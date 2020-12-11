@@ -91,10 +91,10 @@ Feature: Implanted Manifest
     Then Operator verifies that "Not a success reservation!" error toast message is displayed
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | TODAY             |
-      | toDate      | TOMORROW          |
-      | type        | Normal            |
-      | shipperName | {shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | shipperName | {shipper-v4-name}                |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
 
@@ -130,10 +130,10 @@ Feature: Implanted Manifest
     Then Operator verifies that "Not a success reservation!" error toast message is displayed
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | TODAY             |
-      | toDate      | TOMORROW          |
-      | type        | Normal            |
-      | shipperName | {shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | shipperName | {shipper-v4-name}                |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | scannedAtShipperCount | 0       |
@@ -171,11 +171,11 @@ Feature: Implanted Manifest
     Then Operator verifies that "No POD available!" error toast message is displayed
     And Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | TODAY             |
-      | toDate      | TOMORROW          |
-      | type        | Normal            |
-      | status      | SUCCESS           |
-      | shipperName | {shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | status      | SUCCESS                          |
+      | shipperName | {shipper-v4-name}                |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | scannedAtShipperCount | 1                                          |
@@ -206,11 +206,11 @@ Feature: Implanted Manifest
     Then Operator verifies that "POD and Manifest parcel count do not match." error toast message is displayed
     And Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | TODAY             |
-      | toDate      | TOMORROW          |
-      | type        | Normal            |
-      | status      | SUCCESS           |
-      | shipperName | {shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | status      | SUCCESS                          |
+      | shipperName | {shipper-v4-name}                |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | scannedAtShipperCount | 0       |

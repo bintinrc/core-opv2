@@ -6,7 +6,6 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -58,16 +57,18 @@ public class TagManagementSteps extends AbstractSteps
             }
         }*/
 
-        tagManagementPage.clickCreateTag();
-        tagManagementPage.setTagNameValue(DEFAULT_TAG_NAME);
-        tagManagementPage.setDescriptionValue(DEFAULT_TAG_DESCRIPTION);
-        tagManagementPage.clickSubmitOnAddTag();
+        tagManagementPage.createTag.click();
+        tagManagementPage.addTagDialog.waitUntilVisible();
+        tagManagementPage.addTagDialog.tagName.setValue(DEFAULT_TAG_NAME);
+        tagManagementPage.addTagDialog.description.setValue(DEFAULT_TAG_DESCRIPTION);
+        tagManagementPage.addTagDialog.submit.clickAndWaitUntilDone();
+        tagManagementPage.addTagDialog.waitUntilInvisible();
     }
 
     @Then("^Operator verify the new tag is created successfully on Tag Management$")
     public void verifyNewTagCreatedSuccessfully()
     {
-        retryIfAssertionErrorOccurred(()->
+        retryIfAssertionErrorOccurred(() ->
         {
             reloadPageAndEnableSortByName();
 
@@ -86,15 +87,17 @@ public class TagManagementSteps extends AbstractSteps
         assertEquals(DEFAULT_TAG_NAME, actualTagName);
 
         tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_EDIT);
-        tagManagementPage.setTagNameValue(EDITED_TAG_NAME);
-        tagManagementPage.setDescriptionValue(EDITED_DEFAULT_TAG_DESCRIPTION);
-        tagManagementPage.clickSubmitChangesOnEditTag();
+        tagManagementPage.addTagDialog.waitUntilVisible();
+        tagManagementPage.addTagDialog.tagName.setValue(EDITED_TAG_NAME);
+        tagManagementPage.addTagDialog.description.setValue(EDITED_DEFAULT_TAG_DESCRIPTION);
+        tagManagementPage.addTagDialog.submitChanges.clickAndWaitUntilDone();
+        tagManagementPage.addTagDialog.waitUntilInvisible();
     }
 
     @Then("^Operator verify the tag is updated successfully on Tag Management$")
     public void verifyTagUpdatedSuccessfully()
     {
-        retryIfAssertionErrorOccurred(()->
+        retryIfAssertionErrorOccurred(() ->
         {
             reloadPageAndEnableSortByName();
 

@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
@@ -77,6 +77,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     @FindBy(css = "md-dialog")
     public ResumeSelectedDialog resumeSelectedDialog;
+
+    @FindBy(css = "md-dialog")
+    public CancelSelectedDialog cancelSelectedDialog;
 
     @FindBy(css = "div.navigation md-menu")
     public MdMenu actionsMenu;
@@ -339,21 +342,23 @@ public class AllOrdersPage extends OperatorV2SimplePage
         selectAllShown("ctrl.ordersTableParam");
         actionsMenu.selectOption(CANCEL_SELECTED.getName());
 
-        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
-        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        cancelSelectedDialog.waitUntilVisible();
+
+        List<String> listOfActualTrackingIds = cancelSelectedDialog.trackingIds.stream().map(PageElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
-        sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
+        cancelSelectedDialog.cancellationReason.setValue(String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
 
         if (listOfActualTrackingIds.size() == 1)
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
+            cancelSelectedDialog.cancelOrder.clickAndWaitUntilDone();
         } else
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
+            cancelSelectedDialog.cancelOrders.clickAndWaitUntilDone();
         }
+        cancelSelectedDialog.waitUntilInvisible();
 
-        waitUntilInvisibilityOfToast("updated");
+        waitUntilInvisibilityOfToast(f("%d order(s) updated", listOfExpectedTrackingId.size()));
     }
 
     public void openFiltersForm()
@@ -639,10 +644,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
         CANCEL_SELECTED("Cancel Selected"),
         RESUME_SELECTED("Resume Selected"),
         MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
-        PULL_FROM_ROUTE("Pull from Route"),
-        ADD_TO_ROUTE("Add To Route");
+        PULL_FROM_ROUTE("Pull Selected from Route"),
+        ADD_TO_ROUTE("Add Selected to Route");
 
-        private String name;
+        private final String name;
 
         public String getName()
         {
@@ -734,6 +739,26 @@ public class AllOrdersPage extends OperatorV2SimplePage
         public NvApiTextButton resumeOrders;
 
         public ResumeSelectedDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class CancelSelectedDialog extends MdDialog
+    {
+        @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.orders']/td[1]")
+        public List<PageElement> trackingIds;
+
+        @FindBy(css = "[id^='container.order.edit.cancellation-reason']")
+        public TextBox cancellationReason;
+
+        @FindBy(name = "container.order.edit.cancel-order")
+        public NvApiTextButton cancelOrder;
+
+        @FindBy(name = "container.order.edit.cancel-orders")
+        public NvApiTextButton cancelOrders;
+
+        public CancelSelectedDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
         }

@@ -3,7 +3,13 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.AbstractFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
@@ -37,11 +43,34 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     @FindBy(css = "th.column-checkbox md-menu")
     public MdMenu selectionMenu;
 
+    @FindBy(xpath = "//nv-filter-date-box[.//p[.='Start Datetime']]")
+    public NvFilterDateBox startDateTimeFilter;
+
+    @FindBy(xpath = "//nv-filter-date-box[.//p[.='End Datetime']]")
+    public NvFilterDateBox endDateTimeFilter;
+
+    @FindBy(css = "nv-filter-time-box[main-title='Creation Time']")
+    public NvFilterTimeBox creationTimeFilter;
+
+    @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
+    public NvFilterAutocomplete shipperFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='DP Order']")
+    public NvFilterBox dpOrderFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Route Grouping']")
+    public NvFilterBox routeGroupingFilter;
+
+    @FindBy(css = "nv-filter-boolean-box[main-title='Routed']")
+    public NvFilterBooleanBox routedFilter;
+
     @FindBy(css = "[id^='route-group']")
     public MdSelect routeGroup;
 
     @FindBy(name = "Add Transactions/Reservations")
     public NvButtonSave addTransactionReservation;
+
+    public Map<String, AbstractFilterBox> filters;
 
     public CreateRouteGroupsPage(WebDriver webDriver)
     {
@@ -51,6 +80,14 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
                 "Routed", value -> setSwitchFilter(XPATH_GENERAL_FILTERS, "Routed", value),
                 "Creation Time", this::setCreationTimeFilter);
         txnRsvnTable = new TxnRsvnTable(webDriver);
+        filters = ImmutableMap.<String, AbstractFilterBox>builder()
+                .put("Start Datetime", startDateTimeFilter)
+                .put("End Datetime", endDateTimeFilter)
+                .put("Creation Time", creationTimeFilter)
+                .put("Shipper", shipperFilter)
+                .put("DP Order", dpOrderFilter)
+                .put("Route Grouping", routeGroupingFilter)
+                .put("Routed", routedFilter).build();
     }
 
     public void waitUntilRouteGroupPageIsLoaded()
@@ -60,36 +97,11 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void setCreationTimeFilter()
     {
-        String dateLabel = DATE_FILTER_SDF.format(TestUtils.getNextDate(1));
-
-        /*
-          Set toHour & toMinute of Creation Time.
-         */
-        click("//md-input-container[@model='container.toHour']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 23 ')]");
-        pause500ms();
-        click("//md-input-container[@model='container.toMinute']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 30 ')]");
-        pause500ms();
-
-        click("//md-datepicker[@ng-model='container.toDate']/button");
-        pause500ms();
-        click("//td[@aria-label='" + dateLabel + "']");
-        pause500ms();
-
-        /*
-          Set fromHour & fromMinute of Creation Time.
-         */
-        click("//md-input-container[@model='container.fromHour']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
-        pause500ms();
-        click("//md-input-container[@model='container.fromMinute']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
-        pause500ms();
+        creationTimeFilter.selectToDate(TestUtils.getNextDate(1));
+        creationTimeFilter.selectToHours("23");
+        creationTimeFilter.selectToMinutes("30");
+        creationTimeFilter.selectFromHours("00");
+        creationTimeFilter.selectToMinutes("00");
     }
 
     public void setCreationTimeFilter(String dates)
@@ -111,53 +123,36 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
         /*
           Set fromHour & fromMinute of Creation Time.
          */
-        sendKeys("//md-datepicker[@name='fromDateField']//input", fromDateStr);
-        pause500ms();
-        click("//md-input-container[@model='container.fromHour']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
-        pause500ms();
-        click("//md-input-container[@model='container.fromMinute']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
-        pause500ms();
+        creationTimeFilter.selectFromDate(fromDateStr);
+        creationTimeFilter.selectFromHours("00");
+        creationTimeFilter.selectFromMinutes("00");
 
         /*
           Set toHour & toMinute of Creation Time.
          */
-        sendKeys("//md-datepicker[@name='toDateField']//input", toDateStr);
-        pause500ms();
-        click("//md-input-container[@model='container.toHour']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 23 ')]");
-        pause500ms();
-        click("//md-input-container[@model='container.toMinute']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 30 ')]");
-        pause500ms();
+        creationTimeFilter.selectToDate(toDateStr);
+        creationTimeFilter.selectToHours("23");
+        creationTimeFilter.selectToMinutes("30");
     }
 
     public void removeFilter(String filterName)
     {
-        if (filterName.contains("time"))
+        AbstractFilterBox filter = filters.get(filterName);
+        if (filter != null)
         {
-            if (isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button"))
-            {
-                click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
-            }
-        } else
-        {
-            click("//div[div[p[text()='" + filterName + "']]]/div/div/nv-icon-button/button");
+            filter.removeFilter();
         }
     }
 
     public void removeAllFilterExceptGiven(List<String> filters)
     {
-        String xpath = "//div[@class='filter-container']//div[contains(@class,'main-title')]/p";
-        List<String> filterTitles = getTextOfElements(xpath);
-        filterTitles.removeAll(filters);
-        String removeFilterXpath = XPATH_FILTER_BY_TITLE + "//*[@name='commons.remove-filter']";
-        filterTitles.forEach(filter -> clickf(removeFilterXpath, filter));
+        this.filters.forEach((name, filter) ->
+        {
+            if (!filters.contains(name) && filter.isDisplayedFast())
+            {
+                filter.removeFilter();
+            }
+        });
     }
 
     public void selectTransactionFiltersMode(String value)

@@ -13,6 +13,7 @@ import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class PathManagementSteps extends AbstractSteps {
     @And("Operator verifies path management page is loaded")
     public void operatorMovementTripPageIsLoaded() {
         pathManagementPage.switchTo();
-        pathManagementPage.defaultPathButton.waitUntilClickable(30);
+        pathManagementPage.addDefaultPathButton.waitUntilClickable(30);
     }
 
     @And("Operator clicks show or hide filters")
@@ -97,6 +98,13 @@ public class PathManagementSteps extends AbstractSteps {
         pause1s();
     }
 
+    @When("Operator clicks add default path button")
+    public void operatorClicksAddDefaultPathButton() {
+        pathManagementPage.addDefaultPathButton.click();
+        pathManagementPage.createDefaultPathModal.waitUntilVisible();
+        pause1s();
+    }
+
     @And("Operator verify {string} data appear in path table")
     public void operatorVerifyAppearInPathTable(String pathType) {
         pathManagementPage.verifyDataAppearInPathTable(pathType);
@@ -110,16 +118,43 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub);
     }
 
+    @And("Operator verify path data from {string} to {string} appear in path table with following transit hubs:")
+    public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName, String destinationHubName, List<String> transitHubs) {
+        String resolvedOriginHub = resolveValue(originHubName);
+        String resolvedDestinationHub = resolveValue(destinationHubName);
+        List<String> resolvedTransitHubs = new ArrayList<>();
+        for (String transitHub: transitHubs) {
+            resolvedTransitHubs.add(resolveValue(transitHub));
+        }
+        List<String> passedHubs = new ArrayList<>();
+        passedHubs.add(resolvedOriginHub);
+        passedHubs.addAll(resolvedTransitHubs);
+        passedHubs.add(resolvedDestinationHub);
+        pathManagementPage.verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs);
+    }
+
     @When("Operator click {string} hyperlink button")
     public void operatorClickHyperlinkButton(String hyperlinkAction) {
         if ("view".equals(hyperlinkAction)) {
-            pathManagementPage.viewFirstRow.click();
+            pathManagementPage.pathRowNvTable.getRow(0).viewAction.click();
         }
+        if ("remove".equals(hyperlinkAction)) {
+            pathManagementPage.pathRowNvTable.getRow(0).removeAction.click();
+        }
+        if ("edit".equals(hyperlinkAction)) {
+            pathManagementPage.pathRowNvTable.getRow(0).editAction.click();
+        }
+        pause1s();
     }
 
     @Then("Operator verify shown {string} path details modal data")
     public void operatorVerifyShownPathDetailsModalData(String pathType) {
         pathManagementPage.verifyShownPathDetail(pathType);
+    }
+
+    @Then("Operator verify shown {string} remove path modal data")
+    public void operatorVerifyShownRemovePathModalData(String pathType) {
+        pathManagementPage.verifyShownRemovePathDetail(pathType);
     }
 
     @And("Operator searches {string} in {string} field")
@@ -185,6 +220,19 @@ public class PathManagementSteps extends AbstractSteps {
         pause2s();
     }
 
+    @And("Operator create default path with following data:")
+    public void operatorCreateDefaultPathWithFollowingData(Map<String, String> mapOfData) {
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String originHubName = resolvedMapOfData.get("originHubName");
+        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+
+        pathManagementPage.createDefaultPath(originHubName, destinationHubName);
+        if (!"empty".equals(originHubName) && !"empty".equals(destinationHubName)) {
+            pathManagementPage.verifyCreatingDefaultPath(originHubName, destinationHubName);
+        }
+        pause2s();
+    }
+
     @Then("Operator verify a notification with message {string} is shown on path management page")
     public void operatorVerifyANotificationWithMessageIsShownOnPathManagementPage(String notificationMessage) {
         String resolvedNotificationMessage = resolveValue(notificationMessage);
@@ -207,8 +255,17 @@ public class PathManagementSteps extends AbstractSteps {
         operatorVerifyCreatedManualPathWithScheduleDataInPathDetail("single", mapOfData);
     }
 
+    @And("Operator verify created default path data in path detail with following data:")
+    public void operatorVerifyCreatedDefaultPathDataInPathDetail(Map<String, String> mapOfData) {
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String originHubName = resolvedMapOfData.get("originHubName");
+        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+        String path = originHubName + " → " + destinationHubName;
+        pathManagementPage.verifyCreatedPathDetail(path, null);
+    }
+
     @And("Operator verify created manual path data in path detail empty schedule with following data:")
-    public void operatorVerifyCreatedManualPathDataInPathDetailEmptyScheduleWithFollowingData(Map<String, String> mapOfData) {
+    public void operatorVerifyCreatedPathDataInPathDetailWithFollowingData(Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
         String originHubName = resolvedMapOfData.get("originHubName");
         String destinationHubName = resolvedMapOfData.get("destinationHubName");
@@ -360,4 +417,125 @@ public class PathManagementSteps extends AbstractSteps {
             }
         }
     }
+
+    @And("Operator click {string} button in path details")
+    public void operatorClickButtonInPathDetails(String buttonName) {
+        if ("remove".equals(buttonName)) {
+            pathManagementPage.pathDetailsModal.removePathButton.click();
+        }
+        if ("edit".equals(buttonName)) {
+            pathManagementPage.pathDetailsModal.editPathButton.click();
+        }
+        pause1s();
+    }
+
+    @And("Operator verify no new path created")
+    public void operatorVerifyNoNewPathCreated() {
+        Integer actualPathRowsSize = pathManagementPage.pathRowNvTable.rows.size();
+        assertThat("Path rows size is one", actualPathRowsSize, equalTo(1));
+    }
+
+    @And("Operator verify no path found from {string} to {string} message is shown in create default path modal")
+    public void operatorVerifyNoPathFoundMessageIsShownInCreateDefaultPathModal(String originHub, String destinationHub) {
+        String resolvedOriginHub = resolveValue(originHub);
+        String resolvedDestinationHub = resolveValue(destinationHub);
+
+        String actualCreateDefaultPathInfoText = pathManagementPage.createDefaultPathModal.createDefaultPathInfo.getText();
+        String expectedCreateDefaultPathInfoText = f("No path found from %s to %s!\nPlease add movement schedule(s) in Movement Schedule page in order to create a path between facilities.",
+                resolvedOriginHub, resolvedDestinationHub);
+        assertThat("Create default path message is equal", actualCreateDefaultPathInfoText,
+                equalTo(expectedCreateDefaultPathInfoText));
+    }
+
+    @Then("Operator verify {string} error info shown on create default path modal")
+    public void operatorVerifyErrorInfoShownOnCreateDefaultPathModal(String errorField) {
+        String expectedErrorInfo = "This field is required.";
+        if ("both".equals(errorField)) {
+            String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo.getText();
+            String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo.getText();
+            assertThat("Error origin hub info is equal", actualOriginHubErrorInfo, equalTo(expectedErrorInfo));
+            assertThat("Error destination info is equal", actualDestinationHubErrorInfo, equalTo(expectedErrorInfo));
+        }
+        if ("origin hub".equals(errorField)) {
+            String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo.getText();
+            assertThat("Error origin hub info is equal", actualOriginHubErrorInfo, equalTo(expectedErrorInfo));
+        }
+        if ("destination hub".equals(errorField)) {
+            String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo.getText();
+            assertThat("Error destination info is equal", actualDestinationHubErrorInfo, equalTo(expectedErrorInfo));
+        }
+    }
+
+    @When("Operator selects {string} as transit hub in edit path modal")
+    public void operatorSelectsHubAsTransitHubInEditPathModal(String transitHub) {
+        String resolvedTransitHub = resolveValue(transitHub);
+        pathManagementPage.editManualPathModal.waitUntilVisible();
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHub, false);
+    }
+
+    @When("Operator selects {string} as transit hub in created edit path modal")
+    public void operatorSelectsHubAsTransitHubInCreatedEditPathModal(String transitHub) {
+        String resolvedTransitHub = resolveValue(transitHub);
+        pathManagementPage.createdEditPathModal.waitUntilVisible();
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHub, true);
+    }
+
+    @When("Operator selects following transit hubs in edit path modal:")
+    public void operatorSelectsFollowingTransitHubsInEditPathModal(List<String> transitHubs) {
+        List<String> resolvedTransitHubs = new ArrayList<>();
+        for (String transitHub: transitHubs) {
+            resolvedTransitHubs.add(resolveValue(transitHub));
+        }
+        pathManagementPage.editManualPathModal.waitUntilVisible();
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHubs);
+    }
+
+    @When("Operator clicks {string} button in edit path modal")
+    public void operatorClicksButtonInEditPathModal(String button) {
+        if ("next".equals(button)) {
+            pathManagementPage.editManualPathModal.nextButton.click();
+        }
+        if ("update".equals(button)) {
+            pathManagementPage.editManualPathModal.updateButton.click();
+        }
+        if ("cancel".equals(button)) {
+            pathManagementPage.editManualPathModal.cancelButton.click();
+        }
+        pause2s();
+    }
+
+    @When("Operator clicks {string} button in created edit path modal")
+    public void operatorClicksButtonInCreatedEditPathModal(String button) {
+        if ("next".equals(button)) {
+            pathManagementPage.createdEditPathModal.nextButton.click();
+        }
+        if ("update".equals(button)) {
+            pathManagementPage.createdEditPathModal.updateButton.click();
+        }
+        if ("cancel".equals(button)) {
+            pathManagementPage.createdEditPathModal.cancelButton.click();
+        }
+        pause2s();
+    }
+
+    @When("Operator selects first schedule in edit path modal")
+    public void operatorSelectsFirstScheduleInEditPathModal() {
+        pathManagementPage.editManualPathSecondStage(false);
+    }
+
+    @When("Operator selects first schedule in created edit path modal")
+    public void operatorSelectsFirstScheduleInCreatedEditPathModal() {
+        pathManagementPage.editCreatedManualPathSecondStage();
+    }
+
+    @When("Operator selects second schedule in edit path modal")
+    public void operatorSelectsSecondScheduleInEditPathModal() {
+        pathManagementPage.editManualPathSecondStage(true);
+    }
+
+    @Then("Operator verify it cannot edit manual path {string} with data:")
+    public void operatorVerifyItCannotEditManualPathWithData(String reason, Map<String, String> mapOfData) {
+        operatorVerifyItCannotCreateManualPathWithoutSelectingSchedule(reason, mapOfData);
+    }
+
 }

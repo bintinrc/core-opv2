@@ -65,10 +65,10 @@ Feature: Reservations
     And Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | TODAY             |
-      | toDate      | TOMORROW          |
-      | type        | Normal            |
-      | shipperName | {shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | shipperName | {shipper-v4-name}                |
     And Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
       | approxVolume | Less than 3 Parcels          |
@@ -97,10 +97,10 @@ Feature: Reservations
     And Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | TODAY             |
-      | toDate      | TOMORROW          |
-      | type        | Normal            |
-      | shipperName | {shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | shipperName | {shipper-v4-name}                |
     And Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
       | approxVolume | Less than 3 Parcels          |
