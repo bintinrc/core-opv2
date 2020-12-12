@@ -362,7 +362,7 @@ Feature: Parcel Sweeper Live
       | orderId    | -        |
       | color      | #55a1e8  |
     And API Operator get all zones preferences
-    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+    Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -457,7 +457,7 @@ Feature: Parcel Sweeper Live
       | orderId    | -         |
       | color      | #55a1e8   |
     And API Operator get all zones preferences
-    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+    Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
