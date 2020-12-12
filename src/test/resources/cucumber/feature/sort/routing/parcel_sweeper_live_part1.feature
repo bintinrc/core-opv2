@@ -488,7 +488,7 @@ Feature: Parcel Sweeper Live
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | DELIVERY |
+      | addParcelToRouteRequest | PICKUP |
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
