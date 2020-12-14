@@ -53,6 +53,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
     public RouteInboundCommentsDialog routeInboundCommentsDialog;
 
     @FindBy(css = "md-dialog")
+    public PhotoAuditDialog photoAuditDialog;
+
+    @FindBy(css = "md-dialog")
     public MoneyCollectionHistoryDialog moneyCollectionHistoryDialog;
 
     @FindBy(xpath = "//md-dialog[.//h2[.='Choose a route']]")
@@ -402,8 +405,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void closeDialog()
     {
-        closeDialog.moveAndClick();
-        closeDialog.waitUntilInvisible();
+        routeInboundCommentsDialog.forceClose();
     }
 
     public void scanTrackingId(String trackingId)
@@ -953,6 +955,17 @@ public class RouteInboundPage extends OperatorV2SimplePage
         public void chooseRoute(long routeId)
         {
             new NvIconButton(getWebDriver(), getWebElement(), f("//tr[./td[.='%d']]//*[@name='commons.proceed']", routeId)).click();
+        }
+    }
+
+    public static class PhotoAuditDialog extends MdDialog
+    {
+        @FindBy(css = "[aria-label='I have completed photo audit']")
+        public Button completePhotoAudit;
+
+        public PhotoAuditDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
         }
     }
 }

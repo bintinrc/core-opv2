@@ -447,6 +447,15 @@ public class RouteInboundSteps extends AbstractSteps
         routeInboundPage.continueToInbound.click();
     }
 
+    @When("^Operator click 'I have completed photo audit' button on Route Inbound page$")
+    public void operatorClickCompletePhotoAuditdButtonOnRouteInboundPage()
+    {
+        routeInboundPage.photoAuditDialog.waitUntilVisible();
+        pause5s();
+        routeInboundPage.photoAuditDialog.completePhotoAudit.click();
+        routeInboundPage.photoAuditDialog.waitUntilInvisible();
+    }
+
     @When("^Operator add route inbound comment \"(.+)\"  on Route Inbound page$")
     public void operatorAddRouteInboundCommentOnRouteInboundPage(String comment)
     {
