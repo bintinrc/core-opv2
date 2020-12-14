@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @UpdatePath @CFW
+@OperatorV2 @MiddleMile @Hub @PathManagement @UpdatePath
 Feature: Update Path
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -69,7 +69,7 @@ Feature: Update Path
     And Operator clicks "update" button in edit path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully updated" is shown on path management page
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCreatedPaths @RT
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCreatedPaths
   Scenario: Update Path - Direct Path (uid:6c71c487-8ec0-488a-92aa-aab93afc8e6a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
