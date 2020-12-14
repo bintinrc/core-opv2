@@ -107,6 +107,7 @@ public class RouteInboundSteps extends AbstractSteps
     @When("^Operator verify error message displayed on Route Inbound:$")
     public void checkErrorMessage(Map<String, String> data)
     {
+        data = resolveKeyValues(data);
         String status = data.get("status");
         String url = data.get("url");
         String errorCode = data.get("errorCode");
@@ -446,6 +447,15 @@ public class RouteInboundSteps extends AbstractSteps
         routeInboundPage.continueToInbound.click();
     }
 
+    @When("^Operator click 'I have completed photo audit' button on Route Inbound page$")
+    public void operatorClickCompletePhotoAuditdButtonOnRouteInboundPage()
+    {
+        routeInboundPage.photoAuditDialog.waitUntilVisible();
+        pause5s();
+        routeInboundPage.photoAuditDialog.completePhotoAudit.click();
+        routeInboundPage.photoAuditDialog.waitUntilInvisible();
+    }
+
     @When("^Operator add route inbound comment \"(.+)\"  on Route Inbound page$")
     public void operatorAddRouteInboundCommentOnRouteInboundPage(String comment)
     {
@@ -587,7 +597,8 @@ public class RouteInboundSteps extends AbstractSteps
     }
 
     @When("^Operator open Money Collection history dialog on Route Inbound page$")
-    public void operatorOpenMoneyCollectionHistoryDialog(){
+    public void operatorOpenMoneyCollectionHistoryDialog()
+    {
         routeInboundPage.cashButton.click();
         routeInboundPage.moneyCollectionHistoryDialog.waitUntilVisible();
     }

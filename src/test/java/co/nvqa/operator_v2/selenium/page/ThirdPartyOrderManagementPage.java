@@ -3,9 +3,11 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -44,6 +46,12 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
 
     @FindBy(name = "container.third-party-order.create-multiple-mapping")
     public NvIconTextButton uploadBulk;
+
+    @FindBy(name = "commons.load-orders")
+    public NvApiTextButton loadOrders;
+
+    @FindBy(css = "md-progress-linear")
+    public PageElement loadingBar;
 
     private static final String MD_VIRTUAL_REPEAT = "order in getTableData()";
 
@@ -104,6 +112,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMapping);
         refreshPage();
+        loadOrders();
         verifyOrderMappingRecord(expectedOrderMapping);
     }
 
@@ -111,6 +120,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMappings);
         refreshPage();
+        loadOrders();
         verifyOrderMappingRecords(expectedOrderMappings);
     }
 
@@ -194,6 +204,15 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    }
+
+    public void loadOrders()
+    {
+        loadOrders.clickAndWaitUntilDone();
+        if (loadingBar.waitUntilVisible(1))
+        {
+            loadingBar.waitUntilInvisible();
+        }
     }
 
     public static class UploadSingleMappingDialog extends MdDialog
