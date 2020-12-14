@@ -289,7 +289,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows
   Scenario Outline: Parcel Sweeper Live - With Priority Level - <scenarioName> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -303,9 +303,8 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | {KEY_CREATED_ROUTE_ID} |
-      | driverName | {ninja-driver-name}    |
-      | color      | #55a1e8                |
+      | routeId    | -        |
+      | color      | #55a1e8  |
     Then Operator verifies priority level dialog box shows correct priority level info using data below:
       | priorityLevel           | <priorityLevel>             |
       | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
@@ -314,20 +313,15 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | {hub-name}   |
-      | color   | #e8e8e8      |
+      | hubName | {KEY_CREATED_ORDER.destinationHub}  |
+      | color   | #55a1e8                             |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
     And DB Operator verify the order_events record exists for the created order with type:
-      | 31    |
       | 27    |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | OUTBOUND SCAN	    |
       | hubName   | {hub-name}          |
       | hubId     | {hub-id}            |
     And Operator verify order status is "Transit" on Edit Order page
