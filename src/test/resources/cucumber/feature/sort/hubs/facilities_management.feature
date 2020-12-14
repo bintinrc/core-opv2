@@ -207,9 +207,6 @@ Feature: Facilities Management
       | sortHub      | YES       |
     And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
-    And DB Operator verify a new hub is created in core.hubs using data below:
-      | hubName      | {KEY_CREATED_HUB.name} |
-      | facilityType | CROSSDOCK              |
     And DB Operator verify a new hub is created in sort.hubs using data below:
       | hubName      | {KEY_CREATED_HUB.name} |
       | facilityType | CROSSDOCK              |
@@ -229,9 +226,6 @@ Feature: Facilities Management
       | longitude    | GENERATED         |
     And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
-    And DB Operator verify a new hub is created in core.hubs using data below:
-      | hubName      | {KEY_CREATED_HUB.name} |
-      | facilityType | CROSSDOCK_STATION      |
     And DB Operator verify a new hub is created in sort.hubs using data below:
       | hubName      | {KEY_CREATED_HUB.name} |
       | facilityType | CROSSDOCK_STATION      |
@@ -262,9 +256,6 @@ Feature: Facilities Management
       | longitude         | 11                              |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
-    And DB Operator verify a new hub is created in core.hubs using data below:
-      | hubName      | {KEY_CREATED_HUB.name} |
-      | facilityType | CROSSDOCK              |
     And DB Operator verify a new hub is created in sort.hubs using data below:
       | hubName      | {KEY_CREATED_HUB.name} |
       | facilityType | CROSSDOCK              |
@@ -296,9 +287,6 @@ Feature: Facilities Management
       | sortHub           | YES                             |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
-    And DB Operator verify a new hub is created in core.hubs using data below:
-      | hubName      | {KEY_CREATED_HUB.name} |
-      | facilityType | CROSSDOCK              |
     And DB Operator verify a new hub is created in sort.hubs using data below:
       | hubName      | {KEY_CREATED_HUB.name} |
       | facilityType | CROSSDOCK              |
@@ -329,9 +317,6 @@ Feature: Facilities Management
       | longitude         | 11                              |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
-    And DB Operator verify a new hub is created in core.hubs using data below:
-      | hubName      | {KEY_CREATED_HUB.name} |
-      | facilityType | CROSSDOCK_STATION      |
     And DB Operator verify a new hub is created in sort.hubs using data below:
       | hubName      | {KEY_CREATED_HUB.name} |
       | facilityType | CROSSDOCK_STATION      |
