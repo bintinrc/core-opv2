@@ -289,17 +289,13 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows
   Scenario Outline: Parcel Sweeper Live - With Priority Level - <scenarioName> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
     When API Operator update priority level of an order to = "<priorityLevel>"
     When Operator go to menu Routing -> Parcel Sweeper Live
@@ -307,9 +303,8 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | {KEY_CREATED_ROUTE_ID} |
-      | driverName | {ninja-driver-name}    |
-      | color      | #55a1e8                |
+      | routeId    | -        |
+      | color      | #55a1e8  |
     Then Operator verifies priority level dialog box shows correct priority level info using data below:
       | priorityLevel           | <priorityLevel>             |
       | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
@@ -318,20 +313,15 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | {hub-name}   |
-      | color   | #e8e8e8      |
+      | hubName | {KEY_CREATED_ORDER.destinationHub}  |
+      | color   | #55a1e8                             |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
     And DB Operator verify the order_events record exists for the created order with type:
-      | 31    |
       | 27    |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | OUTBOUND SCAN	    |
       | hubName   | {hub-name}          |
       | hubId     | {hub-id}            |
     And Operator verify order status is "Transit" on Edit Order page
@@ -350,6 +340,7 @@ Feature: Parcel Sweeper Live
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And API Operator refresh created order data
@@ -362,7 +353,7 @@ Feature: Parcel Sweeper Live
       | orderId    | -        |
       | color      | #55a1e8  |
     And API Operator get all zones preferences
-    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+    Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -457,7 +448,7 @@ Feature: Parcel Sweeper Live
       | orderId    | -         |
       | color      | #55a1e8   |
     And API Operator get all zones preferences
-    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+    Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -488,7 +479,7 @@ Feature: Parcel Sweeper Live
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | DELIVERY |
+      | addParcelToRouteRequest | PICKUP |
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
@@ -536,6 +527,7 @@ Feature: Parcel Sweeper Live
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     Given Operator go to menu Routing -> Parcel Sweeper Live
