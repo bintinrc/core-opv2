@@ -136,6 +136,7 @@ Feature: Parcel Sweeper Live
     And Operator open Route Manifest of created route from Route Logs page
     When Operator fail delivery waypoint from Route Manifest page
     When API Operator refresh created order data
+    And Operator refresh page
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
@@ -228,6 +229,7 @@ Feature: Parcel Sweeper Live
     When API Operator Van Inbound parcel
     When API Operator start the route
     When API Operator refresh created order data
+    And Operator refresh page
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
