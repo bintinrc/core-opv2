@@ -67,6 +67,7 @@ public class ParcelSweeperSteps extends AbstractSteps
     public void operatorVerifyZoneOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData)
     {
         String zoneName = mapOfData.get("zoneName");
+        String zoneShortName = new String();
         if (StringUtils.equalsIgnoreCase(zoneName, "FROM CREATED ORDER"))
         {
             Order order = get(KEY_CREATED_ORDER);
@@ -79,9 +80,13 @@ public class ParcelSweeperSteps extends AbstractSteps
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
             zoneName = f("%s", routingZone.getName());
+<<<<<<< HEAD
+=======
+            zoneShortName = f("%s", routingZone.getShortName());
+>>>>>>> dfd504233b846b7bfaa0c116f9899652a8296c5d
         }
         String color = mapOfData.get("color");
-        parcelSweeperPage.verifyZoneInfo(zoneName, color);
+        parcelSweeperPage.verifyZoneInfo(zoneShortName, zoneName, color);
     }
 
     @Then("^Operator verify Destination Hub on Parcel Sweeper page using data below:$")

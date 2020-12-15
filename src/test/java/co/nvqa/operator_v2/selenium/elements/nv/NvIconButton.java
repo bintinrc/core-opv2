@@ -23,6 +23,11 @@ public class NvIconButton extends PageElement
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
+    public NvIconButton(WebDriver webDriver, SearchContext searchContext, String xpath)
+    {
+        super(webDriver, searchContext, xpath);
+    }
+
     @FindBy(tagName = "button")
     private Button button;
 

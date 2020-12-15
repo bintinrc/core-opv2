@@ -29,8 +29,7 @@ Feature: Route Inbound
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Fleet -> Route Cash Inbound
-    And Operator create new COD on Route Cash Inbound page
+    And API Operator create new COD for created order
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu Inbounding -> Route Inbound
@@ -49,6 +48,7 @@ Feature: Route Inbound
       | wpCompleted | 0                      |
       | wpTotal     | 4                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
     When Operator open Pending Waypoints Info dialog on Route Inbound page
@@ -83,8 +83,7 @@ Feature: Route Inbound
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Fleet -> Route Cash Inbound
-    And Operator create new COD on Route Cash Inbound page
+    And API Operator create new COD for created order
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -108,6 +107,7 @@ Feature: Route Inbound
       | wpCompleted | 3                      |
       | wpTotal     | 3                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
     When Operator open Completed Waypoints Info dialog on Route Inbound page
@@ -139,8 +139,7 @@ Feature: Route Inbound
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Fleet -> Route Cash Inbound
-    And Operator create new COD on Route Cash Inbound page
+    And API Operator create new COD for created order
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -164,6 +163,7 @@ Feature: Route Inbound
       | wpCompleted | 0                      |
       | wpTotal     | 3                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
     When Operator open Failed Waypoints Info dialog on Route Inbound page
@@ -176,7 +176,6 @@ Feature: Route Inbound
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Failed | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Return) | Failed | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |         | GET_FROM_CREATED_ORDER_3 | Delivery (Normal) | Failed | 0        | Inbounded          |
-
 
   @DeleteOrArchiveRoute
   Scenario: View Waypoint Performance of Total Waypoints on Route Inbound Page (uid:40fd6a8f-ba66-4b5e-a036-fcd8b6af95ea)
@@ -249,6 +248,7 @@ Feature: Route Inbound
       | wpCompleted | 2                      |
       | wpTotal     | 6                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
     When Operator open Total Waypoints Info dialog on Route Inbound page
@@ -313,6 +313,7 @@ Feature: Route Inbound
       | wpCompleted | 0                      |
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     And Operator click 'Go Back' button on Route Inbound page
     And Operator open Partial Waypoints Info dialog on Route Inbound page
@@ -324,7 +325,6 @@ Feature: Route Inbound
       | trackingId                                 | stampId | location                 | type              | status  | cmiCount | routeInboundStatus |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Failed  | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Normal) | Success | 0        | Inbounded          |
-
 
   @DeleteOrArchiveRoute
   Scenario: View Cash Collection (uid:0dccc613-ddc8-4c11-bee2-ed3d15a50590)
@@ -343,8 +343,7 @@ Feature: Route Inbound
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
-    Given Operator go to menu Fleet -> Route Cash Inbound
-    When Operator create new COD on Route Cash Inbound page
+    When API Operator create new COD for created order
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -357,10 +356,9 @@ Feature: Route Inbound
       | receiptNo       | {KEY_ROUTE_CASH_INBOUND_COD.receiptNumber}   |
     And Operator verify Money Collection Collected Order record using data below:
       | processedCodAmount    | {KEY_COD_GOODS_AMOUNT}                     |
-      | processedCodCollected | {KEY_COD_GOODS_AMOUNT}                     |
+      | processedCodCollected | 0                                          |
       | trackingId            | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | customType            | Delivery (Normal)                          |
-    And Operator close Money Collection history dialog on Route Inbound page
 
   @DeleteOrArchiveRoute
   Scenario: View Failed Parcels (uid:431dd316-eeee-4e5f-9d29-7a8bf072fd17)
@@ -398,6 +396,7 @@ Feature: Route Inbound
       | wpCompleted | 0                      |
       | wpTotal     | 2                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     Then Operator verify Waypoint Scans record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
@@ -412,7 +411,6 @@ Feature: Route Inbound
       | trackingId                                 | stampId | location                 | type              | status | cmiCount | routeInboundStatus |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Failed | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Return) | Failed | 0        | Inbounded          |
-    And Operator close Failed Parcels dialog on Route Inbound page
 
   @DeleteOrArchiveRoute
   Scenario: View Return Parcels (uid:2a66a597-c949-49fd-912e-89cfa1f072ce)
@@ -454,6 +452,7 @@ Feature: Route Inbound
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     Then Operator verify Waypoint Scans record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
@@ -468,7 +467,6 @@ Feature: Route Inbound
       | trackingId                                 | stampId | location             | type             | status  | cmiCount | routeInboundStatus |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | CREATED_ORDER_FROM_1 | Pick Up (Return) | Success | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | CREATED_ORDER_FROM_2 | Pick Up (Return) | Success | 0        | Inbounded          |
-    And Operator close C2C + Return dialog on Route Inbound page
 
   @DeleteOrArchiveRoute
   Scenario: View Reservations (uid:7b009bad-45fa-4783-a33a-f4525b0a989a)
@@ -503,6 +501,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     Then Operator verify Waypoint Scans record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |

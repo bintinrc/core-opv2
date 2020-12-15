@@ -5,7 +5,6 @@ Feature: Route Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   @DeleteOrArchiveRoute
   Scenario: Add Comment to a Route Inbound Session (uid:98ab3b29-59b9-4483-b17f-4aa353d727e4)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -26,9 +25,9 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     And Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator add route inbound comment "Test route inbound comment {gradle-current-date-yyyyMMddHHmmsss}"  on Route Inbound page
     Then Operator verify route inbound comment on Route Inbound page
-
 
   @DeleteOrArchiveRoute
   Scenario Outline: Inbound Cash for COD - <Title> (<hiptest-uid>)
@@ -63,6 +62,7 @@ Feature: Route Inbound
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify 'Money to collect' value is "<cashOnDelivery>" on Route Inbound page
     And Operator open Money Collection dialog on Route Inbound page
     Then Operator verify 'Expected Total' value is "<cashOnDelivery>" on Money Collection dialog
@@ -112,6 +112,7 @@ Feature: Route Inbound
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify 'Money to collect' value is "<cashOnPickup>" on Route Inbound page
     And Operator open Money Collection dialog on Route Inbound page
     Then Operator verify 'Expected Total' value is "<cashOnPickup>" on Money Collection dialog
@@ -129,7 +130,7 @@ Feature: Route Inbound
       | Inbound Credit Only              | uid:aa78036d-10ca-43c2-add2-5ed08faea2b0 |               | 23.57           | 123       | 23.57        |
       | Inbound Split Into Cash & Credit | uid:f153b865-3093-43cd-82ed-4d17bec13cdd | 10.0          | 13.57           | 123       | 23.57        |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Pending Deliveries (uid:55f86f84-52a9-4db0-809b-cc8e57474396)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -155,6 +156,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | routeId                | {KEY_CREATED_ROUTE_ID} |
       | driverName             | {ninja-driver-name}    |
@@ -180,10 +182,7 @@ Feature: Route Inbound
       | parcelProcessedTotal   | 2 |
       | pendingDeliveriesScans | 1 |
       | pendingDeliveriesTotal | 2 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -191,7 +190,7 @@ Feature: Route Inbound
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid) (uid:bb40e733-b68f-4fe3-85d3-17e98888b270)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -225,6 +224,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | routeId                      | {KEY_CREATED_ROUTE_ID} |
       | driverName                   | {ninja-driver-name}    |
@@ -249,10 +249,7 @@ Feature: Route Inbound
       | parcelProcessedTotal         | 2 |
       | failedDeliveriesInvalidScans | 1 |
       | failedDeliveriesInvalidTotal | 1 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Delivery Fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -260,7 +257,7 @@ Feature: Route Inbound
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid) (uid:399467aa-4bf3-474f-ba8a-1b1857f1b571)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -291,6 +288,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | routeId                    | {KEY_CREATED_ROUTE_ID} |
       | driverName                 | {ninja-driver-name}    |
@@ -316,10 +314,7 @@ Feature: Route Inbound
       | parcelProcessedTotal       | 2 |
       | failedDeliveriesValidScans | 1 |
       | failedDeliveriesValidTotal | 2 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Delivery Fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -327,7 +322,7 @@ Feature: Route Inbound
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Return Pickups (uid:992ba47a-545f-41ed-9044-7bb4ca39b785)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -357,6 +352,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | routeId               | {KEY_CREATED_ROUTE_ID} |
       | driverName            | {ninja-driver-name}    |
@@ -382,10 +378,7 @@ Feature: Route Inbound
       | parcelProcessedTotal  | 2 |
       | c2cReturnPickupsScans | 1 |
       | c2cReturnPickupsTotal | 2 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -393,7 +386,7 @@ Feature: Route Inbound
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Reservation Pickups (uid:c6dd80a8-6a15-4283-b9a4-850aa645d7e7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -426,6 +419,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | routeId                 | {KEY_CREATED_ROUTE_ID} |
       | driverName              | {ninja-driver-name}    |
@@ -443,10 +437,7 @@ Feature: Route Inbound
       | parcelProcessedTotal    | 2 |
       | reservationPickupsScans | 1 |
       | reservationPickupsTotal | 1 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -454,7 +445,7 @@ Feature: Route Inbound
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders (uid:6788f2c6-d062-44f5-a415-51028bea9eac)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -490,6 +481,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | routeId                 | {KEY_CREATED_ROUTE_ID} |
       | driverName              | {ninja-driver-name}    |
@@ -515,10 +507,7 @@ Feature: Route Inbound
       | trackingId  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | shipperName | {shipper-v4-name}                          |
     When Operator close Reservation Pickups dialog on Route Inbound page
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -559,6 +548,7 @@ Feature: Route Inbound
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify 'Money to collect' value is "<cashOnDelivery>" on Route Inbound page
     And Operator open Money Collection dialog on Route Inbound page
     Then Operator verify 'Expected Total' value is "<cashOnDelivery>" on Money Collection dialog
@@ -591,9 +581,9 @@ Feature: Route Inbound
     And API Driver deliver the created parcel successfully
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}                    |
-      | fetchBy      | FETCH_BY_TRACKING_ID          |
-      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+      | hubName      | {hub-name}                      |
+      | fetchBy      | FETCH_BY_TRACKING_ID            |
+      | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
@@ -605,6 +595,7 @@ Feature: Route Inbound
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     Then Operator verify Waypoint Scans record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |

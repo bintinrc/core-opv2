@@ -1,18 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +116,7 @@ public class AllOrdersSteps extends AbstractSteps
     {
         List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
 
-        if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty())
+        if (CollectionUtils.isEmpty(listOfCreatedTrackingId))
         {
             throw new RuntimeException("List of created Tracking ID should not be null or empty.");
         }
