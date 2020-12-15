@@ -76,7 +76,7 @@ Feature: Add To Shipment
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created multiple shipment on Shipment Management page
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator verifies that the row of the added order is red highlighted
 
   @DeleteShipment @ForceSuccessOrder

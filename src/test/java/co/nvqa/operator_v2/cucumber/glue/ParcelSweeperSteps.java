@@ -80,10 +80,7 @@ public class ParcelSweeperSteps extends AbstractSteps
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
             zoneName = f("%s", routingZone.getName());
-<<<<<<< HEAD
-=======
             zoneShortName = f("%s", routingZone.getShortName());
->>>>>>> dfd504233b846b7bfaa0c116f9899652a8296c5d
         }
         String color = mapOfData.get("color");
         parcelSweeperPage.verifyZoneInfo(zoneShortName, zoneName, color);
