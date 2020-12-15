@@ -17,6 +17,7 @@ import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.driver.DriverFilter;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -229,6 +230,12 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         put(KEY_CREATED_DRIVER_USERNAME, driverInfo.getUsername());
         put(KEY_CREATED_DRIVER_ID, driverInfo.getId());
         put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
+    }
+
+    @And("API Operator refresh drivers data")
+    public void refreshDriversData()
+    {
+        getDriverClient().getAllDriver();
     }
 
     @After("@DeleteFilersPreset")
