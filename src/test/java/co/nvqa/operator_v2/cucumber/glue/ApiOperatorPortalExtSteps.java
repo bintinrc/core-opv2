@@ -6,6 +6,8 @@ import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.BatchOrderInfo;
 import co.nvqa.commons.model.core.BulkOrderInfo;
+import co.nvqa.commons.model.core.Cod;
+import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.ShipperPickupFilterTemplate;
@@ -27,6 +29,7 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.ReservationGroup;
+import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.model.VehicleType;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -338,8 +341,10 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
 
     @Given("API Operator creates {int} new Hub using data below:")
-    public void apiOperatorCreatesMultipleNewHubUsingDataBelow(Integer numberOfHubs, Map<String, String> mapOfData) {
-        for (int i = 0; i < numberOfHubs; i++) {
+    public void apiOperatorCreatesMultipleNewHubUsingDataBelow(Integer numberOfHubs, Map<String, String> mapOfData)
+    {
+        for (int i = 0; i < numberOfHubs; i++)
+        {
             apiOperatorCreatesNewHubUsingDataBelow(mapOfData);
         }
     }
@@ -658,5 +663,36 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         {
             getShipperPickupFilterTemplatesClient().deleteFilerTemplate(shipperPickupFilterTemplate.getId());
         }
+    }
+
+    @When("^API Operator create new COD for created order$")
+    public void operatorCreateNewCod()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+
+        Cod cod = order.getCod();
+        assertNotNull("COD should not be null.", cod);
+        Double codGoodsAmount = cod.getGoodsAmount();
+        assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
+
+        Double amountCollected = codGoodsAmount - (codGoodsAmount.intValue() / 2);
+        String receiptNumber = "#" + routeId + "-" + generateDateUniqueString();
+
+        RouteCashInboundCod routeCashInboundCod = new RouteCashInboundCod();
+        routeCashInboundCod.setRouteId(routeId);
+        routeCashInboundCod.setTotalCollected(amountCollected);
+        routeCashInboundCod.setAmountCollected(amountCollected);
+        routeCashInboundCod.setReceiptNumber(receiptNumber);
+
+        CodInbound codInbound = new CodInbound();
+        codInbound.setRouteId(routeId);
+        codInbound.setAmountCollected(amountCollected);
+        codInbound.setReceiptNo(receiptNumber);
+
+        getCodInboundsClient().codInbound(codInbound);
+
+        put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
+        put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
     }
 }

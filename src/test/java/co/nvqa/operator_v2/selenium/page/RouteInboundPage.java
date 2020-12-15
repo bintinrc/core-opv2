@@ -53,7 +53,13 @@ public class RouteInboundPage extends OperatorV2SimplePage
     public RouteInboundCommentsDialog routeInboundCommentsDialog;
 
     @FindBy(css = "md-dialog")
+    public PhotoAuditDialog photoAuditDialog;
+
+    @FindBy(css = "md-dialog")
     public MoneyCollectionHistoryDialog moneyCollectionHistoryDialog;
+
+    @FindBy(xpath = "//md-dialog[.//h2[.='Choose a route']]")
+    public ChooseRouteDialog chooseRouteDialog;
 
     @FindBy(css = "md-dialog")
     public ReservationPickupsDialog reservationPickupsDialog;
@@ -176,7 +182,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         selectHub.selectValue(hubName);
         routeIdInput.setValue(routeId);
         routeIdContinue.click();
-        if (isElementVisible("//div[@class='toast-message']", 1))
+        if (isElementVisible("//div[@class='toast-message']", 2))
         {
             return;
         }
@@ -217,7 +223,6 @@ public class RouteInboundPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast(false);
         selectHub.selectValue(hubName);
         selectDriver.selectValue(driverName);
-        selectDriverContinue.click();
         if (routeId != null)
         {
             selectRoute(routeId);
@@ -232,12 +237,10 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void selectRoute(Long routeId)
     {
-        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
+        if (chooseRouteDialog.waitUntilVisible(5))
         {
-            String routeIdProceedButton = String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId);
-            moveToElementWithXpath(routeIdProceedButton); //This needed to make sure the button is clicked if there are many routes.
-            pause200ms();
-            click(routeIdProceedButton);
+            chooseRouteDialog.chooseRoute(routeId);
+            chooseRouteDialog.waitUntilInvisible();
         }
     }
 
@@ -402,8 +405,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void closeDialog()
     {
-        closeDialog.moveAndClick();
-        closeDialog.waitUntilInvisible();
+        routeInboundCommentsDialog.forceClose();
     }
 
     public void scanTrackingId(String trackingId)
@@ -940,6 +942,30 @@ public class RouteInboundPage extends OperatorV2SimplePage
                     .put(TAGS, "//td[5]")
                     .build());
             setEntityClass(WaypointScanInfo.class);
+        }
+    }
+
+    public static class ChooseRouteDialog extends MdDialog
+    {
+        public ChooseRouteDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        public void chooseRoute(long routeId)
+        {
+            new NvIconButton(getWebDriver(), getWebElement(), f("//tr[./td[.='%d']]//*[@name='commons.proceed']", routeId)).click();
+        }
+    }
+
+    public static class PhotoAuditDialog extends MdDialog
+    {
+        @FindBy(css = "[aria-label='I have completed photo audit']")
+        public Button completePhotoAudit;
+
+        public PhotoAuditDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
         }
     }
 }

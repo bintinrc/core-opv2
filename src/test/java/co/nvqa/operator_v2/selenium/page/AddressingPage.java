@@ -22,7 +22,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @SuppressWarnings("WeakerAccess")
 public class AddressingPage extends OperatorV2SimplePage
 {
-
     @FindBy(name = "Add Address")
     public NvIconTextButton addAddress;
 
@@ -47,6 +46,20 @@ public class AddressingPage extends OperatorV2SimplePage
     @FindBy(xpath = "//md-card[contains(@class, 'address-list-card')]")
     public PageElement addressCard;
 
+    @FindBy(xpath = "//label[starts-with(@for, 'building-no')]/following-sibling::div[1]")
+    public PageElement buildingNo;
+
+    @FindBy(xpath = "//label[starts-with(@for, 'street')]/following-sibling::div[1]")
+    public PageElement street;
+
+    @FindBy(xpath = "//label[starts-with(@for, 'postcode')]/following-sibling::div[1]")
+    public PageElement postcode;
+
+    @FindBy(xpath = "//label[starts-with(@for, 'latitude')]/following-sibling::div[1]")
+    public PageElement latitude;
+
+    @FindBy(xpath = "//label[starts-with(@for, 'longitude')]/following-sibling::div[1]")
+    public PageElement longitude;
 
     public AddressingPage(WebDriver webDriver)
     {
@@ -76,23 +89,13 @@ public class AddressingPage extends OperatorV2SimplePage
 
     public void verifyAddressExistAndInfoIsCorrect(Addressing addressing)
     {
-        clickf("//md-card[contains(@class, 'address-list-card')][contains(.,'%s')]", addressing.getBuildingNo());
-        pause100ms();
+        addressCard.click();
 
-        String actualBuildingNo = getText("//label[starts-with(@for, 'building-no')]/following-sibling::div[1]");
-        assertEquals("Building No is different.", addressing.getBuildingNo(), actualBuildingNo);
-
-        String actualStreetName = getText("//label[starts-with(@for, 'street')]/following-sibling::div[1]");
-        assertEquals("Street Name is different.", addressing.getStreetName(), actualStreetName);
-
-        String actualPostcode = getText("//label[starts-with(@for, 'postcode')]/following-sibling::div[1]");
-        assertEquals("Postcode is different.", addressing.getPostcode(), actualPostcode);
-
-        String actualLatitude = getText("//label[starts-with(@for, 'latitude')]/following-sibling::div[1]");
-        assertEquals("Latitude is different.", String.valueOf(addressing.getLatitude()), actualLatitude);
-
-        String actualLongitude = getText("//label[starts-with(@for, 'longitude')]/following-sibling::div[1]");
-        assertEquals("Longitude is different.", String.valueOf(addressing.getLongitude()), actualLongitude);
+        assertEquals("Building No", addressing.getBuildingNo(), buildingNo.getText());
+        assertEquals("Street Name", addressing.getStreetName(), street.getText());
+        assertEquals("Postcode", addressing.getPostcode(), postcode.getText());
+        assertEquals("Latitude", String.valueOf(addressing.getLatitude()), latitude.getText());
+        assertEquals("Longitude", String.valueOf(addressing.getLongitude()), longitude.getText());
     }
 
     public void deleteAddress()

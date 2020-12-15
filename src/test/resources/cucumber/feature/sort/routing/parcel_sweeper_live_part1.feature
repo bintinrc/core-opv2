@@ -140,6 +140,7 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
+    And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
@@ -184,6 +185,7 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
+    And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name-2} |
@@ -223,6 +225,7 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
+    And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
@@ -262,6 +265,7 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
+    And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name-2} |
@@ -530,6 +534,7 @@ Feature: Parcel Sweeper Live
     And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And Operator refresh page
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
