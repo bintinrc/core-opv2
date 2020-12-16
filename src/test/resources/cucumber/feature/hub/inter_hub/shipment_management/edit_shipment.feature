@@ -114,7 +114,7 @@ Feature: Shipment Management - Edit Shipment
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan the created order to shipment in hub {hub-name}
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Closed on Shipment Management page

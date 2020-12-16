@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @Routing @ParcelSweeperLive
+@OperatorV2 @MiddleMile @Hub @Routing @ParcelSweeperLive @CFW
 Feature: Parcel Sweeper Live
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -258,7 +258,7 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteShipment @ForceSuccessOrder @RT
   Scenario Outline: Sweep Parcel In Shipment with Priority Level (<hiptest-uid>) - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -299,12 +299,12 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED               |
-      | hubId      | {KEY_DESTINATION_HUB} |
+      | trackingId | CREATED                              |
+      | hubId      | {KEY_DESTINATION_HUB_PARCEL_SWEEPER} |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN                |
-      | hubName   | {KEY_CREATED_ORDER.destinationHub} |
-      | hubId     | {KEY_DESTINATION_HUB}              |
+      | eventName | PARCEL ROUTING SCAN                  |
+      | hubName   | {KEY_CREATED_ORDER.destinationHub}   |
+      | hubId     | {KEY_DESTINATION_HUB_PARCEL_SWEEPER} |
     And Operator verify order status is "Transit" on Edit Order page
     Examples:
       | scenarioName    | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
