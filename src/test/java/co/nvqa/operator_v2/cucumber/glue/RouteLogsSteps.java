@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -47,7 +46,7 @@ public class RouteLogsSteps extends AbstractSteps
     }
 
     @When("^Operator create new route using data below:$")
-    public void operatorCreateNewRouteUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorCreateNewRouteUsingDataBelow(Map<String, String> mapOfData)
     {
         try
         {
@@ -84,15 +83,14 @@ public class RouteLogsSteps extends AbstractSteps
             putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
             put(KEY_CREATED_ROUTE_ID, createdRouteId);
             putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse date.", ex);
         }
     }
 
     @When("^Operator create multiple routes using data below:$")
-    public void operatorCreateMultipleRoutesUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorCreateMultipleRoutesUsingDataBelow(Map<String, String> mapOfData)
     {
         try
         {
@@ -111,9 +109,9 @@ public class RouteLogsSteps extends AbstractSteps
             String vehicleName = mapOfData.get("vehicleName");
             List<CreateRouteParams> listOfCreateRouteParams = new ArrayList<>();
 
-            for(int i=0; i<numberOfRoute; i++)
+            for (int i = 0; i < numberOfRoute; i++)
             {
-                String comments = f("This route (#%d) is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", (i+1), createdDate, scenarioName);
+                String comments = f("This route (#%d) is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", (i + 1), createdDate, scenarioName);
 
                 CreateRouteParams createRouteParams = new CreateRouteParams();
                 createRouteParams.setRouteDate(routeDate);
@@ -129,7 +127,7 @@ public class RouteLogsSteps extends AbstractSteps
             routeLogsPage.createMultipleRoute(listOfCreateRouteParams);
             int counter = 1;
 
-            for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+            for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
             {
                 Route createdRoute = createRouteParams.getCreatedRoute();
                 Long createdRouteId = createdRoute.getId();
@@ -144,8 +142,7 @@ public class RouteLogsSteps extends AbstractSteps
             }
 
             put(KEY_LIST_OF_CREATE_ROUTE_PARAMS, listOfCreateRouteParams);
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse date.", ex);
         }
@@ -163,14 +160,14 @@ public class RouteLogsSteps extends AbstractSteps
     {
         List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
 
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             routeLogsPage.verifyNewRouteIsCreatedSuccessfully(createRouteParams);
         }
     }
 
     @When("^Operator bulk edit details multiple routes using data below:$")
-    public void operatorBulkEditDetailsMultipleRoutesUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorBulkEditDetailsMultipleRoutesUsingDataBelow(Map<String, String> mapOfData)
     {
         try
         {
@@ -186,7 +183,7 @@ public class RouteLogsSteps extends AbstractSteps
             String ninjaDriverName = mapOfData.get("ninjaDriverName");
             String vehicleName = mapOfData.get("vehicleName");
 
-            for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+            for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
             {
                 createRouteParams.setRouteDate(routeDate);
                 createRouteParams.setRouteTags(tags);
@@ -197,8 +194,7 @@ public class RouteLogsSteps extends AbstractSteps
             }
 
             routeLogsPage.bulkEditDetails(listOfCreateRouteParams);
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse date.", ex);
         }
@@ -209,14 +205,14 @@ public class RouteLogsSteps extends AbstractSteps
     {
         List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
 
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             routeLogsPage.verifyRouteIsFoundAndInfoIsCorrect(createRouteParams);
         }
     }
 
     @When("^Operator edit driver type of multiple routes using data below:$")
-    public void operatorEditDriverTypeOfMultipleRoutesUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorEditDriverTypeOfMultipleRoutesUsingDataBelow(Map<String, String> mapOfData)
     {
         List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
 
@@ -329,7 +325,7 @@ public class RouteLogsSteps extends AbstractSteps
     }
 
     @When("^Operator set filter using data below and click 'Load Selection'$")
-    public void loadSelection(Map<String,String> mapOfData)
+    public void loadSelection(Map<String, String> mapOfData)
     {
         Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
         Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
@@ -358,9 +354,9 @@ public class RouteLogsSteps extends AbstractSteps
 
         String actualCurrentUrl = null;
 
-        for(String windowName : windowHandles)
+        for (String windowName : windowHandles)
         {
-            if(!primaryWindowHandle.equals(windowName))
+            if (!primaryWindowHandle.equals(windowName))
             {
                 getWebDriver().switchTo().window(windowName);
                 pause3s();
@@ -371,8 +367,7 @@ public class RouteLogsSteps extends AbstractSteps
                     Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
                     pause200ms();
                     alert.accept();
-                }
-                catch(Exception ex)
+                } catch (Exception ex)
                 {
                     getScenarioManager().writeToCurrentScenarioLog(f("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
                     getScenarioManager().writeToCurrentScenarioLog(TestUtils.convertExceptionStackTraceToString(ex));
@@ -388,7 +383,7 @@ public class RouteLogsSteps extends AbstractSteps
             }
         }
 
-        Map<String,String> mapOfTokens = new HashMap<>();
+        Map<String, String> mapOfTokens = new HashMap<>();
         mapOfTokens.put("route_id", String.valueOf(routeId));
         String expectedRedirectUrl = replaceTokens(redirectUrl, mapOfTokens);
         assertEquals(f("Operator does not redirect to page %s.", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
@@ -434,7 +429,7 @@ public class RouteLogsSteps extends AbstractSteps
         {
             String level = "[INFO]";
 
-            if(counter>1)
+            if (counter > 1)
             {
                 level = "[WARNING]";
             }
@@ -445,7 +440,7 @@ public class RouteLogsSteps extends AbstractSteps
             routeLogsPage.clickEditFilter();
             loadSelectionButtonIsVisible = routeLogsPage.isLoadSelectionVisible();
         }
-        while(!loadSelectionButtonIsVisible && counter<=MAX_RETRY);
+        while (!loadSelectionButtonIsVisible && counter <= MAX_RETRY);
 
         routeLogsPage.clickLoadSelection();
         routeLogsPage.searchAndVerifyRouteExist(routeId);
@@ -489,6 +484,7 @@ public class RouteLogsSteps extends AbstractSteps
     public void operatorOpenRouteManifestOfCreatedRouteFromRouteLogsPage()
     {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
+        put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
         routeLogsPage.openRouteManifest(routeId);
     }
 }

@@ -201,7 +201,6 @@ public class RouteManifestPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         chooseAnOutcomeForTheWaypointDialog.success.click();
-        chooseAnOutcomeForTheWaypointDialog.update.click();
         confirmationDialog.waitUntilVisible();
         confirmationDialog.proceed.click();
         confirmationDialog.waitUntilInvisible();

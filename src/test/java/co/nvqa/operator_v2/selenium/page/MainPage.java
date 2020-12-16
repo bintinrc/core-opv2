@@ -144,7 +144,7 @@ public class MainPage extends OperatorV2SimplePage
                     waitUntilInvisibilityOfElementLocated(dialogXpath);
                 } catch (Exception ex)
                 {
-
+                    refreshPage();
                 }
             }
         }
