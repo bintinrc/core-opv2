@@ -30,8 +30,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage = new ShipmentScanningPage(getWebDriver());
     }
 
-    @When("^Operator scan the created order to shipment in hub ([^\"]*)$")
-    public void operatorScanTheCreatedOrderToShipmentInHub(String hub) {
+    @When("^Operator scan the created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
+    public void operatorScanTheCreatedOrderToShipmentInHub(String hub, String destHub) {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
@@ -42,6 +42,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
                         ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
                 shipmentScanningPage.selectHub(hub);
+                shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
                 shipmentScanningPage.selectShipmentType(shipmentType);
                 shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
                 shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
@@ -72,8 +73,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.closeShipmentWithData(hubName, shipmentType, shipmentId);
     }
 
-    @When("^Operator scan multiple created order to shipment in hub ([^\"]*)$")
-    public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub) {
+    @When("^Operator scan multiple created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
+    public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub, String destHub) {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
@@ -84,7 +85,9 @@ public class ShipmentScanningSteps extends AbstractSteps {
                         ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
 
+                String resolvedDestHub = resolveValue(destHub);
                 shipmentScanningPage.selectHub(hub);
+                shipmentScanningPage.selectDestinationHub(resolvedDestHub);
                 shipmentScanningPage.selectShipmentType(shipmentType);
                 shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
                 shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
