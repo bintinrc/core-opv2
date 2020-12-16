@@ -1340,7 +1340,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
                 sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
                 String errorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
-                assertTrue("Error Message is displayed: ", errorMessage.equalsIgnoreCase(errorMessageText));
+                assertTrue("Error Message is not expected ", errorMessage.equalsIgnoreCase(errorMessageText));
+                assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
                 clickButtonByAriaLabel("Cancel");
             }
         }

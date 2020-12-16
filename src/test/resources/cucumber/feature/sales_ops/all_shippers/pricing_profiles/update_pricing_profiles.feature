@@ -122,7 +122,7 @@ Feature: Pricing Profiles
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | Special character is not allowed |
 
-  @CloseNewWindows
+  @CloseNewWindows @NotInGaia
   Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -155,20 +155,10 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Flat                           |
       | discountValue           | 10                             |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-2-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
       | discountValue | 4.38656                        |
-    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
-    And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
-    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
-    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-2-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-2-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-      | discountValue           | 4.39                           |
+    Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
+      | discountValue | Please provide only 2 decimal places. |
+
 
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
@@ -219,7 +209,7 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Flat                           |
       | discountValue           | 50000                          |
 
-  @CloseNewWindows
+  @CloseNewWindows @NotInGaia
   Scenario: Update an Existing Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
