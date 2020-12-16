@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @Routing @ParcelSweeperLive @CFW
+@OperatorV2 @MiddleMile @Hub @Routing @ParcelSweeperLive
 Feature: Parcel Sweeper Live
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -258,7 +258,7 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
 
-  @DeleteShipment @ForceSuccessOrder @RT
+  @DeleteShipment @ForceSuccessOrder
   Scenario Outline: Sweep Parcel In Shipment with Priority Level (<hiptest-uid>) - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

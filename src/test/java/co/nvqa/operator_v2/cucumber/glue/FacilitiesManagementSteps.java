@@ -5,6 +5,7 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -289,5 +290,17 @@ public class FacilitiesManagementSteps extends AbstractSteps
         Hub hub = get(KEY_CREATED_HUB);
         facilitiesManagementPage.activateHub(hub.getName());
         hub.setActive(true);
+    }
+
+    @And("Operator verify Hub {string} is {string}")
+    public void operatorVerifyHubValue(String filter, String value)
+    {
+        Hub expectedHub = get(KEY_CREATED_HUB);
+        Hub actualHub = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
+
+        if ("facility type".equals(filter)) {
+            assertThat("Facility type is equal", actualHub.getFacilityType(), equalTo(expectedHub.getFacilityType()));
+        }
+
     }
 }
