@@ -236,7 +236,7 @@ Feature: All Shippers
       | comments          | This is an invalid discount                     |
       | errorMessage      | Please provide only 2 decimal places.           |
 
-  @CloseNewWindows @NotInGaia
+  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:5e17e04a-7461-4546-9e3b-20dc2add40e6)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -264,7 +264,7 @@ Feature: All Shippers
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @CloseNewWindows
+  @CloseNewWindows  @NotInGaia
   Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount  (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

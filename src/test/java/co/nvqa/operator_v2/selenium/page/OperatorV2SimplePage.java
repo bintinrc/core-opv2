@@ -688,7 +688,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void checkRowWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat)
     {
-        WebElement mdCheckboxWe = findElementByXpath(f("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber));
+        WebElement mdCheckboxWe = findElementByXpath(f("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]//md-checkbox", mdVirtualRepeat, rowNumber));
         String ariaChecked = getAttribute(mdCheckboxWe, "aria-checked");
 
         if ("false".equalsIgnoreCase(ariaChecked))
