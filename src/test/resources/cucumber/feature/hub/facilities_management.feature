@@ -23,7 +23,6 @@ Feature: Facilities Management
     Then Operator verify Hub is found on Facilities Management page and contains correct info
     And Operator verify Hub "facility type" is "<type>"
     And Operator disable created hub on Facilities Management page
-    Then Operator verify Hub is updated successfully on Facilities Management page
     Examples:
       | type    | hiptest-uid                              |
       | Station | uid:6f350889-3076-4293-992a-7b0443dac7d8 |
