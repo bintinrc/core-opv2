@@ -36,21 +36,21 @@ Feature: Shipment Management - Edit Shipment
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
 
-    @DeleteShipment
-    Scenario: Cancel Shipment with Cancelled Status (uid:c414b401-2260-4388-bbbd-b364fc07727f)
-      Given Operator go to menu Shipper Support -> Blocked Dates
-      Given Operator go to menu Inter-Hub -> Shipment Management
-      When Operator create Shipment on Shipment Management page using data below:
-        | origHubName | {hub-name}                                                          |
-        | destHubName | {hub-name-2}                                                        |
-        | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      When API Operator change the status of the shipment into "Cancelled"
-      Given Operator go to menu Shipper Support -> Blocked Dates
-      Given Operator go to menu Inter-Hub -> Shipment Management
-      And Operator click "Load All Selection" on Shipment Management page
-      Then Operator verify the following parameters of the created shipment on Shipment Management page:
-        | status | Cancelled |
-      Then Operator verify "Cancel" action button is disabled on shipment Management page
+  @DeleteShipment
+  Scenario: Cancel Shipment with Cancelled Status (uid:c414b401-2260-4388-bbbd-b364fc07727f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
+    Then Operator verify "Cancel" action button is disabled on shipment Management page
 
   @DeleteShipment
   Scenario: Cancel Shipment with Completed Status (uid:bc7496b5-5719-480f-9205-b8604cebf3c9)
@@ -104,7 +104,7 @@ Feature: Shipment Management - Edit Shipment
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -203,6 +203,61 @@ Feature: Shipment Management - Edit Shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
+
+  @DeleteShipment
+  Scenario Outline: Edit Shipment - <type> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    When Operator edit Shipment on Shipment Management page based on "<type>" using data below:
+      | origHubName | {hub-name-2}                                                        |
+      | destHubName | {hub-name-1}                                                        |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | EDA         |                                                                     |
+      | ETA         |                                                                     |
+    And Operator refresh page
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Examples:
+      | type     | hiptest-uid                              |
+      | Start Hub | uid:1087986d-905c-4d2c-ad92-b3139f69d8fd |
+      | End Hub   | uid:2a179fc7-9139-455d-b1a2-d4e5582c88a7 |
+      | Comments | uid:af9bb414-10d0-4dc6-a298-189e2884c63f |
+#      | EDA & ETA | uid:380aee44-c3e6-4a81-9fb7-9e77b01259cd |
+
+#  @DeleteShipment
+#  Scenario: Edit Shipment (uid:5fbdb7d5-0a54-42de-bd8e-960ad26ff43e)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+#    When Operator create Shipment on Shipment Management page using data below:
+#      | origHubName | {hub-name}                                                          |
+#      | destHubName | {hub-name-2}                                                        |
+#      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+#    When Operator click "Load All Selection" on Shipment Management page
+#    When Operator edit Shipment on Shipment Management page using data below:
+#      | destHubName | {hub-name-2}                                                         |
+#      | origHubName | {hub-name}                                                           |
+#      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+#    And Operator click "Load All Selection" on Shipment Management page
+#    Then Operator verify parameters of the created shipment on Shipment Management page
+
+
+  Scenario: Edit Shipment - End Hub (uid:2a179fc7-9139-455d-b1a2-d4e5582c88a7)
+    Given no-op
+
+  Scenario: Edit Shipment - Comments (uid:af9bb414-10d0-4dc6-a298-189e2884c63f)
+    Given no-op
+
+  Scenario: Edit Shipment - EDA & ETA (uid:380aee44-c3e6-4a81-9fb7-9e77b01259cd)
+    Given no-op
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

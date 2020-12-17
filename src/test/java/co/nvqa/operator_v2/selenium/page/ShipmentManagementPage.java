@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -674,6 +675,32 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
             assertEquals("Successful Order(s) : ", successfulOrder, 0);
             assertEquals("Failed Order(s) : ", failedOrder, 1);
         }
+    }
+
+    public void editShipmentBy(String editType, ShipmentInfo shipmentInfo)
+    {
+        clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
+        if ("Start Hub".equals(editType))
+        {
+            editShipmentDialog.waitUntilVisible();
+            editShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+        }
+        if ("End Hub".equals(editType))
+        {
+            editShipmentDialog.waitUntilVisible();
+            editShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+        }
+        if ("Comments".equals(editType))
+        {
+            editShipmentDialog.waitUntilVisible();
+            editShipmentDialog.comments.setValue(shipmentInfo.getComments());
+        }
+        if ("EDA & ETA".equals(editType))
+        {
+            editShipmentDialog.waitUntilVisible();
+//            editShipmentDialog.startHub.searchAndSelectValue(editType);
+        }
+        editShipmentDialog.saveChanges(shipmentInfo.getId());
     }
 
     /**

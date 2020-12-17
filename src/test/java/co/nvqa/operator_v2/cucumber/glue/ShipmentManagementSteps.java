@@ -251,6 +251,30 @@ public class ShipmentManagementSteps extends AbstractSteps
         shipmentManagementPage.editShipment(shipmentInfo);
     }
 
+    @When("Operator edit Shipment on Shipment Management page based on {string} using data below:")
+    public void operatorEditShipmentOnShipmentManagementPageBasedOnTypeUsingDataBelow(String editType, Map<String, String> mapOfData)
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        switch (editType)
+        {
+            case "Start Hub":
+                shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
+                break;
+            case "End Hub":
+                shipmentInfo.setDestHubName(resolvedMapOfData.get("destHubName"));
+                break;
+            case "Comments":
+                shipmentInfo.setComments(resolvedMapOfData.get("comments"));
+                break;
+            case "EDA & ETA":
+                // TODO: Fill
+                break;
+        }
+        shipmentManagementPage.editShipmentBy(editType, shipmentInfo);
+        put(KEY_SHIPMENT_INFO, shipmentInfo);
+    }
+
     @When("^Operator edit Shipment on Shipment Management page including MAWB using data below:$")
     public void operatorEditShipmentOnShipmentManagementPageIncludingMawbUsingDataBelow(Map<String, String> mapOfData)
     {
