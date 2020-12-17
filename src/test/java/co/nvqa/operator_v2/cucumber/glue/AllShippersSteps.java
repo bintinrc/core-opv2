@@ -1098,4 +1098,16 @@ public class AllShippersSteps extends AbstractSteps
 
         allShippersPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
     }
+
+    @When("Operator adds new pricing Profile")
+    public void operatorAddsNewPricingProfile()
+    {
+        allShippersPage.allShippersCreateEditPage.addNewPricingProfile();
+    }
+
+    @Then("Operator verifies that Start Date is populated as today's date and is not editable")
+    public void operatorVerifiesThatStartDateIsPopulatedAsTodaySDateAndIsNotEditable()
+    {
+        allShippersPage.allShippersCreateEditPage.verifyStartDateInNewPricingScript();
+    }
 }
