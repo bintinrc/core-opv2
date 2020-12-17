@@ -579,6 +579,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         assertThat("toast message is the same", getToastBottomText(), containsString("Cannot parse parameter id as Long: For input string: \"\""));
     }
 
+    public void verifyCannotParseParameterIdAsLongToastExist()
+    {
+        waitUntilVisibilityOfToast("Network Request Error");
+        assertThat("toast message is the same", getToastBottomText(), containsString("Cannot parse parameter id as Long: For input string:"));
+    }
+
     public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
     {
         StringBuilder bulkData = new StringBuilder();

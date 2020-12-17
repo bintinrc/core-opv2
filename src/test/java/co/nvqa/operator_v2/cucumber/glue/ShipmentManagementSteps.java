@@ -690,4 +690,10 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         shipmentManagementPage.verifyEmptyLineParsingErrorToastExist();
     }
+
+    @Then("Operator verify cannot parse parameter id as long error toast exist")
+    public void operatorVerifyCannotParseParameterIdAsLongErrorToastExist()
+    {
+        shipmentManagementPage.verifyCannotParseParameterIdAsLongToastExist();
+    }
 }
