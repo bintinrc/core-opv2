@@ -206,6 +206,15 @@ public class OperatorV2SimplePage extends SimplePage
         clickf("//md-datepicker[@id='%s']/parent::*", mdDatepickerId);
     }
 
+    public String getValueMdDatepickerById(String mdDatepickerId)
+    {
+        return getValue(f("//md-datepicker[@id='%s']/div/input", mdDatepickerId));
+    }
+
+    public boolean isEnabledMdDatepickerById(String mdDatepickerId)
+    {
+        return isElementEnabled(f("//md-datepicker[@id='%s']/div/input", mdDatepickerId));
+    }
     public void clickTabItem(String tabItemText)
     {
         clickf("//tab-item[contains(text(), '%s')]", tabItemText);

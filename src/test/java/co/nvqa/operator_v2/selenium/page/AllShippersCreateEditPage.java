@@ -1436,4 +1436,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         @FindBy(css = "button[aria-label='Leave']")
         public Button leave;
     }
+
+    public void addNewPricingProfile(){
+        waitUntilPageLoaded();
+        createShipper.click();
+        switchToNewWindow();
+        waitUntilShipperCreateEditPageIsLoaded();
+        tabs.selectTab("Pricing and Billing");
+        addNewProfile.click();
+        newPricingProfileDialog.waitUntilVisible();
+    }
+
+
+    public void verifyStartDateInNewPricingScript(){
+        assertEquals("Expected Start Date is not today ", DateUtil.getTodayDate_YYYY_MM_DD(), getValueMdDatepickerById(LOCATOR_START_DATE));
+        assertFalse(isEnabledMdDatepickerById(LOCATOR_START_DATE));
+    }
 }
