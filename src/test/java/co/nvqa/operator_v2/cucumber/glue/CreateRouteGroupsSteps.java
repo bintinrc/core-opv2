@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.commons.support.DateUtil.ISO8601_LITE_DATETIME_FORMAT;
-import static co.nvqa.commons.support.DateUtil.SDF_YYYY_MM_DD_HH_MM_SS;
-
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.operator_v2.model.TxnRsvn;
@@ -19,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+
+import static co.nvqa.commons.support.DateUtil.ISO8601_LITE_DATETIME_FORMAT;
+import static co.nvqa.commons.support.DateUtil.SDF_YYYY_MM_DD_HH_MM_SS;
 
 /**
  * @author Daniel Joi Partogi Hutapea

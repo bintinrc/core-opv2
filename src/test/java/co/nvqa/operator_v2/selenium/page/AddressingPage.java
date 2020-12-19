@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -15,6 +13,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Tristania Siagian

@@ -1,9 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
-import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_ROUTE_EDIT;
-import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.COLUMN_RESERVATION_ID;
-
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
@@ -28,6 +24,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
+
+import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
+import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_ROUTE_EDIT;
+import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.COLUMN_RESERVATION_ID;
 
 /**
  * @author Daniel Joi Partogi Hutapea

@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
@@ -15,6 +13,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Sergey Mishanin

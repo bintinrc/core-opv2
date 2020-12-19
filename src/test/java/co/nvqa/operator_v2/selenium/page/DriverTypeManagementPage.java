@@ -1,10 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
-import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
@@ -20,6 +15,11 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
+import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * Modified by Sergey Mishanin

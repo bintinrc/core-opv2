@@ -1,11 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_CREATE_TICKET;
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_SHOW_DETAIL;
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.COLUMN_TRACKING_ID;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteCleaningReportCodInfo;
 import co.nvqa.operator_v2.model.RouteCleaningReportParcelInfo;
@@ -17,6 +11,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
+
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_CREATE_TICKET;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_SHOW_DETAIL;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.COLUMN_TRACKING_ID;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Daniel Joi Partogi Hutapea

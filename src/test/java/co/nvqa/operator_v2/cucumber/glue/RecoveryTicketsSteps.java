@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.COLUMN_TRACKING_ID;
-
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import cucumber.api.java.en.And;
@@ -11,6 +8,9 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.Map;
+
+import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.COLUMN_TRACKING_ID;
 
 /**
  * @author Daniel Joi Partogi Hutapea

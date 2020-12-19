@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static org.hamcrest.Matchers.allOf;
-
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -26,6 +24,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static org.hamcrest.Matchers.allOf;
 
 /**
  * @author Lanang Jati
