@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -10,69 +9,62 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AntSelect extends PageElement
-{
-    public AntSelect(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class AntSelect extends PageElement {
 
-    public AntSelect(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public AntSelect(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-select-selection-selected-value")
-    public PageElement selectValueElement;
+  public AntSelect(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-select-search__field")
-    public PageElement searchInput;
+  @FindBy(className = "ant-select-selection-selected-value")
+  public PageElement selectValueElement;
 
-    @FindBy(className = "ant-select-clear-icon")
-    public PageElement clearIcon;
+  @FindBy(className = "ant-select-search__field")
+  public PageElement searchInput;
 
-    public void selectValue(String value)
-    {
-        enterSearchTerm(value);
-        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]", value);
-    }
+  @FindBy(className = "ant-select-clear-icon")
+  public PageElement clearIcon;
 
-    public void selectValueWithoutSearch(String value)
-    {
-        openMenu();
-        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]", value);
-    }
+  public void selectValue(String value) {
+    enterSearchTerm(value);
+    clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]",
+        value);
+  }
 
-    public void clearValue()
-    {
-        clearIcon.click();
-    }
+  public void selectValueWithoutSearch(String value) {
+    openMenu();
+    clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]",
+        value);
+  }
 
-    private void openMenu()
-    {
-        waitUntilClickable();
-        jsClick();
-        pause1s();
-    }
+  public void clearValue() {
+    clearIcon.click();
+  }
 
-    public void enterSearchTerm(String value)
-    {
-        openMenu();
-        searchInput.sendKeys(value);
-        pause1s();
-    }
+  private void openMenu() {
+    waitUntilClickable();
+    jsClick();
+    pause1s();
+  }
 
-    public void sendReturnButton()
-    {
-        searchInput.sendKeys(Keys.RETURN);
-    }
+  public void enterSearchTerm(String value) {
+    openMenu();
+    searchInput.sendKeys(value);
+    pause1s();
+  }
 
-    public String getValue()
-    {
-        return selectValueElement.isDisplayedFast() ?
-                selectValueElement.getText() :
-                null;
-    }
+  public void sendReturnButton() {
+    searchInput.sendKeys(Keys.RETURN);
+  }
+
+  public String getValue() {
+    return selectValueElement.isDisplayedFast() ?
+        selectValueElement.getText() :
+        null;
+  }
 }

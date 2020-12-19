@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.selenium.page.ContactTypeManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
 import java.util.Map;
 
 /**
@@ -14,130 +13,123 @@ import java.util.Map;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ContactTypeManagementSteps extends AbstractSteps
-{
-    private ContactTypeManagementPage contactTypeManagementPage;
+public class ContactTypeManagementSteps extends AbstractSteps {
 
-    public ContactTypeManagementSteps()
-    {
+  private ContactTypeManagementPage contactTypeManagementPage;
+
+  public ContactTypeManagementSteps() {
+  }
+
+  @Override
+  public void init() {
+    contactTypeManagementPage = new ContactTypeManagementPage(getWebDriver());
+  }
+
+  @When("^Operator create new Contact Type on page Contact Type Management using data below:$")
+  public void operatorCreateNewContactTypeOnPageContactTypeManagementUsingDataBelow(
+      Map<String, String> mapOfData) {
+    String name = mapOfData.get("name");
+
+    String uniqueCode = generateDateUniqueString();
+
+    if ("GENERATED".equals(name)) {
+      name = "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode;
     }
 
-    @Override
-    public void init()
-    {
-        contactTypeManagementPage = new ContactTypeManagementPage(getWebDriver());
+    ContactType contactType = new ContactType();
+    contactType.setName(name);
+    contactTypeManagementPage.createNewContactType(contactType);
+
+    put(KEY_CONTACT_TYPE, contactType);
+  }
+
+  @Then("^Operator verify a new Contact Type is created successfully on page Contact Type Management$")
+  public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration() {
+    ContactType contactType = get(KEY_CONTACT_TYPE);
+    contactTypeManagementPage.verifyContactTypeIsExistAndDataIsCorrect(contactType);
+  }
+
+  @When("^Operator update Contact Type on page Contact Type Management using data below:$")
+  public void operatorUpdateContactTypeOnPageContactTypeManagementUsingDataBelow(
+      Map<String, String> mapOfData) {
+    ContactType contactType = get(KEY_CONTACT_TYPE);
+
+    mapOfData = resolveKeyValues(mapOfData);
+    String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
+    String name = mapOfData.get("name");
+
+    if (contactType == null) {
+      contactType = new ContactType();
+      put(KEY_CONTACT_TYPE, contactType);
     }
 
-    @When("^Operator create new Contact Type on page Contact Type Management using data below:$")
-    public void operatorCreateNewContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
-    {
-        String name = mapOfData.get("name");
+    String uniqueCode = generateDateUniqueString();
 
-        String uniqueCode = generateDateUniqueString();
-
-        if ("GENERATED".equals(name))
-        {
-            name = "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode;
-        }
-
-        ContactType contactType = new ContactType();
-        contactType.setName(name);
-        contactTypeManagementPage.createNewContactType(contactType);
-
-        put(KEY_CONTACT_TYPE, contactType);
+    if ("GENERATED".equals(name)) {
+      String temp = contactType.getName();
+      name = temp == null ? "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode : temp + " [EDITED]";
     }
 
-    @Then("^Operator verify a new Contact Type is created successfully on page Contact Type Management$")
-    public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration()
-    {
-        ContactType contactType = get(KEY_CONTACT_TYPE);
-        contactTypeManagementPage.verifyContactTypeIsExistAndDataIsCorrect(contactType);
-    }
+    contactType.setName(name);
+    contactTypeManagementPage.updateContactType(searchContactTypesKeyword, contactType);
+  }
 
-    @When("^Operator update Contact Type on page Contact Type Management using data below:$")
-    public void operatorUpdateContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
-    {
-        ContactType contactType = get(KEY_CONTACT_TYPE);
+  @Then("^Operator verify Contact Type is updated successfully on page Contact Type Management$")
+  public void operatorVerifyContactTypeIsUpdatedSuccessfullyOnPageContactTypeManagement() {
+    ContactType contactType = get(KEY_CONTACT_TYPE);
+    contactTypeManagementPage.verifyContactTypeIsExistAndDataIsCorrect(contactType);
+  }
 
-        mapOfData = resolveKeyValues(mapOfData);
-        String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
-        String name = mapOfData.get("name");
+  @When("^Operator delete Contact Type on page Contact Type Management using data below:$")
+  public void operatorDeleteContactTypeOnPageContactTypeManagementUsingDataBelow(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
 
-        if (contactType == null)
-        {
-            contactType = new ContactType();
-            put(KEY_CONTACT_TYPE, contactType);
-        }
+    String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
+    contactTypeManagementPage.deleteContactType(searchContactTypesKeyword);
 
-        String uniqueCode = generateDateUniqueString();
+    put("searchContactTypesKeyword", searchContactTypesKeyword);
+  }
 
-        if ("GENERATED".equals(name))
-        {
-            String temp = contactType.getName();
-            name = temp == null ? "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode : temp + " [EDITED]";
-        }
+  @Then("^Operator verify Contact Type is deleted successfully on page Contact Type Management$")
+  public void operatorVerifyContactTypeIsDeletedSuccessfullyOnPageContactTypeManagement() {
+    String searchContactTypesKeyword = get("searchContactTypesKeyword");
+    contactTypeManagementPage.verifyContactTypeIsNotExistAnymore(searchContactTypesKeyword);
+  }
 
-        contactType.setName(name);
-        contactTypeManagementPage.updateContactType(searchContactTypesKeyword, contactType);
-    }
+  @When("^Operator search Contact Type on page Contact Type Management using data below:$")
+  public void operatorSearchContactTypeOnPageContactTypeManagementUsingDataBelow(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    ContactType contactType = get(KEY_CONTACT_TYPE);
+    String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
+    ContactType contactTypeSearchResult = contactTypeManagementPage
+        .searchContactType(searchContactTypesKeyword);
+    put(KEY_CONTACT_TYPE_SEARCH_RESULT, contactTypeSearchResult);
+    put("searchContactTypesKeyword", searchContactTypesKeyword);
+  }
 
-    @Then("^Operator verify Contact Type is updated successfully on page Contact Type Management$")
-    public void operatorVerifyContactTypeIsUpdatedSuccessfullyOnPageContactTypeManagement()
-    {
-        ContactType contactType = get(KEY_CONTACT_TYPE);
-        contactTypeManagementPage.verifyContactTypeIsExistAndDataIsCorrect(contactType);
-    }
+  @Then("^Operator verify Contact Type is found on page Contact Type Management and contains correct info$")
+  public void operatorVerifyContactTypeIsFoundOnPageContactTypeManagementAndContainsCorrectInfo() {
+    String searchContactTypesKeyword = get("searchContactTypesKeyword");
+    ContactType expectedContactType = get(KEY_CONTACT_TYPE);
+    ContactType actualContactType = get(KEY_CONTACT_TYPE_SEARCH_RESULT);
 
-    @When("^Operator delete Contact Type on page Contact Type Management using data below:$")
-    public void operatorDeleteContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
-    {
-        mapOfData = resolveKeyValues(mapOfData);
+    assertNotNull(
+        f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword),
+        actualContactType);
+    assertEquals("Contact Type", expectedContactType.getName(), actualContactType.getName());
+  }
 
-        String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
-        contactTypeManagementPage.deleteContactType(searchContactTypesKeyword);
+  @When("^Operator download Contact Type CSV file on page Contact Type Management$")
+  public void operatorDownloadContactTypeCsvFileOnPageContactTypeManagement() {
+    contactTypeManagementPage.downloadCsvFile();
+  }
 
-        put("searchContactTypesKeyword", searchContactTypesKeyword);
-    }
-
-    @Then("^Operator verify Contact Type is deleted successfully on page Contact Type Management$")
-    public void operatorVerifyContactTypeIsDeletedSuccessfullyOnPageContactTypeManagement()
-    {
-        String searchContactTypesKeyword = get("searchContactTypesKeyword");
-        contactTypeManagementPage.verifyContactTypeIsNotExistAnymore(searchContactTypesKeyword);
-    }
-
-    @When("^Operator search Contact Type on page Contact Type Management using data below:$")
-    public void operatorSearchContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
-    {
-        mapOfData = resolveKeyValues(mapOfData);
-        ContactType contactType = get(KEY_CONTACT_TYPE);
-        String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
-        ContactType contactTypeSearchResult = contactTypeManagementPage.searchContactType(searchContactTypesKeyword);
-        put(KEY_CONTACT_TYPE_SEARCH_RESULT, contactTypeSearchResult);
-        put("searchContactTypesKeyword", searchContactTypesKeyword);
-    }
-
-    @Then("^Operator verify Contact Type is found on page Contact Type Management and contains correct info$")
-    public void operatorVerifyContactTypeIsFoundOnPageContactTypeManagementAndContainsCorrectInfo()
-    {
-        String searchContactTypesKeyword = get("searchContactTypesKeyword");
-        ContactType expectedContactType = get(KEY_CONTACT_TYPE);
-        ContactType actualContactType = get(KEY_CONTACT_TYPE_SEARCH_RESULT);
-
-        assertNotNull(f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword), actualContactType);
-        assertEquals("Contact Type", expectedContactType.getName(), actualContactType.getName());
-    }
-
-    @When("^Operator download Contact Type CSV file on page Contact Type Management$")
-    public void operatorDownloadContactTypeCsvFileOnPageContactTypeManagement()
-    {
-        contactTypeManagementPage.downloadCsvFile();
-    }
-
-    @Then("^Operator verify Contact Type CSV file is downloaded successfully and contains correct info$")
-    public void operatorVerifyContactTypeCsvFileIsDownloadedSuccessfullyAndContainsCorrectInfo()
-    {
-        ContactType contactType = get(KEY_CONTACT_TYPE);
-        contactTypeManagementPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(contactType);
-    }
+  @Then("^Operator verify Contact Type CSV file is downloaded successfully and contains correct info$")
+  public void operatorVerifyContactTypeCsvFileIsDownloadedSuccessfullyAndContainsCorrectInfo() {
+    ContactType contactType = get(KEY_CONTACT_TYPE);
+    contactTypeManagementPage
+        .verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(contactType);
+  }
 }

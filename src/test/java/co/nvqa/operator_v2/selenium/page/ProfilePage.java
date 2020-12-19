@@ -10,58 +10,50 @@ import org.openqa.selenium.support.FindBy;
  * @author Lanang Jati
  */
 @SuppressWarnings("WeakerAccess")
-public class ProfilePage extends OperatorV2SimplePage
-{
-    @FindBy(css = "button[aria-label='Profile']")
-    public Button profileButton;
-    @FindBy(css = "md-select[ng-model='domain.current']")
-    public MdSelect countrySelect;
-    @FindBy(css = "app-sidenav")
-    public PageElement appSidenav;
+public class ProfilePage extends OperatorV2SimplePage {
 
-    public ProfilePage(WebDriver webDriver)
-    {
-        super(webDriver);
+  @FindBy(css = "button[aria-label='Profile']")
+  public Button profileButton;
+  @FindBy(css = "md-select[ng-model='domain.current']")
+  public MdSelect countrySelect;
+  @FindBy(css = "app-sidenav")
+  public PageElement appSidenav;
+
+  public ProfilePage(WebDriver webDriver) {
+    super(webDriver);
+  }
+
+  public void clickProfileButton() {
+    profileButton.click();
+  }
+
+  public void closeProfile() {
+    appSidenav.moveAndClick();
+  }
+
+  public void pickCountry(String country) {
+    countrySelect.selectValue(country);
+  }
+
+  public String getCurrentCountry() {
+    return countrySelect.getAttribute("innerText");
+  }
+
+  public void changeCountry(String newCountry) {
+    String currentCountry = getCurrentCountry();
+
+    if (currentCountry.equalsIgnoreCase(newCountry)) {
+      closeProfile();
+    } else {
+      pickCountry(newCountry);
     }
+  }
 
-    public void clickProfileButton()
-    {
-        profileButton.click();
-    }
-
-    public void closeProfile()
-    {
-        appSidenav.moveAndClick();
-    }
-
-    public void pickCountry(String country)
-    {
-        countrySelect.selectValue(country);
-    }
-
-    public String getCurrentCountry()
-    {
-        return countrySelect.getAttribute("innerText");
-    }
-
-    public void changeCountry(String newCountry)
-    {
-        String currentCountry = getCurrentCountry();
-
-        if (currentCountry.equalsIgnoreCase(newCountry))
-        {
-            closeProfile();
-        } else
-        {
-            pickCountry(newCountry);
-        }
-    }
-
-    public void currentCountryIs(String country)
-    {
-        clickProfileButton();
-        String currentCountry = getCurrentCountry();
-        closeProfile();
-        assertTrue(f("Current country is %s not %s", currentCountry, country), currentCountry.equalsIgnoreCase(country));
-    }
+  public void currentCountryIs(String country) {
+    clickProfileButton();
+    String currentCountry = getCurrentCountry();
+    closeProfile();
+    assertTrue(f("Current country is %s not %s", currentCountry, country),
+        currentCountry.equalsIgnoreCase(country));
+  }
 }

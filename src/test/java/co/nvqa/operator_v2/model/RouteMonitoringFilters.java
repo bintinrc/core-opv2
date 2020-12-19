@@ -1,76 +1,63 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Date;
 import java.util.Map;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteMonitoringFilters extends DataEntity<RouteMonitoringFilters>
-{
-    private Date routeDate;
-    private String[] routeTags;
-    private String[] hubs;
-    private String[] zones;
+public class RouteMonitoringFilters extends DataEntity<RouteMonitoringFilters> {
 
-    public RouteMonitoringFilters()
-    {
-    }
+  private Date routeDate;
+  private String[] routeTags;
+  private String[] hubs;
+  private String[] zones;
 
-    public RouteMonitoringFilters(Map<String, ?> data)
-    {
-        fromMap(data);
-    }
+  public RouteMonitoringFilters() {
+  }
 
-    public Date getRouteDate()
-    {
-        return routeDate;
-    }
+  public RouteMonitoringFilters(Map<String, ?> data) {
+    fromMap(data);
+  }
 
-    public void setRouteDate(Date routeDate)
-    {
-        this.routeDate = routeDate;
-    }
+  public Date getRouteDate() {
+    return routeDate;
+  }
 
-    public String[] getRouteTags()
-    {
-        return routeTags;
-    }
+  public void setRouteDate(Date routeDate) {
+    this.routeDate = routeDate;
+  }
 
-    public void setRouteTags(String[] routeTags)
-    {
-        this.routeTags = routeTags;
-    }
+  public String[] getRouteTags() {
+    return routeTags;
+  }
 
-    public String[] getHubs()
-    {
-        return hubs;
-    }
+  public void setRouteTags(String[] routeTags) {
+    this.routeTags = routeTags;
+  }
 
-    public void setHubs(String[] hubs)
-    {
-        this.hubs = hubs;
-    }
+  public String[] getHubs() {
+    return hubs;
+  }
 
-    public void setHubs(String hubs)
-    {
-        setHubs(hubs.split(";"));
-    }
+  public void setHubs(String[] hubs) {
+    this.hubs = hubs;
+  }
 
-    public String[] getZones()
-    {
-        return zones;
-    }
+  public void setHubs(String hubs) {
+    setHubs(hubs.split(";"));
+  }
 
-    public void setZones(String[] zones)
-    {
-        this.zones = zones;
-    }
+  public String[] getZones() {
+    return zones;
+  }
 
-    public void setZones(String zones)
-    {
-        setZones(zones.split(";"));
-    }
+  public void setZones(String[] zones) {
+    this.zones = zones;
+  }
+
+  public void setZones(String zones) {
+    setZones(zones.split(";"));
+  }
 }

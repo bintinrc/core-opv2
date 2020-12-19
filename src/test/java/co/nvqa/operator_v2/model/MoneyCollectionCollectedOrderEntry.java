@@ -1,109 +1,91 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class MoneyCollectionCollectedOrderEntry extends DataEntity<MoneyCollectionCollectedOrderEntry>
-{
-    private String processedCodAmount;
-    private String processedCodCollected;
-    private String trackingId;
-    private String stampId;
-    private String customType;
-    private String location;
-    private String contact;
-    private String addressee;
+public class MoneyCollectionCollectedOrderEntry extends
+    DataEntity<MoneyCollectionCollectedOrderEntry> {
 
-    public MoneyCollectionCollectedOrderEntry()
-    {
-    }
+  private String processedCodAmount;
+  private String processedCodCollected;
+  private String trackingId;
+  private String stampId;
+  private String customType;
+  private String location;
+  private String contact;
+  private String addressee;
 
-    public MoneyCollectionCollectedOrderEntry(Map<String, ?> data)
-    {
-        fromMap(data);
-    }
+  public MoneyCollectionCollectedOrderEntry() {
+  }
 
-    public String getProcessedCodAmount()
-    {
-        return processedCodAmount;
-    }
+  public MoneyCollectionCollectedOrderEntry(Map<String, ?> data) {
+    fromMap(data);
+  }
 
-    public void setProcessedCodAmount(String processedCodAmount)
-    {
-        this.processedCodAmount = processedCodAmount;
-    }
+  public String getProcessedCodAmount() {
+    return processedCodAmount;
+  }
 
-    public String getProcessedCodCollected()
-    {
-        return processedCodCollected;
-    }
+  public void setProcessedCodAmount(String processedCodAmount) {
+    this.processedCodAmount = processedCodAmount;
+  }
 
-    public void setProcessedCodCollected(String processedCodCollected)
-    {
-        this.processedCodCollected = processedCodCollected;
-    }
+  public String getProcessedCodCollected() {
+    return processedCodCollected;
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public void setProcessedCodCollected(String processedCodCollected) {
+    this.processedCodCollected = processedCodCollected;
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getStampId()
-    {
-        return stampId;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setStampId(String stampId)
-    {
-        this.stampId = stampId;
-    }
+  public String getStampId() {
+    return stampId;
+  }
 
-    public String getCustomType()
-    {
-        return customType;
-    }
+  public void setStampId(String stampId) {
+    this.stampId = stampId;
+  }
 
-    public void setCustomType(String customType)
-    {
-        this.customType = customType;
-    }
+  public String getCustomType() {
+    return customType;
+  }
 
-    public String getLocation()
-    {
-        return location;
-    }
+  public void setCustomType(String customType) {
+    this.customType = customType;
+  }
 
-    public void setLocation(String location)
-    {
-        this.location = location;
-    }
+  public String getLocation() {
+    return location;
+  }
 
-    public String getContact()
-    {
-        return contact;
-    }
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
-    public void setContact(String contact)
-    {
-        this.contact = contact;
-    }
+  public String getContact() {
+    return contact;
+  }
 
-    public String getAddressee()
-    {
-        return addressee;
-    }
+  public void setContact(String contact) {
+    this.contact = contact;
+  }
 
-    public void setAddressee(String addressee)
-    {
-        this.addressee = addressee;
-    }
+  public String getAddressee() {
+    return addressee;
+  }
+
+  public void setAddressee(String addressee) {
+    this.addressee = addressee;
+  }
 }

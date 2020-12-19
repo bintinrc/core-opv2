@@ -4,18 +4,15 @@ import co.nvqa.commons.cucumber.glue.StandardSteps;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
-{
-    public ApiShipperExtSteps()
-    {
-    }
+public class ApiShipperExtSteps extends StandardSteps<ScenarioManager> {
 
-    @Override
-    public void init()
-    {
-    }
+  public ApiShipperExtSteps() {
+  }
+
+  @Override
+  public void init() {
+  }
 }

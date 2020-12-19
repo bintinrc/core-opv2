@@ -8,32 +8,28 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-public class TabWrapper extends PageElement
-{
-    public TabWrapper(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class TabWrapper extends PageElement {
 
-    public TabWrapper(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public TabWrapper(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    private static final String TAB_LOCATOR = ".//tab-item[normalize-space(text())=normalize-space('%s')]";
-    private static final String ACTIVE_TAB_LOCATOR = ".//tab-item[contains(@class,'active')]";
+  public TabWrapper(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    public void selectTab(String value)
-    {
-        WebElement tabElement = findElementBy(By.xpath(f(TAB_LOCATOR, value)), webElement);
-        tabElement.click();
+  private static final String TAB_LOCATOR = ".//tab-item[normalize-space(text())=normalize-space('%s')]";
+  private static final String ACTIVE_TAB_LOCATOR = ".//tab-item[contains(@class,'active')]";
 
-    }
+  public void selectTab(String value) {
+    WebElement tabElement = findElementBy(By.xpath(f(TAB_LOCATOR, value)), webElement);
+    tabElement.click();
 
-    public String getValue()
-    {
-        return findElementBy(By.xpath(ACTIVE_TAB_LOCATOR), webElement).getText();
-    }
+  }
+
+  public String getValue() {
+    return findElementBy(By.xpath(ACTIVE_TAB_LOCATOR), webElement).getText();
+  }
 }

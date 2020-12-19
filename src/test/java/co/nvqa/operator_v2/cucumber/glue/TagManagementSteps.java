@@ -10,37 +10,35 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  */
 @SuppressWarnings("WeakerAccess")
 @ScenarioScoped
-public class TagManagementSteps extends AbstractSteps
-{
-    public static final String DEFAULT_TAG_NAME = "AAA";
-    public static final String EDITED_TAG_NAME = "AAB";
-    private static final String DEFAULT_TAG_DESCRIPTION = "This tag is created by Automation Test for testing purpose only. Ignore this tag.";
-    private static final String EDITED_DEFAULT_TAG_DESCRIPTION = DEFAULT_TAG_DESCRIPTION + " [EDITED]";
+public class TagManagementSteps extends AbstractSteps {
 
-    private TagManagementPage tagManagementPage;
+  public static final String DEFAULT_TAG_NAME = "AAA";
+  public static final String EDITED_TAG_NAME = "AAB";
+  private static final String DEFAULT_TAG_DESCRIPTION = "This tag is created by Automation Test for testing purpose only. Ignore this tag.";
+  private static final String EDITED_DEFAULT_TAG_DESCRIPTION =
+      DEFAULT_TAG_DESCRIPTION + " [EDITED]";
 
-    public TagManagementSteps()
-    {
-    }
+  private TagManagementPage tagManagementPage;
 
-    @Override
-    public void init()
-    {
-        tagManagementPage = new TagManagementPage(getWebDriver());
-    }
+  public TagManagementSteps() {
+  }
 
-    @When("^Operator create new tag on Tag Management$")
-    public void createNewTag()
-    {
+  @Override
+  public void init() {
+    tagManagementPage = new TagManagementPage(getWebDriver());
+  }
+
+  @When("^Operator create new tag on Tag Management$")
+  public void createNewTag() {
         /*
           Check is tag name already exists. If tag is exists, delete that tag first.
           Check twice:
           1. DEFAULT_TAG_NAME = AAA
           2. EDITED_TAG_NAME = AAB
          */
-        tagManagementPage.clickTagNameColumnHeader();
+    tagManagementPage.clickTagNameColumnHeader();
 
-        //This code below is removed because KH said the ops want that button to be removed.
+    //This code below is removed because KH said the ops want that button to be removed.
         /*for(int i=0; i<2; i++)
         {
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
@@ -57,88 +55,89 @@ public class TagManagementSteps extends AbstractSteps
             }
         }*/
 
-        tagManagementPage.createTag.click();
-        tagManagementPage.addTagDialog.waitUntilVisible();
-        tagManagementPage.addTagDialog.tagName.setValue(DEFAULT_TAG_NAME);
-        tagManagementPage.addTagDialog.description.setValue(DEFAULT_TAG_DESCRIPTION);
-        tagManagementPage.addTagDialog.submit.clickAndWaitUntilDone();
-        tagManagementPage.addTagDialog.waitUntilInvisible();
-    }
+    tagManagementPage.createTag.click();
+    tagManagementPage.addTagDialog.waitUntilVisible();
+    tagManagementPage.addTagDialog.tagName.setValue(DEFAULT_TAG_NAME);
+    tagManagementPage.addTagDialog.description.setValue(DEFAULT_TAG_DESCRIPTION);
+    tagManagementPage.addTagDialog.submit.clickAndWaitUntilDone();
+    tagManagementPage.addTagDialog.waitUntilInvisible();
+  }
 
-    @Then("^Operator verify the new tag is created successfully on Tag Management$")
-    public void verifyNewTagCreatedSuccessfully()
-    {
-        retryIfAssertionErrorOccurred(() ->
+  @Then("^Operator verify the new tag is created successfully on Tag Management$")
+  public void verifyNewTagCreatedSuccessfully() {
+    retryIfAssertionErrorOccurred(() ->
         {
-            reloadPageAndEnableSortByName();
+          reloadPageAndEnableSortByName();
 
-            String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-            assertEquals(DEFAULT_TAG_NAME, actualTagName);
-        }, f("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToCurrentScenarioLog);
-    }
+          String actualTagName = tagManagementPage
+              .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
+          assertEquals(DEFAULT_TAG_NAME, actualTagName);
+        }, f("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME),
+        getScenarioManager()::writeToCurrentScenarioLog);
+  }
 
-    @When("^Operator update tag on Tag Management$")
-    public void updateTag()
-    {
+  @When("^Operator update tag on Tag Management$")
+  public void updateTag() {
         /*
           Check first row is tag DEFAULT_TAG_NAME.
          */
-        String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        assertEquals(DEFAULT_TAG_NAME, actualTagName);
+    String actualTagName = tagManagementPage
+        .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
+    assertEquals(DEFAULT_TAG_NAME, actualTagName);
 
-        tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_EDIT);
-        tagManagementPage.addTagDialog.waitUntilVisible();
-        tagManagementPage.addTagDialog.tagName.setValue(EDITED_TAG_NAME);
-        tagManagementPage.addTagDialog.description.setValue(EDITED_DEFAULT_TAG_DESCRIPTION);
-        tagManagementPage.addTagDialog.submitChanges.clickAndWaitUntilDone();
-        tagManagementPage.addTagDialog.waitUntilInvisible();
-    }
+    tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_EDIT);
+    tagManagementPage.addTagDialog.waitUntilVisible();
+    tagManagementPage.addTagDialog.tagName.setValue(EDITED_TAG_NAME);
+    tagManagementPage.addTagDialog.description.setValue(EDITED_DEFAULT_TAG_DESCRIPTION);
+    tagManagementPage.addTagDialog.submitChanges.clickAndWaitUntilDone();
+    tagManagementPage.addTagDialog.waitUntilInvisible();
+  }
 
-    @Then("^Operator verify the tag is updated successfully on Tag Management$")
-    public void verifyTagUpdatedSuccessfully()
+  @Then("^Operator verify the tag is updated successfully on Tag Management$")
+  public void verifyTagUpdatedSuccessfully() {
+    retryIfAssertionErrorOccurred(() ->
     {
-        retryIfAssertionErrorOccurred(() ->
-        {
-            reloadPageAndEnableSortByName();
+      reloadPageAndEnableSortByName();
 
-            String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-            assertEquals(EDITED_TAG_NAME, actualTagName);
+      String actualTagName = tagManagementPage
+          .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
+      assertEquals(EDITED_TAG_NAME, actualTagName);
 
-            String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_DESCRIPTION);
-            assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
-        }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToCurrentScenarioLog);
-    }
+      String actualTagDescription = tagManagementPage
+          .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_DESCRIPTION);
+      assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
+    }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToCurrentScenarioLog);
+  }
 
-    @When("^Operator delete tag on Tag Management$")
-    public void deleteTag()
-    {
-        reloadPageAndEnableSortByName();
+  @When("^Operator delete tag on Tag Management$")
+  public void deleteTag() {
+    reloadPageAndEnableSortByName();
 
         /*
           Check first row is tag EDITED_TAG_NAME.
          */
-        String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        assertEquals(EDITED_TAG_NAME, actualTagName);
+    String actualTagName = tagManagementPage
+        .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
+    assertEquals(EDITED_TAG_NAME, actualTagName);
 
-        tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
-        pause100ms();
-        tagManagementPage.clickDeleteOnConfirmDeleteDialog();
-        pause200ms();
-    }
+    tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
+    pause100ms();
+    tagManagementPage.clickDeleteOnConfirmDeleteDialog();
+    pause200ms();
+  }
 
-    @Then("^Operator verify the tag is deleted successfully on Tag Management$")
-    public void verifyTagDeletedSuccessfully()
-    {
+  @Then("^Operator verify the tag is deleted successfully on Tag Management$")
+  public void verifyTagDeletedSuccessfully() {
         /*
           Check first row does not contain tag EDITED_TAG_NAME.
          */
-        String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        assertNotEquals(EDITED_TAG_NAME, actualTagName);
-    }
+    String actualTagName = tagManagementPage
+        .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
+    assertNotEquals(EDITED_TAG_NAME, actualTagName);
+  }
 
-    private void reloadPageAndEnableSortByName()
-    {
-        reloadPage();
-        tagManagementPage.clickTagNameColumnHeader(); // Enable sort name ascending.
-    }
+  private void reloadPageAndEnableSortByName() {
+    reloadPage();
+    tagManagementPage.clickTagNameColumnHeader(); // Enable sort name ascending.
+  }
 }

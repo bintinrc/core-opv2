@@ -3,87 +3,73 @@ package co.nvqa.operator_v2.model;
 /**
  * @author Sergey Mishanin
  */
-public class ThirdPartyOrderMapping
-{
-    private int shipperId;
-    private String shipperName;
-    private String trackingId;
-    private String thirdPlTrackingId;
-    private String status = "Saved";
+public class ThirdPartyOrderMapping {
 
-    public ThirdPartyOrderMapping()
-    {
-    }
+  private int shipperId;
+  private String shipperName;
+  private String trackingId;
+  private String thirdPlTrackingId;
+  private String status = "Saved";
 
-    public int getShipperId()
-    {
-        return shipperId;
-    }
+  public ThirdPartyOrderMapping() {
+  }
 
-    public void setShipperId(int shipperId)
-    {
-        this.shipperId = shipperId;
-    }
+  public int getShipperId() {
+    return shipperId;
+  }
 
-    public void setShipperId(String shipperId)
-    {
-        setShipperId(Integer.parseInt(shipperId));
-    }
+  public void setShipperId(int shipperId) {
+    this.shipperId = shipperId;
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public void setShipperId(String shipperId) {
+    setShipperId(Integer.parseInt(shipperId));
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getThirdPlTrackingId()
-    {
-        return thirdPlTrackingId;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setThirdPlTrackingId(String thirdPlTrackingId)
-    {
-        this.thirdPlTrackingId = thirdPlTrackingId;
-    }
+  public String getThirdPlTrackingId() {
+    return thirdPlTrackingId;
+  }
 
-    public String getStatus()
-    {
-        return status;
-    }
+  public void setThirdPlTrackingId(String thirdPlTrackingId) {
+    this.thirdPlTrackingId = thirdPlTrackingId;
+  }
 
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public String getShipperName()
-    {
-        return shipperName;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public void setShipperName(String shipperName)
-    {
-        this.shipperName = shipperName;
-    }
+  public String getShipperName() {
+    return shipperName;
+  }
 
-    @Override
-    public String toString()
-    {
-        return "ThirdPartyOrderMapping{" +
-                "shipperId='" + shipperId + '\'' +
-                ", shipperName='" + shipperName + '\'' +
-                ", trackingId='" + trackingId + '\'' +
-                ", thirdPlTrackingId='" + thirdPlTrackingId + '\'' +
-                ", status='" + status + '\'' +
-                '}';
-    }
+  public void setShipperName(String shipperName) {
+    this.shipperName = shipperName;
+  }
 
-    public String toCsvLine()
-    {
-        return trackingId + "," + shipperId + "," + thirdPlTrackingId;
-    }
+  @Override
+  public String toString() {
+    return "ThirdPartyOrderMapping{" +
+        "shipperId='" + shipperId + '\'' +
+        ", shipperName='" + shipperName + '\'' +
+        ", trackingId='" + trackingId + '\'' +
+        ", thirdPlTrackingId='" + thirdPlTrackingId + '\'' +
+        ", status='" + status + '\'' +
+        '}';
+  }
+
+  public String toCsvLine() {
+    return trackingId + "," + shipperId + "," + thirdPlTrackingId;
+  }
 }

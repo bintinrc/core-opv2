@@ -5,10 +5,9 @@ package co.nvqa.operator_v2;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class TestRunner
-{
-    @SuppressWarnings("EmptyMethod")
-    public static void main(String[] args)
-    {
-    }
+public class TestRunner {
+
+  @SuppressWarnings("EmptyMethod")
+  public static void main(String[] args) {
+  }
 }

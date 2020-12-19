@@ -48,7 +48,7 @@ Feature: Failed Pickup Management
   Scenario: Operator Download and Verify CSV File of Failed Pickup Return Order on Failed Pickup Management (uid:169bdc0a-b0dc-413a-8e1a-2a77f91f4307)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -66,7 +66,7 @@ Feature: Failed Pickup Management
   Scenario: Operator Find Failed Pickup Return Order on Failed Pickup Management (uid:4624d4e0-f69d-4cd2-87f6-ff252cedf414)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -83,7 +83,7 @@ Feature: Failed Pickup Management
   Scenario: Operator Reschedule Failed Return Pickup on Next Day (uid:2681404c-127f-4dc4-b74f-9a6bd9f1a186)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -102,7 +102,7 @@ Feature: Failed Pickup Management
   Scenario: Operator Reschedule Failed Return Pickup on Specific Date (uid:ba61ee2c-6149-400f-b8e3-034f06c751b5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -121,7 +121,7 @@ Feature: Failed Pickup Management
   Scenario: Operator Cancel Failed Pickup of a Return Order (uid:a6ec640d-7249-4a79-9851-81b2bbbe381d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

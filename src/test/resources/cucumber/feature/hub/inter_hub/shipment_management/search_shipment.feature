@@ -28,7 +28,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Completion (uid:9667bb60-0933-49e3-8879-2bdac54aae68)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
@@ -51,7 +51,7 @@ Feature: Shipment Management - Search Shipment
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -74,7 +74,7 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Last Inbound Hub (uid:7a2bf3c3-622d-4f31-9851-02ef7797ef1b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
