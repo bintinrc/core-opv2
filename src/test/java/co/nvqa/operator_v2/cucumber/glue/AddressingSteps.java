@@ -12,103 +12,92 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * @author Tristania Siagian
  */
 @ScenarioScoped
-public class AddressingSteps extends AbstractSteps
-{
-    private AddressingPage addressingPage;
+public class AddressingSteps extends AbstractSteps {
 
-    public AddressingSteps()
-    {
-    }
+  private AddressingPage addressingPage;
 
-    @Override
-    public void init()
-    {
-        addressingPage = new AddressingPage(getWebDriver());
-    }
+  public AddressingSteps() {
+  }
 
-    @When("^Operator clicks on Add Address Button on Addressing Page$")
-    public void clickAddAddressButton()
-    {
-        addressingPage.clickAddAddressButton();
-    }
+  @Override
+  public void init() {
+    addressingPage = new AddressingPage(getWebDriver());
+  }
 
-    @And("^Operator creates new address on Addressing Page$")
-    public void addNewAddress()
-    {
-        String uniqueCode = generateDateUniqueString();
-        long uniqueCoordinate = System.currentTimeMillis();
+  @When("^Operator clicks on Add Address Button on Addressing Page$")
+  public void clickAddAddressButton() {
+    addressingPage.clickAddAddressButton();
+  }
 
-        Addressing addressing = new Addressing();
-        addressing.setPostcode("112233");
-        addressing.setStreetName(TestUtils.randomInt(10, 99) + " Test Street");
-        addressing.setBuildingName("Test Building");
-        addressing.setBuildingNo(uniqueCode);
-        addressing.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
-        addressing.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
-        addressing.setAddressType("Standard");
+  @And("^Operator creates new address on Addressing Page$")
+  public void addNewAddress() {
+    String uniqueCode = generateDateUniqueString();
+    long uniqueCoordinate = System.currentTimeMillis();
 
-        addressingPage.addNewAddress(addressing);
-        put(KEY_CREATED_ADDRESSING, addressing);
-    }
+    Addressing addressing = new Addressing();
+    addressing.setPostcode("112233");
+    addressing.setStreetName(TestUtils.randomInt(10, 99) + " Test Street");
+    addressing.setBuildingName("Test Building");
+    addressing.setBuildingNo(uniqueCode);
+    addressing.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
+    addressing.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
+    addressing.setAddressType("Standard");
 
-    @And("^Operator searches the address that has been made on Addressing Page$")
-    public void searchAddress()
-    {
-        Addressing addressing = get(KEY_CREATED_ADDRESSING);
-        addressingPage.searchAddress(addressing);
-    }
+    addressingPage.addNewAddress(addressing);
+    put(KEY_CREATED_ADDRESSING, addressing);
+  }
 
-    @Then("^Operator verifies the address exists on Addressing Page$")
-    public void verifyAddressExist()
-    {
-        Addressing addressing = get(KEY_CREATED_ADDRESSING);
-        addressingPage.verifyAddressExistAndInfoIsCorrect(addressing);
-    }
+  @And("^Operator searches the address that has been made on Addressing Page$")
+  public void searchAddress() {
+    Addressing addressing = get(KEY_CREATED_ADDRESSING);
+    addressingPage.searchAddress(addressing);
+  }
 
-    @When("^Operator delete the address that has been made on Addressing Page$")
-    public void deleteAddress()
-    {
-        addressingPage.deleteAddress();
-    }
+  @Then("^Operator verifies the address exists on Addressing Page$")
+  public void verifyAddressExist() {
+    Addressing addressing = get(KEY_CREATED_ADDRESSING);
+    addressingPage.verifyAddressExistAndInfoIsCorrect(addressing);
+  }
 
-    @Then("^Operator verifies the address does not exist anymore on Addressing Page$")
-    public void verifyDelete()
-    {
-        Addressing addressing = get(KEY_CREATED_ADDRESSING);
-        addressingPage.verifyDelete(addressing);
-    }
+  @When("^Operator delete the address that has been made on Addressing Page$")
+  public void deleteAddress() {
+    addressingPage.deleteAddress();
+  }
 
-    @When("^Operator edits the address on Addressing Page$")
-    public void editAddress()
-    {
-        Addressing addressing = get(KEY_CREATED_ADDRESSING);
+  @Then("^Operator verifies the address does not exist anymore on Addressing Page$")
+  public void verifyDelete() {
+    Addressing addressing = get(KEY_CREATED_ADDRESSING);
+    addressingPage.verifyDelete(addressing);
+  }
 
-        long uniqueCoordinate = System.currentTimeMillis();
+  @When("^Operator edits the address on Addressing Page$")
+  public void editAddress() {
+    Addressing addressing = get(KEY_CREATED_ADDRESSING);
 
-        Addressing addressingEdited = new Addressing();
-        addressingEdited.setPostcode(addressing.getPostcode());
-        addressingEdited.setStreetName(addressing.getStreetName() + " EDITED");
-        addressingEdited.setBuildingName(addressing.getBuildingName() + " EDITED");
-        addressingEdited.setBuildingNo(addressing.getBuildingNo());
-        addressingEdited.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
-        addressingEdited.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
-        addressingEdited.setAddressType(addressing.getAddressType());
+    long uniqueCoordinate = System.currentTimeMillis();
 
-        put(KEY_EDITED_ADDRESSING, addressingEdited);
-        addressingPage.editAddress(addressing, addressingEdited);
-    }
+    Addressing addressingEdited = new Addressing();
+    addressingEdited.setPostcode(addressing.getPostcode());
+    addressingEdited.setStreetName(addressing.getStreetName() + " EDITED");
+    addressingEdited.setBuildingName(addressing.getBuildingName() + " EDITED");
+    addressingEdited.setBuildingNo(addressing.getBuildingNo());
+    addressingEdited.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
+    addressingEdited.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
+    addressingEdited.setAddressType(addressing.getAddressType());
 
-    @And("^Operator searches the address that has been edited on Addressing Page$")
-    public void searchEditedAddress()
-    {
-        Addressing addressingEdited = get(KEY_EDITED_ADDRESSING);
-        addressingPage.searchAddress(addressingEdited);
-    }
+    put(KEY_EDITED_ADDRESSING, addressingEdited);
+    addressingPage.editAddress(addressing, addressingEdited);
+  }
 
-    @Then("^Operator verifies the address has been changed$")
-    public void verifyAddressEdited()
-    {
-        Addressing addressingEdited = get(KEY_EDITED_ADDRESSING);
-        addressingPage.verifyAddressExistAndInfoIsCorrect(addressingEdited);
-    }
+  @And("^Operator searches the address that has been edited on Addressing Page$")
+  public void searchEditedAddress() {
+    Addressing addressingEdited = get(KEY_EDITED_ADDRESSING);
+    addressingPage.searchAddress(addressingEdited);
+  }
+
+  @Then("^Operator verifies the address has been changed$")
+  public void verifyAddressEdited() {
+    Addressing addressingEdited = get(KEY_EDITED_ADDRESSING);
+    addressingPage.verifyAddressExistAndInfoIsCorrect(addressingEdited);
+  }
 }

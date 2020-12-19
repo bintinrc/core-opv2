@@ -11,69 +11,64 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class TagManagementPage extends OperatorV2SimplePage
-{
-    private static final String MD_VIRTUAL_REPEAT = "tag in getTableData()";
+public class TagManagementPage extends OperatorV2SimplePage {
 
-    //public static final String COLUMN_CLASS_DATA_NO = "column-index";
-    public static final String COLUMN_CLASS_DATA_TAG_NAME = "name";
-    public static final String COLUMN_CLASS_DATA_DESCRIPTION = "description";
+  private static final String MD_VIRTUAL_REPEAT = "tag in getTableData()";
 
-    public static final String ACTION_BUTTON_EDIT = "commons.edit";
-    public static final String ACTION_BUTTON_DELETE = "commons.delete";
+  //public static final String COLUMN_CLASS_DATA_NO = "column-index";
+  public static final String COLUMN_CLASS_DATA_TAG_NAME = "name";
+  public static final String COLUMN_CLASS_DATA_DESCRIPTION = "description";
 
-    @FindBy(name = "container.tag-management.create-tag")
-    public NvIconTextButton createTag;
+  public static final String ACTION_BUTTON_EDIT = "commons.edit";
+  public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
-    @FindBy(css = "md-dialog")
-    public AddTagDialog addTagDialog;
+  @FindBy(name = "container.tag-management.create-tag")
+  public NvIconTextButton createTag;
 
-    public TagManagementPage(WebDriver webDriver)
-    {
-        super(webDriver);
+  @FindBy(css = "md-dialog")
+  public AddTagDialog addTagDialog;
+
+  public TagManagementPage(WebDriver webDriver) {
+    super(webDriver);
+  }
+
+  public void clickTagNameColumnHeader() {
+    WebElement we = findElementByXpath("//th[contains(@class, 'name')]");
+    moveAndClick(we);
+    pause200ms();
+  }
+
+  public void clickDeleteOnConfirmDeleteDialog() {
+    click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+    waitUntilVisibilityOfElementLocated(
+        "//div[@class='toast-bottom'][contains(text(),'1 Tag Deleted')]");
+  }
+
+  public String getTextOnTable(int rowNumber, String columnDataClass) {
+    return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+  }
+
+  public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
+    clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    pause200ms();
+  }
+
+  public static class AddTagDialog extends MdDialog {
+
+    @FindBy(css = "[id^='tag-name']")
+    public TextBox tagName;
+
+    @FindBy(id = "description")
+    public TextBox description;
+
+    @FindBy(name = "Submit")
+    public NvButtonSave submit;
+
+    @FindBy(name = "Submit Changes")
+    public NvButtonSave submitChanges;
+
+    public AddTagDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
-
-    public void clickTagNameColumnHeader()
-    {
-        WebElement we = findElementByXpath("//th[contains(@class, 'name')]");
-        moveAndClick(we);
-        pause200ms();
-    }
-
-    public void clickDeleteOnConfirmDeleteDialog()
-    {
-        click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
-        waitUntilVisibilityOfElementLocated("//div[@class='toast-bottom'][contains(text(),'1 Tag Deleted')]");
-    }
-
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-    }
-
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-        pause200ms();
-    }
-
-    public static class AddTagDialog extends MdDialog
-    {
-        @FindBy(css = "[id^='tag-name']")
-        public TextBox tagName;
-
-        @FindBy(id = "description")
-        public TextBox description;
-
-        @FindBy(name = "Submit")
-        public NvButtonSave submit;
-
-        @FindBy(name = "Submit Changes")
-        public NvButtonSave submitChanges;
-
-        public AddTagDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-    }
+  }
 }

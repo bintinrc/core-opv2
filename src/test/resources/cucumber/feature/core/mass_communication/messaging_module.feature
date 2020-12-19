@@ -26,12 +26,12 @@ Feature: Messaging Module
 
   Scenario: Operator Retrieve SMS Records History with Valid Tracking Id (uid:958dcd89-4e1a-4d27-b030-f56a8ccb88c6)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "from":{ "name":"Sim Sze Kiat", "phone_number":"+6588698632" }, "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Mass Communications -> Messaging Module
     Then op upload sms campaign csv file
-        | tracking_id | name         | email          | job |
-        | _created_   | Sim Sze Kiat | qa@ninjavan.co |	Dev |
+      | tracking_id | name         | email          | job |
+      | _created_   | Sim Sze Kiat | qa@ninjavan.co | Dev |
     When op compose sms with data : Sim Sze Kiat, _created_
     Then op send sms
     Then op wait for sms to be processed

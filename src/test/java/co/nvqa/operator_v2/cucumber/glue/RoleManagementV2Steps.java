@@ -5,76 +5,71 @@ import co.nvqa.operator_v2.selenium.page.RoleManagementV2Page;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
 import java.util.Date;
 
 
 @ScenarioScoped
 public class RoleManagementV2Steps extends AbstractSteps {
-    private RoleManagementV2Page roleManagementV2Page;
 
-    public RoleManagementV2Steps()
-    {
-    }
+  private RoleManagementV2Page roleManagementV2Page;
 
-    @Override
-    public void init()
-    {
-        roleManagementV2Page = new RoleManagementV2Page(getWebDriver());
-    }
+  public RoleManagementV2Steps() {
+  }
 
-    @When("^Operator creates new role on Role Management v2 page$")
-    public void createNewRole()
-    {
-        String scenarioName = getScenarioManager().getCurrentScenario().getName();
-        String uniqueCode = generateDateUniqueString();
+  @Override
+  public void init() {
+    roleManagementV2Page = new RoleManagementV2Page(getWebDriver());
+  }
 
-        RoleManagement roleManagement = new RoleManagement();
-        roleManagement.setRoleName("QA_"+uniqueCode);
-        roleManagement.setDesc(f("This role is created for testing purpose only. Ignore this role. Created at %s by scenario \"%s\".", CREATED_DATE_SDF.format(new Date()), scenarioName));
+  @When("^Operator creates new role on Role Management v2 page$")
+  public void createNewRole() {
+    String scenarioName = getScenarioManager().getCurrentScenario().getName();
+    String uniqueCode = generateDateUniqueString();
 
-        roleManagementV2Page.createNewRole(roleManagement);
-        put("roleManagement", roleManagement);
-    }
+    RoleManagement roleManagement = new RoleManagement();
+    roleManagement.setRoleName("QA_" + uniqueCode);
+    roleManagement.setDesc(
+        f("This role is created for testing purpose only. Ignore this role. Created at %s by scenario \"%s\".",
+            CREATED_DATE_SDF.format(new Date()), scenarioName));
 
-    @Then("^Operator verifies the role on Role Management V2 page$")
-    public void verifyNewRole()
-    {
-        RoleManagement roleManagement = get("roleManagement");
-        roleManagementV2Page.verifyRoleDetails(roleManagement);
-    }
+    roleManagementV2Page.createNewRole(roleManagement);
+    put("roleManagement", roleManagement);
+  }
 
-    @When("^Operator deletes the role on Role Management V2 page$")
-    public void deleteRole()
-    {
-        roleManagementV2Page.deleteRole();
-    }
+  @Then("^Operator verifies the role on Role Management V2 page$")
+  public void verifyNewRole() {
+    RoleManagement roleManagement = get("roleManagement");
+    roleManagementV2Page.verifyRoleDetails(roleManagement);
+  }
 
-    @Then("^Operator verifies the role is deleted on Role Management V2 page$")
-    public void verifyRoleIsDeleted()
-    {
-        RoleManagement roleManagement = get("roleManagement");
-        roleManagementV2Page.verifyRoleIsDeleted(roleManagement);
-    }
+  @When("^Operator deletes the role on Role Management V2 page$")
+  public void deleteRole() {
+    roleManagementV2Page.deleteRole();
+  }
 
-    @When("^Operator edits the role on Role Management V2 page$")
-    public void editRole()
-    {
-        RoleManagement roleManagement = get("roleManagement");
+  @Then("^Operator verifies the role is deleted on Role Management V2 page$")
+  public void verifyRoleIsDeleted() {
+    RoleManagement roleManagement = get("roleManagement");
+    roleManagementV2Page.verifyRoleIsDeleted(roleManagement);
+  }
 
-        RoleManagement roleManagementEdited = new RoleManagement();
-        roleManagementEdited.setRoleName(roleManagement.getRoleName()+"_EDITED");
-        roleManagementEdited.setDesc(f(roleManagement.getDesc()+" Modified at %s.", CREATED_DATE_SDF.format(new Date())));
-        roleManagementEdited.setScope("AUTH_ADMIN");
+  @When("^Operator edits the role on Role Management V2 page$")
+  public void editRole() {
+    RoleManagement roleManagement = get("roleManagement");
 
-        put("roleManagementEdited", roleManagementEdited);
-        roleManagementV2Page.editRole(roleManagementEdited);
-    }
+    RoleManagement roleManagementEdited = new RoleManagement();
+    roleManagementEdited.setRoleName(roleManagement.getRoleName() + "_EDITED");
+    roleManagementEdited.setDesc(
+        f(roleManagement.getDesc() + " Modified at %s.", CREATED_DATE_SDF.format(new Date())));
+    roleManagementEdited.setScope("AUTH_ADMIN");
 
-    @Then("^Operator verifies the role is edited on Role Management V2 Page$")
-    public void verifyRoleIsEdited()
-    {
-        RoleManagement roleManagementEdited = get("roleManagementEdited");
-        roleManagementV2Page.verifyEditedRoleDetails(roleManagementEdited);
-    }
+    put("roleManagementEdited", roleManagementEdited);
+    roleManagementV2Page.editRole(roleManagementEdited);
+  }
+
+  @Then("^Operator verifies the role is edited on Role Management V2 Page$")
+  public void verifyRoleIsEdited() {
+    RoleManagement roleManagementEdited = get("roleManagementEdited");
+    roleManagementV2Page.verifyEditedRoleDetails(roleManagementEdited);
+  }
 }

@@ -155,7 +155,7 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Flat                           |
       | discountValue           | 10                             |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | 4.38656                        |
+      | discountValue | 4.38656 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | Please provide only 2 decimal places. |
 

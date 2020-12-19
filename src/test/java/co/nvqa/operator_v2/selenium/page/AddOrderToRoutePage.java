@@ -12,55 +12,52 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class AddOrderToRoutePage extends OperatorV2SimplePage
-{
-    @FindBy(id = "container.routing.add-order-to-route.route-id")
-    public TextBox routeId;
+public class AddOrderToRoutePage extends OperatorV2SimplePage {
 
-    @FindBy(id = "scan")
-    public TextBox trackingId;
+  @FindBy(id = "container.routing.add-order-to-route.route-id")
+  public TextBox routeId;
 
-    @FindBy(css = "nv-autocomplete[item-types='transaction types']")
-    public NvAutocomplete transactionType;
+  @FindBy(id = "scan")
+  public TextBox trackingId;
 
-    @FindBy(name = "container.routing.add-order-to-route.add-prefix")
-    public NvIconTextButton addPrefix;
+  @FindBy(css = "nv-autocomplete[item-types='transaction types']")
+  public NvAutocomplete transactionType;
 
-    @FindBy(name = "container.routing.add-order-to-route.remove-prefix")
-    public NvIconTextButton removePrefix;
+  @FindBy(name = "container.routing.add-order-to-route.add-prefix")
+  public NvIconTextButton addPrefix;
 
-    @FindBy(css = "h5.last-scanned-tracking-id")
-    public PageElement lastScannedTrackingId;
+  @FindBy(name = "container.routing.add-order-to-route.remove-prefix")
+  public NvIconTextButton removePrefix;
 
-    @FindBy(css = "md-dialog")
-    public SetPrefixDialog setPrefixDialog;
+  @FindBy(css = "h5.last-scanned-tracking-id")
+  public PageElement lastScannedTrackingId;
 
-    public AddOrderToRoutePage(WebDriver webDriver)
-    {
-        super(webDriver);
+  @FindBy(css = "md-dialog")
+  public SetPrefixDialog setPrefixDialog;
+
+  public AddOrderToRoutePage(WebDriver webDriver) {
+    super(webDriver);
+  }
+
+  public void addPrefix(String prefix) {
+    addPrefix.click();
+    setPrefixDialog.waitUntilVisible();
+    setPrefixDialog.prefix.setValue(prefix);
+    setPrefixDialog.save.click();
+    setPrefixDialog.waitUntilInvisible();
+    assertTrue("Remove Prefix button in present", removePrefix.isDisplayed());
+  }
+
+  public static class SetPrefixDialog extends MdDialog {
+
+    @FindBy(id = "container.global-inbound.prefix")
+    public TextBox prefix;
+
+    @FindBy(id = "saveButtonPrefix")
+    public NvIconTextButton save;
+
+    public SetPrefixDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
-
-    public void addPrefix(String prefix)
-    {
-        addPrefix.click();
-        setPrefixDialog.waitUntilVisible();
-        setPrefixDialog.prefix.setValue(prefix);
-        setPrefixDialog.save.click();
-        setPrefixDialog.waitUntilInvisible();
-        assertTrue("Remove Prefix button in present", removePrefix.isDisplayed());
-    }
-
-    public static class SetPrefixDialog extends MdDialog
-    {
-        @FindBy(id = "container.global-inbound.prefix")
-        public TextBox prefix;
-
-        @FindBy(id = "saveButtonPrefix")
-        public NvIconTextButton save;
-
-        public SetPrefixDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-    }
+  }
 }

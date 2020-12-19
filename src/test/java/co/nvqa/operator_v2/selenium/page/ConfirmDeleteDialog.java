@@ -6,21 +6,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ConfirmDeleteDialog extends PageElement
-{
-    public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-    }
+public class ConfirmDeleteDialog extends PageElement {
 
-    @FindBy(css = "button[aria-label='Delete']")
-    public Button delete;
+  public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
 
-    public void confirmDelete()
-    {
-        waitUntilClickable();
-        pause1s();
-        delete.click();
-        waitUntilInvisible();
-    }
+  @FindBy(css = "button[aria-label='Delete']")
+  public Button delete;
+
+  public void confirmDelete() {
+    waitUntilClickable();
+    pause1s();
+    delete.click();
+    waitUntilInvisible();
+  }
 }

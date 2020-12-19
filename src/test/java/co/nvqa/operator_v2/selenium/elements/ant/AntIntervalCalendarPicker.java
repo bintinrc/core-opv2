@@ -15,66 +15,62 @@ import org.openqa.selenium.support.PageFactory;
  *
  * @author Sergey Mishanin
  */
-public class AntIntervalCalendarPicker extends PageElement
-{
-    public AntIntervalCalendarPicker(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class AntIntervalCalendarPicker extends PageElement {
 
-    public AntIntervalCalendarPicker(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public AntIntervalCalendarPicker(WebDriver webDriver, SearchContext searchContext,
+      WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(xpath = ".//input[@placeholder='Start date']")
-    public TextBox valueFrom;
+  public AntIntervalCalendarPicker(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(xpath = ".//input[@placeholder='End date']")
-    public TextBox valueTo;
+  @FindBy(xpath = ".//input[@placeholder='Start date']")
+  public TextBox valueFrom;
 
-    @FindBy(xpath = ".//i[contains(@class,'ant-calendar-picker-clear')]")
-    public PageElement clear;
+  @FindBy(xpath = ".//input[@placeholder='End date']")
+  public TextBox valueTo;
 
-    @FindBy(xpath = "//*[contains(@class,'ant-calendar-range-left')]//input[contains(@class, 'ant-calendar-input')]")
-    public TextBox inputFrom;
+  @FindBy(xpath = ".//i[contains(@class,'ant-calendar-picker-clear')]")
+  public PageElement clear;
 
-    @FindBy(xpath = "//*[contains(@class,'ant-calendar-range-right')]//input[contains(@class, 'ant-calendar-input')]")
-    public TextBox inputTo;
+  @FindBy(xpath = "//*[contains(@class,'ant-calendar-range-left')]//input[contains(@class, 'ant-calendar-input')]")
+  public TextBox inputFrom;
 
-    public void setFrom(String from)
-    {
-        valueFrom.click();
-        inputFrom.waitUntilVisible();
-        inputFrom.sendKeys(from + Keys.ENTER);
-        inputFrom.waitUntilInvisible();
-    }
+  @FindBy(xpath = "//*[contains(@class,'ant-calendar-range-right')]//input[contains(@class, 'ant-calendar-input')]")
+  public TextBox inputTo;
 
-    public void setTo(String to)
-    {
-        valueFrom.click();
-        inputTo.waitUntilVisible();
-        inputTo.sendKeys(to + Keys.ENTER);
-        inputTo.waitUntilInvisible();
-    }
+  public void setFrom(String from) {
+    valueFrom.click();
+    inputFrom.waitUntilVisible();
+    inputFrom.sendKeys(from + Keys.ENTER);
+    inputFrom.waitUntilInvisible();
+  }
 
-    public void setInterval(String from, String to)
-    {
-        valueFrom.click();
-        inputFrom.waitUntilVisible();
-        inputFrom.jsSetValue(from);
-        inputTo.jsSetValue(to);
-        inputTo.sendKeys(Keys.ENTER);
-        inputTo.waitUntilInvisible();
-    }
+  public void setTo(String to) {
+    valueFrom.click();
+    inputTo.waitUntilVisible();
+    inputTo.sendKeys(to + Keys.ENTER);
+    inputTo.waitUntilInvisible();
+  }
 
-    public String getValueFrom(){
-        return valueFrom.getValue();
-    }
+  public void setInterval(String from, String to) {
+    valueFrom.click();
+    inputFrom.waitUntilVisible();
+    inputFrom.jsSetValue(from);
+    inputTo.jsSetValue(to);
+    inputTo.sendKeys(Keys.ENTER);
+    inputTo.waitUntilInvisible();
+  }
 
-    public String getValueTo(){
-        return valueTo.getValue();
-    }
+  public String getValueFrom() {
+    return valueFrom.getValue();
+  }
+
+  public String getValueTo() {
+    return valueTo.getValue();
+  }
 }

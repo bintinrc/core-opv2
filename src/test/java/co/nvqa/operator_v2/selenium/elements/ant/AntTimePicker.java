@@ -11,32 +11,30 @@ import org.openqa.selenium.support.PageFactory;
 
 /**
  * Controller for ant-time-picker component
+ *
  * @author Sergey Mishanin
  */
-public class AntTimePicker extends PageElement
-{
-    public AntTimePicker(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class AntTimePicker extends PageElement {
 
-    public AntTimePicker(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public AntTimePicker(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-time-picker-input")
-    public TextBox input;
+  public AntTimePicker(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(xpath = "//input[@class='ant-time-picker-panel-input']")
-    public TextBox panelInput;
+  @FindBy(className = "ant-time-picker-input")
+  public TextBox input;
 
-    public void setValue(String value)
-    {
-        input.click();
-        panelInput.setValue(value);
-        input.jsClick();
-    }
+  @FindBy(xpath = "//input[@class='ant-time-picker-panel-input']")
+  public TextBox panelInput;
+
+  public void setValue(String value) {
+    input.click();
+    panelInput.setValue(value);
+    input.jsClick();
+  }
 }

@@ -6,25 +6,22 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class NvFilterFreeTextBox extends AbstractFilterBox
-{
-    public NvFilterFreeTextBox(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-    }
+public class NvFilterFreeTextBox extends AbstractFilterBox {
 
-    @FindBy(css = "input[ng-model='search']")
-    public TextBox search;
+  public NvFilterFreeTextBox(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
 
-    public void setValue(String value)
-    {
-        search.setValue(value);
-        search.sendKeys(Keys.ENTER);
-    }
+  @FindBy(css = "input[ng-model='search']")
+  public TextBox search;
 
-    @Override
-    void setValue(String... values)
-    {
-        setValue(values[1]);
-    }
+  public void setValue(String value) {
+    search.setValue(value);
+    search.sendKeys(Keys.ENTER);
+  }
+
+  @Override
+  void setValue(String... values) {
+    setValue(values[1]);
+  }
 }

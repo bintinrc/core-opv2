@@ -4,59 +4,45 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
 import java.util.Random;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class SampleSteps extends AbstractSteps
-{
-    private static final Random random = new Random();
+public class SampleSteps extends AbstractSteps {
 
-    public SampleSteps()
-    {
+  private static final Random random = new Random();
+
+  public SampleSteps() {
+  }
+
+  @Override
+  public void init() {
+  }
+
+  @Given("^step \"([^\"]*)\"$")
+  public void stepSuccessOrFailed(String status) {
+    String scenarioName = getScenarioManager().getCurrentScenario().getName();
+
+    if ("success".equalsIgnoreCase(status)) {
+      NvLogger.info("Step SUCCESS on scenario: " + scenarioName);
+    } else if ("failed".equalsIgnoreCase(status)) {
+      throw new NvTestRuntimeException("Step FAILED on scenario: " + scenarioName);
+    } else {
+      randomStep();
     }
+  }
 
-    @Override
-    public void init()
-    {
+  @Given("^random step$")
+  public void randomStep() {
+    String scenarioName = getScenarioManager().getCurrentScenario().getName();
+    boolean randomSuccess = random.nextBoolean();
+
+    if (randomSuccess) {
+      NvLogger.info("Step SUCCESS on scenario: " + scenarioName);
+    } else {
+      throw new NvTestRuntimeException("Step FAILED on scenario: " + scenarioName);
     }
-
-    @Given("^step \"([^\"]*)\"$")
-    public void stepSuccessOrFailed(String status)
-    {
-        String scenarioName = getScenarioManager().getCurrentScenario().getName();
-
-        if("success".equalsIgnoreCase(status))
-        {
-            NvLogger.info("Step SUCCESS on scenario: "+scenarioName);
-        }
-        else if("failed".equalsIgnoreCase(status))
-        {
-            throw new NvTestRuntimeException("Step FAILED on scenario: "+scenarioName);
-        }
-        else
-        {
-            randomStep();
-        }
-    }
-
-    @Given("^random step$")
-    public void randomStep()
-    {
-        String scenarioName = getScenarioManager().getCurrentScenario().getName();
-        boolean randomSuccess = random.nextBoolean();
-
-        if(randomSuccess)
-        {
-            NvLogger.info("Step SUCCESS on scenario: "+scenarioName);
-        }
-        else
-        {
-            throw new NvTestRuntimeException("Step FAILED on scenario: "+scenarioName);
-        }
-    }
+  }
 }

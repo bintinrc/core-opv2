@@ -9,169 +9,150 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class DpCompanyManagementSteps extends AbstractSteps
-{
-    private DpCompanyManagementPage dpCompanyManagementPage;
-    private DpCompanyAgentPage dpCompanyAgentPage;
+public class DpCompanyManagementSteps extends AbstractSteps {
 
-    public DpCompanyManagementSteps()
-    {
-    }
+  private DpCompanyManagementPage dpCompanyManagementPage;
+  private DpCompanyAgentPage dpCompanyAgentPage;
 
-    @Override
-    public void init()
-    {
-        dpCompanyManagementPage = new DpCompanyManagementPage(getWebDriver());
-        dpCompanyAgentPage = new DpCompanyAgentPage(getWebDriver());
-    }
+  public DpCompanyManagementSteps() {
+  }
 
-    @When("^Operator create new DP Company$")
-    public void operatorCreateDpCompany()
-    {
-        String uniqueCode = generateDateUniqueString();
-        DpCompany dpCompany = new DpCompany();
-        dpCompany.setName(f("DP Company #%s", uniqueCode));
-        dpCompany.setEmail(f("dp.company.%s@test.co", uniqueCode));
-        dpCompany.setContact(f("65%s", uniqueCode));
-        dpCompany.setDropOffWebhookUrl(f("https://www.dropoffwebhook-%s.co", uniqueCode));
-        dpCompany.setCollectWebhookUrl(f("https://www.collectwebhook-%s.co", uniqueCode));
-        dpCompany.setIntegrated(Boolean.FALSE);
-        dpCompanyManagementPage.addDpCompany(dpCompany);
-        put("dpCompany", dpCompany);
-    }
+  @Override
+  public void init() {
+    dpCompanyManagementPage = new DpCompanyManagementPage(getWebDriver());
+    dpCompanyAgentPage = new DpCompanyAgentPage(getWebDriver());
+  }
 
-    @Then("^Operator verify the new DP Company is created successfully$")
-    public void operatorVerifyDpCompanyIsCreatedSuccessfully()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpCompany);
-    }
+  @When("^Operator create new DP Company$")
+  public void operatorCreateDpCompany() {
+    String uniqueCode = generateDateUniqueString();
+    DpCompany dpCompany = new DpCompany();
+    dpCompany.setName(f("DP Company #%s", uniqueCode));
+    dpCompany.setEmail(f("dp.company.%s@test.co", uniqueCode));
+    dpCompany.setContact(f("65%s", uniqueCode));
+    dpCompany.setDropOffWebhookUrl(f("https://www.dropoffwebhook-%s.co", uniqueCode));
+    dpCompany.setCollectWebhookUrl(f("https://www.collectwebhook-%s.co", uniqueCode));
+    dpCompany.setIntegrated(Boolean.FALSE);
+    dpCompanyManagementPage.addDpCompany(dpCompany);
+    put("dpCompany", dpCompany);
+  }
 
-    @When("^Operator update the new DP Company$")
-    public void operatorUpdateDpCompany()
-    {
-        DpCompany dpCompany = get("dpCompany");
+  @Then("^Operator verify the new DP Company is created successfully$")
+  public void operatorVerifyDpCompanyIsCreatedSuccessfully() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpCompany);
+  }
 
-        DpCompany dpCompanyEdited = new DpCompany();
-        dpCompanyEdited.setName(dpCompany.getName()+" [EDITED]");
-        dpCompanyEdited.setEmail(dpCompany.getEmail()+".sg");
-        dpCompanyEdited.setContact(dpCompany.getContact()+"1");
-        dpCompanyEdited.setDropOffWebhookUrl(dpCompany.getDropOffWebhookUrl()+".sg");
-        dpCompanyEdited.setCollectWebhookUrl(dpCompany.getCollectWebhookUrl()+".sg");
-        dpCompanyEdited.setIntegrated(Boolean.TRUE);
-        dpCompanyManagementPage.editDpCompany(dpCompanyEdited);
-        put("dpCompanyEdited", dpCompanyEdited);
-    }
+  @When("^Operator update the new DP Company$")
+  public void operatorUpdateDpCompany() {
+    DpCompany dpCompany = get("dpCompany");
 
-    @Then("^Operator verify the new DP Company is updated successfully$")
-    public void operatorVerifyDpCompanyIsUpdatedSuccessfully()
-    {
-        DpCompany dpCompanyEdited = get("dpCompanyEdited");
-        dpCompanyManagementPage.verifyDpCompanyIsUpdatedSuccessfully(dpCompanyEdited);
-    }
+    DpCompany dpCompanyEdited = new DpCompany();
+    dpCompanyEdited.setName(dpCompany.getName() + " [EDITED]");
+    dpCompanyEdited.setEmail(dpCompany.getEmail() + ".sg");
+    dpCompanyEdited.setContact(dpCompany.getContact() + "1");
+    dpCompanyEdited.setDropOffWebhookUrl(dpCompany.getDropOffWebhookUrl() + ".sg");
+    dpCompanyEdited.setCollectWebhookUrl(dpCompany.getCollectWebhookUrl() + ".sg");
+    dpCompanyEdited.setIntegrated(Boolean.TRUE);
+    dpCompanyManagementPage.editDpCompany(dpCompanyEdited);
+    put("dpCompanyEdited", dpCompanyEdited);
+  }
 
-    @When("^Operator delete the new DP Company$")
-    public void operatorDeleteDpCompany()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyManagementPage.deleteDpCompany(dpCompany);
-    }
+  @Then("^Operator verify the new DP Company is updated successfully$")
+  public void operatorVerifyDpCompanyIsUpdatedSuccessfully() {
+    DpCompany dpCompanyEdited = get("dpCompanyEdited");
+    dpCompanyManagementPage.verifyDpCompanyIsUpdatedSuccessfully(dpCompanyEdited);
+  }
 
-    @Then("^Operator verify the new DP Company is deleted successfully$")
-    public void operatorVerifyDpCompanyIsDeletedSuccessfully()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyManagementPage.verifyDpCompanyIsDeletedSuccessfully(dpCompany);
-    }
+  @When("^Operator delete the new DP Company$")
+  public void operatorDeleteDpCompany() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyManagementPage.deleteDpCompany(dpCompany);
+  }
 
-    @Then("^Operator check all filters on DP Company Management page work fine$")
-    public void operatorCheckAllFiltersOnDpCompanyManagementPageWork()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyManagementPage.verifyAllFiltersWorkFine(dpCompany);
-    }
+  @Then("^Operator verify the new DP Company is deleted successfully$")
+  public void operatorVerifyDpCompanyIsDeletedSuccessfully() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyManagementPage.verifyDpCompanyIsDeletedSuccessfully(dpCompany);
+  }
 
-    @When("^Operator download DP Company CSV file$")
-    public void operatorDownloadDpCompanyCsvFile()
-    {
-        dpCompanyManagementPage.downloadCsvFile();
-    }
+  @Then("^Operator check all filters on DP Company Management page work fine$")
+  public void operatorCheckAllFiltersOnDpCompanyManagementPageWork() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyManagementPage.verifyAllFiltersWorkFine(dpCompany);
+  }
 
-    @When("^Operator verify DP Company CSV file downloaded successfully$")
-    public void operatorVerifyDpCompanyCsvFileDownloadSuccessfully()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyManagementPage.verifyCsvFileDownloadedSuccessfully(dpCompany);
-    }
+  @When("^Operator download DP Company CSV file$")
+  public void operatorDownloadDpCompanyCsvFile() {
+    dpCompanyManagementPage.downloadCsvFile();
+  }
 
-    @When("^Operator create new Agent for the new DP Company$")
-    public void operatorCreateNewAgentForTheNewDpCompany()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyManagementPage.clickSeeVault(dpCompany);
+  @When("^Operator verify DP Company CSV file downloaded successfully$")
+  public void operatorVerifyDpCompanyCsvFileDownloadSuccessfully() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyManagementPage.verifyCsvFileDownloadedSuccessfully(dpCompany);
+  }
 
-        String uniqueCode = generateDateUniqueString();
-        DpCompanyAgent dpCompanyAgent = new DpCompanyAgent();
-        dpCompanyAgent.setName(f("DP Company Agent #%s", uniqueCode));
-        dpCompanyAgent.setEmail(f("dp.company.agent.%s@test.co", uniqueCode));
-        dpCompanyAgent.setContact(f("65%s", uniqueCode));
-        dpCompanyAgent.setUnlockCode(uniqueCode);
-        dpCompanyAgentPage.addDpCompanyAgent(dpCompanyAgent);
+  @When("^Operator create new Agent for the new DP Company$")
+  public void operatorCreateNewAgentForTheNewDpCompany() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyManagementPage.clickSeeVault(dpCompany);
 
-        put("dpCompanyAgent", dpCompanyAgent);
-    }
+    String uniqueCode = generateDateUniqueString();
+    DpCompanyAgent dpCompanyAgent = new DpCompanyAgent();
+    dpCompanyAgent.setName(f("DP Company Agent #%s", uniqueCode));
+    dpCompanyAgent.setEmail(f("dp.company.agent.%s@test.co", uniqueCode));
+    dpCompanyAgent.setContact(f("65%s", uniqueCode));
+    dpCompanyAgent.setUnlockCode(uniqueCode);
+    dpCompanyAgentPage.addDpCompanyAgent(dpCompanyAgent);
 
-    @Then("^Operator verify the new Agent for the new DP Company is created successfully$")
-    public void operatorVerifyTheNewAgentForTheNewDpCompanyIsCreatedSuccessfully()
-    {
-        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
-        dpCompanyAgentPage.verifyDpCompanyAgentIsCreatedSuccessfully(dpCompanyAgent);
-    }
+    put("dpCompanyAgent", dpCompanyAgent);
+  }
 
-    @When("^Operator update the new Agent for the new DP Company$")
-    public void operatorUpdateTheNewAgentForTheNewDpCompany()
-    {
-        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
+  @Then("^Operator verify the new Agent for the new DP Company is created successfully$")
+  public void operatorVerifyTheNewAgentForTheNewDpCompanyIsCreatedSuccessfully() {
+    DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
+    dpCompanyAgentPage.verifyDpCompanyAgentIsCreatedSuccessfully(dpCompanyAgent);
+  }
 
-        DpCompanyAgent dpCompanyAgentEdited = new DpCompanyAgent();
-        dpCompanyAgentEdited.setName(dpCompanyAgent.getName()+" [EDITED]");
-        dpCompanyAgentEdited.setEmail(dpCompanyAgent.getEmail()+".sg");
-        dpCompanyAgentEdited.setContact(dpCompanyAgent.getContact()+"1");
-        dpCompanyAgentEdited.setUnlockCode(dpCompanyAgent.getUnlockCode()+"1");
-        dpCompanyAgentPage.editDpCompanyAgent(dpCompanyAgentEdited);
+  @When("^Operator update the new Agent for the new DP Company$")
+  public void operatorUpdateTheNewAgentForTheNewDpCompany() {
+    DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
 
-        put("dpCompanyAgentEdited", dpCompanyAgentEdited);
-    }
+    DpCompanyAgent dpCompanyAgentEdited = new DpCompanyAgent();
+    dpCompanyAgentEdited.setName(dpCompanyAgent.getName() + " [EDITED]");
+    dpCompanyAgentEdited.setEmail(dpCompanyAgent.getEmail() + ".sg");
+    dpCompanyAgentEdited.setContact(dpCompanyAgent.getContact() + "1");
+    dpCompanyAgentEdited.setUnlockCode(dpCompanyAgent.getUnlockCode() + "1");
+    dpCompanyAgentPage.editDpCompanyAgent(dpCompanyAgentEdited);
 
-    @Then("^Operator verify the new Agent for the new DP Company is updated successfully$")
-    public void operatorVerifyTheNewAgentForTheNewDpCompanyIsUpdatedSuccessfully()
-    {
-        DpCompanyAgent dpCompanyAgentEdited = get("dpCompanyAgentEdited");
-        dpCompanyAgentPage.verifyDpCompanyAgentIsUpdatedSuccessfully(dpCompanyAgentEdited);
-    }
+    put("dpCompanyAgentEdited", dpCompanyAgentEdited);
+  }
 
-    @When("^Operator delete the new Agent for the new DP Company$")
-    public void operatorDeleteTheNewAgentForTheNewDpCompany()
-    {
-        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
-        dpCompanyAgentPage.deleteDpCompanyAgent(dpCompanyAgent);
-    }
+  @Then("^Operator verify the new Agent for the new DP Company is updated successfully$")
+  public void operatorVerifyTheNewAgentForTheNewDpCompanyIsUpdatedSuccessfully() {
+    DpCompanyAgent dpCompanyAgentEdited = get("dpCompanyAgentEdited");
+    dpCompanyAgentPage.verifyDpCompanyAgentIsUpdatedSuccessfully(dpCompanyAgentEdited);
+  }
 
-    @Then("^Operator verify the new Agent for the new DP Company is deleted successfully$")
-    public void operatorVerifyTheNewAgentForTheNewDpCompanyIsDeletedSuccessfully()
-    {
-        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
-        dpCompanyAgentPage.verifyDpCompanyAgentIsDeletedSuccessfully(dpCompanyAgent);
-    }
+  @When("^Operator delete the new Agent for the new DP Company$")
+  public void operatorDeleteTheNewAgentForTheNewDpCompany() {
+    DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
+    dpCompanyAgentPage.deleteDpCompanyAgent(dpCompanyAgent);
+  }
 
-    @When("^Operator back to DP Company Management page$")
-    public void operatorBackToDpCompanyManagementPage()
-    {
-        DpCompany dpCompany = get("dpCompany");
-        dpCompanyAgentPage.backToDpCompanyManagementPage(dpCompany);
-    }
+  @Then("^Operator verify the new Agent for the new DP Company is deleted successfully$")
+  public void operatorVerifyTheNewAgentForTheNewDpCompanyIsDeletedSuccessfully() {
+    DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
+    dpCompanyAgentPage.verifyDpCompanyAgentIsDeletedSuccessfully(dpCompanyAgent);
+  }
+
+  @When("^Operator back to DP Company Management page$")
+  public void operatorBackToDpCompanyManagementPage() {
+    DpCompany dpCompany = get("dpCompany");
+    dpCompanyAgentPage.backToDpCompanyManagementPage(dpCompany);
+  }
 }

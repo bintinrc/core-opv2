@@ -1,82 +1,67 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-import org.junit.platform.commons.util.StringUtils;
-
 import java.util.Map;
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * @author Sergey Mishanin
  */
-public class MoneyCollection extends DataEntity<MoneyCollection>
-{
-    private Double cashCollected;
-    private Double creditCollected;
-    private String receiptNo;
-    private String receiptId;
+public class MoneyCollection extends DataEntity<MoneyCollection> {
 
-    public MoneyCollection()
-    {
-    }
+  private Double cashCollected;
+  private Double creditCollected;
+  private String receiptNo;
+  private String receiptId;
 
-    public MoneyCollection(Map<String, ?> data)
-    {
-        fromMap(data);
-    }
+  public MoneyCollection() {
+  }
 
-    public Double getCashCollected()
-    {
-        return cashCollected;
-    }
+  public MoneyCollection(Map<String, ?> data) {
+    fromMap(data);
+  }
 
-    public void setCashCollected(Double cashCollected)
-    {
-        this.cashCollected = cashCollected;
-    }
+  public Double getCashCollected() {
+    return cashCollected;
+  }
 
-    public void setCashCollected(String cashCollected)
-    {
-        if (StringUtils.isNotBlank(cashCollected))
-        {
-            setCashCollected(Double.parseDouble(cashCollected));
-        }
-    }
+  public void setCashCollected(Double cashCollected) {
+    this.cashCollected = cashCollected;
+  }
 
-    public Double getCreditCollected()
-    {
-        return creditCollected;
+  public void setCashCollected(String cashCollected) {
+    if (StringUtils.isNotBlank(cashCollected)) {
+      setCashCollected(Double.parseDouble(cashCollected));
     }
+  }
 
-    public void setCreditCollected(Double creditCollected)
-    {
-        this.creditCollected = creditCollected;
-    }
+  public Double getCreditCollected() {
+    return creditCollected;
+  }
 
-    public void setCreditCollected(String creditCollected)
-    {
-        if (StringUtils.isNotBlank(creditCollected))
-        {
-            setCreditCollected(Double.parseDouble(creditCollected));
-        }
-    }
+  public void setCreditCollected(Double creditCollected) {
+    this.creditCollected = creditCollected;
+  }
 
-    public String getReceiptNo()
-    {
-        return receiptNo;
+  public void setCreditCollected(String creditCollected) {
+    if (StringUtils.isNotBlank(creditCollected)) {
+      setCreditCollected(Double.parseDouble(creditCollected));
     }
+  }
 
-    public void setReceiptNo(String receiptNo)
-    {
-        this.receiptNo = receiptNo;
-    }
+  public String getReceiptNo() {
+    return receiptNo;
+  }
 
-    public String getReceiptId()
-    {
-        return receiptId;
-    }
+  public void setReceiptNo(String receiptNo) {
+    this.receiptNo = receiptNo;
+  }
 
-    public void setReceiptId(String receiptId)
-    {
-        this.receiptId = receiptId;
-    }
+  public String getReceiptId() {
+    return receiptId;
+  }
+
+  public void setReceiptId(String receiptId) {
+    this.receiptId = receiptId;
+  }
 }

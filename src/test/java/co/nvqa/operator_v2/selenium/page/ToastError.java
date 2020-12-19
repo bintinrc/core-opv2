@@ -5,15 +5,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ToastError extends PageElement
-{
-    @FindBy(css = "div.toast-bottom")
-    public PageElement toastBottom;
+public class ToastError extends PageElement {
 
-    public ToastError(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-    }
+  @FindBy(css = "div.toast-bottom")
+  public PageElement toastBottom;
+
+  public ToastError(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
 
 
 }

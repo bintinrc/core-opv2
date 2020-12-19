@@ -1,79 +1,65 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class Zone
-{
-    private String name;
-    private String shortName;
-    private String hubName;
-    private Double latitude;
-    private Double longitude;
-    private String description;
+public class Zone {
 
-    public Zone()
-    {
-    }
+  private String name;
+  private String shortName;
+  private String hubName;
+  private Double latitude;
+  private Double longitude;
+  private String description;
 
-    public String getName()
-    {
-        return name;
-    }
+  public Zone() {
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getShortName()
-    {
-        return shortName;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setShortName(String shortName)
-    {
-        this.shortName = shortName;
-    }
+  public String getShortName() {
+    return shortName;
+  }
 
-    public String getHubName()
-    {
-        return hubName;
-    }
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
+  }
 
-    public void setHubName(String hubName)
-    {
-        this.hubName = hubName;
-    }
+  public String getHubName() {
+    return hubName;
+  }
 
-    public Double getLatitude()
-    {
-        return latitude;
-    }
+  public void setHubName(String hubName) {
+    this.hubName = hubName;
+  }
 
-    public void setLatitude(Double latitude)
-    {
-        this.latitude = latitude;
-    }
+  public Double getLatitude() {
+    return latitude;
+  }
 
-    public Double getLongitude()
-    {
-        return longitude;
-    }
+  public void setLatitude(Double latitude) {
+    this.latitude = latitude;
+  }
 
-    public void setLongitude(Double longitude)
-    {
-        this.longitude = longitude;
-    }
+  public Double getLongitude() {
+    return longitude;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public void setLongitude(Double longitude) {
+    this.longitude = longitude;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
 }

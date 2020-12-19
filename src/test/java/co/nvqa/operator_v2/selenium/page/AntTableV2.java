@@ -12,111 +12,93 @@ import org.openqa.selenium.support.PageFactory;
 /**
  * @author Sergey Mishanin
  */
-public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T>
-{
-    private static final String CELL_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
+public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
-    @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
-    public PageElement noResultsFound;
+  private static final String CELL_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
 
-    public AntTableV2(WebDriver webDriver)
-    {
-        super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+  @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
+  public PageElement noResultsFound;
+
+  public AntTableV2(WebDriver webDriver) {
+    super(webDriver);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+  }
+
+  @Override
+  protected String getTextOnTable(int rowNumber, String columnDataClass) {
+    String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, columnDataClass);
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
     }
+    return getText(xpath);
+  }
 
-    @Override
-    protected String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, columnDataClass);
-        if (StringUtils.isNotBlank(tableLocator))
-        {
-            xpath = tableLocator + xpath;
-        }
-        return getText(xpath);
-    }
+  @Override
+  public void clickActionButton(int rowNumber, String actionId) {
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
 
-    @Override
-    public void clickActionButton(int rowNumber, String actionId)
-    {
-        throw new UnsupportedOperationException("Not implemented yet");
+  @Override
+  public int getRowsCount() {
+    if (StringUtils.isNotBlank(tableLocator)) {
+      return executeInContext(tableLocator,
+          () -> getElementsCount(".//div[@role='row'][contains(@class,'base-row')]"));
+    } else {
+      return getElementsCount(".//div[@role='row'][contains(@class,'base-row')]");
     }
+  }
 
-    @Override
-    public int getRowsCount()
-    {
-        if (StringUtils.isNotBlank(tableLocator))
-        {
-            return executeInContext(tableLocator, () -> getElementsCount(".//div[@role='row'][contains(@class,'base-row')]"));
-        } else
-        {
-            return getElementsCount(".//div[@role='row'][contains(@class,'base-row')]");
-        }
-    }
+  @Override
+  public void selectRow(int rowNumber) {
+    String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
+    click(xpath);
+  }
 
-    @Override
-    public void selectRow(int rowNumber)
-    {
-        String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
-        click(xpath);
-    }
+  public boolean isRowSelected(int rowNumber) {
+    String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
+    return findElementByXpath(xpath).isSelected();
+  }
 
-    public boolean isRowSelected(int rowNumber)
-    {
-        String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
-        return findElementByXpath(xpath).isSelected();
-    }
+  @Override
+  protected String getTableLocator() {
+    return "//div[@class='virtual-table']";
+  }
 
-    @Override
-    protected String getTableLocator()
-    {
-        return "//div[@class='virtual-table']";
+  @Override
+  public AbstractTable<T> filterByColumn(String columnId, String value) {
+    String xpath = f("//div[@role='gridcell'][@data-key='%s']//input", columnId);
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
     }
+    String currentValue = getValue(xpath);
+    if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < currentValue.length(); i++) {
+        sb.append(Keys.BACK_SPACE);
+      }
+      sb.append(value);
+      sendKeys(xpath, sb.toString());
+    } else if (StringUtils.isEmpty(currentValue)) {
+      sendKeys(xpath, value);
+    }
+    return this;
+  }
 
-    @Override
-    public AbstractTable<T> filterByColumn(String columnId, String value)
-    {
-        String xpath = f("//div[@role='gridcell'][@data-key='%s']//input", columnId);
-        if (StringUtils.isNotBlank(tableLocator))
-        {
-            xpath = tableLocator + xpath;
-        }
-        String currentValue = getValue(xpath);
-        if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value))
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < currentValue.length(); i++)
-            {
-                sb.append(Keys.BACK_SPACE);
-            }
-            sb.append(value);
-            sendKeys(xpath, sb.toString());
-        } else if (StringUtils.isEmpty(currentValue))
-        {
-            sendKeys(xpath, value);
-        }
-        return this;
-    }
+  public AbstractTable<T> filterByColumn(String columnId, Object value) {
+    return filterByColumn(columnId, String.valueOf(value));
+  }
 
-    public AbstractTable<T> filterByColumn(String columnId, Object value)
-    {
-        return filterByColumn(columnId, String.valueOf(value));
-    }
+  @Override
+  public boolean isEmpty() {
+    return noResultsFound.isDisplayedFast();
+  }
 
-    @Override
-    public boolean isEmpty()
-    {
-        return noResultsFound.isDisplayedFast();
+  @Override
+  public void clickColumn(int rowNumber, String columnId) {
+    String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, getColumnLocators().get(columnId));
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
     }
-
-    @Override
-    public void clickColumn(int rowNumber, String columnId)
-    {
-        String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, getColumnLocators().get(columnId));
-        if (StringUtils.isNotBlank(tableLocator))
-        {
-            xpath = tableLocator + xpath;
-        }
-        click(xpath);
-    }
+    click(xpath);
+  }
 }

@@ -4,13 +4,12 @@ import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumAbstractSteps;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public abstract class AbstractSteps extends CommonSeleniumAbstractSteps<ScenarioManager> implements ScenarioStorageKeys
-{
-    public AbstractSteps()
-    {
-    }
+public abstract class AbstractSteps extends CommonSeleniumAbstractSteps<ScenarioManager> implements
+    ScenarioStorageKeys {
+
+  public AbstractSteps() {
+  }
 }
