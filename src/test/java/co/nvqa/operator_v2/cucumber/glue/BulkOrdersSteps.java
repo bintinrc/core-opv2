@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.BulkOrdersPage.BulkOrdersTable.ACTION_DETAILS;
-import static co.nvqa.operator_v2.selenium.page.BulkOrdersPage.BulkOrdersTable.ACTION_PRINT;
-
 import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
@@ -11,6 +8,9 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import org.junit.Assert;
+
+import static co.nvqa.operator_v2.selenium.page.BulkOrdersPage.BulkOrdersTable.ACTION_DETAILS;
+import static co.nvqa.operator_v2.selenium.page.BulkOrdersPage.BulkOrdersTable.ACTION_PRINT;
 
 /**
  * @author Sergey Mishanin

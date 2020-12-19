@@ -1,10 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_DELETE;
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_ID;
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_NAME;
-
 import co.nvqa.operator_v2.model.HubsGroup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -17,6 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_DELETE;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_ID;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_NAME;
 
 /**
  * @author Sergey Mishanin

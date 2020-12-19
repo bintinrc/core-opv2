@@ -1,10 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_CONTACT_INFO;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_DELETE;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
-
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -16,6 +11,11 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_CONTACT_INFO;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_DELETE;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 
 /**
  * @author Sergey Mishanin

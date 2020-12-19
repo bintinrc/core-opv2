@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.RouteInboundPage.ShippersTable.VIEW_ORDERS;
-
 import co.nvqa.operator_v2.model.CollectionSummary;
 import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
@@ -36,6 +34,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.RouteInboundPage.ShippersTable.VIEW_ORDERS;
 
 /**
  * @author Daniel Joi Partogi Hutapea

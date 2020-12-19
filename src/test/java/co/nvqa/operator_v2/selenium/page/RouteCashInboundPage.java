@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.COLUMN_RECEIPT_NUMBER;
-
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
@@ -14,6 +11,9 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.COLUMN_RECEIPT_NUMBER;
 
 /**
  * @author Daniel Joi Partogi Hutapea

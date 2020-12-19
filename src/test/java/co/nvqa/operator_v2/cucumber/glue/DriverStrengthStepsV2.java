@@ -1,9 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE;
-
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import cucumber.api.java.en.Then;
@@ -12,6 +8,10 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import org.hamcrest.Matchers;
+
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE;
 
 /**
  * @author Sergey Mishanin

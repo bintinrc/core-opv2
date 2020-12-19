@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.FailedPickupsTable.ACTION_RESCHEDULE_NEXT_DAY;
-import static co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.FailedPickupsTable.COLUMN_TRACKING_ID;
-
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -21,6 +18,9 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.FailedPickupsTable.ACTION_RESCHEDULE_NEXT_DAY;
+import static co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.FailedPickupsTable.COLUMN_TRACKING_ID;
 
 /**
  * @author Daniel Joi Partogi Hutapea

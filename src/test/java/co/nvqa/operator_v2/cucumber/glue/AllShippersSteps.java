@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
-import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
-
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.MilkrunSettings;
@@ -48,6 +45,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 
 /**
  * @author Daniel Joi Partogi Hutapea

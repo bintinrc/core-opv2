@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TRACKING_ID;
-import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TYPE;
-
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -23,6 +20,9 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TRACKING_ID;
+import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TYPE;
 
 /**
  * @author Daniel Joi Partogi Hutapea

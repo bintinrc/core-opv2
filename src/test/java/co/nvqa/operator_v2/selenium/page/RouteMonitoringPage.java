@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
@@ -12,6 +10,8 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Daniel Joi Partogi Hutapea

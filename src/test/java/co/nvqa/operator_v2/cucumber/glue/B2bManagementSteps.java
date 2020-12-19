@@ -1,10 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY;
-import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.MASTER_SHIPPER_VIEW_SUB_SHIPPER_ACTION_BUTTON_INDEX;
-import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
-import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX;
-
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.B2bManagementPage;
@@ -12,6 +7,11 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import java.util.List;
+
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.MASTER_SHIPPER_VIEW_SUB_SHIPPER_ACTION_BUTTON_INDEX;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX;
 
 /**
  * @author Lanang Jati

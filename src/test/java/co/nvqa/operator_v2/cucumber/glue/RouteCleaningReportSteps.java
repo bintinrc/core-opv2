@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.COLUMN_TRACKING_ID;
-
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.RouteCleaningReportCodInfo;
@@ -18,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.COLUMN_TRACKING_ID;
 
 /**
  * @author Daniel Joi Partogi Hutapea

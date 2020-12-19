@@ -1,8 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.ReservationRejectionEntityTable.COLUMN_PICKUP_INFO;
-import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.ReservationRejectionEntityTable.COLUMN_REASON_FOR_REJECTION;
-
 import co.nvqa.commons.model.driver.RejectReservationRequest;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -17,6 +14,9 @@ import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.ReservationRejectionEntityTable.COLUMN_PICKUP_INFO;
+import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.ReservationRejectionEntityTable.COLUMN_REASON_FOR_REJECTION;
 
 /**
  * @author Kateryna Skakunova
