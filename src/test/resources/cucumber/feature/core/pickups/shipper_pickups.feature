@@ -386,65 +386,68 @@ Feature: Shipper Pickups
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Reservation by Waypoint Status - SUCCESS (uid:a400c076-ada2-4e14-aabe-e9f888608373)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
-      | status      | ROUTED                           |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
-    When Operator finish reservation with success
-    Then Operator verifies reservation is finished using data below:
-      | backgroundColor | #90ee90 |
-      | status          | SUCCESS |
-    When Operator refresh page
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-name}                |
       | status      | SUCCESS                          |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
+      | shipperName  | {shipper-v4-name}    |
+      | approxVolume | Less than 10 Parcels |
+    And Operator verifies reservation is finished using data below:
+      | backgroundColor | #90ee90 |
+      | status          | SUCCESS |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Reservation by Waypoint Status - FAIL (uid:8e4d27a1-4d7b-4def-bd7b-2f758cb2deb4)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver fail the reservation using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
-      | status      | ROUTED                           |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
-    When Operator finish reservation with failure
-    Then Operator verifies reservation is finished using data below:
-      | backgroundColor | #ffc0cb |
-      | status          | FAIL    |
-    When Operator refresh page
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
@@ -453,6 +456,9 @@ Feature: Shipper Pickups
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}    |
       | approxVolume | Less than 10 Parcels |
+    And Operator verifies reservation is finished using data below:
+      | backgroundColor | #ffc0cb |
+      | status          | FAIL    |
 
   Scenario: Operator Filters Reservation by Reservation Type - Premium Scheduled Reservation (uid:6693f2c8-ee4a-4592-8147-6dee8f4cebe5)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -738,6 +744,260 @@ Feature: Shipper Pickups
       | status      | FAIL                             |
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Single Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+    And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
+    Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
+    When Operator select created reservations on Shipper Pickup page
+    Then Operator verify that title of Bulk Route Assignment Side Panel is "1/100 RSVN selected"
+    And Operator verify reservations data in Bulk Route Assignment Side Panel using data below:
+      | title             | description                                                   | subtitle                                 |
+      | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    When Operator select "{KEY_CREATED_ROUTE_ID}" route in Bulk Route Assignment Side Panel
+    And Operator click Bulk Assign button in Bulk Route Assignment Side Panel
+    Then Operator verifies that "Bulk Assignment is successful" success toast message is displayed
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+      | routeId      | GET_FROM_CREATED_ROUTE       |
+      | driverName   | {ninja-driver-name}          |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v4-id} |
+      | generateAddress   | RANDOM          |
+    And API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+    And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
+    Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
+    When Operator select created reservations on Shipper Pickup page
+    Then Operator verify that title of Bulk Route Assignment Side Panel is "2/100 RSVN selected"
+    And Operator verify reservations data in Bulk Route Assignment Side Panel using data below:
+      | title             | description                                                   | subtitle                                 |
+      | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithPostcode} | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
+    When Operator delete 1 reservation in Bulk Route Assignment Side Panel
+    Then Operator verify that title of Bulk Route Assignment Side Panel is "1/100 RSVN selected"
+    And Operator verify reservations data in Bulk Route Assignment Side Panel using data below:
+      | title             | description                                                   | subtitle                                 |
+      | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithPostcode} | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
+    When Operator select "{KEY_CREATED_ROUTE_ID}" route in Bulk Route Assignment Side Panel
+    And Operator click Bulk Assign button in Bulk Route Assignment Side Panel
+    Then Operator verifies that "Bulk Assignment is successful" success toast message is displayed
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v4-name}      |
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
+      | driverName  | {ninja-driver-name}    |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Routed Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | ROUTED                           |
+    And Operator select created reservations on Shipper Pickup page
+    And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
+    Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
+    And Operator verify that title of Bulk Route Assignment Side Panel is "0/100 RSVN selected"
+    And Operator verify that reservation checkbox is not selected on Shipper Pickups page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Failed Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver fail the reservation using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | FAIL                             |
+    And Operator select created reservations on Shipper Pickup page
+    And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
+    Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
+    And Operator verify that title of Bulk Route Assignment Side Panel is "0/100 RSVN selected"
+    And Operator verify that reservation checkbox is not selected on Shipper Pickups page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Success Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | SUCCESS                          |
+    And Operator select created reservations on Shipper Pickup page
+    And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
+    Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
+    And Operator verify that title of Bulk Route Assignment Side Panel is "0/100 RSVN selected"
+    And Operator verify that reservation checkbox is not selected on Shipper Pickups page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Success Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | ROUTED                           |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+    When Operator finish reservation with success
+    Then Operator verifies reservation is finished using data below:
+      | backgroundColor | #90ee90 |
+      | status          | SUCCESS |
+    When Operator refresh page
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | SUCCESS                          |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+    And Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Fail Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | ROUTED                           |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+    When Operator finish reservation with failure
+    Then Operator verifies reservation is finished using data below:
+      | backgroundColor | #ffc0cb |
+      | status          | FAIL    |
+    When Operator refresh page
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | FAIL                             |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}    |
+      | approxVolume | Less than 10 Parcels |
+    And Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
+
+  Scenario: Operator Not Allowed to Force Finish a Unrouted Pending Reservation on Shipper Pickup Page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+    Then Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
