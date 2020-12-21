@@ -20,6 +20,11 @@ public class MdCheckbox extends PageElement {
     return StringUtils.equalsIgnoreCase(webElement.getAttribute("aria-checked"), "true");
   }
 
+  @Override
+  public boolean isEnabled() {
+    return StringUtils.equalsIgnoreCase(webElement.getAttribute("aria-disabled"), "false");
+  }
+
   public void check() {
     if (!isChecked()) {
       click();

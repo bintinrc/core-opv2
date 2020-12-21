@@ -6,7 +6,9 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.ReservationInfo;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
+import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.BulkRouteAssignmentSidePanel.ReservationCard;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -323,14 +325,18 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator select \"(.+)\" action for created reservations on Shipper Pickup page$")
   public void operatorSelectActionForCreatedReservations(String action) {
     action = resolveValue(action);
+    operatorSelectCreatedReservations();
+    shipperPickupsPage.actionsMenu.selectOption(action);
+  }
+
+  @And("^Operator select created reservations on Shipper Pickup page$")
+  public void operatorSelectCreatedReservations() {
     List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
     addresses.forEach(address ->
     {
       shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
       shipperPickupsPage.reservationsTable.selectRow(1);
     });
-    shipperPickupsPage.actionsMenu.selectOption(action);
-
   }
 
   @And("^Operator verifies no route suggested for selected reservations$")
@@ -490,5 +496,77 @@ public class ShipperPickupsSteps extends AbstractSteps {
           .containsInAnyOrder(
               Arrays.stream(expectedValue.split(",")).map(StringUtils::trim).toArray()));
     }
+  }
+
+  @When("^Operator switch (on|off) Bulk Assign Route toggle on Shipper Pickups page$")
+  public void operatorSwitchBulkAssignRoute(String mode) {
+    shipperPickupsPage.bulkAssignRoute.setValue(StringUtils.equalsIgnoreCase(mode, "on"));
+  }
+
+  @Then("^Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page$")
+  public void operatorVerifyBulkRouteAssignmentSidePanelIsShown() {
+    assertTrue("Bulk Route Assignment Side Panel is shown",
+        shipperPickupsPage.bulkAssignRoute.waitUntilVisible(5));
+  }
+
+  @Then("^Operator verify that title of Bulk Route Assignment Side Panel is \"(.+)\"$")
+  public void operatorVerifyBulkRouteAssignmentSidePanelTitle(String expected) {
+    assertEquals("Bulk Route Assignment Side Panel title", expected,
+        shipperPickupsPage.bulkRouteAssignmentSidePanel.description.getText());
+  }
+
+  @Then("^Operator verify reservations data in Bulk Route Assignment Side Panel using data below:$")
+  public void operatorVerifyReservationDataInBulkRouteAssignmentSidePanelTitle(
+      List<Map<String, String>> data) {
+    assertEquals("Count of Reservation Cards in Bulk Route Assignment Side Panel", data.size(),
+        shipperPickupsPage.bulkRouteAssignmentSidePanel.reservationCards.size());
+    for (int i = 0; i < data.size(); i++) {
+      ReservationCard reservationCard = shipperPickupsPage.bulkRouteAssignmentSidePanel.reservationCards
+          .get(i);
+      Map<String, String> expected = resolveKeyValues(data.get(i));
+      if (expected.containsKey("title")) {
+        assertThat(f("Reservation card title %d", i + 1), reservationCard.title.getText(),
+            Matchers.startsWith(expected.get("title")));
+      }
+      if (expected.containsKey("description")) {
+        assertThat(f("Reservation card description %d", i + 1),
+            reservationCard.description.getText(), Matchers.equalTo(expected.get("description")));
+      }
+      if (expected.containsKey("subtitle")) {
+        assertThat(f("Reservation card subtitle %d", i + 1), reservationCard.subtitle.getText(),
+            Matchers.equalTo(expected.get("subtitle")));
+      }
+    }
+  }
+
+  @When("^Operator select \"(.+)\" route in Bulk Route Assignment Side Panel$")
+  public void operatorSelectRouteInBulkRouteAssignmentSidePanel(String route) {
+    shipperPickupsPage.bulkRouteAssignmentSidePanel.route.selectValue(resolveValue(route));
+  }
+
+  @When("^Operator click Bulk Assign button in Bulk Route Assignment Side Panel$")
+  public void operatorClickBulkAssignButtonInBulkRouteAssignmentSidePanel() {
+    shipperPickupsPage.bulkRouteAssignmentSidePanel.bulkAssign.clickAndWaitUntilDone();
+  }
+
+  @Then("^Operator delete (\\d+) reservation in Bulk Route Assignment Side Panel$")
+  public void operatorDeleteReservationBulkRouteAssignmentSidePanelTitle(int index) {
+    shipperPickupsPage.bulkRouteAssignmentSidePanel.reservationCards.get(index - 1).closeIcon
+        .click();
+  }
+
+  @Then("^Operator verify that reservation checkbox is not selected on Shipper Pickups page$")
+  public void operatorReservationCheckboxIsNotSelected() {
+    MdCheckbox checkBox = shipperPickupsPage.reservationsTable.getCheckbox(1);
+    assertFalse("Checkbox is enabled", checkBox.isEnabled());
+    assertFalse("Checkbox is checked", checkBox.isChecked());
+  }
+
+  @Then("^Operator verify that \"(.+)\" icon is disabled for created reservation on Shipper Pickups page$")
+  public void operatorVerifyThatFinishIconIsDisabled(String buttonName) {
+    Address address = get(KEY_CREATED_ADDRESS);
+    shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
+    assertFalse(f("%s button is disabled", buttonName),
+        shipperPickupsPage.reservationsTable.getActionButton(buttonName, 1).isEnabled());
   }
 }
