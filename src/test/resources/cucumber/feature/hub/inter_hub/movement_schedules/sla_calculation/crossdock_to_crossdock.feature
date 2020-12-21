@@ -194,8 +194,8 @@ Feature: Crossdock to Crossdock
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                          |
-      | status   | FAILED                                                                                                                   |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
   @DeleteHubsViaDb @DeleteShipment @CloseNewWindows

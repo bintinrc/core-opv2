@@ -135,7 +135,7 @@ Feature: Sort App User Management
     And Operator Load all the Sort App User
     Then Operator verifies that the newly created Sort App User will be shown
     And Operator edits the existed Sort App User with details:
-      | firstName | lastName   | contact        | password | employmentType | employmentStatus | primaryHub | warehouseTeamFormation | position | comments                                                             |
+      | firstName | lastName   | contact        | password | employmentType | employmentStatus | primaryHub | warehouseTeamFormation | position    | comments                                                          |
       | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Sort App User Management
@@ -190,8 +190,8 @@ Feature: Sort App User Management
     And Operator Load all the Sort App User
     Then Operator verifies that the newly created Sort App User will be shown
     And Operator edits the existed Sort App User with details:
-      | firstName | lastName   | contact        | password | employmentType | employmentStatus | primaryHub   | additionalHub | warehouseTeamFormation | position    | comments                                                          |
-      | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name}   | {hub-name-2}  | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. |
+      | firstName | lastName   | contact        | password | employmentType | employmentStatus | primaryHub | additionalHub | warehouseTeamFormation | position    | comments                                                          |
+      | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | {hub-name-2}  | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Sort App User Management
     And Operator Load all the Sort App User
@@ -206,8 +206,8 @@ Feature: Sort App User Management
     And Operator Load all the Sort App User
     Then Operator verifies that the newly created Sort App User will be shown
     And Operator edits the existed Sort App User with details:
-      | firstName | lastName   | contact        | password | employmentType | employmentStatus | primaryHub   | warehouseTeamFormation | position    | comments                                                          |
-      | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name}   | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. |
+      | firstName | lastName   | contact        | password | employmentType | employmentStatus | primaryHub | warehouseTeamFormation | position    | comments                                                          |
+      | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Sort App User Management
     And Operator Load all the Sort App User

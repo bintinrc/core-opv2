@@ -1,146 +1,120 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Tristania Siagian
  */
 
-public class MiddleMileDriver
-{
-    private String name;
-    private String hub;
-    private String contactNumber;
-    private String licenseNumber;
-    private String licenseType;
-    private String expiryDate;
-    private String employmentType;
-    private String employmentStartDate;
-    private String employmentEndDate;
-    private String username;
-    private String password;
-    private String comments;
+public class MiddleMileDriver {
 
-    public MiddleMileDriver()
-    {
-    }
+  private String name;
+  private String hub;
+  private String contactNumber;
+  private String licenseNumber;
+  private String licenseType;
+  private String expiryDate;
+  private String employmentType;
+  private String employmentStartDate;
+  private String employmentEndDate;
+  private String username;
+  private String password;
+  private String comments;
 
-    public String getName()
-    {
-        return name;
-    }
+  public MiddleMileDriver() {
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getHub()
-    {
-        return hub;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setHub(String hub)
-    {
-        this.hub = hub;
-    }
+  public String getHub() {
+    return hub;
+  }
 
-    public String getContactNumber()
-    {
-        return contactNumber;
-    }
+  public void setHub(String hub) {
+    this.hub = hub;
+  }
 
-    public void setContactNumber(String contactNumber)
-    {
-        this.contactNumber = contactNumber;
-    }
+  public String getContactNumber() {
+    return contactNumber;
+  }
 
-    public String getLicenseNumber()
-    {
-        return licenseNumber;
-    }
+  public void setContactNumber(String contactNumber) {
+    this.contactNumber = contactNumber;
+  }
 
-    public void setLicenseNumber(String licenseNumber)
-    {
-        this.licenseNumber = licenseNumber;
-    }
+  public String getLicenseNumber() {
+    return licenseNumber;
+  }
 
-    public String getLicenseType()
-    {
-        return licenseType;
-    }
+  public void setLicenseNumber(String licenseNumber) {
+    this.licenseNumber = licenseNumber;
+  }
 
-    public void setLicenseType(String licenseType)
-    {
-        this.licenseType = licenseType;
-    }
+  public String getLicenseType() {
+    return licenseType;
+  }
 
-    public String getExpiryDate()
-    {
-        return expiryDate;
-    }
+  public void setLicenseType(String licenseType) {
+    this.licenseType = licenseType;
+  }
 
-    public void setExpiryDate(String expiryDate)
-    {
-        this.expiryDate = expiryDate;
-    }
+  public String getExpiryDate() {
+    return expiryDate;
+  }
 
-    public String getEmploymentType()
-    {
-        return employmentType;
-    }
+  public void setExpiryDate(String expiryDate) {
+    this.expiryDate = expiryDate;
+  }
 
-    public void setEmploymentType(String employmentType)
-    {
-        this.employmentType = employmentType;
-    }
+  public String getEmploymentType() {
+    return employmentType;
+  }
 
-    public String getEmploymentStartDate()
-    {
-        return employmentStartDate;
-    }
+  public void setEmploymentType(String employmentType) {
+    this.employmentType = employmentType;
+  }
 
-    public void setEmploymentStartDate(String employmentStartDate)
-    {
-        this.employmentStartDate = employmentStartDate;
-    }
+  public String getEmploymentStartDate() {
+    return employmentStartDate;
+  }
 
-    public String getEmploymentEndDate()
-    {
-        return employmentEndDate;
-    }
+  public void setEmploymentStartDate(String employmentStartDate) {
+    this.employmentStartDate = employmentStartDate;
+  }
 
-    public void setEmploymentEndDate(String employmentEndDate)
-    {
-        this.employmentEndDate = employmentEndDate;
-    }
+  public String getEmploymentEndDate() {
+    return employmentEndDate;
+  }
 
-    public String getUsername()
-    {
-        return username;
-    }
+  public void setEmploymentEndDate(String employmentEndDate) {
+    this.employmentEndDate = employmentEndDate;
+  }
 
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getPassword()
-    {
-        return password;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getComments()
-    {
-        return comments;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
+  public String getComments() {
+    return comments;
+  }
+
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 }

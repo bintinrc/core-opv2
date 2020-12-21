@@ -9,12 +9,12 @@ Feature: Global Inbound
   Scenario Outline: Inbound parcel at hub on Operator v2 - <orderType> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<service>", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName      | {hub-name}                                 |
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -26,17 +26,17 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify order event on Edit order page using data below:
-      | name    | HUB INBOUND SCAN |
+      | name | HUB INBOUND SCAN |
     Examples:
-      | orderType       | service       | hiptest-uid                              |
-      | Normal order    | Parcel        | uid:1b29cfe9-33b6-498d-80d0-ac89b4868f81 |
-      | Return order    | Return        | uid:2785626f-4012-4a4a-a722-00661a8b4261 |
+      | orderType    | service | hiptest-uid                              |
+      | Normal order | Parcel  | uid:1b29cfe9-33b6-498d-80d0-ac89b4868f81 |
+      | Return order | Return  | uid:2785626f-4012-4a4a-a722-00661a8b4261 |
 
   @CloseNewWindows
   Scenario Outline: Inbound parcel with changes in size - <size> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
@@ -176,11 +176,11 @@ Feature: Global Inbound
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}                                 |
-      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | ROUTED                             |
-      | color          | #e86161                            |
+      | rackInfo | ROUTED  |
+      | color    | #e86161 |
     And API Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
@@ -207,9 +207,9 @@ Feature: Global Inbound
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | RTS                          |
-      | rackInfo       | sync_problem RECOVERY        |
-      | color          | #e86161                      |
+      | destinationHub | RTS                   |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
@@ -221,17 +221,17 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
     When Operator uploads new mapping
-      |3plShipperName  | {3pl-shipper-name}    |
-      |3plShipperId    | {3pl-shipper-id}      |
+      | 3plShipperName | {3pl-shipper-name} |
+      | 3plShipperId   | {3pl-shipper-id}   |
     When API Operator refresh created order data
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | TRANSFERRED TO 3PL           |
-      | rackInfo       | sync_problem RECOVERY        |
-      | color          | #e86161                      |
+      | destinationHub | TRANSFERRED TO 3PL    |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
@@ -244,12 +244,12 @@ Feature: Global Inbound
     And API Operator force created order status to Completed
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}                                 |
-      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | COMPLETED                    |
-      | rackInfo       | sync_problem RECOVERY        |
-      | color          | #e86161                      |
+      | destinationHub | COMPLETED             |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
@@ -262,38 +262,38 @@ Feature: Global Inbound
     And API Operator force created order status to Cancelled
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}                                 |
-      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | CANCELLED                    |
-      | rackInfo       | sync_problem RECOVERY        |
-      | color          | #e86161                      |
+      | destinationHub | CANCELLED             |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Inbound On Vehicle for Delivery Order (uid:4d0c8a28-ca6a-4bf0-9505-ce656f1a6179)
-      Given Operator go to menu Shipper Support -> Blocked Dates
-      Given API Shipper create V4 order using data below:
-        | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-        | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-      When API Operator Global Inbound parcel using data below:
-        | globalInboundRequest | { "hubId":{hub-id} } |
-      When API Operator create new route using data below:
-        | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-      And API Operator add parcel to the route using data below:
-        | addParcelToRouteRequest | { "type":"DD" } |
-      When API Driver collect all his routes
-      When API Driver get pickup/delivery waypoint of the created order
-      When API Operator Van Inbound parcel
-      When API Operator start the route
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Driver collect all his routes
+    When API Driver get pickup/delivery waypoint of the created order
+    When API Operator Van Inbound parcel
+    When API Operator start the route
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}                                 |
-      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | ROUTED        |
-      | color          | #e86161       |
+      | rackInfo | ROUTED  |
+      | color    | #e86161 |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
@@ -302,12 +302,12 @@ Feature: Global Inbound
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}   |
-      | trackingId        | INVALID      |
+      | hubName    | {hub-name} |
+      | trackingId | INVALID    |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | INVALID                      |
-      | rackInfo       | sync_problem RECOVERY        |
-      | color          | #e86161                      |
+      | destinationHub | INVALID               |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario Outline: Inbound failed delivery - <Note> (<hiptest-uid>)
@@ -592,9 +592,9 @@ Feature: Global Inbound
   Scenario: Inbound Semi Integrated DP Order (uid:d846ee76-cf66-4b14-8e91-88f3f8f3999f)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6596548707","email":"ninjavan.qa3@gmail.com","address":{"country":"SG","address2":"SIANG LIM SIAN LI BUDDHIST TEMPLE","address1":"184E JALAN TOA PAYOH #1-1","postcode":"319941"}},"parcel_job":{"allow_doorstep_dropoff": true,"enforce_delivery_verification": false,"delivery_verification_mode": "SIGNATURE","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":1},"allow_self_collection":true}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
@@ -658,33 +658,33 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator create recovery ticket using data below:
-      | ticketType              | 2                               |
-      | entrySource             | 1                               |
-      | investigatingParty      | 448                             |
-      | investigatingHubId      | 1                               |
-      | outcomeName             | ORDER OUTCOME (MISSING)         |
-      | outComeValue            | REPACKED/RELABELLED TO SEND     |
-      | comments                | Automation Testing.             |
-      | shipperZendeskId        | 1                               |
-      | ticketNotes             | Automation Testing.             |
-      | issueDescription        | Automation Testing.             |
-      | creatorUserId           | 106307852128204474889           |
-      | creatorUserName         | Niko Susanto                    |
-      | creatorUserEmail        | niko.susanto@ninjavan.co        |
-      | TicketCreationSource    | TICKET_MANAGEMENT               |
-      | ticketTypeId            | 17                              |
-      | entrySourceId           | 13                              |
-      | trackingIdFieldId       | 2                               |
-      | investigatingPartyId    | 15                              |
-      | investigatingHubFieldId | 67                              |
-      | outcomeNameId           | 64                              |
-      | commentsId              | 26                              |
-      | shipperZendeskFieldId   | 36                              |
-      | ticketNotesId           | 32                              |
-      | issueDescriptionId      | 45                              |
-      | creatorUserFieldId      | 30                              |
-      | creatorUserNameId       | 39                              |
-      | creatorUserEmailId      | 66                              |
+      | ticketType              | 2                           |
+      | entrySource             | 1                           |
+      | investigatingParty      | 448                         |
+      | investigatingHubId      | 1                           |
+      | outcomeName             | ORDER OUTCOME (MISSING)     |
+      | outComeValue            | REPACKED/RELABELLED TO SEND |
+      | comments                | Automation Testing.         |
+      | shipperZendeskId        | 1                           |
+      | ticketNotes             | Automation Testing.         |
+      | issueDescription        | Automation Testing.         |
+      | creatorUserId           | 106307852128204474889       |
+      | creatorUserName         | Niko Susanto                |
+      | creatorUserEmail        | niko.susanto@ninjavan.co    |
+      | TicketCreationSource    | TICKET_MANAGEMENT           |
+      | ticketTypeId            | 17                          |
+      | entrySourceId           | 13                          |
+      | trackingIdFieldId       | 2                           |
+      | investigatingPartyId    | 15                          |
+      | investigatingHubFieldId | 67                          |
+      | outcomeNameId           | 64                          |
+      | commentsId              | 26                          |
+      | shipperZendeskFieldId   | 36                          |
+      | ticketNotesId           | 32                          |
+      | issueDescriptionId      | 45                          |
+      | creatorUserFieldId      | 30                          |
+      | creatorUserNameId       | 39                          |
+      | creatorUserEmailId      | 66                          |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
@@ -709,43 +709,43 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator create recovery ticket using data below:
-      | ticketType              | 5                               |
-      | subTicketType           | 9                               |
-      | entrySource             | 1                               |
-      | investigatingParty      | 448                             |
-      | investigatingHubId      | 1                               |
-      | outcomeName             | ORDER OUTCOME (DUPLICATE PARCEL)|
-      | outComeValue            | REPACKED/RELABELLED TO SEND     |
-      | comments                | Automation Testing.             |
-      | shipperZendeskId        | 1                               |
-      | ticketNotes             | Automation Testing.             |
-      | issueDescription        | Automation Testing.             |
-      | creatorUserId           | 106307852128204474889           |
-      | creatorUserName         | Niko Susanto                    |
-      | creatorUserEmail        | niko.susanto@ninjavan.co        |
-      | TicketCreationSource    | TICKET_MANAGEMENT               |
-      | ticketTypeId            | 17                              |
-      | subTicketTypeId         | 17                              |
-      | entrySourceId           | 13                              |
-      | trackingIdFieldId       | 2                               |
-      | investigatingPartyId    | 15                              |
-      | investigatingHubFieldId | 67                              |
-      | outcomeNameId           | 64                              |
-      | commentsId              | 26                              |
-      | shipperZendeskFieldId   | 36                              |
-      | ticketNotesId           | 32                              |
-      | issueDescriptionId      | 45                              |
-      | creatorUserFieldId      | 30                              |
-      | creatorUserNameId       | 39                              |
-      | creatorUserEmailId      | 66                              |
+      | ticketType              | 5                                |
+      | subTicketType           | 9                                |
+      | entrySource             | 1                                |
+      | investigatingParty      | 448                              |
+      | investigatingHubId      | 1                                |
+      | outcomeName             | ORDER OUTCOME (DUPLICATE PARCEL) |
+      | outComeValue            | REPACKED/RELABELLED TO SEND      |
+      | comments                | Automation Testing.              |
+      | shipperZendeskId        | 1                                |
+      | ticketNotes             | Automation Testing.              |
+      | issueDescription        | Automation Testing.              |
+      | creatorUserId           | 106307852128204474889            |
+      | creatorUserName         | Niko Susanto                     |
+      | creatorUserEmail        | niko.susanto@ninjavan.co         |
+      | TicketCreationSource    | TICKET_MANAGEMENT                |
+      | ticketTypeId            | 17                               |
+      | subTicketTypeId         | 17                               |
+      | entrySourceId           | 13                               |
+      | trackingIdFieldId       | 2                                |
+      | investigatingPartyId    | 15                               |
+      | investigatingHubFieldId | 67                               |
+      | outcomeNameId           | 64                               |
+      | commentsId              | 26                               |
+      | shipperZendeskFieldId   | 36                               |
+      | ticketNotesId           | 32                               |
+      | issueDescriptionId      | 45                               |
+      | creatorUserFieldId      | 30                               |
+      | creatorUserNameId       | 39                               |
+      | creatorUserEmailId      | 66                               |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | ON HOLD - SHIPPER ISSUE            |
-      | rackInfo       | sync_problem RECOVERY              |
-      | color          | #e86161                            |
+      | destinationHub | ON HOLD - SHIPPER ISSUE |
+      | rackInfo       | sync_problem RECOVERY   |
+      | color          | #e86161                 |
     Then API Operator verify order Recovery ticket info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id}               |
@@ -1048,17 +1048,17 @@ Feature: Global Inbound
   Scenario: Inbound an International order - portation export (uid:a0364582-4f4a-4f8c-90e6-ded25c878348)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                |
-      | v4OrderRequest      | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"export"}} |
-      | addressType         | global                                                                                                                                                                                                                                                                |
-      And Operator go to menu Inbounding -> Global Inbound
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"export"}} |
+      | addressType       | global                                                                                                                                                                                                                                                                |
+    And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}         |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | INTERNATIONAL                      |
+      | destinationHub | INTERNATIONAL                  |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector} |
-      | color          | #ffa400                            |
+      | color          | #ffa400                        |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
@@ -1066,13 +1066,13 @@ Feature: Global Inbound
   Scenario: Inbound an International order - portation import (uid:581b7d82-f823-4d56-b6a4-bfffc2b65d8f)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                |
-      | v4OrderRequest      | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
-      | addressType         | global                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
+      | addressType       | global                                                                                                                                                                                                                                                                |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}         |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -1084,7 +1084,7 @@ Feature: Global Inbound
   Scenario: Inbound Arrived at Distribution Point Order (uid:6213841e-2cb4-434b-bd6b-020aea8833ba)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
     When Operator tags single order to DP with DPMS ID = "{dpms-id}"
@@ -1103,8 +1103,8 @@ Feature: Global Inbound
     When API Operator refresh created order data
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -1117,13 +1117,13 @@ Feature: Global Inbound
   Scenario: Inbound With Device ID (uid:a4df911d-8bf7-43ae-aef0-e791b6e9a664)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | deviceId       | 12345                                      |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | deviceId   | 12345                                      |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -1135,13 +1135,13 @@ Feature: Global Inbound
   Scenario: Order Tagging with Global Inbound - Total tags is less/equal 4 (uid:0e043740-9f44-45ae-94a3-94f6987c45ad)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | tags           | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3              |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | tags       | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3              |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -1165,9 +1165,9 @@ Feature: Global Inbound
       | OrderTag | 5570 |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | tags           | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3,SORTAUTO02    |
+      | hubName    | {hub-name}                                 |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | tags       | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3,SORTAUTO02   |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |

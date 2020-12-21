@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -9,69 +8,57 @@ import java.util.Map;
 /**
  * @author Sergey Mishanin
  */
-public class PendingPriorityOrder extends DataEntity<PendingPriorityOrder>
-{
-    private String trackingId;
-    private String customerName;
-    private List<String> tags;
-    private String address;
+public class PendingPriorityOrder extends DataEntity<PendingPriorityOrder> {
 
-    public PendingPriorityOrder()
-    {
-    }
+  private String trackingId;
+  private String customerName;
+  private List<String> tags;
+  private String address;
 
-    public PendingPriorityOrder(Map<String, String> data)
-    {
-        fromMap(data);
-    }
+  public PendingPriorityOrder() {
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public PendingPriorityOrder(Map<String, String> data) {
+    fromMap(data);
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getCustomerName()
-    {
-        return customerName;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setCustomerName(String customerName)
-    {
-        this.customerName = customerName;
-    }
+  public String getCustomerName() {
+    return customerName;
+  }
 
-    public List<String> getTags()
-    {
-        return tags;
-    }
+  public void setCustomerName(String customerName) {
+    this.customerName = customerName;
+  }
 
-    public void setTags(List<String> tags)
-    {
-        this.tags = tags;
-    }
+  public List<String> getTags() {
+    return tags;
+  }
 
-    public void clearTags()
-    {
-        this.tags = null;
-    }
+  public void setTags(List<String> tags) {
+    this.tags = tags;
+  }
 
-    public void setTags(String tags)
-    {
-        setTags(Arrays.asList(tags.split(",")));
-    }
+  public void clearTags() {
+    this.tags = null;
+  }
 
-    public String getAddress()
-    {
-        return address;
-    }
+  public void setTags(String tags) {
+    setTags(Arrays.asList(tags.split(",")));
+  }
 
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
 }

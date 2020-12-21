@@ -7,22 +7,20 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public abstract class AbstractFilterBox extends PageElement
-{
-    public AbstractFilterBox(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public abstract class AbstractFilterBox extends PageElement {
 
-    @FindBy(name = "commons.remove-filter")
-    public NvIconButton removeFilter;
+  public AbstractFilterBox(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    public void removeFilter()
-    {
-        removeFilter.click();
-    }
+  @FindBy(name = "commons.remove-filter")
+  public NvIconButton removeFilter;
 
-    abstract void setValue(String... values);
+  public void removeFilter() {
+    removeFilter.click();
+  }
+
+  abstract void setValue(String... values);
 
 }

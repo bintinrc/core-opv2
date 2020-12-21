@@ -3,83 +3,70 @@ package co.nvqa.operator_v2.model;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.StandardTestConstants;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
  * @author Kateryna Skakunova
  */
-public class ImplantedManifestOrder extends DataEntity<ImplantedManifestOrder>
-{
-    private String trackingId;
-    private ZonedDateTime scannedAt;
-    private String destination;
-    private String addressee;
-    private String rackSector;
-    private String deliveryBy;
+public class ImplantedManifestOrder extends DataEntity<ImplantedManifestOrder> {
 
-    public ImplantedManifestOrder()
-    {
-    }
+  private String trackingId;
+  private ZonedDateTime scannedAt;
+  private String destination;
+  private String addressee;
+  private String rackSector;
+  private String deliveryBy;
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public ImplantedManifestOrder() {
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public ZonedDateTime getScannedAt()
-    {
-        return scannedAt;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setScannedAt(String scannedAt)
-    {
-        this.scannedAt = DateUtil.getDate(scannedAt, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
-    }
+  public ZonedDateTime getScannedAt() {
+    return scannedAt;
+  }
 
-    public String getDestination()
-    {
-        return destination;
-    }
+  public void setScannedAt(String scannedAt) {
+    this.scannedAt = DateUtil.getDate(scannedAt,
+        DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
+  }
 
-    public void setDestination(String destination)
-    {
-        this.destination = destination;
-    }
+  public String getDestination() {
+    return destination;
+  }
 
-    public String getAddressee()
-    {
-        return addressee;
-    }
+  public void setDestination(String destination) {
+    this.destination = destination;
+  }
 
-    public void setAddressee(String addressee)
-    {
-        this.addressee = addressee;
-    }
+  public String getAddressee() {
+    return addressee;
+  }
 
-    public String getRackSector()
-    {
-        return rackSector;
-    }
+  public void setAddressee(String addressee) {
+    this.addressee = addressee;
+  }
 
-    public void setRackSector(String rackSector)
-    {
-        this.rackSector = rackSector;
-    }
+  public String getRackSector() {
+    return rackSector;
+  }
 
-    public String getDeliveryBy()
-    {
-        return deliveryBy;
-    }
+  public void setRackSector(String rackSector) {
+    this.rackSector = rackSector;
+  }
 
-    public void setDeliveryBy(String deliveryBy)
-    {
-        this.deliveryBy = deliveryBy;
-    }
+  public String getDeliveryBy() {
+    return deliveryBy;
+  }
+
+  public void setDeliveryBy(String deliveryBy) {
+    this.deliveryBy = deliveryBy;
+  }
 }

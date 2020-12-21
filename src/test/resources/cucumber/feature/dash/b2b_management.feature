@@ -166,8 +166,8 @@ Feature: B2B Management
     Then QA verify error message "Email not formatted as _@_._" is displayed on b2b management page
 
     Examples:
-      | masterShipperName                   | hiptest-uid                              |
-      | {operator-b2b-master-shipper-name}  | uid:c344e290-7672-47d6-917a-de46b70aa7e2 |
+      | masterShipperName                  | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name} | uid:c344e290-7672-47d6-917a-de46b70aa7e2 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

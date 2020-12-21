@@ -9,31 +9,27 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class NvIconButton extends PageElement
-{
-    public NvIconButton(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class NvIconButton extends PageElement {
 
-    public NvIconButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public NvIconButton(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    public NvIconButton(WebDriver webDriver, SearchContext searchContext, String xpath)
-    {
-        super(webDriver, searchContext, xpath);
-    }
+  public NvIconButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(tagName = "button")
-    private Button button;
+  public NvIconButton(WebDriver webDriver, SearchContext searchContext, String xpath) {
+    super(webDriver, searchContext, xpath);
+  }
 
-    public void click()
-    {
-        button.scrollIntoView();
-        button.click();
-    }
+  @FindBy(tagName = "button")
+  private Button button;
+
+  public void click() {
+    button.scrollIntoView();
+    button.click();
+  }
 }

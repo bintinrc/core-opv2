@@ -8,7 +8,7 @@ Feature: Van Inbound
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID (uid:677bce9c-ca6e-4842-99e7-ccecba82f2d8)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |

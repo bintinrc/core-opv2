@@ -5,36 +5,31 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class NvFilterBox extends AbstractFilterBox
-{
-    public NvFilterBox(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
+public class NvFilterBox extends AbstractFilterBox {
+
+  public NvFilterBox(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
+
+  @FindBy(tagName = "nv-autocomplete")
+  public NvAutocomplete searchOrSelect;
+
+  @FindBy(name = "commons.clear-all")
+  public PageElement clearAll;
+
+  public void clearAll() {
+    if (clearAll.isDisplayedFast()) {
+      clearAll.moveAndClick();
     }
+  }
 
-    @FindBy(tagName = "nv-autocomplete")
-    public NvAutocomplete searchOrSelect;
+  @Override
+  void setValue(String... values) {
+    selectFilter(values[0]);
+  }
 
-    @FindBy(name = "commons.clear-all")
-    public PageElement clearAll;
-
-    public void clearAll()
-    {
-        if (clearAll.isDisplayedFast())
-        {
-            clearAll.moveAndClick();
-        }
-    }
-
-    @Override
-    void setValue(String... values)
-    {
-        selectFilter(values[0]);
-    }
-
-    public void selectFilter(String value)
-    {
-        searchOrSelect.selectValue(value);
-    }
+  public void selectFilter(String value) {
+    searchOrSelect.selectValue(value);
+  }
 
 }

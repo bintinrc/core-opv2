@@ -5,24 +5,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class NvFilterTextBox extends AbstractFilterBox
-{
-    public NvFilterTextBox(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-    }
+public class NvFilterTextBox extends AbstractFilterBox {
 
-    @FindBy(css = "input[type='text']")
-    public TextBox search;
+  public NvFilterTextBox(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
 
-    public void setValue(String value)
-    {
-        search.setValue(value);
-    }
+  @FindBy(css = "input[type='text']")
+  public TextBox search;
 
-    @Override
-    void setValue(String... values)
-    {
-        setValue(values[0]);
-    }
+  public void setValue(String value) {
+    search.setValue(value);
+  }
+
+  @Override
+  void setValue(String... values) {
+    setValue(values[0]);
+  }
 }

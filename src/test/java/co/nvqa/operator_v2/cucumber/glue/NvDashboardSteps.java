@@ -11,40 +11,36 @@ import org.apache.commons.collections.CollectionUtils;
  * @author Sergey Mishanin
  */
 @ScenarioScoped
-public class NvDashboardSteps extends AbstractSteps
-{
-    private NvDashboardPage nvDashboardPage;
+public class NvDashboardSteps extends AbstractSteps {
 
-    public NvDashboardSteps()
-    {
-    }
+  private NvDashboardPage nvDashboardPage;
 
-    @Override
-    public void init()
-    {
-        nvDashboardPage = new NvDashboardPage(getWebDriver());
-    }
+  public NvDashboardSteps() {
+  }
 
-    @Then("^Operator validate new Shipper is logged in on Dashboard site$")
-    public void operatorValidateNewShipperIsLoggedInOnDashboardSite()
-    {
-        Shipper shipper = get(KEY_CREATED_SHIPPER);
-        nvDashboardPage.validateUserInfo(shipper.getName(), shipper.getEmail());
-    }
+  @Override
+  public void init() {
+    nvDashboardPage = new NvDashboardPage(getWebDriver());
+  }
 
-    @And("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\" on Dashboard site$")
-    public void operatorGoToMenuOnDashboardSite(String item1, String item2)
-    {
-        nvDashboardPage.selectMenuItem(item1, item2);
-    }
+  @Then("^Operator validate new Shipper is logged in on Dashboard site$")
+  public void operatorValidateNewShipperIsLoggedInOnDashboardSite() {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    nvDashboardPage.validateUserInfo(shipper.getName(), shipper.getEmail());
+  }
 
-    @Then("^Operator verify pickup addresses of the new Shipper on Dashboard site$")
-    public void operatorVerifyPickupAddressesOfTheNewShipperOnDashboardSite()
-    {
-        Shipper shipper = get(KEY_CREATED_SHIPPER);
-        if (shipper.getPickup() != null && CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
-        {
-            shipper.getPickup().getReservationPickupAddresses().forEach(nvDashboardPage::validatePickupAddressExists);
-        }
+  @And("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\" on Dashboard site$")
+  public void operatorGoToMenuOnDashboardSite(String item1, String item2) {
+    nvDashboardPage.selectMenuItem(item1, item2);
+  }
+
+  @Then("^Operator verify pickup addresses of the new Shipper on Dashboard site$")
+  public void operatorVerifyPickupAddressesOfTheNewShipperOnDashboardSite() {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    if (shipper.getPickup() != null && CollectionUtils
+        .isNotEmpty(shipper.getPickup().getReservationPickupAddresses())) {
+      shipper.getPickup().getReservationPickupAddresses()
+          .forEach(nvDashboardPage::validatePickupAddressExists);
     }
+  }
 }

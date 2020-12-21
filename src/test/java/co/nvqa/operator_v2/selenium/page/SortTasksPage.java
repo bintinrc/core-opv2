@@ -11,125 +11,116 @@ import org.openqa.selenium.support.FindBy;
  * @author Niko Susanto
  */
 @SuppressWarnings("WeakerAccess")
-public class SortTasksPage extends OperatorV2SimplePage
-{
-    private static final String IFRAME_XPATH = "//iframe[contains(@src,'sort-tasks')]";
-    private static final String OUTPUT_XPATH = "//div[@class='ant-col content-holder'][text()='%s']";
+public class SortTasksPage extends OperatorV2SimplePage {
 
-    @FindBy(xpath = "(//div[@id='hubId'])[1]")
-    public AntSelect selectHub;
+  private static final String IFRAME_XPATH = "//iframe[contains(@src,'sort-tasks')]";
+  private static final String OUTPUT_XPATH = "//div[@class='ant-col content-holder'][text()='%s']";
 
-    @FindBy(xpath = "(//button[contains(@class,'ant-btn')])[1]")
-    public Button load;
+  @FindBy(xpath = "(//div[@id='hubId'])[1]")
+  public AntSelect selectHub;
 
-    @FindBy(xpath = "(//span[contains(text(), 'Add/Remove Outputs')])[1]")
-    public PageElement sideBar;
+  @FindBy(xpath = "(//button[contains(@class,'ant-btn')])[1]")
+  public Button load;
 
-    @FindBy(xpath = "//button/span[contains(text(), 'Create new middle tier')]")
-    public Button createNewMidTier;
+  @FindBy(xpath = "(//span[contains(text(), 'Add/Remove Outputs')])[1]")
+  public PageElement sideBar;
 
-    @FindBy(id = "name")
-    public PageElement midTierName;
+  @FindBy(xpath = "//button/span[contains(text(), 'Create new middle tier')]")
+  public Button createNewMidTier;
 
-    @FindBy(xpath = "//button/span[text()='Create']")
-    public Button create;
+  @FindBy(id = "name")
+  public PageElement midTierName;
 
-    @FindBy(xpath = "(//input[@placeholder='Find...'])[1]")
-    public PageElement find;
+  @FindBy(xpath = "//button/span[text()='Create']")
+  public Button create;
 
-    @FindBy(xpath = "//span/mark[@class='highlight ']")
-    public PageElement actualSortName;
+  @FindBy(xpath = "(//input[@placeholder='Find...'])[1]")
+  public PageElement find;
 
-    @FindBy(xpath = "//td[@class='hubName']/span/span")
-    public PageElement actualHubName;
+  @FindBy(xpath = "//span/mark[@class='highlight ']")
+  public PageElement actualSortName;
 
-    @FindBy(xpath = "//td[@class='type.name']/span/span")
-    public PageElement actualSortType;
+  @FindBy(xpath = "//td[@class='hubName']/span/span")
+  public PageElement actualHubName;
 
-    @FindBy(xpath = "//a[@class='link']/span")
-    public PageElement delete;
+  @FindBy(xpath = "//td[@class='type.name']/span/span")
+  public PageElement actualSortType;
 
-    @FindBy(xpath = "//button//span[text()='Confirm']")
-    public Button confirm;
+  @FindBy(xpath = "//a[@class='link']/span")
+  public PageElement delete;
 
-    @FindBy(xpath = "//div[contains(@class,'NoResult')]/span")
-    public PageElement noResult;
+  @FindBy(xpath = "//button//span[text()='Confirm']")
+  public Button confirm;
 
-    @FindBy(xpath = "//input[@class='ant-checkbox-input']")
-    public PageElement select;
+  @FindBy(xpath = "//div[contains(@class,'NoResult')]/span")
+  public PageElement noResult;
 
-    @FindBy(xpath = "//button/span[text()='Submit']")
-    public Button submit;
+  @FindBy(xpath = "//input[@class='ant-checkbox-input']")
+  public PageElement select;
 
-    public SortTasksPage(WebDriver webDriver)
-    {
-        super(webDriver);
-    }
+  @FindBy(xpath = "//button/span[text()='Submit']")
+  public Button submit;
 
-    public void selectHub (String hubName)
-    {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+  public SortTasksPage(WebDriver webDriver) {
+    super(webDriver);
+  }
 
-        selectHub.waitUntilClickable();
-        selectHub.jsClick();
-        pause1s();
+  public void selectHub(String hubName) {
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
-        selectHub.searchInput.sendKeys(hubName);
-        selectHub.searchInput.sendKeys(Keys.RETURN);
-        load.waitUntilClickable();
-        load.click();
-    }
+    selectHub.waitUntilClickable();
+    selectHub.jsClick();
+    pause1s();
 
-    public void openSidebar()
-    {
-        pause1s();
-        sideBar.click();
-    }
+    selectHub.searchInput.sendKeys(hubName);
+    selectHub.searchInput.sendKeys(Keys.RETURN);
+    load.waitUntilClickable();
+    load.click();
+  }
 
-    public void createMiddleTier(String name)
-    {
-        createNewMidTier.click();
-        midTierName.sendKeys(name);
-        create.waitUntilClickable();
-        create.click();
-    }
+  public void openSidebar() {
+    pause1s();
+    sideBar.click();
+  }
 
-    public void verifyMidTierIsExistAndDataIsCorrect(String sortName, String hubName, String sortType)
-    {
-        find.sendKeys(sortName);
-        assertThat("Sort Name", actualSortName.getText(), equalToIgnoringCase(sortName));
-        assertThat("Hub Name", actualHubName.getText(), equalToIgnoringCase(hubName));
-        assertThat("Sort Name", actualSortType.getText(), equalToIgnoringCase(sortType));
-    }
+  public void createMiddleTier(String name) {
+    createNewMidTier.click();
+    midTierName.sendKeys(name);
+    create.waitUntilClickable();
+    create.click();
+  }
 
-    public void deleteMidTier()
-    {
-        delete.click();
-        confirm.waitUntilClickable();
-        confirm.click();
-    }
+  public void verifyMidTierIsExistAndDataIsCorrect(String sortName, String hubName,
+      String sortType) {
+    find.sendKeys(sortName);
+    assertThat("Sort Name", actualSortName.getText(), equalToIgnoringCase(sortName));
+    assertThat("Hub Name", actualHubName.getText(), equalToIgnoringCase(hubName));
+    assertThat("Sort Name", actualSortType.getText(), equalToIgnoringCase(sortType));
+  }
 
-    public void verifyMidTierIsDeleted()
-    {
-        assertThat("Result", noResult.getText(), equalToIgnoringCase("No Results Found"));
-    }
+  public void deleteMidTier() {
+    delete.click();
+    confirm.waitUntilClickable();
+    confirm.click();
+  }
 
-    public void selectSortTask(String sortName)
-    {
-        find.sendKeys(sortName);
-        select.click();
-        submit.waitUntilClickable();
-        submit.click();
-    }
+  public void verifyMidTierIsDeleted() {
+    assertThat("Result", noResult.getText(), equalToIgnoringCase("No Results Found"));
+  }
 
-    public void verifyOutput(String sortName)
-    {
-        isElementExistFast(f(OUTPUT_XPATH, sortName));
-    }
+  public void selectSortTask(String sortName) {
+    find.sendKeys(sortName);
+    select.click();
+    submit.waitUntilClickable();
+    submit.click();
+  }
 
-    public void verifyOutputDeleted(String sortName)
-    {
-        String value = getText(f(OUTPUT_XPATH, sortName)) ;
-        assertNull("Outputs is removed", value);
-    }
+  public void verifyOutput(String sortName) {
+    isElementExistFast(f(OUTPUT_XPATH, sortName));
+  }
+
+  public void verifyOutputDeleted(String sortName) {
+    String value = getText(f(OUTPUT_XPATH, sortName));
+    assertNull("Outputs is removed", value);
+  }
 }
