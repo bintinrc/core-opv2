@@ -746,7 +746,7 @@ Feature: Shipper Pickups
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Single Reservation
+  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Single Reservation (uid:4726c81c-43f9-4ac4-a10b-d1778d2c4cdf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -778,7 +778,7 @@ Feature: Shipper Pickups
       | driverName   | {ninja-driver-name}          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations
+  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations (uid:644c21ea-190c-4475-b846-3eda37ad0066)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -815,7 +815,7 @@ Feature: Shipper Pickups
       | driverName  | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Routed Reservation
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Routed Reservation (uid:032a6e28-2a95-4fe8-89bb-381f3505e86f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -838,7 +838,7 @@ Feature: Shipper Pickups
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Failed Reservation
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Failed Reservation (uid:0ebc72de-06b0-4e64-a561-0aa853522ddf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -874,7 +874,7 @@ Feature: Shipper Pickups
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Success Reservation
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Success Reservation (uid:886f246b-547d-4137-b07f-f908264ff835)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -913,7 +913,7 @@ Feature: Shipper Pickups
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Success Reservation
+  Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Success Reservation (uid:46685d49-fd6d-4234-b2a2-594bc411bbb3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -950,7 +950,7 @@ Feature: Shipper Pickups
     And Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Fail Reservation
+  Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Fail Reservation (uid:42df2c09-16b2-4081-a325-00e8aaffada3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -985,7 +985,7 @@ Feature: Shipper Pickups
       | approxVolume | Less than 10 Parcels |
     And Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
-  Scenario: Operator Not Allowed to Force Finish a Unrouted Pending Reservation on Shipper Pickup Page
+  Scenario: Operator Not Allowed to Force Finish a Unrouted Pending Reservation on Shipper Pickup Page (uid:d4b2cd45-a14f-4abe-ad1e-45313e6a0e87)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
