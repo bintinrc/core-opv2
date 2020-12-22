@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +73,18 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     clickf(
         ".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]//md-checkbox",
         mdVirtualRepeat, rowNumber);
+  }
+
+  public MdCheckbox getCheckbox(int rowNumber) {
+    return new MdCheckbox(getWebDriver(), findElementByXpath(
+        f(".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]//md-checkbox",
+            mdVirtualRepeat, rowNumber)));
+  }
+
+  public Button getActionButton(String buttonName, int rowNumber) {
+    return new Button(getWebDriver(), findElementByXpath(
+        f(".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]//button[@aria-label='%s']",
+            mdVirtualRepeat, rowNumber, buttonName)));
   }
 
   @Override

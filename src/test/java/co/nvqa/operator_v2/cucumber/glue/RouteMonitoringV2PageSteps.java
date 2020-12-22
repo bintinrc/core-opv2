@@ -37,7 +37,9 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
   @When("Route Monitoring V2 page is loaded")
   public void movementManagementPageIsLoaded() {
     routeMonitoringV2Page.switchTo();
-    routeMonitoringV2Page.spinner.waitUntilInvisible();
+    if (routeMonitoringV2Page.spinner.waitUntilVisible(5)) {
+      routeMonitoringV2Page.spinner.waitUntilInvisible();
+    }
   }
 
   @When("^Operator filter Route Monitoring V2 using data below and then load selection:$")

@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -32,14 +33,19 @@ public class AntSelect extends PageElement {
 
   public void selectValue(String value) {
     enterSearchTerm(value);
-    clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]",
-        value);
+    clickMenuItem(value);
   }
 
   public void selectValueWithoutSearch(String value) {
     openMenu();
-    clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]",
-        value);
+    clickMenuItem(value);
+  }
+
+  public void clickMenuItem(String value) {
+    clickf(
+        "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]",
+        StringUtils
+            .normalizeSpace(value));
   }
 
   public void clearValue() {

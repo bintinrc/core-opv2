@@ -95,7 +95,11 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
     try {
       clazz.getConstructor(WebDriver.class, WebElement.class);
     } catch (Exception e) {
-      return false;
+      try {
+        clazz.getConstructor(WebDriver.class, SearchContext.class, WebElement.class);
+      } catch (Exception ex) {
+        return false;
+      }
     }
 
     return true;
