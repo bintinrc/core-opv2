@@ -328,7 +328,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
 
     searchTerm.setValue(keyword);
-//    search.clickAndWaitUntilDone();
     clickAndWaitUntilDone(f(XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN, keyword));
     loadingShippers.waitUntilInvisible();
   }
@@ -337,8 +336,16 @@ public class AllShippersPage extends OperatorV2SimplePage {
     String shipperName = shipper.getName();
     String shipperLegacyId = String.valueOf(shipper.getLegacyId());
     NvLogger.infof("Created Shipper name : %s ", shipperName);
-    quickSearchShipper(
-        shipperName == null ? shipperLegacyId : shipperLegacyId.concat("-").concat(shipperName));
+    String value = shipperName;
+    if (Objects.isNull(shipperName)) {
+      value = shipperLegacyId;
+    } else if (Objects.nonNull(shipperLegacyId)) {
+      shipperLegacyId.concat("-").concat(shipperName);
+    } else {
+      throw new RuntimeException("Shipper legacy id and/or name not saved");
+    }
+
+    quickSearchShipper(value);
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
