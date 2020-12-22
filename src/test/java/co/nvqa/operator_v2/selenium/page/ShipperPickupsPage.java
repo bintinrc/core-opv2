@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
@@ -83,6 +84,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
+
+  @FindBy(css = "md-switch[aria-label='Bulk Assign Route']")
+  public MdSwitch bulkAssignRoute;
+
+  @FindBy(css = "nv-bulk-route-assignment-side-panel")
+  public BulkRouteAssignmentSidePanel bulkRouteAssignmentSidePanel;
 
   public ShipperPickupsPage(WebDriver webDriver) {
     super(webDriver);
@@ -334,7 +341,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   }
 
   public void verifyFinishedReservationHasStatus(String status) {
-    assertEquals("Expected another reservation status for finished reservation with failure",
+    assertEquals("Reservation status",
         status,
         reservationsTable.getTextOnTable(1, ReservationsTable.COLUMN_RESERVATION_STATUS_CLASS));
   }
@@ -779,6 +786,45 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
     public RemoveRouteFromReservationsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+  }
+
+  public static class BulkRouteAssignmentSidePanel extends PageElement {
+
+    @FindBy(css = "div.list-description")
+    public PageElement description;
+
+    @FindBy(css = "div[md-virtual-repeat='item in cards']")
+    public List<ReservationCard> reservationCards;
+
+    @FindBy(css = "nv-autocomplete[selected-item='selectedRoute']")
+    public NvAutocomplete route;
+
+    @FindBy(name = "Bulk Assign")
+    public NvApiTextButton bulkAssign;
+
+    public BulkRouteAssignmentSidePanel(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public static class ReservationCard extends PageElement {
+
+      @FindBy(css = "p.title")
+      public PageElement title;
+
+      @FindBy(css = "p.description")
+      public PageElement description;
+
+      @FindBy(css = "p.subtitle")
+      public PageElement subtitle;
+
+      @FindBy(css = "div.close-icon")
+      public PageElement closeIcon;
+
+      public ReservationCard(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
     }
   }
 }

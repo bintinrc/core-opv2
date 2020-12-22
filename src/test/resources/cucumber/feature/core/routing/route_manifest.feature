@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteManifest @Debug
+@OperatorV2 @Core @Routing @RouteManifest
 Feature: Route Manifest
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
