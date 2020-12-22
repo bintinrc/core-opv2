@@ -6,7 +6,6 @@ Feature: Pricing Scripts V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePricingScript
-  #@NotInGaia
   Scenario: Link Script to Shipper (uid:8c623eef-fb54-4a8b-bcf1-a182eba43bf7)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
