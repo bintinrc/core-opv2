@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -720,6 +721,39 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       bulkUpdateShipmentDialog.shipmentTypeEnable.check();
       bulkUpdateShipmentDialog.shipmentType.selectValue(shipmentType);
     }
+    if (resolvedMapOfData.get("startHub") != null) {
+      String startHub = resolvedMapOfData.get("startHub");
+      bulkUpdateShipmentDialog.startHubEnable.check();
+      bulkUpdateShipmentDialog.startHub.selectValue(startHub);
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      String endHub = resolvedMapOfData.get("endHub");
+      bulkUpdateShipmentDialog.destHubEnable.check();
+      bulkUpdateShipmentDialog.endHub.selectValue(endHub);
+    }
+    if (resolvedMapOfData.get("EDA") != null) {
+      String eda = resolvedMapOfData.get("EDA");
+      bulkUpdateShipmentDialog.edaEnable.check();
+      bulkUpdateShipmentDialog.edaInput.sendKeys(eda);
+    }
+    if (resolvedMapOfData.get("ETA") != null) {
+      String eta = resolvedMapOfData.get("ETA");
+      String etaHour = eta.split(":")[0];
+      String etaMinute = eta.split(":")[1];
+      bulkUpdateShipmentDialog.etaEnable.check();
+      bulkUpdateShipmentDialog.etaSelectHour.selectValue(etaHour);
+      bulkUpdateShipmentDialog.etaSelectMinute.selectValue(etaMinute);
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      String mawb = resolvedMapOfData.get("mawb");
+      bulkUpdateShipmentDialog.mawbEnable.check();
+      bulkUpdateShipmentDialog.mawbInput.sendKeys(mawb);
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      String comments = resolvedMapOfData.get("comments");
+      bulkUpdateShipmentDialog.commentsEnable.check();
+      bulkUpdateShipmentDialog.commentsInput.sendKeys(comments);
+    }
     bulkUpdateShipmentDialog.applyToSelected.click();
   }
 
@@ -731,6 +765,24 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
         .trim();
     if (resolvedMapOfData.get("shipmentType") != null) {
       assertThat("Field is the same", fieldToBeUpdated, equalTo("Shipment Type"));
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, equalTo("Start Hub"));
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, equalTo("End Hub"));
+    }
+    if (resolvedMapOfData.get("eda") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, equalTo("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("eta") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, equalTo("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, equalTo("MAWB"));
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, equalTo("Comments"));
     }
     List<String> actualShipmentIds = shipmentToBeUpdatedTable.shipmentIds.stream()
         .map(TextBox::getText).collect(
@@ -751,6 +803,24 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     Long numberOfRecords = Long.valueOf(confirmUpdateContent[1].split(":")[1].trim());
     if (resolvedMapOfData.get("shipmentType") != null) {
       assertThat("field is equal", shipmentField, equalTo("Shipment Type"));
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      assertThat("field is equal", shipmentField, equalTo("Start Hub"));
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      assertThat("field is equal", shipmentField, equalTo("End Hub"));
+    }
+    if (resolvedMapOfData.get("EDA") != null) {
+      assertThat("field is equal", shipmentField, equalTo("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("ETA") != null) {
+      assertThat("field is equal", shipmentField, equalTo("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      assertThat("field is equal", shipmentField, equalTo("MAWB"));
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      assertThat("field is equal", shipmentField, equalTo("Comments"));
     }
     assertThat("number of records is equal", numberOfRecords, equalTo(2L));
     confirmBulkUpdateDialog.proceed.click();
@@ -773,6 +843,34 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     if (resolvedMapOfData.get("shipmentType") != null) {
       assertThat("Shipment Type is the same", actualShipmentInfo.getShipmentType().toLowerCase(),
           equalTo(resolvedMapOfData.get("shipmentType").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      assertThat("Start Hub is the same", actualShipmentInfo.getOrigHubName().toLowerCase(),
+          equalTo(resolvedMapOfData.get("startHub").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      assertThat("End Hub is the same", actualShipmentInfo.getDestHubName().toLowerCase(),
+          equalTo(resolvedMapOfData.get("endHub").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("EDA") != null) {
+      String eda = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[0];
+      assertThat("EDA is the same", eda,
+          equalTo(resolvedMapOfData.get("EDA").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("ETA") != null) {
+      String eta = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[1];
+      assertThat("ETA is the same", eta,
+          equalTo(resolvedMapOfData.get("ETA").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      String mawb = actualShipmentInfo.getMawb().toLowerCase();
+      assertThat("MAWB is the same", mawb,
+          equalTo(resolvedMapOfData.get("mawb").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      String comments = actualShipmentInfo.getComments().toLowerCase();
+      assertThat("Comments is the same", comments,
+          equalTo(resolvedMapOfData.get("comments").toLowerCase()));
     }
   }
 
@@ -996,14 +1094,53 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public static class BulkUpdateShipmentDialog extends MdDialog {
 
+    @FindBy(xpath = "//button[@aria-label='Apply to Selected']")
+    public Button applyToSelected;
+
     @FindBy(xpath = "//md-input-container[contains(@model,'shipment_type')]//md-checkbox")
     public MdCheckbox shipmentTypeEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'orig_hub_id')]//md-checkbox")
+    public MdCheckbox startHubEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'dest_hub_id')]//md-checkbox")
+    public MdCheckbox destHubEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'eda')]//md-checkbox")
+    public MdCheckbox edaEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'eta')]//md-checkbox")
+    public MdCheckbox etaEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'mawb')]//md-checkbox")
+    public MdCheckbox mawbEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'comments')]//md-checkbox")
+    public MdCheckbox commentsEnable;
 
     @FindBy(css = "[aria-label='Shipment Type']")
     public MdSelect shipmentType;
 
-    @FindBy(xpath = "//button[@aria-label='Apply to Selected']")
-    public Button applyToSelected;
+    @FindBy(css = "[aria-label='Start Hub']")
+    public MdSelect startHub;
+
+    @FindBy(css = "[aria-label='End Hub']")
+    public MdSelect endHub;
+
+    @FindBy(xpath = "//md-datepicker[@name='EDA']//div//input")
+    public PageElement edaInput;
+
+    @FindBy(css = "[aria-label='select-hour']")
+    public MdSelect etaSelectHour;
+
+    @FindBy(css = "[aria-label='select-minute']")
+    public MdSelect etaSelectMinute;
+
+    @FindBy(css = "[aria-label='MAWB']")
+    public PageElement mawbInput;
+
+    @FindBy(css = "[aria-label='Comments']")
+    public PageElement commentsInput;
 
     public BulkUpdateShipmentDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
