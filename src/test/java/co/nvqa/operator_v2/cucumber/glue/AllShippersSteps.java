@@ -814,6 +814,16 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.editShipper(shipper);
   }
 
+  @And("Operator edits shipper with ID and Name {string}")
+  public void operatorEditsShipperWithIdAndName(String shipperIdAndName) {
+    Shipper shipper = new Shipper();
+    shipper.setLegacyId(Long.valueOf(shipperIdAndName.split("-", 2)[0]));
+    shipper.setName(shipperIdAndName.split("-", 2)[1]);
+    put(KEY_CREATED_SHIPPER, shipper);
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    allShippersPage.editShipper(shipper);
+  }
+
   @Then("Operator adds new Shipper's Pricing Profile")
   public void OperatorAddsNewShippersPricingProfile(Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
