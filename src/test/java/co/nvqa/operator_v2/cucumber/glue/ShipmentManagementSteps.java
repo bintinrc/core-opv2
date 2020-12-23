@@ -721,4 +721,9 @@ public class ShipmentManagementSteps extends AbstractSteps {
           String.valueOf(shipmentId), mapOfData);
     }
   }
+
+  @Then("Operator verify it highlight selected shipment and it can select another shipment")
+  public void operatorVerifyItHighlightSelectedShipmentAndItCanSelectAnotherShipment() {
+    shipmentManagementPage.selectAnotherShipmentAndVerifyCount();
+  }
 }

@@ -125,8 +125,22 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   @FindBy(name = "Confirm Updates")
   public NvApiTextButton confirmUpdateButton;
 
-  private static final String FILEPATH = TestConstants.TEMP_DIR;
+  @FindBy(name = "Abort Updates")
+  public NvApiTextButton abortUpdateButton;
 
+  @FindBy(name = "Modify Selection")
+  public NvIconTextButton modifySelectionButton;
+
+  @FindBy(xpath = "//md-checkbox[@aria-checked='false']")
+  private PageElement uncheckedShipmentCheckBox;
+
+  @FindBy(xpath = "//button[contains(@ng-class,'show-selected')]")
+  private PageElement showSelectedShipmentsDropdown;
+
+  @FindBy(xpath = "//button[@aria-label='Show Only Selected']")
+  private PageElement showSelectedShipments;
+
+  private static final String FILEPATH = TestConstants.TEMP_DIR;
 
   public ShipmentManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -764,29 +778,41 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String fieldToBeUpdated = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(":")[1]
         .trim();
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("Shipment Type"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("Shipment Type"));
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("Start Hub"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("Start Hub"));
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("End Hub"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("End Hub"));
     }
     if (resolvedMapOfData.get("eda") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("ETA (Date Time)"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
     }
     if (resolvedMapOfData.get("eta") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("ETA (Date Time)"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("MAWB"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("MAWB"));
     }
     if (resolvedMapOfData.get("comments") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, equalTo("Comments"));
+      assertThat("Field is the same", fieldToBeUpdated, containsString("Comments"));
     }
     List<String> actualShipmentIds = shipmentToBeUpdatedTable.shipmentIds.stream()
         .map(TextBox::getText).collect(
             Collectors.toList());
+
+    if (resolvedMapOfData.get("removeShipment") != null) {
+      String whichShipment = resolvedMapOfData.get("removeShipment");
+      if ("second".equals(whichShipment)) {
+        shipmentToBeUpdatedTable.removeButtons.get(1).click();
+        pause1s();
+        assertThat(f("shipment id %d is contained", shipmentIds.get(0)),
+            actualShipmentIds.contains(String.valueOf(shipmentIds.get(0))), equalTo(true));
+        return;
+      }
+    }
+
     for (Long shipmentId : shipmentIds) {
       assertThat(f("shipment id %d is contained", shipmentId),
           actualShipmentIds.contains(String.valueOf(shipmentId)), equalTo(true));
@@ -794,6 +820,16 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void confirmUpdateBulk(Map<String, String> resolvedMapOfData) {
+    if (resolvedMapOfData.get("abort") != null) {
+      abortUpdateButton.click();
+      pause1s();
+      return;
+    }
+    if (resolvedMapOfData.get("modifySelection") != null) {
+      modifySelectionButton.click();
+      pause1s();
+      return;
+    }
     confirmUpdateButton.click();
 
     confirmBulkUpdateDialog.waitUntilVisible();
@@ -802,27 +838,31 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String shipmentField = confirmUpdateContent[0].split(":")[1].trim();
     Long numberOfRecords = Long.valueOf(confirmUpdateContent[1].split(":")[1].trim());
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("field is equal", shipmentField, equalTo("Shipment Type"));
+      assertThat("field is equal", shipmentField, containsString("Shipment Type"));
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("field is equal", shipmentField, equalTo("Start Hub"));
+      assertThat("field is equal", shipmentField, containsString("Start Hub"));
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("field is equal", shipmentField, equalTo("End Hub"));
+      assertThat("field is equal", shipmentField, containsString("End Hub"));
     }
     if (resolvedMapOfData.get("EDA") != null) {
-      assertThat("field is equal", shipmentField, equalTo("ETA (Date Time)"));
+      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
     }
     if (resolvedMapOfData.get("ETA") != null) {
-      assertThat("field is equal", shipmentField, equalTo("ETA (Date Time)"));
+      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      assertThat("field is equal", shipmentField, equalTo("MAWB"));
+      assertThat("field is equal", shipmentField, containsString("MAWB"));
     }
     if (resolvedMapOfData.get("comments") != null) {
-      assertThat("field is equal", shipmentField, equalTo("Comments"));
+      assertThat("field is equal", shipmentField, containsString("Comments"));
     }
-    assertThat("number of records is equal", numberOfRecords, equalTo(2L));
+    if (resolvedMapOfData.get("removeShipment") != null) {
+      assertThat("number of records is equal", numberOfRecords, equalTo(1L));
+    } else {
+      assertThat("number of records is equal", numberOfRecords, equalTo(2L));
+    }
     confirmBulkUpdateDialog.proceed.click();
     confirmBulkUpdateDialog.waitUntilInvisible();
 
@@ -872,6 +912,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       assertThat("Comments is the same", comments,
           equalTo(resolvedMapOfData.get("comments").toLowerCase()));
     }
+  }
+
+  public void selectAnotherShipmentAndVerifyCount() {
+    uncheckedShipmentCheckBox.click();
+    showSelectedShipmentsDropdown.click();
+    showSelectedShipments.click();
+
+    List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
+    assertThat("Selected shipments count is true", shipmentList.size(), equalTo(3));
   }
 
   /**
@@ -1152,7 +1201,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[contains(@class,'shipment-bulk-description')]//div")
     public TextBox fieldToBeUpdated;
 
-    @FindBy(xpath = "//nv-iconUpdatedTable-button[@name='Remove']")
+    @FindBy(xpath = "//nv-icon-button[@name='Remove']")
     public List<NvIconButton> removeButtons;
 
     @FindBy(xpath = "//td[contains(@class,'shipment-id')]")

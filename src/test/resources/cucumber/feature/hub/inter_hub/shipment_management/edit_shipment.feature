@@ -465,7 +465,7 @@ Feature: Shipment Management - Edit Shipment
     Then Operator verify the following parameters of all created shipments on Shipment Management page:
       | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
 
-  @DeleteShipments #TODO
+  @DeleteShipments
   Scenario: Bulk Update Shipment - Update Multiple Fields (uid:325947b5-3c94-441e-b5d1-28dd76627eb0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -476,15 +476,19 @@ Feature: Shipment Management - Edit Shipment
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
-      | shipmentType | Others |
+      | startHub | {hub-name-2}                                                         |
+      | endHub   | {hub-name}                                                           |
+      | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     Then Operator verify the following parameters of all created shipments on Shipment Management page:
-      | shipmentType | OTHERS |
+      | startHub | {hub-name-2}                                                         |
+      | endHub   | {hub-name}                                                           |
+      | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
 
-  @DeleteShipments #TODO
+  @DeleteShipments
   Scenario: Bulk Update Shipment - Remove Selected Shipment (uid:05a2ed45-d659-45f3-b5d5-9878335e7a18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -495,15 +499,18 @@ Feature: Shipment Management - Edit Shipment
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
-      | shipmentType | Others |
+      | startHub       | {hub-name-2} |
+      | removeShipment | second       |
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-    Then Operator verify the following parameters of all created shipments on Shipment Management page:
-      | shipmentType | OTHERS |
+    Then Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[1]}" on Shipment Management page:
+      | startHub | {hub-name-2} |
+    And Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}" on Shipment Management page:
+      | startHub | {hub-name} |
 
-  @DeleteShipments #TODO
+  @DeleteShipments
   Scenario: Bulk Update Shipment - Abort Update (uid:83793581-a5af-45c1-aef5-bfc0e5edb0c5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -515,14 +522,15 @@ Feature: Shipment Management - Edit Shipment
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
       | shipmentType | Others |
+      | abort        | true   |
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     Then Operator verify the following parameters of all created shipments on Shipment Management page:
-      | shipmentType | OTHERS |
+      | shipmentType | AIR_HAUL |
 
-  @DeleteShipments # TODO: IMPLEMENT ME
+  @DeleteShipments
   Scenario: Bulk Update Shipment - Modify Selection (uid:c5697e80-4b45-4866-a71c-240056492089)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -533,13 +541,9 @@ Feature: Shipment Management - Edit Shipment
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
-      | shipmentType | Others |
-    And Operator click Edit filter on Shipment Management page
-    And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
-      | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-    Then Operator verify the following parameters of all created shipments on Shipment Management page:
-      | shipmentType | OTHERS |
+      | shipmentType    | Others |
+      | modifySelection | true   |
+    Then Operator verify it highlight selected shipment and it can select another shipment
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
