@@ -334,23 +334,27 @@ public class AllShippersPage extends OperatorV2SimplePage {
   }
 
   public void editShipper(Shipper shipper) {
-    String shipperName = shipper.getName();
-    String shipperLegacyId = String.valueOf(shipper.getLegacyId());
-    NvLogger.infof("Created Shipper name : %s ", shipperName);
-
-    String searchValue = shipperName;
-    if (Objects.isNull(shipperName)) {
-      searchValue = shipperLegacyId;
-    } else if (Objects.nonNull(shipperLegacyId)) {
-      searchValue = shipperLegacyId.concat("-").concat(shipperName);
-    } else {
-      throw new NvTestRuntimeException("Shipper legacy id and/or shipper name not saved");
-    }
-
-    quickSearchShipper(searchValue);
+    quickSearchShipper(getSearchValue(shipper));
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+  }
+
+  private String getSearchValue(Shipper shipper) {
+    String shipperName = shipper.getName();
+    String shipperLegacyId = Objects.toString(shipper.getLegacyId(), null);
+    NvLogger.infof("Created Shipper name : %s ", shipperName);
+    String searchValue;
+    if (Objects.isNull(shipperName) && Objects.isNull(shipperLegacyId)) {
+      throw new NvTestRuntimeException("Shipper legacy id and/or shipper name not saved");
+    } else if (Objects.isNull(shipperName)) {
+      searchValue = shipperLegacyId;
+    } else if (Objects.isNull(shipperLegacyId)) {
+      searchValue = shipperName;
+    } else {
+      searchValue = shipperLegacyId.concat("-").concat(shipperName);
+    }
+    return searchValue;
   }
 
   public String addNewPricingScript(Shipper shipper) {
