@@ -215,6 +215,44 @@ public class ShipmentManagementSteps extends AbstractSteps {
     }, 10);
   }
 
+  @When("Operator edit Shipment on Shipment Management page based on {string} using data below:")
+  public void operatorEditShipmentOnShipmentManagementPageBasedOnTypeUsingDataBelow(String editType,
+      Map<String, String> mapOfData) {
+    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+    switch (editType) {
+      case "Start Hub":
+        shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
+        break;
+      case "End Hub":
+        shipmentInfo.setDestHubName(resolvedMapOfData.get("destHubName"));
+        break;
+      case "Comments":
+        shipmentInfo.setComments(resolvedMapOfData.get("comments"));
+        break;
+      case "EDA & ETA":
+        shipmentInfo
+            .setArrivalDatetime(resolvedMapOfData.get("EDA") + " " + resolvedMapOfData.get("ETA"));
+        break;
+      case "mawb":
+        shipmentInfo.setMawb(resolvedMapOfData.get("mawb"));
+        break;
+      case "non-mawb":
+        shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
+        shipmentInfo.setDestHubName(resolvedMapOfData.get("destHubName"));
+        shipmentInfo.setComments(resolvedMapOfData.get("comments"));
+        break;
+    }
+    shipmentManagementPage.editShipmentBy(editType, shipmentInfo);
+    put(KEY_SHIPMENT_INFO, shipmentInfo);
+  }
+
+  @When("Operator force complete shipment from edit shipment")
+  public void operatorForceCompleteShipmentFromEditShipment() {
+    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+    shipmentManagementPage.editShipmentBy("completed", shipmentInfo);
+  }
+
   @When("^Operator edit Shipment on Shipment Management page using data below:$")
   public void operatorEditShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
@@ -289,6 +327,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), expectedShipmentInfo);
   }
 
+  @Then("Operator verify the following parameters of all created shipments status is pending")
+  public void operatorVerifyTheFollowingParametersOfTheAllCreatedShipmentsStatusIsPending() {
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    for (Long shipmentId : shipmentIds) {
+      shipmentManagementPage.validateShipmentStatusPending(shipmentId);
+    }
+  }
+
   @When("^Operator click \"([^\"]*)\" action button for the created shipment on Shipment Management page$")
   public void operatorClickActionButtonForTheCreatedShipmentOnShipmentManagementPage(
       String actionId) {
@@ -332,6 +378,13 @@ public class ShipmentManagementSteps extends AbstractSteps {
   @When("Operator edits and verifies that the cancelled shipment cannot be edited")
   public void operatorEditsAndVerifiesThatTheCancelledShipmentCannotBeEdited() {
     shipmentManagementPage.editCancelledShipment();
+  }
+
+  @And("Operator edits and verifies that the completed shipment cannot be edited")
+  public void operatorEditsAndVerifiesThatTheCompletedShipmentCannotBeEdited() {
+    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+    shipmentManagementPage.editShipmentBy("cancelled", shipmentInfo);
+    shipmentManagementPage.verifyUnableToEditCompletedShipmentToastExist();
   }
 
   @And("^Operator open the Master AWB of the created shipment on Shipment Management Page$")
@@ -411,6 +464,11 @@ public class ShipmentManagementSteps extends AbstractSteps {
         }
       }, "retry shipment details event", 5000, 10);
     });
+  }
+
+  @Then("Operator verify cannot parse parameter id as long error toast exist")
+  public void operatorVerifyCannotParseParameterIdAsLongErrorToastExist() {
+    shipmentManagementPage.verifyCannotParseParameterIdAsLongToastExist();
   }
 
   @Then("Operator verifies event is present for shipment id {string} on Shipment Detail page")
@@ -554,6 +612,11 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.clickReopenShipmentButton();
   }
 
+  @When("Operator clicks on reopen shipment button under the Apply Action for multiple shipments")
+  public void operatorClicksOnReopenShipmentButtonUnderTheApplyActionForMultipleShipments() {
+    shipmentManagementPage.selectAllAndClickReopenShipmentButton();
+  }
+
   @When("Operator clicks on reopen shipment button under the Apply Action for invalid status shipment")
   public void operatorClicksOnReopenShipmentButtonUnderTheApplyActionForInvaludStatusShipment() {
     shipmentManagementPage.clickReopenShipmentButton(false);
@@ -622,5 +685,45 @@ public class ShipmentManagementSteps extends AbstractSteps {
   @Then("Operator verify empty line parsing error toast exist")
   public void operatorVerifyEmptyLineParsingErrorToastExist() {
     shipmentManagementPage.verifyEmptyLineParsingErrorToastExist();
+  }
+
+  @Then("Operator selects all shipments and click bulk update button under the apply action")
+  public void operatorSelectsAllShipmentsAndClickBulkUpdateButtonUnderTheApplyAction() {
+    shipmentManagementPage.selectAllAndClickBulkUpdateButton();
+  }
+
+  @When("Operator bulk update shipment with data below:")
+  public void operatorBulkUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+
+    shipmentManagementPage.bulkUpdateShipment(resolvedMapOfData);
+    shipmentManagementPage.verifyShipmentToBeUpdatedData(shipmentIds, resolvedMapOfData);
+    shipmentManagementPage.confirmUpdateBulk(resolvedMapOfData);
+  }
+
+  @Then("Operator verify the following parameters of shipment with id {string} on Shipment Management page:")
+  public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
+      String shipmentIdAsString,
+      Map<String, String> mapOfData) {
+    String resolvedShipmentId = resolveValue(shipmentIdAsString);
+    Long shipmentId = Long.valueOf(resolvedShipmentId);
+    Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);
+    shipmentManagementPage.validateShipmentUpdated(shipmentId, resolvedKeyValues);
+  }
+
+  @Then("Operator verify the following parameters of all created shipments on Shipment Management page:")
+  public void operatorVerifyTheFollowingParametersOfAllTheCreatedShipmentOnShipmentManagementPage(
+      Map<String, String> mapOfData) {
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    for (Long shipmentId : shipmentIds) {
+      operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
+          String.valueOf(shipmentId), mapOfData);
+    }
+  }
+
+  @Then("Operator verify it highlight selected shipment and it can select another shipment")
+  public void operatorVerifyItHighlightSelectedShipmentAndItCanSelectAnotherShipment() {
+    shipmentManagementPage.selectAnotherShipmentAndVerifyCount();
   }
 }
