@@ -48,6 +48,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String description = f(
         "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
         createdDate, scenarioName);
+    NvLogger.infof("Created Pricing Script Name :" + name);
 
     Script script = new Script();
     script.setName(name);
@@ -156,6 +157,20 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     shipper.setLegacyId(Long.parseLong(shipperId));
 
     pricingScriptsV2Page.linkShippers(script, shipper);
+    put(KEY_CREATED_SHIPPER, shipper);
+  }
+
+  @When("^Operator link Script to Shipper with ID and Name = \"([^\"]*)\"$")
+  public void operatorLinkShipperWithIdAndNameToTheScript(String shipperIdAndName) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+
+    Shipper shipper = new Shipper();
+    String shipperId = shipperIdAndName.split("-", 2)[0];
+    String shipperName = shipperIdAndName.split("-", 2)[1];
+    shipper.setLegacyId(Long.parseLong(shipperId));
+    shipper.setName(shipperName);
+
+    pricingScriptsV2Page.linkShippersWithIdAndName(script, shipper);
     put(KEY_CREATED_SHIPPER, shipper);
   }
 

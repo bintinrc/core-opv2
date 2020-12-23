@@ -5,6 +5,7 @@ import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -52,6 +53,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public static final String XPATH_ACTIVE_FILTER = "//p[text()='Active']/parent::div/following-sibling::div//span[text()='Yes']/parent::button";
   public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
   public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
+  public static final String XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN = "//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[contains(text(),'%s')]";
 
   public final AllShippersCreateEditPage allShippersCreateEditPage;
 
@@ -327,14 +329,25 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
 
     searchTerm.setValue(keyword);
-    search.clickAndWaitUntilDone();
+    clickAndWaitUntilDone(f(XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN, keyword));
     loadingShippers.waitUntilInvisible();
   }
 
   public void editShipper(Shipper shipper) {
     String shipperName = shipper.getName();
+    String shipperLegacyId = String.valueOf(shipper.getLegacyId());
     NvLogger.infof("Created Shipper name : %s ", shipperName);
-    quickSearchShipper(shipperName == null ? String.valueOf(shipper.getLegacyId()) : shipperName);
+
+    String searchValue = shipperName;
+    if (Objects.isNull(shipperName)) {
+      searchValue = shipperLegacyId;
+    } else if (Objects.nonNull(shipperLegacyId)) {
+      searchValue = shipperLegacyId.concat("-").concat(shipperName);
+    } else {
+      throw new NvTestRuntimeException("Shipper legacy id and/or shipper name not saved");
+    }
+
+    quickSearchShipper(searchValue);
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();

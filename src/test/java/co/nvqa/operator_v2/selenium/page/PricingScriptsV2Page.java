@@ -6,13 +6,16 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -41,6 +44,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   private static final String TAB_ACTIVE_SCRIPTS = "Active Scripts";
   private static final String ACTIVE_TAB_XPATH = "//tab-content[@aria-hidden='false']";
   private static final Pattern SHIPPER_SELECT_VALUE_PATTERN = Pattern.compile("(\\d+)-(.*)");
+
+  @FindBy(xpath = "//md-virtual-repeat-container//div[@class='md-virtual-repeat-scroller']")
+  public PageElement progressBar;
 
   public PricingScriptsV2Page(WebDriver webDriver) {
     super(webDriver);
@@ -147,6 +153,39 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     waitUntilInvisibilityOfElementLocated(
         "//md-dialog//md-dialog-content/div/md-progress-circular");
     selectValueFromNvAutocomplete("ctrl.view.textShipper", legacyId);
+    clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+  }
+
+  public void linkShippersWithIdAndName(Script script, Shipper shipper) {
+    String scriptName = script.getName();
+    String legacyId = shipper.getLegacyId().toString();
+    String name = shipper.getName();
+
+    clickTabItem(TAB_ACTIVE_SCRIPTS);
+    searchTableActiveScriptsByScriptName(scriptName);
+    wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
+        "Active Scripts table is empty. Script not found.");
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
+    NvLogger.info("Waiting until Link Shippers Dialog loaded.");
+    waitUntilInvisibilityOfElementLocated(
+        "//md-dialog//md-dialog-content/div/md-progress-circular");
+    String searchValue = Objects.isNull(name) ? legacyId : legacyId.concat("-").concat(name);
+
+    sendKeys(".//nv-autocomplete[@search-text='ctrl.view.textShipper']//input", searchValue);
+    progressBar.waitUntilVisible();
+    String menuXpath = "//md-virtual-repeat-container//ul[@class='md-autocomplete-suggestions light']";
+    String itemXpath = f("//li//span[starts-with(text(),'%s')]", legacyId);
+
+    int count = 0;
+    while (!isElementVisible(itemXpath, 1) && count < 5) {
+      String lastItemXpath = menuXpath + "//li[last()]";
+      scrollIntoView(lastItemXpath, true);
+      count++;
+    }
+    scrollIntoView(itemXpath, true);
+    waitUntilElementIsClickable(itemXpath);
+    click(itemXpath);
+
     clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
   }
 
