@@ -338,16 +338,16 @@ public class AllShippersPage extends OperatorV2SimplePage {
     String shipperLegacyId = String.valueOf(shipper.getLegacyId());
     NvLogger.infof("Created Shipper name : %s ", shipperName);
 
-    String value = shipperName;
+    String searchValue = shipperName;
     if (Objects.isNull(shipperName)) {
-      value = shipperLegacyId;
+      searchValue = shipperLegacyId;
     } else if (Objects.nonNull(shipperLegacyId)) {
-      value = shipperLegacyId.concat("-").concat(shipperName);
+      searchValue = shipperLegacyId.concat("-").concat(shipperName);
     } else {
       throw new NvTestRuntimeException("Shipper legacy id and/or shipper name not saved");
     }
 
-    quickSearchShipper(value);
+    quickSearchShipper(searchValue);
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
