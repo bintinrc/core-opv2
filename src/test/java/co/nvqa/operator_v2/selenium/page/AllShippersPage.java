@@ -5,6 +5,7 @@ import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -336,13 +337,14 @@ public class AllShippersPage extends OperatorV2SimplePage {
     String shipperName = shipper.getName();
     String shipperLegacyId = String.valueOf(shipper.getLegacyId());
     NvLogger.infof("Created Shipper name : %s ", shipperName);
+
     String value = shipperName;
     if (Objects.isNull(shipperName)) {
       value = shipperLegacyId;
     } else if (Objects.nonNull(shipperLegacyId)) {
-      shipperLegacyId.concat("-").concat(shipperName);
+      value = shipperLegacyId.concat("-").concat(shipperName);
     } else {
-      throw new RuntimeException("Shipper legacy id and/or name not saved");
+      throw new NvTestRuntimeException("Shipper legacy id and/or shipper name not saved");
     }
 
     quickSearchShipper(value);
