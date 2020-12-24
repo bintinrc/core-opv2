@@ -334,13 +334,13 @@ public class AllShippersPage extends OperatorV2SimplePage {
   }
 
   public void editShipper(Shipper shipper) {
-    quickSearchShipper(getSearchValue(shipper));
+    quickSearchShipper(getSearchKeyword(shipper));
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
-  private String getSearchValue(Shipper shipper) {
+  private String getSearchKeyword(Shipper shipper) {
     String shipperName = shipper.getName();
     String shipperLegacyId = Objects.toString(shipper.getLegacyId(), null);
     NvLogger.infof("Created Shipper name : %s ", shipperName);
