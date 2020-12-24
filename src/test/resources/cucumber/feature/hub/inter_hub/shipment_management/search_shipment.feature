@@ -202,6 +202,28 @@ Feature: Shipment Management - Search Shipment
       | Search Shipment by Filter - ETA (Date Time) | ETA (Date Time) | uid:5a65a7ea-12ef-4a59-a8b0-a15f261b52d2 | ETA (Date Time) |
       | Search Shipment by Filter - Shipment Date   | Shipment Date   | uid:e10f1ad8-cdc0-4795-b816-2ae3015a36d3 | Shipment Date   |
 
+  Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "comma"
+    Then Operator verify cannot parse parameter id as long error toast exist
+
+  @DeleteShipment
+  Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

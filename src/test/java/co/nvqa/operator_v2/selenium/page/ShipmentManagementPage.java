@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -8,26 +10,34 @@ import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_DETAILS;
@@ -58,8 +68,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
   private static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
   private static final String XPATH_CHECKBOX_ON_SHIPMENT_TABLE = "//td[@class='id']/following-sibling::td[@class='column-checkbox']//md-checkbox[@ng-checked='table.isSelected(shipment)']//div[@class='md-icon']";
+  private static final String XPATH_SECOND_CHECKBOX_ON_SHIPMENT_TABLE = "(//md-checkbox)[2]";
   private static final String XPATH_APPLY_ACTION_BUTTON = "//button[@ng-click='$mdOpenMenu($event)' and @aria-label='Action']";
   private static final String XPATH_REOPEN_SHIPMENT_OPTION = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())']";
+  private static final String XPATH_BULK_UPDATE_SHIPMENT_OPTION = "//button[@aria-label='Bulk Update']";
   private static final String XPATH_REOPEN_SHIPMENT_OPTION_DISABLED = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())' and @disabled='disabled']";
   private static final String XPATH_SEARCH_BY_SHIPMENT_ID = "//textarea[@id='shipment-ids']";
   private static final String XPATH_SEARCH_SHIPMENT_BUTTON = "//button[contains(@class,'shipment-search-btn')]";
@@ -73,6 +85,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public ShipmentsTable shipmentsTable;
   public ShipmentEventsTable shipmentEventsTable;
   public MovementEventsTable movementEventsTable;
+
+  @FindBy(xpath = "//div[@class='shipment-bulk-container']")
+  public ShipmentToBeUpdatedTable shipmentToBeUpdatedTable;
 
   @FindBy(name = "Create Shipment")
   public NvIconTextButton createShipment;
@@ -95,11 +110,35 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public CancelShipmentDialog cancelShipmentDialog;
 
+  @FindBy(css = "md-dialog")
+  public BulkUpdateShipmentDialog bulkUpdateShipmentDialog;
+
+  @FindBy(css = "md-dialog")
+  public ConfirmBulkUpdateDialog confirmBulkUpdateDialog;
+
   @FindBy(xpath = "//button[@aria-label='Cancel']")
   public Button cancelShipmentButton;
 
   @FindBy(css = "[id^='commons.preset.load-filter-preset']")
   public MdSelect filterPresetSelector;
+
+  @FindBy(name = "Confirm Updates")
+  public NvApiTextButton confirmUpdateButton;
+
+  @FindBy(name = "Abort Updates")
+  public NvApiTextButton abortUpdateButton;
+
+  @FindBy(name = "Modify Selection")
+  public NvIconTextButton modifySelectionButton;
+
+  @FindBy(xpath = "//md-checkbox[@aria-checked='false']")
+  private PageElement uncheckedShipmentCheckBox;
+
+  @FindBy(xpath = "//button[contains(@ng-class,'show-selected')]")
+  private PageElement showSelectedShipmentsDropdown;
+
+  @FindBy(xpath = "//button[@aria-label='Show Only Selected']")
+  private PageElement showSelectedShipments;
 
   private static final String FILEPATH = TestConstants.TEMP_DIR;
 
@@ -321,6 +360,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     expectedShipmentInfo.compareWithActual(actualShipmentInfo);
   }
 
+  public void validateShipmentStatusPending(Long shipmentId) {
+    shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+    ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
+    assertThat("shipment Id is the same", actualShipmentInfo.getId(), equalTo(shipmentId));
+    assertThat("shipment status is the same", actualShipmentInfo.getStatus(), equalTo("Pending"));
+  }
+
   public void validateShipmentId(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     String expectedShipmentId = getText("//td[@nv-table-highlight='filter.id']");
@@ -426,6 +472,24 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     clickReopenShipmentButton(true);
   }
 
+  public void selectAllAndClickReopenShipmentButton() {
+    click(XPATH_CHECKBOX_ON_SHIPMENT_TABLE);
+    click(XPATH_SECOND_CHECKBOX_ON_SHIPMENT_TABLE);
+
+    click(XPATH_APPLY_ACTION_BUTTON);
+    waitUntilVisibilityOfElementLocated(XPATH_REOPEN_SHIPMENT_OPTION);
+    click(XPATH_REOPEN_SHIPMENT_OPTION);
+  }
+
+  public void selectAllAndClickBulkUpdateButton() {
+    click(XPATH_CHECKBOX_ON_SHIPMENT_TABLE);
+    click(XPATH_SECOND_CHECKBOX_ON_SHIPMENT_TABLE);
+
+    click(XPATH_APPLY_ACTION_BUTTON);
+    waitUntilVisibilityOfElementLocated(XPATH_BULK_UPDATE_SHIPMENT_OPTION);
+    click(XPATH_BULK_UPDATE_SHIPMENT_OPTION);
+  }
+
   public void verifiesShipmentIsReopened() {
     waitUntilVisibilityOfToast("Success reopen shipments");
     waitUntilInvisibilityOfToast("Success reopen shipments");
@@ -453,6 +517,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     }
 
     click(XPATH_SEARCH_SHIPMENT_BUTTON);
+  }
+
+  public void verifyCannotParseParameterIdAsLongToastExist() {
+    waitUntilVisibilityOfToast("Network Request Error");
+    assertThat("toast message is the same", getToastBottomText(),
+        containsString("Cannot parse parameter id as Long: For input string:"));
   }
 
   public void bulkSearchShipmentIds(List<Long> shipmentIds) {
@@ -489,12 +559,49 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
             break;
 
         }
-      } else {
-        sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString());
       }
     }
-    pause3s();
-    click(XPATH_SEARCH_SHIPMENT_BUTTON);
+  }
+
+  public void editShipmentBy(String editType, ShipmentInfo shipmentInfo) {
+    clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
+    editShipmentDialog.waitUntilVisible();
+    if ("Start Hub".equals(editType)) {
+      editShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+    }
+    if ("End Hub".equals(editType)) {
+      editShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+    }
+    if ("Comments".equals(editType)) {
+      editShipmentDialog.comments.setValue(shipmentInfo.getComments());
+    }
+    if ("EDA & ETA".equals(editType)) {
+      String updatedEDA = shipmentInfo.getArrivalDatetime().split(" ")[0];
+      String updatedETA = shipmentInfo.getArrivalDatetime().split(" ")[1].split(":")[0];
+      editShipmentDialog.datePickerInput.clear();
+      editShipmentDialog.datePickerInput.sendKeys(updatedEDA);
+      editShipmentDialog.selectHour.selectValue(updatedETA);
+    }
+    if ("non-mawb".equals(editType)) {
+      editShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+      editShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+      editShipmentDialog.comments.setValue(shipmentInfo.getComments());
+    }
+    if ("mawb".equals(editType)) {
+      editShipmentDialog.mawb.sendKeys(shipmentInfo.getMawb());
+      editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
+      return;
+    }
+    if ("cancelled".equals(editType)) {
+      editShipmentDialog.saveChanges.click();
+      pause1s();
+      return;
+    }
+    if ("completed".equals(editType)) {
+      editShipmentDialog.forceSuccessButton.click();
+      return;
+    }
+    editShipmentDialog.saveChanges(shipmentInfo.getId());
   }
 
   public void verifiesSearchErrorModalIsShown(boolean isValidShipmentExist) {
@@ -528,6 +635,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfToast("Network Request Error");
     assertThat("toast message is the same", getToastBottomText(),
         containsString("Cannot parse parameter id as Long: For input string: \"\""));
+  }
+
+  public void verifyUnableToEditCompletedShipmentToastExist() {
+    waitUntilVisibilityOfToast("Network Request Error");
+    assertThat("toast message is the same", getToastBottomText(),
+        containsString("unable to edit completed/cancelled shipments"));
   }
 
   public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid,
@@ -614,6 +727,200 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       assertEquals("Successful Order(s) : ", successfulOrder, 0);
       assertEquals("Failed Order(s) : ", failedOrder, 1);
     }
+  }
+
+  public void bulkUpdateShipment(Map<String, String> resolvedMapOfData) {
+    if (resolvedMapOfData.get("shipmentType") != null) {
+      String shipmentType = resolvedMapOfData.get("shipmentType");
+      bulkUpdateShipmentDialog.shipmentTypeEnable.check();
+      bulkUpdateShipmentDialog.shipmentType.selectValue(shipmentType);
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      String startHub = resolvedMapOfData.get("startHub");
+      bulkUpdateShipmentDialog.startHubEnable.check();
+      bulkUpdateShipmentDialog.startHub.selectValue(startHub);
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      String endHub = resolvedMapOfData.get("endHub");
+      bulkUpdateShipmentDialog.destHubEnable.check();
+      bulkUpdateShipmentDialog.endHub.selectValue(endHub);
+    }
+    if (resolvedMapOfData.get("EDA") != null) {
+      String eda = resolvedMapOfData.get("EDA");
+      bulkUpdateShipmentDialog.edaEnable.check();
+      bulkUpdateShipmentDialog.edaInput.sendKeys(eda);
+    }
+    if (resolvedMapOfData.get("ETA") != null) {
+      String eta = resolvedMapOfData.get("ETA");
+      String etaHour = eta.split(":")[0];
+      String etaMinute = eta.split(":")[1];
+      bulkUpdateShipmentDialog.etaEnable.check();
+      bulkUpdateShipmentDialog.etaSelectHour.selectValue(etaHour);
+      bulkUpdateShipmentDialog.etaSelectMinute.selectValue(etaMinute);
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      String mawb = resolvedMapOfData.get("mawb");
+      bulkUpdateShipmentDialog.mawbEnable.check();
+      bulkUpdateShipmentDialog.mawbInput.sendKeys(mawb);
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      String comments = resolvedMapOfData.get("comments");
+      bulkUpdateShipmentDialog.commentsEnable.check();
+      bulkUpdateShipmentDialog.commentsInput.sendKeys(comments);
+    }
+    bulkUpdateShipmentDialog.applyToSelected.click();
+  }
+
+  public void verifyShipmentToBeUpdatedData(List<Long> shipmentIds,
+      Map<String, String> resolvedMapOfData) {
+    shipmentToBeUpdatedTable.waitUntilVisible();
+    shipmentToBeUpdatedTable.fieldToBeUpdated.waitUntilVisible();
+    String fieldToBeUpdated = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(":")[1]
+        .trim();
+    if (resolvedMapOfData.get("shipmentType") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("Shipment Type"));
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("Start Hub"));
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("End Hub"));
+    }
+    if (resolvedMapOfData.get("eda") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("eta") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("MAWB"));
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      assertThat("Field is the same", fieldToBeUpdated, containsString("Comments"));
+    }
+    List<String> actualShipmentIds = shipmentToBeUpdatedTable.shipmentIds.stream()
+        .map(TextBox::getText).collect(
+            Collectors.toList());
+
+    if (resolvedMapOfData.get("removeShipment") != null) {
+      String whichShipment = resolvedMapOfData.get("removeShipment");
+      if ("second".equals(whichShipment)) {
+        shipmentToBeUpdatedTable.removeButtons.get(1).click();
+        pause1s();
+        assertThat(f("shipment id %d is contained", shipmentIds.get(0)),
+            actualShipmentIds.contains(String.valueOf(shipmentIds.get(0))), equalTo(true));
+        return;
+      }
+    }
+
+    for (Long shipmentId : shipmentIds) {
+      assertThat(f("shipment id %d is contained", shipmentId),
+          actualShipmentIds.contains(String.valueOf(shipmentId)), equalTo(true));
+    }
+  }
+
+  public void confirmUpdateBulk(Map<String, String> resolvedMapOfData) {
+    if (resolvedMapOfData.get("abort") != null) {
+      abortUpdateButton.click();
+      pause1s();
+      return;
+    }
+    if (resolvedMapOfData.get("modifySelection") != null) {
+      modifySelectionButton.click();
+      pause1s();
+      return;
+    }
+    confirmUpdateButton.click();
+
+    confirmBulkUpdateDialog.waitUntilVisible();
+    String[] confirmUpdateContent = confirmBulkUpdateDialog.confirmDialogContent.getText()
+        .split("\n");
+    String shipmentField = confirmUpdateContent[0].split(":")[1].trim();
+    Long numberOfRecords = Long.valueOf(confirmUpdateContent[1].split(":")[1].trim());
+    if (resolvedMapOfData.get("shipmentType") != null) {
+      assertThat("field is equal", shipmentField, containsString("Shipment Type"));
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      assertThat("field is equal", shipmentField, containsString("Start Hub"));
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      assertThat("field is equal", shipmentField, containsString("End Hub"));
+    }
+    if (resolvedMapOfData.get("EDA") != null) {
+      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("ETA") != null) {
+      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      assertThat("field is equal", shipmentField, containsString("MAWB"));
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      assertThat("field is equal", shipmentField, containsString("Comments"));
+    }
+    if (resolvedMapOfData.get("removeShipment") != null) {
+      assertThat("number of records is equal", numberOfRecords, equalTo(1L));
+    } else {
+      assertThat("number of records is equal", numberOfRecords, equalTo(2L));
+    }
+    confirmBulkUpdateDialog.proceed.click();
+    confirmBulkUpdateDialog.waitUntilInvisible();
+
+    pause1s();
+    String fieldInfo = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(": ")[0];
+    assertThat("Field info is correct", fieldInfo, equalTo("Field successfully updated"));
+    for (PageElement checkListExistence : shipmentToBeUpdatedTable.checkLists) {
+      assertThat("checklists is shown", checkListExistence.getText(), equalTo("check"));
+    }
+    shipmentToBeUpdatedTable.backButton.click();
+  }
+
+  public void validateShipmentUpdated(Long shipmentId, Map<String, String> resolvedMapOfData) {
+    shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+    ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
+    assertThat("Shipment id is the same", actualShipmentInfo.getId(),
+        equalTo(shipmentId));
+    if (resolvedMapOfData.get("shipmentType") != null) {
+      assertThat("Shipment Type is the same", actualShipmentInfo.getShipmentType().toLowerCase(),
+          equalTo(resolvedMapOfData.get("shipmentType").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("startHub") != null) {
+      assertThat("Start Hub is the same", actualShipmentInfo.getOrigHubName().toLowerCase(),
+          equalTo(resolvedMapOfData.get("startHub").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("endHub") != null) {
+      assertThat("End Hub is the same", actualShipmentInfo.getDestHubName().toLowerCase(),
+          equalTo(resolvedMapOfData.get("endHub").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("EDA") != null) {
+      String eda = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[0];
+      assertThat("EDA is the same", eda,
+          equalTo(resolvedMapOfData.get("EDA").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("ETA") != null) {
+      String eta = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[1];
+      assertThat("ETA is the same", eta,
+          equalTo(resolvedMapOfData.get("ETA").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("mawb") != null) {
+      String mawb = actualShipmentInfo.getMawb().toLowerCase();
+      assertThat("MAWB is the same", mawb,
+          equalTo(resolvedMapOfData.get("mawb").toLowerCase()));
+    }
+    if (resolvedMapOfData.get("comments") != null) {
+      String comments = actualShipmentInfo.getComments().toLowerCase();
+      assertThat("Comments is the same", comments,
+          equalTo(resolvedMapOfData.get("comments").toLowerCase()));
+    }
+  }
+
+  public void selectAnotherShipmentAndVerifyCount() {
+    uncheckedShipmentCheckBox.click();
+    showSelectedShipmentsDropdown.click();
+    showSelectedShipments.click();
+
+    List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
+    assertThat("Selected shipments count is true", shipmentList.size(), equalTo(3));
   }
 
   /**
@@ -723,9 +1030,22 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(id = "saveChangesButton")
     public NvIconTextButton saveChanges;
 
+    @FindBy(xpath = "//input[@class='md-datepicker-input']")
+    public PageElement datePickerInput;
+
+    @FindBy(id = "select-hour")
+    public MdSelect selectHour;
+
+    @FindBy(css = "button[aria-label='Force Success']")
+    public Button forceSuccessButton;
+
     public void saveChanges(Long shipmentId) {
       saveChanges.click();
       pause1s();
+
+      waitUntilVisibilityOfElementLocated(
+          f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
+              shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
       waitUntilInvisibilityOfElementLocated(
           f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
               shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
@@ -739,6 +1059,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
           "//md-dialog[contains(@aria-describedby,'dialogContent') and not (contains(@class,'shipment-edit'))]");
       click("//button[@aria-label='Save']");
 
+      waitUntilVisibilityOfElementLocated(
+          f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
+              shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
       waitUntilInvisibilityOfElementLocated(
           f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
               shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
@@ -814,6 +1137,100 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public Button cancel;
 
     public ForceCompleteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class BulkUpdateShipmentDialog extends MdDialog {
+
+    @FindBy(xpath = "//button[@aria-label='Apply to Selected']")
+    public Button applyToSelected;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'shipment_type')]//md-checkbox")
+    public MdCheckbox shipmentTypeEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'orig_hub_id')]//md-checkbox")
+    public MdCheckbox startHubEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'dest_hub_id')]//md-checkbox")
+    public MdCheckbox destHubEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'eda')]//md-checkbox")
+    public MdCheckbox edaEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'eta')]//md-checkbox")
+    public MdCheckbox etaEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'mawb')]//md-checkbox")
+    public MdCheckbox mawbEnable;
+
+    @FindBy(xpath = "//md-input-container[contains(@model,'comments')]//md-checkbox")
+    public MdCheckbox commentsEnable;
+
+    @FindBy(css = "[aria-label='Shipment Type']")
+    public MdSelect shipmentType;
+
+    @FindBy(css = "[aria-label='Start Hub']")
+    public MdSelect startHub;
+
+    @FindBy(css = "[aria-label='End Hub']")
+    public MdSelect endHub;
+
+    @FindBy(xpath = "//md-datepicker[@name='EDA']//div//input")
+    public PageElement edaInput;
+
+    @FindBy(css = "[aria-label='select-hour']")
+    public MdSelect etaSelectHour;
+
+    @FindBy(css = "[aria-label='select-minute']")
+    public MdSelect etaSelectMinute;
+
+    @FindBy(css = "[aria-label='MAWB']")
+    public PageElement mawbInput;
+
+    @FindBy(css = "[aria-label='Comments']")
+    public PageElement commentsInput;
+
+    public BulkUpdateShipmentDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ShipmentToBeUpdatedTable extends PageElement {
+
+    @FindBy(xpath = "//div[contains(@class,'shipment-bulk-description')]//div")
+    public TextBox fieldToBeUpdated;
+
+    @FindBy(xpath = "//nv-icon-button[@name='Remove']")
+    public List<NvIconButton> removeButtons;
+
+    @FindBy(xpath = "//td[contains(@class,'shipment-id')]")
+    public List<TextBox> shipmentIds;
+
+    @FindBy(xpath = "//i[.='check']")
+    public List<PageElement> checkLists;
+
+    @FindBy(css = "[aria-label='Back to Shipment Management']")
+    public Button backButton;
+
+    public ShipmentToBeUpdatedTable(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+  }
+
+  public static class ConfirmBulkUpdateDialog extends MdDialog {
+
+    @FindBy(xpath = "//div[@class='md-dialog-content-body']")
+    public TextBox confirmDialogContent;
+
+    @FindBy(css = "[aria-label='Proceed']")
+    public Button proceed;
+
+    @FindBy(css = "[aria-label='Cancel']")
+    public Button cancel;
+
+    public ConfirmBulkUpdateDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
