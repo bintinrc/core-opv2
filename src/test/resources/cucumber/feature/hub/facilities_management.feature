@@ -6,7 +6,7 @@ Feature: Facilities Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteHubsViaDb
-  Scenario Outline: Disable Hub - <type> - (<hiptest-uid>)
+  Scenario Outline: Disable Hub - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
       | name        | GENERATED |
@@ -21,16 +21,19 @@ Feature: Facilities Management
     When Operator search Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify Hub is found on Facilities Management page and contains correct info
-    And Operator verify Hub "facility type" is "<type>"
+    And Operator verify Hub "facility type"
     And Operator disable created hub on Facilities Management page
+    When Operator search Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify Hub "status"
     Examples:
-      | type    | hiptest-uid                              |
-      | Station | uid:6f350889-3076-4293-992a-7b0443dac7d8 |
-#      | Station - Crossdock | uid:4d9e12db-b529-4b93-b7fc-776ac32bc7dc |
-#      | Hub - Crossdock     | uid:846081f6-4fa4-4ecc-b3a4-2a2ee1e2b68e |
+      | name                | type              | hiptest-uid                              |
+      | Station             | STATION           | uid:6f350889-3076-4293-992a-7b0443dac7d8 |
+      | Station - Crossdock | CROSSDOCK_STATION | uid:4d9e12db-b529-4b93-b7fc-776ac32bc7dc |
+      | Hub - Crossdock     | CROSSDOCK         | uid:846081f6-4fa4-4ecc-b3a4-2a2ee1e2b68e |
 
   @DeleteHubsViaDb
-  Scenario Outline: Disable Hub - DP/Recovery/Others - <type> - (<hiptest-uid>)
+  Scenario Outline: Disable Hub - DP/Recovery/Others - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
       | name        | GENERATED |
@@ -45,32 +48,72 @@ Feature: Facilities Management
     When Operator search Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify Hub is found on Facilities Management page and contains correct info
-    And Operator verify Hub "facility type" is "<type>"
+    And Operator verify Hub "facility type"
     And Operator disable created hub on Facilities Management page
-    Then Operator verify Hub is updated successfully on Facilities Management page
+    When Operator search Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify Hub "status"
     Examples:
-      | type     | hiptest-uid                              |
-      | DP       | uid:39bef1c8-a345-4b6a-8be6-eca897b6e78c |
-      | Recovery | uid:578bf271-1547-407f-8abb-00e42525e4c2 |
-      | Others   | uid:2de00e90-0f48-4617-90d5-355eb3e1045a |
+      | name     | type     | hiptest-uid                              |
+      | DP       | DP       | uid:39bef1c8-a345-4b6a-8be6-eca897b6e78c |
+      | Recovery | RECOVERY | uid:578bf271-1547-407f-8abb-00e42525e4c2 |
+      | Others   | OTHERS   | uid:2de00e90-0f48-4617-90d5-355eb3e1045a |
 
   @DeleteHubsViaDb
-  Scenario Outline: Update Facility Type (<hiptest-uid>)
-    Given no-op
+  Scenario Outline: Update Facility Type - <type> - (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub with type "<type>" using data below:
+      | name        | GENERATED |
+      | displayName | GENERATED |
+      | city        | GENERATED |
+      | country     | GENERATED |
+      | latitude    | GENERATED |
+      | longitude   | GENERATED |
+    And API Operator reloads hubs cache
+    And Operator refresh page
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator search Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify Hub is found on Facilities Management page and contains correct info
+    And Operator verify Hub "facility type"
+    And Operator update Hub column "facility type" with data:
+      | facilityType | DP |
+    When Operator search Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify Hub "facility type"
     Examples:
-      | type                | hiptest-uid                              |
-      | Station             | uid:2a62c480-b20c-40c4-b89e-3a9118b8878a |
-      | Hub - Crossdock     | uid:58bba508-9557-46b3-b863-10c6c9445961 |
-      | Station - Crossdock | uid:580558a4-ea3d-4813-8770-36fc9c5c3a97 |
+      | name                | type              | hiptest-uid                              |
+      | Station             | STATION           | uid:2a62c480-b20c-40c4-b89e-3a9118b8878a |
+      | Hub - Crossdock     | CROSSDOCK         | uid:58bba508-9557-46b3-b863-10c6c9445961 |
+      | Station - Crossdock | CROSSDOCK_STATION | uid:580558a4-ea3d-4813-8770-36fc9c5c3a97 |
 
   @DeleteHubsViaDb
-  Scenario Outline: Update Facility Type - DP/Recovery/Others (<hiptest-uid>)
-    Given no-op
+  Scenario Outline: Update Facility Type - DP/Recovery/Others - <name> - (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub with type "<type>" using data below:
+      | name        | GENERATED |
+      | displayName | GENERATED |
+      | city        | GENERATED |
+      | country     | GENERATED |
+      | latitude    | GENERATED |
+      | longitude   | GENERATED |
+    And API Operator reloads hubs cache
+    And Operator refresh page
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator search Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify Hub is found on Facilities Management page and contains correct info
+    And Operator verify Hub "facility type"
+    And Operator update Hub column "facility type" with data:
+      | facilityType | STATION |
+    When Operator search Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify Hub "facility type"
     Examples:
-      | type     | hiptest-uid                              |
-      | DP       | uid:0349459e-6e60-42cb-8440-0d6a34eb15ca |
-      | Recovery | uid:a6c0f1b1-2e29-4cd4-b0ef-fc04ecb44198 |
-      | Others   | uid:7147944e-cffd-4292-a2e6-41dad805678c |
+      | name     | type     | hiptest-uid                              |
+      | DP       | DP       | uid:0349459e-6e60-42cb-8440-0d6a34eb15ca |
+      | Recovery | RECOVERY | uid:a6c0f1b1-2e29-4cd4-b0ef-fc04ecb44198 |
+      | Others   | OTHERS   | uid:7147944e-cffd-4292-a2e6-41dad805678c |
 
   @DeleteHubsViaDb
   Scenario Outline: Update Lat/Long of Facility (<hiptest-uid>)

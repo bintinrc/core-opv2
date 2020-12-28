@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.ConfirmUpdatesDialog;
 import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -49,6 +50,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public EditHubDialog editHubDialog;
+
+  @FindBy(css = "md-dialog")
+  public ConfirmUpdateHubDialog confirmUpdateHubDialog;
 
   @FindBy(css = "md-dialog")
   public ConfirmDeactivationDialog confirmDeactivationDialog;
@@ -125,9 +129,25 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     String facilityType = hub.getFacilityType();
     if (facilityType.equalsIgnoreCase("CROSSDOCK") || facilityType
         .equalsIgnoreCase("CROSSDOCK_STATION") || facilityType.equalsIgnoreCase("STATION")) {
-      saveChanges.waitUntilVisible();
-      saveChanges.waitUntilClickable();
-      saveChanges.click();
+      confirmUpdateHubDialog.saveButton.waitUntilVisible();
+      confirmUpdateHubDialog.saveButton.waitUntilClickable();
+      confirmUpdateHubDialog.saveButton.click();
+    }
+    editHubDialog.waitUntilInvisible();
+  }
+
+  public void updateHubByFacilityType(Hub hub, String typeBefore) {
+    loadingHubsLabel.waitUntilInvisible();
+    hubsTable.filterByColumn(COLUMN_NAME, hub.getName());
+    hubsTable.clickActionButton(1, ACTION_EDIT);
+    editHubDialog.waitUntilVisible();
+    editHubDialog.facilityType.selectByValue(hub.getFacilityType());
+    editHubDialog.submitChanges.click();
+    if (typeBefore.equalsIgnoreCase("CROSSDOCK") || typeBefore
+        .equalsIgnoreCase("CROSSDOCK_STATION") || typeBefore.equalsIgnoreCase("STATION")) {
+      confirmUpdateHubDialog.saveButton.waitUntilVisible();
+      confirmUpdateHubDialog.saveButton.waitUntilClickable();
+      confirmUpdateHubDialog.saveButton.click();
     }
     editHubDialog.waitUntilInvisible();
   }
@@ -302,5 +322,17 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
 
     @FindBy(css = "button[aria-label='Activate']")
     public Button activate;
+  }
+
+  public static class ConfirmUpdateHubDialog extends MdDialog {
+    public ConfirmUpdateHubDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = "//button[@aria-label='Save']")
+    public Button saveButton;
+
+    @FindBy(xpath = "//button[@aria-label='Cancel']")
+    public Button cancelButton;
   }
 }
