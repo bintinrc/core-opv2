@@ -1,57 +1,47 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ThirdPartyShipper
-{
-    private Integer id;
-    private String code;
-    private String name;
-    private String url;
+public class ThirdPartyShipper {
 
-    public ThirdPartyShipper()
-    {
-    }
+  private Integer id;
+  private String code;
+  private String name;
+  private String url;
 
-    public Integer getId()
-    {
-        return id;
-    }
+  public ThirdPartyShipper() {
+  }
 
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getCode()
-    {
-        return code;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getUrl()
-    {
-        return url;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setUrl(String url)
-    {
-        this.url = url;
-    }
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 }

@@ -10,7 +10,7 @@ Feature: Route Cleaning Report
   @DeleteOrArchiveRoute
   Scenario: Operator download Excel report on Route Cleaning Report successfully (uid:860479ee-1308-41ef-bd2f-1e14ab841e8b)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -61,7 +61,7 @@ Feature: Route Cleaning Report
   @DeleteOrArchiveRoute
   Scenario: Operator download CSV of selected COD and verify the CSV contains correct information on Route Cleaning Report (uid:d9fb1eb2-4d47-42e0-8c1b-669391020e00)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -113,7 +113,7 @@ Feature: Route Cleaning Report
   @DeleteOrArchiveRoute
   Scenario: Operator download CSV of order on Parcel tab and verify the info is correct on Route Cleaning Report page (uid:96f0836b-b890-4a2f-a2c2-1c356c0e228a)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |

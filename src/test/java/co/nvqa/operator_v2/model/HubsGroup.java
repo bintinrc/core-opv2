@@ -2,69 +2,59 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author Sergey Mishanin
  */
-public class HubsGroup extends DataEntity<HubsGroup>
-{
-    private Long id;
-    private String name;
-    private List<String> hubs;
+public class HubsGroup extends DataEntity<HubsGroup> {
 
-    public Long getId()
-    {
-        return id;
-    }
+  private Long id;
+  private String name;
+  private List<String> hubs;
 
-    public HubsGroup setId(Long id)
-    {
-        this.id = id;
-        return this;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public HubsGroup setId(String id)
-    {
-        return setId(Long.valueOf(id));
-    }
+  public HubsGroup setId(Long id) {
+    this.id = id;
+    return this;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public HubsGroup setId(String id) {
+    return setId(Long.valueOf(id));
+  }
 
-    public HubsGroup setName(String name)
-    {
-        if ("GENERATED".equalsIgnoreCase(name))
-        {
-            name = "HG-" + TestUtils.generateDateUniqueString();
-        }
-        this.name = name;
-        return this;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public List<String> getHubs()
-    {
-        return hubs;
+  public HubsGroup setName(String name) {
+    if ("GENERATED".equalsIgnoreCase(name)) {
+      name = "HG-" + TestUtils.generateDateUniqueString();
     }
+    this.name = name;
+    return this;
+  }
 
-    public void setHubs(String hubs)
-    {
-        this.hubs = Arrays.asList(hubs.split(","));
-        this.hubs.sort(String::compareTo);
-    }
+  public List<String> getHubs() {
+    return hubs;
+  }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("name", name)
-                .append("hubs", hubs)
-                .toString();
-    }
+  public void setHubs(String hubs) {
+    this.hubs = Arrays.asList(hubs.split(","));
+    this.hubs.sort(String::compareTo);
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("name", name)
+        .append("hubs", hubs)
+        .toString();
+  }
 }

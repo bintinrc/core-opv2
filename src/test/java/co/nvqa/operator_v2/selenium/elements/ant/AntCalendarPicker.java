@@ -16,29 +16,31 @@ import org.openqa.selenium.support.PageFactory;
  * @author refoilmiya
  */
 public class AntCalendarPicker extends PageElement {
-    public AntCalendarPicker(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
 
-    public AntCalendarPicker(WebDriver webDriver, WebElement webElement) {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public AntCalendarPicker(WebDriver webDriver, SearchContext searchContext,
+      WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(xpath = ".//input[@class='ant-calendar-picker-input ant-input']")
-    public TextBox pickerInput;
+  public AntCalendarPicker(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(xpath = ".//i[contains(@class,'ant-calendar-picker-clear')]")
-    public PageElement clear;
+  @FindBy(xpath = ".//input[@class='ant-calendar-picker-input ant-input']")
+  public TextBox pickerInput;
 
-    @FindBy(xpath = "//input[@class='ant-calendar-input ']")
-    public TextBox input;
+  @FindBy(xpath = ".//i[contains(@class,'ant-calendar-picker-clear')]")
+  public PageElement clear;
 
-    public void sendDate(String value) {
-        input.waitUntilVisible();
-        input.sendKeys(value);
-        input.sendKeys(Keys.ENTER);
-        input.waitUntilInvisible();
-    }
+  @FindBy(xpath = "//input[@class='ant-calendar-input ']")
+  public TextBox input;
+
+  public void sendDate(String value) {
+    input.waitUntilVisible();
+    input.sendKeys(value);
+    input.sendKeys(Keys.ENTER);
+    input.waitUntilInvisible();
+  }
 }

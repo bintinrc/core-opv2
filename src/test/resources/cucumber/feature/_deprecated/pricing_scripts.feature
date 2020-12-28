@@ -33,7 +33,7 @@ Feature: Pricing Scripts
       | gst          | SGD 7             |
       | handlingFee  | SGD 11            |
       | total        | SGD <total>       |
-      | comments     | OK              |
+      | comments     | OK                |
     Examples:
       | Note                               | hiptest-uid                              | orderType | deliveryType | timeslotType | size | total  | deliveryFee | insurance | cod |
       | NORMAL - STANDARD - NONE - S       | uid:317ae297-3148-4c7a-8a5f-493bd0414fa5 | NORMAL    | STANDARD     | NONE         | S    | 22.256 | 9.8         | 0         | 0   |

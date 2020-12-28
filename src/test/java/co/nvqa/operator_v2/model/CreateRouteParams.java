@@ -1,105 +1,86 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.core.route.Route;
-
 import java.util.Date;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class CreateRouteParams
-{
-    private Date routeDate;
-    private String[] routeTags;
-    private String zoneName;
-    private String hubName;
-    private String ninjaDriverName;
-    private String vehicleName;
-    private String comments;
-    private Route createdRoute;
+public class CreateRouteParams {
 
-    public CreateRouteParams()
-    {
-    }
+  private Date routeDate;
+  private String[] routeTags;
+  private String zoneName;
+  private String hubName;
+  private String ninjaDriverName;
+  private String vehicleName;
+  private String comments;
+  private Route createdRoute;
 
-    public Date getRouteDate()
-    {
-        return routeDate;
-    }
+  public CreateRouteParams() {
+  }
 
-    public void setRouteDate(Date routeDate)
-    {
-        this.routeDate = routeDate;
-    }
+  public Date getRouteDate() {
+    return routeDate;
+  }
 
-    public String[] getRouteTags()
-    {
-        return routeTags;
-    }
+  public void setRouteDate(Date routeDate) {
+    this.routeDate = routeDate;
+  }
 
-    public void setRouteTags(String[] routeTags)
-    {
-        this.routeTags = routeTags;
-    }
+  public String[] getRouteTags() {
+    return routeTags;
+  }
 
-    public String getZoneName()
-    {
-        return zoneName;
-    }
+  public void setRouteTags(String[] routeTags) {
+    this.routeTags = routeTags;
+  }
 
-    public void setZoneName(String zoneName)
-    {
-        this.zoneName = zoneName;
-    }
+  public String getZoneName() {
+    return zoneName;
+  }
 
-    public String getHubName()
-    {
-        return hubName;
-    }
+  public void setZoneName(String zoneName) {
+    this.zoneName = zoneName;
+  }
 
-    public void setHubName(String hubName)
-    {
-        this.hubName = hubName;
-    }
+  public String getHubName() {
+    return hubName;
+  }
 
-    public String getNinjaDriverName()
-    {
-        return ninjaDriverName;
-    }
+  public void setHubName(String hubName) {
+    this.hubName = hubName;
+  }
 
-    public void setNinjaDriverName(String ninjaDriverName)
-    {
-        this.ninjaDriverName = ninjaDriverName;
-    }
+  public String getNinjaDriverName() {
+    return ninjaDriverName;
+  }
 
-    public String getVehicleName()
-    {
-        return vehicleName;
-    }
+  public void setNinjaDriverName(String ninjaDriverName) {
+    this.ninjaDriverName = ninjaDriverName;
+  }
 
-    public void setVehicleName(String vehicleName)
-    {
-        this.vehicleName = vehicleName;
-    }
+  public String getVehicleName() {
+    return vehicleName;
+  }
 
-    public String getComments()
-    {
-        return comments;
-    }
+  public void setVehicleName(String vehicleName) {
+    this.vehicleName = vehicleName;
+  }
 
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
+  public String getComments() {
+    return comments;
+  }
 
-    public Route getCreatedRoute()
-    {
-        return createdRoute;
-    }
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 
-    public void setCreatedRoute(Route createdRoute)
-    {
-        this.createdRoute = createdRoute;
-    }
+  public Route getCreatedRoute() {
+    return createdRoute;
+  }
+
+  public void setCreatedRoute(Route createdRoute) {
+    this.createdRoute = createdRoute;
+  }
 }

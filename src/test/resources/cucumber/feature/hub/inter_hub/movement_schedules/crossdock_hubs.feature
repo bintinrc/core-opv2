@@ -264,7 +264,7 @@ Feature: Crossdock Hubs
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator load schedules on Movement Management page with retry using data below:
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |

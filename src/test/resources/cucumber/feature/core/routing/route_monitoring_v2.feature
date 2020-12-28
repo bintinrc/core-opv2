@@ -748,7 +748,7 @@ Feature: Route Monitoring
       | failureReasonIndexMode | FIRST       |
     And API Driver fail the reservation using data below:
       | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9          |
+      | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
@@ -791,7 +791,7 @@ Feature: Route Monitoring
     And API Operator start the route
     And API Driver fail the reservation using data below:
       | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9          |
+      | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded

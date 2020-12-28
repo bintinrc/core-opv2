@@ -6,10 +6,8 @@ import co.nvqa.commons.model.DataEntity;
  * @author Sergey Mishanin
  */
 @SuppressWarnings("unused")
-public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails>
-{
+public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
 
-    public RouteGroupJobDetails()
-    {
-    }
+  public RouteGroupJobDetails() {
+  }
 }

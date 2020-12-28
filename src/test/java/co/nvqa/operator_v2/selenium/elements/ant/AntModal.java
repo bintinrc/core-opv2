@@ -8,36 +8,33 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AntModal extends PageElement
-{
-    public AntModal(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class AntModal extends PageElement {
 
-    public AntModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public AntModal(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-modal-close")
-    public PageElement close;
+  public AntModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-modal-title")
-    public PageElement title;
+  @FindBy(className = "ant-modal-close")
+  public PageElement close;
 
-    public void close()
-    {
-        close.moveAndClick();
-    }
+  @FindBy(className = "ant-modal-title")
+  public PageElement title;
 
-    public boolean isDisplayed(){
-        return title.isDisplayedFast();
-    }
+  public void close() {
+    close.moveAndClick();
+  }
 
-    public void waitUntilVisible(){
-        title.waitUntilClickable();
-    }
+  public boolean isDisplayed() {
+    return title.isDisplayedFast();
+  }
+
+  public void waitUntilVisible() {
+    title.waitUntilClickable();
+  }
 }

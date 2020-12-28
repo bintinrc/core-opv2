@@ -6,80 +6,67 @@ import co.nvqa.operator_v2.util.TestUtils;
 /**
  * @author Sergey Mishanin
  */
-public class ReservationGroup extends DataEntity<ReservationGroup>
-{
-    private Long id;
-    private String name;
-    private String driver;
-    private String hub;
-    private Long numberOfPickupLocations;
+public class ReservationGroup extends DataEntity<ReservationGroup> {
 
-    public Long getId()
-    {
-        return id;
-    }
+  private Long id;
+  private String name;
+  private String driver;
+  private String hub;
+  private Long numberOfPickupLocations;
 
-    public ReservationGroup setId(Long id)
-    {
-        this.id = id;
-        return this;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public ReservationGroup setId(String id)
-    {
-        return setId(Long.valueOf(id));
-    }
+  public ReservationGroup setId(Long id) {
+    this.id = id;
+    return this;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public ReservationGroup setId(String id) {
+    return setId(Long.valueOf(id));
+  }
 
-    public ReservationGroup setName(String name)
-    {
-        if ("GENERATED".equalsIgnoreCase(name))
-        {
-            name = "TA-" + TestUtils.generateDateUniqueString();
-        }
-        this.name = name;
-        return this;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getDriver()
-    {
-        return driver;
+  public ReservationGroup setName(String name) {
+    if ("GENERATED".equalsIgnoreCase(name)) {
+      name = "TA-" + TestUtils.generateDateUniqueString();
     }
+    this.name = name;
+    return this;
+  }
 
-    public ReservationGroup setDriver(String driver)
-    {
-        this.driver = driver;
-        return this;
-    }
+  public String getDriver() {
+    return driver;
+  }
 
-    public String getHub()
-    {
-        return hub;
-    }
+  public ReservationGroup setDriver(String driver) {
+    this.driver = driver;
+    return this;
+  }
 
-    public ReservationGroup setHub(String hub)
-    {
-        this.hub = hub;
-        return this;
-    }
+  public String getHub() {
+    return hub;
+  }
 
-    public Long getNumberOfPickupLocations()
-    {
-        return numberOfPickupLocations;
-    }
+  public ReservationGroup setHub(String hub) {
+    this.hub = hub;
+    return this;
+  }
 
-    public ReservationGroup setNumberOfPickupLocations(Long numberOfPickupLocations)
-    {
-        this.numberOfPickupLocations = numberOfPickupLocations;
-        return this;
-    }
+  public Long getNumberOfPickupLocations() {
+    return numberOfPickupLocations;
+  }
 
-    public ReservationGroup setNumberOfPickupLocations(String numberOfPickupLocations)
-    {
-        return setNumberOfPickupLocations(Long.valueOf(numberOfPickupLocations));
-    }
+  public ReservationGroup setNumberOfPickupLocations(Long numberOfPickupLocations) {
+    this.numberOfPickupLocations = numberOfPickupLocations;
+    return this;
+  }
+
+  public ReservationGroup setNumberOfPickupLocations(String numberOfPickupLocations) {
+    return setNumberOfPickupLocations(Long.valueOf(numberOfPickupLocations));
+  }
 }

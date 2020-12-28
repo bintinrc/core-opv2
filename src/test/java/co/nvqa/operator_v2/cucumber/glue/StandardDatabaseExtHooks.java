@@ -8,92 +8,78 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.UserManagement;
 import cucumber.api.java.After;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class StandardDatabaseExtHooks extends AbstractDatabaseSteps<StandardScenarioManager> implements ScenarioStorageKeys
-{
-    public StandardDatabaseExtHooks()
-    {
+public class StandardDatabaseExtHooks extends
+    AbstractDatabaseSteps<StandardScenarioManager> implements ScenarioStorageKeys {
+
+  public StandardDatabaseExtHooks() {
+  }
+
+  @Override
+  public void init() {
+  }
+
+  @After("@DeleteDpPartner")
+  public void deleteDpPartner() {
+    DpPartner dpPartner = get(KEY_DP_PARTNER);
+
+    if (dpPartner != null) {
+      getDpJdbc().deleteDpPartner(dpPartner.getName());
+    }
+  }
+
+  @After("@DeleteDpAndPartner")
+  public void deleteDp() {
+    DpPartner dpPartner = get(KEY_DP_PARTNER);
+
+    if (dpPartner != null) {
+      getDpJdbc().deleteDp(dpPartner.getName());
+      getDpJdbc().deleteDpPartner(dpPartner.getName());
+    }
+  }
+
+  @After("@DeleteDpUserDpAndPartner")
+  public void deleteDpUser() {
+    DpPartner dpPartner = get(KEY_DP_PARTNER);
+
+    if (dpPartner != null) {
+      getDpJdbc().deleteDpUser(dpPartner.getName());
+      getDpJdbc().deleteDp(dpPartner.getName());
+      getDpJdbc().deleteDpPartner(dpPartner.getName());
+    }
+  }
+
+  @After("@SoftDeleteOauthClientByEmailAddress")
+  public void dbOperatorSoftDeleteOauthClientByEmailAddress() {
+    NvLogger.info("=============== SOFT DELETING OAUTH CLIENT BY EMAIL ADDRESS ===============");
+
+    List<UserManagement> listOfUserManagement = new ArrayList<>();
+    listOfUserManagement.add(get(KEY_CREATED_USER_MANAGEMENT));
+    listOfUserManagement.add(get(KEY_UPDATED_USER_MANAGEMENT));
+
+    Set<String> setOfEmailAddress = new HashSet<>();
+
+    for (UserManagement userManagement : listOfUserManagement) {
+      if (userManagement != null && userManagement.getEmail() != null) {
+        setOfEmailAddress.add(userManagement.getEmail());
+      }
     }
 
-    @Override
-    public void init()
-    {
+    for (String emailAddress : setOfEmailAddress) {
+      if (emailAddress != null) {
+        NvLogger.warnf("Soft Deleting OAuth Client with Email Address: %s", emailAddress);
+        getAuthJdbc().softDeleteOauthClientByEmailAddress(emailAddress);
+      }
     }
 
-    @After("@DeleteDpPartner")
-    public void deleteDpPartner()
-    {
-        DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-        if(dpPartner!=null)
-        {
-            getDpJdbc().deleteDpPartner(dpPartner.getName());
-        }
-    }
-
-    @After("@DeleteDpAndPartner")
-    public void deleteDp()
-    {
-        DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-        if(dpPartner!=null)
-        {
-            getDpJdbc().deleteDp(dpPartner.getName());
-            getDpJdbc().deleteDpPartner(dpPartner.getName());
-        }
-    }
-
-    @After("@DeleteDpUserDpAndPartner")
-    public void deleteDpUser()
-    {
-        DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-        if(dpPartner!=null)
-        {
-            getDpJdbc().deleteDpUser(dpPartner.getName());
-            getDpJdbc().deleteDp(dpPartner.getName());
-            getDpJdbc().deleteDpPartner(dpPartner.getName());
-        }
-    }
-
-    @After("@SoftDeleteOauthClientByEmailAddress")
-    public void dbOperatorSoftDeleteOauthClientByEmailAddress()
-    {
-        NvLogger.info("=============== SOFT DELETING OAUTH CLIENT BY EMAIL ADDRESS ===============");
-
-        List<UserManagement> listOfUserManagement = new ArrayList<>();
-        listOfUserManagement.add(get(KEY_CREATED_USER_MANAGEMENT));
-        listOfUserManagement.add(get(KEY_UPDATED_USER_MANAGEMENT));
-
-        Set<String> setOfEmailAddress = new HashSet<>();
-
-        for(UserManagement userManagement : listOfUserManagement)
-        {
-            if(userManagement!=null && userManagement.getEmail()!=null)
-            {
-                setOfEmailAddress.add(userManagement.getEmail());
-            }
-        }
-
-        for(String emailAddress : setOfEmailAddress)
-        {
-            if(emailAddress!=null)
-            {
-                NvLogger.warnf("Soft Deleting OAuth Client with Email Address: %s", emailAddress);
-                getAuthJdbc().softDeleteOauthClientByEmailAddress(emailAddress);
-            }
-        }
-
-        NvLogger.info("===========================================================================");
-    }
+    NvLogger.info("===========================================================================");
+  }
 }

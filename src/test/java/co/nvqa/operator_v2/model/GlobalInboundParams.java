@@ -1,112 +1,92 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class GlobalInboundParams
-{
-    private String hubName;
-    private String deviceId;
-    private String trackingId;
-    private String overrideSize;
-    private Double overrideWeight;
-    private Double overrideDimHeight;
-    private Double overrideDimWidth;
-    private Double overrideDimLength;
-    private String tags;
+public class GlobalInboundParams {
 
-    public GlobalInboundParams()
-    {
-    }
+  private String hubName;
+  private String deviceId;
+  private String trackingId;
+  private String overrideSize;
+  private Double overrideWeight;
+  private Double overrideDimHeight;
+  private Double overrideDimWidth;
+  private Double overrideDimLength;
+  private String tags;
 
-    public String getHubName()
-    {
-        return hubName;
-    }
+  public GlobalInboundParams() {
+  }
 
-    public void setHubName(String hubName)
-    {
-        this.hubName = hubName;
-    }
+  public String getHubName() {
+    return hubName;
+  }
 
-    public String getDeviceId()
-    {
-        return deviceId;
-    }
+  public void setHubName(String hubName) {
+    this.hubName = hubName;
+  }
 
-    public void setDeviceId(String deviceId)
-    {
-        this.deviceId = deviceId;
-    }
+  public String getDeviceId() {
+    return deviceId;
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public void setDeviceId(String deviceId) {
+    this.deviceId = deviceId;
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getOverrideSize()
-    {
-        return overrideSize;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setOverrideSize(String overrideSize)
-    {
-        this.overrideSize = overrideSize;
-    }
+  public String getOverrideSize() {
+    return overrideSize;
+  }
 
-    public Double getOverrideWeight()
-    {
-        return overrideWeight;
-    }
+  public void setOverrideSize(String overrideSize) {
+    this.overrideSize = overrideSize;
+  }
 
-    public void setOverrideWeight(Double overrideWeight)
-    {
-        this.overrideWeight = overrideWeight;
-    }
+  public Double getOverrideWeight() {
+    return overrideWeight;
+  }
 
-    public Double getOverrideDimHeight()
-    {
-        return overrideDimHeight;
-    }
+  public void setOverrideWeight(Double overrideWeight) {
+    this.overrideWeight = overrideWeight;
+  }
 
-    public void setOverrideDimHeight(Double overrideDimHeight)
-    {
-        this.overrideDimHeight = overrideDimHeight;
-    }
+  public Double getOverrideDimHeight() {
+    return overrideDimHeight;
+  }
 
-    public Double getOverrideDimWidth()
-    {
-        return overrideDimWidth;
-    }
+  public void setOverrideDimHeight(Double overrideDimHeight) {
+    this.overrideDimHeight = overrideDimHeight;
+  }
 
-    public void setOverrideDimWidth(Double overrideDimWidth)
-    {
-        this.overrideDimWidth = overrideDimWidth;
-    }
+  public Double getOverrideDimWidth() {
+    return overrideDimWidth;
+  }
 
-    public Double getOverrideDimLength()
-    {
-        return overrideDimLength;
-    }
+  public void setOverrideDimWidth(Double overrideDimWidth) {
+    this.overrideDimWidth = overrideDimWidth;
+  }
 
-    public void setOverrideDimLength(Double overrideDimLength)
-    {
-        this.overrideDimLength = overrideDimLength;
-    }
+  public Double getOverrideDimLength() {
+    return overrideDimLength;
+  }
 
-    public String getTags()
-    {
-        return tags;
-    }
+  public void setOverrideDimLength(Double overrideDimLength) {
+    this.overrideDimLength = overrideDimLength;
+  }
 
-    public void setTags(String tags)
-    {
-        this.tags = tags;
-    }
+  public String getTags() {
+    return tags;
+  }
+
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
 }

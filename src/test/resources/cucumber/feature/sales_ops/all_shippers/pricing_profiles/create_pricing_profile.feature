@@ -31,6 +31,11 @@ Feature: All Shippers
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
+  Scenario: Add New Shipper with new Pricing Profile (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
+    Then Operator verifies that Start Date is populated as today's date and is not editable
+
   Scenario: Create a new Shipper - Create Pricing Profile (uid:78dadc9d-16ea-429f-88ff-eb472bad435f)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -93,7 +98,7 @@ Feature: All Shippers
   @CloseNewWindows @DeletePricingProfile
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
     Given Operator go to menu Shipper -> All Shippers
-    And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
+    And Operator edits shipper with ID and Name "{shipper-v4-active-expired-pp-legacy-id}-{shipper-v4-active-expired-pp-name}"
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile

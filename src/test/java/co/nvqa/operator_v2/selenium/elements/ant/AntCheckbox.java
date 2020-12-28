@@ -11,42 +11,37 @@ import org.openqa.selenium.support.PageFactory;
 
 /**
  * Controller for ant-checkbox component
+ *
  * @author Sergey Mishanin
  */
-public class AntCheckbox extends PageElement
-{
-    public AntCheckbox(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class AntCheckbox extends PageElement {
 
-    public AntCheckbox(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public AntCheckbox(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-checkbox-input")
-    public CheckBox input;
+  public AntCheckbox(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    public boolean isChecked()
-    {
-        return input.isChecked();
-    }
+  @FindBy(className = "ant-checkbox-input")
+  public CheckBox input;
 
-    private void check()
-    {
-        input.check();
-    }
+  public boolean isChecked() {
+    return input.isChecked();
+  }
 
-    public void uncheck()
-    {
-        input.uncheck();
-    }
+  private void check() {
+    input.check();
+  }
 
-    public void setValue(boolean value)
-    {
-        input.setValue(value);
-    }
+  public void uncheck() {
+    input.uncheck();
+  }
+
+  public void setValue(boolean value) {
+    input.setValue(value);
+  }
 }

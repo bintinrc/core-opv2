@@ -1,20 +1,29 @@
 [
   {
     "name": "Ignored tests",
-    "matchedStatuses": ["skipped"]
+    "matchedStatuses": [
+      "skipped"
+    ]
   },
   {
     "name": "Infrastructure problems",
-    "matchedStatuses": ["broken", "failed"],
+    "matchedStatuses": [
+      "broken",
+      "failed"
+    ],
     "traceRegex": ".*InternalServerError.*"
   },
   {
     "name": "Product defects",
-    "matchedStatuses": ["failed"]
+    "matchedStatuses": [
+      "failed"
+    ]
   },
   {
     "name": "Test defects",
-    "matchedStatuses": ["broken"],
+    "matchedStatuses": [
+      "broken"
+    ],
     "traceRegex": "((?!InternalServerError).)*"
   }
 ]

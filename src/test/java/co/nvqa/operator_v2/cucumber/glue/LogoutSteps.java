@@ -5,27 +5,23 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class LogoutSteps extends AbstractSteps
-{
-    private LogoutPage logoutPage;
+public class LogoutSteps extends AbstractSteps {
 
-    public LogoutSteps()
-    {
-    }
+  private LogoutPage logoutPage;
 
-    @Override
-    public void init()
-    {
-        logoutPage = new LogoutPage(getWebDriver());
-    }
+  public LogoutSteps() {
+  }
 
-    @When("^Operator click logout button$")
-    public void logout()
-    {
-        logoutPage.logout();
-    }
+  @Override
+  public void init() {
+    logoutPage = new LogoutPage(getWebDriver());
+  }
+
+  @When("^Operator click logout button$")
+  public void logout() {
+    logoutPage.logout();
+  }
 }

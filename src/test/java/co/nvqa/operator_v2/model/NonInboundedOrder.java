@@ -5,180 +5,151 @@ import co.nvqa.commons.model.DataEntity;
 /**
  * @author Sergey Mishanin
  */
-public class NonInboundedOrder extends DataEntity<NonInboundedOrder>
-{
-    private String shipper;
-    private String trackingId;
-    private String granularStatus;
-    private String orderPickupDate;
-    private String fromAddress;
-    private String reservationCount;
-    private String lastSuccessReservation;
-    private String nextPendingReservation;
-    private String orderCreateDate;
-    private String reservationAddress;
-    private String lastReservationDatetime;
-    private String lastReservationStatus;
-    private String lastReservationFailureDescription;
-    private String lastReservationFailureCategory;
+public class NonInboundedOrder extends DataEntity<NonInboundedOrder> {
 
-    public String getShipper()
-    {
-        return shipper;
-    }
+  private String shipper;
+  private String trackingId;
+  private String granularStatus;
+  private String orderPickupDate;
+  private String fromAddress;
+  private String reservationCount;
+  private String lastSuccessReservation;
+  private String nextPendingReservation;
+  private String orderCreateDate;
+  private String reservationAddress;
+  private String lastReservationDatetime;
+  private String lastReservationStatus;
+  private String lastReservationFailureDescription;
+  private String lastReservationFailureCategory;
 
-    public void setShipper(String shipper)
-    {
-        this.shipper = shipper;
-    }
+  public String getShipper() {
+    return shipper;
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public void setShipper(String shipper) {
+    this.shipper = shipper;
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getGranularStatus()
-    {
-        return granularStatus;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setGranularStatus(String granularStatus)
-    {
-        this.granularStatus = granularStatus;
-    }
+  public String getGranularStatus() {
+    return granularStatus;
+  }
 
-    public String getOrderPickupDate()
-    {
-        return orderPickupDate;
-    }
+  public void setGranularStatus(String granularStatus) {
+    this.granularStatus = granularStatus;
+  }
 
-    public void setOrderPickupDate(String orderPickupDate)
-    {
-        this.orderPickupDate = orderPickupDate;
-    }
+  public String getOrderPickupDate() {
+    return orderPickupDate;
+  }
 
-    public String getFromAddress()
-    {
-        return fromAddress;
-    }
+  public void setOrderPickupDate(String orderPickupDate) {
+    this.orderPickupDate = orderPickupDate;
+  }
 
-    public void setFromAddress(String fromAddress)
-    {
-        this.fromAddress = fromAddress;
-    }
+  public String getFromAddress() {
+    return fromAddress;
+  }
 
-    public String getReservationCount()
-    {
-        return reservationCount;
-    }
+  public void setFromAddress(String fromAddress) {
+    this.fromAddress = fromAddress;
+  }
 
-    public void setReservationCount(String reservationCount)
-    {
-        this.reservationCount = reservationCount;
-    }
+  public String getReservationCount() {
+    return reservationCount;
+  }
 
-    public String getLastSuccessReservation()
-    {
-        return lastSuccessReservation;
-    }
+  public void setReservationCount(String reservationCount) {
+    this.reservationCount = reservationCount;
+  }
 
-    public void setLastSuccessReservation(String lastSuccessReservation)
-    {
-        this.lastSuccessReservation = lastSuccessReservation;
-    }
+  public String getLastSuccessReservation() {
+    return lastSuccessReservation;
+  }
 
-    public String getNextPendingReservation()
-    {
-        return nextPendingReservation;
-    }
+  public void setLastSuccessReservation(String lastSuccessReservation) {
+    this.lastSuccessReservation = lastSuccessReservation;
+  }
 
-    public void setNextPendingReservation(String nextPendingReservation)
-    {
-        this.nextPendingReservation = nextPendingReservation;
-    }
+  public String getNextPendingReservation() {
+    return nextPendingReservation;
+  }
 
-    public String getOrderCreateDate()
-    {
-        return orderCreateDate;
-    }
+  public void setNextPendingReservation(String nextPendingReservation) {
+    this.nextPendingReservation = nextPendingReservation;
+  }
 
-    public void setOrderCreateDate(String orderCreateDate)
-    {
-        this.orderCreateDate = orderCreateDate;
-    }
+  public String getOrderCreateDate() {
+    return orderCreateDate;
+  }
 
-    public String getReservationAddress()
-    {
-        return reservationAddress;
-    }
+  public void setOrderCreateDate(String orderCreateDate) {
+    this.orderCreateDate = orderCreateDate;
+  }
 
-    public void setReservationAddress(String reservationAddress)
-    {
-        this.reservationAddress = reservationAddress;
-    }
+  public String getReservationAddress() {
+    return reservationAddress;
+  }
 
-    public String getLastReservationDatetime()
-    {
-        return lastReservationDatetime;
-    }
+  public void setReservationAddress(String reservationAddress) {
+    this.reservationAddress = reservationAddress;
+  }
 
-    public void setLastReservationDatetime(String lastReservationDatetime)
-    {
-        this.lastReservationDatetime = lastReservationDatetime;
-    }
+  public String getLastReservationDatetime() {
+    return lastReservationDatetime;
+  }
 
-    public String getLastReservationStatus()
-    {
-        return lastReservationStatus;
-    }
+  public void setLastReservationDatetime(String lastReservationDatetime) {
+    this.lastReservationDatetime = lastReservationDatetime;
+  }
 
-    public void setLastReservationStatus(String lastReservationStatus)
-    {
-        this.lastReservationStatus = lastReservationStatus;
-    }
+  public String getLastReservationStatus() {
+    return lastReservationStatus;
+  }
 
-    public String getLastReservationFailureDescription()
-    {
-        return lastReservationFailureDescription;
-    }
+  public void setLastReservationStatus(String lastReservationStatus) {
+    this.lastReservationStatus = lastReservationStatus;
+  }
 
-    public void setLastReservationFailureDescription(String lastReservationFailureDescription)
-    {
-        this.lastReservationFailureDescription = lastReservationFailureDescription;
-    }
+  public String getLastReservationFailureDescription() {
+    return lastReservationFailureDescription;
+  }
 
-    public String getLastReservationFailureCategory()
-    {
-        return lastReservationFailureCategory;
-    }
+  public void setLastReservationFailureDescription(String lastReservationFailureDescription) {
+    this.lastReservationFailureDescription = lastReservationFailureDescription;
+  }
 
-    public void setLastReservationFailureCategory(String lastReservationFailureCategory)
-    {
-        this.lastReservationFailureCategory = lastReservationFailureCategory;
-    }
+  public String getLastReservationFailureCategory() {
+    return lastReservationFailureCategory;
+  }
 
-    @Override
-    public void fromCsvLine(String csvLine)
-    {
-        String[] values = splitCsvLine(csvLine);
-        setShipper(getValueIfIndexExists(values, 0));
-        setTrackingId(getValueIfIndexExists(values, 1));
-        setGranularStatus(getValueIfIndexExists(values, 2));
-        setOrderPickupDate(getValueIfIndexExists(values, 3));
-        setFromAddress(getValueIfIndexExists(values, 4));
-        setReservationCount(getValueIfIndexExists(values, 5));
-        setLastSuccessReservation(getValueIfIndexExists(values, 6));
-        setNextPendingReservation(getValueIfIndexExists(values, 7));
-        setOrderCreateDate(getValueIfIndexExists(values, 8));
-        setReservationAddress(getValueIfIndexExists(values, 9));
-        setLastReservationDatetime(getValueIfIndexExists(values, 10));
-        setLastReservationStatus(getValueIfIndexExists(values, 11));
-        setLastReservationFailureDescription(getValueIfIndexExists(values, 12));
-        setLastReservationFailureCategory(getValueIfIndexExists(values, 13));
-    }
+  public void setLastReservationFailureCategory(String lastReservationFailureCategory) {
+    this.lastReservationFailureCategory = lastReservationFailureCategory;
+  }
+
+  @Override
+  public void fromCsvLine(String csvLine) {
+    String[] values = splitCsvLine(csvLine);
+    setShipper(getValueIfIndexExists(values, 0));
+    setTrackingId(getValueIfIndexExists(values, 1));
+    setGranularStatus(getValueIfIndexExists(values, 2));
+    setOrderPickupDate(getValueIfIndexExists(values, 3));
+    setFromAddress(getValueIfIndexExists(values, 4));
+    setReservationCount(getValueIfIndexExists(values, 5));
+    setLastSuccessReservation(getValueIfIndexExists(values, 6));
+    setNextPendingReservation(getValueIfIndexExists(values, 7));
+    setOrderCreateDate(getValueIfIndexExists(values, 8));
+    setReservationAddress(getValueIfIndexExists(values, 9));
+    setLastReservationDatetime(getValueIfIndexExists(values, 10));
+    setLastReservationStatus(getValueIfIndexExists(values, 11));
+    setLastReservationFailureDescription(getValueIfIndexExists(values, 12));
+    setLastReservationFailureCategory(getValueIfIndexExists(values, 13));
+  }
 }
