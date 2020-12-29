@@ -5,7 +5,6 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -278,15 +277,42 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     if ("status".equals(columnName)) {
       assertEquals("Status", expectedHub.getActive(), actualHub.getActive());
     }
+    if ("lat/long".equals(columnName)) {
+      assertEquals("Hub latitude", expectedHub.getLatitude(),
+          actualHub.getLatitude());
+      assertEquals("Hub longitude", expectedHub.getLongitude(),
+          actualHub.getLongitude());
+    }
+    if ("facility type and lat/long".equals(columnName)) {
+      assertEquals("Facility Type Display", expectedHub.getFacilityTypeDisplay(),
+          actualHub.getFacilityTypeDisplay());
+      assertEquals("Hub latitude", expectedHub.getLatitude(),
+          actualHub.getLatitude());
+      assertEquals("Hub longitude", expectedHub.getLongitude(),
+          actualHub.getLongitude());
+    }
   }
 
   @When("Operator update Hub column {string} with data:")
   public void operatorUpdateHubWithData(String columnName, Map<String, String> mapOfData) {
     Hub hub = get(KEY_CREATED_HUB);
+    String beforeType = hub.getFacilityType();
     if ("facility type".equals(columnName)) {
-      String beforeType = hub.getFacilityType();
       hub.setFacilityType(mapOfData.get("facilityType"));
-      facilitiesManagementPage.updateHubByFacilityType(hub, beforeType);
     }
+    if ("lat/long".equals(columnName)) {
+      Double latitude = Double.valueOf(mapOfData.get("latitude"));
+      Double longitude = Double.valueOf(mapOfData.get("longitude"));
+      hub.setLatitude(latitude);
+      hub.setLongitude(longitude);
+    }
+    if ("facility type and lat/long".equals(columnName)) {
+      Double latitude = Double.valueOf(mapOfData.get("latitude"));
+      Double longitude = Double.valueOf(mapOfData.get("longitude"));
+      hub.setLatitude(latitude);
+      hub.setLongitude(longitude);
+      hub.setFacilityType(mapOfData.get("facilityType"));
+    }
+    facilitiesManagementPage.updateHubByColumn(hub, columnName, beforeType);
   }
 }

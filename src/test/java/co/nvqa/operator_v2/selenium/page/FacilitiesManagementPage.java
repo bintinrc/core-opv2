@@ -136,12 +136,23 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     editHubDialog.waitUntilInvisible();
   }
 
-  public void updateHubByFacilityType(Hub hub, String typeBefore) {
+  public void updateHubByColumn(Hub hub, String column, String typeBefore) {
     loadingHubsLabel.waitUntilInvisible();
     hubsTable.filterByColumn(COLUMN_NAME, hub.getName());
     hubsTable.clickActionButton(1, ACTION_EDIT);
     editHubDialog.waitUntilVisible();
-    editHubDialog.facilityType.selectByValue(hub.getFacilityType());
+    if ("facility type".equals(column)) {
+      editHubDialog.facilityType.selectByValue(hub.getFacilityType());
+    }
+    if ("lat/long".equals(column)) {
+      editHubDialog.latitude.setValue(hub.getLatitude());
+      editHubDialog.longitude.setValue(hub.getLongitude());
+    }
+    if ("facility type and lat/long".equals(column)) {
+      editHubDialog.facilityType.selectByValue(hub.getFacilityType());
+      editHubDialog.latitude.setValue(hub.getLatitude());
+      editHubDialog.longitude.setValue(hub.getLongitude());
+    }
     editHubDialog.submitChanges.click();
     if (typeBefore.equalsIgnoreCase("CROSSDOCK") || typeBefore
         .equalsIgnoreCase("CROSSDOCK_STATION") || typeBefore.equalsIgnoreCase("STATION")) {
