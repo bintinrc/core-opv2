@@ -324,10 +324,19 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       hubMap.put(hubResp.getName(), hubResp);
     }, getCurrentMethodName());
     hub = hubMap.get(hubName);
+    hub.setFacilityTypeDisplay(facilityType);
 
     put(KEY_CREATED_HUB, hub);
     putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     NvLogger.success(f("Created hub with id %d and name %s", hub.getId(), hub.getName()));
+  }
+
+  @Given("API Operator creates new Hub with type {string} using data below:")
+  public void apiOperatorCreatesNewHubWithTypeUsingDataBelow(String hubType,
+      Map<String, String> mapOfData) {
+    Map<String, String> mapOfDataWithHubType = new HashMap<>(mapOfData);
+    mapOfDataWithHubType.put("facilityType", hubType);
+    apiOperatorCreatesNewHubUsingDataBelow(mapOfDataWithHubType);
   }
 
   @Given("API Operator creates {int} new Hub using data below:")

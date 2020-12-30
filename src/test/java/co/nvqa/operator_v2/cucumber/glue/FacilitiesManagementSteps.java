@@ -195,12 +195,17 @@ public class FacilitiesManagementSteps extends AbstractSteps {
 
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
     {
-      navigateRefresh();
-      pause2s();
-      Hub facilitiesManagementSearchResult = facilitiesManagementPage.searchHub(searchHubsKeyword);
-      put(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT, facilitiesManagementSearchResult);
-      put("searchHubsKeyword", searchHubsKeyword);
-    }, "Unable to find the hub, retrying...");
+      try {
+        Hub facilitiesManagementSearchResult = facilitiesManagementPage
+            .searchHub(searchHubsKeyword);
+        put(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT, facilitiesManagementSearchResult);
+        put("searchHubsKeyword", searchHubsKeyword);
+      } catch (Exception ex) {
+        navigateRefresh();
+        pause2s();
+        throw ex;
+      }
+    }, "Unable to find the hub, retrying...", 1000, 10);
   }
 
   @Then("^Operator verify Hub is found on Facilities Management page and contains correct info$")
@@ -242,13 +247,15 @@ public class FacilitiesManagementSteps extends AbstractSteps {
 
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
     {
-      navigateRefresh();
-      pause2s();
-      facilitiesManagementPage.disableHub(hub.getName());
-      hub.setActive(false);
+      try {
+        facilitiesManagementPage.disableHub(hub.getName());
+        hub.setActive(false);
+      } catch (Exception ex) {
+        navigateRefresh();
+        pause2s();
+        throw ex;
+      }
     }, "Unable to find the hub, retrying...");
-
-
   }
 
   @When("^Operator activate created hub on Facilities Management page$")
@@ -256,5 +263,56 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     Hub hub = get(KEY_CREATED_HUB);
     facilitiesManagementPage.activateHub(hub.getName());
     hub.setActive(true);
+  }
+
+  @Then("Operator verify Hub {string}")
+  public void operatorVerifyHubDataByColumn(String columnName) {
+    Hub expectedHub = get(KEY_CREATED_HUB);
+    Hub actualHub = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
+
+    if ("facility type".equals(columnName)) {
+      assertEquals("Facility Type Display", expectedHub.getFacilityTypeDisplay(),
+          actualHub.getFacilityTypeDisplay());
+    }
+    if ("status".equals(columnName)) {
+      assertEquals("Status", expectedHub.getActive(), actualHub.getActive());
+    }
+    if ("lat/long".equals(columnName)) {
+      assertEquals("Hub latitude", expectedHub.getLatitude(),
+          actualHub.getLatitude());
+      assertEquals("Hub longitude", expectedHub.getLongitude(),
+          actualHub.getLongitude());
+    }
+    if ("facility type and lat/long".equals(columnName)) {
+      assertEquals("Facility Type Display", expectedHub.getFacilityTypeDisplay(),
+          actualHub.getFacilityTypeDisplay());
+      assertEquals("Hub latitude", expectedHub.getLatitude(),
+          actualHub.getLatitude());
+      assertEquals("Hub longitude", expectedHub.getLongitude(),
+          actualHub.getLongitude());
+    }
+  }
+
+  @When("Operator update Hub column {string} with data:")
+  public void operatorUpdateHubWithData(String columnName, Map<String, String> mapOfData) {
+    Hub hub = get(KEY_CREATED_HUB);
+    String beforeType = hub.getFacilityType();
+    if ("facility type".equals(columnName)) {
+      hub.setFacilityType(mapOfData.get("facilityType"));
+    }
+    if ("lat/long".equals(columnName)) {
+      Double latitude = Double.valueOf(mapOfData.get("latitude"));
+      Double longitude = Double.valueOf(mapOfData.get("longitude"));
+      hub.setLatitude(latitude);
+      hub.setLongitude(longitude);
+    }
+    if ("facility type and lat/long".equals(columnName)) {
+      Double latitude = Double.valueOf(mapOfData.get("latitude"));
+      Double longitude = Double.valueOf(mapOfData.get("longitude"));
+      hub.setLatitude(latitude);
+      hub.setLongitude(longitude);
+      hub.setFacilityType(mapOfData.get("facilityType"));
+    }
+    facilitiesManagementPage.updateHubByColumn(hub, columnName, beforeType);
   }
 }
