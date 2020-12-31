@@ -648,4 +648,27 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
     put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
   }
+
+  @And("API Operator does the {string} scan for the shipment {string} from {string} to {string}")
+  public void apiOperatorDoesTheScanForTheShipment(String inboundType, String shipmentIdAsString, String originHubIdAsString, String destHubIdAsString) {
+    Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+    long originHubId = Long.parseLong(resolveValue(originHubIdAsString));
+    long destHubId = Long.parseLong(resolveValue(destHubIdAsString));
+    long hubId;
+
+    if ("van-inbound".equalsIgnoreCase(inboundType)) {
+      hubId = originHubId;
+    } else {
+      hubId = destHubId;
+    }
+    getHubClient().shipmentInboundScanning(inboundType, shipmentId, hubId);
+  }
+
+  @And("API Operator does the {string} scan from {string} to {string} for the following shipments:")
+  public void apiOperatorDoesTheScanForMultipleShipments(String inboundType, String originHubIdAsString, String destHubIdAsString, List<String> shipmentIds) {
+    for (String shipmentIdAsString : shipmentIds) {
+      apiOperatorDoesTheScanForTheShipment(inboundType, shipmentIdAsString, originHubIdAsString, destHubIdAsString);
+      pause2s();
+    }
+  }
 }

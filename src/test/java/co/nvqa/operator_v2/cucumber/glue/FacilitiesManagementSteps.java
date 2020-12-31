@@ -258,6 +258,24 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     }, "Unable to find the hub, retrying...");
   }
 
+  @When("Operator disable hub with name {string} on Facilities Management page")
+  public void operatorDisableCreatedHub(String hubName) {
+    Hub hub = new Hub();
+    hub.setName(resolveValue(hubName));
+
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+    {
+      try {
+        facilitiesManagementPage.disableHub(hub.getName());
+        hub.setActive(false);
+      } catch (Exception ex) {
+        navigateRefresh();
+        pause2s();
+        throw ex;
+      }
+    }, "Unable to find the hub, retrying...");
+  }
+
   @When("^Operator activate created hub on Facilities Management page$")
   public void operatorActivateCreatedHub() {
     Hub hub = get(KEY_CREATED_HUB);
