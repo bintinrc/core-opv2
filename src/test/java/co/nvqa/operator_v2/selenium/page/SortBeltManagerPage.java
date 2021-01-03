@@ -13,16 +13,15 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class SortBeltManagerPage extends OperatorV2SimplePage {
 
-  private static final String IFRAME_XPATH = "//iframe[contains(@src,'sort-belt-manager')]";
   private static final String TOGGLE_XPATH = "//span[text() = '%s']/ancestor::div/button[@role='switch']";
   private static final String FILTER_XPATH = "//span[text() = '%s']/ancestor::div[contains(@class, 'styles__Arm')]//div[@class='ant-select-selection__rendered']//span[contains(text(), '%s')]/ancestor::div[@class='ant-select-selection__rendered']";
   private static final String FILTER_INPUT_XPATH = "//span[text() = '%s']/ancestor::div[contains(@class, 'styles__Arm')]//div[@class='ant-select-selection__rendered']//span[contains(text(), '%s')]/ancestor::div[@class='ant-select-selection__rendered']//input[@class='ant-select-search__field']";
   private static final String ADD_COMBINATION_XPATH = "//span[text() = '%s']/ancestor::div[contains(@class, 'styles__Arm')]//button//span[text() = 'Add Combination']";
 
-  @FindBy(xpath = "(//div[@class='ant-select-selection__rendered'])[1]")
+  @FindBy(xpath = "(//div[contains(@class,'ant-select-enabled')])[1]")
   public AntSelect selectHub;
 
-  @FindBy(xpath = "(//div[@class='ant-select-selection__rendered'])[2]")
+  @FindBy(xpath = "(//div[contains(@class,'ant-select-enabled')])[2]")
   public AntSelect selectDeviceId;
 
   @FindBy(xpath = "//button/span[contains(text(), 'Proceed')]")
@@ -64,31 +63,15 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'duplicate')]//td[@class='orderTagDisplay']/span/span")
   public PageElement actualDuplicateOrderTag;
 
+  @FindBy(tagName = "iframe")
+  private PageElement pageFrame;
+
   public SortBeltManagerPage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void selectHub(String hubName) {
-    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-
-    selectHub.waitUntilClickable();
-    selectHub.jsClick();
-    pause3s();
-
-    selectHub.searchInput.sendKeys(hubName);
-    selectHub.searchInput.sendKeys(Keys.RETURN);
-  }
-
-
-  public void selectDeviceId(String deviceId) {
-    selectDeviceId.waitUntilClickable();
-    selectDeviceId.jsClick();
-    pause1s();
-
-    selectDeviceId.searchInput.sendKeys(deviceId);
-    selectDeviceId.searchInput.sendKeys(Keys.RETURN);
-    proceed.waitUntilClickable();
-    proceed.click();
+  public void switchTo() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
   public void clickCreateConfig() {

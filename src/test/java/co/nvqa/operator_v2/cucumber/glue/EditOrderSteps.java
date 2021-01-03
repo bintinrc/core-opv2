@@ -117,6 +117,22 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.confirmCompleteOrder();
   }
 
+  @When("^Operator confirm manually complete order with COD on Edit Order page$")
+  public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
+    editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.markAll.click();
+    editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
+  }
+
+  @When("^Operator confirm manually complete order without collecting COD on Edit Order page$")
+  public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
+    editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
+    editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
+  }
+
   @Then("^Operator verify the order completed successfully on Edit Order page$")
   public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage() {
     Order order = get(KEY_CREATED_ORDER);
@@ -148,6 +164,21 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator add created order to the (.+) route on Edit Order page$")
   public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(String type) {
     editOrderPage.addToRoute(get(KEY_CREATED_ROUTE_ID), type);
+  }
+
+  @When("^Operator add created order route on Edit Order page using data below:$")
+  public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String type = data.getOrDefault("type", "Delivery");
+    String trackingId = editOrderPage.trackingId.getText();
+    String routeId = data.get("routeId");
+    editOrderPage.clickMenu(type, "Add To Route");
+    editOrderPage.addToRouteDialog.waitUntilVisible();
+    editOrderPage.addToRouteDialog.route.setValue(routeId);
+    editOrderPage.addToRouteDialog.type.selectValue(type);
+    editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast(
+        f("%s has been added to route %s successfully", trackingId, routeId), true);
   }
 
   @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
@@ -1019,5 +1050,30 @@ public class EditOrderSteps extends AbstractSteps {
     String expectedDeliveryStatus = mapOfData.get("deliveryStatus");
     editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(createdOrder, globalInboundParams,
         currentOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
+  }
+
+  @Then("Operator set Delivery Verification Required to {string} on on Edit order page")
+  public void operatorSetDeliveryVerificationRequired(String deliveryVerificationRequired) {
+    deliveryVerificationRequired = resolveValue(deliveryVerificationRequired);
+    editOrderPage.deliveryVerificationTypeEdit.click();
+    editOrderPage.editDeliveryVerificationRequiredDialog.waitUntilVisible();
+    editOrderPage.editDeliveryVerificationRequiredDialog.deliveryVerificationRequired
+        .selectValue(deliveryVerificationRequired);
+    editOrderPage.editDeliveryVerificationRequiredDialog.saveChanges.clickAndWaitUntilDone();
+    editOrderPage
+        .waitUntilInvisibilityOfToast("Delivery Verification Required updated successfully", true);
+  }
+
+  @Then("Operator verify Delivery Verification Required is {string} on on Edit order page")
+  public void operatorVerifyDeliveryVerificationRequired(String deliveryVerificationRequired) {
+    deliveryVerificationRequired = resolveValue(deliveryVerificationRequired);
+    assertEquals("Delivery Verification Required", deliveryVerificationRequired,
+        editOrderPage.deliveryVerificationType.getNormalizedText());
+  }
+
+  @Then("^Operator verify Latest Route ID is \"(.+)\" on Edit Order page$")
+  public void operatorVerifyRouteIdOnEditOrderPage(String routeId) {
+    assertEquals("Latest Route ID", resolveValue(routeId),
+        editOrderPage.latestRouteId.getNormalizedText());
   }
 }

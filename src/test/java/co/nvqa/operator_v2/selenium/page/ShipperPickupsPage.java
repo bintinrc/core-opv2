@@ -61,6 +61,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ReservationDetailsDialog reservationDetailsDialog;
 
+  @FindBy(css = "md-dialog.shipper-pickups-pod-details-dialog")
+  public PodDetailsDialog podDetailsDialog;
+
   @FindBy(css = "md-dialog")
   public EditRouteDialog editRouteDialog;
 
@@ -366,11 +369,26 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     @FindBy(xpath = ".//div[normalize-space(.)='POD not found']")
     public PageElement podNotFound;
 
+    @FindBy(css = "#field-timestamp > div")
+    public PageElement timestamp;
+
+    @FindBy(css = "#field-keyin-by-driver > div")
+    public PageElement inputOnPod;
+
     @FindBy(css = "#field-scanned-at-shipper > div")
     public PageElement scannedAtShipperCount;
 
     @FindBy(css = ".pod-table-content:nth-of-type(1) .content-row")
     public PageElement scannedAtShipperPOD;
+
+    @FindBy(name = "container.shipper-pickups.dialog.view-pod")
+    public NvIconTextButton viewPod;
+
+    @FindBy(name = "commons.download-csv")
+    public NvIconTextButton downloadCsvFile;
+
+    @FindBy(css = "nv-tag")
+    public PageElement podName;
 
     public ReservationDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -413,6 +431,24 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
+
+    @FindBy(name = "container.shipper-pickups.dialog.change-address")
+    public NvIconTextButton editAddress;
+
+    @FindBy(id = "commons.address1")
+    public TextBox address1;
+
+    @FindBy(id = "commons.address2")
+    public TextBox address2;
+
+    @FindBy(id = "commons.postcode")
+    public TextBox postcode;
+
+    @FindBy(id = "commons.latitude")
+    public TextBox latitude;
+
+    @FindBy(id = "commons.longitude")
+    public TextBox longitude;
 
     public EditRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -825,6 +861,31 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
           WebElement webElement) {
         super(webDriver, searchContext, webElement);
       }
+    }
+  }
+
+  public static class PodDetailsDialog extends MdDialog {
+
+    @FindBy(css = "#field-reservation-id > div")
+    public PageElement reservationId;
+
+    @FindBy(css = "#field-receipient-name > div")
+    public PageElement recipientName;
+
+    @FindBy(css = "#field-shipper-id > div")
+    public PageElement shipperId;
+
+    @FindBy(css = "#field-shipper-name > div")
+    public PageElement shipperName;
+
+    @FindBy(css = "#field-shipper-contact > div")
+    public PageElement shipperContact;
+
+    @FindBy(xpath = ".//md-input-container[./label[.='Status']]/div")
+    public PageElement status;
+
+    public PodDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 }

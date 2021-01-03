@@ -138,8 +138,9 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @Then("^Operator verify the new reservation is listed on table in Shipper Pickups page using data below:$")
   public void operatorVerifyTheNewReservationIsListedOnTableInShipperPickupsPageUsingDataBelow(
       Map<String, String> mapOfData) {
+    String addressKey = mapOfData.getOrDefault("address", "KEY_CREATED_ADDRESS");
+    Address addressResult = resolveValue(addressKey);
     mapOfData = resolveKeyValues(mapOfData);
-    Address addressResult = get(KEY_CREATED_ADDRESS);
     verifyReservationData(addressResult, mapOfData);
   }
 
@@ -475,7 +476,18 @@ public class ShipperPickupsSteps extends AbstractSteps {
   public void operatorVerifiesPodDetails(Map<String, String> data) {
     data = resolveKeyValues(data);
     shipperPickupsPage.reservationDetailsDialog.waitUntilVisible();
-    String expectedValue = data.get("scannedAtShipperCount");
+    String expectedValue = data.get("timestamp");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertThat("Timestamp",
+          shipperPickupsPage.reservationDetailsDialog.timestamp.getNormalizedText(),
+          Matchers.startsWith(expectedValue));
+    }
+    expectedValue = data.get("inputOnPod");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Input on POD (Driver)", expectedValue,
+          shipperPickupsPage.reservationDetailsDialog.inputOnPod.getNormalizedText());
+    }
+    expectedValue = data.get("scannedAtShipperCount");
     if (StringUtils.isNotBlank(expectedValue)) {
       assertEquals("Scanned at Shipper count", expectedValue,
           shipperPickupsPage.reservationDetailsDialog.scannedAtShipperCount.getNormalizedText());
@@ -568,5 +580,87 @@ public class ShipperPickupsSteps extends AbstractSteps {
     shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
     assertFalse(f("%s button is disabled", buttonName),
         shipperPickupsPage.reservationsTable.getActionButton(buttonName, 1).isEnabled());
+  }
+
+  @Then("^Operator verifies POD details in POD Details dialog on Shipper Pickups page using data below:$")
+  public void operatorVerifiesPodDetailsDialog(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    if (!shipperPickupsPage.podDetailsDialog.isDisplayedFast()) {
+      assertTrue("Reservation dialog is opened",
+          shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+      shipperPickupsPage.reservationDetailsDialog.viewPod.click();
+      shipperPickupsPage.podDetailsDialog.waitUntilVisible();
+    }
+    String expectedValue = data.get("reservationId");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Reservation ID",
+          expectedValue,
+          shipperPickupsPage.podDetailsDialog.reservationId.getNormalizedText());
+    }
+    expectedValue = data.get("recipientName");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Recipient Name", expectedValue,
+          shipperPickupsPage.podDetailsDialog.recipientName.getNormalizedText());
+    }
+    expectedValue = data.get("shipperId");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Shipper ID", expectedValue,
+          shipperPickupsPage.podDetailsDialog.shipperId.getNormalizedText());
+    }
+    expectedValue = data.get("shipperName");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Shipper Name", expectedValue,
+          shipperPickupsPage.podDetailsDialog.shipperName.getNormalizedText());
+    }
+    expectedValue = data.get("shipperContact");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Shipper Contact", expectedValue,
+          shipperPickupsPage.podDetailsDialog.shipperContact.getNormalizedText());
+    }
+    expectedValue = data.get("status");
+    if (StringUtils.isNotBlank(expectedValue)) {
+      assertEquals("Status", expectedValue,
+          shipperPickupsPage.podDetailsDialog.status.getNormalizedText());
+    }
+    shipperPickupsPage.podDetailsDialog.forceClose();
+  }
+
+  @Then("^Operator verifies downloaded POD CSV file on Shipper Pickups page using data below:$")
+  public void operatorVerifiesPodCsvFile(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
+    assertTrue("Reservation dialog is opened",
+        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+    String podId = shipperPickupsPage.reservationDetailsDialog.podName.getAttribute("name")
+        .replace("POD-", "");
+    shipperPickupsPage.reservationDetailsDialog.downloadCsvFile.click();
+    for (String trackingId : trackingIds) {
+      shipperPickupsPage
+          .verifyFileDownloadedSuccessfully("pod-file-id-" + podId + ".csv", trackingId);
+    }
+  }
+
+  @When("^Operator edit reservation address details on Edit Route Details dialog using data below:$")
+  public void operatorEditReservationAddressFromEditRouteDetailsDialog(Map<String, String> data) {
+    Address oldAddress = resolveValue(data.get("oldAddress"));
+    Address newAddress = resolveValue(data.get("newAddress"));
+    shipperPickupsPage.reservationsTable.searchByPickupAddress(oldAddress);
+    shipperPickupsPage.reservationsTable.clickActionButton(1, ACTION_BUTTON_ROUTE_EDIT);
+    shipperPickupsPage.editRouteDialog.editAddress.click();
+    if (StringUtils.isNotBlank(newAddress.getAddress1())) {
+      shipperPickupsPage.editRouteDialog.address1.setValue(newAddress.getAddress1());
+    }
+    if (StringUtils.isNotBlank(newAddress.getAddress2())) {
+      shipperPickupsPage.editRouteDialog.address2.setValue(newAddress.getAddress2());
+    }
+    if (StringUtils.isNotBlank(newAddress.getPostcode())) {
+      shipperPickupsPage.editRouteDialog.postcode.setValue(newAddress.getPostcode());
+    }
+    if (newAddress.getLatitude() != null) {
+      shipperPickupsPage.editRouteDialog.latitude.setValue(newAddress.getLatitude());
+    }
+    if (newAddress.getLongitude() != null) {
+      shipperPickupsPage.editRouteDialog.longitude.setValue(newAddress.getLongitude());
+    }
+    shipperPickupsPage.editRouteDialog.submitForm();
   }
 }

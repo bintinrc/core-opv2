@@ -647,5 +647,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
     put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
     put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
+    put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
 }
