@@ -22,6 +22,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenuBar;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -71,6 +72,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[label[.='Granular']]/h3")
   public PageElement granular;
 
+  @FindBy(xpath = "//div[label[.='Latest Route ID']]/h3")
+  public PageElement latestRouteId;
+
   @FindBy(xpath = "//div[label[.='Shipper ID']]/p")
   public PageElement shipperId;
 
@@ -82,6 +86,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[./label[.='Current Priority']]/h3")
   public PageElement currentPriority;
+
+  @FindBy(xpath = "//div[./label[.='Delivery Verification Required']]/div/div")
+  public PageElement deliveryVerificationType;
+
+  @FindBy(css = "[name='commons.edit']")
+  public NvIconButton deliveryVerificationTypeEdit;
 
   @FindBy(css = "nv-tag[name^='COP']")
   public NvTag copValue;
@@ -125,6 +135,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   private EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
+
+  @FindBy(css = "md-dialog")
+  public EditDeliveryVerificationRequiredDialog editDeliveryVerificationRequiredDialog;
 
   @FindBy(id = "delivery-details")
   public DeliveryDetailsBox deliveryDetailsBox;
@@ -1980,6 +1993,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(name = "container.order.edit.complete-order")
     public NvApiTextButton completeOrder;
+
+    @FindBy(name = "commons.mark-all")
+    public NvIconTextButton markAll;
+
+    @FindBy(name = "commons.unmark-all")
+    public NvIconTextButton unmarkAll;
   }
 
   public static class EditOrderStampDialog extends MdDialog {
@@ -2040,6 +2059,19 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']")
     public Button codNo;
+
+    @FindBy(name = "commons.save-changes")
+    public NvApiTextButton saveChanges;
+  }
+
+  public static class EditDeliveryVerificationRequiredDialog extends MdDialog {
+
+    public EditDeliveryVerificationRequiredDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "[id^='commons.delivery-verification-required']")
+    public MdSelect deliveryVerificationRequired;
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;

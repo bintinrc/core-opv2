@@ -22,22 +22,35 @@ public class SortBeltManagerSteps extends AbstractSteps {
     sortBeltManagerPage = new SortBeltManagerPage(getWebDriver());
   }
 
+  @When("Sort Belt Manager page is loaded")
+  public void movementManagementPageIsLoaded() {
+    sortBeltManagerPage.switchTo();
+    sortBeltManagerPage.proceed.waitUntilClickable(60);
+  }
+
   @When("^Operator select the hub of Sort Belt Manager$")
   public void operatorSelectTheHubOfSortBeltManager(Map<String, String> data) {
+    data = resolveKeyValues(data);
     String hubName = data.get("hubName");
     sortBeltManagerPage.waitUntilPageLoaded();
-    sortBeltManagerPage.selectHub(hubName);
+    sortBeltManagerPage.selectHub.selectValue(hubName);
   }
 
   @When("^Operator select the device id of Sort Belt Manager$")
   public void operatorSelectTheDeviceIdOfSortBeltManager(Map<String, String> data) {
+    data = resolveKeyValues(data);
     String deviceId = data.get("deviceId");
-    sortBeltManagerPage.selectDeviceId(deviceId);
+    sortBeltManagerPage.selectDeviceId.selectValue(deviceId);
   }
 
   @When("^Operator click Create Configuration button$")
   public void operatorClickCreateConfigurationButton() {
     sortBeltManagerPage.clickCreateConfig();
+  }
+
+  @When("^Operator click Proceed button on Sort Belt Manager page$")
+  public void operatorClickProceedButton() {
+    sortBeltManagerPage.proceed.click();
   }
 
   @When("^Operator select Filters$")

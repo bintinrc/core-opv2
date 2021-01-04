@@ -999,6 +999,182 @@ Feature: Shipper Pickups
       | shipperName | {shipper-v4-name}                |
     Then Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Refresh List Routes on Shipper Pickup Page (uid:1c1ca03b-1e89-49fc-892d-5eff53431aed)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And Operator refresh routes on Shipper Pickups page
+    And Operator assign Reservation to Route on Shipper Pickups page
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+      | routeId      | GET_FROM_CREATED_ROUTE       |
+      | driverName   | {ninja-driver-name}          |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Views POD Details of a Success Reservation (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Operator start the route
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | status      | SUCCESS                          |
+      | shipperName | {shipper-v4-name}                |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | timestamp             | {gradle-current-date-yyyy-MM-dd}           |
+      | inputOnPod            | 1                                          |
+      | scannedAtShipperCount | 1                                          |
+      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And Operator verifies POD details in POD Details dialog on Shipper Pickups page using data below:
+      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | recipientName  | {KEY_CREATED_RESERVATION.name}           |
+      | shipperId      | {shipper-v4-legacy-id}                   |
+      | shipperName    | {shipper-v4-name}                        |
+      | shipperContact | {shipper-v4-contact}                     |
+      | status         | SUCCESS                                  |
+    And Operator verifies downloaded POD CSV file on Shipper Pickups page using data below:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+
+  Scenario: Operator Views POD Details of a Pending Reservation with no POD (uid:2b350b24-e984-4596-b867-fc232a4abf2e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | shipperName | {shipper-v4-name}                |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
+
+  Scenario: Operator Edits Pending Reservation Address Details (uid:5fb61b34-8fdd-45a6-84a3-b2e5148e0bd4)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And Operator edit reservation address details on Edit Route Details dialog using data below:
+      | oldAddress | KEY_LIST_OF_CREATED_ADDRESSES[1] |
+      | newAddress | KEY_LIST_OF_CREATED_ADDRESSES[2] |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | address      | KEY_LIST_OF_CREATED_ADDRESSES[2] |
+      | shipperName  | {shipper-v4-name}                |
+      | approxVolume | Less than 3 Parcels              |
+      | comments     | GET_FROM_CREATED_RESERVATION     |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Not Allowed to Edit Attempted Reservation Address Details - Success Reservation (uid:80f2356d-5010-4291-9463-fae61a6207a1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Operator start the route
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | SUCCESS                          |
+    Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Not Allowed to Edit Attempted Reservation Address Details - Fail Reservation (uid:416311c2-e9b0-4b34-a3a3-e00d7152dd2f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver fail the reservation using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-name}                |
+      | status      | SUCCESS                          |
+    Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
