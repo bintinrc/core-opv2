@@ -4,7 +4,6 @@ Feature: Order Billing
   "ALL": All orders (1 very big file, takes long time to generate)
   "SCRIPT": Orders consolidated by script (1 file per script), grouped by shipper within the file
   "AGGREGATED": All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate)
-  "PARENT": Orders consolidated by parent shipper (1 file per parent shipper)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
