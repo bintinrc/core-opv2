@@ -31,7 +31,7 @@ Feature: All Shippers
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  Scenario: Add New Shipper with new Pricing Profile (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
+  Scenario: Add New Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable
