@@ -1153,15 +1153,27 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("DB Operator verifies {string} path with origin {string} and {string} is created in movement_path table")
   public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTable(String pathType,
       String originHubIdAsString, String destinationHubIdAsString) {
+    dbOperatorVerifiesManualPathIsCreatedInMovementPathTableWithShipmentType(pathType,
+        originHubIdAsString, destinationHubIdAsString, "");
+  }
+
+  @Then("DB Operator verifies {string} path with origin {string} and {string} with type {string} is created in movement_path table")
+  public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTableWithShipmentType(
+      String pathType,
+      String originHubIdAsString, String destinationHubIdAsString, String shipmentType) {
     Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
     Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
 
-    MovementPath movementPath = getHubJdbc().getMovementPath(originHubId, destinationHubId);
+    MovementPath movementPath = getHubJdbc()
+        .getMovementPath(originHubId, destinationHubId, shipmentType);
     putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId());
     String expectedMovementPathMovementType = "LAND_HAUL";
     String expectedMovementPathType = "MANUAL";
     if ("default".equals(pathType)) {
       expectedMovementPathType = "AUTO_GENERATED";
+    }
+    if (StringUtils.isNotEmpty(shipmentType)) {
+      expectedMovementPathMovementType = shipmentType;
     }
     assertThat("Movement path type is equal", movementPath.getType(),
         equalTo(expectedMovementPathType));
@@ -1201,25 +1213,42 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   }
 
   @When("DB Operator verify sla in movement_events table is {string} no path for the following shipments from {string} to {string}:")
-  public void dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(String expectedStatus, String originHub, String destHub, List<String> shipmentIds) {
+  public void dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+      String expectedStatus, String originHub, String destHub, List<String> shipmentIds) {
     String expectedEvent = "SLA_CALCULATION";
     Long expectedOriginHub = Long.valueOf(resolveValue(originHub));
     Long expectedDestHub = Long.valueOf(resolveValue(destHub));
-    String expectedExtData = f("{\"path_cache\":{\"full_path\":null,\"trip_path\":null},\"crossdock_detail\":null," +
+    String expectedExtData = f(
+        "{\"path_cache\":{\"full_path\":null,\"trip_path\":null},\"crossdock_detail\":null," +
             "\"error_message\":\"found no path from origin %d (sg) to destination %d (sg)\"}",
         expectedOriginHub, expectedDestHub);
     for (String shipmentIdAsString : shipmentIds) {
       Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
       if ("NOT FOUND".equals(expectedStatus)) {
-        Boolean movementEventEntityExistence = getHubJdbc().getMovementEvenExistenceByShipmentId(shipmentId);
+        Boolean movementEventEntityExistence = getHubJdbc()
+            .getMovementEvenExistenceByShipmentId(shipmentId);
         assertThat("Movement Event not found", movementEventEntityExistence, equalTo(false));
         continue;
       }
-      MovementEventEntity movementEventEntity = getHubJdbc().getMovementEventByShipmentId(shipmentId);
+      MovementEventEntity movementEventEntity = getHubJdbc()
+          .getMovementEventByShipmentId(shipmentId);
       assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
       assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
       assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
       pause1s();
     }
+  }
+
+  @Then("DB Operator verify path in movement_path table is not found for shipments from {string} to {string}")
+  public void dbOperatorVerifyPathNotFoundInMovementPathTableIsForShipmentsFromTo(
+      String originHubId, String destinationHubId) {
+    Long resolvedOriginHubId = Long.valueOf(resolveValue(originHubId));
+    Long resolvedDestinationHubId = Long.valueOf(resolveValue(destinationHubId));
+    List<MovementPath> movementPaths = getHubJdbc()
+        .getAllMovementPath(resolvedOriginHubId, resolvedDestinationHubId);
+    movementPaths.forEach(movementPath -> {
+      assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(),
+          notNullValue());
+    });
   }
 }
