@@ -647,6 +647,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
     put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
     put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
+    put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
 
   @And("API Operator does the {string} scan for the shipment {string} from {string} to {string}")
