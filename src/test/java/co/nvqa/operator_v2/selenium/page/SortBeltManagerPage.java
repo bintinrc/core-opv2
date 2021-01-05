@@ -1,8 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.ArmCombination;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
+import com.google.common.collect.ImmutableMap;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -13,21 +19,16 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class SortBeltManagerPage extends OperatorV2SimplePage {
 
-  private static final String TOGGLE_XPATH = "//span[text() = '%s']/ancestor::div/button[@role='switch']";
-  private static final String FILTER_XPATH = "//span[text() = '%s']/ancestor::div[contains(@class, 'styles__Arm')]//div[@class='ant-select-selection__rendered']//span[contains(text(), '%s')]/ancestor::div[@class='ant-select-selection__rendered']";
-  private static final String FILTER_INPUT_XPATH = "//span[text() = '%s']/ancestor::div[contains(@class, 'styles__Arm')]//div[@class='ant-select-selection__rendered']//span[contains(text(), '%s')]/ancestor::div[@class='ant-select-selection__rendered']//input[@class='ant-select-search__field']";
-  private static final String ADD_COMBINATION_XPATH = "//span[text() = '%s']/ancestor::div[contains(@class, 'styles__Arm')]//button//span[text() = 'Add Combination']";
-
   @FindBy(xpath = "(//div[contains(@class,'ant-select-enabled')])[1]")
   public AntSelect selectHub;
 
   @FindBy(xpath = "(//div[contains(@class,'ant-select-enabled')])[2]")
   public AntSelect selectDeviceId;
 
-  @FindBy(xpath = "//button/span[contains(text(), 'Proceed')]")
-  public Button proceed;
+  @FindBy(xpath = "//button[.//span[contains(., 'Proceed')]]")
+  public AntButton proceed;
 
-  @FindBy(xpath = "//button/span[contains(text(), 'Create Configuration')]")
+  @FindBy(xpath = "//button[.//span[contains(., 'Create Configuration')]]")
   public Button create;
 
   @FindBy(xpath = "(//div[@class='ant-select-selection__rendered'])[2]")
@@ -43,10 +44,10 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public Button confirm;
 
   @FindBy(xpath = "(//input[@class='ant-input'])[1]")
-  public PageElement nameInput;
+  public TextBox nameInput;
 
   @FindBy(xpath = "(//input[@class='ant-input'])[2]")
-  public PageElement descriptionInput;
+  public TextBox descriptionInput;
 
   @FindBy(xpath = "//div[contains(@class,'NoResult')]/span")
   public PageElement noResult;
@@ -54,32 +55,20 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'duplicate')]//th[contains(@class,'armOutput')]//input[@placeholder='Find...']")
   public PageElement find;
 
-  @FindBy(xpath = "//div[contains(@class,'duplicate')]//span/mark[@class='highlight ']")
-  public PageElement actualDuplicateArmOutput;
-
-  @FindBy(xpath = "//div[contains(@class,'duplicate')]//td[@class='destinationHubDisplay']/span/span")
-  public PageElement actualDuplicateDestinationHub;
-
-  @FindBy(xpath = "//div[contains(@class,'duplicate')]//td[@class='orderTagDisplay']/span/span")
-  public PageElement actualDuplicateOrderTag;
-
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
+  public DuplicatedCombinationsTable duplicatedCombinationsTable;
+  public UniqueCombinationsTable uniqueCombinationsTable;
+
   public SortBeltManagerPage(WebDriver webDriver) {
     super(webDriver);
+    duplicatedCombinationsTable = new DuplicatedCombinationsTable(webDriver);
+    uniqueCombinationsTable = new UniqueCombinationsTable(webDriver);
   }
 
   public void switchTo() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
-  }
-
-  public void clickCreateConfig() {
-    create.click();
-  }
-
-  public void clickConfirm() {
-    confirm.click();
   }
 
   public void selectFilters(String firstFilter, String secondFilter, String thirdFilter) {
@@ -113,12 +102,6 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     confirm.click();
   }
 
-  public void inputName(String name, String description) {
-    nameInput.sendKeys(name);
-    descriptionInput.sendKeys(description);
-    confirm.click();
-  }
-
   public void verifyConfigNotCreated(String configName) {
     create.waitUntilClickable();
     selectHub.waitUntilClickable();
@@ -129,54 +112,62 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     assertThat("Result", noResult.getText(), equalToIgnoringCase("No Results Found"));
   }
 
-  public void setFilter(String armNumber, String status, String destinationHubs, String orderTags) {
-    if ("Disabled".equals(status)) {
-      click(f(TOGGLE_XPATH, armNumber));
-      pause1s();
-    } else {
-      if (destinationHubs != null) {
-        selectFilter("Destination Hub", destinationHubs, armNumber);
-      }
-      if (orderTags != null) {
-        selectFilter("Order Tag", orderTags, armNumber);
-      }
+  public ArmCombinationContainer getArmCombinationContainer(String armName) {
+    String xpath = f("//div[contains(@class,'ArmCombinationContainer')][.//span[.='%s']]", armName);
+    return new ArmCombinationContainer(getWebDriver(), xpath);
+  }
+
+  public static class ArmCombinationContainer extends PageElement {
+
+    @FindBy(css = "button[class*='AddCombinationButton']")
+    public Button addCombination;
+
+    @FindBy(css = "button[class*='ArmSwitch']")
+    public MdSwitch enable;
+
+    public ArmCombinationContainer(WebDriver webDriver, String xpath) {
+      super(webDriver, xpath);
+    }
+
+    public int getCombinationsCount() {
+      return getElementsCountFast(By.cssSelector("div[class*='StyledRow']"));
+    }
+
+    public AntSelect getFilterSelect(String filterName, int index) {
+      String xpath = f(
+          "(.//div[contains(@class,'MultipleSelectFilterContainer')][.//span[.='%s']])[%d]",
+          filterName, index);
+      return new AntSelect(getWebDriver(), getWebElement(), xpath);
     }
   }
 
-  public void addCombination(String armNumber, String destinationHubs, String orderTags) {
-    waitUntilElementIsClickable(f(ADD_COMBINATION_XPATH, armNumber));
-    click(f(ADD_COMBINATION_XPATH, armNumber));
+  public static class DuplicatedCombinationsTable extends AntTable<ArmCombination> {
 
-    if (destinationHubs != null) {
-      addFilter("Destination Hub", destinationHubs, armNumber);
+    public DuplicatedCombinationsTable(WebDriver webDriver) {
+      super(webDriver);
+      setTableLocator("//div[contains(@class,'duplicate-info-holder ')]");
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("armOutput", "armOutputDisplay")
+          .put("destinationHub", "destinationHubDisplay")
+          .put("orderTag", "orderTagDisplay")
+          .build()
+      );
+      setEntityClass(ArmCombination.class);
     }
-    if (orderTags != null) {
-      addFilter("Order Tag", orderTags, armNumber);
+  }
+
+  public static class UniqueCombinationsTable extends AntTable<ArmCombination> {
+
+    public UniqueCombinationsTable(WebDriver webDriver) {
+      super(webDriver);
+      setTableLocator("//div[contains(@class,'unique-info-holder')]");
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("armOutput", "armOutputDisplay")
+          .put("destinationHub", "destinationHubDisplay")
+          .put("orderTag", "orderTagDisplay")
+          .build()
+      );
+      setEntityClass(ArmCombination.class);
     }
-  }
-
-  public void selectFilter(String filterName, String value, String armNumber) {
-    waitUntilElementIsClickable(f(FILTER_XPATH, armNumber, filterName));
-    click(f(FILTER_XPATH, armNumber, filterName));
-    pause1s();
-
-    sendKeys(f(FILTER_INPUT_XPATH, armNumber, filterName), value + "\n");
-  }
-
-  public void addFilter(String filterName, String value, String armNumber) {
-    waitUntilElementIsClickable(f(FILTER_XPATH, armNumber, filterName));
-    click(f("(" + FILTER_XPATH, armNumber, filterName) + ")[2]");
-    pause1s();
-
-    sendKeys(f("(" + FILTER_INPUT_XPATH, armNumber, filterName) + ")[2]", value + "\n");
-  }
-
-  public void verifyDuplicateConfigIsExistAndDataIsCorrect(String armOutput, String destinationHubs,
-      String orderTags) {
-    find.sendKeys(armOutput);
-    assertThat("Arm Output", actualDuplicateArmOutput.getText(), equalToIgnoringCase(armOutput));
-    assertThat("Destination Hub", actualDuplicateDestinationHub.getText(),
-        equalToIgnoringCase(destinationHubs));
-    assertThat("Order Tag", actualDuplicateOrderTag.getText(), equalToIgnoringCase(orderTags));
   }
 }
