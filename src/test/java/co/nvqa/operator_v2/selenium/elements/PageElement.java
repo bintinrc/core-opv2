@@ -187,4 +187,15 @@ public class PageElement extends SimplePage {
   public boolean hasClass(String className) {
     return Arrays.asList(getAttribute("class").split(" ")).contains(className);
   }
+
+  public int getElementsCountFast(By by) {
+    try {
+      setImplicitTimeout(0);
+      return getWebElement().findElements(by).size();
+    } catch (Exception ex) {
+      return 0;
+    } finally {
+      resetImplicitTimeout();
+    }
+  }
 }

@@ -22,6 +22,10 @@ public class AntSelect extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
+  public AntSelect(WebDriver webDriver, SearchContext searchContext, String xpath) {
+    super(webDriver, searchContext, xpath);
+  }
+
   @FindBy(className = "ant-select-selection-selected-value")
   public PageElement selectValueElement;
 
