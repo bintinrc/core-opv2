@@ -5,7 +5,7 @@ Feature: Add Shipper To Preset
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipperPickupFilterTemplate
+  @DeleteShipperPickupFilterTemplate @Close@CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address (uid:c5345ae2-e212-42c7-866a-59d5f1a80e42)
     Given API Operator creates new Shipper Pickup Filter Template using data below:
       | name                | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
@@ -70,9 +70,10 @@ Feature: Add Shipper To Preset
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
-  @DeleteShipperPickupFilterTemplate
+  @DeleteShipperPickupFilterTemplate @CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Multiple Addresses (uid:fd702085-61cd-4aab-9f18-e8a556f45544)
-    Given API Operator creates new Shipper Pickup Filter Template using data below:
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator creates new Shipper Pickup Filter Template using data below:
       | name                | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
       | reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
       | reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
@@ -119,6 +120,7 @@ Feature: Add Shipper To Preset
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
   Scenario: Operator Failed to Select Shipper Creation Date more than 7 Days Range on Add Shipper to Preset Page (uid:14437f95-98fd-4888-bea7-751d6baa540b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator applies filters on Add Shipper To Preset page using data below:
@@ -127,6 +129,7 @@ Feature: Add Shipper To Preset
     Then Operator verifies wrong dates toast is shown on Add Shipper To Preset page
 
   Scenario: Check Shipper Selection in Add Shipper to Preset Page (uid:c8c488bd-b4fd-4ce3-abfc-d2fe5105ea97)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator clicks Load Selection on Add Shipper To Preset page
@@ -142,6 +145,51 @@ Feature: Add Shipper To Preset
     When Operator unchecks Show Only Selected on Add Shipper To Preset page
     And Operator clicks Clear Current Selection on Add Shipper To Preset page
     Then Operator verify all rows are unselected on Add Shipper To Preset page
+
+  Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download All Shown (uid:908ad032-fa7f-4f63-ac4b-39729d1c4754)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Pick Ups -> Add Shipper To Preset
+    And Add Shipper To Preset page is loaded
+    And Operator clicks Load Selection on Add Shipper To Preset page
+    And Operator applies "UP" sorting to "Shipper Name" column on Add Shipper To Preset page
+    And Operator saves displayed shipper results
+    And Operator clicks Download CSV button on Add Shipper To Preset page
+    Then Operator verify that CSV file contains all Shippers currently being shown on Add Shipper To Preset page
+
+  @CloseNewWindows
+  Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Filtered Shipper (uid:4790da95-8173-4c53-a208-ab77052ebaff)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And Operator go to menu Shipper -> All Shippers
+    And Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And API Operator reload shipper's cache
+    And API Operator fetch id of the created shipper
+    And API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2                        |
+      | shipperId         | {KEY_CREATED_SHIPPER.id} |
+      | generateAddress   | RANDOM                   |
+    And API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{KEY_CREATED_SHIPPER.legacyId}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Add Shipper To Preset
+    And Add Shipper To Preset page is loaded
+    And Operator clicks Load Selection on Add Shipper To Preset page
+    And Operator applies "{KEY_CREATED_SHIPPER.name}" filter to "Shipper Name" column on Add Shipper To Preset page
+    And Operator saves displayed shipper results
+    And Operator clicks Download CSV button on Add Shipper To Preset page
+    Then Operator verify that CSV file contains all Shippers currently being shown on Add Shipper To Preset page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

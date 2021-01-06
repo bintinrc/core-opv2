@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ShipperInfo;
 import co.nvqa.operator_v2.selenium.page.AddShipperToPresetPage;
 import cucumber.api.java.en.Then;
@@ -19,6 +20,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
 
   private AddShipperToPresetPage addShipperToPresetPage;
   private static final String KEY_SELECTED_SHIPPER_INFO = "KEY_SELECTED_SHIPPER_INFO";
+  private static final String KEY_LIST_OF_SHIPPER_INFO = "KEY_LIST_OF_SHIPPER_INFO";
 
   public AddShipperToPresetSteps() {
   }
@@ -51,10 +53,9 @@ public class AddShipperToPresetSteps extends AbstractSteps {
 
   @When("Operator clicks Load Selection on Add Shipper To Preset page")
   public void operatorAppliesFiltersValues() {
-    addShipperToPresetPage.loadSelection.click();
+    addShipperToPresetPage.loadSelection.clickAndWaitUntilDone();
     addShipperToPresetPage.waitUntilUpdated();
   }
-
 
   @When("Operator applies filters on Add Shipper To Preset page using data below:")
   public void operatorAppliesFiltersValues(Map<String, String> data) {
@@ -199,5 +200,34 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     addShipperToPresetPage.shippersTable.selectRow(rowIndex);
     ShipperInfo shipperInfo = addShipperToPresetPage.shippersTable.readEntity(1);
     put(KEY_SELECTED_SHIPPER_INFO, shipperInfo);
+  }
+
+  @Then("Operator saves displayed shipper results")
+  public void operatorSaveDisplayedShipperResult() {
+    List<ShipperInfo> shipperResults = addShipperToPresetPage.shippersTable.readAllEntities();
+    put(KEY_LIST_OF_SHIPPER_INFO, shipperResults);
+  }
+
+  @When("Operator clicks Download CSV button on Add Shipper To Preset page")
+  public void operatorClicksDownloadCsv() {
+    addShipperToPresetPage.downloadCsv.click();
+  }
+
+  @When("Operator verify that CSV file contains all Shippers currently being shown on Add Shipper To Preset page")
+  public void operatorVerifyCsvFile() {
+    List<ShipperInfo> expected = get(KEY_LIST_OF_SHIPPER_INFO);
+    String fileName = addShipperToPresetPage
+        .getLatestDownloadedFilename("add-shipper-to-preset.csv");
+    addShipperToPresetPage.verifyFileDownloadedSuccessfully(fileName);
+    String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    List<ShipperInfo> actual = ShipperInfo
+        .fromCsvFile(ShipperInfo.class, pathName, true);
+
+    assertEquals("Unexpected number of lines in CSV file", expected.size(),
+        actual.size());
+
+    for (int i = 0; i < expected.size(); i++) {
+      expected.get(i).compareWithActual("Shipper Result " + (i + 1), actual.get(i));
+    }
   }
 }
