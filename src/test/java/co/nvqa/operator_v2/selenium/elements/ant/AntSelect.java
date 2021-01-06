@@ -40,6 +40,11 @@ public class AntSelect extends PageElement {
     clickMenuItem(value);
   }
 
+  public void selectByIndex(int index) {
+    openMenu();
+    clickMenuItemByIndex(index);
+  }
+
   public void selectValueWithoutSearch(String value) {
     openMenu();
     clickMenuItem(value);
@@ -50,6 +55,12 @@ public class AntSelect extends PageElement {
         "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]",
         StringUtils
             .normalizeSpace(value));
+  }
+
+  public void clickMenuItemByIndex(int index) {
+    clickf(
+        "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']",
+        index);
   }
 
   public void clearValue() {

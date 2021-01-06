@@ -5,12 +5,13 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -31,14 +32,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//span[contains(., 'Create Configuration')]]")
   public Button create;
 
-  @FindBy(xpath = "(//div[@class='ant-select-selection__rendered'])[2]")
-  public AntSelect selectFirstFilter;
+  @FindBy(xpath = "//button[.//span[contains(., 'Edit Configuration')]]")
+  public Button editConfiguration;
 
-  @FindBy(xpath = "(//div[@class='ant-select-selection__rendered'])[3]")
-  public AntSelect selectSecondFilter;
-
-  @FindBy(xpath = "(//div[@class='ant-select-selection__rendered'])[4]")
-  public AntSelect SelectThirdFilter;
+  @FindBy(css = "a[class*='EditButton']")
+  public Button editUnassignedParcelsArm;
 
   @FindBy(xpath = "//button/span[contains(text(), 'Confirm')]")
   public Button confirm;
@@ -52,11 +50,17 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'NoResult')]/span")
   public PageElement noResult;
 
-  @FindBy(xpath = "//div[contains(@class,'duplicate')]//th[contains(@class,'armOutput')]//input[@placeholder='Find...']")
-  public PageElement find;
+  @FindBy(xpath = "//label[.='Unassigned Parcel Arm']/following-sibling::span")
+  public PageElement unassignedParcelArm;
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
+
+  @FindBy(className = "ant-modal-wrap")
+  public CreateConfigurationModal createConfigurationModal;
+
+  @FindBy(className = "ant-modal-wrap")
+  public ChangeUnassignedParcelArmModal changeUnassignedParcelArmModal;
 
   public DuplicatedCombinationsTable duplicatedCombinationsTable;
   public UniqueCombinationsTable uniqueCombinationsTable;
@@ -69,37 +73,6 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
   public void switchTo() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
-  }
-
-  public void selectFilters(String firstFilter, String secondFilter, String thirdFilter) {
-    if (firstFilter != null) {
-      selectFirstFilter.waitUntilClickable();
-      selectFirstFilter.jsClick();
-      pause1s();
-
-      selectFirstFilter.searchInput.sendKeys(firstFilter);
-      selectFirstFilter.searchInput.sendKeys(Keys.RETURN);
-    }
-
-    if (secondFilter != null) {
-      selectSecondFilter.waitUntilClickable();
-      selectSecondFilter.jsClick();
-      pause1s();
-
-      selectSecondFilter.searchInput.sendKeys(secondFilter);
-      selectSecondFilter.searchInput.sendKeys(Keys.RETURN);
-    }
-
-    if (thirdFilter != null) {
-      SelectThirdFilter.waitUntilClickable();
-      SelectThirdFilter.jsClick();
-      pause1s();
-
-      SelectThirdFilter.searchInput.sendKeys(thirdFilter);
-      SelectThirdFilter.searchInput.sendKeys(Keys.RETURN);
-    }
-
-    confirm.click();
   }
 
   public void verifyConfigNotCreated(String configName) {
@@ -168,6 +141,48 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
           .build()
       );
       setEntityClass(ArmCombination.class);
+    }
+  }
+
+  public static class CreateConfigurationModal extends AntModal {
+
+    public CreateConfigurationModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[1]")
+    public AntSelect firstFilter;
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[2]")
+    public AntSelect secondFilter;
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[3]")
+    public AntSelect thirdFilter;
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[4]")
+    public AntSelect unassignedParcelArm;
+
+    @FindBy(xpath = ".//button[.//span[contains(., 'Confirm')]]")
+    public AntButton confirm;
+  }
+
+  public static class ChangeUnassignedParcelArmModal extends AntModal {
+
+    public ChangeUnassignedParcelArmModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[1]")
+    public AntSelect unassignedParcelArm;
+
+    @FindBy(xpath = ".//button[.//span[contains(., 'Confirm')]]")
+    public AntButton confirm;
+
+    @FindBy(css = "div.note")
+    public PageElement note;
+
+    public String getFilterValue(String filterName) {
+      return findElement(By.xpath(f("//tr[.//td[contains(.,'%s')]]//td[2]", filterName))).getText();
     }
   }
 }
