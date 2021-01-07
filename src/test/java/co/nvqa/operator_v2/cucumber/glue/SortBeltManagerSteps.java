@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.ArmCombinationContainer;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
@@ -59,13 +60,28 @@ public class SortBeltManagerSteps extends AbstractSteps {
     sortBeltManagerPage.proceed.clickAndWaitUntilDone();
   }
 
-  @When("^Operator select Filters$")
-  public void operatorSelectFilters(Map<String, String> data) {
-    String firstFilter = data.get("firstFilter");
-    String secondFilter = data.get("secondFilter");
-    String thirdFilter = data.get("thirdFilter");
-
-    sortBeltManagerPage.selectFilters(firstFilter, secondFilter, thirdFilter);
+  @When("^Operator fill data in Create Configuration modal:$")
+  public void operatorFillDataInCreateConfigurationModal(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    sortBeltManagerPage.createConfigurationModal.waitUntilVisible();
+    String value = data.get("firstFilter");
+    if (StringUtils.isNotBlank(value)) {
+      sortBeltManagerPage.createConfigurationModal.firstFilter.selectValue(value.toLowerCase());
+    }
+    value = data.get("secondFilter");
+    if (StringUtils.isNotBlank(value)) {
+      sortBeltManagerPage.createConfigurationModal.secondFilter.selectValue(value.toLowerCase());
+    }
+    value = data.get("thirdFilter");
+    if (StringUtils.isNotBlank(value)) {
+      sortBeltManagerPage.createConfigurationModal.thirdFilter.selectValue(value.toLowerCase());
+    }
+    value = data.get("unassignedParcelArm");
+    if (StringUtils.isNotBlank(value)) {
+      sortBeltManagerPage.createConfigurationModal.unassignedParcelArm.selectValue(value);
+    }
+    sortBeltManagerPage.createConfigurationModal.confirm.click();
+    sortBeltManagerPage.createConfigurationModal.waitUntilInvisible();
   }
 
   @When("^Operator input Configuration name and description$")
@@ -121,6 +137,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @Given("^Operator click Confirm button on Configuration Summary page$")
   @When("^Operator click Confirm button on Create Configuration page$")
+  @Then("^Operator click Confirm button on Edit Configuration page$")
   public void operatorClickConfirmButton() {
     sortBeltManagerPage.confirm.click();
   }
@@ -177,5 +194,68 @@ public class SortBeltManagerSteps extends AbstractSteps {
   public void operatorVerifiesToast(String message) {
     message = resolveValue(message);
     sortBeltManagerPage.waitUntilInvisibilityOfNotification(message, true);
+  }
+
+  @When("Operator verifies Unassigned Parcel Arm is {string} on Sort Belt Manager page")
+  public void verifyUnassignedParcelArmValue(String expected) {
+    assertEquals("Unassigned Parcel Arm", expected,
+        sortBeltManagerPage.unassignedParcelArm.getText());
+  }
+
+  @When("^Operator click Edit Configuration button on Sort Belt Manager page$")
+  public void operatorClickEditConfigurationButton() {
+    sortBeltManagerPage.editConfiguration.click();
+  }
+
+  @When("Operator Change Unassigned Parcel Arm to {string} on Edit Configuration page")
+  public void operatorChangeUnassignedParcelArm(String value) {
+    operatorOpensChangeUnassignedParcelArmModal();
+    operatorSelectsUnassignedParcelArmModal(value);
+    sortBeltManagerPage.changeUnassignedParcelArmModal.confirm.click();
+    sortBeltManagerPage.changeUnassignedParcelArmModal.waitUntilInvisible();
+  }
+
+  @When("Operator opens Change Unassigned Parcel Arm modal on Edit Configuration page")
+  public void operatorOpensChangeUnassignedParcelArmModal() {
+    sortBeltManagerPage.editUnassignedParcelsArm.click();
+    sortBeltManagerPage.changeUnassignedParcelArmModal.waitUntilVisible();
+  }
+
+  @When("Operator selects {string} Unassigned Parcel Arm on Edit Configuration page")
+  public void operatorSelectsUnassignedParcelArmModal(String value) {
+    value = resolveValue(value);
+    if (StringUtils.equalsIgnoreCase(value, "none")) {
+      sortBeltManagerPage.changeUnassignedParcelArmModal.unassignedParcelArm.selectByIndex(0);
+    } else {
+      sortBeltManagerPage.changeUnassignedParcelArmModal.unassignedParcelArm.selectValue(value);
+    }
+  }
+
+  @When("Operator verifies filter values in Change Unassigned Parcel Arm modal:")
+  public void operatorVerifyFilterValues(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String value = data.get("Destination Hub");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Destination Hub", value,
+          sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Destination Hub"));
+    }
+    value = data.get("Order Tag");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Order Tag", value,
+          sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Order Tag"));
+    }
+  }
+
+  @When("Operator verifies {string} message is displayed in Change Unassigned Parcel Arm modal")
+  public void operatorVerifyNoteMessage(String value) {
+    assertTrue("Note message is displayed",
+        sortBeltManagerPage.changeUnassignedParcelArmModal.note.isDisplayedFast());
+    assertEquals("Note message", value,
+        sortBeltManagerPage.changeUnassignedParcelArmModal.note.getText());
+  }
+
+  @When("Operator click Confirm button in Change Unassigned Parcel Arm modal")
+  public void operatorClickConfirmButtonInChangeUnassignedParcelArmModal() {
+    sortBeltManagerPage.changeUnassignedParcelArmModal.confirm.click();
   }
 }

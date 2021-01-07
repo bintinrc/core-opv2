@@ -55,4 +55,13 @@ public class ShipperInfo extends DataEntity<ShipperInfo> {
   public void setLegacyId(String legacyId) {
     setLegacyId(Long.parseLong(legacyId));
   }
+
+  @Override
+  public void fromCsvLine(String csvLine) {
+    String[] values = splitCsvLine(csvLine);
+    setCreatedAt(getValueIfIndexExists(values, 1));
+    setAddress(getValueIfIndexExists(values, 2));
+    setName(getValueIfIndexExists(values, 3));
+    setLegacyId(getValueIfIndexExists(values, 4));
+  }
 }

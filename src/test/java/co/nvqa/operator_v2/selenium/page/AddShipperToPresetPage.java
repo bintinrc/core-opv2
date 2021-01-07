@@ -6,11 +6,13 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,14 +26,17 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
-  @FindBy(css = ".ant-spin")
+  @FindBy(css = "div.ant-spin-nested-loading")
   public PageElement spinner;
+
+  @FindBy(css = ".table-holder  div.ant-spin-spinning")
+  public PageElement tableSpinner;
 
   @FindBy(xpath = "//div[@class='filter-container'][.//div[.='Shipper Creation Date']]")
   public AntIntervalCalendarPicker shipperCreationDateFilter;
 
   @FindBy(css = "[data-testid='load-button']")
-  public Button loadSelection;
+  public AntButton loadSelection;
 
   @FindBy(xpath = "//button[.='Add to Preset']")
   public Button addToPreset;
@@ -130,6 +135,9 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Delete' and contains(@class, 'ant-btn-primary')]")
   public Button modalDeleteButton;
 
+  @FindBy(xpath = ".//button[.//span[contains(., 'Download CSV')]]")
+  public AntButton downloadCsv;
+
   //endregion
 
   public ShippersTable shippersTable;
@@ -144,12 +152,15 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilLoaded() {
+    if (spinner.waitUntilVisible(10)) {
+      spinner.waitUntilInvisible();
+    }
     loadSelection.waitUntilClickable(60);
   }
 
   public void waitUntilUpdated() {
-    if (spinner.waitUntilVisible(10)) {
-      spinner.waitUntilInvisible();
+    if (tableSpinner.waitUntilVisible(10)) {
+      tableSpinner.waitUntilInvisible();
     }
   }
 
@@ -216,7 +227,7 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
       String expectedDirection = DIRECTIONS.get(direction.trim().toLowerCase());
       String xpath = f("//div[@data-headerkey='%s']//*[@data-icon]", columnId);
       String sortType = getAttribute(xpath, "data-icon");
-      while (!sortType.equals(expectedDirection)) {
+      while (!StringUtils.equalsIgnoreCase(sortType, expectedDirection)) {
         click(xpath);
         pause1s();
         sortType = getAttribute(xpath, "data-icon");
