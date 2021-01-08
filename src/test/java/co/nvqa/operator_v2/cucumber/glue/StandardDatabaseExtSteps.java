@@ -43,6 +43,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -672,7 +673,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
 
     List<Long> createdShipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
-    if (createdShipmentIds.size() != 0) {
+    if (createdShipmentIds != null && createdShipmentIds.size() != 0) {
       for (Long createdShipmentId : createdShipmentIds) {
         getHubJdbc().deleteShipment(createdShipmentId);
       }
@@ -1179,6 +1180,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         equalTo(expectedMovementPathType));
     assertThat("Movement path type is equal", movementPath.getMovementType(),
         equalTo(expectedMovementPathMovementType));
+    pause1s();
   }
 
   @Then("DB Operator verifies number of path with origin {string} and {string} is {int} in movement_path table")
@@ -1209,7 +1211,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     HubRelationSchedule hubRelationSchedule = getHubJdbc()
         .getHubRelationScheduleByHubRelationId(hubRelationId);
     assertThat("Hub Relation not found", hubRelationSchedule.getDeletedAt(), notNullValue());
+  }
 
+  @Then("DB Operator verify {string} is not deleted in hub_relation_schedules")
+  public void dbOperatorVerifyScheduleIsNotDeletedInHubRelationSchedules(
+      String hubRelationIdAsString) {
+    Long hubRelationId = Long.valueOf(resolveValue(hubRelationIdAsString));
+    HubRelationSchedule hubRelationSchedule = getHubJdbc()
+        .getHubRelationScheduleByHubRelationId(hubRelationId);
+    assertThat("Hub Relation not found", hubRelationSchedule.getDeletedAt(), equalTo(null));
   }
 
   @When("DB Operator verify sla in movement_events table is {string} no path for the following shipments from {string} to {string}:")

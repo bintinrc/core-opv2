@@ -283,6 +283,24 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     hub.setActive(true);
   }
 
+  @When("Operator activate hub with name {string} on Facilities Management page")
+  public void operatorActivateCreatedHub(String hubName) {
+    Hub hub = new Hub();
+    hub.setName(resolveValue(hubName));
+
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+    {
+      try {
+        facilitiesManagementPage.activateHub(hub.getName());
+        hub.setActive(true);
+      } catch (Exception ex) {
+        navigateRefresh();
+        pause2s();
+        throw ex;
+      }
+    }, "Unable to find the hub, retrying...");
+  }
+
   @Then("Operator verify Hub {string}")
   public void operatorVerifyHubDataByColumn(String columnName) {
     Hub expectedHub = get(KEY_CREATED_HUB);
@@ -319,8 +337,8 @@ public class FacilitiesManagementSteps extends AbstractSteps {
       hub.setFacilityType(mapOfData.get("facilityType"));
     }
     if ("lat/long".equals(columnName)) {
-      Double latitude = Double.valueOf(mapOfData.get("latitude"));
-      Double longitude = Double.valueOf(mapOfData.get("longitude"));
+      Double latitude = Double.valueOf(resolveValue(mapOfData.get("latitude")));
+      Double longitude = Double.valueOf(resolveValue(mapOfData.get("longitude")));
       hub.setLatitude(latitude);
       hub.setLongitude(longitude);
     }
