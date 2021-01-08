@@ -5,7 +5,7 @@ Feature: Pricing Profiles
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with 0 Percentage Discount (uid:8fa73f4b-69a1-4ce0-927a-82b2be6ace0c)
+  Scenario: Edit Pending Pricing Profile - with 0 Percentage Discount (uid:8fa73f4b-69a1-4ce0-927a-82b2be6ace0c)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -41,7 +41,7 @@ Feature: Pricing Profiles
       | discountValue | 0 is not a valid discount value |
 
   @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with none Percentage Discount (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
+  Scenario: Edit Pending Pricing Profile - with none Percentage Discount (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

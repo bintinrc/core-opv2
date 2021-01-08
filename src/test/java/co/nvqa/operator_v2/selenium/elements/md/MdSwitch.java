@@ -24,7 +24,7 @@ public class MdSwitch extends PageElement {
   public PageElement textValue;
 
   public boolean isChecked() {
-    return Boolean.getBoolean(getAttribute("aria-checked"));
+    return Boolean.parseBoolean(getAttribute("aria-checked"));
   }
 
   public void check() {
