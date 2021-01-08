@@ -5,7 +5,7 @@ Feature: Pricing Profiles
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with 0 Flat Discount (uid:7764257b-02ad-41d6-99df-1a52e9c7f01f)
+  Scenario: Edit Pending Pricing Profile - with 0 Flat Discount (uid:7764257b-02ad-41d6-99df-1a52e9c7f01f)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -40,7 +40,7 @@ Feature: Pricing Profiles
       | discountValue | 0 is not a valid discount value |
 
   @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
+  Scenario: Edit Pending Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -88,7 +88,7 @@ Feature: Pricing Profiles
       | discountValue           | none                           |
 
   @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with special characters Discount (uid:35faef0b-1dc5-41d3-8c25-e623af2fbbde)
+  Scenario: Edit Pending Pricing Profile - with special characters Discount (uid:35faef0b-1dc5-41d3-8c25-e623af2fbbde)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -123,7 +123,7 @@ Feature: Pricing Profiles
       | discountValue | Special character is not allowed |
 
   @CloseNewWindows @NotInGaia
-  Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
+  Scenario: Edit Pending Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -161,7 +161,7 @@ Feature: Pricing Profiles
 
 
   @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
+  Scenario: Edit Pending Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -210,7 +210,7 @@ Feature: Pricing Profiles
       | discountValue           | 50000                          |
 
   @CloseNewWindows @NotInGaia
-  Scenario: Update an Existing Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
+  Scenario: Edit Pending Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -245,7 +245,7 @@ Feature: Pricing Profiles
       | discountValue | Discounts cannot exceed 6 figures. |
 
   @CloseNewWindows
-  Scenario: Edit Shipper Pricing Profile (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)
+  Scenario: Edit Pending Pricing Profile - with Int Discount (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
