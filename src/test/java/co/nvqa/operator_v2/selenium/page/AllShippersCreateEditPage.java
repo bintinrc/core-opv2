@@ -333,6 +333,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       clickToggleButtonByLabel("Corporate", "No");
+      clickToggleButtonByLabel("Corporate Return", "No");
     }
 
     if (isCreateForm) {
