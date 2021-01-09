@@ -649,4 +649,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
+
+  @When("^API Operator archives routes:$")
+  public void operatorArchivesRoutes(List<String> routeIds) {
+    routeIds = resolveValues(routeIds);
+    long[] ids = new long[routeIds.size()];
+    for (int i = 0; i < routeIds.size(); i++) {
+      ids[i] = Long.parseLong(routeIds.get(i));
+    }
+    getRouteClient().archiveRoutes(ids);
+  }
 }

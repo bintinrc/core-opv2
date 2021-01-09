@@ -14,7 +14,6 @@ import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.MovementTripEventEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
-import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
 import co.nvqa.commons.model.entity.ShipmentPathEntity;
 import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
@@ -22,10 +21,8 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
-import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
-import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
@@ -70,27 +67,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Override
   public void init() {
-  }
-
-  /**
-   * Cucumber regex: ^DB Operator verify driver types of multiple routes is updated successfully$
-   */
-  @Given("^DB Operator verify driver types of multiple routes is updated successfully$")
-  public void dbOperatorVerifyDriverTypesOfMultipleRoutesIsUpdatedSuccessfully() {
-    List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
-    DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
-
-    Long driverTypeId = driverTypeParams.getDriverTypeId();
-
-    for (CreateRouteParams createRouteParams : listOfCreateRouteParams) {
-      long routeId = createRouteParams.getCreatedRoute().getId();
-      List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc()
-          .findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
-      List<Long> listOfRouteDriverTypeId = listOfRouteDriverTypeEntity.stream()
-          .map(RouteDriverTypeEntity::getDriverTypeId).collect(Collectors.toList());
-      assertThat(f("Route with ID = %d does not contain the expected Driver Type ID = %d", routeId,
-          driverTypeId), listOfRouteDriverTypeId, hasItem(driverTypeId));
-    }
   }
 
   @Then("^Operator verify Jaro Scores are created successfully$")
