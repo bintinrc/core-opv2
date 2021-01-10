@@ -810,6 +810,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @SuppressWarnings("unchecked")
   @Given("^DB Operator verifies orders record using data below:$")
   public void dbOperatorVerifiesOrdersRecord(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
     Order order = get(KEY_CREATED_ORDER);
     final String finalTrackingId = order.getTrackingId();
     List<Order> orderRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
@@ -889,6 +890,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
               mapOfData.get("toDistrict");
       assertEquals(f("Expected %s in %s table", "to_district", "orders"), toDistrict,
           orderRecord.getToDistrict());
+    }
+    if (StringUtils.isNotBlank(mapOfData.get("rts"))) {
+      boolean expected = StringUtils.equalsAnyIgnoreCase(mapOfData.get("rts"), "1", "true");
+      assertEquals("RTS", expected, orderRecord.getRts());
     }
   }
 

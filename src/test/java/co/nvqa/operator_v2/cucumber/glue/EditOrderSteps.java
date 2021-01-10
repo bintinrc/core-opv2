@@ -1076,4 +1076,61 @@ public class EditOrderSteps extends AbstractSteps {
     assertEquals("Latest Route ID", resolveValue(routeId),
         editOrderPage.latestRouteId.getNormalizedText());
   }
+
+  @Then("^Operator cancel RTS on Edit Order page$")
+  public void operatorCancelRtsOnEditOrderPage() {
+    editOrderPage.clickMenu("Return to Sender", "Cancel RTS");
+    editOrderPage.cancelRtsDialog.waitUntilVisible();
+    editOrderPage.cancelRtsDialog.cancelRts.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("The RTS has been cancelled", true);
+  }
+
+  @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order page$")
+  public void operatorVerifyRtsTag(String state) {
+    assertEquals("RTS tag is displayed", StringUtils.equalsIgnoreCase(state, "displayed"),
+        editOrderPage.deliveryDetailsBox.rtsTag.isDisplayed());
+  }
+
+  @Then("Operator verifies Latest Event is {string} on Edit Order page")
+  public void operatorVerifyLatestEvent(String value) {
+    assertEquals("Latest Event", resolveValue(value),
+        editOrderPage.latestEvent.getNormalizedText());
+  }
+
+  @Then("Operator RTS order on Edit Order page using data below:")
+  public void operatorRtsOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    editOrderPage.clickMenu("Delivery", "Return to Sender");
+    editOrderPage.editRtsDetailsDialog.waitUntilVisible();
+    String value = data.get("reason");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.reason.selectValue(value);
+    }
+    value = data.get("recipientName");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.recipientName.setValue(value);
+    }
+    value = data.get("recipientContact");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.recipientContact.setValue(value);
+    }
+    value = data.get("recipientEmail");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.recipientEmail.setValue(value);
+    }
+    value = data.get("internalNotes");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.internalNotes.setValue(value);
+    }
+    value = data.get("deliveryDate");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.deliveryDate.simpleSetValue(value);
+    }
+    value = data.get("timeslot");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.timeslot.searchAndSelectValue(value);
+    }
+    editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
+  }
 }
