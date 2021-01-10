@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.OrderTagManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -10,6 +11,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Niko Susanto
@@ -33,19 +35,50 @@ public class OrderTagManagementSteps extends AbstractSteps {
   public void operatorSelectsFilterAndclicksLoadSelectionOnAddTagsToOrderPageUsingDataBelow(
       Map<String, String> data) {
     data = resolveKeyValues(data);
+
+    if (data.containsKey("orderTags")) {
+      List<String> tags = splitAndNormalize(data.get("orderTags"));
+      orderTagManagementPage.orderTagsFilter.clearAll();
+      orderTagManagementPage.orderTagsFilter.selectFilter(tags);
+    }
+
     if (data.containsKey("shipperName")) {
+      if (!orderTagManagementPage.shipperFilter.isDisplayedFast()) {
+        orderTagManagementPage.addFilter("Shipper");
+      }
       orderTagManagementPage.shipperFilter.clearAll();
       orderTagManagementPage.shipperFilter.selectFilter(data.get("shipperName"));
     }
 
     if (data.containsKey("status")) {
+      if (!orderTagManagementPage.statusFilter.isDisplayedFast()) {
+        orderTagManagementPage.addFilter("Status");
+      }
       orderTagManagementPage.statusFilter.clearAll();
       orderTagManagementPage.statusFilter.selectFilter(data.get("status"));
     }
 
     if (data.containsKey("granularStatus")) {
+      if (!orderTagManagementPage.granularStatusFilter.isDisplayedFast()) {
+        orderTagManagementPage.addFilter("Granular Status");
+      }
       orderTagManagementPage.granularStatusFilter.clearAll();
       orderTagManagementPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
+    }
+
+    if (data.containsKey("orderType")) {
+      if (!orderTagManagementPage.orderTypeFilter.isDisplayedFast()) {
+        orderTagManagementPage.addFilter("Order Type");
+      }
+      orderTagManagementPage.orderTypeFilter.clearAll();
+      orderTagManagementPage.orderTypeFilter.selectFilter(data.get("orderType"));
+    }
+
+    if (data.containsKey("rts")) {
+      if (!orderTagManagementPage.rtsFilter.isDisplayedFast()) {
+        orderTagManagementPage.addFilter("RTS");
+      }
+      orderTagManagementPage.rtsFilter.setFilter(data.get("rts"));
     }
 
     orderTagManagementPage.loadSelection.click();
@@ -98,6 +131,60 @@ public class OrderTagManagementSteps extends AbstractSteps {
     assertEquals(
         f("Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
             order.getId()), normalizedExpectedList, normalizedActualList);
+  }
+
+  @And("Operator verifies selected value of RTS filter is {string} on Order Tag Management page")
+  public void operatorVerifyRtsFilter(String expected) {
+    expected = resolveValue(expected);
+    assertTrue("RTS filter is displayed", orderTagManagementPage.rtsFilter.isDisplayed());
+    assertEquals("RTS filter value", expected, orderTagManagementPage.rtsFilter.getValue());
+  }
+
+  @And("Operator clicks 'Clear All Selection' button on Order Tag Management page")
+  public void operatorClicksClearAllSelection() {
+    orderTagManagementPage.clearAllSelection.click();
+  }
+
+  @And("Operator verifies orders are not displayed on Order Tag Management page:")
+  public void operatorVerifyOrdersAreNotDisplayed(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
+    trackingIds.forEach(trackingId ->
+    {
+      orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
+      assertTrue(f("Order %s must not be displayed", trackingId),
+          orderTagManagementPage.ordersTable.isEmpty());
+    });
+  }
+
+  @And("Operator opens 'View Tagged Orders' tab on Order Tag Management page:")
+  public void operatorOpenViewTaggedOrdersTab() {
+    orderTagManagementPage.viewTaggedOrders.click();
+  }
+
+  @And("^Operator verifies that 'Load Selection' button is (enabled|disabled) on Order Tag Management page")
+  public void operatorVerifyLoadSelection(String state) {
+    assertEquals("Load selection button enable state",
+        StringUtils.equalsIgnoreCase(state, "enabled"),
+        orderTagManagementPage.loadSelection.isEnabled());
+  }
+
+  @And("^Operator verifies order params on Order Tag Management page:")
+  public void operatorVerifyOrderParams(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    Order expected = new Order();
+    expected.fromMap(data);
+    orderTagManagementPage.ordersTable.filterByColumn("trackingId", expected.getTrackingId());
+    Order actual = orderTagManagementPage.ordersTable.readEntity(1);
+    expected.compareWithActual(actual);
+  }
+
+  @And("^Operator verifies tagged order params on Order Tag Management page:")
+  public void operatorVerifytaggedOrderParams(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    TaggedOrderParams expected = new TaggedOrderParams(data);
+    orderTagManagementPage.taggedOrdersTable.filterByColumn("trackingId", expected.getTrackingId());
+    TaggedOrderParams actual = orderTagManagementPage.taggedOrdersTable.readEntity(1);
+    expected.compareWithActual(actual);
   }
 
 }

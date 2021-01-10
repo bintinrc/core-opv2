@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @Debug
+@OperatorV2 @Core @Routing @RouteLogs
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
