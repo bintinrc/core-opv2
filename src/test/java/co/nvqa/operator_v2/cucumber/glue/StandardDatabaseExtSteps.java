@@ -7,6 +7,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
@@ -44,6 +45,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -1245,7 +1247,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
       assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
       assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
-      pause1s();
+      pause2s();
     }
   }
 
@@ -1260,5 +1262,70 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(),
           notNullValue());
     });
+  }
+
+  @When("DB Operator verify sla in movement_events table is succeed for the following data:")
+  public void dbOperatorVerifySlaInMovementEventsTableIsSucceedForTheFollowingData(
+      Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapData = resolveKeyValues(mapOfData);
+    String expectedExtData = resolvedMapData.get("extData");
+    String[] shipmentIds = resolvedMapData.get("shipmentIds").split(",");
+    List<Long> listShipmentIds = Arrays.stream(shipmentIds).map(Long::valueOf)
+        .collect(Collectors.toList());
+
+    String expectedEvent = "SLA_CALCULATION";
+    String expectedStatus = "SUCCESS";
+    for (Long shipmentId : listShipmentIds) {
+      MovementEventEntity movementEventEntity = getHubJdbc()
+          .getMovementEventByShipmentId(shipmentId);
+      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+      assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      pause1s();
+    }
+  }
+
+  @When("API Operator verify sla in movement events table for {string} movement")
+  public void apiOperatorVerifySlaInMovementEventsTableForMovement(String scheduleType) {
+    List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
+    List<String> tripScheduleIds = get(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS);
+    Long landHaulShipmentId = shipmentIds.get(0);
+    Long airHaulShipmentId = shipmentIds.get(1);
+
+    String expectedEvent = "SLA_CALCULATION";
+    String expectedStatus = "SUCCESS";
+    switch (scheduleType) {
+      case "CD->its ST":
+        String expectedExtDataLandHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(2));
+        String expectedExtDataAirHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(3));
+
+        MovementEventEntity movementEventEntity = getHubJdbc()
+            .getMovementEventByShipmentId(landHaulShipmentId);
+        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+        assertThat("ExtData is equal", movementEventEntity.getExtData(), isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+
+
+        movementEventEntity = getHubJdbc().getMovementEventByShipmentId(airHaulShipmentId);
+        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+        assertThat("ExtData is equal", movementEventEntity.getExtData(), isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+        break;
+      case "CD->ST under another CD":
+        break;
+      case "ST->ST under same CD":
+        break;
+      case "ST->ST under diff CD":
+        break;
+      case "ST->its CD":
+        break;
+      case "ST->another CD":
+        break;
+    }
   }
 }

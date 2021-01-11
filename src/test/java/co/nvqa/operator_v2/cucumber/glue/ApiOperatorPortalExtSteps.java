@@ -17,6 +17,7 @@ import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.sort.hub.CrossDockStationRelation;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -347,6 +348,48 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  @Given("API Operator creates hubs for {string} movement")
+  public void apiOperatorCreatesHubsForMovement(String scheduleType) {
+    Map<String, String> mapOfData = new HashMap<>();
+    mapOfData.put("name", "GENERATED");
+    mapOfData.put("displayName", "GENERATED");
+    mapOfData.put("city", "GENERATED");
+    mapOfData.put("country", "GENERATED");
+    mapOfData.put("latitude", "GENERATED");
+    mapOfData.put("longitude", "GENERATED");
+    switch (scheduleType) {
+      case "CD->CD":
+        break;
+      case "CD->its ST":
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        List<Hub> createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case "CD->ST under another CD":
+        break;
+      case "ST->ST under same CD":
+        break;
+      case "ST->ST under diff CD":
+        break;
+      case "ST->its CD":
+        break;
+      case "ST->another CD":
+        break;
+    }
+  }
+
+  @Given("API Operator assign CrossDock {string} for Station {string}")
+  public void apiOperatorCreateRelationFor(String crossDockIdAsString, String stationIdAsString) {
+    Long crossDockId = Long.valueOf(resolveValue(crossDockIdAsString));
+    Long stationId = Long.valueOf(resolveValue(stationIdAsString));
+
+    CrossDockStationRelation crossDockStationRelation = getHubClient()
+        .assignStationToCrossDock("sg", crossDockId, stationId);
+    put(KEY_HUB_CROSSDOCK_DETAIL_ID, crossDockStationRelation.getId());
+    putInList(KEY_LIST_OF_HUB_CROSSDOCK_DETAIL_ID, crossDockStationRelation.getId());
+  }
 
   @Given("^API Operator updates Hub using data below:$")
   public void apiOperatorUpdatesHubUsingDataBelow(Map<String, String> data) {
@@ -651,7 +694,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
   @And("API Operator does the {string} scan for the shipment {string} from {string} to {string}")
-  public void apiOperatorDoesTheScanForTheShipment(String inboundType, String shipmentIdAsString, String originHubIdAsString, String destHubIdAsString) {
+  public void apiOperatorDoesTheScanForTheShipment(String inboundType, String shipmentIdAsString,
+      String originHubIdAsString, String destHubIdAsString) {
     Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
     long originHubId = Long.parseLong(resolveValue(originHubIdAsString));
     long destHubId = Long.parseLong(resolveValue(destHubIdAsString));
@@ -666,9 +710,11 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
   @And("API Operator does the {string} scan from {string} to {string} for the following shipments:")
-  public void apiOperatorDoesTheScanForMultipleShipments(String inboundType, String originHubIdAsString, String destHubIdAsString, List<String> shipmentIds) {
+  public void apiOperatorDoesTheScanForMultipleShipments(String inboundType,
+      String originHubIdAsString, String destHubIdAsString, List<String> shipmentIds) {
     for (String shipmentIdAsString : shipmentIds) {
-      apiOperatorDoesTheScanForTheShipment(inboundType, shipmentIdAsString, originHubIdAsString, destHubIdAsString);
+      apiOperatorDoesTheScanForTheShipment(inboundType, shipmentIdAsString, originHubIdAsString,
+          destHubIdAsString);
       pause2s();
     }
   }
