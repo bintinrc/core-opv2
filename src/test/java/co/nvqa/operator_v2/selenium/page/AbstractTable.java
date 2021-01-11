@@ -160,6 +160,10 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
         .collect(Collectors.toList());
   }
 
+  public AbstractTable<T> filterByColumn(String columnId, Object value) {
+    return filterByColumn(columnId, String.valueOf(value));
+  }
+
   @SuppressWarnings("UnusedReturnValue")
   public AbstractTable<T> filterByColumn(String columnId, String value) {
     Preconditions.checkArgument(StringUtils.isNotBlank(columnId),

@@ -96,6 +96,13 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
   @Override
   public void clickColumn(int rowNumber, String columnId) {
-    throw new UnsupportedOperationException();
+    String xpath = f(
+        "%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[normalize-space(@class)='%s']",
+        getTableLocator(), mdVirtualRepeat, rowNumber, getColumnLocators().get(columnId));
+    if (isElementExistFast(xpath + "//a")) {
+      click(xpath + "//a");
+    } else {
+      click(xpath);
+    }
   }
 }
