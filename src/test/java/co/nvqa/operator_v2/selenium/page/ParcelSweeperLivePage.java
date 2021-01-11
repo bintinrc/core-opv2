@@ -4,6 +4,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -25,12 +27,16 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String HUB_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]/ancestor::md-autocomplete";
   private static final String HUB_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]";
   private static final String CHOSEN_VALUE_SELECTION_XPATH = "//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
+  private static final String CHOSEN_VALUE_TASK_XPATH = "//md-virtual-repeat-container/following-sibling::md-virtual-repeat-container//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]/ancestor::md-autocomplete";
   private static final String SORT_TASK_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]";
   private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
 
   @FindBy(xpath = "//nv-icon-text-button[@name='Proceed']")
   public Button proceedButton;
+
+  @FindBy(xpath = "//div[contains(@class,'prior-container')]/h5")
+  public PageElement priorTag;
 
   public ParcelSweeperLivePage(WebDriver webDriver) {
     super(webDriver);
@@ -53,10 +59,10 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
       click(SORT_TASK_DROPDOWN_XPATH);
       if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
         waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
-        sendKeys(SORT_TASK_INPUT_XPATH, MASTER_VIEW_SORT_TASK_OPTION);
+        sendKeys(SORT_TASK_INPUT_XPATH, hubName);
         waitUntilVisibilityOfElementLocated(
-            f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
-        click(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
+            f(CHOSEN_VALUE_TASK_XPATH, hubName));
+        click(f(CHOSEN_VALUE_TASK_XPATH, hubName));
       }
     }
 
@@ -129,6 +135,11 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
         "Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
         expectedOrderTags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()),
         tags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()));
+  }
+
+  public void verifyPriorTag() {
+    String actualTag = priorTag.getText();
+    assertEquals("Prior tag", "PRIOR", actualTag);
   }
 
 }
