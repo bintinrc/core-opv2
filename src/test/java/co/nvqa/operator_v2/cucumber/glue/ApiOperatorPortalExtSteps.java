@@ -693,6 +693,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
 
+
   @And("API Operator does the {string} scan for the shipment {string} from {string} to {string}")
   public void apiOperatorDoesTheScanForTheShipment(String inboundType, String shipmentIdAsString,
       String originHubIdAsString, String destHubIdAsString) {
@@ -717,5 +718,15 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
           destHubIdAsString);
       pause2s();
     }
+  }
+
+  @When("^API Operator archives routes:$")
+  public void operatorArchivesRoutes(List<String> routeIds) {
+    routeIds = resolveValues(routeIds);
+    long[] ids = new long[routeIds.size()];
+    for (int i = 0; i < routeIds.size(); i++) {
+      ids[i] = Long.parseLong(routeIds.get(i));
+    }
+    getRouteClient().archiveRoutes(ids);
   }
 }

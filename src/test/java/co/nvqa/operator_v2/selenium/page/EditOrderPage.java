@@ -66,6 +66,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[label[.='Tracking ID']]/h3")
   public PageElement trackingId;
 
+  @FindBy(xpath = "//div[label[.='Latest Event']]/h3")
+  public PageElement latestEvent;
+
   @FindBy(xpath = "//div[label[.='Status']]/h3")
   public PageElement status;
 
@@ -138,6 +141,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public EditDeliveryVerificationRequiredDialog editDeliveryVerificationRequiredDialog;
+
+  @FindBy(css = "md-dialog")
+  public CancelRtsDialog cancelRtsDialog;
+
+  @FindBy(css = "md-dialog")
+  public EditRtsDetailsDialog editRtsDetailsDialog;
 
   @FindBy(id = "delivery-details")
   public DeliveryDetailsBox deliveryDetailsBox;
@@ -1214,6 +1223,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public PageElement lastServiceEnd;
     @FindBy(xpath = ".//div[label[.='Delivery Instructions']]/p")
     public PageElement deliveryInstructions;
+    @FindBy(name = "commons.rts")
+    public PageElement rtsTag;
 
     private static final String BOX_LOCATOR = "//div[h5[text()='Delivery Details']]";
     private static final String ROUTE_ID_LOCATOR =
@@ -2072,6 +2083,54 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(css = "[id^='commons.delivery-verification-required']")
     public MdSelect deliveryVerificationRequired;
+
+    @FindBy(name = "commons.save-changes")
+    public NvApiTextButton saveChanges;
+  }
+
+  /**
+   * Accessor for Cancel RTS
+   */
+  public static class CancelRtsDialog extends MdDialog {
+
+    public CancelRtsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(name = "container.order.edit.cancel-rts")
+    public NvApiTextButton cancelRts;
+  }
+
+
+  public static class EditRtsDetailsDialog extends MdDialog {
+
+    public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "md-select[id^='commons.reason']")
+    public MdSelect reason;
+
+    @FindBy(css = "input[id^='commons.recipient-name']")
+    public TextBox recipientName;
+
+    @FindBy(css = "input[id^='commons.recipient-contact']")
+    public TextBox recipientContact;
+
+    @FindBy(css = "input[id^='commons.recipient-email']")
+    public TextBox recipientEmail;
+
+    @FindBy(css = "input[id^='container.order.edit.internal-notes']")
+    public TextBox internalNotes;
+
+    @FindBy(id = "commons.model.delivery-date")
+    public MdDatepicker deliveryDate;
+
+    @FindBy(css = "md-select[id^='commons.timeslot']")
+    public MdSelect timeslot;
+
+    @FindBy(name = "container.order.edit.change-address")
+    public NvIconTextButton changeAddress;
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;

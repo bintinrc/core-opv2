@@ -49,7 +49,7 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
 
-  @DeleteShipments @DeleteHubsViaDb #TODO: IMPLEMENT OTHER THAN  CD -> ITS ST
+  @DeleteShipments @DeleteHubsViaDb @RT #TODO: IMPLEMENT OTHER THAN  CD -> ITS ST
   Scenario Outline: Create Schedule - Van Inbound w/o Trip - (<type>)- (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     Given API Operator creates paths for "<type>" movement
@@ -76,7 +76,7 @@ Feature: Path Invalidation - Without Trip
 #      | ST->its CD              | uid:3b64b309-0e5b-43c5-9ef4-0359678bb10e |
 #      | ST->another CD          | uid:1396e561-1368-4a21-9233-939b8eebe6cf |
 
-  @DeleteShipments @DeleteHubsViaDb @RT #TODO: IMPLEMENT OTHER THAN  CD -> ITS ST
+  @DeleteShipments @DeleteHubsViaDb #TODO: IMPLEMENT OTHER THAN  CD -> ITS ST
   Scenario Outline: Delete Schedules - Van Inbound w/o Trip (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator creates paths for "<type>" movement

@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.md;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -37,7 +38,7 @@ public class MdAutocomplete extends PageElement {
   }
 
   public void closeSuggestions() {
-    inputElement.click();
+    inputElement.sendKeys(Keys.ESCAPE);
   }
 
   public void selectItem(String value) {
