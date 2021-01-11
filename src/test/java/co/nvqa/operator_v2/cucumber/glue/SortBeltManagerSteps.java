@@ -189,6 +189,12 @@ public class SortBeltManagerSteps extends AbstractSteps {
         sortBeltManagerPage.duplicatedCombinationsTable.isEmpty());
   }
 
+  @When("^Operator verify there are no result under Unique Combination table$")
+  public void makeSureThereAreNoUniqueCombinations() {
+    assertTrue("Unique Combination table is empty",
+        sortBeltManagerPage.uniqueCombinationsTable.isEmpty());
+  }
+
   @When("Operator verifies that \"(.+)\" success notification is displayed")
   @And("Operator verifies that \"(.+)\" error notification is displayed")
   public void operatorVerifiesToast(String message) {
