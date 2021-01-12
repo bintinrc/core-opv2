@@ -49,38 +49,41 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
 
+  @DeleteShipments @DeleteHubsViaDb #TODO: IMPLEMENT ME
+  Scenario: Create Schedule (CD->CD) - Van Inbound w/ Trip (uid:46da887e-b5b5-4467-b3fa-523bc849e964)
+    Given no-op
+
   @DeleteShipments @DeleteHubsViaDb @RT #TODO: IMPLEMENT OTHER THAN  CD -> ITS ST
-  Scenario Outline: Create Schedule - Van Inbound w/o Trip - (<type>)- (<hiptest-uid>)
+  Scenario Outline: Create Schedule - Van Inbound w/o Trip - <type>- (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     Given API Operator creates paths for "<type>" movement
-    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 3 in movement_path table
+    Then DB Operator verifies number of path for "<type>" movement existence
     When API Operator creates schedules for "<type>" movement
-    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 3 in movement_path table
+    Then DB Operator verifies number of path for "<type>" movement existence
     When API Operator create multiple 1 new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
-    Then API Operator verify sla in movement events table for "<type>" movement
+    Then DB Operator verify sla in movement events table for "<type>" movement
     And DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
-    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
-    And DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 3 in movement_path table
-    Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id}" is not deleted in hub_relation_schedules
-    Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[4].id}" is not deleted in hub_relation_schedules
+    And DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
+    Then DB Operator verifies number of path for "<type>" movement existence after van inbound
+    And DB Operator verify created hub relation schedules is not deleted
     Examples:
       | type                    | hiptest-uid                              |
-      | CD->its ST              | uid:b1dc9df8-c0cd-4055-964b-45ae2eb4d08b |
+#      | CD->its ST              | uid:b1dc9df8-c0cd-4055-964b-45ae2eb4d08b |
 #      | CD->ST under another CD | uid:97f8988a-3e15-4c8a-8d3c-fdc3c8ce9393 |
 #      | ST->ST under same CD    | uid:c3a36fb3-4b0f-485e-bec8-598e29f394df |
-#      | ST->ST under diff CD    | uid:807955fd-7f34-4410-9a36-ea798d915ba4 |
+      | ST->ST under diff CD    | uid:807955fd-7f34-4410-9a36-ea798d915ba4 |
 #      | ST->its CD              | uid:3b64b309-0e5b-43c5-9ef4-0359678bb10e |
-#      | ST->another CD          | uid:1396e561-1368-4a21-9233-939b8eebe6cf |
+      | ST->another CD          | uid:1396e561-1368-4a21-9233-939b8eebe6cf |
 
   @DeleteShipments @DeleteHubsViaDb #TODO: IMPLEMENT OTHER THAN  CD -> ITS ST
   Scenario Outline: Delete Schedules - Van Inbound w/o Trip (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator creates paths for "<type>" movement
-    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 3 in movement_path table
+    Then DB Operator verifies number of path for "<type>" movement existence
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Operator refresh page
     And Movement Management page is loaded

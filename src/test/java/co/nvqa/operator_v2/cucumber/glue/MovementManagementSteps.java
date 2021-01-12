@@ -548,14 +548,14 @@ public class MovementManagementSteps extends AbstractSteps {
   @When("Operator deletes schedule for {string} movement")
   public void operatorDeletesScheduleForMovement(String scheduleType) {
     List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+    String crossdockHub = hubs.get(0).getName();
+    String destinationHub = hubs.get(1).getName();
     retryIfRuntimeExceptionOccurred(() -> {
       try {
         switch (scheduleType) {
           case "CD->CD":
             break;
           case "CD->its ST":
-            String crossdockHub = hubs.get(0).getName();
-            String destinationHub = hubs.get(1).getName();
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(crossdockHub);
             movementManagementPage.originStationHub.selectValue(crossdockHub);
