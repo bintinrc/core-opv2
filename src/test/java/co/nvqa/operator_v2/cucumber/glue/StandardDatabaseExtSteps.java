@@ -1188,11 +1188,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long destinationHubId;
     List<MovementPath> movementPaths;
     switch (scheduleType) {
-      case "ST->ST under diff CD":
       case "ST->ST under same CD":
-      case "ST->another CD":
-      case "CD->its ST":
       case "ST->its CD":
+      case "CD->its ST":
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths.forEach(movementPath -> {
@@ -1202,6 +1200,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         break;
       case "CD->CD":
       case "CD->ST under another CD":
+      case "ST->another CD":
+      case "ST->ST under diff CD":
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths.forEach(movementPath -> {
@@ -1219,15 +1219,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long destinationHubId;
     List<MovementPath> movementPaths;
     switch (scheduleType) {
-      case "ST->ST under diff CD":
       case "ST->ST under same CD":
-      case "ST->another CD":
       case "CD->its ST":
       case "ST->its CD":
-      case "CD->CD":
         dbOperatorVerifiesNumberOfPathForMovement(scheduleType);
         break;
       case "CD->ST under another CD":
+      case "ST->another CD":
+      case "ST->ST under diff CD":
+      case "CD->CD":
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths.forEach(movementPath -> {
@@ -1266,7 +1266,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("DB Operator verify created hub relation schedules is not deleted")
   public void dbOperatorVerifyHubRelationScheduleIsNotDeletedFor() {
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    List<HubRelation> createdHubRelations = hubRelations.subList(2,hubRelations.size());
+    List<HubRelation> createdHubRelations = hubRelations.subList(2, hubRelations.size());
     createdHubRelations.forEach(hubRelation -> {
       HubRelationSchedule hubRelationSchedule = getHubJdbc()
           .getHubRelationScheduleByHubRelationId(hubRelation.getId());
@@ -1299,6 +1299,26 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
       assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
       pause2s();
+    }
+  }
+
+  @Then("DB Operator verify sla in movement_events table for {string} no path for the following shipments from {string} to {string}:")
+  public void dbOperatorVerifySlaInMovementEventsTableForNoPathForTheFollowingShipmentsFromTo(
+      String scheduleType, String originHub, String destHub, List<String> shipmentIds) {
+    switch (scheduleType) {
+      case "CD->CD":
+      case "ST->ST under diff CD":
+      case "ST->another CD":
+      case "CD->ST under another CD":
+      case "ST->ST under same CD":
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "FAILED", originHub, destHub, shipmentIds);
+        break;
+      case "CD->its ST":
+      case "ST->its CD":
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "NOT FOUND", originHub, destHub, shipmentIds);
+        break;
     }
   }
 
@@ -1403,6 +1423,40 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
         break;
       case "ST->ST under diff CD":
+        pathBase = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
+            hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(3).getName(),
+            hubs.get(1).getName());
+        pathOptionOne =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(1), tripScheduleIds.get(2));
+        pathOptionTwo =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(1), tripScheduleIds.get(5));
+        pathOptionThree =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(4), tripScheduleIds.get(2));
+        pathOptionFour =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(4), tripScheduleIds.get(5));
+        String pathOptionFive =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(1), tripScheduleIds.get(2));
+        String pathOptionSix =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(1), tripScheduleIds.get(5));
+        String pathOptionSeven =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(4), tripScheduleIds.get(2));
+        String pathOptionEight =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(4), tripScheduleIds.get(5));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour, pathOptionFive,
+                pathOptionSix, pathOptionSeven, pathOptionEight));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour, pathOptionFive,
+                pathOptionSix, pathOptionSeven, pathOptionEight));
         break;
     }
   }

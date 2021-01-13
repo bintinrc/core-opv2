@@ -547,48 +547,57 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("Operator deletes schedule for {string} movement")
   public void operatorDeletesScheduleForMovement(String scheduleType) {
-    List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
-    String crossdockHub = hubs.get(0).getName();
-    String destinationHub = hubs.get(1).getName();
     retryIfRuntimeExceptionOccurred(() -> {
       try {
+        List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+        String originHub = hubs.get(0).getName();
+        String destinationHub = hubs.get(1).getName();
         switch (scheduleType) {
           case "CD->CD":
+            movementManagementPage.originCrossdockHub.selectValue(originHub);
+            movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
             break;
           case "CD->its ST":
             movementManagementPage.stationsTab.click();
-            movementManagementPage.crossdockHub.selectValue(crossdockHub);
-            movementManagementPage.originStationHub.selectValue(crossdockHub);
+            movementManagementPage.crossdockHub.selectValue(originHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
             movementManagementPage.destinationStationHub.selectValue(destinationHub);
-            movementManagementPage.loadSchedules.click();
-            movementManagementPage.modify.click();
-            movementManagementPage.rowCheckBox.check();
-            movementManagementPage.rowCheckBoxSecond.check();
-            movementManagementPage.delete.click();
-            movementManagementPage.modalDeleteButton.click();
-            movementManagementPage
-                .verifyNotificationWithMessage("2 schedule(s) have been deleted.");
-            assertThat("effecting path text is equal",
-                movementManagementPage.effectingPathText.getText(), equalTo("Effecting Paths"));
-            movementManagementPage.effectingPathClose.click();
-            assertThat("No results found is true",
-                movementManagementPage.noResultsFoundText.getText(),
-                equalTo("No Results Found"));
-            movementManagementPage.refreshPage();
-            // affected path dialog
-            // click delete again
             break;
           case "CD->ST under another CD":
+            destinationHub = hubs.get(2).getName();
+            movementManagementPage.originCrossdockHub.selectValue(originHub);
+            movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
             break;
           case "ST->ST under same CD":
-            break;
           case "ST->ST under diff CD":
+          case "ST->another CD":
+            destinationHub = hubs.get(2).getName();
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(destinationHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
             break;
           case "ST->its CD":
-            break;
-          case "ST->another CD":
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(destinationHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
             break;
         }
+        movementManagementPage.loadSchedules.click();
+        movementManagementPage.modify.click();
+        movementManagementPage.rowCheckBox.check();
+        movementManagementPage.rowCheckBoxSecond.check();
+        movementManagementPage.delete.click();
+        movementManagementPage.modalDeleteButton.click();
+        movementManagementPage
+            .verifyNotificationWithMessage("2 schedule(s) have been deleted.");
+        assertThat("effecting path text is equal",
+            movementManagementPage.effectingPathText.getText(), equalTo("Effecting Paths"));
+        movementManagementPage.effectingPathClose.click();
+        assertThat("No results found is true",
+            movementManagementPage.noResultsFoundText.getText(),
+            equalTo("No Results Found"));
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info(
