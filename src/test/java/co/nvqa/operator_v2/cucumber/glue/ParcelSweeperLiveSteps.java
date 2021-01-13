@@ -113,4 +113,9 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
     parcelSweeperLivePage.verifiesTags(expectedOrderTags);
   }
 
+  @Then("^Operator verify Prior tag on Parcel Sweeper Live page$")
+  public void operatorVerifyPriorTagOnParcelSweeperByHubPage() {
+    parcelSweeperLivePage.verifyPriorTag();
+  }
+
 }

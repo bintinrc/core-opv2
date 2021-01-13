@@ -220,4 +220,9 @@ public class GlobalInboundSteps extends AbstractSteps {
   public void operatorVerifyFailedTaggingToast() {
     globalInboundPage.verifyFailedTaggingToast("Tagging Failed: Order exceed 4 tags limit");
   }
+
+  @When("^Operator verifies prior tag is displayed$")
+  public void operatorVerifiesPriorTagIsDisplayed() {
+    globalInboundPage.verifiesPriorTag();
+  }
 }

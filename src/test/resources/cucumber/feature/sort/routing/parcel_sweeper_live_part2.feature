@@ -369,6 +369,44 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup at Distribution Point" on Edit Order page
 
+  @CloseNewWindows
+  Scenario: Parcel Sweeper Live - PRIOR Tag (uid:1becf42f-49a8-47f6-8cb8-a808abb4f9f3)
+    Given Operator go to menu Order -> All Orders
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When API Operator refresh created order data
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | orderId | NOT ROUTED |
+      | color   | #55a1e8    |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #55a1e8            |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | {KEY_CREATED_ORDER.destinationHub} |
+      | color   | #55a1e8                            |
+    Then Operator verify Prior tag on Parcel Sweeper Live page
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
