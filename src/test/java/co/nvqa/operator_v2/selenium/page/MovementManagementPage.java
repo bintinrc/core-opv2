@@ -129,9 +129,20 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//tr[1]//td[1]//input")
   public CheckBox rowCheckBox;
 
+  @FindBy(xpath = "//tr[2]//td[1]//input")
+  public CheckBox rowCheckBoxSecond;
+
   @FindBy(xpath = "//button[.='Delete' and contains(@class, 'ant-btn-primary')]")
   public Button modalDeleteButton;
 
+  @FindBy(xpath = "//div[@class='ant-modal-body']//div//span")
+  public TextBox effectingPathText;
+
+  @FindBy(xpath = "(//div[@class='ant-modal-content']//button[@aria-label='Close'])[2]")
+  public Button effectingPathClose;
+
+  @FindBy(xpath = "//span[.='No Results Found']")
+  public TextBox noResultsFoundText;
   //endregion
 
   public SchedulesTable schedulesTable;
