@@ -49,7 +49,7 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
 
-  @DeleteShipments @DeleteHubsViaDb
+  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Create Schedule (CD->CD) - Van Inbound w/ Trip (uid:46da887e-b5b5-4467-b3fa-523bc849e964)
     Given API Operator creates 3 new Hub using data below:
       | name         | GENERATED |
@@ -79,7 +79,7 @@ Feature: Path Invalidation - Without Trip
     And DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[3].id}" with type "AIR_HAUL" is created in movement_path table
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[3].id}" is 2 in movement_path table
 
-  @DeleteShipments @DeleteHubsViaDb
+  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
   Scenario Outline: Create Schedule - Van Inbound w/o Trip - <type>- (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator reloads hubs cache
@@ -106,7 +106,7 @@ Feature: Path Invalidation - Without Trip
       | ST->its CD              | uid:3b64b309-0e5b-43c5-9ef4-0359678bb10e |
       | ST->another CD          | uid:1396e561-1368-4a21-9233-939b8eebe6cf |
 
-  @DeleteShipments @DeleteHubsViaDb
+  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
   Scenario Outline: Delete Schedules - Van Inbound w/o Trip (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator creates paths for "<type>" movement
@@ -136,7 +136,7 @@ Feature: Path Invalidation - Without Trip
       | ST->its CD              | uid:f9c9b675-cd90-46c4-b049-487f333c00f4 |
       | ST->another CD          | uid:d69b831a-8078-44e3-a9c6-c4e9b55e7b05 |
 
-  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaD
+  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaD @SoftDeleteCrossdockDetailsViaDb
   Scenario: Create Hub - Van Inbound w/o Trip (uid:1ae0c8db-f594-49ee-a3d5-64c170f0bf74)
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
