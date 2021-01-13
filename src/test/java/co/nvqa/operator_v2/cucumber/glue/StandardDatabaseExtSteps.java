@@ -41,7 +41,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +66,13 @@ import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioManager> {
 
   private final String TRANSACTION_TYPE_DELIVERY = "DELIVERY";
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
 
   public StandardDatabaseExtSteps() {
   }
@@ -1188,9 +1194,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long destinationHubId;
     List<MovementPath> movementPaths;
     switch (scheduleType) {
-      case "ST->ST under same CD":
-      case "ST->its CD":
-      case "CD->its ST":
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_ITS_CD:
+      case HUB_CD_ITS_ST:
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths.forEach(movementPath -> {
@@ -1198,10 +1204,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         });
         assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
         break;
-      case "CD->CD":
-      case "CD->ST under another CD":
-      case "ST->another CD":
-      case "ST->ST under diff CD":
+      case HUB_CD_CD:
+      case HUB_CD_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_DIFF_CD:
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths.forEach(movementPath -> {
@@ -1219,15 +1225,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long destinationHubId;
     List<MovementPath> movementPaths;
     switch (scheduleType) {
-      case "ST->ST under same CD":
-      case "CD->its ST":
-      case "ST->its CD":
+      case HUB_ST_ST_SAME_CD:
+      case HUB_CD_ITS_ST:
+      case HUB_ST_ITS_CD:
         dbOperatorVerifiesNumberOfPathForMovement(scheduleType);
         break;
-      case "CD->ST under another CD":
-      case "ST->another CD":
-      case "ST->ST under diff CD":
-      case "CD->CD":
+      case HUB_CD_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_DIFF_CD:
+      case HUB_CD_CD:
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths.forEach(movementPath -> {
@@ -1306,16 +1312,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifySlaInMovementEventsTableForNoPathForTheFollowingShipmentsFromTo(
       String scheduleType, String originHub, String destHub, List<String> shipmentIds) {
     switch (scheduleType) {
-      case "CD->CD":
-      case "ST->ST under diff CD":
-      case "ST->another CD":
-      case "CD->ST under another CD":
-      case "ST->ST under same CD":
+      case HUB_CD_CD:
+      case HUB_ST_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_CD_ST_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
             "FAILED", originHub, destHub, shipmentIds);
         break;
-      case "CD->its ST":
-      case "ST->its CD":
+      case HUB_CD_ITS_ST:
+      case HUB_ST_ITS_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
             "NOT FOUND", originHub, destHub, shipmentIds);
         break;
