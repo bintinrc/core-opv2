@@ -53,6 +53,9 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-tag")
   public PageElement dpTag;
 
+  @FindBy(xpath = "//div[contains(@class,'prior-container')]/h5")
+  public PageElement priorTag;
+
   @FindBy(xpath = "//button[@aria-label='Use order tagging']")
   public Button useOrderTagging;
 
@@ -294,6 +297,11 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   public void verifiesDpTag() {
     String actualTag = dpTag.getText();
     assertEquals("DP tag", "DP PARCEL", actualTag);
+  }
+
+  public void verifiesPriorTag() {
+    String actualTag = priorTag.getText();
+    assertEquals("Prior tag", "PRIOR", actualTag);
   }
 
   public void addTag(List<String> orderTags) {
