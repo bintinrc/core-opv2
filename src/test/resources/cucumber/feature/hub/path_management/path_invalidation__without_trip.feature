@@ -136,9 +136,9 @@ Feature: Path Invalidation - Without Trip
       | ST->its CD              | uid:f9c9b675-cd90-46c4-b049-487f333c00f4 |
       | ST->another CD          | uid:d69b831a-8078-44e3-a9c6-c4e9b55e7b05 |
 
-  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaD @SoftDeleteCrossdockDetailsViaDb
+  @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaD @SoftDeleteCrossdockDetailsViaD
   Scenario: Create Hub - Van Inbound w/o Trip (uid:1ae0c8db-f594-49ee-a3d5-64c170f0bf74)
-    Given API Operator creates 2 new Hub using data below:
+    Given API Operator creates 1 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -146,12 +146,24 @@ Feature: Path Invalidation - Without Trip
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    Given API Operator creates 1 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    And API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator create new "STATIONS" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
     And Operator refresh page
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
-    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
+    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 2 in movement_path table
     Given API Operator creates 1 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -162,18 +174,16 @@ Feature: Path Invalidation - Without Trip
       | longitude    | GENERATED |
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is not deleted in hub_relation_schedules
+    Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}" is not deleted in hub_relation_schedules
     Given API Operator create multiple 1 new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    And API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:
+    Given API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
-    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
-    And DB Operator verify sla in movement_events table is succeed for the following data:
-      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[3].name} (sg)"],"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[4]}]},"crossdock_detail":null,"error_message":null} |
-      | shipmentIds | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                                                                                                                                                                                                                                                                         |
-    And DB Operator verify sla in movement_events table is succeed for the following data:
-      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[3].name} (sg)"],"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[5]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[6]}]},"crossdock_detail":null,"error_message":null} |
-      | shipmentIds | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}                                                                                                                                                                                                                                                                         |
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 2 in movement_path table
+    And DB Operator verify sla in movement_events table from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" is succeed for the following data:
+      | hubRelationIds | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} |
+      | shipmentIds    | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]},{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}           |
 
   @DeleteShipments @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Activate Hub - Van Inbound w/o Trip (uid:e9da5cec-13e2-4dff-8c2d-5c96ceab4fbf)

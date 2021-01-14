@@ -5,7 +5,7 @@ Feature: Path Invalidation - With Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @RT
+  @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Disable Hub - Van Inbound w/ Trip (uid:9508ba48-a19a-4632-bff5-1f58f51cfada)
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
@@ -88,14 +88,115 @@ Feature: Path Invalidation - With Trip
 
   @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Create Schedule (CD->CD) - Van Inbound w/ Trip (uid:46da887e-b5b5-4467-b3fa-523bc849e964)
-    Given no-op
+    Given API Operator creates 3 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create multiple 1 new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    And API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    And API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id}"
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[4].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 3
+    And API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 3
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 0 in movement_path table
+    Given API Operator shipment inbound scan with trip with data below:
+      | scanValue      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                   |
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]}              |
+    Given API Operator shipment inbound scan with trip with data below:
+      | scanValue      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}                   |
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[4].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[4]}              |
+    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[3].id}" with type "LAND_HAUL" is created in movement_path table
+    And DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[3].id}" with type "AIR_HAUL" is created in movement_path table
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[3].id}" is 2 in movement_path table
 
   @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Create Hub - Van Inbound w/ Trip (uid:81204411-101b-4a3e-9d27-1bc0a8799ca9)
-    Given no-op
+    Given API Operator creates 1 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    Given API Operator creates 1 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator create new "STATIONS" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    And Operator refresh page
+    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
+    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 2 in movement_path table
+    Given API Operator creates 1 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+    Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is not deleted in hub_relation_schedules
+    Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}" is not deleted in hub_relation_schedules
+    Given API Operator create multiple 1 new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator shipment inbound scan with trip with data below:
+      | scanValue      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                   |
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    Given API Operator shipment inbound scan with trip with data below:
+      | scanValue      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}                   |
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}              |
+    Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 2 in movement_path table
+    And DB Operator verify sla in movement_events table from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" is succeed for the following data:
+      | hubRelationIds | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} |
+      | shipmentIds    | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]},{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}           |
 
-  @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
-  Scenario Outline: Create Schedule - Van Inbound w/ Trip (<hiptest-uid>)
+  @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb @RT
+  Scenario Outline: Create Schedule - Van Inbound w/ Trip - <type> - (<hiptest-uid>)
     Given no-op
     Examples:
       | type                    | hiptest-uid                              |
@@ -107,10 +208,10 @@ Feature: Path Invalidation - With Trip
       | ST->another CD          | uid:126c6464-a9ed-4ec1-b231-404e17d43c55 |
 
   @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
-  Scenario Outline: Delete Schedule - Van Inbound w/ Trip (<hiptest-uid>)
+  Scenario Outline: Delete Schedule - Van Inbound w/ Trip - <type> - (<hiptest-uid>)
     Given no-op
     Examples:
-      | Type                    | hiptest-uid                              |
+      | type                    | hiptest-uid                              |
       | CD->CD                  | uid:d7b5f328-d925-49ec-b588-bf83361f94fd |
       | CD->its ST              | uid:7ac35d22-467d-4568-867a-1da0768aff76 |
       | CD->ST under another CD | uid:85bab802-0b36-4a43-b2e8-f290b4016c95 |
@@ -120,7 +221,7 @@ Feature: Path Invalidation - With Trip
       | ST->another CD          | uid:cf1708e4-be28-4f7e-b43d-5d8eeb2feab9 |
 
   @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
-  Scenario Outline: Update Hub Facility Type - Van Inbound w/ Trip (<hiptest-uid>)
+  Scenario Outline: Update Hub Facility Type - Van Inbound w/ Trip - <name> - (<hiptest-uid>)
     Given no-op
     Examples:
       | name                                           | hiptest-uid                              |
@@ -133,7 +234,7 @@ Feature: Path Invalidation - With Trip
       | Station to different Crossdock                 | uid:9fa1bb89-baad-480d-8e38-08c667ea1e2a |
 
   @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
-  Scenario Outline: Update Hub LatLong - Van Inbound w/ Trip (<hiptest-uid>)
+  Scenario Outline: Update Hub LatLong - Van Inbound w/ Trip - <name> - (<hiptest-uid>)
     Given no-op
     Examples:
       | name                                           | hiptest-uid                              |
@@ -146,7 +247,7 @@ Feature: Path Invalidation - With Trip
       | Station to different Crossdock                 | uid:bb9173f7-50ae-47c5-a59c-876d61a537b9 |
 
   @DeleteShipments @DeleteHubsViaDb @DeleteDriver @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCrossdockDetailsViaDb
-  Scenario Outline: Activate Hub - Van Inbound w/ Trip (<hiptest-uid>)
+  Scenario Outline: Activate Hub - Van Inbound w/ Trip - <name> - (<hiptest-uid>)
     Given no-op
     Examples:
       | name                                           | hiptest-uid                              |
