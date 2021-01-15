@@ -116,12 +116,9 @@ Feature: Route Monitoring
       | completionPercentage | 0                      |
       | totalWaypoint        | 1                      |
       | pendingCount         | 1                      |
-      | numLateAndPending    | 0                      |
       | successCount         | 0                      |
       | numInvalidFailed     | 0                      |
       | numValidFailed       | 0                      |
-      | earlyCount           | 0                      |
-      | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Delivery (uid:8ff7b641-6085-4a03-bd23-2fa7caddc4a3)
@@ -145,12 +142,9 @@ Feature: Route Monitoring
       | completionPercentage | 0                      |
       | totalWaypoint        | 1                      |
       | pendingCount         | 1                      |
-      | numLateAndPending    | 0                      |
       | successCount         | 0                      |
       | numInvalidFailed     | 0                      |
       | numValidFailed       | 0                      |
-      | earlyCount           | 0                      |
-      | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Delivery (uid:99109042-790f-49cb-a2a0-f39f9d99b788)
@@ -186,8 +180,6 @@ Feature: Route Monitoring
       | successCount         | 1                      |
       | numInvalidFailed     | 0                      |
       | numValidFailed       | 0                      |
-      | earlyCount           | 1                      |
-      | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Pickup (uid:7071c04a-8e7e-4cd8-8c8b-446e3e9798d9)
@@ -219,8 +211,6 @@ Feature: Route Monitoring
       | successCount         | 1                      |
       | numInvalidFailed     | 0                      |
       | numValidFailed       | 0                      |
-      | earlyCount           | 1                      |
-      | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Delivery - <type> (<hiptest-uid>)
@@ -259,8 +249,6 @@ Feature: Route Monitoring
       | successCount         | 0                      |
       | numInvalidFailed     | <numInvalidFailed>     |
       | numValidFailed       | <numValidFailed>       |
-      | earlyCount           | 1                      |
-      | lateCount            | 0                      |
     Examples:
       | type           | failureReasonCodeId | completionPercentage | numInvalidFailed | numValidFailed | hiptest-uid                              |
       | Valid Failed   | 2                   | 100                  | 0                | 1              | uid:c4fb6765-3c45-4c51-8e7a-1e1e91ce1f77 |
@@ -299,8 +287,6 @@ Feature: Route Monitoring
       | successCount         | 0                      |
       | numInvalidFailed     | <numInvalidFailed>     |
       | numValidFailed       | <numValidFailed>       |
-      | earlyCount           | 1                      |
-      | lateCount            | 0                      |
     Examples:
       | type           | failureReasonCodeId | completionPercentage | numInvalidFailed | numValidFailed | hiptest-uid                              |
       | Valid Failed   | 7                   | 100                  | 0                | 1              | uid:528bb29f-1f4f-4d52-b029-7787030289f1 |
@@ -758,7 +744,6 @@ Feature: Route Monitoring
       | routeId | {KEY_CREATED_ROUTE_ID}   |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId          | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels     | 3                      |
       | totalWaypoint    | 3                      |
       | numInvalidFailed | 3                      |
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
@@ -767,7 +752,7 @@ Feature: Route Monitoring
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
       | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].fromName}    |
+      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].toName}      |
       | tags         | -                                          |
     And Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
       | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -779,6 +764,11 @@ Feature: Route Monitoring
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -787,7 +777,7 @@ Feature: Route Monitoring
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
+    And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver fail the reservation using data below:
       | failureReasonFindMode  | findAdvance |
@@ -802,7 +792,7 @@ Feature: Route Monitoring
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId          | {KEY_CREATED_ROUTE_ID} |
       | totalParcels     | 1                      |
-      | totalWaypoint    | 1                      |
+      | totalWaypoint    | 2                      |
       | numInvalidFailed | 1                      |
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page

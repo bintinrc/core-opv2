@@ -158,13 +158,13 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage {
     public InvalidFailedWpModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-      invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
-      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
       invalidFailedDeliveriesTable = new InvalidFailedOrdersTable(webDriver);
       invalidFailedDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
+      invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
+      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
       invalidFailedReservationsTable = new InvalidFailedOrdersTable(webDriver);
       invalidFailedReservationsTable
-          .setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
+          .setTableLocator("(//div[contains(@class,'ant-card-body')])[4]");
     }
 
     public static class InvalidFailedOrdersTable extends AntTableV2<PendingPriorityOrder> {

@@ -127,8 +127,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
         .filterByColumn(COLUMN_ROUTE_ID, resolveValue(routeId));
     pause1s();
     routeMonitoringV2Page.routeMonitoringTable.clickColumn(1, COLUMN_INVALID_FAILED_WP);
-    routeMonitoringV2Page.invalidFailedWpModal.waitUntilVisible();
-    routeMonitoringV2Page.spinner.waitUntilInvisible();
+    routeMonitoringV2Page.invalidFailedWpModal.waitUntilLoaded();
   }
 
   @When("^Operator check there are (\\d+) Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page$")
