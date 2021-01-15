@@ -45,9 +45,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
   @When("^Operator filter Route Monitoring V2 using data below and then load selection:$")
   public void operatorFilterRouteMonitoringV2UsingDataBelowAndThenLoadSelection(
       Map<String, String> data) {
-    if (routeMonitoringV2Page.openFilters.isDisplayedFast()) {
-      routeMonitoringV2Page.openFilters.click();
-    }
+    routeMonitoringV2Page.expandFilters();
 
     data = resolveKeyValues(data);
     RouteMonitoringFilters filters = new RouteMonitoringFilters(data);
@@ -84,7 +82,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
     long start = new Date().getTime();
     while (routeMonitoringV2Page.routeMonitoringTable.isEmpty() && (new Date().getTime() - start
         <= timeout)) {
-      routeMonitoringV2Page.openFilters.click();
+      routeMonitoringV2Page.expandFilters();
       routeMonitoringV2Page.loadSelection.click();
       pause1s();
       routeMonitoringV2Page.smallSpinner.waitUntilInvisible();

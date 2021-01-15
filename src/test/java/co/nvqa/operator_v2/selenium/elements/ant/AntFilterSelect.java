@@ -26,7 +26,7 @@ public class AntFilterSelect extends PageElement {
 
   public void clearAll() {
     if (clearAll.isDisplayedFast()) {
-      clearAll.moveAndClick();
+      clearAll.click();
     }
   }
 

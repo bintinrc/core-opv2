@@ -1,7 +1,7 @@
 @OperatorV2 @Core @Order @EditOrder @Saas
 Feature: Edit Order
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -1020,19 +1020,19 @@ Feature: Edit Order
   Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"allow_doorstep_dropoff":<allow_doorstep_dropoff>,"enforce_delivery_verification":<enforce_delivery_verification>,"delivery_verification_mode":"<delivery_verification_mode>","is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"<delivery_verification_mode>","is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator set Delivery Verification Required to "<new_delivery_verification_mode>" on on Edit order page
     Then Operator verify Delivery Verification Required is "<new_delivery_verification_mode>" on on Edit order page
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE DELIVERY VERIFICATION |
     Examples:
-      | Note        | allow_doorstep_dropoff | enforce_delivery_verification | delivery_verification_mode | new_delivery_verification_mode | hiptest-uid                              |
-      | OTP to NONE | false                  | true                          | OTP                        | None                           | uid:faa86019-64a6-4755-aa51-252d4fe2dc38 |
-      | NONE to OTP | true                   | false                         | NONE                       | OTP                            | uid:f4cda665-1173-49a8-83ec-e261e69ae554 |
+      | Note        | delivery_verification_mode | new_delivery_verification_mode | hiptest-uid                              |
+      | OTP to NONE | OTP                        | None                           | uid:faa86019-64a6-4755-aa51-252d4fe2dc38 |
+      | NONE to OTP | NONE                       | OTP                            | uid:f4cda665-1173-49a8-83ec-e261e69ae554 |
 
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Hub Inbound Scan (uid:bc007800-0866-45e1-9b51-c80ab9a7fa88)
     Given Operator go to menu Shipper Support -> Blocked Dates
