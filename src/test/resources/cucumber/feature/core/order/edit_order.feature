@@ -1029,6 +1029,13 @@ Feature: Edit Order
     Then Operator verify Delivery Verification Required is "<new_delivery_verification_mode>" on on Edit order page
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE DELIVERY VERIFICATION |
+    When DB Operator get shipper ref metadata of created order
+    Then DB Operator make sure shipper ref metadata contains values:
+      | deliveryVerificationMode | <new_delivery_verification_mode> |
+    When DB Operator get order delivery verifications of created order
+    Then DB Operator make sure order delivery verifications contains values:
+      | deliveryVerificationMode | <new_delivery_verification_mode> |
+
     Examples:
       | Note        | delivery_verification_mode | new_delivery_verification_mode | hiptest-uid                              |
       | OTP to NONE | OTP                        | None                           | uid:faa86019-64a6-4755-aa51-252d4fe2dc38 |
@@ -1234,6 +1241,103 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Suggest Route on Edit Order Page - Delivery, Suggested Route Found (uid:9df8ffd8-1adb-4752-9769-14d3d03393ff)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-current-date-yyyy-MM-dd} 23:00:00", "dateTime": "{gradle-current-date-yyyy-MM-dd}T23:00:00+00:00" } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Delivery -> Add To Route on Edit Order page
+    And Operator suggest route of "{route-tag-name}" tag from the Route Finder on Edit Order Page
+    Then Operator verify Route value is "{KEY_CREATED_ROUTE_ID}" in Add To Route dialog on Edit Order Page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Suggest Route on Edit Order Page - Pickup, Suggested Route Found (uid:236f2423-0404-4db1-a4aa-79ef4ed3655f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-current-date-yyyy-MM-dd} 23:00:00", "dateTime": "{gradle-current-date-yyyy-MM-dd}T23:00:00+00:00" } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Pickup -> Add To Route on Edit Order page
+    And Operator suggest route of "{route-tag-name}" tag from the Route Finder on Edit Order Page
+    Then Operator verify Route value is "{KEY_CREATED_ROUTE_ID}" in Add To Route dialog on Edit Order Page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Suggest Route on Edit Order Page - Delivery, No Suggested Route Found (uid:4fc900dd-1ce2-4362-801c-63c2053ac0d1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-current-date-yyyy-MM-dd} 23:00:00", "dateTime": "{gradle-current-date-yyyy-MM-dd}T23:00:00+00:00" } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Delivery -> Add To Route on Edit Order page
+    And Operator suggest route of "{route-tag-name}" tag from the Route Finder on Edit Order Page
+    Then Operator verify Route value is "" in Add To Route dialog on Edit Order Page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Suggest Route on Edit Order Page - Pickup, No Suggested Route Found (uid:c3b9d6c1-c600-4d0d-aa24-c06476e2e32b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-current-date-yyyy-MM-dd} 23:00:00", "dateTime": "{gradle-current-date-yyyy-MM-dd}T23:00:00+00:00" } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Pickup -> Add To Route on Edit Order page
+    And Operator suggest route of "{route-tag-name}" tag from the Route Finder on Edit Order Page
+    Then Operator verify Route value is "" in Add To Route dialog on Edit Order Page
+
+  Scenario: Operator Resume a Cancelled Order on Edit Order page (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
+      | status                        | Cancelled |
+      | granularStatus                | Cancelled |
+      | lastPickupTransactionStatus   | Cancelled |
+      | lastDeliveryTransactionStatus | Cancelled |
+    And Operator resume order on Edit Order page
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify order event on Edit order page using data below:
+      | name | RESUME |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
