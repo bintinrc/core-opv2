@@ -66,7 +66,8 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
 
   public void verifyZoneInfo(String shortName, String name, String color) {
     if (StringUtils.isNotBlank(shortName)) {
-      String zoneShortName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h3[@class=\"zone-title\"]");
+      String zoneShortName = getText(
+          LOCATOR_ZONE_INFO_CONTAINER + "//h3[contains(@class,'zone-title')]");
       String zoneFullName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h5");
       if (!("NIL".equalsIgnoreCase(shortName))) {
         if ((zoneFullName != null && !zoneFullName.isEmpty())) {
@@ -83,6 +84,19 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_ZONE_INFO_CONTAINER, "background-color"));
       assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
+    }
+  }
+
+  public void verifyNextSortingHubInfo(String nextSort) {
+    if (StringUtils.isNotBlank(nextSort)) {
+      String actualNextSort = getText(
+          LOCATOR_ZONE_INFO_CONTAINER + "//h3[@class = 'next-sorting-node']");
+      if (!("NIL".equalsIgnoreCase(nextSort))) {
+        assertThat("Unexpected Next Sorting Hub Name", actualNextSort,
+            equalToIgnoringCase(nextSort));
+      } else {
+        assertThat("Unexpected Next Sorting Hub Name", "NIL", equalToIgnoringCase(nextSort));
+      }
     }
   }
 
