@@ -10,6 +10,10 @@ public class Button extends PageElement {
     super(webDriver, webElement);
   }
 
+  public Button(WebDriver webDriver, String xpath) {
+    super(webDriver, xpath);
+  }
+
   public Button(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
     super(webDriver, searchContext, webElement);
   }

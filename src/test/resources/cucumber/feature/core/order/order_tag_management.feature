@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @OrderTagManagement
+@OperatorV2 @Core @Order @OrderTagManagement @Debug
 Feature: Order Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -16,13 +16,13 @@ Feature: Order Tag Management
       | granular status | Pending Pickup                           |
     And Operator searches and selects orders created on Add Tags to Order page
     And Operator tags order with:
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
+      | {order-tag-name}   |
+      | {order-tag-name-2} |
+      | {order-tag-name-3} |
     Then Operator verify the tags shown on Edit Order page
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
+      | {order-tag-name}   |
+      | {order-tag-name-2} |
+      | {order-tag-name-3} |
     And DB Operator verify order_events record for the created order:
       | type | 48 |
 
@@ -31,20 +31,10 @@ Feature: Order Tag Management
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> Order Tag Management
-    And Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
-      | status          | Pending                                  |
-      | granular status | Pending Pickup                           |
-    And Operator searches and selects orders created on Add Tags to Order page
-    And Operator tags order with:
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
-    Then Operator verify the tags shown on Edit Order page
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
+    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
+      | {order-tag-id}   |
+      | {order-tag-id-2} |
+      | {order-tag-id-3} |
     When Operator go to menu Order -> Order Tag Management
     And Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
       | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
@@ -52,10 +42,10 @@ Feature: Order Tag Management
       | granular status | Pending Pickup                           |
     And Operator searches and selects orders created on Add Tags to Order page
     And Operator remove order tags:
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
+      | {order-tag-name}   |
+      | {order-tag-name-2} |
     Then Operator verify the tags shown on Edit Order page
-      | OPV2AUTO3 |
+      | {order-tag-name-3} |
     And DB Operator verify order_events record for the created order:
       | type | 48 |
 
@@ -64,6 +54,8 @@ Feature: Order Tag Management
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
+      | {order-tag-id} |
     When Operator go to menu Order -> Order Tag Management
     And Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
       | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
@@ -71,22 +63,12 @@ Feature: Order Tag Management
       | granular status | Pending Pickup                           |
     And Operator searches and selects orders created on Add Tags to Order page
     And Operator tags order with:
-      | OPV2AUTO1 |
+      | {order-tag-name-2} |
+      | {order-tag-name-3} |
     Then Operator verify the tags shown on Edit Order page
-      | OPV2AUTO1 |
-    When Operator go to menu Order -> Order Tag Management
-    And Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
-      | status          | Pending                                  |
-      | granular status | Pending Pickup                           |
-    And Operator searches and selects orders created on Add Tags to Order page
-    And Operator tags order with:
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
-    Then Operator verify the tags shown on Edit Order page
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
+      | {order-tag-name}   |
+      | {order-tag-name-2} |
+      | {order-tag-name-3} |
     And DB Operator verify order_events record for the created order:
       | type | 48 |
 
