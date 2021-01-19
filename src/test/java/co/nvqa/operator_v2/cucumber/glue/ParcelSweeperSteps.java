@@ -82,6 +82,28 @@ public class ParcelSweeperSteps extends AbstractSteps {
     parcelSweeperPage.verifyZoneInfo(zoneShortName, zoneName, color);
   }
 
+  @Then("^Operator verify Next Sorting Hub on Parcel Sweeper page using data below:$")
+  public void operatorVerifyNextSortingHubOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData) {
+    String zoneName = mapOfData.get("nextSortingHub");
+    String zoneShortName = new String();
+    if (StringUtils.equalsIgnoreCase(zoneName, "FROM CREATED ORDER")) {
+      Order order = get(KEY_CREATED_ORDER);
+      Transaction deliveryTransaction = order.getTransactions().stream()
+          .filter(transaction -> "DELIVERY".equalsIgnoreCase(transaction.getType()))
+          .findFirst()
+          .orElseThrow(() -> new RuntimeException(
+              "Could not find DELIVERY transaction for order [" + order.getId() + "]"));
+      List<Zone> zones = get(KEY_LIST_OF_ZONE_PREFERENCES);
+      Zone routingZone = zones.stream().filter(
+          zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
+          .findFirst()
+          .orElseThrow(() -> new RuntimeException(
+              "Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
+      zoneShortName = f("%s", routingZone.getShortName());
+    }
+    parcelSweeperPage.verifyNextSortingHubInfo(zoneShortName);
+  }
+
   @Then("^Operator verify Destination Hub on Parcel Sweeper page using data below:$")
   public void operatorVerifyDestinationHubOnParcelSweeperPageUsingDataBelow(
       Map<String, String> mapOfData) {

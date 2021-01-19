@@ -1202,6 +1202,195 @@ Feature: Sort Belt Manager
     When Operator click Confirm button on Configuration Summary page
     Then Operator verifies that "Configuration Updated" success notification is displayed
 
+  Scenario: Remove Combination from an Arm (uid:33f93f97-cb49-49a0-bd7e-a522f03935cd)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And Operator go to menu Sort -> Sort Belt Manager
+    And Sort Belt Manager page is loaded
+    And Operator select the hub of Sort Belt Manager
+      | hubName | JKB |
+    And Operator select the device id of Sort Belt Manager
+      | deviceId | Hello |
+    And Operator click Proceed button on Sort Belt Manager page
+    And Operator click Create Configuration button
+    And Operator fill data in Create Configuration modal:
+      | firstFilter  | Destination Hubs |
+      | secondFilter | Order Tags       |
+    And Operator input Configuration name and description
+      | configName  | AUTO {gradle-current-date-yyyyMMddHHmmsss} |
+      | description | Created for test automation purposes       |
+    And Operator select combination value for "Arm 1"
+      | status          | Enabled    |
+      | destinationHubs | {hub-name} |
+      | orderTags       | OPV2AUTO1  |
+    And Operator add combination value for "Arm 1"
+      | destinationHubs | {hub-name-3} |
+      | orderTags       | OPV2AUTO2    |
+    And Operator select combination value for "Arm 2"
+      | status | Disabled |
+    And Operator select combination value for "Arm 3"
+      | status | Disabled |
+    And Operator select combination value for "Arm 4"
+      | status | Disabled |
+    And Operator select combination value for "Arm 5"
+      | status | Disabled |
+    And Operator select combination value for "Arm 6"
+      | status | Disabled |
+    And Operator select combination value for "Arm 7"
+      | status | Disabled |
+    And Operator select combination value for "Arm 8"
+      | status | Disabled |
+    And Operator select combination value for "Arm 9"
+      | status | Disabled |
+    And Operator select combination value for "Arm 10"
+      | status | Disabled |
+    And Operator select combination value for "Arm 11"
+      | status | Disabled |
+    And Operator select combination value for "Arm 12"
+      | status | Disabled |
+    And Operator select combination value for "Arm 13"
+      | status | Disabled |
+    And Operator select combination value for "Arm 14"
+      | status | Disabled |
+    And Operator select combination value for "Arm 15"
+      | status | Disabled |
+    And Operator click Confirm button on Create Configuration page
+    And Operator click Confirm button on Configuration Summary page
+    And Operator verifies that "Configuration Created" success notification is displayed
+    When Operator click Edit Configuration button on Sort Belt Manager page
+    And Operator remove 2 combination for "Arm 1"
+    And Operator click Confirm button on Edit Configuration page
+    Then Operator verify there are no result under Duplicate Combination table
+    And Operator verifies combination appears under Unique Combination table:
+      | armOutput      | Arm 1      |
+      | destinationHub | {hub-name} |
+      | orderTag       | OPV2AUTO1  |
+    When Operator click Confirm button on Configuration Summary page
+    Then Operator verifies that "Configuration Updated" success notification is displayed
+
+  Scenario: Change Active Configuration (uid:771d3341-7f52-4046-b055-5ff2797dca23)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And Operator go to menu Sort -> Sort Belt Manager
+    And Sort Belt Manager page is loaded
+    And Operator select the hub of Sort Belt Manager
+      | hubName | JKB |
+    And Operator select the device id of Sort Belt Manager
+      | deviceId | Hello |
+    And Operator click Proceed button on Sort Belt Manager page
+    And Operator click Create Configuration button
+    And Operator fill data in Create Configuration modal:
+      | firstFilter  | Destination Hubs |
+      | secondFilter | Order Tags       |
+    And Operator input Configuration name and description
+      | configName  | AUTO {gradle-current-date-yyyyMMddHHmmsss} |
+      | description | Created for test automation purposes       |
+    And Operator select combination value for "Arm 1"
+      | status          | Enabled    |
+      | destinationHubs | {hub-name} |
+      | orderTags       | OPV2AUTO1  |
+    And Operator select combination value for "Arm 2"
+      | status | Disabled |
+    And Operator select combination value for "Arm 3"
+      | status | Disabled |
+    And Operator select combination value for "Arm 4"
+      | status | Disabled |
+    And Operator select combination value for "Arm 5"
+      | status | Disabled |
+    And Operator select combination value for "Arm 6"
+      | status | Disabled |
+    And Operator select combination value for "Arm 7"
+      | status | Disabled |
+    And Operator select combination value for "Arm 8"
+      | status | Disabled |
+    And Operator select combination value for "Arm 9"
+      | status | Disabled |
+    And Operator select combination value for "Arm 10"
+      | status | Disabled |
+    And Operator select combination value for "Arm 11"
+      | status | Disabled |
+    And Operator select combination value for "Arm 12"
+      | status | Disabled |
+    And Operator select combination value for "Arm 13"
+      | status | Disabled |
+    And Operator select combination value for "Arm 14"
+      | status | Disabled |
+    And Operator select combination value for "Arm 15"
+      | status | Disabled |
+    And Operator click Confirm button on Create Configuration page
+    And Operator click Confirm button on Configuration Summary page
+    And Operator verifies that "Configuration Created" success notification is displayed
+    When Operator save active configuration value on Sort Belt Manager page
+    And Operator change active configuration to "{KEY_CREATED_SORT_BELT_CONFIG}" on Sort Belt Manager page
+    Then Operator verifies that "Configuration Activated" success notification is displayed
+    And Operator verify active configuration values on Sort Belt Manager page:
+      | activeConfiguration   | {KEY_CREATED_SORT_BELT_CONFIG}   |
+      | previousConfiguration | {KEY_ACTIVE_SORT_BELT_CONFIG}    |
+      | lastChangedAt         | {gradle-current-date-yyyy-MM-dd} |
+
+  Scenario: Disable Arm (uid:b9e3f527-bf57-49c0-a36f-cb988ae38e88)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Belt Manager
+    And Sort Belt Manager page is loaded
+    And Operator select the hub of Sort Belt Manager
+      | hubName | JKB |
+    And Operator select the device id of Sort Belt Manager
+      | deviceId | Hello |
+    And Operator click Proceed button on Sort Belt Manager page
+    And Operator click Create Configuration button
+    And Operator fill data in Create Configuration modal:
+      | firstFilter  | Destination Hubs |
+      | secondFilter | Order Tags       |
+    And Operator input Configuration name and description
+      | configName  | AUTO {gradle-current-date-yyyyMMddHHmmsss} |
+      | description | Created for test automation purposes       |
+    And Operator select combination value for "Arm 1"
+      | status          | Enabled    |
+      | destinationHubs | {hub-name} |
+      | orderTags       | OPV2AUTO1  |
+    And Operator select combination value for "Arm 2"
+      | status          | Enabled      |
+      | destinationHubs | {hub-name-3} |
+      | orderTags       | OPV2AUTO2    |
+    And Operator select combination value for "Arm 3"
+      | status | Disabled |
+    And Operator select combination value for "Arm 4"
+      | status | Disabled |
+    And Operator select combination value for "Arm 5"
+      | status | Disabled |
+    And Operator select combination value for "Arm 6"
+      | status | Disabled |
+    And Operator select combination value for "Arm 7"
+      | status | Disabled |
+    And Operator select combination value for "Arm 8"
+      | status | Disabled |
+    And Operator select combination value for "Arm 9"
+      | status | Disabled |
+    And Operator select combination value for "Arm 10"
+      | status | Disabled |
+    And Operator select combination value for "Arm 11"
+      | status | Disabled |
+    And Operator select combination value for "Arm 12"
+      | status | Disabled |
+    And Operator select combination value for "Arm 13"
+      | status | Disabled |
+    And Operator select combination value for "Arm 14"
+      | status | Disabled |
+    And Operator select combination value for "Arm 15"
+      | status | Disabled |
+    And Operator click Confirm button on Create Configuration page
+    And Operator click Confirm button on Configuration Summary page
+    And Operator verifies that "Configuration Created" success notification is displayed
+    When Operator click Edit Configuration button on Sort Belt Manager page
+    And Operator select combination value for "Arm 2"
+      | status | Disabled |
+    And Operator click Confirm button on Edit Configuration page
+    Then Operator verify there are no result under Duplicate Combination table
+    And Operator verifies combination appears under Unique Combination table:
+      | armOutput      | Arm 1      |
+      | destinationHub | {hub-name} |
+      | orderTag       | OPV2AUTO1  |
+    When Operator click Confirm button on Configuration Summary page
+    Then Operator verifies that "Configuration Updated" success notification is displayed
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

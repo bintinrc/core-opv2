@@ -93,6 +93,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
     sortBeltManagerPage.nameInput.setValue(name);
     sortBeltManagerPage.descriptionInput.setValue(description);
     put(KEY_CREATED_SORT_BELT_CONFIG, name);
+    putInList(KEY_LIST_OF_CREATED_SORT_BELT_CONFIGS, name);
   }
 
   @When("^Make sure new configuration is not created$")
@@ -116,6 +117,12 @@ public class SortBeltManagerSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(orderTags)) {
       container.getFilterSelect("Order Tag", 1).selectValue(orderTags);
     }
+  }
+
+  @Given("Operator remove {int} combination for {string}")
+  public void operatorRemoveCombination(int index, String armName) {
+    armName = resolveValue(armName);
+    sortBeltManagerPage.getArmCombinationContainer(armName).getRemoveButton(index).click();
   }
 
   @Given("^Operator add combination value for \"([^\"]*)\"$")
@@ -263,5 +270,39 @@ public class SortBeltManagerSteps extends AbstractSteps {
   @When("Operator click Confirm button in Change Unassigned Parcel Arm modal")
   public void operatorClickConfirmButtonInChangeUnassignedParcelArmModal() {
     sortBeltManagerPage.changeUnassignedParcelArmModal.confirm.click();
+  }
+
+  @When("Operator save active configuration value on Sort Belt Manager page")
+  public void operatorSaveActiveConfigurationValue() {
+    put(KEY_ACTIVE_SORT_BELT_CONFIG, sortBeltManagerPage.getActiveConfiguration());
+  }
+
+  @When("Operator change active configuration to {string} on Sort Belt Manager page")
+  public void operatorChangeActiveConfigurationValue(String value) {
+    value = resolveValue(value);
+    sortBeltManagerPage.change.click();
+    sortBeltManagerPage.changeActiveConfigurationModal.waitUntilClickable();
+    sortBeltManagerPage.changeActiveConfigurationModal.configuration.selectValue(value);
+    sortBeltManagerPage.changeActiveConfigurationModal.confirm.click();
+    sortBeltManagerPage.changeActiveConfigurationModal.waitUntilInvisible();
+  }
+
+  @When("Operator verify active configuration values on Sort Belt Manager page:")
+  public void operatorVerifyActiveConfigurationValueS(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String expected = data.get("activeConfiguration");
+    if (StringUtils.isNotBlank(expected)) {
+      assertEquals("Active Configuration", expected, sortBeltManagerPage.getActiveConfiguration());
+    }
+    expected = data.get("previousConfiguration");
+    if (StringUtils.isNotBlank(expected)) {
+      assertEquals("Previous Configuration", expected,
+          sortBeltManagerPage.getPreviousConfiguration());
+    }
+    expected = data.get("lastChangedAt");
+    if (StringUtils.isNotBlank(expected)) {
+      assertThat("Last Changed At", sortBeltManagerPage.getLastChangedAt(),
+          Matchers.startsWith(expected));
+    }
   }
 }

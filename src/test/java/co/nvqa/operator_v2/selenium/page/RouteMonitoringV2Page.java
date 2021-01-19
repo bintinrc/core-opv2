@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,14 +22,17 @@ import org.openqa.selenium.support.PageFactory;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class RouteMonitoringV2Page extends OperatorV2SimplePage {
 
-  @FindBy(css = ".ant-spin")
+  @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;
+
+  @FindBy(css = ".ant-collapse-header")
+  public PageElement collapseHeader;
+
+  @FindBy(css = "i.ant-collapse-arrow")
+  public PageElement collapseArrow;
 
   @FindBy(css = ".anticon-loading")
   public PageElement smallSpinner;
-
-  @FindBy(css = "div.ant-collapse-header i.ant-collapse-arrow")
-  public Button openFilters;
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -57,6 +61,12 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage {
 
   public void switchTo() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
+  }
+
+  public void expandFilters() {
+    if (StringUtils.equalsIgnoreCase(collapseHeader.getAttribute("aria-expanded"), "false")) {
+      collapseArrow.click();
+    }
   }
 
   public static class RouteMonitoringTable extends AntTableV2<RouteMonitoringParams> {
@@ -148,13 +158,13 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage {
     public InvalidFailedWpModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-      invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
-      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
       invalidFailedDeliveriesTable = new InvalidFailedOrdersTable(webDriver);
       invalidFailedDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
+      invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
+      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
       invalidFailedReservationsTable = new InvalidFailedOrdersTable(webDriver);
       invalidFailedReservationsTable
-          .setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
+          .setTableLocator("(//div[contains(@class,'ant-card-body')])[4]");
     }
 
     public static class InvalidFailedOrdersTable extends AntTableV2<PendingPriorityOrder> {
