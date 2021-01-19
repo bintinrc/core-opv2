@@ -1297,7 +1297,10 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Add To Route on Edit Order page
     And Operator suggest route of "{route-tag-name}" tag from the Route Finder on Edit Order Page
-    Then Operator verify Route value is "" in Add To Route dialog on Edit Order Page
+    Then Operator verifies that error toast displayed:
+      | top    | Error trying to suggest route            |
+      | bottom | No waypoints to suggest after filtering! |
+    And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
 
   @DeleteOrArchiveRoute
   Scenario: Operator Suggest Route on Edit Order Page - Pickup, No Suggested Route Found (uid:c3b9d6c1-c600-4d0d-aa24-c06476e2e32b)
@@ -1312,7 +1315,10 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Add To Route on Edit Order page
     And Operator suggest route of "{route-tag-name}" tag from the Route Finder on Edit Order Page
-    Then Operator verify Route value is "" in Add To Route dialog on Edit Order Page
+    Then Operator verifies that error toast displayed:
+      | top    | Error trying to suggest route            |
+      | bottom | No waypoints to suggest after filtering! |
+    And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
 
   Scenario: Operator Resume a Cancelled Order on Edit Order page (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
     Given API Shipper create V4 order using data below:

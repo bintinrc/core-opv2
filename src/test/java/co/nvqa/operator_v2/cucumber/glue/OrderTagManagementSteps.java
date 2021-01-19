@@ -106,16 +106,17 @@ public class OrderTagManagementSteps extends AbstractSteps {
 
   @And("^Operator tags order with:$")
   public void operatorTagsOrderWith(List<String> orderTag) {
-    orderTagManagementPage.addTag(orderTag);
+    orderTagManagementPage.addTag(resolveValues(orderTag));
   }
 
   @And("^Operator remove order tags:$")
   public void operatorRemoveOrderTags(List<String> orderTag) {
-    orderTagManagementPage.removeTag(orderTag);
+    orderTagManagementPage.removeTag(resolveValues(orderTag));
   }
 
   @And("^Operator verify the tags shown on Edit Order page$")
   public void operatorVerifyTheTagsShownOnEditOrderPage(List<String> expectedOrderTags) {
+    expectedOrderTags = resolveValues(expectedOrderTags);
     Order order = get(KEY_CREATED_ORDER);
 
     navigateTo(

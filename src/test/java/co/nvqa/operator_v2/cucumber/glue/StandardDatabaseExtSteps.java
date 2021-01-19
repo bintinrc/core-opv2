@@ -41,7 +41,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -229,12 +228,11 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     List<Integer> types = mapOfData.asList(Integer.class);
     types.forEach(type ->
-    {
-      OrderEventEntity event = orderEvents.stream()
-          .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), type)).findFirst()
-          .orElseThrow(() -> new IllegalArgumentException(
-              f("No order event with type %s is found in order events DB table", type)));
-    });
+        orderEvents.stream()
+            .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), type))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                f("No order event with type %s is found in order events DB table", type))));
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -362,33 +360,30 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()),
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
-    assertEquals("Transaction entity is not as expected in db", order.getFromAddress1(),
-        entity.getAddress1());
-    assertEquals("Transaction entity is not as expected in db", order.getFromAddress2(),
-        entity.getAddress2());
-    assertEquals("Transaction entity is not as expected in db", order.getFromPostcode(),
-        entity.getPostcode());
-    assertEquals("Transaction entity is not as expected in db", order.getFromCity(),
-        entity.getCity());
-    assertEquals("Transaction entity is not as expected in db", order.getFromCountry(),
-        entity.getCountry());
-    assertEquals("Transaction entity is not as expected in db", order.getFromName(),
-        entity.getName());
-    assertEquals("Transaction entity is not as expected in db", order.getFromEmail(),
-        entity.getEmail());
-    assertEquals("Transaction entity is not as expected in db", order.getFromContact(),
-        entity.getContact());
+    assertEquals("From Address 1", order.getFromAddress1(),
+        StringUtils.normalizeSpace(entity.getAddress1()));
+    assertEquals("From Address 2", order.getFromAddress2(),
+        StringUtils.normalizeSpace(entity.getAddress2()));
+    assertEquals("From Postcode", order.getFromPostcode(),
+        StringUtils.normalizeSpace(entity.getPostcode()));
+    assertEquals("From City", order.getFromCity(), StringUtils.normalizeSpace(entity.getCity()));
+    assertEquals("From Country", order.getFromCountry(),
+        StringUtils.normalizeSpace(entity.getCountry()));
+    assertEquals("From Name", order.getFromName(), StringUtils.normalizeSpace(entity.getName()));
+    assertEquals("From Email", order.getFromEmail(), StringUtils.normalizeSpace(entity.getEmail()));
+    assertEquals("From Contact", order.getFromContact(),
+        StringUtils.normalizeSpace(entity.getContact()));
     ZonedDateTime entityStartDateTime = ZonedDateTime
         .parse(entity.getStartTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
     ZonedDateTime entityEndDateTime = ZonedDateTime
         .parse(entity.getEndTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Pickup start date/time",
         order.getPickupDate() + " " + TIME_FORMATTER_1
             .format(order.getPickupTimeslot().getStartTime()),
         DateUtil.displayDateTime(entityStartDateTime));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Pickup end date/time",
         order.getPickupDate() + " " + TIME_FORMATTER_1
             .format(order.getPickupTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
@@ -404,33 +399,30 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()),
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
-    assertEquals("Transaction entity is not as expected in db", order.getToAddress1(),
-        entity.getAddress1());
-    assertEquals("Transaction entity is not as expected in db", order.getToAddress2(),
-        entity.getAddress2());
-    assertEquals("Transaction entity is not as expected in db", order.getToPostcode(),
-        entity.getPostcode());
-    assertEquals("Transaction entity is not as expected in db", order.getToCity(),
-        entity.getCity());
-    assertEquals("Transaction entity is not as expected in db", order.getToCountry(),
-        entity.getCountry());
-    assertEquals("Transaction entity is not as expected in db", order.getToName(),
-        entity.getName());
-    assertEquals("Transaction entity is not as expected in db", order.getToEmail(),
-        entity.getEmail());
-    assertEquals("Transaction entity is not as expected in db", order.getToContact(),
-        entity.getContact());
+    assertEquals("To Address 1", order.getToAddress1(),
+        StringUtils.normalizeSpace(entity.getAddress1()));
+    assertEquals("To Address 2", order.getToAddress2(),
+        StringUtils.normalizeSpace(entity.getAddress2()));
+    assertEquals("To Postcode", order.getToPostcode(),
+        StringUtils.normalizeSpace(entity.getPostcode()));
+    assertEquals("To City", order.getToCity(), StringUtils.normalizeSpace(entity.getCity()));
+    assertEquals("To Country", order.getToCountry(),
+        StringUtils.normalizeSpace(entity.getCountry()));
+    assertEquals("To Name", order.getToName(), StringUtils.normalizeSpace(entity.getName()));
+    assertEquals("To Email", order.getToEmail(), StringUtils.normalizeSpace(entity.getEmail()));
+    assertEquals("To Contact", order.getToContact(),
+        StringUtils.normalizeSpace(entity.getContact()));
     ZonedDateTime entityStartDateTime = ZonedDateTime
         .parse(entity.getStartTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
     ZonedDateTime entityEndDateTime = ZonedDateTime
         .parse(entity.getEndTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Delivery start date/time",
         order.getDeliveryDate() + " " + TIME_FORMATTER_1
             .format(order.getDeliveryTimeslot().getStartTime()),
         DateUtil.displayDateTime(entityStartDateTime));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Delivery end date/time",
         order.getDeliveryDate() + " " + TIME_FORMATTER_1
             .format(order.getDeliveryTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
@@ -477,22 +469,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
     if (Objects.nonNull(address1)) {
       assertEquals("Address1 in Transaction entity is not as expected in db", address1,
-          entity.getAddress1());
+          StringUtils.normalizeSpace(entity.getAddress1()));
     }
     if (Objects.nonNull(address2)) {
       assertEquals("Address2 in Transaction entity is not as expected in db", address2,
-          entity.getAddress2());
+          StringUtils.normalizeSpace(entity.getAddress2()));
     }
     if (Objects.nonNull(city)) {
-      assertEquals("City in Transaction entity is not as expected in db", city, entity.getCity());
+      assertEquals("City in Transaction entity is not as expected in db", city,
+          StringUtils.normalizeSpace(entity.getCity()));
     }
     if (Objects.nonNull(country)) {
       assertEquals("Country in Transaction entity is not as expected in db", country,
-          entity.getCountry());
+          StringUtils.normalizeSpace(entity.getCountry()));
     }
     if (Objects.nonNull(postcode)) {
       assertEquals("Postcode in Transaction entity is not as expected in db", postcode,
-          entity.getPostcode());
+          StringUtils.normalizeSpace(entity.getPostcode()));
     }
     if (Objects.nonNull(routeId)) {
       Integer routeIdInt =
@@ -939,39 +932,35 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   private void validatePickupInWaypointRecord(Order order, String transactionType,
       long waypointId) {
-    Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
-
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
     assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), order.getFromCity(),
-        actualWaypoint.getCity());
+        StringUtils.normalizeSpace(actualWaypoint.getCity()));
     assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getFromCountry(),
-        actualWaypoint.getCountry());
+        StringUtils.normalizeSpace(actualWaypoint.getCountry()));
     assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId),
-        order.getFromAddress1(), actualWaypoint.getAddress1());
+        order.getFromAddress1(), StringUtils.normalizeSpace(actualWaypoint.getAddress1()));
     assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId),
-        order.getFromAddress2(), actualWaypoint.getAddress2());
+        order.getFromAddress2(), StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
     assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId),
-        order.getFromPostcode(), actualWaypoint.getPostcode());
+        order.getFromPostcode(), StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
     assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
         order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
   }
 
   private void validateDeliveryInWaypointRecord(Order order, String transactionType,
       long waypointId) {
-    Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
-
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
     assertEquals(f("%s waypoint [%d] city", transactionType, waypointId),
         Objects.isNull(order.getToCity()) ? "" :
             order.getToCity(), actualWaypoint.getCity());
     assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getToCountry(),
-        actualWaypoint.getCountry());
+        StringUtils.normalizeSpace(actualWaypoint.getCountry()));
     assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getToAddress1(),
-        actualWaypoint.getAddress1());
+        StringUtils.normalizeSpace(actualWaypoint.getAddress1()));
     assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getToAddress2(),
-        actualWaypoint.getAddress2());
+        StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
     assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getToPostcode(),
-        actualWaypoint.getPostcode());
+        StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
     if (Objects.nonNull(order.getDeliveryTimeslot())) {
       assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
           order.getDeliveryTimeslot().getId(),
@@ -1175,9 +1164,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     List<MovementPath> movementPaths = getHubJdbc()
         .getAllMovementPath(originHubId, destinationHubId);
-    movementPaths.forEach(movementPath -> {
-      putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId());
-    });
+    movementPaths
+        .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
     assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
   }
 
@@ -1193,9 +1181,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case "CD->its ST":
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
-        movementPaths.forEach(movementPath -> {
-          putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId());
-        });
+        movementPaths
+            .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
         assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
         break;
       case "CD->CD":
@@ -1204,9 +1191,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case "ST->ST under diff CD":
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
-        movementPaths.forEach(movementPath -> {
-          putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId());
-        });
+        movementPaths
+            .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
         assertThat("Movement path length is equal", movementPaths.size(), equalTo(2));
         break;
     }
@@ -1230,9 +1216,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case "CD->CD":
         destinationHubId = createdHubs.get(1).getId();
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
-        movementPaths.forEach(movementPath -> {
-          putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId());
-        });
+        movementPaths
+            .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
         assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
         break;
     }
@@ -1329,10 +1314,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long resolvedDestinationHubId = Long.valueOf(resolveValue(destinationHubId));
     List<MovementPath> movementPaths = getHubJdbc()
         .getAllMovementPath(resolvedOriginHubId, resolvedDestinationHubId);
-    movementPaths.forEach(movementPath -> {
-      assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(),
-          notNullValue());
-    });
+    movementPaths.forEach(movementPath ->
+        assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(),
+            notNullValue()));
   }
 
   @When("DB Operator verify sla in movement_events table is succeed for the following data:")

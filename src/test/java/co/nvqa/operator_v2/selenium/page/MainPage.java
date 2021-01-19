@@ -1,13 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Soewandi Wirjawan
@@ -17,6 +20,9 @@ public class MainPage extends OperatorV2SimplePage {
 
   private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
   private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
+
+  @FindBy(css = "button[aria-label='Open Sidenav']")
+  public Button openSideNav;
 
   static {
     MAP_OF_END_URL.put("1. Create Route Groups", "transactions/v2");
@@ -144,26 +150,31 @@ public class MainPage extends OperatorV2SimplePage {
     }
     webDriver.switchTo().defaultContent();
     closeDialogIfVisible();
-    if (isElementVisible("//i[@ng-if='!showLogo()']")) {
-      openNavigationPanel();
-    }
+    openNavigationPanel();
     String mainDashboard = grabEndURL(navTitle);
     clickNavigation(parentTitle, navTitle, mainDashboard);
   }
 
   public void openNavigationPanel() {
-    clickButtonByAriaLabel("Open Sidenav");
+    if (isElementVisible("//i[@ng-if='!showLogo()']")) {
+      openSideNav.click();
+    }
   }
 
   public void clickNavigation(String parentTitle, String navTitle, String urlPart) {
-    String childNavXpath = String.format("//nv-section-item/button[div='%s']", navTitle);
-    String parentNavXpath = String.format("//nv-section-header/button[span='%s']", parentTitle);
+    Button childNav = new Button(getWebDriver(), f("//nv-section-item/button[div='%s']", navTitle));
+    Button parentNav = new Button(getWebDriver(),
+        f("//nv-section-header/button[span='%s']", parentTitle));
 
     for (int i = 0; i < 2; i++) {
-      WebElement childNavWe = findElementByXpath(childNavXpath);
-
-      if (!childNavWe.isDisplayed()) {
-        click(parentNavXpath);
+      if (!childNav.isDisplayedFast()) {
+        try {
+          parentNav.click();
+        } catch (JavascriptException ex) {
+          refreshPage();
+          openNavigationPanel();
+          parentNav.click();
+        }
         pause200ms();
         closeDialogIfVisible();
       }
@@ -171,9 +182,9 @@ public class MainPage extends OperatorV2SimplePage {
       pause100ms();
       boolean refreshPage = true;
 
-      if (childNavWe.isDisplayed()) {
+      if (childNav.isDisplayedFast()) {
         try {
-          childNavWe.click();
+          childNav.click();
           pause200ms();
           closeDialogIfVisible();
           refreshPage = false;
