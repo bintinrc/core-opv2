@@ -14,6 +14,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import com.google.common.collect.ImmutableMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -31,6 +32,9 @@ import org.openqa.selenium.support.PageFactory;
  * @author Sergey Mishanin
  */
 public class MovementManagementPage extends OperatorV2SimplePage {
+
+  @FindBy(xpath = "//button[.='Close']")
+  public Button closeButton;
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -135,6 +139,9 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Delete' and contains(@class, 'ant-btn-primary')]")
   public Button modalDeleteButton;
 
+  @FindBy(xpath = "//button[.='Update' and contains(@class, 'ant-btn-primary')]")
+  public Button modalUpdateButton;
+
   @FindBy(xpath = "//div[@class='ant-modal-body']//div//span")
   public TextBox effectingPathText;
 
@@ -143,6 +150,24 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//span[.='No Results Found']")
   public TextBox noResultsFoundText;
+
+  @FindBy(xpath = "//td[@class='startTime']//span[@class='ant-time-picker']")
+  public List<AntTimePicker> departureTimeInputs;
+
+  @FindBy(xpath = "//td[@class='duration']//span[@class='ant-time-picker']")
+  public List<AntTimePicker> durationInputs;
+
+  @FindBy(xpath = "//td[@class='comment']//textarea")
+  public List<TextBox> commentInputs;
+
+  @FindBy(xpath = "//td[@class='startTime']")
+  public List<TextBox> departureTimes;
+
+  @FindBy(xpath = "//td[@class='duration']")
+  public List<TextBox> durations;
+
+  @FindBy(xpath = "//td[@class='comment']")
+  public List<TextBox> comments;
   //endregion
 
   public SchedulesTable schedulesTable;
