@@ -417,6 +417,30 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  @Given("API Operator assign stations to its crossdock for {string} movement")
+  public void apiOperatorAssignStationsToItsCrossdockForMovementType(String scheduleType) {
+    List<Hub> createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+    switch (scheduleType) {
+      case "CD->CD":
+      case "CD->ST under another CD":
+        break;
+      case "CD->its ST":
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case "ST->ST under same CD":
+      case "ST->another CD":
+      case "ST->ST under diff CD":
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        break;
+      case "ST->its CD":
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(1).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        break;
+    }
+  }
+
   @Given("API Operator assign CrossDock {string} for Station {string}")
   public void apiOperatorCreateRelationFor(String crossDockIdAsString, String stationIdAsString) {
     Long crossDockId = Long.valueOf(resolveValue(crossDockIdAsString));

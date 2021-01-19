@@ -5,9 +5,11 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.util.List;
 import java.util.Map;
 import org.hamcrest.Matchers;
 import org.junit.platform.commons.util.StringUtils;
@@ -19,7 +21,13 @@ import org.junit.platform.commons.util.StringUtils;
 public class FacilitiesManagementSteps extends AbstractSteps {
 
   private FacilitiesManagementPage facilitiesManagementPage;
-
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
   public FacilitiesManagementSteps() {
   }
 
@@ -350,5 +358,45 @@ public class FacilitiesManagementSteps extends AbstractSteps {
       hub.setFacilityType(mapOfData.get("facilityType"));
     }
     facilitiesManagementPage.updateHubByColumn(hub, columnName, beforeType);
+  }
+
+  @And("Operator update hub column facility type for first hub into type {string}")
+  public void operatorRevertHubColumnFacilityTypeForHubWithType(String updatedFacilityType) {
+    List<Hub> hub = get(KEY_LIST_OF_CREATED_HUBS);
+    String beforeType = hub.get(0).getFacilityType();
+    hub.get(0).setFacilityType(updatedFacilityType);
+    facilitiesManagementPage.updateHubByColumn(hub.get(0), "facility type", beforeType);
+  }
+
+  @And("Operator update hub column longitude latitude for first hub into {string} and {string}")
+  public void operatorUpdateLongitudeLatitudeForHub(String longitude, String latitude) {
+    List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+    Hub hub = hubs.get(0);
+    String beforeType = hub.getFacilityType();
+    Hub updateHub = new Hub();
+    updateHub.setName(hub.getName());
+    updateHub.setLatitude(Double.valueOf(resolveValue(latitude)));
+    updateHub.setLongitude(Double.valueOf(resolveValue(longitude)));
+    facilitiesManagementPage.updateHubByColumn(updateHub, "lat/long", beforeType);
+  }
+
+  @When("Operator revert hub column facility type for first hub for type {string}")
+  public void operatorRevertHubColumnFacilityTypeForFirstHubForType(String movementType) {
+    List<Hub> hub = get(KEY_LIST_OF_CREATED_HUBS);
+    String beforeType = hub.get(0).getFacilityType();
+    switch (movementType) {
+      case HUB_CD_CD:
+      case HUB_CD_ITS_ST:
+      case HUB_CD_ST_DIFF_CD:
+        hub.get(0).setFacilityType("crossdock hub");
+        break;
+      case HUB_ST_ITS_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_ST_DIFF_CD:
+        hub.get(0).setFacilityType("station");
+        break;
+    }
+    facilitiesManagementPage.updateHubByColumn(hub.get(0), "facility type", beforeType);
   }
 }
