@@ -1406,7 +1406,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     MovementEventEntity landHaulMovementEventEntity = getHubJdbc()
         .getMovementEventByShipmentId(landHaulShipmentId);
     assertThat("Event is equal", landHaulMovementEventEntity.getEvent(), equalTo(expectedEvent));
-    assertThat("Status is equal", landHaulMovementEventEntity.getStatus(), equalTo(expectedStatus));
+    HUB_CD_CD    assertThat("Status is equal", landHaulMovementEventEntity.getStatus(), equalTo(expectedStatus));
 
     MovementEventEntity airHaulMovementEventEntity = getHubJdbc()
         .getMovementEventByShipmentId(airHaulShipmentId);

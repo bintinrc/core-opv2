@@ -55,7 +55,14 @@ import org.apache.commons.lang3.StringUtils;
  */
 @ScenarioScoped
 public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<ScenarioManager> {
-
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
+  
   public ApiOperatorPortalExtSteps() {
   }
 
@@ -359,18 +366,18 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     mapOfData.put("longitude", "GENERATED");
     List<Hub> createdHubs;
     switch (scheduleType) {
-      case "CD->CD":
+      case HUB_CD_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         break;
-      case "CD->its ST":
+      case HUB_CD_ITS_ST:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
-      case "CD->ST under another CD":
+      case HUB_CD_ST_DIFF_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
@@ -378,7 +385,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
-      case "ST->ST under same CD":
+      case HUB_ST_ST_SAME_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
@@ -388,7 +395,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
-      case "ST->ST under diff CD":
+      case HUB_ST_ST_DIFF_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
@@ -399,14 +406,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(3).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
-      case "ST->its CD":
+      case HUB_ST_ITS_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(1).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         break;
-      case "ST->another CD":
+      case HUB_ST_CD_DIFF_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
@@ -421,20 +428,20 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void apiOperatorAssignStationsToItsCrossdockForMovementType(String scheduleType) {
     List<Hub> createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
     switch (scheduleType) {
-      case "CD->CD":
-      case "CD->ST under another CD":
+      case HUB_CD_CD:
+      case HUB_CD_ST_DIFF_CD:
         break;
-      case "CD->its ST":
+      case HUB_CD_ITS_ST:
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
-      case "ST->ST under same CD":
-      case "ST->another CD":
-      case "ST->ST under diff CD":
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_DIFF_CD:
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         break;
-      case "ST->its CD":
+      case HUB_ST_ITS_CD:
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(1).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         break;

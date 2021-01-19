@@ -31,6 +31,13 @@ import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.Schedules
 public class MovementManagementSteps extends AbstractSteps {
 
   private MovementManagementPage movementManagementPage;
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
 
   public MovementManagementSteps() {
   }
@@ -555,31 +562,31 @@ public class MovementManagementSteps extends AbstractSteps {
         String originHub = hubs.get(0).getName();
         String destinationHub = hubs.get(1).getName();
         switch (scheduleType) {
-          case "CD->CD":
+          case HUB_CD_CD:
             movementManagementPage.originCrossdockHub.selectValue(originHub);
             movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
             break;
-          case "CD->its ST":
+          case HUB_CD_ITS_ST:
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(originHub);
             movementManagementPage.originStationHub.selectValue(originHub);
             movementManagementPage.destinationStationHub.selectValue(destinationHub);
             break;
-          case "CD->ST under another CD":
+          case HUB_CD_ST_DIFF_CD:
             destinationHub = hubs.get(2).getName();
             movementManagementPage.originCrossdockHub.selectValue(originHub);
             movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
             break;
-          case "ST->ST under same CD":
-          case "ST->ST under diff CD":
-          case "ST->another CD":
+          case HUB_ST_ST_SAME_CD:
+          case HUB_ST_ST_DIFF_CD:
+          case HUB_ST_CD_DIFF_CD:
             destinationHub = hubs.get(2).getName();
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(destinationHub);
             movementManagementPage.originStationHub.selectValue(originHub);
             movementManagementPage.destinationStationHub.selectValue(destinationHub);
             break;
-          case "ST->its CD":
+          case HUB_ST_ITS_CD:
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(destinationHub);
             movementManagementPage.originStationHub.selectValue(originHub);
@@ -619,31 +626,31 @@ public class MovementManagementSteps extends AbstractSteps {
         String originHub = hubs.get(0).getName();
         String destinationHub = hubs.get(1).getName();
         switch (scheduleType) {
-          case "CD->CD":
+          case HUB_CD_CD:
             movementManagementPage.originCrossdockHub.selectValue(originHub);
             movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
             break;
-          case "CD->its ST":
+          case HUB_CD_ITS_ST:
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(originHub);
             movementManagementPage.originStationHub.selectValue(originHub);
             movementManagementPage.destinationStationHub.selectValue(destinationHub);
             break;
-          case "CD->ST under another CD":
+          case HUB_CD_ST_DIFF_CD:
             destinationHub = hubs.get(2).getName();
             movementManagementPage.originCrossdockHub.selectValue(originHub);
             movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
             break;
-          case "ST->ST under same CD":
-          case "ST->ST under diff CD":
-          case "ST->another CD":
+          case HUB_ST_ST_SAME_CD:
+          case HUB_ST_ST_DIFF_CD:
+          case HUB_ST_CD_DIFF_CD:
             destinationHub = hubs.get(2).getName();
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(destinationHub);
             movementManagementPage.originStationHub.selectValue(originHub);
             movementManagementPage.destinationStationHub.selectValue(destinationHub);
             break;
-          case "ST->its CD":
+          case HUB_ST_ITS_CD:
             movementManagementPage.stationsTab.click();
             movementManagementPage.crossdockHub.selectValue(destinationHub);
             movementManagementPage.originStationHub.selectValue(originHub);
@@ -677,11 +684,11 @@ public class MovementManagementSteps extends AbstractSteps {
         .verifyNotificationWithMessage("2 schedule(s) have been updated.");
 
     switch (scheduleType) {
-      case "CD->its ST":
-      case "ST->ST under same CD":
-      case "ST->ST under diff CD":
-      case "ST->another CD":
-      case "ST->its CD":
+      case HUB_CD_ITS_ST:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ITS_CD:
         movementManagementPage.closeButton.click();
         break;
     }
