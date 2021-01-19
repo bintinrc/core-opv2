@@ -453,7 +453,7 @@ public class EditOrderSteps extends AbstractSteps {
   @And("Operator suggest route of {string} tag from the Route Finder on Edit Order Page")
   public void operatorSuggestRouteFromTheRouteFinder(String routeTag) {
     editOrderPage.addToRouteDialog.waitUntilVisible();
-    editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(routeTag));
+    editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(resolveValue(routeTag)));
     editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
   }
 

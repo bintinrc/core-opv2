@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @OrderTagManagement @Debug
+@OperatorV2 @Core @Order @OrderTagManagement
 Feature: Order Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -27,7 +27,9 @@ Feature: Order Tag Management
       | type | 48 |
 
   Scenario: Remove Tags from Order (uid:1ea8fbc7-d934-4433-9cc2-3034f6d9ae2a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -50,7 +52,9 @@ Feature: Order Tag Management
       | type | 48 |
 
   Scenario: Update Tags from Order (uid:7d001759-5de3-42aa-9622-dd72913aae5a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -73,7 +77,9 @@ Feature: Order Tag Management
       | type | 48 |
 
   Scenario Outline: Search Orders on Order Tag Management Page by Order Type Filter - <Note> (<hiptest-uid>)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -89,7 +95,9 @@ Feature: Order Tag Management
       | Return | uid:c2cb8cdc-f354-4afc-a5c8-63cc99a7955e | Return    | true             |
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Hide RTS Orders (uid:375d4322-b8ba-4cd3-a211-ce59402fc803)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -111,7 +119,9 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders (uid:b2d0b3b7-e915-49ed-94a1-0ac287889db5)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -131,7 +141,9 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Add Tags to Order page
 
   Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id (uid:0117a8b6-ddca-44c3-90ec-a741f0f7f157)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -155,7 +167,9 @@ Feature: Order Tag Management
       | granularStatus       | Arrived at Sorting Hub          |
 
   Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days (uid:890edc5f-46a4-4fde-990b-fa89bc0e94db)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -178,7 +192,9 @@ Feature: Order Tag Management
 
   @DeleteOrArchiveRoute
   Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule (uid:3ea40471-cd24-4809-8b7d-c8e7605d4847)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    #Refresh page to clear error toasts which doesn't disappear automatically
+    Given Operator refresh page
+    And Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
