@@ -163,6 +163,20 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     editHubDialog.waitUntilInvisible();
   }
 
+  public void updateFacilityType(String searchHubsKeyword, String typeBefore) {
+    hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
+    hubsTable.clickActionButton(1, ACTION_EDIT);
+    editHubDialog.facilityType.selectByValue(searchHubsKeyword);
+    editHubDialog.submitChanges.click();
+    if (typeBefore.equalsIgnoreCase("CROSSDOCK") || typeBefore
+        .equalsIgnoreCase("CROSSDOCK_STATION") || typeBefore.equalsIgnoreCase("STATION")) {
+      confirmUpdateHubDialog.saveButton.waitUntilVisible();
+      confirmUpdateHubDialog.saveButton.waitUntilClickable();
+      confirmUpdateHubDialog.saveButton.click();
+    }
+    editHubDialog.waitUntilInvisible();
+  }
+
   public void disableHub(String searchHubsKeyword) {
     hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
     hubsTable.clickActionButton(1, ACTION_DISABLE);
