@@ -379,7 +379,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     public PageElement scannedAtShipperCount;
 
     @FindBy(css = ".pod-table-content:nth-of-type(1) .content-row")
-    public PageElement scannedAtShipperPOD;
+    public List<PageElement> scannedAtShipperPOD;
 
     @FindBy(name = "container.shipper-pickups.dialog.view-pod")
     public NvIconTextButton viewPod;
