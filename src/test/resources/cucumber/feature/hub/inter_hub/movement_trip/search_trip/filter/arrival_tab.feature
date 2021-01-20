@@ -13,7 +13,7 @@ Feature: Movement Trip - Search Trip - Filter - Arrival Tab
     When Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  @DeleteHubsViaAPI
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub (uid:871871f1-adec-4f77-a624-fa363563fc80)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -71,7 +71,7 @@ Feature: Movement Trip - Search Trip - Filter - Arrival Tab
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  @DeleteDriver @DeleteHubsViaDb
+  @DeleteDriver @DeleteHubsViaAPI
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub and Arrival Date (uid:49d374f3-d309-4d1d-b988-c0f6c5514fb6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -108,7 +108,7 @@ Feature: Movement Trip - Search Trip - Filter - Arrival Tab
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  @DeleteDriver @DeleteHubsViaDb
+  @DeleteDriver @DeleteHubsViaAPI
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub, Movement Type, Arrival Date (uid:7bf46e74-836d-4a9c-bebc-b18333c402ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
