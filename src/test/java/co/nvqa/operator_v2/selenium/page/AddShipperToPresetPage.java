@@ -26,7 +26,7 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
-  @FindBy(css = "div.ant-spin-nested-loading")
+  @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;
 
   @FindBy(css = ".table-holder  div.ant-spin-spinning")
