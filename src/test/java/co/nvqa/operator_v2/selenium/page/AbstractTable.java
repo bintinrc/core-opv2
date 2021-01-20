@@ -11,7 +11,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * @author Sergey Mishanin
@@ -146,7 +148,7 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
 
   public List<T> readFirstEntities(int count) {
     int rowsCount = getRowsCount();
-    count = rowsCount >= count ? count : rowsCount;
+    count = Math.min(rowsCount, count);
     return IntStream.rangeClosed(1, count)
         .mapToObj(this::readEntity)
         .collect(Collectors.toList());
@@ -154,7 +156,7 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
 
   public List<String> readFirstRowsInColumn(String columnId, int count) {
     int rowsCount = getRowsCount();
-    count = rowsCount >= count ? count : rowsCount;
+    count = Math.min(rowsCount, count);
     return IntStream.rangeClosed(1, count)
         .mapToObj(rowIndex -> this.getColumnText(rowIndex, columnId))
         .collect(Collectors.toList());
@@ -171,7 +173,12 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
     String columnLocator = columnLocators.get(columnId);
     Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator),
         "Locator for columnId [" + columnId + "] was not defined.");
-    executeInContext(getTableLocator(), () -> searchTableCustom1(columnLocator, value));
+    executeInContext(getTableLocator(), () -> {
+      WebElement we = findElementBy(By.cssSelector(
+          f("th.%s > nv-search-input-filter > md-input-container input", columnLocator)));
+      sendKeys(we, value);
+      pause400ms();
+    });
     return this;
   }
 

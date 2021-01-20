@@ -8,6 +8,7 @@ import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
+import com.google.common.collect.ImmutableList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1327,5 +1328,43 @@ public class OperatorV2SimplePage extends SimplePage {
     }
 
     return currentWindowHandle;
+  }
+
+  public void closeDialogIfVisible() {
+    String dialogXpath = "//md-dialog";
+    if (isElementVisible(dialogXpath, 0)) {
+      List<String> closeLocators = ImmutableList.of(
+          dialogXpath + "//nv-icon-button[@name='Cancel']",
+          dialogXpath + "//nv-icon-text-button[@name='Cancel']",
+          dialogXpath + "//button[@aria-label='Leave']"
+
+      );
+      for (String closeLocator : closeLocators) {
+        if (isElementVisible(closeLocator, 0)) {
+          click(closeLocator);
+          waitUntilInvisibilityOfElementLocated(closeLocator);
+          break;
+        }
+      }
+      if (isElementVisible(dialogXpath, 0)) {
+        try {
+          WebElement webElement = findElementByXpath(dialogXpath);
+          try {
+            executeScript("angular.element(arguments[0]).controller().function.cancel()",
+                webElement);
+          } catch (Exception ex1) {
+            try {
+              executeScript("angular.element(arguments[0]).controller().onCancel()", webElement);
+            } catch (Exception ex2) {
+              executeScript("angular.element(arguments[0]).controller().function.onCancel()",
+                  webElement);
+            }
+          }
+          waitUntilInvisibilityOfElementLocated(dialogXpath);
+        } catch (Exception ex) {
+          refreshPage();
+        }
+      }
+    }
   }
 }
