@@ -6,6 +6,7 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.ReservationInfo;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.BulkRouteAssignmentSidePanel.ReservationCard;
@@ -494,8 +495,11 @@ public class ShipperPickupsSteps extends AbstractSteps {
     }
     expectedValue = data.get("scannedAtShipperPOD");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Scanned at Shipper (POD)", expectedValue,
-          shipperPickupsPage.reservationDetailsDialog.scannedAtShipperPOD.getNormalizedText());
+      List<String> expected = splitAndNormalize(expectedValue);
+      List<String> actual = shipperPickupsPage.reservationDetailsDialog.scannedAtShipperPOD.stream()
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
+      assertThat("Scanned at Shipper (POD)", actual,
+          Matchers.containsInAnyOrder(expected.toArray(new String[0])));
     }
   }
 
