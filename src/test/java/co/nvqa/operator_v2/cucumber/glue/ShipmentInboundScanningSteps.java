@@ -36,8 +36,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        navigateRefresh();
-        pause2s();
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
 
@@ -45,6 +43,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
         throw ex;
       }
     }, 10);

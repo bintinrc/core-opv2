@@ -161,8 +161,9 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}        |
+      | trackingId | CREATED           |
+      | task       | SORTHUBTESTFROMQA |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | NOT ROUTED TODAY       |
