@@ -672,6 +672,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
     }
   }
 
+  @Then("Operator verifies the searched shipment ids result is right except last")
+  public void operatorVerifiesTheSearchedShipmentIdsResultIsRightExceptLast() {
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    for (int i = 0; i < shipmentIds.size() - 1; i++) {
+      shipmentManagementPage.searchedShipmentVerification(shipmentIds.get(i));
+    }
+  }
+
   @Then("Operator verify {string} action button is disabled on shipment Management page")
   public void operatorVerifyActionButtonIsDisabled(String actionButton) {
 
