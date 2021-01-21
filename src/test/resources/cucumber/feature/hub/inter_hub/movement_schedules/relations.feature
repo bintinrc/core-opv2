@@ -5,7 +5,7 @@ Feature: Relations
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb
+  @DeleteHubsViaAPI
   Scenario: Search Station in Pending Relations Tab (uid:4a568272-59e4-4502-a5ab-230b7f158365)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -28,7 +28,7 @@ Feature: Relations
       | station | wrong-station-name |
     Then Operator verify relations table on Movement Management page is empty
 
-  @DeleteHubsViaDb
+  @DeleteHubsViaAPI
   Scenario: Update Station Relation (uid:b54b31c7-770c-4db3-b4cc-19e1fb9335c1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

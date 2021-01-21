@@ -5,7 +5,7 @@ Feature: Crossdock to Crossdock
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI  @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to Crossdock - Crossdock Movement found and there is available schedule (uid:28f9335f-e4b8-44de-8c36-4a41245901ef)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
