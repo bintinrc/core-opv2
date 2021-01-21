@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
-import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -114,7 +113,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
          */
     String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
     String actualName = routeGroupManagementPage
-        .getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
+        .getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
     assertNotEquals(routeGroupName, actualName);
   }
 

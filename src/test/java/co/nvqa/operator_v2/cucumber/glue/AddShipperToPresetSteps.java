@@ -85,6 +85,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     String columnId = AddShipperToPresetPage.ShippersTable.COLUMN_IDS_BY_NAME
         .get(columnName.trim().toLowerCase());
     addShipperToPresetPage.shippersTable.filterByColumn(columnId, filter);
+    addShipperToPresetPage.waitUntilUpdated();
   }
 
   @When("Operator verify records on Add Shipper To Preset page using data below:")
