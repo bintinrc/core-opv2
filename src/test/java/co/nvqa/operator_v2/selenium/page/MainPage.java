@@ -3,13 +3,10 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -102,44 +99,6 @@ public class MainPage extends OperatorV2SimplePage {
     if (!currentUrl.endsWith(countrySpecificDashboardUrl)) {
       getWebDriver().navigate()
           .to(TestConstants.OPERATOR_PORTAL_BASE_URL + '/' + countrySpecificDashboardUrl);
-    }
-  }
-
-  public void closeDialogIfVisible() {
-    String dialogXpath = "//md-dialog";
-    if (isElementVisible(dialogXpath, 0)) {
-      List<String> closeLocators = ImmutableList.of(
-          dialogXpath + "//nv-icon-button[@name='Cancel']",
-          dialogXpath + "//nv-icon-text-button[@name='Cancel']",
-          dialogXpath + "//button[@aria-label='Leave']"
-
-      );
-      for (String closeLocator : closeLocators) {
-        if (isElementVisible(closeLocator, 0)) {
-          click(closeLocator);
-          waitUntilInvisibilityOfElementLocated(closeLocator);
-          break;
-        }
-      }
-      if (isElementVisible(dialogXpath, 0)) {
-        try {
-          WebElement webElement = findElementByXpath(dialogXpath);
-          try {
-            executeScript("angular.element(arguments[0]).controller().function.cancel()",
-                webElement);
-          } catch (Exception ex1) {
-            try {
-              executeScript("angular.element(arguments[0]).controller().onCancel()", webElement);
-            } catch (Exception ex2) {
-              executeScript("angular.element(arguments[0]).controller().function.onCancel()",
-                  webElement);
-            }
-          }
-          waitUntilInvisibilityOfElementLocated(dialogXpath);
-        } catch (Exception ex) {
-          refreshPage();
-        }
-      }
     }
   }
 
