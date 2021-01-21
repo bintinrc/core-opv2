@@ -219,7 +219,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify the last order_events record for the created order:$")
   public void operatorVerifyTheLastOrderEventParams(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEventsASC(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     OrderEventEntity theLastOrderEvent = orderEvents.get(0);
     String value = mapOfData.get("type");

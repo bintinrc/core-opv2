@@ -54,6 +54,10 @@ public class MdSelect extends PageElement {
   private static final String MD_OPTION_LOCATOR_2 = "//div[@id='%s']//md-option[.//div[contains(normalize-space(.), \"%s\")]]";
   private static final String MD_OPTION_BY_VALUE_LOCATOR = "//div[@id='%s']//md-option[@value='%s']";
 
+  public void searchValue(String value) {
+    enterSearchTerm(value);
+  }
+
   public void searchAndSelectValue(String value) {
     enterSearchTerm(value);
     value = escapeValue(value);
@@ -96,6 +100,10 @@ public class MdSelect extends PageElement {
       click(f(locator, menuId, StringUtils.normalizeSpace(value)));
     });
     closeMenu();
+  }
+
+  public boolean isValueExist(String value) {
+    return isElementExist(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
   }
 
   public void selectByValue(String value) {
