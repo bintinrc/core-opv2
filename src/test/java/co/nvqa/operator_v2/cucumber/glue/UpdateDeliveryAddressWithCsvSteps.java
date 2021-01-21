@@ -92,7 +92,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
       assertTrue("Unexpected Tracking ID", addresses.containsKey(trackingId));
       Address actualAddress = updateDeliveryAddressWithCsvPage.addressesTable.readEntity(i);
       Address expectedAddress = addresses.get(trackingId);
-      expectedAddress.compareWithActual(actualAddress);
+      expectedAddress.compareWithActual(actualAddress, "street", "subDistrict");
     }
   }
 
@@ -147,7 +147,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
           .orElseThrow(() -> new AssertionError(
               f("Could not find order with Tracking ID [%s]", trackingId)));
 
-      toAddress.compareWithActual(order.getToAddress());
+      toAddress.compareWithActual(order.getToAddress(), "street", "subDistrict");
     });
   }
 
@@ -440,7 +440,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
             .orElseThrow(() -> new AssertionError(
                 f("Could not find order with Tracking ID [%s]", trackingId)));
 
-        toAddress.compareWithActual(order.getToAddress());
+        toAddress.compareWithActual(order.getToAddress(), "street", "subDistrict");
       }
       ordinal.set(ordinal.incrementAndGet());
     });

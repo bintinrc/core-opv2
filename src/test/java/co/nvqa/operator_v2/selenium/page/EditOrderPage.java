@@ -27,7 +27,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.text.ParseException;
 import java.time.ZoneId;
@@ -185,20 +184,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
   public void openPage(long orderId) {
     getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.COUNTRY_CODE.toLowerCase(), orderId));
-    String dialogXpath = "//md-dialog";
-    if (isElementVisible(dialogXpath, 2)) {
-      List<String> closeLocators = ImmutableList.of(
-          dialogXpath + "//button[@aria-label='Leave']"
-      );
-      for (String closeLocator : closeLocators) {
-        if (isElementVisible(closeLocator, 0)) {
-          pause1s();
-          click(closeLocator);
-          waitUntilInvisibilityOfElementLocated(closeLocator);
-          break;
-        }
-      }
-    }
+    pause1s();
+    closeDialogIfVisible();
     waitUntilInvisibilityOfLoadingOrder();
   }
 

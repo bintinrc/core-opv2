@@ -55,6 +55,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @ScenarioScoped
 public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<ScenarioManager> {
+
   private static final String HUB_CD_CD = "CD->CD";
   private static final String HUB_CD_ITS_ST = "CD->its ST";
   private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
@@ -62,43 +63,12 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
   private static final String HUB_ST_ITS_CD = "ST->its CD";
   private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
-  
+
   public ApiOperatorPortalExtSteps() {
   }
 
   @Override
   public void init() {
-  }
-
-  @Given("^Operator V2 cleaning Tag Management by calling API endpoint directly$")
-  public void cleaningTagManagement() {
-    Order order1 = new Order();
-    order1.setId(1L);
-    order1.setComments("No");
-
-    Order order2 = new Order();
-    order2.setId(1L);
-    order2.setComments("Yes");
-
-    String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
-
-    try {
-      getRouteClient().deleteTag(tagName);
-    } catch (RuntimeException ex) {
-      NvLogger
-          .warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName,
-              ex.getMessage());
-    }
-
-    tagName = TagManagementSteps.EDITED_TAG_NAME;
-
-    try {
-      getRouteClient().deleteTag(tagName);
-    } catch (RuntimeException ex) {
-      NvLogger
-          .warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName,
-              ex.getMessage());
-    }
   }
 
   @Given("^API Operator retrieve routes using data below:$")
@@ -373,7 +343,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       case HUB_CD_ITS_ST:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
-        createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
@@ -381,7 +351,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
-        createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(1).getId()));
         break;
@@ -389,7 +359,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
-        createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
@@ -400,7 +370,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
-        createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(3).getId()),
@@ -409,7 +379,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       case HUB_ST_ITS_CD:
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
-        createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(1).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         break;
@@ -417,7 +387,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
         apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
-        createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
         apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
             String.valueOf(createdHubs.get(0).getId()));
         break;
@@ -426,7 +396,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
   @Given("API Operator assign stations to its crossdock for {string} movement")
   public void apiOperatorAssignStationsToItsCrossdockForMovementType(String scheduleType) {
-    List<Hub> createdHubs =  get(KEY_LIST_OF_CREATED_HUBS);
+    List<Hub> createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
     switch (scheduleType) {
       case HUB_CD_CD:
       case HUB_CD_ST_DIFF_CD:
@@ -796,5 +766,32 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       ids[i] = Long.parseLong(routeIds.get(i));
     }
     getRouteClient().archiveRoutes(ids);
+  }
+
+  @Given("^API Operator create zone using data below:$")
+  public void apiOperatorCreateZone(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String hubId = data.get("hubId");
+    if (StringUtils.isBlank(hubId)) {
+      throw new IllegalArgumentException("hubId for zone was not provided");
+    }
+    String uniqueCode = generateDateUniqueString();
+    long uniqueCoordinate = System.currentTimeMillis();
+
+    Zone zone = new Zone();
+    zone.setName("ZONE-" + uniqueCode);
+    zone.setShortName("Z-" + uniqueCode);
+    zone.setHubId(Integer.valueOf(hubId));
+    zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
+    zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
+    zone.setDescription(
+        f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.",
+            new Date()));
+
+    zone = getZoneClient().create(zone);
+    zone.setHubName(data.get("hubName"));
+    put(KEY_CREATED_ZONE, zone);
+    put(KEY_CREATED_ZONE_ID, zone.getId());
+    getZoneClient().reloadCache();
   }
 }
