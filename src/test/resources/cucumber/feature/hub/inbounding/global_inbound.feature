@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @Inbounding @GlobalInbound @CFW
+@OperatorV2 @MiddleMile @Hub @Inbounding @GlobalInbound
 Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -318,7 +318,7 @@ Feature: Global Inbound
       | 2 - 90 | uid:85ae2e8e-670b-477f-bda2-d4c8e417000c | 50            | #e29d4a                 |
       | > 90   | uid:6639ab15-e238-4451-8611-6616fbe3d49a | 100           | #c65d44                 |
 
-  @DeleteShipment @ForceSuccessOrder @RT
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Inbound RTS Unrouted Parcel In Shipment (uid:86c65fd5-fa71-47ac-aced-510c828c41b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

@@ -430,7 +430,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, "retry shipment details", 5000, 10);
+    }, "retry shipment details", 5000, 5);
   }
 
   @Then("Operator verifies event is present for shipment on Shipment Detail page")
