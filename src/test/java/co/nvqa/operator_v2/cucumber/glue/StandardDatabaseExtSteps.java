@@ -229,16 +229,18 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @Then("^DB Operator verify the last order_events record for the created order for RTS:$")
+  @Then("^DB Operator verify order_events record for the created order for RTS:$")
   public void operatorVerifyTheLastOrderEventParamsForRTS(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
     List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<String> orderEventsTypes = orderEvents.stream()
+        .map(orderEvent -> String.valueOf(orderEvent.getType())).collect(
+            Collectors.toList());
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
-    OrderEventEntity theLastOrderEvent = orderEvents.get(orderEvents.size()-1);
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
+      assertThat("Type contained in orderEvents", orderEventsTypes, hasItem(value));
     }
   }
 
@@ -1613,7 +1615,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .getMovementPath(originHubId, destinationHubId, "LAND_HAUL", "MANUAL");
     List<PathSchedule> pathSchedule = getHubJdbc()
         .getMovementPathSchedulesByPathId(movementPath.getId());
-    List<PathSchedule> oldPathSchedule = pathSchedule.subList(0,7);
+    List<PathSchedule> oldPathSchedule = pathSchedule.subList(0, 7);
     oldPathSchedule.forEach(pathScheduleElement -> {
       assertThat(f("path id is the same %d", movementPath.getId()), pathScheduleElement.getPathId(),
           equalTo(movementPath.getId()));
