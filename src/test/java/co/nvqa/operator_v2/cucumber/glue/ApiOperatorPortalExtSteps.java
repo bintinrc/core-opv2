@@ -17,6 +17,7 @@ import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.sort.hub.CrossDockStationRelation;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
@@ -69,6 +70,18 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
   @Override
   public void init() {
+  }
+
+  @After("@DeleteCorporateSubShipper")
+  public void deleteShipper() {
+    List<Shipper> subShippers = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
+    if (subShippers != null) {
+      for (Shipper subShipper : subShippers) {
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(
+            () -> getShipperClient().deleteShipperByShipperId(subShipper.getId()),
+            f("Deleting newly created shipper with ID : %d", subShipper.getId()));
+      }
+    }
   }
 
   @Given("^API Operator retrieve routes using data below:$")
