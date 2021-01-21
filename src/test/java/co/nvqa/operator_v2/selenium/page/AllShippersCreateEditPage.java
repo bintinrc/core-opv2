@@ -179,8 +179,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]/div[@ng-repeat='e in errorMsgs']";
   public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
 
+  public final B2bManagementPage b2bManagementPage;
+
   public AllShippersCreateEditPage(WebDriver webDriver) {
     super(webDriver);
+    b2bManagementPage = new B2bManagementPage(webDriver);
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
@@ -1230,6 +1233,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
           waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
       }
   */
+
+  public void goToTabCorporateSubShipper() {
+    tabs.selectTab("Corporate sub shippers");
+    b2bManagementPage.backToSubShipperTable();
+  }
 
   public String addNewPricingScript(Shipper shipper) {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
