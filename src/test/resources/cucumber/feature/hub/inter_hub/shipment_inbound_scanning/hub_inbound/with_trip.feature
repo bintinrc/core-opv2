@@ -1606,6 +1606,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Given Operator go to menu Inter-Hub -> Add To Shipment
     And Operator close shipment with data below:
       | origHubName  | {hub-name-temp}           |
+      | destHubName  | {hub-name-temp-2}         |
       | shipmentType | Air Haul                  |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID} |
     When Operator change the country to "Singapore"

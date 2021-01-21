@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip 
 Feature: Shipment Van Inbound With Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -572,6 +572,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
+    And API Operator complete trip with data below:
+      | tripId | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
+      | hubId  | {KEY_LIST_OF_CREATED_HUBS[2].id}           |
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
@@ -597,7 +600,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     When Operator clicks shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verifies it will direct to shipment details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI 
   Scenario: View Many Shipments To Go With Trip for Van Inbound (uid:bccb666c-c8b3-406a-87cd-c00886ad77ae)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -663,6 +666,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
+    And API Operator complete trip with data below:
+      | tripId | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
+      | hubId  | {KEY_LIST_OF_CREATED_HUBS[2].id}           |
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
@@ -688,7 +694,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     When Operator clicks shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
     Then Operator verifies it will direct to shipment details page for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI 
   Scenario: Error Shipment Detected as Incorrect Shipment (uid:f902787b-19bd-4771-a9dd-1ed0933774f7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -774,6 +780,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
+    And API Operator complete trip with data below:
+      | tripId | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
+      | hubId  | {KEY_LIST_OF_CREATED_HUBS[2].id}           |
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
@@ -815,7 +824,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
       | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI 
   Scenario: Skip Some Shipment From Shipment To Go With Trip (uid:6ab1af92-2ff5-4d19-a190-14627dde199e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -892,6 +901,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
+    And API Operator complete trip with data below:
+      | tripId | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
+      | hubId  | {KEY_LIST_OF_CREATED_HUBS[2].id}           |
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
@@ -1703,6 +1715,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Given Operator go to menu Inter-Hub -> Add To Shipment
     And Operator close shipment with data below:
       | origHubName  | {hub-name-temp}           |
+      | destHubName  | {hub-name-temp-2}         |
       | shipmentType | Air Haul                  |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID} |
     When Operator change the country to "Singapore"
