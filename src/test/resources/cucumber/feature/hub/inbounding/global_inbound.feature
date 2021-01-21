@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @Inbounding @GlobalInbound
+@OperatorV2 @MiddleMile @Hub @Inbounding @GlobalInbound @CFW
 Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -318,7 +318,7 @@ Feature: Global Inbound
       | 2 - 90 | uid:85ae2e8e-670b-477f-bda2-d4c8e417000c | 50            | #e29d4a                 |
       | > 90   | uid:6639ab15-e238-4451-8611-6616fbe3d49a | 100           | #c65d44                 |
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteShipment @ForceSuccessOrder @RT
   Scenario: Inbound RTS Unrouted Parcel In Shipment (uid:86c65fd5-fa71-47ac-aced-510c828c41b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -360,7 +360,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify the last order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -432,12 +432,12 @@ Feature: Global Inbound
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
-      | routeDate       | {gradle-next-2-day-yyyy-MM-dd} |
-      | routeTags       | [{route-tag-name}]             |
-      | zoneName        | {zone-name}                    |
-      | hubName         | {hub-name}                     |
-      | ninjaDriverName | {ninja-driver-name}            |
-      | vehicleName     | {vehicle-name}                 |
+      | date            | {gradle-next-2-day-yyyy-MM-dd} |
+      | tags            | {route-tag-name}               |
+      | zone            | {zone-name}                    |
+      | hub             | {hub-name}                     |
+      | driverName      | {ninja-driver-name}            |
+      | vehicle         | {vehicle-name}                 |
     When API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
@@ -450,7 +450,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify the last order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
