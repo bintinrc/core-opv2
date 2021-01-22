@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @PathInvalidation @WithTrip
+@OperatorV2 @MiddleMile @Hub @PathInvalidation @WithTrip
 Feature: Path Invalidation - With Trip
 
   @LaunchBrowser @ShouldAlwaysRun
