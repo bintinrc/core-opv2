@@ -327,7 +327,7 @@ Feature: Path Invalidation - Without Trip
       | ST->its CD              | uid:ac329f12-8492-4e4a-b88c-ce799a2b0960 |
       | ST->another CD          | uid:1c16e9d7-ecd5-4d9e-8a0a-41528699980e |
 
-  @DeleteShipments @@DeleteHubsViaAPIhj
+  @DeleteShipments @DeleteHubsViaAPI
   Scenario: Update Hub Crossdock - Van Inbound w/o Trip (uid:93382a6c-21b9-4af0-840f-57adbe0b6312)
     Given API Operator creates hubs for "ST->its CD" movement
     Given API Operator creates 1 new Hub using data below:
