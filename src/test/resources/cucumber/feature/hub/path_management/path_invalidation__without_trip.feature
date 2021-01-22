@@ -50,6 +50,25 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
 
   @DeleteHubsViaAPI @DeleteShipments
+  Scenario: Create Schedule (CD->CD) - Van Inbound w/o Trip (uid:7ecb6050-6f12-4856-be11-b25f27e8c3a1)
+    Given API Operator creates hubs for "CD->CD" movement
+    And API Operator reloads hubs cache
+    Given API Operator creates paths for "CD->CD" movement
+    Then DB Operator verifies number of path for "CD->CD" movement existence
+    When API Operator creates schedules for "CD->CD" movement
+    Then DB Operator verifies number of path for "CD->CD" movement existence
+    When API Operator create multiple 1 new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+    Then DB Operator verify sla in movement events table for "CD->CD" movement
+    And DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
+    And DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
+    Then DB Operator verifies number of path for "CD->CD" movement existence after van inbound
+    And DB Operator verify created hub relation schedules is not deleted
+
+  @DeleteHubsViaAPI @DeleteShipments
   Scenario Outline: Create Schedule - Van Inbound w/o Trip - <type> - (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator reloads hubs cache
