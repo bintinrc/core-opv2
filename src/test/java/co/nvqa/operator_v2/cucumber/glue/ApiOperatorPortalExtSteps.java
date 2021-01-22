@@ -51,6 +51,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import static co.nvqa.commons.model.core.Order.GRANULAR_STATUS_VAN_ENROUTE_TO_PICKUP;
+import static co.nvqa.commons.model.core.Order.STATUS_TRANSIT;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -249,8 +252,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     Order latestOrderInfo = retryIfAssertionErrorOrRuntimeExceptionOccurred(
         () -> getOrderClient().getOrder(orderId), methodInfo);
     assertEquals(f("Granular Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()),
-        "VAN_ENROUTE_TO_PICKUP", latestOrderInfo.getGranularStatus());
-    assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "TRANSIT",
+        GRANULAR_STATUS_VAN_ENROUTE_TO_PICKUP, latestOrderInfo.getGranularStatus());
+    assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), STATUS_TRANSIT,
         latestOrderInfo.getStatus());
   }
 
@@ -609,7 +612,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         .findFirst()
         .orElseThrow(() -> new RuntimeException(
             f("Vehicle Type with name [%s] was not found", vehicleType.getName())));
-    vehicleType.setId(Long.valueOf(apiData.getId()));
+    vehicleType.setId(apiData.getId());
   }
 
   @After("@DeleteVehicleTypes")
