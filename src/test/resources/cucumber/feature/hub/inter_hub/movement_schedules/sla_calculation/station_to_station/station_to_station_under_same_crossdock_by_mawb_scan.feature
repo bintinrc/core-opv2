@@ -84,7 +84,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows @SoftDeleteCrossdockDetailsViaDb
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock by MAWB Scan - Station Movement Found but there is no available schedule (uid:08df57d8-f3a5-4bc7-9418-c310c9031201)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management

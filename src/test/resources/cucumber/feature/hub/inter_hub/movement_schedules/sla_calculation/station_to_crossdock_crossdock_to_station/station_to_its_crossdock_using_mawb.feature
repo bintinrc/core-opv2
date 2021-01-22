@@ -68,7 +68,7 @@ Feature: Station to its Crossdock using MAWB
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows @SoftDeleteCrossdockDetailsViaDb
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to its Crossdock using MAWB - Station Movement Found but there is no available schedule (uid:b490f397-0beb-4fcf-8ee1-b8b979097a30)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
