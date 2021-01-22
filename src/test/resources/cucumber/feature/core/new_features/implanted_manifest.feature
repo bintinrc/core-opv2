@@ -6,7 +6,6 @@ Feature: Implanted Manifest
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page (uid:cd7f3ec4-3887-4f61-b057-d40ae8a56d5b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

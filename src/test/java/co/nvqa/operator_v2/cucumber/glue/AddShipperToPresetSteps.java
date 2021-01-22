@@ -6,9 +6,11 @@ import co.nvqa.operator_v2.selenium.page.AddShipperToPresetPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 
@@ -223,6 +225,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<ShipperInfo> actual = ShipperInfo
         .fromCsvFile(ShipperInfo.class, pathName, true);
+    FileUtils.deleteQuietly(new File(pathName));
 
     assertEquals("Unexpected number of lines in CSV file", expected.size(),
         actual.size());
