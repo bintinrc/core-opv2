@@ -86,7 +86,7 @@ Feature: Path Invalidation - With Trip
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 2 in movement_path table
 
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
   Scenario: Create Schedule (CD->CD) - Van Inbound w/ Trip (uid:46da887e-b5b5-4467-b3fa-523bc849e964)
     Given API Operator creates 3 new Hub using data below:
       | name         | GENERATED |
