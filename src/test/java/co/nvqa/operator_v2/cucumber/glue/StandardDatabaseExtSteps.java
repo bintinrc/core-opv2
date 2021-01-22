@@ -1325,6 +1325,11 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       String scheduleType, String originHub, String destHub, List<String> shipmentIds) {
     switch (scheduleType) {
       case HUB_CD_CD:
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "FAILED", originHub, destHub, shipmentIds.subList(0,1));
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "NOT FOUND", originHub, destHub, shipmentIds.subList(1,2));
+        break;
       case HUB_ST_ST_DIFF_CD:
       case HUB_ST_CD_DIFF_CD:
       case HUB_CD_ST_DIFF_CD:
@@ -1535,16 +1540,27 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     String pathOptionTwo;
     String pathOptionThree;
     String pathOptionFour;
+    String expectedExtDataLandHaul;
+    String expectedExtDataAirHaul;
 
     switch (scheduleType) {
       case HUB_CD_CD:
-      case "ST->its CD":
-      case "CD->its ST":
-        apiOperatorVerifySlaInMovementEventsTableForMovement(scheduleType);
+      case HUB_ST_ITS_CD:
+      case HUB_CD_ITS_ST:
+        expectedExtDataLandHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(2));
+        expectedExtDataAirHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(3));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
         break;
-      case "ST->another CD":
-      case "ST->ST under same CD":
-      case "CD->ST under another CD":
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_CD_ST_DIFF_CD:
         apiOperatorVerifySlaInMovementEventsTableForMovement("default");
         pathBase = f(
             "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
@@ -1566,7 +1582,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
             isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
         break;
-      case "ST->ST under diff CD":
+      case HUB_ST_ST_DIFF_CD:
         apiOperatorVerifySlaInMovementEventsTableForMovement("default");
         pathBase = f(
             "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
