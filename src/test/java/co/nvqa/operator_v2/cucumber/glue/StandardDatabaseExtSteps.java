@@ -1438,22 +1438,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     switch (scheduleType) {
       case HUB_CD_CD:
-      case "ST->its CD":
-      case "CD->its ST":
+      case HUB_ST_ITS_CD:
+      case HUB_CD_ITS_ST:
         expectedExtDataLandHaul = f(
             "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
-            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(2));
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(0));
         expectedExtDataAirHaul = f(
             "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
-            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(3));
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(1));
         assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
             isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
         assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
             isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
         break;
-      case "ST->another CD":
-      case "ST->ST under same CD":
-      case "CD->ST under another CD":
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_CD_ST_DIFF_CD:
         pathBase = f(
             "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
             hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(1).getName());
@@ -1474,7 +1474,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
             isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
         break;
-      case "ST->ST under diff CD":
+      case HUB_ST_ST_DIFF_CD:
         pathBase = f(
             "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
             hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(3).getName(),
