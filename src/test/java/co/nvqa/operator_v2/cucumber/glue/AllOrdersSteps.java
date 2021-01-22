@@ -107,12 +107,16 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator find multiple orders by uploading CSV on All Orders page$")
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage() {
     List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
+  }
 
+  @When("^Operator find orders by uploading CSV on All Orders page:$")
+  public void operatorFindOrdersByUploadingCsvOnAllOrderPage(List<String> listOfCreatedTrackingId) {
     if (CollectionUtils.isEmpty(listOfCreatedTrackingId)) {
-      throw new RuntimeException("List of created Tracking ID should not be null or empty.");
+      throw new IllegalArgumentException(
+          "List of created Tracking ID should not be null or empty.");
     }
-
-    allOrdersPage.findOrdersWithCsv(listOfCreatedTrackingId);
+    allOrdersPage.findOrdersWithCsv(resolveValues(listOfCreatedTrackingId));
   }
 
   @When("^Operator find order by uploading CSV on All Orders page$")
@@ -120,7 +124,7 @@ public class AllOrdersSteps extends AbstractSteps {
     String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
     if (StringUtils.isBlank(createdTrackingId)) {
-      throw new RuntimeException("Created Order Tracking ID should not be null or empty.");
+      throw new IllegalArgumentException("Created Order Tracking ID should not be null or empty.");
     }
 
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
@@ -191,13 +195,18 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.pullOutFromRoute(listOfTrackingIds);
   }
 
-  @When("^Operator add multiple orders to route on All Orders page$")
-  public void operatorAddMultipleOrdersToRouteOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    allOrdersPage.addToRoute(listOfTrackingIds, routeId);
+  @When("Operator add multiple orders to route on All Orders page:")
+  public void operatorAddMultipleOrdersUsingTagFilterToRouteOnAllOrdersPage(
+      Map<String, String> data) {
+    data = resolveKeyValues(data);
+    List<String> listOfTrackingIds = null;
+    String trackingIds = data.get("trackingIds");
+    if (StringUtils.isNotBlank(trackingIds)) {
+      listOfTrackingIds = splitAndNormalize(trackingIds);
+    } else {
+      listOfTrackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    }
+    allOrdersPage.addToRoute(listOfTrackingIds, data.get("routeId"), data.get("tag"));
   }
 
   @When("^Operator print Waybill for single order on All Orders page$")

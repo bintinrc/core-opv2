@@ -63,8 +63,12 @@ Feature: All Orders
     When Operator go to menu Order -> All Orders
     When Operator find multiple orders by uploading CSV on All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
-    When Operator add multiple orders to route on All Orders page
-    Then API Operator verify multiple delivery orders is added to route
+    When Operator add multiple orders to route on All Orders page:
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verifies that info toast displayed:
+      | top    | 3 order(s) updated |
+      | bottom | add to route       |
+    And API Operator verify multiple delivery orders is added to route
 
   Scenario: Operator Print Waybill for Single Order on All Orders Page and Verify the Downloaded PDF Contains Correct Info (uid:4989c98b-9a7d-4f87-8bc3-d7b3692ce279)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -77,20 +81,57 @@ Feature: All Orders
     When Operator print Waybill for single order on All Orders page
     Then Operator verify the printed waybill for single order on All Orders page contains correct info
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Add Parcel to Route Using Tag Filter on All Orders Page (uid:a5f2f56b-2484-4401-bb65-f713c85e6017)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator selects the Route Tags of "{route-tag-name}" from the Route Finder on Edit Order Page
-    Then Operator verifies the route is tagged to the order
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-previous-1-day-yyyy-MM-dd} 16:00:00", "dateTime": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00+00:00" } |
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
+    When Operator go to menu Order -> All Orders
+    And Operator find orders by uploading CSV on All Orders page:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+    When Operator add multiple orders to route on All Orders page:
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]},{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+      | tag         | {KEY_CREATED_ROUTE_TAG.name}                                                          |
+    Then Operator verifies that info toast displayed:
+      | top    | 2 order(s) updated |
+      | bottom | add to route       |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE           |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | PENDING                |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[3]}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE           |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | PENDING                |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
 
   Scenario: Operator Force Success Single Order on All Orders Page (uid:0fa34155-b840-45c0-95eb-a789526c6e26)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -136,6 +177,7 @@ Feature: All Orders
     Given API Driver failed the delivery of the created parcel
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
+      | expectedStatus       | DELIVERY_FAIL        |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
     When Operator find multiple orders by uploading CSV on All Orders page

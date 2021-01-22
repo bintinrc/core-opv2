@@ -13,11 +13,13 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -56,6 +58,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   @FindBy(name = "commons.search")
   public NvApiTextButton search;
 
+  @FindBy(css = "th.column-checkbox md-menu")
+  public MdMenu selectionMenu;
+
   @FindBy(name = "container.order.list.find-orders-with-csv")
   public NvIconTextButton findOrdersWithCsv;
 
@@ -79,6 +84,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public CancelSelectedDialog cancelSelectedDialog;
+
+  @FindBy(css = "md-dialog")
+  public AddToRouteDialog addToRouteDialog;
 
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
@@ -259,9 +267,13 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     }
   }
 
+  public void selectAllShown() {
+    selectionMenu.selectOption("Select All Shown");
+  }
+
   public void forceSuccessSingleOrder(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption("Manually Complete Selected");
     manuallyCompleteOrderDialog.waitUntilVisible();
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
@@ -285,7 +297,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void rtsSingleOrderNextDay(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption("Set RTS to Selected");
     setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
     selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
@@ -295,9 +307,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void rtsMultipleOrderNextDay(List<String> listOfExpectedTrackingId) {
     clearFilterTableOrderByTrackingId();
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption("Set RTS to Selected");
-
     List<WebElement> listOfWe = findElementsByXpath(
         "//tr[@ng-repeat='order in ctrl.orders']/td[1]");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
@@ -319,7 +330,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void cancelSelected(List<String> listOfExpectedTrackingId) {
     clearFilterTableOrderByTrackingId();
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption(CANCEL_SELECTED.getName());
 
     cancelSelectedDialog.waitUntilVisible();
@@ -349,7 +360,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void resumeSelected(List<String> listOfExpectedTrackingId) {
     clearFilterTableOrderByTrackingId();
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption("Resume Selected");
 
     resumeSelectedDialog.waitUntilVisible();
@@ -395,7 +406,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void applyActionToOrdersByTrackingId(
       @SuppressWarnings("unused") List<String> listOfExpectedTrackingId, AllOrdersAction action) {
     clearFilterTableOrderByTrackingId();
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption(action.getName());
   }
 
@@ -437,22 +448,27 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     pullSelectedFromRouteDialog.waitUntilInvisible();
   }
 
-  public void addToRoute(List<String> listOfExpectedTrackingId, long routeId) {
+  public void addToRoute(List<String> listOfExpectedTrackingId, String routeId, String tag) {
     clearFilterTableOrderByTrackingId();
-    selectAllShown("ctrl.ordersTableParam");
+    selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
-
-    List<WebElement> listOfWe = findElementsByXpath(
-        "//div[@md-virtual-repeat='order in ctrl.formData.orders']/div[@class='table-tracking-id']");
-    List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
+    addToRouteDialog.waitUntilVisible();
+    List<String> actualTrackingId = addToRouteDialog.trackingIds.stream().map(PageElement::getText)
         .collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
+
+    assertThat("List of Tracking IDs", actualTrackingId,
         hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
-    clickNvIconTextButtonByName("container.order.edit.set-to-all");
-    sendKeysById("container.order.edit.route", String.valueOf(routeId));
-    clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.add-selected-to-routes");
-    waitUntilInvisibilityOfToast("updated");
+    addToRouteDialog.setToAll.click();
+    if (StringUtils.isNotBlank(routeId)) {
+      addToRouteDialog.routes.get(0).setValue(routeId);
+    } else if (StringUtils.isNotBlank(tag)) {
+      addToRouteDialog.routeFinder.click();
+      addToRouteDialog.routeTags.get(0).selectValues(ImmutableList.of(tag));
+      addToRouteDialog.suggestRoutes.clickAndWaitUntilDone();
+    }
+    addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
+    addToRouteDialog.waitUntilInvisible();
   }
 
   public void printWaybill(String trackingId) {
@@ -717,6 +733,40 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     public NvApiTextButton cancelOrders;
 
     public CancelSelectedDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class AddToRouteDialog extends MdDialog {
+
+    @FindBy(name = "container.order.edit.set-to-all")
+    public NvIconTextButton setToAll;
+
+    @FindBy(name = "container.order.edit.route-finder")
+    public NvIconTextButton routeFinder;
+
+    @FindBy(name = "commons.close")
+    public NvIconTextButton close;
+
+    @FindBy(name = "container.order.edit.suggest-routes")
+    public NvApiTextButton suggestRoutes;
+
+    @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders'] > div.table-tracking-id")
+    public List<PageElement> trackingIds;
+
+    @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders']  md-select[name^='commons.type']")
+    public List<MdSelect> types;
+
+    @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders']  input[name^='container.order.edit.route']")
+    public List<TextBox> routes;
+
+    @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders']  md-select[name^='container.order.edit.route-tags']")
+    public List<MdSelect> routeTags;
+
+    @FindBy(name = "container.order.edit.add-selected-to-routes")
+    public NvApiTextButton addSelectedToRoutes;
+
+    public AddToRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

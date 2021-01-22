@@ -438,7 +438,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorSelectTheRouteTagsOfFromTheRouteFinder(String routeTag) {
     editOrderPage.clickMenu("Delivery", "Add To Route");
     editOrderPage.addToRouteDialog.waitUntilVisible();
-    editOrderPage.addToRouteDialog.routeTags.selectValue(routeTag);
+    editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(resolveValue(routeTag)));
     editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
     if (editOrderPage.toastErrors.size() > 0) {
       Assert.fail(
