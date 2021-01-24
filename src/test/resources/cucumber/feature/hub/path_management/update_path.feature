@@ -83,7 +83,7 @@ Feature: Update Path
     And API Operator reloads hubs cache
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
-    Given API Operator create manual path with the first movement schedule
+    Given API Operator create "manual" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
@@ -296,7 +296,7 @@ Feature: Update Path
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 1
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
-    Given API Operator create "manual" path from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with multiple movement schedule ids:
+    Given API Operator create "manual" path from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with multiple movement schedule ids with "LAND_HAUL" movement type:
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id} |
     And Operator refresh page
@@ -333,7 +333,7 @@ Feature: Update Path
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[4].id}" plus hours 2
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[4].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[5].id}" plus hours 3
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[5].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 4
-    Given API Operator create "manual" path from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with multiple movement schedule ids:
+    Given API Operator create "manual" path from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with multiple movement schedule ids with "LAND_HAUL" movement_type:
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id} |
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[4].id} |
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[5].id} |
@@ -374,7 +374,7 @@ Feature: Update Path
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[4].id}" plus hours 2
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[4].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[5].id}" plus hours 3
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[5].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 4
-    Given API Operator create "manual" path from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with multiple movement schedule ids:
+    Given API Operator create "manual" path from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with multiple movement schedule ids with "LAND_HAUL" movement type:
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id} |
       | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[4].id} |

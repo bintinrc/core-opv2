@@ -45,9 +45,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
   @When("^Operator filter Route Monitoring V2 using data below and then load selection:$")
   public void operatorFilterRouteMonitoringV2UsingDataBelowAndThenLoadSelection(
       Map<String, String> data) {
-    if (routeMonitoringV2Page.openFilters.isDisplayedFast()) {
-      routeMonitoringV2Page.openFilters.click();
-    }
+    routeMonitoringV2Page.expandFilters();
 
     data = resolveKeyValues(data);
     RouteMonitoringFilters filters = new RouteMonitoringFilters(data);
@@ -84,7 +82,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
     long start = new Date().getTime();
     while (routeMonitoringV2Page.routeMonitoringTable.isEmpty() && (new Date().getTime() - start
         <= timeout)) {
-      routeMonitoringV2Page.openFilters.click();
+      routeMonitoringV2Page.expandFilters();
       routeMonitoringV2Page.loadSelection.click();
       pause1s();
       routeMonitoringV2Page.smallSpinner.waitUntilInvisible();
@@ -129,8 +127,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
         .filterByColumn(COLUMN_ROUTE_ID, resolveValue(routeId));
     pause1s();
     routeMonitoringV2Page.routeMonitoringTable.clickColumn(1, COLUMN_INVALID_FAILED_WP);
-    routeMonitoringV2Page.invalidFailedWpModal.waitUntilVisible();
-    routeMonitoringV2Page.spinner.waitUntilInvisible();
+    routeMonitoringV2Page.invalidFailedWpModal.waitUntilLoaded();
   }
 
   @When("^Operator check there are (\\d+) Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page$")

@@ -18,7 +18,7 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   private static final String CREATE_SUB_SHIPPER_BUTTON_XPATH = "//button[descendant::*[text()='Create Sub-shipper Account(s)']]";
   private static final String PREV_PAGE_XPATH = "//li[contains(@class,'ant-pagination-prev')]";
   private static final String NEXT_PAGE_XPATH = "//li[contains(@class,'ant-pagination-next')]";
-  private static final String SELLER_ID_ID = "sellerId";
+  private static final String BRANCH_ID_ID = "branchId";
   private static final String NAME_ID = "name";
   private static final String EMAIL_ID = "email";
   private static final String ERROR_MSG_CREATE_SUB_SHIPPER_XPATH = "//div[contains(@class,'ant-form-item-control')]//div[contains(@class,'ant-form-explain')]";
@@ -28,6 +28,7 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   public static final String EMAIL_COLUMN_LOCATOR_KEY = "email";
   public static final int MASTER_SHIPPER_VIEW_SUB_SHIPPER_ACTION_BUTTON_INDEX = 3;
   public static final int SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX = 2;
+  public static final String XPATH_SUB_SHIPPER_BACK = "//*[@class='ant-page-header-back-icon']";
 
   public B2bManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -66,10 +67,10 @@ public class B2bManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().parentFrame();
   }
 
-  public void fillSellerId(String sellerId) {
+  public void fillBranchId(String branchId) {
     getWebDriver().switchTo().parentFrame();
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-    sendKeysById(SELLER_ID_ID, sellerId);
+    sendKeysById(BRANCH_ID_ID, branchId);
     getWebDriver().switchTo().parentFrame();
   }
 
@@ -119,12 +120,26 @@ public class B2bManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().parentFrame();
   }
 
-  public void shipperDetailsDisplayed(String shipperId) {
-    String currentWindowsHandle = switchToNewWindow();
-    String currentUrl = getWebDriver().getCurrentUrl();
+  public void backToSubShipperTable() {
+    getWebDriver().switchTo().parentFrame();
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+    if (isElementExistFast(XPATH_SUB_SHIPPER_BACK)) {
+      click(XPATH_SUB_SHIPPER_BACK);
+    }
+    getWebDriver().switchTo().parentFrame();
+  }
 
-    assertTrue(currentUrl.endsWith(shipperId));
-    getWebDriver().switchTo().window(currentWindowsHandle);
+  public void goToFirstPage() {
+    while (!isPrevPageButtonDisable()) {
+      clickPrevPageButton();
+    }
+  }
+
+  public void shipperDetailsDisplayed(String shipperName) {
+    switchToNewWindow();
+    String actualShipperName = getInputValueById("shipper-name");
+
+    assertEquals("Check corporate sub shipper", shipperName, actualShipperName);
   }
 
   public String getErrorMessage() {
@@ -152,7 +167,7 @@ public class B2bManagementPage extends OperatorV2SimplePage {
         String emailLocator) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(idLocator, "sellerId")
+          .put(idLocator, "id")
           .put(nameLocator, "name")
           .put(emailLocator, "email")
           .build()

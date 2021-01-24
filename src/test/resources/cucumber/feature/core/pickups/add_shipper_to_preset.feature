@@ -5,7 +5,7 @@ Feature: Add Shipper To Preset
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipperPickupFilterTemplate @Close@CloseNewWindows
+  @DeleteShipper @DeleteShipperPickupFilterTemplate @Close@CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address (uid:c5345ae2-e212-42c7-866a-59d5f1a80e42)
     Given API Operator creates new Shipper Pickup Filter Template using data below:
       | name                | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
@@ -70,7 +70,7 @@ Feature: Add Shipper To Preset
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
-  @DeleteShipperPickupFilterTemplate @CloseNewWindows
+  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Multiple Addresses (uid:fd702085-61cd-4aab-9f18-e8a556f45544)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Shipper Pickup Filter Template using data below:
@@ -156,7 +156,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file contains all Shippers currently being shown on Add Shipper To Preset page
 
-  @CloseNewWindows
+  @DeleteShipper @CloseNewWindows
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Filtered Shipper (uid:4790da95-8173-4c53-a208-ab77052ebaff)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Shipper -> All Shippers

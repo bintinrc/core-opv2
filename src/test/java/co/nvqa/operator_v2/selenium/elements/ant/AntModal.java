@@ -20,6 +20,9 @@ public class AntModal extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
+  @FindBy(css = ".ant-spin-dot")
+  public PageElement spinner;
+
   @FindBy(className = "ant-modal-close")
   public PageElement close;
 
@@ -36,5 +39,12 @@ public class AntModal extends PageElement {
 
   public void waitUntilVisible() {
     title.waitUntilClickable();
+  }
+
+  public void waitUntilLoaded() {
+    waitUntilVisible();
+    if (spinner.waitUntilVisible(2)) {
+      spinner.waitUntilInvisible();
+    }
   }
 }

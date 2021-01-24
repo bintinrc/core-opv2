@@ -27,7 +27,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.text.ParseException;
 import java.time.ZoneId;
@@ -41,7 +40,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -148,6 +146,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public EditRtsDetailsDialog editRtsDetailsDialog;
 
+  @FindBy(css = "md-dialog")
+  public ResumeOrderDialog resumeOrderDialog;
+
   @FindBy(id = "delivery-details")
   public DeliveryDetailsBox deliveryDetailsBox;
 
@@ -183,20 +184,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
   public void openPage(long orderId) {
     getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.COUNTRY_CODE.toLowerCase(), orderId));
-    String dialogXpath = "//md-dialog";
-    if (isElementVisible(dialogXpath, 2)) {
-      List<String> closeLocators = ImmutableList.of(
-          dialogXpath + "//button[@aria-label='Leave']"
-      );
-      for (String closeLocator : closeLocators) {
-        if (isElementVisible(closeLocator, 0)) {
-          pause1s();
-          click(closeLocator);
-          waitUntilInvisibilityOfElementLocated(closeLocator);
-          break;
-        }
-      }
-    }
+    pause1s();
+    closeDialogIfVisible();
     waitUntilInvisibilityOfLoadingOrder();
   }
 
@@ -307,20 +296,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     addToRouteDialog.type.selectValue(type);
     addToRouteDialog.addToRoute.clickAndWaitUntilDone();
     addToRouteDialog.waitUntilInvisible();
-  }
-
-  public void addToRouteFromRouteTag(String routeTag) {
-    clickMenu("Delivery", "Add To Route");
-    addToRouteDialog.waitUntilVisible();
-    addToRouteDialog.routeTags.selectValue(routeTag);
-    addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
-    if (toastErrors.size() > 0) {
-      Assert.fail(
-          f("Error on attempt to suggest routes: %s", toastErrors.get(0).toastBottom.getText()));
-    }
-    addToRouteDialog.addToRoute.clickAndWaitUntilDone();
-    addToRouteDialog.waitUntilInvisible();
-    waitUntilInvisibilityOfToast(true);
   }
 
   public void verifyDeliveryStartDateTime(String expectedDate) {
@@ -2101,7 +2076,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public NvApiTextButton cancelRts;
   }
 
-
   public static class EditRtsDetailsDialog extends MdDialog {
 
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
@@ -2134,5 +2108,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
+  }
+
+  public static class ResumeOrderDialog extends MdDialog {
+
+    public ResumeOrderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(name = "container.order.edit.resume-order")
+    public NvApiTextButton resumeOrder;
   }
 }

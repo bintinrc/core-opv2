@@ -34,6 +34,5 @@ public class MdMenu extends PageElement {
   private void openMenu() {
     selectionButton.click();
     pause100ms();
-
   }
 }

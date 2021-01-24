@@ -137,7 +137,9 @@ public class ImplantedManifestSteps extends AbstractSteps {
   @When("^Operator scans \"(.+)\" barcode on Implanted Manifest page$")
   public void operatorScansBarcodeOnImplantedManifestPage(String barcode) {
     barcode = resolveValue(barcode);
+    implantedManifestPage.scanBarcodeInput.click();
     implantedManifestPage.scanBarcodeInput.setValue(barcode + Keys.ENTER);
+    pause1s();
   }
 
   @When("^Operator creates manifest for \"(.+)\" reservation on Implanted Manifest page$")

@@ -77,7 +77,7 @@ Feature: All Orders
     When Operator print Waybill for single order on All Orders page
     Then Operator verify the printed waybill for single order on All Orders page contains correct info
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Operator Add Parcel to Route Using Tag Filter on All Orders Page (uid:a5f2f56b-2484-4401-bb65-f713c85e6017)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -88,9 +88,8 @@ Feature: All Orders
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator set tags of the new created route to [{route-tag-id}]
-    Given Operator go to menu Order -> All Orders
-    When Operator open page of the created order from All Orders page
-    And Operator selects the Route Tags of "{route-tag-name}" from the Route Finder
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator selects the Route Tags of "{route-tag-name}" from the Route Finder on Edit Order Page
     Then Operator verifies the route is tagged to the order
 
   Scenario: Operator Force Success Single Order on All Orders Page (uid:0fa34155-b840-45c0-95eb-a789526c6e26)

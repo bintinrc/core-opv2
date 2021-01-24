@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableList;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -433,9 +434,33 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.manuallyCompleteOrder();
   }
 
-  @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder")
+  @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder on Edit Order Page")
   public void operatorSelectTheRouteTagsOfFromTheRouteFinder(String routeTag) {
-    editOrderPage.addToRouteFromRouteTag(routeTag);
+    editOrderPage.clickMenu("Delivery", "Add To Route");
+    editOrderPage.addToRouteDialog.waitUntilVisible();
+    editOrderPage.addToRouteDialog.routeTags.selectValue(routeTag);
+    editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
+    if (editOrderPage.toastErrors.size() > 0) {
+      Assert.fail(
+          f("Error on attempt to suggest routes: %s",
+              editOrderPage.toastErrors.get(0).toastBottom.getText()));
+    }
+    editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    editOrderPage.addToRouteDialog.waitUntilInvisible();
+    editOrderPage.waitUntilInvisibilityOfToast(true);
+  }
+
+  @And("Operator suggest route of {string} tag from the Route Finder on Edit Order Page")
+  public void operatorSuggestRouteFromTheRouteFinder(String routeTag) {
+    editOrderPage.addToRouteDialog.waitUntilVisible();
+    editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(resolveValue(routeTag)));
+    editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
+  }
+
+  @And("Operator verify Route value is {string} in Add To Route dialog on Edit Order Page")
+  public void operatorVerifyRouteValue(String expected) {
+    assertEquals("Route value", resolveValue(expected),
+        editOrderPage.addToRouteDialog.route.getValue());
   }
 
   @Then("^Operator verify order event on Edit order page using data below:$")
@@ -1132,5 +1157,13 @@ public class EditOrderSteps extends AbstractSteps {
     }
     editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
+  }
+
+  @Then("Operator resume order on Edit Order page")
+  public void operatorResumeOrder() {
+    editOrderPage.clickMenu("Order Settings", "Resume Order");
+    editOrderPage.resumeOrderDialog.waitUntilVisible();
+    editOrderPage.resumeOrderDialog.resumeOrder.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) resumed", true);
   }
 }

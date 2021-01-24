@@ -24,6 +24,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static co.nvqa.commons.model.core.Order.STATUS_CANCELLED;
+import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
+
 /**
  * @author Tristania Siagian
  */
@@ -730,11 +733,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
         statusConverted = "In Transit";
         break;
 
-      case "COMPLETED":
+      case STATUS_COMPLETED:
         statusConverted = "Completed";
         break;
 
-      case "CANCELLED":
+      case STATUS_CANCELLED:
         statusConverted = "Cancelled";
         break;
 

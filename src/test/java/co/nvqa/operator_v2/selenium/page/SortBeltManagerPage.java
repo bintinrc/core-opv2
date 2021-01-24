@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,6 +29,18 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[.//span[contains(., 'Proceed')]]")
   public AntButton proceed;
+
+  @FindBy(xpath = "//div[./label/span[.='Active Configuration']]")
+  public PageElement activeConfiguration;
+
+  @FindBy(xpath = "//div[./label/span[.='Previous Configuration']]")
+  public PageElement previousConfiguration;
+
+  @FindBy(xpath = "//div[./label/span[.='Last changed at']]")
+  public PageElement lastChangedAt;
+
+  @FindBy(xpath = "//button[.//span[.='Change']]")
+  public Button change;
 
   @FindBy(xpath = "//button[.//span[contains(., 'Create Configuration')]]")
   public Button create;
@@ -62,6 +75,9 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-wrap")
   public ChangeUnassignedParcelArmModal changeUnassignedParcelArmModal;
 
+  @FindBy(className = "ant-modal-wrap")
+  public ChangeActiveConfigurationModal changeActiveConfigurationModal;
+
   public DuplicatedCombinationsTable duplicatedCombinationsTable;
   public UniqueCombinationsTable uniqueCombinationsTable;
 
@@ -73,6 +89,21 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
   public void switchTo() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
+  }
+
+  public String getActiveConfiguration() {
+    return StringUtils
+        .normalizeSpace(activeConfiguration.getText().replace("Active Configuration", ""));
+  }
+
+  public String getPreviousConfiguration() {
+    return StringUtils
+        .normalizeSpace(previousConfiguration.getText().replace("Previous Configuration", ""));
+  }
+
+  public String getLastChangedAt() {
+    return StringUtils
+        .normalizeSpace(lastChangedAt.getText().replace("Last changed at", ""));
   }
 
   public void verifyConfigNotCreated(String configName) {
@@ -104,6 +135,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
     public int getCombinationsCount() {
       return getElementsCountFast(By.cssSelector("div[class*='StyledRow']"));
+    }
+
+    public Button getRemoveButton(int index) {
+      String xpath = f("(.//button[contains(@class,'RemoveFilterButton')])[%d]", index);
+      return new Button(getWebDriver(), getWebElement(), xpath);
     }
 
     public AntSelect getFilterSelect(String filterName, int index) {
@@ -184,5 +220,18 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     public String getFilterValue(String filterName) {
       return findElement(By.xpath(f("//tr[.//td[contains(.,'%s')]]//td[2]", filterName))).getText();
     }
+  }
+
+  public static class ChangeActiveConfigurationModal extends AntModal {
+
+    public ChangeActiveConfigurationModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[1]")
+    public AntSelect configuration;
+
+    @FindBy(xpath = ".//button[.//span[contains(., 'Confirm')]]")
+    public AntButton confirm;
   }
 }

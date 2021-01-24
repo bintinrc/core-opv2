@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.hub.Hub;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
@@ -12,6 +14,8 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +31,13 @@ import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.Schedules
 public class MovementManagementSteps extends AbstractSteps {
 
   private MovementManagementPage movementManagementPage;
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
 
   public MovementManagementSteps() {
   }
@@ -314,8 +325,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @And("Operator fill Add Movement Schedule form using data below:")
   public void operatorFillAddMovementScheduleFormUsingDataBelow(Map<String, String> data) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       try {
         final Map<String, String> finalData = StandardTestUtils
             .replaceDataTableTokens(resolveKeyValues(data));
@@ -542,5 +552,160 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addMovementScheduleModal.errorMessage.isDisplayedFast());
     assertEquals("Error message text", expectedMessage,
         movementManagementPage.addMovementScheduleModal.errorMessage.getText());
+  }
+
+  @When("Operator deletes schedule for {string} movement")
+  public void operatorDeletesScheduleForMovement(String scheduleType) {
+    retryIfRuntimeExceptionOccurred(() -> {
+      try {
+        List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+        String originHub = hubs.get(0).getName();
+        String destinationHub = hubs.get(1).getName();
+        switch (scheduleType) {
+          case HUB_CD_CD:
+            movementManagementPage.originCrossdockHub.selectValue(originHub);
+            movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
+            break;
+          case HUB_CD_ITS_ST:
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(originHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
+            break;
+          case HUB_CD_ST_DIFF_CD:
+            destinationHub = hubs.get(2).getName();
+            movementManagementPage.originCrossdockHub.selectValue(originHub);
+            movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
+            break;
+          case HUB_ST_ST_SAME_CD:
+          case HUB_ST_ST_DIFF_CD:
+          case HUB_ST_CD_DIFF_CD:
+            destinationHub = hubs.get(2).getName();
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(destinationHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
+            break;
+          case HUB_ST_ITS_CD:
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(destinationHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
+            break;
+        }
+        movementManagementPage.loadSchedules.click();
+        movementManagementPage.modify.click();
+        movementManagementPage.rowCheckBox.check();
+        movementManagementPage.rowCheckBoxSecond.check();
+        movementManagementPage.delete.click();
+        movementManagementPage.modalDeleteButton.click();
+        movementManagementPage
+            .verifyNotificationWithMessage("2 schedule(s) have been deleted.");
+        assertThat("effecting path text is equal",
+            movementManagementPage.effectingPathText.getText(), equalTo("Effecting Paths"));
+        movementManagementPage.effectingPathClose.click();
+        assertThat("No results found is true",
+            movementManagementPage.noResultsFoundText.getText(),
+            equalTo("No Results Found"));
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info(
+            f("Cannot select hub name value in Origin Crossdock Hub field on the Movement Schedule page"));
+        movementManagementPage.refreshPage();
+        movementManagementPage.switchTo();
+        throw ex;
+      }
+    }, 5);
+  }
+
+  @When("Operator updates schedule for {string} movement")
+  public void operatorUpdatesScheduleForMovement(String scheduleType) {
+    retryIfRuntimeExceptionOccurred(() -> {
+      try {
+        List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+        String originHub = hubs.get(0).getName();
+        String destinationHub = hubs.get(1).getName();
+        switch (scheduleType) {
+          case HUB_CD_CD:
+            movementManagementPage.originCrossdockHub.selectValue(originHub);
+            movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
+            break;
+          case HUB_CD_ITS_ST:
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(originHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
+            break;
+          case HUB_CD_ST_DIFF_CD:
+            destinationHub = hubs.get(2).getName();
+            movementManagementPage.originCrossdockHub.selectValue(originHub);
+            movementManagementPage.destinationCrossdockHub.selectValue(destinationHub);
+            break;
+          case HUB_ST_ST_SAME_CD:
+          case HUB_ST_ST_DIFF_CD:
+          case HUB_ST_CD_DIFF_CD:
+            destinationHub = hubs.get(2).getName();
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(destinationHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
+            break;
+          case HUB_ST_ITS_CD:
+            movementManagementPage.stationsTab.click();
+            movementManagementPage.crossdockHub.selectValue(destinationHub);
+            movementManagementPage.originStationHub.selectValue(originHub);
+            movementManagementPage.destinationStationHub.selectValue(destinationHub);
+            break;
+        }
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info(
+            f("Cannot select hub name value in Origin Crossdock Hub field on the Movement Schedule page"));
+        movementManagementPage.refreshPage();
+        movementManagementPage.switchTo();
+        throw ex;
+      }
+    }, 5);
+    movementManagementPage.loadSchedules.click();
+    movementManagementPage.modify.click();
+    String displayTime = DateUtil
+        .displayTime(DateUtil.getDate(ZoneId.of("UTC")).plusHours(7), true);
+    movementManagementPage.departureTimeInputs.get(0).setValue(displayTime);
+    movementManagementPage.departureTimeInputs.get(1).setValue(displayTime);
+    movementManagementPage.durationInputs.get(0).setValue("00:45");
+    movementManagementPage.durationInputs.get(1).setValue("00:45");
+    movementManagementPage.commentInputs.get(0)
+        .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.commentInputs.get(1)
+        .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+        .verifyNotificationWithMessage("2 schedule(s) have been updated.");
+
+    switch (scheduleType) {
+      case HUB_CD_ITS_ST:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ITS_CD:
+        movementManagementPage.closeButton.click();
+        break;
+    }
+
+    assertThat("departure time 1 is true",
+        movementManagementPage.departureTimes.get(0).getText(), equalTo(displayTime));
+    assertThat("departure time 2 is true",
+        movementManagementPage.departureTimes.get(1).getText(), equalTo(displayTime));
+    assertThat("duration 1 is true",
+        movementManagementPage.durations.get(0).getText(), equalTo("00d 00h 45m"));
+    assertThat("duration 2 is true",
+        movementManagementPage.durations.get(0).getText(), equalTo("00d 00h 45m"));
+    assertThat("comments 1 is true",
+        movementManagementPage.comments.get(0).getText(),
+        equalTo("This schedule has been updated by Automation Test"));
+    assertThat("comments 2 is true",
+        movementManagementPage.comments.get(0).getText(),
+        equalTo("This schedule has been updated by Automation Test"));
   }
 }

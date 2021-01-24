@@ -43,6 +43,7 @@ public class SalesSteps extends AbstractSteps {
         .parseInt(dataTableAsMap.getOrDefault("numberOfSalesPerson", "1"));
 
     for (int i = 0; i < numberOfSalesPerson; i++) {
+      pause100ms(); //to avoid same uniqueString
       String uniqueString = generateDateUniqueString();
       SalesPerson salesPerson = new SalesPerson();
       salesPerson.setCode("DSP-" + uniqueString);
