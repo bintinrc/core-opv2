@@ -271,10 +271,10 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectionMenu.selectOption("Select All Shown");
   }
 
-  public void forceSuccessSingleOrder(String trackingId) {
-    filterTableOrderByTrackingId(trackingId);
+  public void forceSuccessOrders() {
+    clearFilterTableOrderByTrackingId();
     selectAllShown();
-    actionsMenu.selectOption("Manually Complete Selected");
+    actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
@@ -352,10 +352,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     cancelSelectedDialog.waitUntilInvisible();
 
     waitUntilInvisibilityOfToast(f("%d order(s) updated", listOfExpectedTrackingId.size()));
-  }
-
-  public void openFiltersForm() {
-    clickButtonByAriaLabel("Edit Conditions");
   }
 
   public void resumeSelected(List<String> listOfExpectedTrackingId) {

@@ -1120,7 +1120,7 @@ Feature: Edit Order
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
-    And Operator RTS order on Edit Order page using data below:
+    When Operator RTS order on Edit Order page using data below:
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |

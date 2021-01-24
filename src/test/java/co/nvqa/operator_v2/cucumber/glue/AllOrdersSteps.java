@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -158,7 +159,15 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator Force Success single order on All Orders page$")
   public void operatorForceSuccessSingleOrderOnAllOrdersPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.forceSuccessSingleOrder(trackingId);
+    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
+    allOrdersPage.forceSuccessOrders();
+  }
+
+  @When("Operator Force Success multiple orders on All Orders page")
+  public void operatorForceSuccessOrders() {
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.findOrdersWithCsv(trackingIds);
+    allOrdersPage.forceSuccessOrders();
   }
 
   @Then("^Operator verify the order is Force Successed successfully$")
@@ -224,7 +233,16 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator resume order on All Orders page$")
   public void operatorResumeOrderOnAllOrdersPage() {
     List<String> trackingIds = Collections.singletonList(get(KEY_CREATED_ORDER_TRACKING_ID));
-    allOrdersPage.openFiltersForm();
+    resumeOrders(trackingIds);
+  }
+
+  @When("^Operator resume multiple orders on All Orders page$")
+  public void operatorResumeOrdersOnAllOrdersPage() {
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    resumeOrders(trackingIds);
+  }
+
+  private void resumeOrders(List<String> trackingIds) {
     allOrdersPage.findOrdersWithCsv(trackingIds);
     allOrdersPage.resumeSelected(trackingIds);
   }
@@ -232,7 +250,6 @@ public class AllOrdersSteps extends AbstractSteps {
   @Then("^Operator verify order status is \"(.+)\"$")
   public void operatorVerifyOrderStatusIs(String expectedOrderStatus) {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.openFiltersForm();
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(trackingId));
     allOrdersPage.verifyOrderStatus(trackingId, expectedOrderStatus);
   }
