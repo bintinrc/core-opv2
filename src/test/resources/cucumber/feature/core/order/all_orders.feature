@@ -26,7 +26,7 @@ Feature: All Orders
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
-  Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders
+  Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders (uid:07ae3956-3711-4994-8de4-94d43ca93edf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -203,7 +203,7 @@ Feature: All Orders
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
 
-  Scenario: Operator Force Success Multiple Orders on All Orders Page
+  Scenario: Operator Force Success Multiple Orders on All Orders Page (uid:07e813db-12db-4861-a27f-f5a059f186af)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -282,7 +282,7 @@ Feature: All Orders
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS Multiple Orders on All Orders Page
+  Scenario: Operator RTS Multiple Orders on All Orders Page (uid:0061ef8a-2496-4ed9-a259-4dd01e8c7cba)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
