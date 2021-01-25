@@ -97,7 +97,6 @@ Feature: B2B Management
       | sub.shipper | uid:3aa9758b-2f85-43e3-8f99-adc34c71a868 |
 
 
-  @CloseNewWindows
   Scenario Outline: Edit sub shippers on shipper settings (<hiptest-uid>)
     When Operator go to tab corporate sub shipper
     And Operator click edit action button for first corporate sub shipper
