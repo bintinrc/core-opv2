@@ -48,37 +48,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       }
     }, 5);
   }
-//
-//  @When("Operator input hub data on Shipment Inbound Scanning page using data below:")
-//  public void inputHubDataOnShipmentInboundScanningPageUsingDataBelow(Map<String, String> data) {
-//    retryIfRuntimeExceptionOccurred(() ->
-//    {
-//      try {
-//        Map<String, String> resolvedData = resolveKeyValues(data);
-//        String label = resolvedData.get("label");
-//        String hub = resolvedData.get("hub");
-//
-//        scanningPage.inboundHub.searchAndSelectValue(hub);
-//        scanningPage.click(scanningPage.grabXpathButton(label));
-//        scanningPage.startInboundButton.click();
-//      } catch (Throwable ex) {
-//        NvLogger.error(ex.getMessage());
-//        NvLogger.info("Hub in Shipment inbound scanning not found, retrying...");
-//        scanningPage.refreshPage();
-//        throw ex;
-//      }
-//    }, 5);
-//  }
-//
-//  @When("Operator scan created shipment and in Shipment Inbound Scanning page")
-//  public void operatorScanCreatedShipmentInShipmentInboundScanningPage() {
-//    Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-//    String shipmentIdAsString = String.valueOf(shipmentId);
-//    scanningPage.fillShipmentId(shipmentId);
-//    if (StringUtils.isNotBlank(shipmentIdAsString)) {
-//      scanningPage.checkSessionScan(shipmentIdAsString);
-//    }
-//  }
 
   @When("^Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:$")
   public void inboundScanningUsingDataBelow(Map<String, String> data) {
