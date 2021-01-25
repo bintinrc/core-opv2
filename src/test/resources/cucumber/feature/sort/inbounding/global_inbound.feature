@@ -13,7 +13,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"<service>", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -40,7 +40,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName      | {hub-name}                                 |
+      | hubName      | {hub-name-3}                               |
       | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideSize | <size>                                     |
     Then Operator verify info on Global Inbound page using data below:
@@ -57,7 +57,7 @@ Feature: Global Inbound
     And Operator make sure size changed to "<size>"
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-3}     |
     Examples:
       | size | hiptest-uid                              |
       | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b |
@@ -73,7 +73,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 7                                          |
     Then Operator verify info on Global Inbound page using data below:
@@ -95,7 +95,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 7                                          |
     Then Operator verify info on Global Inbound page using data below:
@@ -120,7 +120,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}                                 |
+      | hubName           | {hub-name-3}                               |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideDimHeight | 2                                          |
       | overrideDimWidth  | 3                                          |
@@ -144,7 +144,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName           | {hub-name}                                 |
+      | hubName           | {hub-name-3}                               |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideSize      | L                                          |
       | overrideWeight    | 7                                          |
@@ -169,21 +169,21 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
     Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | ROUTED  |
       | color    | #e86161 |
     And API Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 26 |
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
@@ -197,20 +197,20 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
     And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When API Operator force succeed created order
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | RTS                   |
       | rackInfo       | sync_problem RECOVERY |
       | color          | #e86161               |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -226,13 +226,13 @@ Feature: Global Inbound
     When API Operator refresh created order data
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | TRANSFERRED TO 3PL    |
       | rackInfo       | sync_problem RECOVERY |
       | color          | #e86161               |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -244,13 +244,13 @@ Feature: Global Inbound
     And API Operator force created order status to Completed
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | COMPLETED             |
       | rackInfo       | sync_problem RECOVERY |
       | color          | #e86161               |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -262,13 +262,13 @@ Feature: Global Inbound
     And API Operator force created order status to Cancelled
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | CANCELLED             |
       | rackInfo       | sync_problem RECOVERY |
       | color          | #e86161               |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -278,9 +278,9 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
     When API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Driver collect all his routes
@@ -289,12 +289,12 @@ Feature: Global Inbound
     When API Operator start the route
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | ROUTED  |
       | color    | #e86161 |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -302,8 +302,8 @@ Feature: Global Inbound
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name} |
-      | trackingId | INVALID    |
+      | hubName    | {hub-name-3} |
+      | trackingId | INVALID      |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | INVALID               |
       | rackInfo       | sync_problem RECOVERY |
@@ -316,9 +316,9 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
     Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given API Driver collect all his routes
@@ -332,18 +332,16 @@ Feature: Global Inbound
     When Operator go to menu Inbounding -> Global Inbound
     And Operator refresh page
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    And API Operator verify order info after delivery "DELIVERY_FAILED"
-    And DB Operator verify transaction_failure_reason record for the created order
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId | {hub-id} |
-      | type  | 2        |
-    And DB Operator verify the last order_events record for the created order:
+      | hubId | {hub-id-3} |
+      | type  | 2          |
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Delivery fail" on Edit Order page
@@ -369,7 +367,7 @@ Feature: Global Inbound
     And Operator save Inbound settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -389,7 +387,7 @@ Feature: Global Inbound
     And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 10                                         |
       | weightWarning  | Weight is higher than original by 6.0 kg   |
@@ -412,7 +410,7 @@ Feature: Global Inbound
     And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 2                                          |
       | weightWarning  | Weight is lower than original by 8.0 kg    |
@@ -431,7 +429,7 @@ Feature: Global Inbound
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -441,7 +439,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId   | {hub-id}                                   |
+      | hubId   | {hub-id-3}                                 |
       | orderId | {KEY_CREATED_ORDER_ID}                     |
       | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | type    | 2                                          |
@@ -465,7 +463,7 @@ Feature: Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-3}     |
 
   @CloseNewWindows
   Scenario: Inbound parcel picked up from DP - Pickup Successed (uid:7c40f1b0-f27e-4699-b9ca-839b7923eddb)
@@ -477,7 +475,7 @@ Feature: Global Inbound
     Given DB Operator gets the Order ID by Tracking ID
     Given DB Operator gets Reservation ID based on Order ID from order pickups table
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add pickup reservation based on Address ID to route
     And API Operator start the route
     And API Driver collect all his routes
@@ -487,7 +485,7 @@ Feature: Global Inbound
     And API Driver success Reservation by scanning created parcel
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -513,7 +511,7 @@ Feature: Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-3}     |
 
   @CloseNewWindows
   Scenario Outline: Inbound with Priority Level - <Note> (<hiptest-uid>)
@@ -526,7 +524,7 @@ Feature: Global Inbound
       | priorityLevel | <priorityLevel>                   |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -540,7 +538,7 @@ Feature: Global Inbound
       | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
     Then API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}                                   |
+      | hubId      | {hub-id-3}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | type       | 2                                          |
     Then DB Operator verify next Pickup transaction values are updated for the created order:
@@ -570,7 +568,7 @@ Feature: Global Inbound
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"SG","address1":"30 Jalan Kilang Barat","address2":"NVQA V4 HQ","postcode":"628586"}, "collection_point": "{dp-short-name}"},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -579,7 +577,7 @@ Feature: Global Inbound
     And Operator verifies DP tag is displayed
     And API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}                                   |
+      | hubId      | {hub-id-3}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | type       | 2                                          |
     And DB Operator verify order_events record for the created order:
@@ -598,7 +596,7 @@ Feature: Global Inbound
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6596548707","email":"ninjavan.qa3@gmail.com","address":{"country":"SG","address2":"SIANG LIM SIAN LI BUDDHIST TEMPLE","address1":"184E JALAN TOA PAYOH #1-1","postcode":"319941"}},"parcel_job":{"allow_doorstep_dropoff": true,"enforce_delivery_verification": false,"delivery_verification_mode": "SIGNATURE","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":1},"allow_self_collection":true}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -606,7 +604,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}                                   |
+      | hubId      | {hub-id-3}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | type       | 2                                          |
     And DB Operator verify order_events record for the created order:
@@ -633,7 +631,7 @@ Feature: Global Inbound
       | OPV2AUTO3 |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -645,7 +643,7 @@ Feature: Global Inbound
       | OPV2AUTO3 |
     Then API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}                                   |
+      | hubId      | {hub-id-3}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | type       | 2                                          |
     And DB Operator verify order_events record for the created order:
@@ -687,7 +685,7 @@ Feature: Global Inbound
       | creatorUserEmailId      | 66                          |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -740,7 +738,7 @@ Feature: Global Inbound
       | creatorUserEmailId      | 66                               |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | ON HOLD - SHIPPER ISSUE |
@@ -748,7 +746,7 @@ Feature: Global Inbound
       | color          | #e86161                 |
     Then API Operator verify order Recovery ticket info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}               |
+      | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
@@ -762,7 +760,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -781,7 +779,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Express", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -800,7 +798,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -819,7 +817,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -838,7 +836,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -848,7 +846,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}               |
+      | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
@@ -867,7 +865,7 @@ Feature: Global Inbound
       | endDate   | {gradle-next-3-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-1}     |
 
   @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Express (uid:56abc408-a381-4c0d-b431-ed75a0f289d7)
@@ -877,13 +875,13 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Express", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}               |
+      | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
@@ -902,7 +900,7 @@ Feature: Global Inbound
       | endDate   | {gradle-next-2-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-3}     |
 
   @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Nextday (uid:49cbc076-7249-431d-abbb-43771b2ec41a)
@@ -912,13 +910,13 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}               |
+      | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
@@ -937,7 +935,7 @@ Feature: Global Inbound
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-3}     |
 
   @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Sameday (uid:964cd5ae-50f2-4ea0-87b4-e36fcfe1b49a)
@@ -947,13 +945,13 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
     And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}               |
+      | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
@@ -972,7 +970,7 @@ Feature: Global Inbound
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
+      | hubName | {hub-name-3}     |
 
   @CloseNewWindows
   Scenario: Inbound showing max weight limit alert - inbound weight is higher than max weight limit (uid:d56315b8-24df-49ad-8d1f-f02e0cfeb658)
@@ -987,15 +985,15 @@ Feature: Global Inbound
     And Operator save wight limit settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 25                                         |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 26 |
 
   @CloseNewWindows
   Scenario: Inbound showing max weight limit alert - inbound weight is equal to max weight limit (uid:fbcb6c61-f744-4bb7-9697-561d32714f9a)
@@ -1010,7 +1008,7 @@ Feature: Global Inbound
     And Operator save wight limit settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 26                                         |
       | weightWarning  | Weight is exceeding inbound weight limit   |
@@ -1018,7 +1016,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #e86161                            |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -1032,16 +1030,17 @@ Feature: Global Inbound
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
     And Operator save wight limit settings on Global Settings page
+    And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | {hub-name}                                 |
+      | hubName        | {hub-name-3}                               |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 24                                         |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -1053,13 +1052,13 @@ Feature: Global Inbound
       | addressType       | global                                                                                                                                                                                                                                                                |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | INTERNATIONAL                  |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector} |
       | color          | #ffa400                        |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -1071,13 +1070,13 @@ Feature: Global Inbound
       | addressType       | global                                                                                                                                                                                                                                                                |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -1089,9 +1088,9 @@ Feature: Global Inbound
     Given Operator go to menu Distribution Points -> DP Tagging
     When Operator tags single order to DP with DPMS ID = "{dpms-id}"
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator pulled out parcel "DELIVERY" from route
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
@@ -1103,14 +1102,14 @@ Feature: Global Inbound
     When API Operator refresh created order data
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     And Operator verifies DP tag is displayed
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -1121,7 +1120,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | deviceId   | 12345                                      |
     Then Operator verify info on Global Inbound page using data below:
@@ -1139,7 +1138,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | tags       | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3              |
     Then Operator verify info on Global Inbound page using data below:
@@ -1162,10 +1161,10 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
-      | OrderTag | 5570 |
+      | orderTag | 5570 |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | tags       | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3,SORTAUTO02   |
     Then Operator verify info on Global Inbound page using data below:
@@ -1190,7 +1189,7 @@ Feature: Global Inbound
       | orderTag | 5570 |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
+      | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |

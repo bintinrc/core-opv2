@@ -48,6 +48,9 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   public WaypointScansTable waypointScansTable;
   private MoneyCollectionDialog moneyCollectionDialog;
 
+  @FindBy(css = "md-progress-linear")
+  public PageElement progressBar;
+
   @FindBy(css = "md-dialog")
   public RouteInboundCommentsDialog routeInboundCommentsDialog;
 
@@ -308,82 +311,88 @@ public class RouteInboundPage extends OperatorV2SimplePage {
     }
   }
 
+  private void waitUntilLoaded() {
+    if (progressBar.waitUntilVisible(1)) {
+      progressBar.waitUntilInvisible();
+    }
+  }
+
   public void openPendingWaypointsDialog() {
     pendingButton.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Pending");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openCompletedWaypointsDialog() {
     successButton.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Completed");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openFailedWaypointsDialog() {
     failedButton.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Failed");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openFailedParcelsDialog() {
     failedParcels.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Failed Parcels");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openC2CReturnDialog() {
     c2cReturn.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("C2C + Return");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openReservationsDialog() {
     reservationsBigButton.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Reservations");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openTotalWaypointsDialog() {
     totalButton.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Total");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openPartialWaypointsDialog() {
     partialButton.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Partial");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openPendingDeliveriesDialog() {
     pendingDeliveries.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Pending Deliveries");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openFailedDeliveriesValidDialog() {
     failedDeliveriesValid.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Failed Deliveries (Valid)");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openFailedDeliveriesInvalidDialog() {
     failedDeliveriesInvalid.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Failed Deliveries (Invalid)");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openC2CReturnPickupsDialog() {
     c2cReturnPickups.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("C2C / Return Pickups");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void openReservationPickupsDialog() {
     reservationPickups.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("Reservation Pickups");
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void closeDialog() {
