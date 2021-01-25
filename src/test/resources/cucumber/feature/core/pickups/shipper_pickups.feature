@@ -254,12 +254,12 @@ Feature: Shipper Pickups
   Scenario Outline: Operator Filters Reservation by - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
+      | shipperId       | {shipper-v4-id}    |
+      | generateAddress | ZONE {zone-name-3} |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":<zoneId>, "hubId":<hubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
@@ -272,9 +272,9 @@ Feature: Shipper Pickups
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | Note      | hiptest-uid                              | hubId    | hubName    | zoneId    | zoneName    |
-      | Hub Name  | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-id} | {hub-name} | {zone-id} |             |
-      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 | {hub-id} |            | {zone-id} | {zone-name} |
+      | Note      | hiptest-uid                              | hubName      | zoneName           |
+      | Hub Name  | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-name-3} |                    |
+      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 |              | {zone-full-name-3} |
 
   Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -564,9 +564,12 @@ Feature: Shipper Pickups
       | routeId     | {KEY_SUGGESTED_ROUTE.id} |
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, No Suggested Route Found (uid:f59fc4ef-b127-4fc6-8eac-4f5a53bbf2cf)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -588,7 +591,7 @@ Feature: Shipper Pickups
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-name}                |
     And Operator select Route Tags for Route Suggestion of created reservation using data below:
-      | routeTagName | AAA |
+      | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
     And Operator verifies no route suggested for selected reservations
 
@@ -625,9 +628,12 @@ Feature: Shipper Pickups
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, No Suggested Route Found (uid:4911902f-a1a4-4b4a-9a5b-6705728fcfb6)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
     And API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
       | shipperId         | {shipper-v4-id} |
@@ -652,7 +658,7 @@ Feature: Shipper Pickups
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-name}                |
     And Operator select Route Tags for Route Suggestion of created reservations using data below:
-      | routeTagName | AAA |
+      | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
     And Operator verifies no route suggested for selected reservations
 

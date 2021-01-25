@@ -310,6 +310,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator select Route Tags for Route Suggestion of created reservation using data below:$")
   public void operatorSelectRouteTagsForRouteSuggestionsOfTheRouteUsingDataBelow(
       Map<String, String> dataTableAsMap) {
+    dataTableAsMap = resolveKeyValues(dataTableAsMap);
     Address address = get(KEY_CREATED_ADDRESS);
     String routeTagName = dataTableAsMap.get("routeTagName");
     shipperPickupsPage
@@ -319,6 +320,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator select Route Tags for Route Suggestion of created reservations using data below:$")
   public void operatorSelectRouteTagsForRouteSuggestionsOfCreatedReservationsUsingDataBelow(
       Map<String, String> dataTableAsMap) {
+    dataTableAsMap = resolveKeyValues(dataTableAsMap);
     List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
     String routeTagName = dataTableAsMap.get("routeTagName");
     shipperPickupsPage.suggestRoute(addresses, Collections.singletonList(routeTagName));

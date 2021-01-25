@@ -134,6 +134,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     if (address != null) {
       pickupAddress = reservationsTable.searchByPickupAddress(address);
     }
+    assertFalse("Reservation address was not found", reservationsTable.isTableEmpty());
     ReservationInfo actual = reservationsTable.readEntity(1);
 
     if (comments != null && comments.length() > 255) {
