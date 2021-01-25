@@ -63,7 +63,7 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   public void clickCreateSubShipperButton() {
     getWebDriver().switchTo().parentFrame();
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-    scrollIntoView(CREATE_SUB_SHIPPER_BUTTON_XPATH, false);
+    scrollIntoView(CREATE_SUB_SHIPPER_BUTTON_XPATH, true);
     pause1s();
     click(CREATE_SUB_SHIPPER_BUTTON_XPATH);
     getWebDriver().switchTo().parentFrame();
