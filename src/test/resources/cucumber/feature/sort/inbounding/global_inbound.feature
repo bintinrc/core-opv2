@@ -865,7 +865,7 @@ Feature: Global Inbound
       | endDate   | {gradle-next-3-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name-1}     |
+      | hubName | {hub-name-3}     |
 
   @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Express (uid:56abc408-a381-4c0d-b431-ed75a0f289d7)
