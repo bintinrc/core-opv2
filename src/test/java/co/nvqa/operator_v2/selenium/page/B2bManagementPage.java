@@ -124,7 +124,8 @@ public class B2bManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().parentFrame();
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     if (isElementExistFast(XPATH_SUB_SHIPPER_BACK)) {
-      scrollIntoView(XPATH_SUB_SHIPPER_BACK, true);
+      scrollIntoView(XPATH_SUB_SHIPPER_BACK, false);
+      pause1s();
       click(XPATH_SUB_SHIPPER_BACK);
     }
     getWebDriver().switchTo().parentFrame();
