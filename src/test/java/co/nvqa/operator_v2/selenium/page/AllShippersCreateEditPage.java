@@ -1236,6 +1236,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void goToTabCorporateSubShipper() {
     tabs.selectTab("Corporate sub shippers");
+    b2bManagementPage.onDisplay();
     b2bManagementPage.backToSubShipperTable();
   }
 

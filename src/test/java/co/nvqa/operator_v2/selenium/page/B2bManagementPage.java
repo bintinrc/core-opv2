@@ -39,10 +39,8 @@ public class B2bManagementPage extends OperatorV2SimplePage {
 
   public void onDisplay() {
     super.waitUntilPageLoaded();
-    getWebDriver().switchTo().parentFrame();
-    assertTrue(getWebDriver().getCurrentUrl().endsWith(LAST_URL_PATH));
-    assertTrue(isElementExist(IFRAME_XPATH));
-    getWebDriver().switchTo().parentFrame();
+    waitUntilVisibilityOfElementLocated(IFRAME_XPATH);
+    assertTrue(isElementVisible(IFRAME_XPATH));
   }
 
   public B2bShipperTable getMasterShipperTable() {
@@ -63,6 +61,8 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   public void clickCreateSubShipperButton() {
     getWebDriver().switchTo().parentFrame();
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+    scrollIntoView(CREATE_SUB_SHIPPER_BUTTON_XPATH, true);
+    pause1s();
     click(CREATE_SUB_SHIPPER_BUTTON_XPATH);
     getWebDriver().switchTo().parentFrame();
   }
@@ -124,6 +124,8 @@ public class B2bManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().parentFrame();
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     if (isElementExistFast(XPATH_SUB_SHIPPER_BACK)) {
+      scrollIntoView(XPATH_SUB_SHIPPER_BACK, false);
+      pause1s();
       click(XPATH_SUB_SHIPPER_BACK);
     }
     getWebDriver().switchTo().parentFrame();

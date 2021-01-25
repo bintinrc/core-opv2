@@ -233,12 +233,9 @@ public class RouteInboundSteps extends AbstractSteps {
   @Then("^Operator verify Shippers Info in (.+) dialog using data below:$")
   public void operatorVerifyShippersInfoInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
-    List<WaypointShipperInfo> expectedShippersInfo = listOfData.stream().map(data ->
-    {
-      WaypointShipperInfo shipperInfo = new WaypointShipperInfo();
-      shipperInfo.fromMap(data);
-      return shipperInfo;
-    }).collect(Collectors.toList());
+    List<WaypointShipperInfo> expectedShippersInfo = listOfData.stream()
+        .map(data -> new WaypointShipperInfo(resolveKeyValues(data)))
+        .collect(Collectors.toList());
     routeInboundPage.validateShippersTable(expectedShippersInfo);
   }
 

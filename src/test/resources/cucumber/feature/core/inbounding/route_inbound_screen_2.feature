@@ -323,8 +323,8 @@ Feature: Route Inbound
     When Operator click 'View orders or reservations' button for shipper #1 in Partial Waypoints dialog
     Then Operator verify Orders table in Partial Waypoints dialog using data below:
       | trackingId                                 | stampId | location                 | type              | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Failed  | 0        |                    |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Normal) | Success | 0        | Inbounded          |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Normal) | Failed  | 0        | Inbounded          |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Success | 0        |                    |
 
   @DeleteOrArchiveRoute
   Scenario: View Cash Collection (uid:0dccc613-ddc8-4c11-bee2-ed3d15a50590)
@@ -418,15 +418,17 @@ Feature: Route Inbound
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                         |
+      | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     When API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                         |
+      | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:

@@ -1,7 +1,7 @@
 @OperatorV2 @Core @MassCommunications @MessagingModule
 Feature: Messaging Module
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -54,6 +54,6 @@ Feature: Messaging Module
     And Operator compose SMS using URL shortener
     Then Operator verify SMS preview using shortened URL
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

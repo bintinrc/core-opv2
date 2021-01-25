@@ -198,4 +198,8 @@ public class PageElement extends SimplePage {
       resetImplicitTimeout();
     }
   }
+
+  public <T> T executeScript(String script) {
+    return executeScript(script, getWebElement());
+  }
 }
