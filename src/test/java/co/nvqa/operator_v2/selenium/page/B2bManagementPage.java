@@ -39,10 +39,8 @@ public class B2bManagementPage extends OperatorV2SimplePage {
 
   public void onDisplay() {
     super.waitUntilPageLoaded();
-    getWebDriver().switchTo().parentFrame();
-    assertTrue(getWebDriver().getCurrentUrl().endsWith(LAST_URL_PATH));
-    assertTrue(isElementExist(IFRAME_XPATH));
-    getWebDriver().switchTo().parentFrame();
+    waitUntilVisibilityOfElementLocated(IFRAME_XPATH);
+    assertTrue(isElementVisible(IFRAME_XPATH));
   }
 
   public B2bShipperTable getMasterShipperTable() {
