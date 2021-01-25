@@ -121,8 +121,8 @@ Feature: Parcel Sweeper Live
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 27 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |
@@ -246,7 +246,7 @@ Feature: Parcel Sweeper Live
       | color    | #e86161            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | GLOBAL INBOUND |
-      | color   | #e86161        |
+      | color   | #e8e8e8        |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -520,8 +520,8 @@ Feature: Parcel Sweeper Live
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 27 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |
@@ -567,8 +567,8 @@ Feature: Parcel Sweeper Live
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 27 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |
@@ -604,8 +604,8 @@ Feature: Parcel Sweeper Live
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 27 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |
@@ -638,8 +638,8 @@ Feature: Parcel Sweeper Live
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 27 |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |

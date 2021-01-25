@@ -53,7 +53,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-tag")
   public PageElement dpTag;
 
-  @FindBy(xpath = "//div[contains(@class,'prior-container')]/h5")
+  @FindBy(xpath = "//span[contains(@class,'nv-tag md-nvBlue-theme')]")
   public PageElement priorTag;
 
   @FindBy(xpath = "//button[@aria-label='Use order tagging']")
