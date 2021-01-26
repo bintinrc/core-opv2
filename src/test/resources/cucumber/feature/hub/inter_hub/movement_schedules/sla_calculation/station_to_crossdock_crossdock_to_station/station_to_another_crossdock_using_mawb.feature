@@ -5,7 +5,7 @@ Feature: Station to another Crossdock using MAWB
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to another Crossdock using MAWB - Station Movement Found and there is available schedule (uid:bba7604d-9881-42c3-babd-820ec94c7b6a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -86,7 +86,7 @@ Feature: Station to another Crossdock using MAWB
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to another Crossdock using MAWB - Station Movement found but there is no available schedule (uid:0f8ba27c-7a69-4369-8899-fefa0e051bfb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -160,7 +160,7 @@ Feature: Station to another Crossdock using MAWB
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[3].id} (sg) |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to another Crossdock using MAWB - Station Movement not found (uid:78d93bdc-8539-47b1-a050-68f748c2d9a8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

@@ -437,7 +437,7 @@ Feature: Route Inbound
       | parcelProcessedTotal    | 2 |
       | reservationPickupsScans | 1 |
       | reservationPickupsTotal | 1 |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -448,33 +448,26 @@ Feature: Route Inbound
   @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders (uid:6788f2c6-d062-44f5-a415-51028bea9eac)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new route using data below:
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Add  order to success
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Add  reservation to success
-    When API Operator create new shipper address V2 using data below:
+    And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
     And API Operator start the route
     And API Driver get Reservation Job using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-    And API Driver success Reservation using data below:
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    And API Driver success Reservation by NOT scanning order using data below:
+      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId        | {KEY_CREATED_ROUTE_ID}                   |
+      | pickupQuantity | 1                                        |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -491,7 +484,7 @@ Feature: Route Inbound
       | reservationPickupsTotal | 1                      |
     And Operator scan a tracking ID of created order on Route Inbound page
     Then Operator verify Waypoint Scans record using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | status     | Reservation Pickup                         |
       | reason     | ^.*Extra Order                             |
     Then Operator verify the Route Inbound Details is correct using data below:
@@ -499,15 +492,11 @@ Feature: Route Inbound
       | reservationPickupsTotal       | 1 |
       | reservationPickupsExtraOrders | 1 |
     When Operator open Reservation Pickups dialog on Route Inbound page
-    Then Operator verify Non-Inbounded Orders record using data below:
-      | trackingId    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | shipperName   | {shipper-v4-name}                          |
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}   |
     Then Operator verify Extra Orders record using data below:
-      | trackingId  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | trackingId  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | shipperName | {shipper-v4-name}                          |
     When Operator close Reservation Pickups dialog on Route Inbound page
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:

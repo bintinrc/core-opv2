@@ -99,6 +99,10 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    click(xpath);
+    if (isElementExistFast(xpath + "//a")) {
+      click(xpath + "//a");
+    } else {
+      click(xpath);
+    }
   }
 }

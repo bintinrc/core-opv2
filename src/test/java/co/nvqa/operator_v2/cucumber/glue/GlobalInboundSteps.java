@@ -81,18 +81,17 @@ public class GlobalInboundSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        navigateRefresh();
-        pause2s();
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(finalMapOfData);
         globalInboundPage.successfulGlobalInbound(globalInboundParams);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
-        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        NvLogger.info("Element in Global inbound scanning not found, retrying...");
+        globalInboundPage.refreshPage();
         throw ex;
       }
-    }, 10);
+    }, 5);
   }
 
   @When("^Operator global inbounds parcel using data below and check alert:$")
@@ -219,5 +218,10 @@ public class GlobalInboundSteps extends AbstractSteps {
   @Then("^Operator verify failed tagging error toast is shown$")
   public void operatorVerifyFailedTaggingToast() {
     globalInboundPage.verifyFailedTaggingToast("Tagging Failed: Order exceed 4 tags limit");
+  }
+
+  @When("^Operator verifies prior tag is displayed$")
+  public void operatorVerifiesPriorTagIsDisplayed() {
+    globalInboundPage.verifiesPriorTag();
   }
 }

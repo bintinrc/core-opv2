@@ -1,11 +1,14 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
+import java.util.Map;
+
 /**
  * @author Rizaq Pratama
  * <p>
  * Modified by Daniel Joi Partogi Hutapea
  */
-public class SmsCampaignCsv {
+public class SmsCampaignCsv extends DataEntity<SmsCampaignCsv> {
 
   private String tracking_id;
   private String name;
@@ -13,6 +16,10 @@ public class SmsCampaignCsv {
   private String job;
 
   public SmsCampaignCsv() {
+  }
+
+  public SmsCampaignCsv(Map<String, ?> data) {
+    fromMap(data);
   }
 
   public SmsCampaignCsv(String tracking_id, String name, String email, String job) {

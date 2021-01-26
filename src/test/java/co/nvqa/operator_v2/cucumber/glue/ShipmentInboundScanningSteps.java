@@ -36,8 +36,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        navigateRefresh();
-        pause2s();
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
 
@@ -45,9 +43,10 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
         throw ex;
       }
-    }, 10);
+    }, 5);
   }
 
   @When("^Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:$")
@@ -195,5 +194,13 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @When("Operator click proceed in trip completion dialog")
   public void clickProceedInTripCompletionDialog() {
     scanningPage.completeTrip();
+  }
+
+  @Then("Operator verify hub {string} not found on Shipment Inbound Scanning page")
+  public void operatorVerifyHubNotFoundOnShipmentInboundScanningPage(String hubName) {
+    String hubNameResolved = resolveValue(hubName);
+    scanningPage.inboundHub.searchValue(hubNameResolved);
+    assertThat("value does not exist", scanningPage.inboundHub.isValueExist(hubNameResolved),
+        equalTo(false));
   }
 }

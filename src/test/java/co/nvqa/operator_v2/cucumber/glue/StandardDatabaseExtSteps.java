@@ -7,25 +7,27 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
+import co.nvqa.commons.model.core.hub.PathSchedule;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
+import co.nvqa.commons.model.entity.MovementEventEntity;
 import co.nvqa.commons.model.entity.MovementTripEventEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
-import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
 import co.nvqa.commons.model.entity.ShipmentPathEntity;
 import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
+import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
+import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
-import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
-import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
@@ -40,6 +42,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,33 +67,19 @@ import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioManager> {
 
   private final String TRANSACTION_TYPE_DELIVERY = "DELIVERY";
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
 
   public StandardDatabaseExtSteps() {
   }
 
   @Override
   public void init() {
-  }
-
-  /**
-   * Cucumber regex: ^DB Operator verify driver types of multiple routes is updated successfully$
-   */
-  @Given("^DB Operator verify driver types of multiple routes is updated successfully$")
-  public void dbOperatorVerifyDriverTypesOfMultipleRoutesIsUpdatedSuccessfully() {
-    List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
-    DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
-
-    Long driverTypeId = driverTypeParams.getDriverTypeId();
-
-    for (CreateRouteParams createRouteParams : listOfCreateRouteParams) {
-      long routeId = createRouteParams.getCreatedRoute().getId();
-      List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc()
-          .findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
-      List<Long> listOfRouteDriverTypeId = listOfRouteDriverTypeEntity.stream()
-          .map(RouteDriverTypeEntity::getDriverTypeId).collect(Collectors.toList());
-      assertThat(f("Route with ID = %d does not contain the expected Driver Type ID = %d", routeId,
-          driverTypeId), listOfRouteDriverTypeId, hasItem(driverTypeId));
-    }
   }
 
   @Then("^Operator verify Jaro Scores are created successfully$")
@@ -227,16 +216,18 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     validateDeliveryInWaypointRecord(order, transactionType, transaction.getWaypointId());
   }
 
-  @Then("^DB Operator verify the last order_events record for the created order:$")
-  public void operatorVerifyTheLastOrderEventParams(Map<String, String> mapOfData) {
+  @Then("^DB Operator verify order_events record for the created order for RTS:$")
+  public void operatorVerifyTheLastOrderEventParamsForRTS(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
     List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<String> orderEventsTypes = orderEvents.stream()
+        .map(orderEvent -> String.valueOf(orderEvent.getType())).collect(
+            Collectors.toList());
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
-    OrderEventEntity theLastOrderEvent = orderEvents.get(0);
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
+      assertThat("Type contained in orderEvents", orderEventsTypes, hasItem(value));
     }
   }
 
@@ -247,12 +238,11 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     List<Integer> types = mapOfData.asList(Integer.class);
     types.forEach(type ->
-    {
-      OrderEventEntity event = orderEvents.stream()
-          .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), type)).findFirst()
-          .orElseThrow(() -> new IllegalArgumentException(
-              f("No order event with type %s is found in order events DB table", type)));
-    });
+        orderEvents.stream()
+            .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), type))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                f("No order event with type %s is found in order events DB table", type))));
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -380,33 +370,30 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()),
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
-    assertEquals("Transaction entity is not as expected in db", order.getFromAddress1(),
-        entity.getAddress1());
-    assertEquals("Transaction entity is not as expected in db", order.getFromAddress2(),
-        entity.getAddress2());
-    assertEquals("Transaction entity is not as expected in db", order.getFromPostcode(),
-        entity.getPostcode());
-    assertEquals("Transaction entity is not as expected in db", order.getFromCity(),
-        entity.getCity());
-    assertEquals("Transaction entity is not as expected in db", order.getFromCountry(),
-        entity.getCountry());
-    assertEquals("Transaction entity is not as expected in db", order.getFromName(),
-        entity.getName());
-    assertEquals("Transaction entity is not as expected in db", order.getFromEmail(),
-        entity.getEmail());
-    assertEquals("Transaction entity is not as expected in db", order.getFromContact(),
-        entity.getContact());
+    assertEquals("From Address 1", order.getFromAddress1(),
+        StringUtils.normalizeSpace(entity.getAddress1()));
+    assertEquals("From Address 2", order.getFromAddress2(),
+        StringUtils.normalizeSpace(entity.getAddress2()));
+    assertEquals("From Postcode", order.getFromPostcode(),
+        StringUtils.normalizeSpace(entity.getPostcode()));
+    assertEquals("From City", order.getFromCity(), StringUtils.normalizeSpace(entity.getCity()));
+    assertEquals("From Country", order.getFromCountry(),
+        StringUtils.normalizeSpace(entity.getCountry()));
+    assertEquals("From Name", order.getFromName(), StringUtils.normalizeSpace(entity.getName()));
+    assertEquals("From Email", order.getFromEmail(), StringUtils.normalizeSpace(entity.getEmail()));
+    assertEquals("From Contact", order.getFromContact(),
+        StringUtils.normalizeSpace(entity.getContact()));
     ZonedDateTime entityStartDateTime = ZonedDateTime
         .parse(entity.getStartTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
     ZonedDateTime entityEndDateTime = ZonedDateTime
         .parse(entity.getEndTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Pickup start date/time",
         order.getPickupDate() + " " + TIME_FORMATTER_1
             .format(order.getPickupTimeslot().getStartTime()),
         DateUtil.displayDateTime(entityStartDateTime));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Pickup end date/time",
         order.getPickupDate() + " " + TIME_FORMATTER_1
             .format(order.getPickupTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
@@ -422,33 +409,30 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()),
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
-    assertEquals("Transaction entity is not as expected in db", order.getToAddress1(),
-        entity.getAddress1());
-    assertEquals("Transaction entity is not as expected in db", order.getToAddress2(),
-        entity.getAddress2());
-    assertEquals("Transaction entity is not as expected in db", order.getToPostcode(),
-        entity.getPostcode());
-    assertEquals("Transaction entity is not as expected in db", order.getToCity(),
-        entity.getCity());
-    assertEquals("Transaction entity is not as expected in db", order.getToCountry(),
-        entity.getCountry());
-    assertEquals("Transaction entity is not as expected in db", order.getToName(),
-        entity.getName());
-    assertEquals("Transaction entity is not as expected in db", order.getToEmail(),
-        entity.getEmail());
-    assertEquals("Transaction entity is not as expected in db", order.getToContact(),
-        entity.getContact());
+    assertEquals("To Address 1", order.getToAddress1(),
+        StringUtils.normalizeSpace(entity.getAddress1()));
+    assertEquals("To Address 2", order.getToAddress2(),
+        StringUtils.normalizeSpace(entity.getAddress2()));
+    assertEquals("To Postcode", order.getToPostcode(),
+        StringUtils.normalizeSpace(entity.getPostcode()));
+    assertEquals("To City", order.getToCity(), StringUtils.normalizeSpace(entity.getCity()));
+    assertEquals("To Country", order.getToCountry(),
+        StringUtils.normalizeSpace(entity.getCountry()));
+    assertEquals("To Name", order.getToName(), StringUtils.normalizeSpace(entity.getName()));
+    assertEquals("To Email", order.getToEmail(), StringUtils.normalizeSpace(entity.getEmail()));
+    assertEquals("To Contact", order.getToContact(),
+        StringUtils.normalizeSpace(entity.getContact()));
     ZonedDateTime entityStartDateTime = ZonedDateTime
         .parse(entity.getStartTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
     ZonedDateTime entityEndDateTime = ZonedDateTime
         .parse(entity.getEndTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Delivery start date/time",
         order.getDeliveryDate() + " " + TIME_FORMATTER_1
             .format(order.getDeliveryTimeslot().getStartTime()),
         DateUtil.displayDateTime(entityStartDateTime));
-    assertEquals("Transaction entity is not as expected in db",
+    assertEquals("Delivery end date/time",
         order.getDeliveryDate() + " " + TIME_FORMATTER_1
             .format(order.getDeliveryTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
@@ -495,22 +479,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
     if (Objects.nonNull(address1)) {
       assertEquals("Address1 in Transaction entity is not as expected in db", address1,
-          entity.getAddress1());
+          StringUtils.normalizeSpace(entity.getAddress1()));
     }
     if (Objects.nonNull(address2)) {
       assertEquals("Address2 in Transaction entity is not as expected in db", address2,
-          entity.getAddress2());
+          StringUtils.normalizeSpace(entity.getAddress2()));
     }
     if (Objects.nonNull(city)) {
-      assertEquals("City in Transaction entity is not as expected in db", city, entity.getCity());
+      assertEquals("City in Transaction entity is not as expected in db", city,
+          StringUtils.normalizeSpace(entity.getCity()));
     }
     if (Objects.nonNull(country)) {
       assertEquals("Country in Transaction entity is not as expected in db", country,
-          entity.getCountry());
+          StringUtils.normalizeSpace(entity.getCountry()));
     }
     if (Objects.nonNull(postcode)) {
       assertEquals("Postcode in Transaction entity is not as expected in db", postcode,
-          entity.getPostcode());
+          StringUtils.normalizeSpace(entity.getPostcode()));
     }
     if (Objects.nonNull(routeId)) {
       Integer routeIdInt =
@@ -669,7 +654,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
 
     List<Long> createdShipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
-    if (createdShipmentIds.size() != 0) {
+    if (createdShipmentIds != null && createdShipmentIds.size() != 0) {
       for (Long createdShipmentId : createdShipmentIds) {
         getHubJdbc().deleteShipment(createdShipmentId);
       }
@@ -834,6 +819,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @SuppressWarnings("unchecked")
   @Given("^DB Operator verifies orders record using data below:$")
   public void dbOperatorVerifiesOrdersRecord(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
     Order order = get(KEY_CREATED_ORDER);
     final String finalTrackingId = order.getTrackingId();
     List<Order> orderRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
@@ -914,6 +900,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertEquals(f("Expected %s in %s table", "to_district", "orders"), toDistrict,
           orderRecord.getToDistrict());
     }
+    if (StringUtils.isNotBlank(mapOfData.get("rts"))) {
+      boolean expected = StringUtils.equalsAnyIgnoreCase(mapOfData.get("rts"), "1", "true");
+      assertEquals("RTS", expected, orderRecord.getRts());
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -952,39 +942,35 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   private void validatePickupInWaypointRecord(Order order, String transactionType,
       long waypointId) {
-    Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
-
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
     assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), order.getFromCity(),
-        actualWaypoint.getCity());
+        StringUtils.normalizeSpace(actualWaypoint.getCity()));
     assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getFromCountry(),
-        actualWaypoint.getCountry());
+        StringUtils.normalizeSpace(actualWaypoint.getCountry()));
     assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId),
-        order.getFromAddress1(), actualWaypoint.getAddress1());
+        order.getFromAddress1(), StringUtils.normalizeSpace(actualWaypoint.getAddress1()));
     assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId),
-        order.getFromAddress2(), actualWaypoint.getAddress2());
+        order.getFromAddress2(), StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
     assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId),
-        order.getFromPostcode(), actualWaypoint.getPostcode());
+        order.getFromPostcode(), StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
     assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
         order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
   }
 
   private void validateDeliveryInWaypointRecord(Order order, String transactionType,
       long waypointId) {
-    Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
-
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
     assertEquals(f("%s waypoint [%d] city", transactionType, waypointId),
         Objects.isNull(order.getToCity()) ? "" :
             order.getToCity(), actualWaypoint.getCity());
     assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getToCountry(),
-        actualWaypoint.getCountry());
+        StringUtils.normalizeSpace(actualWaypoint.getCountry()));
     assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getToAddress1(),
-        actualWaypoint.getAddress1());
+        StringUtils.normalizeSpace(actualWaypoint.getAddress1()));
     assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getToAddress2(),
-        actualWaypoint.getAddress2());
+        StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
     assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getToPostcode(),
-        actualWaypoint.getPostcode());
+        StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
     if (Objects.nonNull(order.getDeliveryTimeslot())) {
       assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
           order.getDeliveryTimeslot().getId(),
@@ -1150,19 +1136,34 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("DB Operator verifies {string} path with origin {string} and {string} is created in movement_path table")
   public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTable(String pathType,
       String originHubIdAsString, String destinationHubIdAsString) {
+    dbOperatorVerifiesManualPathIsCreatedInMovementPathTableWithShipmentType(pathType,
+        originHubIdAsString, destinationHubIdAsString, "");
+  }
+
+  @Then("DB Operator verifies {string} path with origin {string} and {string} with type {string} is created in movement_path table")
+  public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTableWithShipmentType(
+      String pathType,
+      String originHubIdAsString, String destinationHubIdAsString, String shipmentType) {
     Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
     Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
 
-    MovementPath movementPath = getHubJdbc().getMovementPath(originHubId, destinationHubId);
     String expectedMovementPathMovementType = "LAND_HAUL";
     String expectedMovementPathType = "MANUAL";
     if ("default".equals(pathType)) {
       expectedMovementPathType = "AUTO_GENERATED";
     }
+    MovementPath movementPath = getHubJdbc()
+        .getMovementPath(originHubId, destinationHubId, shipmentType, expectedMovementPathType);
+
+    putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId());
+    if (StringUtils.isNotEmpty(shipmentType)) {
+      expectedMovementPathMovementType = shipmentType;
+    }
     assertThat("Movement path type is equal", movementPath.getType(),
         equalTo(expectedMovementPathType));
     assertThat("Movement path type is equal", movementPath.getMovementType(),
         equalTo(expectedMovementPathMovementType));
+    pause1s();
   }
 
   @Then("DB Operator verifies number of path with origin {string} and {string} is {int} in movement_path table")
@@ -1171,9 +1172,65 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
     Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
 
-    List<MovementPath> movementPath = getHubJdbc()
+    List<MovementPath> movementPaths = getHubJdbc()
         .getAllMovementPath(originHubId, destinationHubId);
-    assertThat("Movement path length is equal", movementPath.size(), equalTo(numberOfPaths));
+    movementPaths
+        .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
+    assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
+  }
+
+  @Then("DB Operator verifies number of path for {string} movement existence")
+  public void dbOperatorVerifiesNumberOfPathForMovement(String scheduleType) {
+    List<Hub> createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+    Long originHubId = createdHubs.get(0).getId();
+    Long destinationHubId;
+    List<MovementPath> movementPaths;
+    switch (scheduleType) {
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_ITS_CD:
+      case HUB_CD_ITS_ST:
+        destinationHubId = createdHubs.get(1).getId();
+        movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
+        movementPaths
+            .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
+        assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
+        break;
+      case HUB_CD_CD:
+      case HUB_CD_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_DIFF_CD:
+        destinationHubId = createdHubs.get(1).getId();
+        movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
+        movementPaths
+            .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
+        assertThat("Movement path length is equal", movementPaths.size(), equalTo(2));
+        break;
+    }
+  }
+
+  @Then("DB Operator verifies number of path for {string} movement existence after van inbound")
+  public void dbOperatorVerifiesNumberOfPathForMovementAfterScheduleCreation(String scheduleType) {
+    List<Hub> createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+    Long originHubId = createdHubs.get(0).getId();
+    Long destinationHubId;
+    List<MovementPath> movementPaths;
+    switch (scheduleType) {
+      case HUB_ST_ST_SAME_CD:
+      case HUB_CD_ITS_ST:
+      case HUB_ST_ITS_CD:
+        dbOperatorVerifiesNumberOfPathForMovement(scheduleType);
+        break;
+      case HUB_CD_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_DIFF_CD:
+      case HUB_CD_CD:
+        destinationHubId = createdHubs.get(1).getId();
+        movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
+        movementPaths
+            .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
+        assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
+        break;
+    }
   }
 
   @Then("DB Operator verify {string} is deleted in movement_path table")
@@ -1181,5 +1238,392 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long pathId = Long.valueOf(resolveValue(pathIdAsString));
     MovementPath movementPath = getHubJdbc().getMovementPathById(pathId);
     assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(), notNullValue());
+  }
+
+  @Then("DB Operator verify {string} is deleted in hub_relation_schedules")
+  public void dbOperatorVerifyScheduleIsDeletedInHubRelationSchedules(
+      String hubRelationIdAsString) {
+    Long hubRelationId = Long.valueOf(resolveValue(hubRelationIdAsString));
+    HubRelationSchedule hubRelationSchedule = getHubJdbc()
+        .getHubRelationScheduleByHubRelationId(hubRelationId);
+    assertThat("Hub Relation not found", hubRelationSchedule.getDeletedAt(), notNullValue());
+  }
+
+  @Then("DB Operator verify {string} is not deleted in hub_relation_schedules")
+  public void dbOperatorVerifyScheduleIsNotDeletedInHubRelationSchedules(
+      String hubRelationIdAsString) {
+    Long hubRelationId = Long.valueOf(resolveValue(hubRelationIdAsString));
+    HubRelationSchedule hubRelationSchedule = getHubJdbc()
+        .getHubRelationScheduleByHubRelationId(hubRelationId);
+    assertThat("Hub Relation found", hubRelationSchedule.getDeletedAt(), equalTo(null));
+  }
+
+  @Then("DB Operator verify created hub relation schedules is not deleted")
+  public void dbOperatorVerifyHubRelationScheduleIsNotDeletedFor() {
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    List<HubRelation> createdHubRelations = hubRelations.subList(2, hubRelations.size());
+    createdHubRelations.forEach(hubRelation -> {
+      HubRelationSchedule hubRelationSchedule = getHubJdbc()
+          .getHubRelationScheduleByHubRelationId(hubRelation.getId());
+      assertThat("Hub Relation found", hubRelationSchedule.getDeletedAt(), equalTo(null));
+    });
+  }
+
+  @Then("DB Operator verify created hub relation schedules is deleted")
+  public void dbOperatorVerifyCreatedHubRelationSchedulesIsDeleted() {
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    List<HubRelation> createdHubRelations = hubRelations.subList(2, hubRelations.size());
+    createdHubRelations.forEach(hubRelation -> {
+      HubRelationSchedule hubRelationSchedule = getHubJdbc()
+          .getHubRelationScheduleByHubRelationId(hubRelation.getId());
+      assertThat("Hub Relation not found", hubRelationSchedule.getDeletedAt(), not(equalTo(null)));
+    });
+  }
+
+  @When("DB Operator verify sla in movement_events table is {string} no path for the following shipments from {string} to {string}:")
+  public void dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+      String expectedStatus, String originHub, String destHub, List<String> shipmentIds) {
+    String expectedEvent = "SLA_CALCULATION";
+    Long expectedOriginHub = Long.valueOf(resolveValue(originHub));
+    Long expectedDestHub = Long.valueOf(resolveValue(destHub));
+    String expectedExtData = f(
+        "{\"path_cache\":{\"full_path\":null,\"trip_path\":null},\"crossdock_detail\":null," +
+            "\"error_message\":\"found no path from origin %d (sg) to destination %d (sg)\"}",
+        expectedOriginHub, expectedDestHub);
+    for (String shipmentIdAsString : shipmentIds) {
+      Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+      if ("NOT FOUND".equals(expectedStatus)) {
+        Boolean movementEventEntityExistence = getHubJdbc()
+            .getMovementEvenExistenceByShipmentId(shipmentId);
+        assertThat("Movement Event not found", movementEventEntityExistence, equalTo(false));
+        continue;
+      }
+      MovementEventEntity movementEventEntity = getHubJdbc()
+          .getMovementEventByShipmentId(shipmentId);
+      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+      assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      pause2s();
+    }
+  }
+
+  @Then("DB Operator verify sla in movement_events table for {string} no path for the following shipments from {string} to {string}:")
+  public void dbOperatorVerifySlaInMovementEventsTableForNoPathForTheFollowingShipmentsFromTo(
+      String scheduleType, String originHub, String destHub, List<String> shipmentIds) {
+    switch (scheduleType) {
+      case HUB_CD_CD:
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "FAILED", originHub, destHub, shipmentIds.subList(0,1));
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "NOT FOUND", originHub, destHub, shipmentIds.subList(1,2));
+        break;
+      case HUB_ST_ST_DIFF_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_CD_ST_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "FAILED", originHub, destHub, shipmentIds);
+        break;
+      case HUB_CD_ITS_ST:
+      case HUB_ST_ITS_CD:
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "NOT FOUND", originHub, destHub, shipmentIds);
+        break;
+    }
+  }
+
+  @Then("DB Operator verify path in movement_path table is not found for shipments from {string} to {string}")
+  public void dbOperatorVerifyPathNotFoundInMovementPathTableIsForShipmentsFromTo(
+      String originHubId, String destinationHubId) {
+    Long resolvedOriginHubId = Long.valueOf(resolveValue(originHubId));
+    Long resolvedDestinationHubId = Long.valueOf(resolveValue(destinationHubId));
+    List<MovementPath> movementPaths = getHubJdbc()
+        .getAllMovementPath(resolvedOriginHubId, resolvedDestinationHubId);
+    movementPaths.forEach(movementPath ->
+        assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(),
+            notNullValue()));
+  }
+
+  @When("DB Operator verify sla in movement_events table is succeed for the following data:")
+  public void dbOperatorVerifySlaInMovementEventsTableIsSucceedForTheFollowingData(
+      Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapData = resolveKeyValues(mapOfData);
+    String expectedExtData = resolvedMapData.get("extData");
+    String[] shipmentIds = resolvedMapData.get("shipmentIds").split(",");
+    List<Long> listShipmentIds = Arrays.stream(shipmentIds).map(Long::valueOf)
+        .collect(Collectors.toList());
+
+    String expectedEvent = "SLA_CALCULATION";
+    String expectedStatus = "SUCCESS";
+    for (Long shipmentId : listShipmentIds) {
+      MovementEventEntity movementEventEntity = getHubJdbc()
+          .getMovementEventByShipmentId(shipmentId);
+      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+      assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      pause1s();
+    }
+  }
+
+  @Then("DB Operator verify sla in movement_events table from {string} to {string} is succeed for the following data:")
+  public void dbOperatorVerifySlaInMovementEventsTableFromToIsSucceedForTheFollowingData(
+      String originHubName, String destinationHubName, Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapData = resolveKeyValues(mapOfData);
+    String resolvedOriginHubName = resolveValue(originHubName);
+    String resolvedDestinationHubName = resolveValue(destinationHubName);
+    String[] shipmentIds = resolvedMapData.get("shipmentIds").split(",");
+    List<Long> listShipmentIds = Arrays.stream(shipmentIds).map(Long::valueOf)
+        .collect(Collectors.toList());
+    String[] hubRelationIds = resolvedMapData.get("hubRelationIds").split(",");
+    List<Long> listHubRelationIds = Arrays.stream(hubRelationIds).map(Long::valueOf)
+        .collect(Collectors.toList());
+    Long landHaulHubRelationId = listHubRelationIds.get(0);
+    String landHaulExtData = f(
+        "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%d]},\"crossdock_detail\":null,\"error_message\":null}",
+        resolvedOriginHubName, resolvedDestinationHubName, landHaulHubRelationId);
+    Long airHaulHubRelationId = listHubRelationIds.get(1);
+    String airHaulExtData = f(
+        "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%d]},\"crossdock_detail\":null,\"error_message\":null}",
+        resolvedOriginHubName, resolvedDestinationHubName, airHaulHubRelationId);
+
+    String expectedEvent = "SLA_CALCULATION";
+    String expectedStatus = "SUCCESS";
+    for (Long shipmentId : listShipmentIds) {
+      MovementEventEntity movementEventEntity = getHubJdbc()
+          .getMovementEventByShipmentId(shipmentId);
+      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+      assertThat("ExtData is equal", movementEventEntity.getExtData(),
+          isOneOf(landHaulExtData, airHaulExtData));
+      pause1s();
+    }
+  }
+
+  @When("DB Operator verify sla in movement events table for {string} movement")
+  public void apiOperatorVerifySlaInMovementEventsTableForMovement(String scheduleType) {
+    List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
+    List<String> tripScheduleIds = get(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS);
+    Long landHaulShipmentId = shipmentIds.get(0);
+    Long airHaulShipmentId = shipmentIds.get(1);
+
+    String expectedEvent = "SLA_CALCULATION";
+    String expectedStatus = "SUCCESS";
+
+    MovementEventEntity landHaulMovementEventEntity = getHubJdbc()
+        .getMovementEventByShipmentId(landHaulShipmentId);
+    assertThat("Event is equal", landHaulMovementEventEntity.getEvent(), equalTo(expectedEvent));
+    assertThat("Status is equal", landHaulMovementEventEntity.getStatus(), equalTo(expectedStatus));
+
+    MovementEventEntity airHaulMovementEventEntity = getHubJdbc()
+        .getMovementEventByShipmentId(airHaulShipmentId);
+    assertThat("Event is equal", airHaulMovementEventEntity.getEvent(), equalTo(expectedEvent));
+    assertThat("Status is equal", airHaulMovementEventEntity.getStatus(), equalTo(expectedStatus));
+
+    String expectedExtDataLandHaul;
+    String expectedExtDataAirHaul;
+    String pathBase;
+    String pathOptionOne;
+    String pathOptionTwo;
+    String pathOptionThree;
+    String pathOptionFour;
+
+    switch (scheduleType) {
+      case HUB_CD_CD:
+      case HUB_ST_ITS_CD:
+      case HUB_CD_ITS_ST:
+        expectedExtDataLandHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(0));
+        expectedExtDataAirHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(1));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+        break;
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_CD_ST_DIFF_CD:
+        pathBase = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
+            hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(1).getName());
+        pathOptionOne =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(1));
+        pathOptionTwo =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(3));
+        pathOptionThree =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(2), tripScheduleIds.get(1));
+        pathOptionFour =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(2), tripScheduleIds.get(3));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
+        break;
+      case HUB_ST_ST_DIFF_CD:
+        pathBase = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
+            hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(3).getName(),
+            hubs.get(1).getName());
+        pathOptionOne =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(1), tripScheduleIds.get(2));
+        pathOptionTwo =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(1), tripScheduleIds.get(5));
+        pathOptionThree =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(4), tripScheduleIds.get(2));
+        pathOptionFour =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(0), tripScheduleIds.get(4), tripScheduleIds.get(5));
+        String pathOptionFive =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(1), tripScheduleIds.get(2));
+        String pathOptionSix =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(1), tripScheduleIds.get(5));
+        String pathOptionSeven =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(4), tripScheduleIds.get(2));
+        String pathOptionEight =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(3), tripScheduleIds.get(4), tripScheduleIds.get(5));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour, pathOptionFive,
+                pathOptionSix, pathOptionSeven, pathOptionEight));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour, pathOptionFive,
+                pathOptionSix, pathOptionSeven, pathOptionEight));
+        break;
+      case "default":
+        break;
+    }
+  }
+
+  @When("DB Operator verify sla in movement events table for {string} movement with deleted movements")
+  public void apiOperatorVerifySlaInMovementEventsTableForMovementWithDeletedMovements(
+      String scheduleType) {
+    List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
+    List<String> tripScheduleIds = get(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS);
+    Long landHaulShipmentId = shipmentIds.get(0);
+    Long airHaulShipmentId = shipmentIds.get(1);
+
+    MovementEventEntity landHaulMovementEventEntity = getHubJdbc()
+        .getMovementEventByShipmentId(landHaulShipmentId);
+
+    MovementEventEntity airHaulMovementEventEntity = getHubJdbc()
+        .getMovementEventByShipmentId(airHaulShipmentId);
+
+    String pathBase;
+    String pathOptionOne;
+    String pathOptionTwo;
+    String pathOptionThree;
+    String pathOptionFour;
+    String expectedExtDataLandHaul;
+    String expectedExtDataAirHaul;
+
+    switch (scheduleType) {
+      case HUB_CD_CD:
+      case HUB_ST_ITS_CD:
+      case HUB_CD_ITS_ST:
+        expectedExtDataLandHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(2));
+        expectedExtDataAirHaul = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\"],\"trip_path\":[%s]},\"crossdock_detail\":null,\"error_message\":null}",
+            hubs.get(0).getName(), hubs.get(1).getName(), tripScheduleIds.get(3));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(expectedExtDataLandHaul, expectedExtDataAirHaul));
+        break;
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_SAME_CD:
+      case HUB_CD_ST_DIFF_CD:
+        apiOperatorVerifySlaInMovementEventsTableForMovement("default");
+        pathBase = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
+            hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(1).getName());
+        pathOptionOne =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(4), tripScheduleIds.get(5));
+        pathOptionTwo =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(4), tripScheduleIds.get(7));
+        pathOptionThree =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(5));
+        pathOptionFour =
+            pathBase + f("[%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(7));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour));
+        break;
+      case HUB_ST_ST_DIFF_CD:
+        apiOperatorVerifySlaInMovementEventsTableForMovement("default");
+        pathBase = f(
+            "{\"path_cache\":{\"full_path\":[\"%s (sg)\",\"%s (sg)\",\"%s (sg)\",\"%s (sg)\"],\"trip_path\":",
+            hubs.get(0).getName(), hubs.get(2).getName(), hubs.get(3).getName(),
+            hubs.get(1).getName());
+        pathOptionOne =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(7), tripScheduleIds.get(8));
+        pathOptionTwo =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(7), tripScheduleIds.get(11));
+        pathOptionThree =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(10), tripScheduleIds.get(8));
+        pathOptionFour =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(10), tripScheduleIds.get(11));
+        String pathOptionFive =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(9), tripScheduleIds.get(7), tripScheduleIds.get(8));
+        String pathOptionSix =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(9), tripScheduleIds.get(7), tripScheduleIds.get(11));
+        String pathOptionSeven =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(9), tripScheduleIds.get(10), tripScheduleIds.get(11));
+        String pathOptionEight =
+            pathBase + f("[%s,%s,%s]},\"crossdock_detail\":null,\"error_message\":null}",
+                tripScheduleIds.get(6), tripScheduleIds.get(7), tripScheduleIds.get(8));
+        assertThat("ExtData is equal", landHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour, pathOptionFive,
+                pathOptionSix, pathOptionSeven, pathOptionEight));
+        assertThat("ExtData is equal", airHaulMovementEventEntity.getExtData(),
+            isOneOf(pathOptionOne, pathOptionTwo, pathOptionThree, pathOptionFour, pathOptionFive,
+                pathOptionSix, pathOptionSeven, pathOptionEight));
+        break;
+    }
+  }
+
+  @Then("DB Operator verifies old path is deleted in path_schedule from {string} to {string}")
+  public void dbOperatorVerifiesOldPathIsDeletedInPathSchedule(String originHubIdAsString,
+      String destinationHubIdAsString) {
+    Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
+    Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
+    MovementPath movementPath = getHubJdbc()
+        .getMovementPath(originHubId, destinationHubId, "LAND_HAUL", "MANUAL");
+    List<PathSchedule> pathSchedule = getHubJdbc()
+        .getMovementPathSchedulesByPathId(movementPath.getId());
+    List<PathSchedule> oldPathSchedule = pathSchedule.subList(0, 7);
+    oldPathSchedule.forEach(pathScheduleElement -> {
+      assertThat(f("path id is the same %d", movementPath.getId()), pathScheduleElement.getPathId(),
+          equalTo(movementPath.getId()));
+      assertThat("deleted at is not null", pathScheduleElement.getDeletedAt(),
+          not(equalTo(null)));
+    });
   }
 }

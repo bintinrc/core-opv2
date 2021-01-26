@@ -5,7 +5,7 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock Given Station is Updated/Disable - Station is Updated (uid:d84cb5fc-9c86-41c5-b945-6d6a973f8219)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -86,7 +86,7 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock Given Station is Updated/Disable - Station is Disable (uid:b78d02b4-1e05-4655-a8c1-ad43e6d9971b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -127,6 +127,7 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And Operator refresh page
     And Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
@@ -145,13 +146,10 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
       | station      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
     When API Operator disable hub with ID "{KEY_LIST_OF_CREATED_HUBS[1].id}"
+    And API Operator reloads hubs cache
+    And Operator refresh page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:
-      | label      | Into Van                         |
-      | hub        | {KEY_LIST_OF_CREATED_HUBS[1].id} |
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}        |
-    Then Operator check alert message on Shipment Inbound Scanning page using data below:
-      | alert | invalid hub: system id sg, id: {KEY_LIST_OF_CREATED_HUBS[1].id} |
+    Then Operator verify hub "{KEY_LIST_OF_CREATED_HUBS[1].id}" not found on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

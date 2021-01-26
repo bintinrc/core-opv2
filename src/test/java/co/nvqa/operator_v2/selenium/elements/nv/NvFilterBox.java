@@ -32,4 +32,8 @@ public class NvFilterBox extends AbstractFilterBox {
     searchOrSelect.selectValue(value);
   }
 
+  public void selectFilter(Iterable<String> values) {
+    values.forEach(this::selectFilter);
+  }
+
 }

@@ -12,6 +12,9 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AntSelect extends PageElement {
 
+  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
+
   public AntSelect(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -51,16 +54,11 @@ public class AntSelect extends PageElement {
   }
 
   public void clickMenuItem(String value) {
-    clickf(
-        "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]",
-        StringUtils
-            .normalizeSpace(value));
+    clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
   }
 
   public void clickMenuItemByIndex(int index) {
-    clickf(
-        "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']",
-        index);
+    clickf(ITEM_INDEX_LOCATOR, index);
   }
 
   public void clearValue() {

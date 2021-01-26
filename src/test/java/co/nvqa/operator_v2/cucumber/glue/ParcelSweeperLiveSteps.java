@@ -58,7 +58,12 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-        parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
+        String task = finalMapOfData.get("task");
+        if (task!= null) {
+          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task);
+        } else {
+          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
+        }
 
         String trackingId = finalMapOfData.get("trackingId");
         if (StringUtils.equalsIgnoreCase(trackingId, "CREATED")) {
@@ -71,7 +76,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         parcelSweeperLivePage.refreshPage();
         throw ex;
       }
-    }, 10);
+    }, 5);
   }
 
   private String getExpectedZoneName(String zoneNameFromDataTable) {
@@ -111,6 +116,11 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
   @Then("Operator verifies tags on Parcel Sweeper Live page")
   public void operatorVerifiesTags(List<String> expectedOrderTags) {
     parcelSweeperLivePage.verifiesTags(expectedOrderTags);
+  }
+
+  @Then("^Operator verify Prior tag on Parcel Sweeper Live page$")
+  public void operatorVerifyPriorTagOnParcelSweeperByHubPage() {
+    parcelSweeperLivePage.verifyPriorTag();
   }
 
 }

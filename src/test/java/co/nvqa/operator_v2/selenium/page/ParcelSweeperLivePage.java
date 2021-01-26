@@ -4,6 +4,9 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -25,6 +28,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String HUB_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]/ancestor::md-autocomplete";
   private static final String HUB_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]";
   private static final String CHOSEN_VALUE_SELECTION_XPATH = "//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
+  private static final String CHOSEN_VALUE_TASK_XPATH = "//md-virtual-repeat-container/following-sibling::md-virtual-repeat-container//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]/ancestor::md-autocomplete";
   private static final String SORT_TASK_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]";
   private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
@@ -32,36 +36,15 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-icon-text-button[@name='Proceed']")
   public Button proceedButton;
 
+  @FindBy(xpath = "//div[contains(@class,'prior-container')]/h5")
+  public PageElement priorTag;
+
   public ParcelSweeperLivePage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void selectHubToBegin(String hubName) {
-    pause2s();
-
-    // Select Hub
-    click(HUB_DROPDOWN_XPATH);
-    waitUntilVisibilityOfElementLocated(HUB_INPUT_XPATH);
-    sendKeys(HUB_INPUT_XPATH, hubName);
-    waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-    click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-
-    pause2s();
-
-    //Select Sort Task
-    if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
-      click(SORT_TASK_DROPDOWN_XPATH);
-      if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
-        waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
-        sendKeys(SORT_TASK_INPUT_XPATH, MASTER_VIEW_SORT_TASK_OPTION);
-        waitUntilVisibilityOfElementLocated(
-            f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
-        click(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
-      }
-    }
-
-    proceedButton.waitUntilClickable();
-    proceedButton.click();
+    selectHubToBeginWithTask(hubName, hubName);
   }
 
   public void scanTrackingId(String trackingId) {
@@ -131,4 +114,36 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
         tags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()));
   }
 
+  public void verifyPriorTag() {
+    String actualTag = priorTag.getText();
+    assertEquals("Prior tag", "PRIOR", actualTag);
+  }
+
+  public void selectHubToBeginWithTask(String hubName, String task) {
+    pause2s();
+
+    // Select Hub
+    click(HUB_DROPDOWN_XPATH);
+    waitUntilVisibilityOfElementLocated(HUB_INPUT_XPATH);
+    sendKeys(HUB_INPUT_XPATH, hubName);
+    waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
+    click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
+
+    pause2s();
+
+    //Select Sort Task
+    if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+      click(SORT_TASK_DROPDOWN_XPATH);
+      if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
+        waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
+        sendKeys(SORT_TASK_INPUT_XPATH, task);
+        waitUntilVisibilityOfElementLocated(
+            f(CHOSEN_VALUE_TASK_XPATH, task));
+        click(f(CHOSEN_VALUE_TASK_XPATH, task));
+      }
+    }
+
+    proceedButton.waitUntilClickable();
+    proceedButton.click();
+  }
 }

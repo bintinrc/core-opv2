@@ -430,7 +430,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, "retry shipment details", 5000, 10);
+    }, "retry shipment details", 5000, 5);
   }
 
   @Then("Operator verifies event is present for shipment on Shipment Detail page")
@@ -668,6 +668,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifiesTheSearchedShipmentIdsResultIsRight() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
     for (int i = 0; i < shipmentIds.size(); i++) {
+      shipmentManagementPage.searchedShipmentVerification(shipmentIds.get(i));
+    }
+  }
+
+  @Then("Operator verifies the searched shipment ids result is right except last")
+  public void operatorVerifiesTheSearchedShipmentIdsResultIsRightExceptLast() {
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    for (int i = 0; i < shipmentIds.size() - 1; i++) {
       shipmentManagementPage.searchedShipmentVerification(shipmentIds.get(i));
     }
   }

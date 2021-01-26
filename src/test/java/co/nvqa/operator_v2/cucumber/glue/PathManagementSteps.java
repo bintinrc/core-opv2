@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.sort.hub.movement_trips.MovementTripSchedule;
+import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.PathManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -245,17 +245,17 @@ public class PathManagementSteps extends AbstractSteps {
     pathManagementPage.verifyNotificationMessageIsShown(resolvedNotificationMessage);
   }
 
-  public MovementTripSchedule getCreatedMovementScheduleWithTripById(
+  public HubRelation getCreatedMovementScheduleWithTripById(
       Long movementScheduleWithTripId) {
-    MovementTripSchedule movementTripSchedule = new MovementTripSchedule();
-    List<MovementTripSchedule> movementTripScheduleList = get(
+    HubRelation hubRelation = new HubRelation();
+    List<HubRelation> hubRelationList = get(
         KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    for (MovementTripSchedule tripSchedule : movementTripScheduleList) {
+    for (HubRelation tripSchedule : hubRelationList) {
       if (tripSchedule.getId().equals(movementScheduleWithTripId)) {
-        movementTripSchedule = tripSchedule;
+        hubRelation = tripSchedule;
       }
     }
-    return movementTripSchedule;
+    return hubRelation;
   }
 
   @And("Operator verify created manual path data in path detail with following data:")

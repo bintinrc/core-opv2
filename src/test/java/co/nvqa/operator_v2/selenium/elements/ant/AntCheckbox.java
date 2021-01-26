@@ -33,7 +33,7 @@ public class AntCheckbox extends PageElement {
     return input.isChecked();
   }
 
-  private void check() {
+  public void check() {
     input.check();
   }
 

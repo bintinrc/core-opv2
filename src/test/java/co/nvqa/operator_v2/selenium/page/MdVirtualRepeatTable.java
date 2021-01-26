@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -96,6 +97,23 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
   @Override
   public void clickColumn(int rowNumber, String columnId) {
-    throw new UnsupportedOperationException();
+    String xpath = f(
+        "%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[normalize-space(@class)='%s']",
+        getTableLocator(), mdVirtualRepeat, rowNumber, getColumnLocators().get(columnId));
+    if (isElementExistFast(xpath + "//a")) {
+      click(xpath + "//a");
+    } else {
+      click(xpath);
+    }
+  }
+
+  public void sortColumn(String columnId, boolean ascending) {
+    String headerLocator = f("th.%s", getColumnLocators().get(columnId));
+    String xpath = f("//th[contains(@class,'%s')]/md-icon[contains(@md-svg-src,'%s')]",
+        getColumnLocators().get(columnId), ascending ? "asc" : "desc");
+    Button button = new Button(getWebDriver(), findElementBy(By.cssSelector(headerLocator)));
+    while (!isElementExistFast(xpath)) {
+      button.click();
+    }
   }
 }

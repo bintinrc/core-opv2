@@ -17,6 +17,8 @@ import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.sort.hub.CrossDockStationRelation;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -49,11 +51,22 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import static co.nvqa.commons.model.core.Order.GRANULAR_STATUS_VAN_ENROUTE_TO_PICKUP;
+import static co.nvqa.commons.model.core.Order.STATUS_TRANSIT;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<ScenarioManager> {
+
+  private static final String HUB_CD_CD = "CD->CD";
+  private static final String HUB_CD_ITS_ST = "CD->its ST";
+  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
+  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
+  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
+  private static final String HUB_ST_ITS_CD = "ST->its CD";
+  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
 
   public ApiOperatorPortalExtSteps() {
   }
@@ -62,34 +75,15 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void init() {
   }
 
-  @Given("^Operator V2 cleaning Tag Management by calling API endpoint directly$")
-  public void cleaningTagManagement() {
-    Order order1 = new Order();
-    order1.setId(1L);
-    order1.setComments("No");
-
-    Order order2 = new Order();
-    order2.setId(1L);
-    order2.setComments("Yes");
-
-    String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
-
-    try {
-      getRouteClient().deleteTag(tagName);
-    } catch (RuntimeException ex) {
-      NvLogger
-          .warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName,
-              ex.getMessage());
-    }
-
-    tagName = TagManagementSteps.EDITED_TAG_NAME;
-
-    try {
-      getRouteClient().deleteTag(tagName);
-    } catch (RuntimeException ex) {
-      NvLogger
-          .warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName,
-              ex.getMessage());
+  @After("@DeleteCorporateSubShipper")
+  public void deleteShipper() {
+    List<Shipper> subShippers = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
+    if (subShippers != null) {
+      for (Shipper subShipper : subShippers) {
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(
+            () -> getShipperClient().deleteShipperByShipperId(subShipper.getId()),
+            f("Deleting newly created shipper with ID : %d", subShipper.getId()));
+      }
     }
   }
 
@@ -258,8 +252,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     Order latestOrderInfo = retryIfAssertionErrorOrRuntimeExceptionOccurred(
         () -> getOrderClient().getOrder(orderId), methodInfo);
     assertEquals(f("Granular Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()),
-        "VAN_ENROUTE_TO_PICKUP", latestOrderInfo.getGranularStatus());
-    assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "TRANSIT",
+        GRANULAR_STATUS_VAN_ENROUTE_TO_PICKUP, latestOrderInfo.getGranularStatus());
+    assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), STATUS_TRANSIT,
         latestOrderInfo.getStatus());
   }
 
@@ -322,7 +316,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
       Hub hubResp = getHubClient().create(hubMap.get(hubName));
       hubMap.put(hubResp.getName(), hubResp);
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(), 500, 5);
     hub = hubMap.get(hubName);
     hub.setFacilityTypeDisplay(facilityType);
 
@@ -347,6 +341,109 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  @Given("API Operator creates hubs for {string} movement")
+  public void apiOperatorCreatesHubsForMovement(String scheduleType) {
+    Map<String, String> mapOfData = new HashMap<>();
+    mapOfData.put("name", "GENERATED");
+    mapOfData.put("displayName", "GENERATED");
+    mapOfData.put("city", "GENERATED");
+    mapOfData.put("country", "GENERATED");
+    mapOfData.put("latitude", "GENERATED");
+    mapOfData.put("longitude", "GENERATED");
+    List<Hub> createdHubs;
+    switch (scheduleType) {
+      case HUB_CD_CD:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        break;
+      case HUB_CD_ITS_ST:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case HUB_CD_ST_DIFF_CD:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case HUB_ST_ST_SAME_CD:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case HUB_ST_ST_DIFF_CD:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(3).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case HUB_ST_ITS_CD:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(1).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        break;
+      case HUB_ST_CD_DIFF_CD:
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("STATION", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        apiOperatorCreatesNewHubWithTypeUsingDataBelow("CROSSDOCK", mapOfData);
+        createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        break;
+    }
+  }
+
+  @Given("API Operator assign stations to its crossdock for {string} movement")
+  public void apiOperatorAssignStationsToItsCrossdockForMovementType(String scheduleType) {
+    List<Hub> createdHubs = get(KEY_LIST_OF_CREATED_HUBS);
+    switch (scheduleType) {
+      case HUB_CD_CD:
+      case HUB_CD_ST_DIFF_CD:
+        break;
+      case HUB_CD_ITS_ST:
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(0).getId()),
+            String.valueOf(createdHubs.get(1).getId()));
+        break;
+      case HUB_ST_ST_SAME_CD:
+      case HUB_ST_CD_DIFF_CD:
+      case HUB_ST_ST_DIFF_CD:
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(2).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        break;
+      case HUB_ST_ITS_CD:
+        apiOperatorCreateRelationFor(String.valueOf(createdHubs.get(1).getId()),
+            String.valueOf(createdHubs.get(0).getId()));
+        break;
+    }
+  }
+
+  @Given("API Operator assign CrossDock {string} for Station {string}")
+  public void apiOperatorCreateRelationFor(String crossDockIdAsString, String stationIdAsString) {
+    Long crossDockId = Long.valueOf(resolveValue(crossDockIdAsString));
+    Long stationId = Long.valueOf(resolveValue(stationIdAsString));
+
+    CrossDockStationRelation crossDockStationRelation = getHubClient()
+        .assignStationToCrossDock("sg", crossDockId, stationId);
+    put(KEY_HUB_CROSSDOCK_DETAIL_ID, crossDockStationRelation.getId());
+    putInList(KEY_LIST_OF_HUB_CROSSDOCK_DETAIL_ID, crossDockStationRelation.getId());
+  }
 
   @Given("^API Operator updates Hub using data below:$")
   public void apiOperatorUpdatesHubUsingDataBelow(Map<String, String> data) {
@@ -515,7 +612,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         .findFirst()
         .orElseThrow(() -> new RuntimeException(
             f("Vehicle Type with name [%s] was not found", vehicleType.getName())));
-    vehicleType.setId(Long.valueOf(apiData.getId()));
+    vehicleType.setId(apiData.getId());
   }
 
   @After("@DeleteVehicleTypes")
@@ -648,5 +745,69 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
     put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
+  }
+
+
+  @And("API Operator does the {string} scan for the shipment {string} from {string} to {string}")
+  public void apiOperatorDoesTheScanForTheShipment(String inboundType, String shipmentIdAsString,
+      String originHubIdAsString, String destHubIdAsString) {
+    Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+    long originHubId = Long.parseLong(resolveValue(originHubIdAsString));
+    long destHubId = Long.parseLong(resolveValue(destHubIdAsString));
+    long hubId;
+
+    if ("van-inbound".equalsIgnoreCase(inboundType)) {
+      hubId = originHubId;
+    } else {
+      hubId = destHubId;
+    }
+    getHubClient().shipmentInboundScanning(inboundType, shipmentId, hubId);
+  }
+
+  @And("API Operator does the {string} scan from {string} to {string} for the following shipments:")
+  public void apiOperatorDoesTheScanForMultipleShipments(String inboundType,
+      String originHubIdAsString, String destHubIdAsString, List<String> shipmentIds) {
+    for (String shipmentIdAsString : shipmentIds) {
+      apiOperatorDoesTheScanForTheShipment(inboundType, shipmentIdAsString, originHubIdAsString,
+          destHubIdAsString);
+      pause2s();
+    }
+  }
+
+  @When("^API Operator archives routes:$")
+  public void operatorArchivesRoutes(List<String> routeIds) {
+    routeIds = resolveValues(routeIds);
+    long[] ids = new long[routeIds.size()];
+    for (int i = 0; i < routeIds.size(); i++) {
+      ids[i] = Long.parseLong(routeIds.get(i));
+    }
+    getRouteClient().archiveRoutes(ids);
+  }
+
+  @Given("^API Operator create zone using data below:$")
+  public void apiOperatorCreateZone(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String hubId = data.get("hubId");
+    if (StringUtils.isBlank(hubId)) {
+      throw new IllegalArgumentException("hubId for zone was not provided");
+    }
+    String uniqueCode = generateDateUniqueString();
+    long uniqueCoordinate = System.currentTimeMillis();
+
+    Zone zone = new Zone();
+    zone.setName("ZONE-" + uniqueCode);
+    zone.setShortName("Z-" + uniqueCode);
+    zone.setHubId(Integer.valueOf(hubId));
+    zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
+    zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
+    zone.setDescription(
+        f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.",
+            new Date()));
+
+    zone = getZoneClient().create(zone);
+    zone.setHubName(data.get("hubName"));
+    put(KEY_CREATED_ZONE, zone);
+    put(KEY_CREATED_ZONE_ID, zone.getId());
+    getZoneClient().reloadCache();
   }
 }

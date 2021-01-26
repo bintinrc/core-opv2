@@ -28,4 +28,9 @@ public class NvIconTextButton extends PageElement {
     button.scrollIntoView();
     button.click();
   }
+
+  @Override
+  public boolean isEnabled() {
+    return button.isEnabled();
+  }
 }

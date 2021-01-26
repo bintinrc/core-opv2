@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableList;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -433,9 +434,33 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.manuallyCompleteOrder();
   }
 
-  @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder")
+  @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder on Edit Order Page")
   public void operatorSelectTheRouteTagsOfFromTheRouteFinder(String routeTag) {
-    editOrderPage.addToRouteFromRouteTag(routeTag);
+    editOrderPage.clickMenu("Delivery", "Add To Route");
+    editOrderPage.addToRouteDialog.waitUntilVisible();
+    editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(resolveValue(routeTag)));
+    editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
+    if (editOrderPage.toastErrors.size() > 0) {
+      Assert.fail(
+          f("Error on attempt to suggest routes: %s",
+              editOrderPage.toastErrors.get(0).toastBottom.getText()));
+    }
+    editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    editOrderPage.addToRouteDialog.waitUntilInvisible();
+    editOrderPage.waitUntilInvisibilityOfToast(true);
+  }
+
+  @And("Operator suggest route of {string} tag from the Route Finder on Edit Order Page")
+  public void operatorSuggestRouteFromTheRouteFinder(String routeTag) {
+    editOrderPage.addToRouteDialog.waitUntilVisible();
+    editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(resolveValue(routeTag)));
+    editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
+  }
+
+  @And("Operator verify Route value is {string} in Add To Route dialog on Edit Order Page")
+  public void operatorVerifyRouteValue(String expected) {
+    assertEquals("Route value", resolveValue(expected),
+        editOrderPage.addToRouteDialog.route.getValue());
   }
 
   @Then("^Operator verify order event on Edit order page using data below:$")
@@ -1075,5 +1100,70 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorVerifyRouteIdOnEditOrderPage(String routeId) {
     assertEquals("Latest Route ID", resolveValue(routeId),
         editOrderPage.latestRouteId.getNormalizedText());
+  }
+
+  @Then("^Operator cancel RTS on Edit Order page$")
+  public void operatorCancelRtsOnEditOrderPage() {
+    editOrderPage.clickMenu("Return to Sender", "Cancel RTS");
+    editOrderPage.cancelRtsDialog.waitUntilVisible();
+    editOrderPage.cancelRtsDialog.cancelRts.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("The RTS has been cancelled", true);
+  }
+
+  @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order page$")
+  public void operatorVerifyRtsTag(String state) {
+    assertEquals("RTS tag is displayed", StringUtils.equalsIgnoreCase(state, "displayed"),
+        editOrderPage.deliveryDetailsBox.rtsTag.isDisplayed());
+  }
+
+  @Then("Operator verifies Latest Event is {string} on Edit Order page")
+  public void operatorVerifyLatestEvent(String value) {
+    assertEquals("Latest Event", resolveValue(value),
+        editOrderPage.latestEvent.getNormalizedText());
+  }
+
+  @Then("Operator RTS order on Edit Order page using data below:")
+  public void operatorRtsOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    editOrderPage.clickMenu("Delivery", "Return to Sender");
+    editOrderPage.editRtsDetailsDialog.waitUntilVisible();
+    String value = data.get("reason");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.reason.selectValue(value);
+    }
+    value = data.get("recipientName");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.recipientName.setValue(value);
+    }
+    value = data.get("recipientContact");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.recipientContact.setValue(value);
+    }
+    value = data.get("recipientEmail");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.recipientEmail.setValue(value);
+    }
+    value = data.get("internalNotes");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.internalNotes.setValue(value);
+    }
+    value = data.get("deliveryDate");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.deliveryDate.simpleSetValue(value);
+    }
+    value = data.get("timeslot");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.timeslot.searchAndSelectValue(value);
+    }
+    editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
+  }
+
+  @Then("Operator resume order on Edit Order page")
+  public void operatorResumeOrder() {
+    editOrderPage.clickMenu("Order Settings", "Resume Order");
+    editOrderPage.resumeOrderDialog.waitUntilVisible();
+    editOrderPage.resumeOrderDialog.resumeOrder.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) resumed", true);
   }
 }
