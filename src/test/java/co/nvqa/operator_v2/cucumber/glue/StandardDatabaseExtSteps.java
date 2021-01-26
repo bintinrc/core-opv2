@@ -216,19 +216,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     validateDeliveryInWaypointRecord(order, transactionType, transaction.getWaypointId());
   }
 
-  @Then("^DB Operator verify the last order_events record for the created order:$")
-  public void operatorVerifyTheLastOrderEventParams(Map<String, String> mapOfData) {
-    Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEventsASC(orderId);
-    assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
-    OrderEventEntity theLastOrderEvent = orderEvents.get(0);
-    String value = mapOfData.get("type");
-
-    if (StringUtils.isNotBlank(value)) {
-      assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
-    }
-  }
-
   @Then("^DB Operator verify order_events record for the created order for RTS:$")
   public void operatorVerifyTheLastOrderEventParamsForRTS(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
