@@ -7,10 +7,9 @@ Feature: Reservation Rejection
 
   @DeleteOrArchiveRoute
   Scenario: Operator Should be Able to Find Rejected Reservation on Reservation Rejection Page (uid:5555943c-371c-4bea-aeed-0755ef9369a4)
-    Given Operator go to menu Order -> All Orders
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator create new shipper address V2 using data below:
+    And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
@@ -25,10 +24,10 @@ Feature: Reservation Rejection
 
   @DeleteOrArchiveRoute
   Scenario: Operator Should be Able to Fail Pickup a Rejected Reservation on Reservation Rejection Page (uid:641cd65f-236a-4c8d-8af4-d1ebfa18e66d)
-    Given Operator go to menu Order -> All Orders
-    Given API Operator create new route using data below:
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator create new shipper address V2 using data below:
+    And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
@@ -44,9 +43,10 @@ Feature: Reservation Rejection
 
   @DeleteOrArchiveRoute
   Scenario: Operator Should be Able to Re-assign a Rejected Reservation on Reservation Rejection Page (uid:cbd252c8-3bf1-4566-ae80-474de3866ed7)
-    Given API Operator create new route using data below:
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator create new shipper address V2 using data below:
+    And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:

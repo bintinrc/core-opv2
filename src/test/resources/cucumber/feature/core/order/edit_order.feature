@@ -817,7 +817,6 @@ Feature: Edit Order
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Cancelled (uid:b6e1568f-28c8-4725-9903-412f7cd4d590)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -828,7 +827,6 @@ Feature: Edit Order
     And Operator verify order granular status is "Cancelled" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Transferred to 3PL (uid:fb4a419b-e97a-4f3a-9414-b40b0f932fb4)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -844,6 +842,526 @@ Feature: Edit Order
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
+
+  Scenario: Operator Force Success Order on Edit Order Page - End State = Completed (uid:11fd9e1a-9caf-4b2e-9da9-6f240649c79d)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - End State = Returned to Sender (uid:5f5c3de3-50a7-483f-ac1e-2775204c3f91)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | FAIL |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+
+  Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Collect COD (uid:2c0df634-56da-4771-8989-fd9e746870bd)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order with COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY                      |
+      | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Collect COD (uid:c763009d-b2b4-4746-9794-272317d96cd6)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order with COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY                      |
+      | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
+      | driverId          | {ninja-driver-id}             |
+
+  Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Do not Collect COD (uid:6d6c623c-1f06-4d4e-a39d-0ef3226c3547)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order without collecting COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY |
+      | expectedCodAmount | 0        |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Do not Collect COD (uid:5d1aadd6-394d-4cbd-ad20-7858a8bae9c5)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order without collecting COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY          |
+      | expectedCodAmount | 0                 |
+      | driverId          | {ninja-driver-id} |
+
+  Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"<delivery_verification_mode>","is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator set Delivery Verification Required to "<new_delivery_verification_mode>" on on Edit order page
+    Then Operator verify Delivery Verification Required is "<new_delivery_verification_mode>" on on Edit order page
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE DELIVERY VERIFICATION |
+    When DB Operator get shipper ref metadata of created order
+    Then DB Operator make sure shipper ref metadata contains values:
+      | deliveryVerificationMode | <new_delivery_verification_mode> |
+    When DB Operator get order delivery verifications of created order
+    Then DB Operator make sure order delivery verifications contains values:
+      | deliveryVerificationMode | <new_delivery_verification_mode> |
+
+    Examples:
+      | Note        | delivery_verification_mode | new_delivery_verification_mode | hiptest-uid                              |
+      | OTP to NONE | OTP                        | None                           | uid:faa86019-64a6-4755-aa51-252d4fe2dc38 |
+      | NONE to OTP | NONE                       | OTP                            | uid:f4cda665-1173-49a8-83ec-e261e69ae554 |
+
+  Scenario: Edit Order Event Table Showing Correctly for Order Event - Hub Inbound Scan (uid:bc007800-0866-45e1-9b51-c80ab9a7fa88)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify order event on Edit order page using data below:
+      | name | HUB INBOUND SCAN |
+
+  @DeleteOrArchiveRoute
+  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator add created order route on Edit Order page using data below:
+      | type    | Delivery               |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | ADD TO ROUTE |
+    Examples:
+      | Note   | hiptest-uid                              | orderType |
+      | Normal | uid:9d63adef-503f-48af-9232-c2a003c5240e | Normal    |
+      | Return | uid:75222ea2-43c3-4783-9b1c-bed9a999f45e | Return    |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Cancel RTS from Edit Order Page (uid:d4419364-fa79-41db-8b2f-2367864463fb)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator cancel RTS on Edit Order page
+    Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
+    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | REVERT RTS |
+    And DB Operator verifies orders record using data below:
+      | rts | 0 |
+
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    When Operator RTS order on Edit Order page using data below:
+      | reason       | Nobody at address              |
+      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | PENDING |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator RTS order on Edit Order page using data below:
+      | reason       | Nobody at address              |
+      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator RTS an Order on Edit Order Page - Delivery Fail / Pending Reschedule (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
+      | {order-tag-id} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 6           |
+      | failureReasonIndexMode | FIRST       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Delivery Fail" on Edit Order page
+    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | FAIL |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator RTS order on Edit Order page using data below:
+      | reason       | Nobody at address              |
+      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+
+  @DeleteOrArchiveRoute @DeleteRouteTags
+  Scenario: Operator Suggest Route on Edit Order Page - Delivery, Suggested Route Found (uid:9df8ffd8-1adb-4752-9769-14d3d03393ff)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-previous-1-day-yyyy-MM-dd} 16:00:00", "dateTime": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00+00:00" } |
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Delivery -> Add To Route on Edit Order page
+    And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
+    Then Operator verify Route value is "{KEY_CREATED_ROUTE_ID}" in Add To Route dialog on Edit Order Page
+
+  @DeleteOrArchiveRoute @DeleteRouteTags
+  Scenario: Operator Suggest Route on Edit Order Page - Pickup, Suggested Route Found (uid:236f2423-0404-4db1-a4aa-79ef4ed3655f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                                     |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-previous-1-day-yyyy-MM-dd} 16:00:00", "dateTime": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00+00:00" } |
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Shipper create V4 order using data below:
+      | generateFrom   | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                                     |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Pickup -> Add To Route on Edit Order page
+    And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
+    Then Operator verify Route value is "{KEY_CREATED_ROUTE_ID}" in Add To Route dialog on Edit Order Page
+
+  @DeleteOrArchiveRoute @DeleteRouteTags
+  Scenario: Operator Suggest Route on Edit Order Page - Delivery, No Suggested Route Found (uid:4fc900dd-1ce2-4362-801c-63c2053ac0d1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-3} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator click Delivery -> Add To Route on Edit Order page
+    And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
+    Then Operator verifies that error toast displayed:
+      | top    | Error trying to suggest route            |
+      | bottom | No waypoints to suggest after filtering! |
+    And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
+
+  @DeleteOrArchiveRoute @DeleteRouteTags
+  Scenario: Operator Suggest Route on Edit Order Page - Pickup, No Suggested Route Found (uid:c3b9d6c1-c600-4d0d-aa24-c06476e2e32b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                                     |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{gradle-current-date-yyyy-MM-dd} 16:00:00", "dateTime": "{gradle-current-date-yyyy-MM-dd}T16:00:00+00:00" } |
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator click Pickup -> Add To Route on Edit Order page
+    And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
+    Then Operator verifies that error toast displayed:
+      | top    | Error trying to suggest route            |
+      | bottom | No waypoints to suggest after filtering! |
+    And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
+
+  Scenario: Operator Resume a Cancelled Order on Edit Order page (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
+      | status                        | Cancelled |
+      | granularStatus                | Cancelled |
+      | lastPickupTransactionStatus   | Cancelled |
+      | lastDeliveryTransactionStatus | Cancelled |
+    And Operator resume order on Edit Order page
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify order event on Edit order page using data below:
+      | name | RESUME |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

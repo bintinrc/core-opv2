@@ -1,8 +1,7 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @PricingScriptsV2 @SalesOps
+@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps
 Feature: Pricing Scripts V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Create Draft Script (uid:233f896b-0e1c-4e21-87c1-8c927b4d91d0)
@@ -42,12 +41,12 @@ Feature: Pricing Scripts V2
       | comments     | <comments>     |
     Examples:
       | Note                               | hiptest-uid                              | orderType | deliveryType | timeslotType | size | weight | insuredValue | codValue | fromZone | toZone | grandTotal | gst   | deliveryFee | insuranceFee | codFee | handlingFee | comments |
-      | NORMAL - STANDARD - NONE - S       | uid:0046cfcd-e197-4d09-90bd-d92ea8a198b3 | NORMAL    | STANDARD     | NONE         | S    | 5.9    | 100          | 200      | EAST     | WEST   | 48.043     | 3.143 | 13.5        | 10           | 20     | 1.4         | OK       |
-      | NORMAL - NEXT_DAY - DAY_NIGHT - XL | uid:27e03555-b783-429e-91eb-e36e8050447a | NORMAL    | NEXT_DAY     | DAY_NIGHT    | XL   | 5.9    | 100          | 200      | EAST     | WEST   | 50.183     | 3.283 | 15.5        | 10           | 20     | 1.4         | OK       |
-      | C2C - EXPRESS - DAY_NIGHT - M      | uid:7fe181d9-801d-4b6f-92e0-9a2553b04491 | C2C       | EXPRESS      | DAY_NIGHT    | M    | 5.9    | 100          | 200      | EAST     | WEST   | 49.969     | 3.269 | 15.3        | 10           | 20     | 1.4         | OK       |
-      | C2C - SAME_DAY - NONE - XL         | uid:2e56fc64-de8b-433b-96f2-0f34f5311b39 | C2C       | SAME_DAY     | NONE         | XL   | 5.9    | 100          | 200      | EAST     | WEST   | 50.611     | 3.311 | 15.9        | 10           | 20     | 1.4         | OK       |
-      | RETURN - NEXT_DAY - TIMESLOT - L   | uid:468f133a-76a2-4df7-a3ac-cbcf5d4c2bd4 | RETURN    | NEXT_DAY     | TIMESLOT     | L    | 5.9    | 100          | 200      | EAST     | WEST   | 50.397     | 3.297 | 15.7        | 10           | 20     | 1.4         | OK       |
-      | RETURN - STANDARD - TIMESLOT - M   | uid:60ed2996-de9c-4305-8ecd-f8da71a54cf5 | RETURN    | STANDARD     | TIMESLOT     | M    | 5.9    | 100          | 200      | EAST     | WEST   | 49.755     | 3.255 | 15.1        | 10           | 20     | 1.4         | OK       |
+      | NORMAL - STANDARD - NONE - S       | uid:34d9484e-5a4a-4a35-90de-e519450ac0f1 | NORMAL    | STANDARD     | NONE         | S    | 5.9    | 100          | 200      | EAST     | WEST   | 48.043     | 3.143 | 13.5        | 10           | 20     | 1.4         | OK       |
+      | NORMAL - NEXT_DAY - DAY_NIGHT - XL | uid:5c89fb60-e033-41e5-a370-c15eb21bd223 | NORMAL    | NEXT_DAY     | DAY_NIGHT    | XL   | 5.9    | 100          | 200      | EAST     | WEST   | 50.183     | 3.283 | 15.5        | 10           | 20     | 1.4         | OK       |
+      | C2C - EXPRESS - DAY_NIGHT - M      | uid:895ce6ad-980f-4453-b9a5-b47f37b0a0ca | C2C       | EXPRESS      | DAY_NIGHT    | M    | 5.9    | 100          | 200      | EAST     | WEST   | 49.969     | 3.269 | 15.3        | 10           | 20     | 1.4         | OK       |
+      | C2C - SAME_DAY - NONE - XL         | uid:696a6d32-e15b-4f10-9628-5c3c5e953391 | C2C       | SAME_DAY     | NONE         | XL   | 5.9    | 100          | 200      | EAST     | WEST   | 50.611     | 3.311 | 15.9        | 10           | 20     | 1.4         | OK       |
+      | RETURN - NEXT_DAY - TIMESLOT - L   | uid:297bb781-77e3-486e-b88a-e596aacfc5e1 | RETURN    | NEXT_DAY     | TIMESLOT     | L    | 5.9    | 100          | 200      | EAST     | WEST   | 50.397     | 3.297 | 15.7        | 10           | 20     | 1.4         | OK       |
+      | RETURN - STANDARD - TIMESLOT - M   | uid:10efe3c4-ec2b-4567-90b8-9bc19d344787 | RETURN    | STANDARD     | TIMESLOT     | M    | 5.9    | 100          | 200      | EAST     | WEST   | 49.755     | 3.255 | 15.1        | 10           | 20     | 1.4         | OK       |
 
   @DeletePricingScript
   Scenario: Create Pricing Script, Verify and Release Script Successfully (uid:987f2b36-b724-4858-bf15-1d06473a72d9)

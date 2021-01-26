@@ -10,69 +10,80 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AntSelect extends PageElement
-{
-    public AntSelect(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class AntSelect extends PageElement {
 
-    public AntSelect(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
 
-    @FindBy(className = "ant-select-selection-selected-value")
-    public PageElement selectValueElement;
+  public AntSelect(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-select-search__field")
-    public PageElement searchInput;
+  public AntSelect(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(className = "ant-select-clear-icon")
-    public PageElement clearIcon;
+  public AntSelect(WebDriver webDriver, SearchContext searchContext, String xpath) {
+    super(webDriver, searchContext, xpath);
+  }
 
-    public void selectValue(String value)
-    {
-        enterSearchTerm(value);
-        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]", value);
-    }
+  @FindBy(className = "ant-select-selection-selected-value")
+  public PageElement selectValueElement;
 
-    public void selectValueWithoutSearch(String value)
-    {
-        openMenu();
-        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]", value);
-    }
+  @FindBy(className = "ant-select-search__field")
+  public PageElement searchInput;
 
-    public void clearValue()
-    {
-        clearIcon.click();
-    }
+  @FindBy(className = "ant-select-clear-icon")
+  public PageElement clearIcon;
 
-    private void openMenu()
-    {
-        waitUntilClickable();
-        jsClick();
-        pause1s();
-    }
+  public void selectValue(String value) {
+    enterSearchTerm(value);
+    clickMenuItem(value);
+  }
 
-    public void enterSearchTerm(String value)
-    {
-        openMenu();
-        searchInput.sendKeys(value);
-        pause1s();
-    }
+  public void selectByIndex(int index) {
+    openMenu();
+    clickMenuItemByIndex(index);
+  }
 
-    public void sendReturnButton()
-    {
-        searchInput.sendKeys(Keys.RETURN);
-    }
+  public void selectValueWithoutSearch(String value) {
+    openMenu();
+    clickMenuItem(value);
+  }
 
-    public String getValue()
-    {
-        return selectValueElement.isDisplayedFast() ?
-                selectValueElement.getText() :
-                null;
-    }
+  public void clickMenuItem(String value) {
+    clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
+  }
+
+  public void clickMenuItemByIndex(int index) {
+    clickf(ITEM_INDEX_LOCATOR, index);
+  }
+
+  public void clearValue() {
+    clearIcon.click();
+  }
+
+  private void openMenu() {
+    waitUntilClickable();
+    jsClick();
+    pause1s();
+  }
+
+  public void enterSearchTerm(String value) {
+    openMenu();
+    searchInput.sendKeys(value);
+    pause1s();
+  }
+
+  public void sendReturnButton() {
+    searchInput.sendKeys(Keys.RETURN);
+  }
+
+  public String getValue() {
+    return selectValueElement.isDisplayedFast() ?
+        selectValueElement.getText() :
+        null;
+  }
 }

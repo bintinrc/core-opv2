@@ -4,7 +4,6 @@ Feature: Order Billing
   "ALL": All orders (1 very big file, takes long time to generate)
   "SCRIPT": Orders consolidated by script (1 file per script), grouped by shipper within the file
   "AGGREGATED": All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate)
-  "PARENT": Orders consolidated by parent shipper (1 file per parent shipper)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -46,7 +45,7 @@ Feature: Order Billing
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
-    Then Operator gets price order details from the database
+    Then Operator gets price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:

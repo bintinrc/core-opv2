@@ -5,7 +5,7 @@ Feature: Movement Trip - View Trips
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  @DeleteHubsViaAPI
   Scenario: View Departure Trip (uid:fd9d635c-5dc2-4e14-8344-20b7acb3f984)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -37,7 +37,7 @@ Feature: Movement Trip - View Trips
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteDriver @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  @DeleteDriver @DeleteHubsViaAPI
   Scenario: View Arrival Trip (uid:567dc293-b7c3-441a-8f00-2998fad953a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:

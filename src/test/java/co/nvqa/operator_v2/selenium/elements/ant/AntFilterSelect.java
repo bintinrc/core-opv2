@@ -8,39 +8,34 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AntFilterSelect extends PageElement
-{
-    public AntFilterSelect(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+public class AntFilterSelect extends PageElement {
+
+  public AntFilterSelect(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
+
+  @FindBy(css = ".ant-select")
+  public AntSelect searchOrSelect;
+
+  @FindBy(css = "div > button > i.anticon-border")
+  public Button clearAll;
+
+  @FindBy(css = "div.close > button")
+  public Button removeFilter;
+
+  public void clearAll() {
+    if (clearAll.isDisplayedFast()) {
+      clearAll.click();
     }
+  }
 
-    @FindBy(css = ".ant-select")
-    public AntSelect searchOrSelect;
+  public void selectFilter(String value) {
+    searchOrSelect.selectValue(value);
+  }
 
-    @FindBy(css = "div > button > i.anticon-border")
-    public Button clearAll;
-
-    @FindBy(css = "div.close > button")
-    public Button removeFilter;
-
-    public void clearAll()
-    {
-        if (clearAll.isDisplayedFast())
-        {
-            clearAll.moveAndClick();
-        }
-    }
-
-    public void selectFilter(String value)
-    {
-        searchOrSelect.selectValue(value);
-    }
-
-    public void removeFilter()
-    {
-        removeFilter.click();
-    }
+  public void removeFilter() {
+    removeFilter.click();
+  }
 
 }

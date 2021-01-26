@@ -1,65 +1,54 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class MovementEvent extends DataEntity<MovementEvent>
-{
-    private String source;
-    private String status;
-    private String createdAt;
-    private String comments;
+public class MovementEvent extends DataEntity<MovementEvent> {
 
-    public MovementEvent()
-    {
-    }
+  private String source;
+  private String status;
+  private String createdAt;
+  private String comments;
 
-    public MovementEvent(Map<String, ?> dataMap)
-    {
-        fromMap(dataMap);
-    }
+  public MovementEvent() {
+  }
 
-    public String getSource()
-    {
-        return source;
-    }
+  public MovementEvent(Map<String, ?> dataMap) {
+    fromMap(dataMap);
+  }
 
-    public void setSource(String source)
-    {
-        this.source = source;
-    }
+  public String getSource() {
+    return source;
+  }
 
-    public String getStatus()
-    {
-        return status;
-    }
+  public void setSource(String source) {
+    this.source = source;
+  }
 
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public String getCreatedAt()
-    {
-        return createdAt;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public void setCreatedAt(String createdAt)
-    {
-        this.createdAt = createdAt;
-    }
+  public String getCreatedAt() {
+    return createdAt;
+  }
 
-    public String getComments()
-    {
-        return comments;
-    }
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
+  public String getComments() {
+    return comments;
+  }
+
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 }

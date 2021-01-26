@@ -5,7 +5,6 @@ Feature: Order Billing
   "ALL": All orders (1 very big file, takes long time to generate)
   "SCRIPT": Orders consolidated by script (1 file per script), grouped by shipper within the file
   "AGGREGATED": All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate)
-  "PARENT": Orders consolidated by parent shipper (1 file per parent shipper)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -21,7 +20,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And Operator gets price order details from the database
+    And Operator gets price order details from the dwh_qa_gl.priced_orders table
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-next-1-day-yyyy-MM-dd}                      |
@@ -76,7 +75,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And Operator gets price order details from the database
+    And Operator gets price order details from the dwh_qa_gl.priced_orders table
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -131,7 +130,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                                                            |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
-    Then Operator gets price order details from the database
+    Then Operator gets price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -206,57 +205,57 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "PARENT" Report (uid:305d96a8-7450-4290-9eaf-43dd7828f948)
-    Given API Shipper create V4 order using data below:
-      | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                             |
-      | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                         |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator force succeed created order
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
-      | uploadCsv    | {sub-shipper-sop-mktpl-v4-legacy-id}                              |
-      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
-      | emailAddress | {order-billing-email}                                             |
-    Then Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
-    Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
-    Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
-
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "PARENT" Report (uid:7574aab4-be81-4219-bbf6-c52b4104d0c1)
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
-      | uploadCsv    | 1122334455                                                        |
-      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
-      | emailAddress | {order-billing-email}                                             |
-    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
-
-
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "PARENT" Report (uid:59c22e15-29eb-427e-bb65-57f956b3df58)
-    Given API Shipper create V4 order using data below:
-      | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                             |
-      | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                         |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator force succeed created order
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
-      | uploadCsv    | {sub-shipper-sop-mktpl-v4-legacy-id},1122334455                   |
-      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
-      | emailAddress | {order-billing-email}                                             |
-    Then Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
-    Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
-    Then Operator verifies the report only contains valid shipper IDs like below:
-      | {sub-shipper-sop-mktpl-v4-legacy-id} |
+#  @DeleteOrArchiveRoute @KillBrowser
+#  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "PARENT" Report (uid:305d96a8-7450-4290-9eaf-43dd7828f948)
+#    Given API Shipper create V4 order using data below:
+#      | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                             |
+#      | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                         |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator force succeed created order
+#    When Operator generates success billings using data below:
+#      | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
+#      | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
+#      | uploadCsv    | {sub-shipper-sop-mktpl-v4-legacy-id}                              |
+#      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
+#      | emailAddress | {order-billing-email}                                             |
+#    Then Operator opens Gmail and checks received email
+#    Then Operator reads the CSV attachment for "Shipper Billing Report"
+#    Then Operator verifies the header using data below:
+#      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
+#    Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
+#
+#  @DeleteOrArchiveRoute @KillBrowser
+#  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "PARENT" Report (uid:7574aab4-be81-4219-bbf6-c52b4104d0c1)
+#    When Operator generates success billings using data below:
+#      | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
+#      | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
+#      | uploadCsv    | 1122334455                                                        |
+#      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
+#      | emailAddress | {order-billing-email}                                             |
+#    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+#
+#
+#  @DeleteOrArchiveRoute @KillBrowser
+#  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "PARENT" Report (uid:59c22e15-29eb-427e-bb65-57f956b3df58)
+#    Given API Shipper create V4 order using data below:
+#      | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                             |
+#      | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                         |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator force succeed created order
+#    When Operator generates success billings using data below:
+#      | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
+#      | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
+#      | uploadCsv    | {sub-shipper-sop-mktpl-v4-legacy-id},1122334455                   |
+#      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
+#      | emailAddress | {order-billing-email}                                             |
+#    Then Operator opens Gmail and checks received email
+#    Then Operator reads the CSV attachment for "Shipper Billing Report"
+#    Then Operator verifies the header using data below:
+#      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
+#    Then Operator verifies the report only contains valid shipper IDs like below:
+#      | {sub-shipper-sop-mktpl-v4-legacy-id} |
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Invalid File Type (uid:2c0617ed-a93e-4146-8a57-8743c472b050)

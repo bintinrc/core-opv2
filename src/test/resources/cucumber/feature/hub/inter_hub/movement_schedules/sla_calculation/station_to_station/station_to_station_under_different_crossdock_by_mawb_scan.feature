@@ -5,7 +5,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock by MAWB Scan - Given Crossdocks have relation (uid:7e1c0094-17b4-4119-a9db-b4ee8f39108c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -75,7 +75,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | movementType   | Air Haul                           |
-      | departureTime  | 13:15                              |
+      | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
     And Operator adds new Station Movement Schedule on Movement Management page using data below:
@@ -83,7 +83,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Air Haul                           |
-      | departureTime  | 13:15                              |
+      | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -100,7 +100,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | status      | Transit                             |
-      | sla         | {{next-3-days-yyyy-MM-dd}} 13:45:00 |
+      | sla         | {{next-3-days-yyyy-MM-dd}} 20:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
@@ -110,7 +110,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock by MAWB Scan - Given Crossdocks have no relation (uid:7f843b3b-4dbb-4abd-8897-0341a9ecee2a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

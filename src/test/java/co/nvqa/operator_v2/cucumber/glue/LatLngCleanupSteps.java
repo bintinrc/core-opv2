@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.selenium.page.LatLngCleanupPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
 import java.util.Map;
 
 /**
@@ -13,36 +12,33 @@ import java.util.Map;
  */
 @SuppressWarnings("WeakerAccess")
 @ScenarioScoped
-public class LatLngCleanupSteps extends AbstractSteps
-{
-    public static final String KEY_WAYPOINT_DETAILS = "KEY_WAYPOINT_DETAILS";
-    private LatLngCleanupPage latLngCleanupPage;
+public class LatLngCleanupSteps extends AbstractSteps {
 
-    public LatLngCleanupSteps()
-    {
-    }
+  public static final String KEY_WAYPOINT_DETAILS = "KEY_WAYPOINT_DETAILS";
+  private LatLngCleanupPage latLngCleanupPage;
 
-    @Override
-    public void init()
-    {
-        latLngCleanupPage = new LatLngCleanupPage(getWebDriver());
-    }
+  public LatLngCleanupSteps() {
+  }
 
-    @And("^Operator edit created delivery waypoint on Lat/Lng Cleanup page using data below:$")
-    public void operatorEditCreatedDeliveryWaypointUsingDataBelow(Map<String, String> mapOfData)
-    {
-        Long waypointId = get(KEY_DELIVERY_WAYPOINT_ID);
-        WaypointDetails newWaypointDetails = new WaypointDetails();
-        newWaypointDetails.fromMap(mapOfData);
-        newWaypointDetails.setId(waypointId);
-        put(KEY_WAYPOINT_DETAILS, newWaypointDetails);
-        latLngCleanupPage.editWaypointDetails(waypointId, newWaypointDetails);
-    }
+  @Override
+  public void init() {
+    latLngCleanupPage = new LatLngCleanupPage(getWebDriver());
+  }
 
-    @Then("^Operator verify waypoint details on Lat/Lng Cleanup page$")
-    public void operatorVerifyWaypointDetailsOnLatLngCleanupPage()
-    {
-        WaypointDetails expectedWaypointDetails = get(KEY_WAYPOINT_DETAILS);
-        latLngCleanupPage.validateWaypointDetails(expectedWaypointDetails.getId(), expectedWaypointDetails);
-    }
+  @And("^Operator edit created delivery waypoint on Lat/Lng Cleanup page using data below:$")
+  public void operatorEditCreatedDeliveryWaypointUsingDataBelow(Map<String, String> mapOfData) {
+    Long waypointId = get(KEY_DELIVERY_WAYPOINT_ID);
+    WaypointDetails newWaypointDetails = new WaypointDetails();
+    newWaypointDetails.fromMap(mapOfData);
+    newWaypointDetails.setId(waypointId);
+    put(KEY_WAYPOINT_DETAILS, newWaypointDetails);
+    latLngCleanupPage.editWaypointDetails(waypointId, newWaypointDetails);
+  }
+
+  @Then("^Operator verify waypoint details on Lat/Lng Cleanup page$")
+  public void operatorVerifyWaypointDetailsOnLatLngCleanupPage() {
+    WaypointDetails expectedWaypointDetails = get(KEY_WAYPOINT_DETAILS);
+    latLngCleanupPage
+        .validateWaypointDetails(expectedWaypointDetails.getId(), expectedWaypointDetails);
+  }
 }

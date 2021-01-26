@@ -9,59 +9,50 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class MainSteps extends AbstractSteps
-{
-    private MainPage mainPage;
+public class MainSteps extends AbstractSteps {
 
-    public MainSteps()
-    {
-    }
+  private MainPage mainPage;
 
-    @Override
-    public void init()
-    {
-        mainPage = new MainPage(getWebDriver());
-    }
+  public MainSteps() {
+  }
 
-    @Given("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\"$")
-    public void operatorGoToMenu(String parentMenuName, String childMenuName)
-    {
-        mainPage.clickNavigation(parentMenuName, childMenuName);
-    }
+  @Override
+  public void init() {
+    mainPage = new MainPage(getWebDriver());
+  }
 
-    @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
-    public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName)
-    {
-        operatorGoToMenu(parentMenuName, childMenuName);
-    }
+  @Given("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\"$")
+  public void operatorGoToMenu(String parentMenuName, String childMenuName) {
+    mainPage.clickNavigation(parentMenuName, childMenuName);
+  }
 
-    @Given("^Operator go to this URL \"([^\"]*)\"$")
-    public void operatorGoToThisUrl(String url)
-    {
-        mainPage.goToUrl(url);
-    }
+  @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
+  public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName) {
+    operatorGoToMenu(parentMenuName, childMenuName);
+  }
 
-    @Then("^Operator verify he is in main page$")
-    public void operatorVerifyHeIsInMainPage()
-    {
-        mainPage.verifyTheMainPageIsLoaded();
-    }
+  @Given("^Operator go to this URL \"([^\"]*)\"$")
+  public void operatorGoToThisUrl(String url) {
+    mainPage.goToUrl(url);
+  }
 
-    @Given("^Operator refresh page v1$")
-    public void operatorRefreshPage_v1()
-    {
-        mainPage.refreshPage_v1();
-    }
+  @Then("^Operator verify he is in main page$")
+  public void operatorVerifyHeIsInMainPage() {
+    mainPage.verifyTheMainPageIsLoaded();
+  }
 
-    @Given("^Operator refresh page$")
-    public void operatorRefreshPage()
-    {
-        mainPage.refreshPage();
-    }
+  @Given("^Operator refresh page v1$")
+  public void operatorRefreshPage_v1() {
+    mainPage.refreshPage_v1();
+  }
 
-    @Then("^Toast \"(.+)\" is displayed$")
-    public void toastIsDisplayed(String message)
-    {
-        mainPage.waitUntilInvisibilityOfToast(message, true);
-    }
+  @Given("^Operator refresh page$")
+  public void operatorRefreshPage() {
+    mainPage.refreshPage();
+  }
+
+  @Then("^Toast \"(.+)\" is displayed$")
+  public void toastIsDisplayed(String message) {
+    mainPage.waitUntilInvisibilityOfToast(message, true);
+  }
 }

@@ -1,9 +1,8 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @PricingScriptsV2 @SalesOps
+@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps
 
 Feature: Pricing Scripts V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePricingScript
@@ -18,6 +17,6 @@ Feature: Pricing Scripts V2
       | endWeight   | 2.0 |
     And Operator refresh page
     Then Operator verify Draft Script is released successfully
-    When Operator link Script to Shipper with ID = "{shipper-v4-dummy-script-legacy-id}"
+    When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully

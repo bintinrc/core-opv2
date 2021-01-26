@@ -1,37 +1,39 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class NvFilterBox extends PageElement
-{
-    public NvFilterBox(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+public class NvFilterBox extends AbstractFilterBox {
+
+  public NvFilterBox(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
+
+  @FindBy(tagName = "nv-autocomplete")
+  public NvAutocomplete searchOrSelect;
+
+  @FindBy(name = "commons.clear-all")
+  public PageElement clearAll;
+
+  public void clearAll() {
+    if (clearAll.isDisplayedFast()) {
+      clearAll.moveAndClick();
     }
+  }
 
-    @FindBy(tagName = "nv-autocomplete")
-    public NvAutocomplete searchOrSelect;
+  @Override
+  void setValue(String... values) {
+    selectFilter(values[0]);
+  }
 
-    @FindBy(name = "commons.clear-all")
-    public PageElement clearAll;
+  public void selectFilter(String value) {
+    searchOrSelect.selectValue(value);
+  }
 
-    public void clearAll()
-    {
-        if (clearAll.isDisplayedFast())
-        {
-            clearAll.moveAndClick();
-        }
-    }
-
-    public void selectFilter(String value)
-    {
-        searchOrSelect.selectValue(value);
-    }
+  public void selectFilter(Iterable<String> values) {
+    values.forEach(this::selectFilter);
+  }
 
 }

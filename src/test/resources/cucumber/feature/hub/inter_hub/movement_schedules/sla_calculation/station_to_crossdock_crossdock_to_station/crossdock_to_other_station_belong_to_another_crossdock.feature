@@ -5,7 +5,7 @@ Feature: Crossdock to other station belong to another crossdock
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement Found and there is available schedule (uid:6b2b71e2-4d64-4ebe-8437-aa9323d75613)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -88,7 +88,7 @@ Feature: Crossdock to other station belong to another crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement Found but there is no schedule (uid:de3b62b5-e244-446c-9665-ed69cf4ffa3d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -168,7 +168,7 @@ Feature: Crossdock to other station belong to another crossdock
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement not found (uid:dd887208-e154-43b0-913b-6d8e59ccdeb1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

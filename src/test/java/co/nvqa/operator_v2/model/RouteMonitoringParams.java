@@ -1,251 +1,205 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
-{
-    private Long routeId;
-    private Integer totalParcels;
-    private Double completionPercentage;
-    private Integer totalWaypoint;
-    private Integer pendingPriorityParcels;
-    private Integer pendingCount;
-    private Integer numLateAndPending;
-    private Integer successCount;
-    private Integer numInvalidFailed;
-    private Integer numValidFailed;
-    private Integer earlyCount;
-    private Integer lateCount;
-    private Integer failedCount;
-    private Integer cmiCount;
+public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams> {
 
-    public RouteMonitoringParams()
-    {
-    }
+  private Long routeId;
+  private Integer totalParcels;
+  private Double completionPercentage;
+  private Integer totalWaypoint;
+  private Integer pendingPriorityParcels;
+  private Integer pendingCount;
+  private Integer numLateAndPending;
+  private Integer successCount;
+  private Integer numInvalidFailed;
+  private Integer numValidFailed;
+  private Integer earlyCount;
+  private Integer lateCount;
+  private Integer failedCount;
+  private Integer cmiCount;
 
-    public RouteMonitoringParams(Map<String, String> data)
-    {
-        fromMap(data);
-    }
+  public RouteMonitoringParams() {
+  }
 
-    public Long getRouteId()
-    {
-        return routeId;
-    }
+  public RouteMonitoringParams(Map<String, String> data) {
+    fromMap(data);
+  }
 
-    public void setRouteId(Long routeId)
-    {
-        this.routeId = routeId;
-    }
+  public Long getRouteId() {
+    return routeId;
+  }
 
-    public void setRouteId(String routeId)
-    {
-        setRouteId(Long.parseLong(routeId));
-    }
+  public void setRouteId(Long routeId) {
+    this.routeId = routeId;
+  }
 
-    public Integer getTotalWaypoint()
-    {
-        return totalWaypoint;
-    }
+  public void setRouteId(String routeId) {
+    setRouteId(Long.parseLong(routeId));
+  }
 
-    public void setTotalWaypoint(Integer totalWaypoint)
-    {
-        this.totalWaypoint = totalWaypoint;
-    }
+  public Integer getTotalWaypoint() {
+    return totalWaypoint;
+  }
 
-    public void setTotalWaypoint(String totalWaypoint)
-    {
-        setTotalWaypoint(Integer.parseInt(totalWaypoint));
-    }
+  public void setTotalWaypoint(Integer totalWaypoint) {
+    this.totalWaypoint = totalWaypoint;
+  }
 
-    public Double getCompletionPercentage()
-    {
-        return completionPercentage;
-    }
+  public void setTotalWaypoint(String totalWaypoint) {
+    setTotalWaypoint(Integer.parseInt(totalWaypoint));
+  }
 
-    public void setCompletionPercentage(Double completionPercentage)
-    {
-        this.completionPercentage = completionPercentage;
-    }
+  public Double getCompletionPercentage() {
+    return completionPercentage;
+  }
 
-    public void setCompletionPercentage(String completionPercentage)
-    {
-        setCompletionPercentage(Double.valueOf(completionPercentage));
-    }
+  public void setCompletionPercentage(Double completionPercentage) {
+    this.completionPercentage = completionPercentage;
+  }
 
-    public Integer getPendingCount()
-    {
-        return pendingCount;
-    }
+  public void setCompletionPercentage(String completionPercentage) {
+    setCompletionPercentage(Double.valueOf(completionPercentage));
+  }
 
-    public void setPendingCount(Integer pendingCount)
-    {
-        this.pendingCount = pendingCount;
-    }
+  public Integer getPendingCount() {
+    return pendingCount;
+  }
 
-    public void setPendingCount(String pendingCount)
-    {
-        setPendingCount(Integer.parseInt(pendingCount));
-    }
+  public void setPendingCount(Integer pendingCount) {
+    this.pendingCount = pendingCount;
+  }
 
-    public Integer getSuccessCount()
-    {
-        return successCount;
-    }
+  public void setPendingCount(String pendingCount) {
+    setPendingCount(Integer.parseInt(pendingCount));
+  }
 
-    public void setSuccessCount(Integer successCount)
-    {
-        this.successCount = successCount;
-    }
+  public Integer getSuccessCount() {
+    return successCount;
+  }
 
-    public void setSuccessCount(String successCount)
-    {
-        setSuccessCount(Integer.parseInt(successCount));
-    }
+  public void setSuccessCount(Integer successCount) {
+    this.successCount = successCount;
+  }
 
-    public Integer getFailedCount()
-    {
-        return failedCount;
-    }
+  public void setSuccessCount(String successCount) {
+    setSuccessCount(Integer.parseInt(successCount));
+  }
 
-    public void setFailedCount(Integer failedCount)
-    {
-        this.failedCount = failedCount;
-    }
+  public Integer getFailedCount() {
+    return failedCount;
+  }
 
-    public void setFailedCount(String failedCount)
-    {
-        setFailedCount(Integer.parseInt(failedCount));
-    }
+  public void setFailedCount(Integer failedCount) {
+    this.failedCount = failedCount;
+  }
 
-    public Integer getCmiCount()
-    {
-        return cmiCount;
-    }
+  public void setFailedCount(String failedCount) {
+    setFailedCount(Integer.parseInt(failedCount));
+  }
 
-    public void setCmiCount(Integer cmiCount)
-    {
-        this.cmiCount = cmiCount;
-    }
+  public Integer getCmiCount() {
+    return cmiCount;
+  }
 
-    public void setCmiCount(String cmiCount)
-    {
-        setCmiCount(Integer.parseInt(cmiCount));
-    }
+  public void setCmiCount(Integer cmiCount) {
+    this.cmiCount = cmiCount;
+  }
 
-    public Integer getEarlyCount()
-    {
-        return earlyCount;
-    }
+  public void setCmiCount(String cmiCount) {
+    setCmiCount(Integer.parseInt(cmiCount));
+  }
 
-    public void setEarlyCount(Integer earlyCount)
-    {
-        this.earlyCount = earlyCount;
-    }
+  public Integer getEarlyCount() {
+    return earlyCount;
+  }
 
-    public void setEarlyCount(String earlyCount)
-    {
-        setEarlyCount(Integer.parseInt(earlyCount));
-    }
+  public void setEarlyCount(Integer earlyCount) {
+    this.earlyCount = earlyCount;
+  }
 
-    public Integer getLateCount()
-    {
-        return lateCount;
-    }
+  public void setEarlyCount(String earlyCount) {
+    setEarlyCount(Integer.parseInt(earlyCount));
+  }
 
-    public void setLateCount(Integer lateCount)
-    {
-        this.lateCount = lateCount;
-    }
+  public Integer getLateCount() {
+    return lateCount;
+  }
 
-    public void setLateCount(String lateCount)
-    {
-        setLateCount(Integer.parseInt(lateCount));
-    }
+  public void setLateCount(Integer lateCount) {
+    this.lateCount = lateCount;
+  }
 
-    @Override
-    public void fromCsvLine(String csvLine)
-    {
-        throw new UnsupportedOperationException();
-    }
+  public void setLateCount(String lateCount) {
+    setLateCount(Integer.parseInt(lateCount));
+  }
 
-    public Integer getTotalParcels()
-    {
-        return totalParcels;
-    }
+  @Override
+  public void fromCsvLine(String csvLine) {
+    throw new UnsupportedOperationException();
+  }
 
-    public void setTotalParcels(Integer totalParcelCount)
-    {
-        this.totalParcels = totalParcelCount;
-    }
+  public Integer getTotalParcels() {
+    return totalParcels;
+  }
 
-    public void setTotalParcels(String totalParcelCount)
-    {
-        setTotalParcels(Integer.valueOf(totalParcelCount));
-    }
+  public void setTotalParcels(Integer totalParcelCount) {
+    this.totalParcels = totalParcelCount;
+  }
 
-    public Integer getNumLateAndPending()
-    {
-        return numLateAndPending;
-    }
+  public void setTotalParcels(String totalParcelCount) {
+    setTotalParcels(Integer.valueOf(totalParcelCount));
+  }
 
-    public void setNumLateAndPending(Integer numLateAndPending)
-    {
-        this.numLateAndPending = numLateAndPending;
-    }
+  public Integer getNumLateAndPending() {
+    return numLateAndPending;
+  }
 
-    public void setNumLateAndPending(String numLateAndPending)
-    {
-        setNumLateAndPending(Integer.valueOf(numLateAndPending));
-    }
+  public void setNumLateAndPending(Integer numLateAndPending) {
+    this.numLateAndPending = numLateAndPending;
+  }
 
-    public Integer getNumInvalidFailed()
-    {
-        return numInvalidFailed;
-    }
+  public void setNumLateAndPending(String numLateAndPending) {
+    setNumLateAndPending(Integer.valueOf(numLateAndPending));
+  }
 
-    public void setNumInvalidFailed(Integer numInvalidFailed)
-    {
-        this.numInvalidFailed = numInvalidFailed;
-    }
+  public Integer getNumInvalidFailed() {
+    return numInvalidFailed;
+  }
 
-    public void setNumInvalidFailed(String numInvalidFailed)
-    {
-        setNumInvalidFailed(Integer.valueOf(numInvalidFailed));
-    }
+  public void setNumInvalidFailed(Integer numInvalidFailed) {
+    this.numInvalidFailed = numInvalidFailed;
+  }
 
-    public Integer getNumValidFailed()
-    {
-        return numValidFailed;
-    }
+  public void setNumInvalidFailed(String numInvalidFailed) {
+    setNumInvalidFailed(Integer.valueOf(numInvalidFailed));
+  }
 
-    public void setNumValidFailed(Integer numValidFailed)
-    {
-        this.numValidFailed = numValidFailed;
-    }
+  public Integer getNumValidFailed() {
+    return numValidFailed;
+  }
 
-    public void setNumValidFailed(String numValidFailed)
-    {
-        setNumValidFailed(Integer.valueOf(numValidFailed));
-    }
+  public void setNumValidFailed(Integer numValidFailed) {
+    this.numValidFailed = numValidFailed;
+  }
 
-    public Integer getPendingPriorityParcels()
-    {
-        return pendingPriorityParcels;
-    }
+  public void setNumValidFailed(String numValidFailed) {
+    setNumValidFailed(Integer.valueOf(numValidFailed));
+  }
 
-    public void setPendingPriorityParcels(Integer pendingPriorityParcels)
-    {
-        this.pendingPriorityParcels = pendingPriorityParcels;
-    }
+  public Integer getPendingPriorityParcels() {
+    return pendingPriorityParcels;
+  }
 
-    public void setPendingPriorityParcels(String pendingPriorityParcels)
-    {
-        setPendingPriorityParcels(Integer.parseInt(pendingPriorityParcels));
-    }
+  public void setPendingPriorityParcels(Integer pendingPriorityParcels) {
+    this.pendingPriorityParcels = pendingPriorityParcels;
+  }
+
+  public void setPendingPriorityParcels(String pendingPriorityParcels) {
+    setPendingPriorityParcels(Integer.parseInt(pendingPriorityParcels));
+  }
 }

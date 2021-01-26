@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.common_selenium.page.SimplePage;
+import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -10,200 +11,195 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.Arrays;
+public class PageElement extends SimplePage {
 
-public class PageElement extends SimplePage
-{
-    protected WebElement webElement;
+  protected WebElement webElement;
 
-    public PageElement(PageElement parent, String xpath)
-    {
-        this(parent.webDriver, parent.webElement, parent.findElementBy(By.xpath(xpath), parent.webElement));
+  public PageElement(PageElement parent, String xpath) {
+    this(parent.webDriver, parent.webElement,
+        parent.findElementBy(By.xpath(xpath), parent.webElement));
+  }
+
+  public PageElement(WebDriver webDriver, String xpath) {
+    this(webDriver, webDriver.findElement(By.xpath(xpath)));
+  }
+
+  public PageElement(WebDriver webDriver) {
+    super(webDriver);
+  }
+
+  public PageElement(WebDriver webDriver, SearchContext searchContext) {
+    super(webDriver, searchContext);
+  }
+
+  public PageElement(WebDriver webDriver, SearchContext searchContext, String xpath) {
+    this(webDriver, searchContext.findElement(By.xpath(xpath)));
+  }
+
+  public PageElement(WebDriver webDriver, WebElement webElement) {
+    this(webDriver);
+    this.webElement = webElement;
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
+
+  public PageElement(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    this(webDriver, searchContext);
+    this.webElement = webElement;
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
+
+  public void moveAndClick() {
+    moveAndClick(getWebElement());
+  }
+
+  public void moveToElement() {
+    moveToElement(getWebElement());
+  }
+
+  public void click() {
+    try {
+      scrollIntoView();
+      getWebElement().click();
+    } catch (ElementClickInterceptedException ex) {
+      jsClick();
     }
+  }
 
-    public PageElement(WebDriver webDriver)
-    {
-        super(webDriver);
-    }
+  public void jsClick() {
+    executeScript("arguments[0].click()", getWebElement());
+  }
 
-    public PageElement(WebDriver webDriver, SearchContext searchContext)
-    {
-        super(webDriver, searchContext);
-    }
+  public String getAttribute(String attributeName) {
+    return getAttribute(getWebElement(), attributeName);
+  }
 
-    public PageElement(WebDriver webDriver, WebElement webElement)
-    {
-        this(webDriver);
-        this.webElement = webElement;
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public String getValue() {
+    return getAttribute("value");
+  }
 
-    public PageElement(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        this(webDriver, searchContext);
-        this.webElement = webElement;
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public String getCssValue(String propertyName) {
+    return getWebElement().getCssValue(propertyName);
+  }
 
-    public void moveAndClick()
-    {
-        moveAndClick(webElement);
-    }
+  public String getText() {
+    return getWebElement().getText();
+  }
 
-    public void click()
-    {
-        try
-        {
-            scrollIntoView();
-            getWebElement().click();
-        } catch (ElementClickInterceptedException ex)
-        {
-            jsClick();
-        }
-    }
+  public String getNormalizedText() {
+    return StringUtils.normalizeSpace(getText());
+  }
 
-    public void jsClick()
-    {
-        executeScript("arguments[0].click()", webElement);
-    }
+  public void clear() {
+    getWebElement().clear();
+  }
 
-    public String getAttribute(String attributeName)
-    {
-        return getAttribute(webElement, attributeName);
-    }
+  public void sendKeys(CharSequence keysToSend) {
+    sendKeysWithoutClear(webElement, keysToSend);
+  }
 
-    public String getValue()
-    {
-        return getAttribute("value");
-    }
+  public void sendKeys(Object value) {
+    sendKeys(String.valueOf(value));
+  }
 
-    public String getCssValue(String propertyName)
-    {
-        return webElement.getCssValue(propertyName);
-    }
+  public void clearAndSendKeys(CharSequence keysToSend) {
+    waitUntilClickable();
+    clear();
+    sendKeys(getWebElement(), keysToSend);
+  }
 
-    public String getText()
-    {
-        return getText(webElement);
+  public WebElement getWebElement() {
+    try {
+      webElement.getTagName();
+    } catch (StaleElementReferenceException ex) {
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
+    return webElement;
+  }
 
-    public String getNormalizedText()
-    {
-        return StringUtils.normalizeSpace(getText(webElement));
-    }
+  public SearchContext getSearchContext() {
+    return searchContext;
+  }
 
-    public void clear()
-    {
-        webElement.clear();
+  public boolean isDisplayed() {
+    try {
+      return getWebElement().isDisplayed();
+    } catch (Exception ex) {
+      return false;
     }
+  }
 
-    public void sendKeys(CharSequence keysToSend)
-    {
-        sendKeysWithoutClear(webElement, keysToSend);
+  public boolean isDisplayedFast() {
+    try {
+      setImplicitTimeout(0);
+      return getWebElement().isDisplayed();
+    } catch (Exception ex) {
+      return false;
+    } finally {
+      resetImplicitTimeout();
     }
+  }
 
-    public void sendKeys(Object value)
-    {
-        sendKeys(String.valueOf(value));
-    }
+  public void scrollIntoView() {
+    scrollIntoView(false);
+  }
 
-    public void clearAndSendKeys(CharSequence keysToSend)
-    {
-        waitUntilClickable();
-        clear();
-        sendKeys(webElement, keysToSend);
-    }
+  public void scrollIntoView(boolean alignToTop) {
+    scrollIntoView(getWebElement(), alignToTop);
+  }
 
-    public WebElement getWebElement()
-    {
-        try
-        {
-            webElement.getTagName();
-        } catch (StaleElementReferenceException ex)
-        {
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-        }
-        return webElement;
-    }
+  public void waitUntilClickable() {
+    waitUntilElementIsClickable(getWebElement());
+  }
 
-    public SearchContext getSearchContext()
-    {
-        return searchContext;
-    }
+  public void waitUntilClickable(int timeoutInSeconds) {
+    waitUntilElementIsClickable(webElement, timeoutInSeconds);
+  }
 
-    public boolean isDisplayed()
-    {
-        try
-        {
-            return webElement.isDisplayed();
-        } catch (Exception ex)
-        {
-            return false;
-        }
-    }
+  public void waitUntilInvisible() {
+    waitUntilInvisibilityOfElementLocated(webElement);
+  }
 
-    public boolean isDisplayedFast()
-    {
-        try
-        {
-            setImplicitTimeout(0);
-            return webElement.isDisplayed();
-        } catch (Exception ex)
-        {
-            return false;
-        } finally
-        {
-            resetImplicitTimeout();
-        }
-    }
+  public void waitUntilVisible() {
+    waitUntilVisibilityOfElementLocated(webElement);
+  }
 
-    public void scrollIntoView()
-    {
-        scrollIntoView(false);
+  public boolean waitUntilVisible(int timeout) {
+    try {
+      waitUntilVisibilityOfElementLocated(getWebElement(), timeout);
+      return true;
+    } catch (Throwable ex) {
+      return false;
     }
+  }
 
-    public void scrollIntoView(boolean alignToTop)
-    {
-        scrollIntoView(getWebElement(), alignToTop);
-    }
+  public boolean isEnabled() {
+    return getWebElement().isEnabled();
+  }
 
-    public void waitUntilClickable()
-    {
-        waitUntilElementIsClickable(getWebElement());
-    }
+  public WebElement findElement(By by) {
+    return getWebElement().findElement(by);
+  }
 
-    public void waitUntilClickable(int timeoutInSeconds)
-    {
-        waitUntilElementIsClickable(webElement, timeoutInSeconds);
-    }
+  protected String escapeValue(String value) {
+    return value.replace("'", "\\'");
+  }
 
-    public void waitUntilInvisible()
-    {
-        waitUntilInvisibilityOfElementLocated(webElement);
-    }
+  public boolean hasClass(String className) {
+    return Arrays.asList(getAttribute("class").split(" ")).contains(className);
+  }
 
-    public void waitUntilVisible()
-    {
-        waitUntilVisibilityOfElementLocated(webElement);
+  public int getElementsCountFast(By by) {
+    try {
+      setImplicitTimeout(0);
+      return getWebElement().findElements(by).size();
+    } catch (Exception ex) {
+      return 0;
+    } finally {
+      resetImplicitTimeout();
     }
+  }
 
-    public boolean isEnabled()
-    {
-        return webElement.isEnabled();
-    }
-
-    public WebElement findElement(By by)
-    {
-        return webElement.findElement(by);
-    }
-
-    protected String escapeValue(String value)
-    {
-        return value.replace("'", "\\'");
-    }
-
-    public boolean hasClass(String className)
-    {
-        return Arrays.asList(getAttribute("class").split(" ")).contains(className);
-    }
+  public <T> T executeScript(String script) {
+    return executeScript(script, getWebElement());
+  }
 }

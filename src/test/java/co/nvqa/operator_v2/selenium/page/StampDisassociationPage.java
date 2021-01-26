@@ -5,56 +5,51 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class StampDisassociationPage extends OperatorV2SimplePage
-{
-    public static final String LOCATOR_FIELD_STAMP_ID = "stamp-id";
-    public static final String LOCATOR_TEXT_ORDER_ID = "//md-card//h5";
-    public static final String LOCATOR_TEXT_DELIVERY_ADDRESS = "//md-card-content/div[5]";
-    public static final String LOCATOR_TEXT_LABEL = "//md-card//nv-tag/span";
-    public static final String LOCATOR_ALERT = "//div[contains(@class, 'order-details-container flex-100')]";
+public class StampDisassociationPage extends OperatorV2SimplePage {
 
-    public StampDisassociationPage(WebDriver webDriver)
-    {
-        super(webDriver);
-    }
+  public static final String LOCATOR_FIELD_STAMP_ID = "stamp-id";
+  public static final String LOCATOR_TEXT_ORDER_ID = "//md-card//h5";
+  public static final String LOCATOR_TEXT_DELIVERY_ADDRESS = "//md-card-content/div[5]";
+  public static final String LOCATOR_TEXT_LABEL = "//md-card//nv-tag/span";
+  public static final String LOCATOR_ALERT = "//div[contains(@class, 'order-details-container flex-100')]";
 
-    public void enterStampId(String trackingId){
-        waitUntilPageLoaded();
-        sendKeysAndEnterById(LOCATOR_FIELD_STAMP_ID, trackingId);
-    }
+  public StampDisassociationPage(WebDriver webDriver) {
+    super(webDriver);
+  }
 
-    public void waitUntilPageLoaded()
-    {
-        super.waitUntilPageLoaded();
-        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading...']");
-    }
+  public void enterStampId(String trackingId) {
+    waitUntilPageLoaded();
+    sendKeysAndEnterById(LOCATOR_FIELD_STAMP_ID, trackingId);
+  }
 
-    public void verifyLabelText(String expectedLabelText)
-    {
-        assertEquals("Label Text", expectedLabelText, getText(LOCATOR_TEXT_LABEL));
-    }
+  public void waitUntilPageLoaded() {
+    super.waitUntilPageLoaded();
+    waitUntilInvisibilityOfElementLocated(
+        "//md-progress-circular/following-sibling::div[text()='Loading...']");
+  }
 
-    public void verifyOrderDetails(Order order)
-    {
-        String expectedOrderId = String.format("#%d - %s", order.getId(), order.getTrackingId());
-        String actualOrderId = getText(LOCATOR_TEXT_ORDER_ID);
-        assertEquals("Order ID", expectedOrderId, actualOrderId);
+  public void verifyLabelText(String expectedLabelText) {
+    assertEquals("Label Text", expectedLabelText, getText(LOCATOR_TEXT_LABEL));
+  }
 
-        String actualDeliveryAddress = StringUtils.normalizeSpace(getText(LOCATOR_TEXT_DELIVERY_ADDRESS));
-        assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
-    }
+  public void verifyOrderDetails(Order order) {
+    String expectedOrderId = String.format("#%d - %s", order.getId(), order.getTrackingId());
+    String actualOrderId = getText(LOCATOR_TEXT_ORDER_ID);
+    assertEquals("Order ID", expectedOrderId, actualOrderId);
 
-    public void checkAlert(String expectedAlert)
-    {
-        assertEquals("Not Found Alert", expectedAlert, getText(LOCATOR_ALERT));
-    }
+    String actualDeliveryAddress = StringUtils
+        .normalizeSpace(getText(LOCATOR_TEXT_DELIVERY_ADDRESS));
+    assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
+  }
 
-    public void clickOnTheDisassociateStampButton()
-    {
-        clickButtonByAriaLabel("Disassociate Stamp");
-    }
+  public void checkAlert(String expectedAlert) {
+    assertEquals("Not Found Alert", expectedAlert, getText(LOCATOR_ALERT));
+  }
+
+  public void clickOnTheDisassociateStampButton() {
+    clickButtonByAriaLabel("Disassociate Stamp");
+  }
 }

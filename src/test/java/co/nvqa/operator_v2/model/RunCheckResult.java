@@ -1,90 +1,74 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RunCheckResult
-{
-    private Double grandTotal;
-    private Double deliveryFee;
-    private Double codFee;
-    private Double insuranceFee;
-    private Double handlingFee;
-    private Double gst;
-    private String comments;
+public class RunCheckResult {
 
-    public RunCheckResult()
-    {
-    }
+  private Double grandTotal;
+  private Double deliveryFee;
+  private Double codFee;
+  private Double insuranceFee;
+  private Double handlingFee;
+  private Double gst;
+  private String comments;
 
-    public Double getGrandTotal()
-    {
-        return grandTotal;
-    }
+  public RunCheckResult() {
+  }
 
-    public void setGrandTotal(Double grandTotal)
-    {
-        this.grandTotal = grandTotal;
-    }
+  public Double getGrandTotal() {
+    return grandTotal;
+  }
 
-    public Double getDeliveryFee()
-    {
-        return deliveryFee;
-    }
+  public void setGrandTotal(Double grandTotal) {
+    this.grandTotal = grandTotal;
+  }
 
-    public void setDeliveryFee(Double deliveryFee)
-    {
-        this.deliveryFee = deliveryFee;
-    }
+  public Double getDeliveryFee() {
+    return deliveryFee;
+  }
 
-    public Double getCodFee()
-    {
-        return codFee;
-    }
+  public void setDeliveryFee(Double deliveryFee) {
+    this.deliveryFee = deliveryFee;
+  }
 
-    public void setCodFee(Double codFee)
-    {
-        this.codFee = codFee;
-    }
+  public Double getCodFee() {
+    return codFee;
+  }
 
-    public Double getInsuranceFee()
-    {
-        return insuranceFee;
-    }
+  public void setCodFee(Double codFee) {
+    this.codFee = codFee;
+  }
 
-    public void setInsuranceFee(Double insuranceFee)
-    {
-        this.insuranceFee = insuranceFee;
-    }
+  public Double getInsuranceFee() {
+    return insuranceFee;
+  }
 
-    public Double getHandlingFee()
-    {
-        return handlingFee;
-    }
+  public void setInsuranceFee(Double insuranceFee) {
+    this.insuranceFee = insuranceFee;
+  }
 
-    public void setHandlingFee(Double handlingFee)
-    {
-        this.handlingFee = handlingFee;
-    }
+  public Double getHandlingFee() {
+    return handlingFee;
+  }
 
-    public Double getGst()
-    {
-        return gst;
-    }
+  public void setHandlingFee(Double handlingFee) {
+    this.handlingFee = handlingFee;
+  }
 
-    public void setGst(Double gst)
-    {
-        this.gst = gst;
-    }
+  public Double getGst() {
+    return gst;
+  }
 
-    public String getComments()
-    {
-        return comments;
-    }
+  public void setGst(Double gst) {
+    this.gst = gst;
+  }
 
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
+  public String getComments() {
+    return comments;
+  }
+
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 }

@@ -8,36 +8,31 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class MdMenu extends PageElement
-{
-    public MdMenu(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-    }
+public class MdMenu extends PageElement {
 
-    public MdMenu(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-    }
+  public MdMenu(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+  }
 
-    @FindBy(css = "button[ng-click*='$mdOpenMenu($event)'] i")
-    public Button selectionButton;
+  public MdMenu(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+  }
 
-    private static final String MD_MENU_ITEM_LOCATOR = "div.md-open-menu-container md-menu-item button[aria-label='%s']";
+  @FindBy(css = "button[ng-click*='$mdOpenMenu($event)'] i")
+  public Button selectionButton;
 
-    public void selectOption(String option)
-    {
-        openMenu();
-        option = escapeValue(option);
-        String selector = f(MD_MENU_ITEM_LOCATOR, option);
-        new Button(getWebDriver(), getWebDriver().findElement(By.cssSelector(selector))).click();
-        pause100ms();
-    }
+  private static final String MD_MENU_ITEM_LOCATOR = "div.md-open-menu-container md-menu-item button[aria-label='%s']";
 
-    private void openMenu()
-    {
-        selectionButton.click();
-        pause100ms();
+  public void selectOption(String option) {
+    openMenu();
+    option = escapeValue(option);
+    String selector = f(MD_MENU_ITEM_LOCATOR, option);
+    new Button(getWebDriver(), getWebDriver().findElement(By.cssSelector(selector))).click();
+    pause100ms();
+  }
 
-    }
+  private void openMenu() {
+    selectionButton.click();
+    pause100ms();
+  }
 }

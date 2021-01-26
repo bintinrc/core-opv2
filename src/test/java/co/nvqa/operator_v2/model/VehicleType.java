@@ -5,50 +5,42 @@ import co.nvqa.commons.model.DataEntity;
 /**
  * @author Sergey Mishanin
  */
-public class VehicleType extends DataEntity<VehicleType>
-{
-    private Long id;
-    private String name;
-    private String systemId;
+public class VehicleType extends DataEntity<VehicleType> {
 
-    public VehicleType()
-    {
-    }
+  private Long id;
+  private String name;
+  private String systemId;
 
-    public VehicleType(VehicleType anotherVehicleType)
-    {
-        id = anotherVehicleType.getId();
-        name = anotherVehicleType.getName();
-        systemId = anotherVehicleType.getSystemId();
-    }
+  public VehicleType() {
+  }
 
-    public Long getId()
-    {
-        return id;
-    }
+  public VehicleType(VehicleType anotherVehicleType) {
+    id = anotherVehicleType.getId();
+    name = anotherVehicleType.getName();
+    systemId = anotherVehicleType.getSystemId();
+  }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getSystemId()
-    {
-        return systemId;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setSystemId(String systemId)
-    {
-        this.systemId = systemId;
-    }
+  public String getSystemId() {
+    return systemId;
+  }
+
+  public void setSystemId(String systemId) {
+    this.systemId = systemId;
+  }
 }

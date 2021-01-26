@@ -5,32 +5,27 @@ import co.nvqa.commons.model.DataEntity;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpTagging extends DataEntity<DpTagging>
-{
-    private String trackingId;
-    private Long dpId;
+public class DpTagging extends DataEntity<DpTagging> {
 
-    public DpTagging()
-    {
-    }
+  private String trackingId;
+  private Long dpId;
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public DpTagging() {
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public Long getDpId()
-    {
-        return dpId;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setDpId(Long dpId)
-    {
-        this.dpId = dpId;
-    }
+  public Long getDpId() {
+    return dpId;
+  }
+
+  public void setDpId(Long dpId) {
+    this.dpId = dpId;
+  }
 }

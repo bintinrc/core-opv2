@@ -9,29 +9,25 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class PrinterTemplatesSteps extends AbstractSteps
-{
-    private PrinterTemplatesPage printerTemplatesPage;
+public class PrinterTemplatesSteps extends AbstractSteps {
 
-    public PrinterTemplatesSteps()
-    {
-    }
+  private PrinterTemplatesPage printerTemplatesPage;
 
-    @Override
-    public void init()
-    {
-        printerTemplatesPage = new PrinterTemplatesPage(getWebDriver());
-    }
+  public PrinterTemplatesSteps() {
+  }
 
-    @When("^Operator select template with name = \"([^\"]*)\" on Printer Templates page$")
-    public void operatorSelectTemplateFromCombobox(String templateName)
-    {
-        printerTemplatesPage.selectTemplate(templateName);
-    }
+  @Override
+  public void init() {
+    printerTemplatesPage = new PrinterTemplatesPage(getWebDriver());
+  }
 
-    @Then("^Operator verifies the selected template is loaded and all needed fields from the template should be shown on the right panel on Printer Templates page$")
-    public void operatorVerifiesTheSelectedTemplateIsLoadedAndAllNeededFieldsFromTheTemplateShouldBeShownOnTheRightPanelOnPrinterTemplatePage()
-    {
-        printerTemplatesPage.verifyTemplateIsLoadedAndAllNeededFieldsIsShownOnRightPanel();
-    }
+  @When("^Operator select template with name = \"([^\"]*)\" on Printer Templates page$")
+  public void operatorSelectTemplateFromCombobox(String templateName) {
+    printerTemplatesPage.selectTemplate(templateName);
+  }
+
+  @Then("^Operator verifies the selected template is loaded and all needed fields from the template should be shown on the right panel on Printer Templates page$")
+  public void operatorVerifiesTheSelectedTemplateIsLoadedAndAllNeededFieldsFromTheTemplateShouldBeShownOnTheRightPanelOnPrinterTemplatePage() {
+    printerTemplatesPage.verifyTemplateIsLoadedAndAllNeededFieldsIsShownOnRightPanel();
+  }
 }

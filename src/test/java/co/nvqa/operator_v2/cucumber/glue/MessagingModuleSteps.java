@@ -5,124 +5,88 @@ import co.nvqa.operator_v2.selenium.page.MessagingModulePage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Rizaq Pratama
  */
 @ScenarioScoped
-public class MessagingModuleSteps extends AbstractSteps
-{
-    private MessagingModulePage messagingModulePage;
+public class MessagingModuleSteps extends AbstractSteps {
 
-    public MessagingModuleSteps()
-    {
-    }
+  private MessagingModulePage messagingModulePage;
 
-    @Override
-    public void init()
-    {
-        messagingModulePage = new MessagingModulePage(getWebDriver());
-    }
+  public MessagingModuleSteps() {
+  }
 
-    @Then("^Operator upload SMS campaign CSV file$")
-    public void uploadSmsCampaignCsv(List<SmsCampaignCsv> data)
-    {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+  @Override
+  public void init() {
+    messagingModulePage = new MessagingModulePage(getWebDriver());
+  }
 
-        if(trackingId!=null)
-        {
-            data = data.stream().peek(smsCampaignCsv ->
-            {
-                if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(smsCampaignCsv.getTracking_id()))
-                {
-                    smsCampaignCsv.setTracking_id(trackingId);
-                }
-            }).collect(Collectors.toList());
-        }
+  @Then("^Operator upload SMS campaign CSV file:$")
+  public void uploadSmsCampaignCsv(List<Map<String, String>> data) {
+    List<SmsCampaignCsv> smsCampaignList = data.stream()
+        .map(val -> new SmsCampaignCsv(resolveKeyValues(val))).collect(Collectors.toList());
 
-        messagingModulePage.uploadCsvCampaignFile(data);
-    }
+    File file = messagingModulePage.createSmsCampaignCsv(smsCampaignList);
+    messagingModulePage.uploadFle.setValue(file);
+  }
 
-    @When("^Operator continue on invalid dialog$")
-    public void onPartialErrorContinue()
-    {
-        messagingModulePage.continueOnCsvUploadFailure();
-    }
+  @When("^Operator continue on invalid dialog$")
+  public void onPartialErrorContinue() {
+    messagingModulePage.csvValidationErrorsDialog.waitUntilVisible();
+    messagingModulePage.csvValidationErrorsDialog.continueBtn.click();
+    messagingModulePage.csvValidationErrorsDialog.waitUntilInvisible();
+  }
 
-    @Then("^Operator verify sms module page reset$")
-    public void onSmsModulePageReset()
-    {
-        messagingModulePage.verifyThatPageReset();
-    }
+  @Then("^Operator verify sms module page reset$")
+  public void onSmsModulePageReset() {
+    assertFalse("Compose Message card displayed",
+        messagingModulePage.composeMessageCard.isDisplayedFast());
+  }
 
-    @When("^Operator compose SMS with name = \"([^\"]*)\" and tracking ID = \"([^\"]*)\"$")
-    public void composeSms(String name, String trackingId)
-    {
-        String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+  @When("^Operator compose SMS with name = \"([^\"]*)\" and tracking ID = \"([^\"]*)\"$")
+  public void composeSms(String name, String trackingId) {
+    messagingModulePage.composeSms(resolveValue(name), resolveValue(trackingId));
+  }
 
-        if(createdTrackingId!=null)
-        {
-            if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(trackingId))
-            {
-                trackingId = createdTrackingId;
-            }
-        }
+  @Then("^Operator compose SMS using URL shortener$")
+  public void composeSmsWithUrlShortener() {
+    messagingModulePage.composeSmsWithUrlShortener();
+  }
 
-        messagingModulePage.composeSms(name, trackingId);
-    }
+  @Then("^Operator verify SMS preview using shortened URL$")
+  public void verifyPreviewUsingShortenedUrl() {
+    messagingModulePage.verifyThatPreviewUsingShortenedUrl();
+  }
 
-    @Then("^Operator compose SMS using URL shortener$")
-    public void composeSmsWithUrlShortener()
-    {
-        messagingModulePage.composeSmsWithUrlShortener();
-    }
+  @When("^Operator send SMS$")
+  public void sendSms() {
+    messagingModulePage.composeMessageCard.sendMessages.clickAndWaitUntilDone();
+    messagingModulePage.waitUntilInvisibilityOfToast("Successfully sent 1 SMS", true);
+  }
 
-    @Then("^Operator verify SMS preview using shortened URL$")
-    public void verifyPreviewUsingShortenedUrl()
-    {
-        messagingModulePage.verifyThatPreviewUsingShortenedUrl();
-    }
+  @Then("^Operator wait for sms to be processed$")
+  public void waitForSmsToBeProcessed() {
+    pause10s();
+  }
 
-    @When("^Operator send SMS$")
-    public void sendSms()
-    {
-        messagingModulePage.sendSms();
-    }
+  @Then("Operator verify that tracking ID {string} is invalid")
+  public void verifyOnTrackingIdInvalid(String trackingId) {
+    trackingId = resolveValue(trackingId);
+    messagingModulePage.searchSmsSentHistory(trackingId);
+    messagingModulePage
+        .waitUntilInvisibilityOfToast("Order with trackingId " + trackingId + " not found!", true);
+  }
 
-    @Then("^op wait for sms to be processed$")
-    public void waitForSmsToBeProcessed()
-    {
-        messagingModulePage.waitForSmsToBeProcessed();
-    }
-
-    @When("^op search sms sent history for tracking id ([^\"]*)$")
-    public void searchHistory(String trackingId)
-    {
-        messagingModulePage.searchSmsSentHistory(trackingId);
-    }
-
-    @Then("^Operator verify that tracking ID \"([^\"]*)\" is invalid$")
-    public void verifyOnTrackingIdInvalid(String trackingId)
-    {
-        messagingModulePage.searchSmsSentHistory(trackingId);
-        messagingModulePage.verifySmsHistoryTrackingIdInvalid(trackingId);
-    }
-
-    @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)$")
-    public void verifyOnTrackingIdValid(String trackingId, String contactNumber)
-    {
-        String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-
-        if(createdTrackingId!=null && "_created_".equalsIgnoreCase(trackingId))
-        {
-            trackingId = createdTrackingId;
-        }
-
-        messagingModulePage.searchSmsSentHistory(trackingId);
-        messagingModulePage.verifySmsHistoryTrackingIdValid(trackingId, contactNumber);
-    }
+  @Then("Operator verify that sms sent to phone number {string} and tracking id {string}")
+  public void verifyOnTrackingIdValid(String contactNumber, String trackingId) {
+    trackingId = resolveValue(trackingId);
+    contactNumber = resolveValue(contactNumber);
+    messagingModulePage.searchSmsSentHistory(trackingId);
+    messagingModulePage.verifySmsHistoryTrackingIdValid(trackingId, contactNumber);
+  }
 }

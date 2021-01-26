@@ -28,7 +28,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Completion (uid:9667bb60-0933-49e3-8879-2bdac54aae68)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
@@ -51,7 +51,7 @@ Feature: Shipment Management - Search Shipment
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -61,7 +61,7 @@ Feature: Shipment Management - Search Shipment
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan the created order to shipment in hub {hub-name}
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
@@ -74,7 +74,7 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Last Inbound Hub (uid:7a2bf3c3-622d-4f31-9851-02ef7797ef1b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -84,7 +84,7 @@ Feature: Shipment Management - Search Shipment
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan the created order to shipment in hub {hub-name}
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Closed on Shipment Management page
@@ -134,7 +134,7 @@ Feature: Shipment Management - Search Shipment
     Given DB Operator gets the 10 shipment IDs
     When Operator searches multiple shipment ids in the Shipment Management Page with "invalid"
     Then Operator verifies that there is a search error modal shown with "valid shipment"
-    And Operator verifies the searched shipment ids result is right
+    And Operator verifies the searched shipment ids result is right except last
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Empty Line (uid:a2945cf0-7404-427f-80f9-7feb06288d75)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -201,6 +201,28 @@ Feature: Shipment Management - Search Shipment
       | Note                                        | scenarioName    | hiptest-uid                              | filterName      |
       | Search Shipment by Filter - ETA (Date Time) | ETA (Date Time) | uid:5a65a7ea-12ef-4a59-a8b0-a15f261b52d2 | ETA (Date Time) |
       | Search Shipment by Filter - Shipment Date   | Shipment Date   | uid:e10f1ad8-cdc0-4795-b816-2ae3015a36d3 | Shipment Date   |
+
+  Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "comma"
+    Then Operator verify cannot parse parameter id as long error toast exist
+
+  @DeleteShipment
+  Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

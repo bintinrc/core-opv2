@@ -1,111 +1,91 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Map;
 
-public class StationMovementSchedule extends DataEntity<StationMovementSchedule>
-{
-    private String crossdockHub;
-    private String originHub;
-    private String destinationHub;
-    private String movementType;
-    private String departureTime;
-    private Integer duration;
-    private String endTime;
-    private String comment;
+public class StationMovementSchedule extends DataEntity<StationMovementSchedule> {
 
-    public StationMovementSchedule()
-    {
-    }
+  private String crossdockHub;
+  private String originHub;
+  private String destinationHub;
+  private String movementType;
+  private String departureTime;
+  private Integer duration;
+  private String endTime;
+  private String comment;
 
-    public StationMovementSchedule(Map<String, ?> data)
-    {
-        fromMap(data);
-    }
+  public StationMovementSchedule() {
+  }
 
-    public String getCrossdockHub()
-    {
-        return crossdockHub;
-    }
+  public StationMovementSchedule(Map<String, ?> data) {
+    fromMap(data);
+  }
 
-    public void setCrossdockHub(String crossdockHub)
-    {
-        this.crossdockHub = crossdockHub;
-    }
+  public String getCrossdockHub() {
+    return crossdockHub;
+  }
 
-    public String getOriginHub()
-    {
-        return originHub;
-    }
+  public void setCrossdockHub(String crossdockHub) {
+    this.crossdockHub = crossdockHub;
+  }
 
-    public void setOriginHub(String originHub)
-    {
-        this.originHub = originHub;
-    }
+  public String getOriginHub() {
+    return originHub;
+  }
 
-    public String getDestinationHub()
-    {
-        return destinationHub;
-    }
+  public void setOriginHub(String originHub) {
+    this.originHub = originHub;
+  }
 
-    public void setDestinationHub(String destinationHub)
-    {
-        this.destinationHub = destinationHub;
-    }
+  public String getDestinationHub() {
+    return destinationHub;
+  }
 
-    public String getMovementType()
-    {
-        return movementType;
-    }
+  public void setDestinationHub(String destinationHub) {
+    this.destinationHub = destinationHub;
+  }
 
-    public void setMovementType(String movementType)
-    {
-        this.movementType = movementType;
-    }
+  public String getMovementType() {
+    return movementType;
+  }
 
-    public String getDepartureTime()
-    {
-        return departureTime;
-    }
+  public void setMovementType(String movementType) {
+    this.movementType = movementType;
+  }
 
-    public void setDepartureTime(String departureTime)
-    {
-        this.departureTime = departureTime;
-    }
+  public String getDepartureTime() {
+    return departureTime;
+  }
 
-    public Integer getDuration()
-    {
-        return duration;
-    }
+  public void setDepartureTime(String departureTime) {
+    this.departureTime = departureTime;
+  }
 
-    public void setDuration(Integer duration)
-    {
-        this.duration = duration;
-    }
+  public Integer getDuration() {
+    return duration;
+  }
 
-    public void setDuration(String duration)
-    {
-        setDuration(Integer.valueOf(duration));
-    }
+  public void setDuration(Integer duration) {
+    this.duration = duration;
+  }
 
-    public String getEndTime()
-    {
-        return endTime;
-    }
+  public void setDuration(String duration) {
+    setDuration(Integer.valueOf(duration));
+  }
 
-    public void setEndTime(String endTime)
-    {
-        this.endTime = endTime;
-    }
+  public String getEndTime() {
+    return endTime;
+  }
 
-    public String getComment()
-    {
-        return comment;
-    }
+  public void setEndTime(String endTime) {
+    this.endTime = endTime;
+  }
 
-    public void setComment(String comment)
-    {
-        this.comment = comment;
-    }
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 }
