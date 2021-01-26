@@ -35,7 +35,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | hiptest-uid                              |
@@ -62,7 +62,7 @@ Feature: Global Inbound
       | destinationHub | <message>             |
       | rackInfo       | sync_problem RECOVERY |
       | color          | #e86161               |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note      | hiptest-uid                              | status    | message   |
@@ -114,7 +114,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -148,7 +148,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -195,7 +195,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 1 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -235,7 +235,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -277,7 +277,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -360,7 +360,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -402,7 +402,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -432,12 +432,12 @@ Feature: Global Inbound
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
-      | routeDate       | {gradle-next-2-day-yyyy-MM-dd} |
-      | routeTags       | [{route-tag-name}]             |
-      | zoneName        | {zone-name}                    |
-      | hubName         | {hub-name}                     |
-      | ninjaDriverName | {ninja-driver-name}            |
-      | vehicleName     | {vehicle-name}                 |
+      | date            | {gradle-next-2-day-yyyy-MM-dd} |
+      | tags            | {route-tag-name}               |
+      | zone            | {zone-name}                    |
+      | hub             | {hub-name}                     |
+      | driverName      | {ninja-driver-name}            |
+      | vehicle         | {vehicle-name}                 |
     When API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
@@ -450,7 +450,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -495,7 +495,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -541,7 +541,7 @@ Feature: Global Inbound
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -584,7 +584,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -617,7 +617,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -648,7 +648,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -681,7 +681,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -712,7 +712,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -738,7 +738,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -764,7 +764,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @KillBrowser @ShouldAlwaysRun

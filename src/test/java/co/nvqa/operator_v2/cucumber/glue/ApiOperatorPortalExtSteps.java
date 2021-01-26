@@ -316,7 +316,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
       Hub hubResp = getHubClient().create(hubMap.get(hubName));
       hubMap.put(hubResp.getName(), hubResp);
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(), 500, 5);
     hub = hubMap.get(hubName);
     hub.setFacilityTypeDisplay(facilityType);
 

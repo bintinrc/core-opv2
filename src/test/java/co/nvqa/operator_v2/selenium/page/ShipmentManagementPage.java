@@ -301,8 +301,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       editShipmentDialog.mawb.setValue(shipmentInfo.getMawb());
       editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
     }
-    waitUntilVisibilityOfToast(f("Shipment %d updated", shipmentInfo.getId()));
-    waitUntilInvisibilityOfToast(f("Shipment %d updated", shipmentInfo.getId()));
   }
 
   public void editCancelledShipment() {
@@ -331,9 +329,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     shipmentsTable.clickActionButton(1, ACTION_FORCE);
     forceCompleteDialog.waitUntilVisible();
     forceCompleteDialog.confirm.click();
-//        click(XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON);
     waitUntilVisibilityOfToast(
-        f("Success changed status to Force Success for Shipment ID %d", shipmentId));
+        f("Successfully changed status to Force Success for Shipment ID %d", shipmentId));
     pause5s();
   }
 
@@ -343,7 +340,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     cancelShipmentDialog.waitUntilVisible();
     cancelShipmentDialog.cancelShipment.click();
     waitUntilVisibilityOfToast(
-        f("Success changed status to Cancelled for Shipment ID %d", shipmentId));
+        f("Successfully changed status to Cancelled for Shipment ID %d", shipmentId));
     pause5s();
   }
 
@@ -561,6 +558,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
         }
       }
     }
+    click(XPATH_SEARCH_SHIPMENT_BUTTON);
   }
 
   public void editShipmentBy(String editType, ShipmentInfo shipmentInfo) {

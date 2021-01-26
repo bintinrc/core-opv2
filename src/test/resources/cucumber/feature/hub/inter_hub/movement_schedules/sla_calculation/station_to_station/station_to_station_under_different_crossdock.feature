@@ -5,7 +5,7 @@ Feature: Station to Station Under Different Crossdock
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock - Given Crossdocks have relation (uid:0e5cd209-00d8-4d7f-8b7d-6c2562f2c073)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -99,7 +99,7 @@ Feature: Station to Station Under Different Crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock - Given Crossdocks have no relation (uid:3757ed72-cbfc-44a6-a0ae-5b38753670f6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -170,7 +170,7 @@ Feature: Station to Station Under Different Crossdock
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Different Crossdock - Given Crossdocks have no schedule (uid:a52a3112-8d62-4dc2-8ce5-dfbd106dcc85)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

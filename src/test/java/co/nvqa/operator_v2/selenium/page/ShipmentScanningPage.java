@@ -106,8 +106,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div//h3")
   public TextBox shipmentDetailPageShipmentId;
 
-  @FindBy(xpath = "//div[@class='hub-selection']//nv-autocomplete")
-  public NvAutocomplete selectHub;
+  @FindBy(xpath = "//div[label[.='Origin Hub']]//nv-autocomplete")
+  public NvAutocomplete selectOriginHub;
+
+  @FindBy(xpath = "//div[label[.='Destination Hub']]//nv-autocomplete")
+  public NvAutocomplete selectDestinationHub;
 
   @FindBy(xpath = "//md-input-container//md-select")
   public MdSelect selectShipmentType;
@@ -204,10 +207,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     waitUntilInvisibilityOfToast();
   }
 
-  public void closeShipmentWithData(String hubName, String shipmentType, String shipmentId) {
+  public void closeShipmentWithData(String originHubName, String destinationHubName, String shipmentType, String shipmentId) {
     waitUntilVisibilityOfElementLocated("//div[@class='hub-selection']//nv-autocomplete");
-    selectHub.waitUntilVisible();
-    selectHub.selectValue(hubName);
+    selectOriginHub.waitUntilVisible();
+    selectOriginHub.selectValue(originHubName);
+
+    selectDestinationHub.waitUntilVisible();
+    selectDestinationHub.selectValue(destinationHubName);
 
     selectShipmentType.waitUntilVisible();
     selectShipmentType.click();

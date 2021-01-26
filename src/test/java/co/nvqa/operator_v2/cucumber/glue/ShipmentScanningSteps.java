@@ -67,10 +67,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
   @And("Operator close shipment with data below:")
   public void operatorCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
-    String hubName = mapOfData.get("origHubName");
+    String origHubName = mapOfData.get("origHubName");
+    String destHubName = mapOfData.get("destHubName");
     String shipmentType = mapOfData.get("shipmentType");
     String shipmentId = mapOfData.get("shipmentId");
-    shipmentScanningPage.closeShipmentWithData(hubName, shipmentType, shipmentId);
+    shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
   @When("^Operator scan multiple created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")

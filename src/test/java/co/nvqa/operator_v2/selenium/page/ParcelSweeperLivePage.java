@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -43,31 +44,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   }
 
   public void selectHubToBegin(String hubName) {
-    pause2s();
-
-    // Select Hub
-    click(HUB_DROPDOWN_XPATH);
-    waitUntilVisibilityOfElementLocated(HUB_INPUT_XPATH);
-    sendKeys(HUB_INPUT_XPATH, hubName);
-    waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-    click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-
-    pause2s();
-
-    //Select Sort Task
-    if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
-      click(SORT_TASK_DROPDOWN_XPATH);
-      if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
-        waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
-        sendKeys(SORT_TASK_INPUT_XPATH, hubName);
-        waitUntilVisibilityOfElementLocated(
-            f(CHOSEN_VALUE_TASK_XPATH, hubName));
-        click(f(CHOSEN_VALUE_TASK_XPATH, hubName));
-      }
-    }
-
-    proceedButton.waitUntilClickable();
-    proceedButton.click();
+    selectHubToBeginWithTask(hubName, hubName);
   }
 
   public void scanTrackingId(String trackingId) {
@@ -142,4 +119,31 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     assertEquals("Prior tag", "PRIOR", actualTag);
   }
 
+  public void selectHubToBeginWithTask(String hubName, String task) {
+    pause2s();
+
+    // Select Hub
+    click(HUB_DROPDOWN_XPATH);
+    waitUntilVisibilityOfElementLocated(HUB_INPUT_XPATH);
+    sendKeys(HUB_INPUT_XPATH, hubName);
+    waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
+    click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
+
+    pause2s();
+
+    //Select Sort Task
+    if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+      click(SORT_TASK_DROPDOWN_XPATH);
+      if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
+        waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
+        sendKeys(SORT_TASK_INPUT_XPATH, task);
+        waitUntilVisibilityOfElementLocated(
+            f(CHOSEN_VALUE_TASK_XPATH, task));
+        click(f(CHOSEN_VALUE_TASK_XPATH, task));
+      }
+    }
+
+    proceedButton.waitUntilClickable();
+    proceedButton.click();
+  }
 }

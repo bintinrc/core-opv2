@@ -602,7 +602,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(), 500, 5);
   }
 
   public void forceTripCompletion() {

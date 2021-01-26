@@ -134,7 +134,7 @@ Feature: Shipment Management - Search Shipment
     Given DB Operator gets the 10 shipment IDs
     When Operator searches multiple shipment ids in the Shipment Management Page with "invalid"
     Then Operator verifies that there is a search error modal shown with "valid shipment"
-    And Operator verifies the searched shipment ids result is right
+    And Operator verifies the searched shipment ids result is right except last
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Empty Line (uid:a2945cf0-7404-427f-80f9-7feb06288d75)
     Given Operator go to menu Shipper Support -> Blocked Dates
