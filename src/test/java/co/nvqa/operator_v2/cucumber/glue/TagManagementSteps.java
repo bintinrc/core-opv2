@@ -38,6 +38,7 @@ public class TagManagementSteps extends AbstractSteps {
       newTag.setName(RandomStringUtils.randomAlphanumeric(3).toUpperCase());
     }
     put(KEY_CREATED_ROUTE_TAG, newTag);
+    putInList(KEY_CREATED_ROUTE_TAG, newTag);
     tagManagementPage.createTag.click();
     tagManagementPage.addTagDialog.waitUntilVisible();
     tagManagementPage.addTagDialog.tagName.setValue(newTag.getName());
