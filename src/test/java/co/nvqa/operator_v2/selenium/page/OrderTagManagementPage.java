@@ -3,10 +3,13 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
@@ -41,8 +44,14 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-filter-box[@item-types='Order Type']")
   public NvFilterBox orderTypeFilter;
 
+  @FindBy(xpath = "//nv-filter-box[@item-types='Master Shipper']")
+  public NvFilterBox masterShipperFilter;
+
   @FindBy(css = "nv-filter-boolean-box[main-title='RTS']")
   public NvFilterBooleanBox rtsFilter;
+
+  @FindBy(name = "container.order-tag-management.find-orders-with-csv")
+  public NvIconTextButton findOrdersWithCsv;
 
   @FindBy(xpath = "//*[@on-click='ctrl.loadResult()' or @on-click='ctrl.goToResult()']")
   public NvIconTextButton loadSelection;
@@ -61,6 +70,12 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
 
   @FindBy(css = "div.actions-container md-menu")
   public MdMenu actionsMenu;
+
+  @FindBy(css = "md-dialog")
+  public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
+
+  @FindBy(css = "md-dialog")
+  public ClearAllTagsDialog clearAllTagsDialog;
 
   public OrdersTable ordersTable;
   public TaggedOrdersTable taggedOrdersTable;
@@ -84,19 +99,6 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
     }
     addTagsDialog.save.click();
     addTagsDialog.waitUntilInvisible();
-  }
-
-  public void removeTag(List<String> orderTags) {
-    actionsMenu.selectOption("Remove Tags");
-    removeTagsDialog.removeTag.waitUntilClickable();
-    while (removeTagsDialog.removeTag.isDisplayedFast()) {
-      removeTagsDialog.removeTag.click();
-    }
-    for (String tag : orderTags) {
-      removeTagsDialog.selectTag.selectValue(tag);
-    }
-    removeTagsDialog.remove.click();
-    removeTagsDialog.waitUntilInvisible();
   }
 
   public static class OrdersTable extends MdVirtualRepeatTable<Order> {
@@ -176,6 +178,38 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
     public Button removeTag;
 
     public RemoveTagsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ClearAllTagsDialog extends MdDialog {
+
+    @FindBy(css = "md-dialog-content > div")
+    public PageElement message;
+
+    @FindBy(name = "commons.remove-all")
+    public NvIconTextButton removeAll;
+
+    public ClearAllTagsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class FindOrdersWithCsvDialog extends MdDialog {
+
+    @FindBy(css = "[label='Select File']")
+    public NvButtonFilePicker selectFile;
+
+    @FindBy(xpath = ".//a[text()='here']")
+    public Button downloadSample;
+
+    @FindBy(name = "commons.upload")
+    public NvButtonSave upload;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
