@@ -134,6 +134,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.verifyOrderIsRedHighlighted();
   }
 
+  @And("Operator verifies that the row of the added order is blue highlighted")
+  public void operatorVerifiesThatTheRowOfTheAddedOrderIsBlueHighlighted() {
+    shipmentScanningPage.verifyOrderIsBlueHighlighted();
+  }
+
   @And("Operator scan shipment with id {string}")
   public void operatorScanTheCreatedShipment(String shipmentIdAsString) {
     String shipmentId = resolveValue(shipmentIdAsString);

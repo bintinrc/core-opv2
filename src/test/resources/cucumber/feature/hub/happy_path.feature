@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @HappyPath
+@OperatorV2 @MiddleMile @Hub @HappyPath @CFW
 Feature: Happy Path
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -351,7 +351,7 @@ Feature: Happy Path
   Scenario: Shipment Details (uid:e18b2c67-8dc0-4627-99f0-2845e2f39c0b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
@@ -363,8 +363,24 @@ Feature: Happy Path
     Then Operator verify the Shipment Details Page opened is for the created shipment
 
     # TODO: IMPLEMENT ME
+  @DeleteShipment @ForceSuccessOrder @RT
   Scenario: Add Parcel to Shipment (uid:ec01c5c8-9088-4da5-ae29-436e75637568)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator verifies that the row of the added order is blue highlighted
+    And Operator refresh page
+    # Verify shipment status in shipment management page
+    # Verify tracking ID in shipment detail
+    # Verify order status in edit order page
+
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Multiple Parcels to Shipment (uid:44bfcc1b-35e8-460b-ac98-f43af0cff49c)

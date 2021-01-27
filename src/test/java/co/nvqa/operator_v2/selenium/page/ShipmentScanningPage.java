@@ -279,6 +279,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     isElementExist("//div[contains(@class,'error-border')]");
   }
 
+  public void verifyOrderIsBlueHighlighted() {
+    // TODO: IMPLEMENT ME
+  }
+
   public void verifyToastWithMessageIsShown(String expectedToastMessage) {
     retryIfAssertionErrorOccurred(() -> {
       try {
