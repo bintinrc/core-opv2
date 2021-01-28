@@ -50,7 +50,7 @@ Feature: Failed Delivery Management
       | uid:6e74cf3d-c3fb-45d9-8c85-429b52ace114 | Other Reason             | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS a Single Parcel and Change to New Address - Add  New Address (uid:b8f49455-12ad-43ff-bba3-85dee9e47571)
+  Scenario: Operator RTS Failed Delivery Order (uid:6bb33ad4-07fe-4a7d-8575-688895ef809d)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -72,6 +72,7 @@ Feature: Failed Delivery Management
       | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
       | deliveryDate  | {{next-1-day-yyyy-MM-dd}}                                                 |
       | timeSlot      | 3PM - 6PM                                                                 |
+      | address       | RANDOM                                                                    |
     Then Operator verify failed delivery order RTS-ed successfully
     And API Operator verify order info after failed delivery order RTS-ed on next day
 
