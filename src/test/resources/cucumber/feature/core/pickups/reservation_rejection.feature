@@ -59,7 +59,7 @@ Feature: Reservation Rejection
     When Operator go to menu Pick Ups -> Reservation Rejection
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator reassigns RSVN to new route
+    Then Operator reassigns RSVN to new route
     And Operator verifies RSVN reassigned successfully
 
   @KillBrowser @ShouldAlwaysRun

@@ -781,7 +781,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     for (int i = 0; i < routeIds.size(); i++) {
       ids[i] = Long.parseLong(routeIds.get(i));
     }
-    getRouteClient().archiveRoutes(ids);
+    getRouteClient().archiveRoutesV2(ids);
   }
 
   @Given("^API Operator create zone using data below:$")
