@@ -4,13 +4,14 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.OrderTagManagementPage;
-import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -36,6 +37,8 @@ public class OrderTagManagementSteps extends AbstractSteps {
       Map<String, String> data) {
     data = resolveKeyValues(data);
 
+    orderTagManagementPage.loadSelection.waitUntilVisible();
+
     if (data.containsKey("orderTags")) {
       List<String> tags = splitAndNormalize(data.get("orderTags"));
       orderTagManagementPage.orderTagsFilter.clearAll();
@@ -48,6 +51,10 @@ public class OrderTagManagementSteps extends AbstractSteps {
       }
       orderTagManagementPage.shipperFilter.clearAll();
       orderTagManagementPage.shipperFilter.selectFilter(data.get("shipperName"));
+    } else {
+      if (orderTagManagementPage.shipperFilter.isDisplayedFast()) {
+        orderTagManagementPage.shipperFilter.clearAll();
+      }
     }
 
     if (data.containsKey("status")) {
@@ -56,6 +63,10 @@ public class OrderTagManagementSteps extends AbstractSteps {
       }
       orderTagManagementPage.statusFilter.clearAll();
       orderTagManagementPage.statusFilter.selectFilter(data.get("status"));
+    } else {
+      if (orderTagManagementPage.statusFilter.isDisplayedFast()) {
+        orderTagManagementPage.statusFilter.clearAll();
+      }
     }
 
     if (data.containsKey("granularStatus")) {
@@ -64,6 +75,10 @@ public class OrderTagManagementSteps extends AbstractSteps {
       }
       orderTagManagementPage.granularStatusFilter.clearAll();
       orderTagManagementPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
+    } else {
+      if (orderTagManagementPage.granularStatusFilter.isDisplayedFast()) {
+        orderTagManagementPage.granularStatusFilter.clearAll();
+      }
     }
 
     if (data.containsKey("orderType")) {
@@ -72,6 +87,10 @@ public class OrderTagManagementSteps extends AbstractSteps {
       }
       orderTagManagementPage.orderTypeFilter.clearAll();
       orderTagManagementPage.orderTypeFilter.selectFilter(data.get("orderType"));
+    } else {
+      if (orderTagManagementPage.orderTypeFilter.isDisplayedFast()) {
+        orderTagManagementPage.orderTypeFilter.clearAll();
+      }
     }
 
     if (data.containsKey("rts")) {
@@ -79,12 +98,28 @@ public class OrderTagManagementSteps extends AbstractSteps {
         orderTagManagementPage.addFilter("RTS");
       }
       orderTagManagementPage.rtsFilter.setFilter(data.get("rts"));
+    } else {
+      if (orderTagManagementPage.rtsFilter.isDisplayedFast()) {
+        orderTagManagementPage.rtsFilter.removeFilter();
+      }
+    }
+
+    if (data.containsKey("masterShipperName")) {
+      if (!orderTagManagementPage.masterShipperFilter.isDisplayedFast()) {
+        orderTagManagementPage.addFilter("Master Shipper");
+      }
+      orderTagManagementPage.masterShipperFilter.clearAll();
+      orderTagManagementPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
+    } else {
+      if (orderTagManagementPage.masterShipperFilter.isDisplayedFast()) {
+        orderTagManagementPage.masterShipperFilter.clearAll();
+      }
     }
 
     orderTagManagementPage.loadSelection.click();
   }
 
-  @And("^Operator searches and selects orders created on Add Tags to Order page$")
+  @And("^Operator searches and selects orders created on Order Tag Management page$")
   public void operatorSearchesAndSelectsOrdersCreatedOnAddTagsToOrderPage() {
     List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     trackingIds.forEach(trackingId ->
@@ -109,29 +144,30 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.addTag(resolveValues(orderTag));
   }
 
-  @And("^Operator remove order tags:$")
-  public void operatorRemoveOrderTags(List<String> orderTag) {
-    orderTagManagementPage.removeTag(resolveValues(orderTag));
+  @And("^Operator removes order tags on Order Tag Management page:$")
+  public void operatorRemoveOrderTags(List<String> orderTags) {
+    orderTags = resolveValues(orderTags);
+    orderTagManagementPage.actionsMenu.selectOption("Remove Tags");
+    orderTagManagementPage.removeTagsDialog.remove.waitUntilVisible();
+    while (orderTagManagementPage.removeTagsDialog.removeTag.isDisplayedFast()) {
+      orderTagManagementPage.removeTagsDialog.removeTag.click();
+    }
+    for (String tag : orderTags) {
+      orderTagManagementPage.removeTagsDialog.selectTag.selectValue(tag);
+    }
+    orderTagManagementPage.removeTagsDialog.remove.click();
+    orderTagManagementPage.removeTagsDialog.waitUntilInvisible();
   }
 
-  @And("^Operator verify the tags shown on Edit Order page$")
-  public void operatorVerifyTheTagsShownOnEditOrderPage(List<String> expectedOrderTags) {
-    expectedOrderTags = resolveValues(expectedOrderTags);
-    Order order = get(KEY_CREATED_ORDER);
-
-    navigateTo(
-        f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE,
-            order.getId()));
-    List<String> actualOrderTags = editOrderPage.getTags();
-
-    final List<String> normalizedExpectedList = expectedOrderTags.stream().map(String::toLowerCase)
-        .sorted().collect(Collectors.toList());
-    final List<String> normalizedActualList = actualOrderTags.stream().map(String::toLowerCase)
-        .sorted().collect(Collectors.toList());
-
-    assertEquals(
-        f("Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
-            order.getId()), normalizedExpectedList, normalizedActualList);
+  @And("^Operator clear all order tags on Order Tag Management page$")
+  public void operatorClearAllTags() {
+    orderTagManagementPage.actionsMenu.selectOption("Clear All Tags");
+    orderTagManagementPage.clearAllTagsDialog.waitUntilClickable();
+    assertEquals("Clear All Tags dialog message",
+        "All existing tags for these orders will be removed.",
+        orderTagManagementPage.clearAllTagsDialog.message.getText());
+    orderTagManagementPage.clearAllTagsDialog.removeAll.click();
+    orderTagManagementPage.clearAllTagsDialog.waitUntilInvisible();
   }
 
   @And("Operator verifies selected value of RTS filter is {string} on Order Tag Management page")
@@ -186,6 +222,23 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.taggedOrdersTable.filterByColumn("trackingId", expected.getTrackingId());
     TaggedOrderParams actual = orderTagManagementPage.taggedOrdersTable.readEntity(1);
     expected.compareWithActual(actual);
+  }
+
+  @When("^Operator find orders by uploading CSV on Order Tag Management page:$")
+  public void operatorFindOrdersByUploadingCsvOnAllOrderPage(List<String> listOfTrackingId) {
+    if (CollectionUtils.isEmpty(listOfTrackingId)) {
+      throw new IllegalArgumentException(
+          "List of created Tracking ID should not be null or empty.");
+    }
+    String csvContents = resolveValues(listOfTrackingId).stream()
+        .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    File csvFile = orderTagManagementPage.createFile(
+        String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
+
+    orderTagManagementPage.findOrdersWithCsv.click();
+    orderTagManagementPage.findOrdersWithCsvDialog.waitUntilVisible();
+    orderTagManagementPage.findOrdersWithCsvDialog.selectFile.setValue(csvFile);
+    orderTagManagementPage.findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
   }
 
 }

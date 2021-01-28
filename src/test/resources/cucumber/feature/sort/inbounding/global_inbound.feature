@@ -1145,6 +1145,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify the tags shown on Edit Order page
       | OPV2AUTO1 |
       | OPV2AUTO2 |
@@ -1172,6 +1173,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     And Operator verify failed tagging error toast is shown
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify the tags shown on Edit Order page
       | PRIOR |
     And DB Operator verify order_events record for the created order:
