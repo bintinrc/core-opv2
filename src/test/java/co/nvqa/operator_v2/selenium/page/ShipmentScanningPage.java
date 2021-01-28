@@ -22,6 +22,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -51,6 +52,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[contains(@class,'scan-barcode-container')]//small";
+  public static final String XPATH_STATUS_CARD_BOX = "//div[contains(@class,'status-card')]";
+  public static final String XPATH_ZONE_CARD_BOX = "//div[contains(@class,'zone-card')]";
+
 
   @FindBy(xpath = "//div[span[.='Driver']]//p")
   public TextBox driverText;
@@ -135,7 +139,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//nv-table[@param='ctrl.unregisteredTableParam']//table[@class='table-body']")
   public NvTable<ErrorShipmentRow> unregisteredShipmentRow;
-
 
   public ShipmentScanningPage(WebDriver webDriver) {
     super(webDriver);
@@ -280,7 +283,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyOrderIsBlueHighlighted() {
-    // TODO: IMPLEMENT ME
+    Color statusCardColor = getBackgroundColor(XPATH_STATUS_CARD_BOX);
+    Color zoneCardColor = getBackgroundColor(XPATH_ZONE_CARD_BOX);
+    String expectedColor = "#55a1e8";
+    assertThat("Status Card color is blue", statusCardColor.asHex(), equalTo(expectedColor));
+    assertThat("Zone Card color is blue", zoneCardColor.asHex(), equalTo(expectedColor));
   }
 
   public void verifyToastWithMessageIsShown(String expectedToastMessage) {
