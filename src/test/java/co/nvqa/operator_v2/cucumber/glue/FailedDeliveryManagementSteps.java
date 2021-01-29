@@ -122,12 +122,14 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
         .submitForm();
 
     RtsDetails.RtsAddress newAddress = rtsDetails.getAddress();
-    Order createdOrder = get(KEY_CREATED_ORDER);
-    createdOrder.setFromCountry(newAddress.getCountry());
-    createdOrder.setFromCity(newAddress.getCity());
-    createdOrder.setFromAddress1(newAddress.getAddress1());
-    createdOrder.setFromAddress2(newAddress.getAddress2());
-    createdOrder.setFromPostcode(newAddress.getPostcode());
+    if (newAddress != null) {
+      Order createdOrder = get(KEY_CREATED_ORDER);
+      createdOrder.setFromCountry(newAddress.getCountry());
+      createdOrder.setFromCity(newAddress.getCity());
+      createdOrder.setFromAddress1(newAddress.getAddress1());
+      createdOrder.setFromAddress2(newAddress.getAddress2());
+      createdOrder.setFromPostcode(newAddress.getPostcode());
+    }
   }
 
   @Then("^Operator verify failed delivery order RTS-ed successfully$")
