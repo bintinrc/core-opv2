@@ -85,7 +85,7 @@ Feature: Sort Task
     Then Operator verify removed outputs removed on tree list
 
   @CloseNewWindows
-  Scenario: Click on nodes (uid:ff4c25d4-25c0-466c-8bd0-ce5ceb0e0036)
+  Scenario: Search sort nodes on Sort Structure Page
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
@@ -93,8 +93,8 @@ Feature: Sort Task
       | hubName | {hub-name} |
     And Operator click View Sort Structure on Sort Tasks page
     Then Operator verifies graph contains following Hub nodes:
-      | {hub-name} |
-      | SUP        |
+      | {hub-name}    |
+      | SORT-SG-2-HUB |
     And Operator verifies graph contains following Middle Tier nodes:
       | MID-TEST-NIKO |
     And Operator verifies graph contains following Zone nodes:
@@ -107,12 +107,37 @@ Feature: Sort Task
       | {hub-name}    |
       | MID-TEST-NIKO |
       | SORT-1        |
-      | SUP           |
+      | SORT-SG-2-HUB |
+
+  @CloseNewWindows
+  Scenario: Click on nodes (uid:ff4c25d4-25c0-466c-8bd0-ce5ceb0e0036)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator click View Sort Structure on Sort Tasks page
+    Then Operator verifies graph contains following Hub nodes:
+      | {hub-name}    |
+      | SORT-SG-2-HUB |
+    And Operator verifies graph contains following Middle Tier nodes:
+      | MID-TEST-NIKO |
+    And Operator verifies graph contains following Zone nodes:
+      | SORT-1 |
+    And Operator verifies graph contains following duplicated nodes:
+      | label  | count |
+      | SORT-1 | 2     |
+    When Operator search for "MID-TEST-NIKO" node on View Sort Structure page
+    Then Operator verifies graph contains exactly following nodes:
+      | {hub-name}    |
+      | MID-TEST-NIKO |
+      | SORT-1        |
+      | SORT-SG-2-HUB |
     When Operator clicks on "MID-TEST-NIKO" node
     Then Operator verifies graph contains exactly following nodes:
       | MID-TEST-NIKO |
       | SORT-1        |
-      | SUP           |
+      | SORT-SG-2-HUB |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

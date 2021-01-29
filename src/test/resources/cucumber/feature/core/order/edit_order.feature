@@ -255,7 +255,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
-  Scenario: Operator Delete Order (uid:6364a910-2590-4a04-adf1-368a9b789b3e)
+  Scenario: Operator Delete Order - Status = Pending Pickup (uid:6364a910-2590-4a04-adf1-368a9b789b3e)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -642,20 +642,9 @@ Feature: Edit Order
 
   @DeleteOrArchiveRoute
   Scenario: Cancel Order - Staging (uid:0bd14e39-9e38-463c-ab66-784553f537cf)
-    Given API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get Reservation Job
-    And API Driver get estimated price of hyperlocal order
-    And API Driver success reservation while creating hyperlocal order
-    Then API Operator verify hyperlocal order created
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Staging" on Edit Order page
     And Operator verify order granular status is "Staging" on Edit Order page

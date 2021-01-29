@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.model.ReservationRejectionEntity;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import com.google.common.collect.ImmutableMap;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -25,14 +26,15 @@ public class ReservationRejectionPage extends OperatorV2SimplePage {
 
   private static final String FAIL_PICKUP_TOAST_MESSAGE_SUCCESSFULLY = "Pick up has been failed";
 
-  private static final String REASSIGN_RESERVATION_MD_DIALOG_TITLE = "Reassign Reservation";
-  private static final String REASSIGN_RESERVATION_MD_DIALOG_BUTTON_ARIA_LABEL = "Reassign";
   private static final String REASSIGN_RESERVATION_TOAST_MESSAGE_SUCCESSFULLY = "Reassigned Successfully";
 
   private ReservationRejectionEntityTable reservationRejectionEntityTable;
 
   @FindBy(css = "md-dialog.reservation-rejection-form")
   public RejectReservationDialog rejectReservationDialog;
+
+  @FindBy(css = "md-dialog.reservation-rejection-form")
+  public ReassignReservationDialog reassignReservationDialog;
 
   public ReservationRejectionPage(WebDriver webDriver) {
     super(webDriver);
@@ -101,10 +103,10 @@ public class ReservationRejectionPage extends OperatorV2SimplePage {
   }
 
   public void reassignReservationInPopup(String routeForReassigning) {
-    waitUntilVisibilityOfMdDialogByTitle(REASSIGN_RESERVATION_MD_DIALOG_TITLE);
-    selectValueFromMdAutocomplete("Search or Select...", routeForReassigning);
-    clickButtonOnMdDialogByAriaLabel(REASSIGN_RESERVATION_MD_DIALOG_BUTTON_ARIA_LABEL);
-    waitUntilInvisibilityOfMdDialogByTitle(REASSIGN_RESERVATION_MD_DIALOG_TITLE);
+    reassignReservationDialog.waitUntilVisible();
+    reassignReservationDialog.newRouteDriver.selectValue(routeForReassigning);
+    reassignReservationDialog.reassign.clickAndWaitUntilDone();
+    reassignReservationDialog.waitUntilInvisible();
   }
 
   public void validateReservationInTable(String pickupInfo,
@@ -179,5 +181,21 @@ public class ReservationRejectionPage extends OperatorV2SimplePage {
           .selectValue(failureReasonDetailsSecond.get(randomFailureReasonDetailsIndexSecond));
     }
 
+  }
+
+  public static class ReassignReservationDialog extends MdDialog {
+
+    @FindBy(css = "nv-autocomplete[placeholder='Search or Select...']")
+    public NvAutocomplete newRouteDriver;
+
+    @FindBy(css = "[id^='container.reservation-rejection.failure-detail']")
+    public List<MdSelect> failureReasonDetail;
+
+    @FindBy(name = "Reassign")
+    public NvApiTextButton reassign;
+
+    public ReassignReservationDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

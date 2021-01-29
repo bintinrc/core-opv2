@@ -321,6 +321,7 @@ Feature: Add To Shipment
       | OPV2AUTO1 |
       | OPV2AUTO2 |
       | OPV2AUTO3 |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify the tags shown on Edit Order page
       | OPV2AUTO1 |
       | OPV2AUTO2 |
