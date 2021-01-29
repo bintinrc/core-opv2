@@ -50,7 +50,7 @@ Feature: Failed Delivery Management
       | uid:6e74cf3d-c3fb-45d9-8c85-429b52ace114 | Other Reason             | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS Failed Delivery Order (uid:6bb33ad4-07fe-4a7d-8575-688895ef809d)
+  Scenario: Operator RTS a Single Parcel and Change to New Address - Add New Address (uid:6bb33ad4-07fe-4a7d-8575-688895ef809d)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
