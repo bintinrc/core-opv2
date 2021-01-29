@@ -1,4 +1,4 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps
+@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps @HappyPath
 
 Feature: Pricing Scripts V2
 
@@ -6,7 +6,7 @@ Feature: Pricing Scripts V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePricingScript
-  Scenario: Link Script to Shipper (uid:8c623eef-fb54-4a8b-bcf1-a182eba43bf7)
+  Scenario: Link Script to Shipper (uid:7dbbe3ef-4742-4c9c-81f2-beee5d146b66)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source           | function calculatePricing(params) { var result = {}; var deliveryFee = 0.0; deliveryFee += getFeeOrderType(params.order_type); result.delivery_fee = deliveryFee; return result; } function getFeeOrderType(order_type) { switch (order_type) {case "NORMAL": return 2; case "RETURN": return 3; case "C2C": return 5; case "CASH": return 8; } } |
@@ -20,3 +20,7 @@ Feature: Pricing Scripts V2
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
