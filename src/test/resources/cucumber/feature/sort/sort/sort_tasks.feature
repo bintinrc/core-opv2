@@ -109,7 +109,7 @@ Feature: Sort Task
       | SORT-1          |
       | SORT-SG-2-HUB   |
 
-  @CloseNewWindows @WIP
+  @CloseNewWindowsz
   Scenario: Click on nodes (uid:ff4c25d4-25c0-466c-8bd0-ce5ceb0e0036)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Sort -> Sort Tasks
