@@ -90,54 +90,54 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name} |
+      | hubName | {hub-name-4} |
     And Operator click View Sort Structure on Sort Tasks page
     Then Operator verifies graph contains following Hub nodes:
-      | {hub-name}    |
+      | {hub-name-4}  |
       | SORT-SG-2-HUB |
     And Operator verifies graph contains following Middle Tier nodes:
-      | MID-TEST-NIKO |
+      | {mid-tier-name} |
     And Operator verifies graph contains following Zone nodes:
       | SORT-1 |
     And Operator verifies graph contains following duplicated nodes:
       | label  | count |
       | SORT-1 | 2     |
-    When Operator search for "MID-TEST-NIKO" node on View Sort Structure page
+    When Operator search for "{mid-tier-name}" node on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
-      | {hub-name}    |
-      | MID-TEST-NIKO |
-      | SORT-1        |
-      | SORT-SG-2-HUB |
+      | {hub-name-4}    |
+      | {mid-tier-name} |
+      | SORT-1          |
+      | SORT-SG-2-HUB   |
 
-  @CloseNewWindows
+  @CloseNewWindowsz
   Scenario: Click on nodes (uid:ff4c25d4-25c0-466c-8bd0-ce5ceb0e0036)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name} |
+      | hubName | {hub-name-4} |
     And Operator click View Sort Structure on Sort Tasks page
     Then Operator verifies graph contains following Hub nodes:
-      | {hub-name}    |
+      | {hub-name-4}  |
       | SORT-SG-2-HUB |
     And Operator verifies graph contains following Middle Tier nodes:
-      | MID-TEST-NIKO |
+      | {mid-tier-name} |
     And Operator verifies graph contains following Zone nodes:
       | SORT-1 |
     And Operator verifies graph contains following duplicated nodes:
       | label  | count |
       | SORT-1 | 2     |
-    When Operator search for "MID-TEST-NIKO" node on View Sort Structure page
+    When Operator search for "{mid-tier-name}" node on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
-      | {hub-name}    |
-      | MID-TEST-NIKO |
-      | SORT-1        |
-      | SORT-SG-2-HUB |
-    When Operator clicks on "MID-TEST-NIKO" node
+      | {hub-name-4}    |
+      | {mid-tier-name} |
+      | SORT-1          |
+      | SORT-SG-2-HUB   |
+    When Operator clicks on "{mid-tier-name}" node
     Then Operator verifies graph contains exactly following nodes:
-      | MID-TEST-NIKO |
-      | SORT-1        |
-      | SORT-SG-2-HUB |
+      | {mid-tier-name} |
+      | SORT-1          |
+      | SORT-SG-2-HUB   |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
