@@ -1123,10 +1123,31 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
     }
 
+    public void verifyHubInboundEventDescription(Order order, String eventDescription) {
+      String widthPattern = f(".* Width changed from .* to %s.*",
+          order.getDimensions().getWidth().intValue());
+      String lengthPattern = f(".* Length changed from .* to %s.*",
+          order.getDimensions().getLength().intValue());
+      String heightPattern = f(".* Height changed from .* to %s.*",
+          order.getDimensions().getHeight().intValue());
+      assertTrue(
+          f("'%s' pattern is not present in the '%s' event description", widthPattern,
+              eventDescription),
+          eventDescription.matches(widthPattern));
+      assertTrue(
+          f("'%s' pattern is not present in the '%s' event description", lengthPattern,
+              eventDescription),
+          eventDescription.matches(lengthPattern));
+      assertTrue(
+          f("'%s' pattern is not present in the '%s' event description", heightPattern,
+              eventDescription),
+          eventDescription.matches(heightPattern));
+    }
+
     public void verifyHubInboundWithDeviceIdEventDescription(Order order, String eventDescription) {
       String deviceIdPattern = null;
 
-      deviceIdPattern = f("*Device Id: 12345*");
+      deviceIdPattern = f(".* Device Id: 12345 .*");
       assertTrue(f("'%s' pattern is not present in the '%s' event description", deviceIdPattern,
           eventDescription),
           eventDescription.matches(deviceIdPattern));
