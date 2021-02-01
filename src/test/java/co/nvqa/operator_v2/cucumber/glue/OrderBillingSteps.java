@@ -341,4 +341,11 @@ public class OrderBillingSteps extends AbstractSteps {
     assertThat("Actual error message does not contain expected error message",
         orderBillingPage.getOrderBillingBodyFromEmail(), containsString(expectedErrorMessage));
   }
+
+  @Then("Operator verifies the order status {string} is not displayed on billing report")
+  public void operatorVerifiesTheOrderStatusArrivedAtDistributionPointIsNotDisplayedOnBillingReport(
+      String status) {
+    assertNull(f("Priced order with status %s IS available in the CSV file", status),
+        get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
+  }
 }
