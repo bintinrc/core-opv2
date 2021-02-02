@@ -1,4 +1,4 @@
-@OperatorV2 @Hub @HappyPath @AddToShipment
+@OperatorV2 @Hub @HappyPath @AddToShipment @CFW
 Feature: Add to Shipment
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -75,9 +75,43 @@ Feature: Add to Shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
 
-    # TODO: IMPLEMENT ME
+  @DeleteShipment @ForceSuccessOrder @RT # TODO: IMPLEMENT ME
   Scenario: Add On Hold with Missing Type to Shipment (uid:81fd47a8-9dd1-4851-861e-4ce58a141ff4)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And API Operator refresh created order data
+    And Operator refresh page
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator verifies that the row of the added order is blue highlighted
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Pending |
+    When Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | ADDED TO SHIPMENT |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Remove Parcel In Shipment from Action Toggle (uid:10201e78-b282-4eee-a1fb-f32e6c31f9e5)

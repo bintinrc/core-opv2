@@ -14,24 +14,6 @@ Feature: Movement Visualization
     When Operator clicks the first result on the list shown on Movement Visualization Page
     Then Operator verifies the relation of hub is right
 
-  # TODO: ASK MASITA
-  Scenario: View and Edit Movement From Origin Hub (uid:d8113ce3-9754-4482-95e1-2e75ecac30ea)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Movement Visualization
-    And Operator selects the Hub by name "{hub-relation-origin-hub-name}" for Hub Type "destination"
-    And API Operator gets all relations for "origin" Hub id "{hub-relation-origin-hub-id}"
-    And Operator clicks the selected Hub
-    Then Operator verifies the list of "origin" shown on Movement Visualization Page is the same to the endpoint fired
-    When Operator clicks the first result on the list shown on Movement Visualization Page
-    Then Operator verifies the relation of hub is right
-    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
-    And Operator edits the selected Movement Schedule
-    And Operator close the View Schedule Modal on Movement Visualization Page
-    And Operator verifies the relation of hub is right
-    Then Operator verifies that the newly added relation is existed
-    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
-    Then Operator deletes the newly added relation from Movement Visualization Page
-
   Scenario: View Movement From Destination Hub (uid:05345ed7-390d-4bc0-a91b-a16046d1a2b6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Visualization
@@ -41,24 +23,6 @@ Feature: Movement Visualization
     Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
     When Operator clicks the first result on the list shown on Movement Visualization Page
     Then Operator verifies the relation of hub is right
-
-  # TODO: ASK MASITA
-  Scenario: View and Edit Movement From Destination Hub (uid:8cfcaa01-9926-4545-b0fb-47d7254ef7fd)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Movement Visualization
-    And Operator selects the Hub by name "{hub-relation-destination-hub-name}" for Hub Type "destination"
-    And API Operator gets all relations for "destination" Hub id "{hub-relation-destination-hub-id}"
-    And Operator clicks the selected Hub
-    Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
-    When Operator clicks the first result on the list shown on Movement Visualization Page
-    Then Operator verifies the relation of hub is right
-    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
-    And Operator edits the selected Movement Schedule
-    And Operator close the View Schedule Modal on Movement Visualization Page
-    And Operator verifies the relation of hub is right
-    Then Operator verifies that the newly added relation is existed
-    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
-    Then Operator deletes the newly added relation from Movement Visualization Page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
