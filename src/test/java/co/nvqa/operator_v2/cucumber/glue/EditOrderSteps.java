@@ -996,6 +996,9 @@ public class EditOrderSteps extends AbstractSteps {
     if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CASH")) {
       editOrderPage.eventsTable().verifyVerifyUpdateCashDescription(order, eventDescription);
     }
+    if (StringUtils.equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN")) {
+      editOrderPage.eventsTable().verifyHubInboundEventDescription(order, eventDescription);
+    }
   }
 
   @When("Operator change Cash on Pickup toggle to yes")
