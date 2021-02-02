@@ -1,4 +1,4 @@
-@Hub @InterHub @HappyPath @TripManagement @MovementTrip @UpdateTrip @CFW
+@Hub @InterHub @HappyPath @TripManagement @MovementTrip @UpdateTrip
 Feature: Movement Trip - Update Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -116,7 +116,7 @@ Feature: Movement Trip - Update Trip
     And Operator arrive trip
     Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver  @RT # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI @DeleteDriver
   Scenario: Register Trip Departure with Single Driver Still In Transit (uid:a88470f0-3722-4792-a31c-e1e05eafcf18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
