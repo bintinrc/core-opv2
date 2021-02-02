@@ -9,6 +9,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
+import co.nvqa.commons.model.core.hub.MovementTrip;
 import co.nvqa.commons.model.core.hub.PathSchedule;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
@@ -22,6 +23,7 @@ import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
+import co.nvqa.commons.model.sort.hub.movement_trips.MovementTripScheduleResponse;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -1313,9 +1315,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     switch (scheduleType) {
       case HUB_CD_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "FAILED", originHub, destHub, shipmentIds.subList(0,1));
+            "FAILED", originHub, destHub, shipmentIds.subList(0, 1));
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "NOT FOUND", originHub, destHub, shipmentIds.subList(1,2));
+            "NOT FOUND", originHub, destHub, shipmentIds.subList(1, 2));
         break;
       case HUB_ST_ST_DIFF_CD:
       case HUB_ST_CD_DIFF_CD:
@@ -1625,5 +1627,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertThat("deleted at is not null", pathScheduleElement.getDeletedAt(),
           not(equalTo(null)));
     });
+  }
+
+  @Then("DB Operator verify trip with id {string} status is {string}")
+  public void dbOperatorVerifyTripWithIdStatusIs(String tripIdAsString, String tripStatus) {
+    Long resolvedTripId = Long.valueOf(resolveValue(tripIdAsString));
+    MovementTrip movementTrip = getHubJdbc().getMovementTrip(resolvedTripId);
+
+    assertThat("Trip status is the same", movementTrip.getStatus().toLowerCase(),
+        equalTo(tripStatus.toLowerCase()));
   }
 }

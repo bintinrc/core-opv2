@@ -127,6 +127,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Arrive']")
   public Button arriveTripButton;
 
+  @FindBy(xpath = "//button[.='Complete']")
+  public Button completeTripButton;
+
   public TripManagementPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -622,6 +625,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void arriveTrip() {
     arriveTripButton.waitUntilClickable();
     arriveTripButton.click();
+    tripDepartureArrivalModal.waitUntilVisible();
+    tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+    tripDepartureArrivalModal.submitTripDeparture.click();
+    tripDepartureArrivalModal.waitUntilInvisible();
+  }
+
+  public void completeTrip() {
+    completeTripButton.waitUntilClickable();
+    completeTripButton.click();
     tripDepartureArrivalModal.waitUntilVisible();
     tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
     tripDepartureArrivalModal.submitTripDeparture.click();

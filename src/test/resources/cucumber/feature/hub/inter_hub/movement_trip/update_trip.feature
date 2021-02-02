@@ -367,8 +367,8 @@ Feature: Movement Trip - Update Trip
     And Operator arrive trip
     Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
-  Scenario: Register Trip Departure with Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
+  @DeleteHubsViaAPI @DeleteDriver #TODO: Update UID
+  Scenario: Register Trip Departure with single Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |

@@ -76,6 +76,11 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.arriveTrip();
   }
 
+  @When("Operator complete trip")
+  public void operatorClickCompleteTripButton() {
+    tripManagementPage.completeTrip();
+  }
+
   @Then("Operator verifies trip has departed")
   public void operatorVerifiesTripHasDeparted() {
     tripManagementPage.verifyTripHasDeparted();
