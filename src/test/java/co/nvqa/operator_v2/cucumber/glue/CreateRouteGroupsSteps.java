@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.TxnRsvn;
@@ -50,7 +51,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @When("^Operator V2 add created Transaction to Route Group$")
   public void addCreatedTransactionToRouteGroup() {
     String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
 
     createRouteGroupsPage.removeFilter("Start Datetime");
     createRouteGroupsPage.removeFilter("End Datetime");
@@ -59,7 +60,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.searchByTrackingId(expectedTrackingId);
     createRouteGroupsPage.txnRsvnTable.selectAllShown();
     createRouteGroupsPage.addToRouteGroup.click();
-    createRouteGroupsPage.selectRouteGroupOnAddToRouteGroupDialog(routeGroupName);
+    createRouteGroupsPage.selectRouteGroupOnAddToRouteGroupDialog(routeGroup.getName());
     pause1s();
     takesScreenshot();
     createRouteGroupsPage.clickAddTransactionsOnAddToRouteGroupDialog();
@@ -85,8 +86,10 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.addToRouteGroupDialog.createNewRouteGroup.click();
     createRouteGroupsPage.addToRouteGroupDialog.newRouteGroup.setValue(groupName);
     createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.clickAndWaitUntilDone();
-    put(KEY_ROUTE_GROUP_NAME, groupName);
-    putInList(KEY_LIST_OF_ROUTE_GROUP_NAMES, groupName);
+    RouteGroup routeGroup = new RouteGroup();
+    routeGroup.setName(groupName);
+    put(KEY_CREATED_ROUTE_GROUP, routeGroup);
+    putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
   }
 
   @When("Operator adds following transactions to Route Group {string}:")
@@ -107,7 +110,6 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.addToRouteGroupDialog.existingRouteGroup.click();
     createRouteGroupsPage.addToRouteGroupDialog.routeGroup.searchAndSelectValue(groupName);
     createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.clickAndWaitUntilDone();
-    put(KEY_ROUTE_GROUP_NAME, groupName);
   }
 
   @Given("^Operator removes all General Filters except following: \"([^\"]*)\"$")

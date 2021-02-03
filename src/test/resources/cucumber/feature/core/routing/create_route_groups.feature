@@ -11,14 +11,9 @@ Feature: Create Route Groups
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Routing -> 2. Route Group Management
-    When Operator wait until 'Route Group Management' page is loaded
-    When Operator create new 'Route Group' on 'Route Groups Management' using data below:
-      | generateName | true       |
-      | hubName      | {hub-name} |
-    When Operator go to menu Routing -> 2. Route Group Management
-    When Operator wait until 'Route Group Management' page is loaded
-    Then Operator verify new 'Route Group' on 'Route Groups Management' created successfully
+    And API Operator create new Route Group:
+      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time"
@@ -26,9 +21,11 @@ Feature: Create Route Groups
       | Creation Time | Today |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator click Load Selection on Create Route Group page
-    And Operator adds following transactions to Route Group "{KEY_ROUTE_GROUP_NAME}":
+    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
       | trackingId                                 |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verifies that success toast displayed:
+      | top | Added successfully |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter RTS Transaction on Route Group (uid:f712664e-dbb9-4fbe-b041-d4d6c305ff48)
@@ -96,7 +93,7 @@ Feature: Create Route Groups
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
 
   @DeleteRouteGroups
-  Scenario: Operator Filter by Route Grouping on Create Route Group Page
+  Scenario: Operator Filter by Route Grouping on Create Route Group Page (uid:ba0eaa68-b518-481c-9ac5-73d32dd5b51b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -123,7 +120,7 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Route Grouping"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Route Grouping | {KEY_ROUTE_GROUP_NAME} |
+      | Route Grouping | {KEY_CREATED_ROUTE_GROUP.name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator click Load Selection on Create Route Group page
     Then Operator verifies Transaction records on Create Route Group page using data below:
@@ -131,7 +128,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
-  Scenario: Operator Filter DP Order on Route Group
+  Scenario: Operator Filter DP Order on Route Group (uid:3d532907-367a-40db-9b5f-021f8fa9950b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -153,7 +150,7 @@ Feature: Create Route Groups
       | trackingId                     | type                 | shipper                      | address                                  | status                 |
       | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildToAddressString} | Arrived at Sorting Hub |
 
-  Scenario: Operator Filter Reservation on Route Group
+  Scenario: Operator Filter Reservation on Route Group (uid:85ef9076-4721-4793-8022-ae7d451d82d5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -176,7 +173,7 @@ Feature: Create Route Groups
       | id                           | type        | shipper           | address                                                | status  |
       | {KEY_CREATED_RESERVATION.id} | Reservation | {shipper-v4-name} | {KEY_CREATED_ADDRESS.to1LineAddressWithSpaceDelimiter} | Pending |
 
-  Scenario: Operator Filter Transaction on Route Group
+  Scenario: Operator Filter Transaction on Route Group (uid:30fc5e7c-b85f-4401-8d92-dcc63c07a03a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -201,8 +198,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
-  @Debug
-  Scenario: Download CSV of Route Group Information
+  Scenario: Download CSV of Route Group Information (uid:836c52f3-fedc-448f-b722-72389fce520b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.operator_v2.selenium.page.BulkAddToRoutePage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -24,11 +25,11 @@ public class BulkAddToRouteSteps extends AbstractSteps {
 
   @When("^Operator choose route group, select tag \"([^\"]*)\" and submit$")
   public void submitOnAddParcelToRoute(String tag) {
-    String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
     takesScreenshot();
     bulkAddToRoutePage.selectCurrentDate();
     takesScreenshot();
-    bulkAddToRoutePage.selectRouteGroup(routeGroupName);
+    bulkAddToRoutePage.selectRouteGroup(routeGroup.getName());
     takesScreenshot();
     bulkAddToRoutePage
         .unselectTag("FLT"); //Un-select tag FLT. Tag FLT is default tag on this page on QA - SG.
