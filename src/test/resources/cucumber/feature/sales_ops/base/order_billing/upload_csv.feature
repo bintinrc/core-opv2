@@ -20,7 +20,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And Operator gets price order details from the dwh_qa_gl.priced_orders table
+    And Operator gets completed price order details from the dwh_qa_gl.priced_orders table
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-next-1-day-yyyy-MM-dd}                      |
@@ -75,7 +75,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And Operator gets price order details from the dwh_qa_gl.priced_orders table
+    And Operator gets completed price order details from the dwh_qa_gl.priced_orders table
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -130,7 +130,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                                                            |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
-    Then Operator gets price order details from the dwh_qa_gl.priced_orders table
+    Then Operator gets completed price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
