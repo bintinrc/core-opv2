@@ -1,4 +1,4 @@
-@HappyPath @Hub @InterHub @MovementSchedules @Stations
+@HappyPath @Hub @InterHub @MovementSchedules @Stations @CFW
 Feature: Stations
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -44,35 +44,35 @@ Feature: Stations
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI @RT # TODO: IMPLEMENT ME
   Scenario: View Station Schedule - Show All Station Schedule under Selected Crossdock Hub (uid:17d9e2b0-2270-4b04-a7d5-db15cd188eb7)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI  # TODO: IMPLEMENT ME
   Scenario: View Station Schedule - Show Station Schedules based on selected Crossdock Hub, Origin Hub and Destination Hub (uid:eabf7da9-8930-4f44-ae35-d2d3486d4e95)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI  # TODO: IMPLEMENT ME
   Scenario: Create Station Schedule - Add Schedule for New Relations (uid:0415f542-2185-42a4-bfd2-ea4dbed56b8a)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI  # TODO: IMPLEMENT ME
   Scenario: Create Station Schedule - Add Schedule for Existing Relations (uid:6bc7dd61-3868-4bb3-9dfb-388a728c02e3)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI  # TODO: IMPLEMENT ME
   Scenario: Create Station Schedule - Add Multiple Schedules (uid:4852437d-c268-4529-a2e3-9204ef59de19)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI   # TODO: IMPLEMENT ME
   Scenario: Delete Station Movement Schedule (uid:0bbb347d-4921-4eb7-868c-441f0d983fc4)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI  # TODO: IMPLEMENT ME
   Scenario: Update Station Schedule - Remove Existing Schedules (uid:12d47851-f76a-41fb-9bea-625dc1bc437d)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteHubsViaAPI  # TODO: IMPLEMENT ME
   Scenario: Update Station Schedule - Succeed Update Schedule (uid:d4c469cf-4f7f-41fb-9afb-2ff695479b13)
     Given no-op
 
