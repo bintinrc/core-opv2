@@ -1128,7 +1128,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     When Operator switch to edit order page using direct URL
-    Then Operator verify "HUB INBOUND SCAN" order event description on Edit order page
+    Then Operator verify Delivery "HUB INBOUND SCAN" order event description on Edit order page
 
   @CloseNewWindows
   Scenario: Order Tagging with Global Inbound - Total tags is less/equal 4 (uid:0e043740-9f44-45ae-94a3-94f6987c45ad)
@@ -1199,6 +1199,54 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     When Operator switch to edit order page using direct URL
     And Operator verifies prior tag is displayed
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+
+  @CloseNewWindows
+  Scenario: Inbound parcel with changes in dimensions (0 Values) (uid:d2232263-f912-4561-8154-d56327e54ca0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "length":"40", "width":"41", "height":"12", "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName           | {hub-name-3}                               |
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | overrideDimHeight | 0                                          |
+      | overrideDimWidth  | 0                                          |
+      | overrideDimLength | 0                                          |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    Then API Operator verify order info after Global Inbound
+    When Operator switch to edit order page using direct URL
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    Then Operator verify "HUB INBOUND SCAN" order event description on Edit order page
+
+  @CloseNewWindows
+  Scenario: Inbound parcel with changes in dimensions (NULL Values) (uid:83644b40-cd17-4b3a-b6ba-927a8170a4f3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "length":"40", "width":"41", "height":"12", "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-3}                               |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    Then API Operator verify order info after Global Inbound
+    When Operator switch to edit order page using direct URL
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
     Then Operator verify "HUB INBOUND SCAN" order event description on Edit order page
 
   @KillBrowser @ShouldAlwaysRun
