@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -28,6 +29,10 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
   public TxnRsvn() {
   }
 
+  public TxnRsvn(Map<String, ?> data) {
+    fromMap(data);
+  }
+
   public Long getSequence() {
     return sequence;
   }
@@ -49,7 +54,9 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
   }
 
   public void setId(String id) {
-    setId(Long.valueOf(id));
+    if (id != null) {
+      setId(Long.valueOf(id));
+    }
   }
 
   public Long getOrderId() {
@@ -61,7 +68,9 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
   }
 
   public void setOrderId(String orderId) {
-    setOrderId(Long.valueOf(orderId));
+    if (orderId != null) {
+      setOrderId(Long.valueOf(orderId));
+    }
   }
 
   public String getTrackingId() {
@@ -160,5 +169,46 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
 
   public void setWaypointId(String waypointId) {
     this.waypointId = waypointId;
+  }
+
+  @Override
+  public void fromCsvLine(String csvLine) {
+    String[] values = splitCsvLine(csvLine);
+    setSequence(getValueIfIndexExists(values, 0));
+    setId(getValueIfIndexExists(values, 1));
+    setOrderId(getValueIfIndexExists(values, 2));
+    setTrackingId(getValueIfIndexExists(values, 3));
+    setWaypointId(getValueIfIndexExists(values, 4));
+    setType(getValueIfIndexExists(values, 5));
+    setShipper(getValueIfIndexExists(values, 6));
+    setAddress(getValueIfIndexExists(values, 7));
+    setRouteId(getValueIfIndexExists(values, 8));
+    setStatus(getValueIfIndexExists(values, 9));
+    setStartDateTime(getValueIfIndexExists(values, 10));
+    setEndDateTime(getValueIfIndexExists(values, 11));
+    setDp(getValueIfIndexExists(values, 12));
+    setPickupSize(getValueIfIndexExists(values, 13));
+    setComments(getValueIfIndexExists(values, 14));
+  }
+
+  @Override
+  public String toString() {
+    return "TxnRsvn{" +
+        "sequence=" + sequence +
+        ", id=" + id +
+        ", orderId=" + orderId +
+        ", waypointId='" + waypointId + '\'' +
+        ", trackingId='" + trackingId + '\'' +
+        ", type='" + type + '\'' +
+        ", shipper='" + shipper + '\'' +
+        ", address='" + address + '\'' +
+        ", routeId='" + routeId + '\'' +
+        ", status='" + status + '\'' +
+        ", startDateTime='" + startDateTime + '\'' +
+        ", endDateTime='" + endDateTime + '\'' +
+        ", dp='" + dp + '\'' +
+        ", pickupSize='" + pickupSize + '\'' +
+        ", comments='" + comments + '\'' +
+        '}';
   }
 }

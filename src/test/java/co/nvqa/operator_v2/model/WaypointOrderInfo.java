@@ -18,6 +18,7 @@ public class WaypointOrderInfo extends DataEntity<WaypointOrderInfo> {
   private String routeInboundStatus;
   private String shipperName;
   private String reservationId;
+  private String issue;
 
   public WaypointOrderInfo() {
   }
@@ -107,5 +108,13 @@ public class WaypointOrderInfo extends DataEntity<WaypointOrderInfo> {
 
   public void setReservationId(String reservationId) {
     this.reservationId = reservationId;
+  }
+
+  public String getIssue() {
+    return issue;
+  }
+
+  public void setIssue(String issue) {
+    this.issue = issue;
   }
 }

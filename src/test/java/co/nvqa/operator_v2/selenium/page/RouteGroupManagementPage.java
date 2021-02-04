@@ -5,26 +5,22 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * @author Daniel Joi Partogi Hutapea
+ * @author Sergey Mishanin
  */
-@SuppressWarnings("WeakerAccess")
 public class RouteGroupManagementPage extends OperatorV2SimplePage {
-
-  private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
   private static final String MD_VIRTUAL_REPEAT = "routeGroup in getTableData()";
   public static final String COLUMN_CLASS_DATA_NAME = "name";
@@ -32,11 +28,19 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
   public static final String ACTION_BUTTON_EDIT = "commons.edit";
   public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
-  private CreateRouteGroupsPage createRouteGroupsPage;
-  private EditRouteGroupDialog editRouteGroupDialog;
+  private final CreateRouteGroupsPage createRouteGroupsPage;
+
+  @FindBy(css = "div.action-toolbar  md-menu")
+  public MdMenu actionsMenu;
+
+  @FindBy(css = "md-dialog")
+  public EditRouteGroupDialog editRouteGroupDialog;
 
   @FindBy(css = "md-dialog")
   public DeleteRouteGroupsDialog deleteRouteGroupsDialog;
+
+  @FindBy(css = "md-dialog")
+  public ClearRouteGroupsDialog clearRouteGroupsDialog;
 
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteRouteGroupDialog;
@@ -62,7 +66,6 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
   public RouteGroupManagementPage(WebDriver webDriver) {
     super(webDriver);
     createRouteGroupsPage = new CreateRouteGroupsPage(webDriver);
-    editRouteGroupDialog = new EditRouteGroupDialog(webDriver);
   }
 
   public void createRouteGroup(String routeGroupName, String hubName) {
@@ -87,35 +90,7 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
     }
 
     createRouteGroupAndAddTransaction.clickAndWaitUntilDone();
-    retryIfRuntimeExceptionOccurred(() -> createRouteGroupsPage.waitUntilRouteGroupPageIsLoaded(),
-        3);
-  }
-
-  public void editRouteGroup(String filterRouteGroupName, String newRouteGroupName) {
-    searchTable(filterRouteGroupName);
-    pause100ms();
-    String actualName = getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
-    assertTrue("Route Group name not matched.", actualName
-        .startsWith(filterRouteGroupName)); //Route Group name is concatenated with description.
-
-    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-    setRouteGroupNameValue(newRouteGroupName);
-    clickNvButtonSaveByName("container.route-group.dialogs.save-changes");
-    waitUntilInvisibilityOfToast("Route Group Updated");
-  }
-
-  public void deleteRouteGroup(String filterRouteGroupName) {
-    searchTable(filterRouteGroupName);
-    pause100ms();
-    clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-    confirmDeleteRouteGroupDialog.confirmDelete();
-    waitUntilInvisibilityOfToast("Route Group Deleted");
-  }
-
-  public DeleteRouteGroupsDialog openDeleteRouteGroupsDialog() {
-    clickMdMenuItem("Apply Action", "Delete Selected");
-    deleteRouteGroupsDialog.waitUntilVisible();
-    return deleteRouteGroupsDialog;
+    retryIfRuntimeExceptionOccurred(createRouteGroupsPage::waitUntilRouteGroupPageIsLoaded, 3);
   }
 
   public void selectRouteGroups(List<String> routeGroupNames) {
@@ -128,11 +103,11 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
     checkRowWithMdVirtualRepeat(1, "routeGroup in getTableData()");
   }
 
-  public EditRouteGroupDialog openEditRouteGroupDialog(String filterRouteGroupName) {
+  public void openEditRouteGroupDialog(String filterRouteGroupName) {
     searchTable(filterRouteGroupName);
     pause100ms();
     clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-    return editRouteGroupDialog.waitUntilVisible();
+    editRouteGroupDialog.waitUntilVisible();
   }
 
   public void setRouteGroupNameValue(String value) {
@@ -165,29 +140,28 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
   /**
    * Accessor for Edit Route Group dialog
    */
-  public static class EditRouteGroupDialog extends OperatorV2SimplePage {
+  public static class EditRouteGroupDialog extends MdDialog {
 
-    private static final String DIALOG_TITLE = "Edit Route Group";
+    @FindBy(name = "container.route-group.dialogs.save-changes")
+    public NvButtonSave saveChanges;
 
-    private JobDetailsTable jobDetailsTable;
+    @FindBy(name = "container.route-group.dialogs.remove-selected")
+    public NvIconTextButton removeSelected;
 
-    public EditRouteGroupDialog(WebDriver webDriver) {
-      super(webDriver);
+    @FindBy(name = "commons.delete")
+    public NvIconTextButton delete;
+
+    @FindBy(name = "Download Selected")
+    public NvApiTextButton downloadSelected;
+
+    @FindBy(css = "[id^='commons.model.group-name']")
+    public TextBox groupName;
+
+    public JobDetailsTable jobDetailsTable;
+
+    public EditRouteGroupDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
       jobDetailsTable = new JobDetailsTable(webDriver);
-    }
-
-    public EditRouteGroupDialog waitUntilVisible() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-      return this;
-    }
-
-    public JobDetailsTable jobDetailsTable() {
-      return jobDetailsTable;
-    }
-
-    public EditRouteGroupDialog clickRemoveSelected() {
-      clickNvIconTextButtonByName("container.route-group.dialogs.remove-selected");
-      return this;
     }
 
     /**
@@ -206,16 +180,21 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
             .put("orderId", "order-id")
             .put(COLUMN_TRACKING_ID, "tracking-id")
             .put(COLUMN_TYPE, "type")
+            .put("shipper", "shipper")
+            .put("address", "address")
+            .put("routeId", "route-id")
+            .put("status", "status")
+            .put("startDateTime", "sdt")
+            .put("endDateTime", "edt")
+            .put("dp", "dp")
+            .put("pickupSize", "pickup-size")
+            .put("comments", "comments")
+            .put("priorityLevel", "priority-level")
             .build()
         );
         setEntityClass(RouteGroupJobDetails.class);
         setMdVirtualRepeat("job in getTableData()");
       }
-    }
-
-    public void saveChanges() {
-      clickNvButtonSaveByNameAndWaitUntilDone("container.route-group.dialogs.save-changes");
-      waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
     }
   }
 
@@ -224,32 +203,33 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
    */
   public static class DeleteRouteGroupsDialog extends MdDialog {
 
-    private static final String DIALOG_TITLE = "Delete Route Group(s)";
-
     public DeleteRouteGroupsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
-    }
-
-    public DeleteRouteGroupsDialog(WebDriver webDriver, SearchContext searchContext,
-        WebElement webElement) {
-      super(webDriver, searchContext, webElement);
     }
 
     @FindBy(name = "container.route-group.delete-route-groups")
     public NvApiTextButton deleteRouteGroups;
 
-    public DeleteRouteGroupsDialog enterPassword(String password) {
+    public void enterPassword(String password) {
       sendKeysById("password", password);
-      return this;
     }
 
     public List<String> getRouteGroupNames() {
       return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
     }
+  }
 
-    public void clickDeleteRouteGroups() {
-      deleteRouteGroups.clickAndWaitUntilDone();
-      waitUntilInvisible();
+  public static class ClearRouteGroupsDialog extends MdDialog {
+
+    public ClearRouteGroupsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(name = "container.route-group.clear-route-groups")
+    public NvApiTextButton clearRouteGroups;
+
+    public List<String> getRouteGroupNames() {
+      return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
     }
   }
 }

@@ -108,12 +108,19 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
   }
 
   public void sortColumn(String columnId, boolean ascending) {
-    String headerLocator = f("th.%s", getColumnLocators().get(columnId));
+    String headerLocator = f("th.%s span", getColumnLocators().get(columnId));
     String xpath = f("//th[contains(@class,'%s')]/md-icon[contains(@md-svg-src,'%s')]",
         getColumnLocators().get(columnId), ascending ? "asc" : "desc");
     Button button = new Button(getWebDriver(), findElementBy(By.cssSelector(headerLocator)));
     while (!isElementExistFast(xpath)) {
       button.click();
     }
+  }
+
+  @Override
+  public String getRowLocator(int index) {
+    return f(
+        "%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]",
+        getTableLocator(), mdVirtualRepeat, index);
   }
 }

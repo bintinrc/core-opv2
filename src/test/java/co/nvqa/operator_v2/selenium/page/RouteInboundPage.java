@@ -42,11 +42,13 @@ import static co.nvqa.operator_v2.selenium.page.RouteInboundPage.ShippersTable.V
  */
 public class RouteInboundPage extends OperatorV2SimplePage {
 
-  private ShippersTable shippersTable;
-  private ReservationsTable reservationsTable;
-  private OrdersTable ordersTable;
+  private final ShippersTable shippersTable;
+  private final ReservationsTable reservationsTable;
+  private final OrdersTable ordersTable;
   public WaypointScansTable waypointScansTable;
-  private MoneyCollectionDialog moneyCollectionDialog;
+  private final MoneyCollectionDialog moneyCollectionDialog;
+  public ProblematicParcelsTable problematicParcelsTable;
+  public ProblematicWaypointsTable problematicWaypointsTable;
 
   @FindBy(css = "md-progress-linear")
   public PageElement progressBar;
@@ -132,6 +134,9 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[./div[.=' C2C / Return Pickups ']]//div[@class='count-over-total']")
   public PageElement c2cReturnPickups;
 
+  @FindBy(xpath = "//div[./div[.=' Pending C2C / Return Pickups ']]//div[@class='count-over-total']")
+  public PageElement pendingC2cReturnPickups;
+
   @FindBy(xpath = "//div[./div[.=' Reservation Pickups ']]//div[@class='count-over-total']")
   public PageElement reservationPickups;
 
@@ -175,6 +180,8 @@ public class RouteInboundPage extends OperatorV2SimplePage {
     ordersTable = new OrdersTable(webDriver);
     moneyCollectionDialog = new MoneyCollectionDialog(webDriver);
     waypointScansTable = new WaypointScansTable(webDriver);
+    problematicParcelsTable = new ProblematicParcelsTable(webDriver);
+    problematicWaypointsTable = new ProblematicWaypointsTable(webDriver);
   }
 
   public void fetchRouteByRouteId(String hubName, Long routeId) {
@@ -386,6 +393,12 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   public void openC2CReturnPickupsDialog() {
     c2cReturnPickups.moveAndClick();
     waitUntilVisibilityOfMdDialogByTitle("C2C / Return Pickups");
+    waitUntilLoaded();
+  }
+
+  public void openPendingC2CReturnPickupsDialog() {
+    pendingC2cReturnPickups.moveAndClick();
+    waitUntilVisibilityOfMdDialogByTitle("Pending C2C / Return Pickups");
     waitUntilLoaded();
   }
 
@@ -910,6 +923,47 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
     public PhotoAuditDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+  }
+
+  public static class ProblematicParcelsTable extends NgRepeatTable<WaypointOrderInfo> {
+
+    public static final String NG_REPEAT = "parcel in getTableData()";
+    public static final String TRACKING_ID = "trackingId";
+    public static final String SHIPPER_NAME = "shipperName";
+    public static final String LOCATION = "location";
+
+    public ProblematicParcelsTable(WebDriver webDriver) {
+      super(webDriver);
+      setNgRepeat(NG_REPEAT);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(TRACKING_ID, "tracking_id")
+          .put(SHIPPER_NAME, "shipper_name")
+          .put(LOCATION, "location")
+          .put("type", "custom-type")
+          .put("issue", "issue")
+          .build());
+      setEntityClass(WaypointOrderInfo.class);
+    }
+  }
+
+  public static class ProblematicWaypointsTable extends NgRepeatTable<WaypointOrderInfo> {
+
+    public static final String NG_REPEAT = "waypoint in getTableData()";
+    public static final String TRACKING_ID = "trackingId";
+    public static final String SHIPPER_NAME = "shipperName";
+    public static final String LOCATION = "location";
+
+    public ProblematicWaypointsTable(WebDriver webDriver) {
+      super(webDriver);
+      setNgRepeat(NG_REPEAT);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(SHIPPER_NAME, "shipper_name")
+          .put(LOCATION, "location")
+          .put("type", "type")
+          .put("issue", "issue")
+          .build());
+      setEntityClass(WaypointOrderInfo.class);
     }
   }
 }
