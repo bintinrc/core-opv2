@@ -373,11 +373,11 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
 
-    # TODO: IMPLEMENT ME
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI # TODO: IMPLEMENT ME
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Different Trips (Validation at End Inbound) (uid:ff970b91-5463-456e-894e-8c3e6163a0eb)
     Given no-op
 
-    # TODO: IMPLEMENT ME
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI # TODO: IMPLEMENT ME
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Different Trips (Validation at Start Inbound) (uid:c35030b6-81b6-4481-9938-cf9123594758)
     Given no-op
 

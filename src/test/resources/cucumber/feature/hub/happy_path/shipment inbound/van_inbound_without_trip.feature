@@ -52,9 +52,12 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
-    # TODO: IMPLEMENT ME
+  @DeleteShipment
   Scenario: Van Inbound Wrong Shipment (uid:206caf86-d510-47b1-86f8-3a41a681d541)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator inbound scanning wrong Shipment 1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
+    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment 1
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
