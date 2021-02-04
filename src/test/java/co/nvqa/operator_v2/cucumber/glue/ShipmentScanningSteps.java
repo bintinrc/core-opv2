@@ -164,6 +164,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.verifyToastContainingMessageIsShown(toastMessage);
   }
 
+  @Then("Operator verifies toast bottom containing message {string} is shown on Shipment Inbound Scanning page")
+  public void operatorVerifiesToastBottomContainingMessageIsShownOnShipmentInboundScanningPage(
+      String toastMessage) {
+    toastMessage = resolveValue(toastMessage);
+    shipmentScanningPage.verifyBottomToastContainingMessageIsShown(toastMessage);
+  }
+
   @And("Operator verifies Scan Shipment Container color is {string}")
   public void operatorVerifiesScanShipmentContainerColorIs(String containerColorAsHex) {
     shipmentScanningPage.verifyScanShipmentColor(containerColorAsHex);
@@ -355,4 +362,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
 //            shipmentScanningPage.switchTo();
     }
   }
+
+  @When("Operator click force complete trip in shipment inbound scanning page")
+  public void operatorClickForceCompleteTripInShipmentInboundScanningPage() {
+    shipmentScanningPage.forceCompleteButton.waitUntilClickable();
+    shipmentScanningPage.forceCompleteButton.click();
+  }
+
 }

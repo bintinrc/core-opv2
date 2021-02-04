@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -130,12 +131,24 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Complete']")
   public Button completeTripButton;
 
+  @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
+  public Button tripDetailButton;
+
   public TripManagementPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void switchTo() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
+  }
+
+  public void switchToOtherWindow() {
+    waitUntilNewWindowOrTabOpened();
+    Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+    for (String windowHandle : windowHandles) {
+      getWebDriver().switchTo().window(windowHandle);
+    }
   }
 
   public void verifiesTripManagementIsLoaded() {

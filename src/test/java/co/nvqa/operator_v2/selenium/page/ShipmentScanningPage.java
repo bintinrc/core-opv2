@@ -140,6 +140,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-table[@param='ctrl.unregisteredTableParam']//table[@class='table-body']")
   public NvTable<ErrorShipmentRow> unregisteredShipmentRow;
 
+  @FindBy(xpath = "//button[.='Force Complete Trip']")
+  public Button forceCompleteButton;
+
   public ShipmentScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -300,7 +303,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(), 500,10);
     pause5s();
   }
 
@@ -308,6 +311,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualToastMessage = getToastBottomText();
     assertEquals(expectedToastMessage, actualToastMessage);
     pause5s();
+  }
+
+  public void verifyBottomToastContainingMessageIsShown(String expectedToastMessageContain) {
+    String actualToastMessage = getToastBottomText();
+    assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
+        containsString(expectedToastMessageContain));
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessageContain) {
