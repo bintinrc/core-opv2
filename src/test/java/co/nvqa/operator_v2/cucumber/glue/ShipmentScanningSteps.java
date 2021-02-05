@@ -126,6 +126,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @Then("Operator verifies that the parcel shown is zero")
   public void operatorVerifiesThatTheParcelShownIsZero() {
+    pause2s();
     shipmentScanningPage.verifyTheSumOfOrderIsZero();
   }
 

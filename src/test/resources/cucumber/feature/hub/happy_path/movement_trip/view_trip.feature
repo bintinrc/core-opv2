@@ -8,15 +8,7 @@ Feature: Movement Trip - View Trips
   @DeleteHubsViaAPI
   Scenario: View Departure Trip (uid:b297f8a1-7178-4c17-9e07-0311edbff9fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    Given API Operator creates new Hub using data below:
+    Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |

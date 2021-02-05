@@ -429,7 +429,6 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.delete.click();
     pause1s();
     movementManagementPage.modalDeleteButton.click();
-    movementManagementPage.closeButton.click();
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
     if (hubRelations != null) {
       hubRelations.remove(0);

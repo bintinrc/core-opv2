@@ -63,7 +63,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String ACTION_COLUMN_XPATH = "//tr[1]//td[contains(@class,'action')]";
   private static final String ACTION_ICON_XPATH = "//tr[1]//td[contains(@class,'action')]/div/i[%d]";
   private static final String VIEW_ICON_ARRIVAL_ARCHIVE_XPATH = "//tr[1]//td[contains(@class,'action')]/div/a[1]";
-  private static final String TRIP_ID_IN_TRIP_DETAILS_XPATH = "//div[contains(@class,'row')]/h4";
+  private static final String TRIP_ID_IN_TRIP_DETAILS_XPATH = "//*[contains(text(),'Trip ID')]";
 
   private static final String ID_CLASS = "id";
   private static final String ORIGIN_HUB_CLASS = "originHub";
@@ -572,7 +572,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     this.switchTo();
     waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
     String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
-    assertTrue("Trip ID", actualTripId.contains(tripId));
+    assertThat("Trip ID is correct", actualTripId, containsString(tripId));
 
     getWebDriver().close();
     getWebDriver().switchTo().window(windowHandle);
@@ -614,11 +614,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
         String actualToastMessage = toast.getText();
         assertThat("Trip Management toast message is the same", actualToastMessage,
             containsString(expectedToastMessage));
+        waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
+        findElementByXpath("//a[@class='ant-notification-notice-close']").click();
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500, 5);
+    }, getCurrentMethodName(), 1000, 5);
   }
 
   public void forceTripCompletion() {

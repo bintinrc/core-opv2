@@ -7,6 +7,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
 
   @DeleteHubsViaAPI
   Scenario: Load Trip Use Filter - Departure Tab - Filter by Origin Hub (uid:5bf84fdf-4adf-486a-adcc-69e19a6cb8e3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -36,6 +37,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
 
   @DeleteHubsViaAPI
   Scenario: Load Trip Use Filter - Departure Tab - Filter by Origin Hub, Movement Type, and Departure Date (uid:1fbbdf02-35b9-4a1e-b908-6cc425617216)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |

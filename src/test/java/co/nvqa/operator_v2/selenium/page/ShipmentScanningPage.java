@@ -244,13 +244,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void removeOrderFromShipment(String firstTrackingId) {
     pause1s();
     sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
+
     pause1s();
     waitUntilVisibilityOfElementLocated(
         "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+    waitUntilElementIsClickable("//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
     click(
         "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+
+    pause1s();
     waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+    waitUntilElementIsClickable("//button[@aria-label='Delete']");
     click("//button[@aria-label='Delete']");
+    waitUntilInvisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+
     waitUntilVisibilityOfToast(f("Success delete order tracking ID %s", firstTrackingId));
     waitUntilInvisibilityOfToast();
   }
