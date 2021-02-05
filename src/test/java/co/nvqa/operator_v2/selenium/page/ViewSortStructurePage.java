@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage.TreeNode.NodeType;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,12 @@ public class ViewSortStructurePage extends OperatorV2SimplePage {
 
   @FindBy(css = "span[aria-label='loading']")
   public PageElement refreshSpinner;
+
+  @FindBy(xpath = "//button[.='Refresh Diagram']")
+  public AntButton refreshDiagram;
+
+  @FindBy(xpath = "//button[.='Reset View']")
+  public AntButton resetView;
 
   @FindBy(css = "g[id]")
   public List<TreeNode> nodes;

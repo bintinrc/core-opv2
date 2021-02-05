@@ -82,6 +82,57 @@ Feature: Third Party Order Management
     When Operator RTS multiple orders on next day on All Orders page
     Then API Operator verify multiple orders info after 3pl parcels RTS-ed on next day
 
+  Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - NOT Transferred to 3PL & Completed (uid:6b8e5cf9-0dab-4a5c-ac18-bd6846a41446)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator force succeed created order
+    Then API Operator wait for following order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status         | COMPLETED                                  |
+      | granularStatus | COMPLETED                                  |
+    When Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    And Operator uploads new mapping
+      | 3plShipperName | {3pl-shipper-name} |
+      | 3plShipperId   | {3pl-shipper-id}   |
+    Then Operator verify upload results on Third Party Order Management page:
+      | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                 |
+      | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                  |
+      | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}          |
+      | status            | Order {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId} Completed |
+    And API Operator verifies order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status         | COMPLETED                                  |
+      | granularStatus | COMPLETED                                  |
+
+  Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - Transferred to 3PL & Completed (uid:62fd5735-c980-4043-b8d8-b0c099259218)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    And Operator uploads new mapping
+      | 3plShipperName | {3pl-shipper-name} |
+      | 3plShipperId   | {3pl-shipper-id}   |
+    Then Operator verify the new mapping is created successfully
+    When API Operator force succeed created order
+    Then API Operator wait for following order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status         | COMPLETED                                  |
+      | granularStatus | COMPLETED                                  |
+    And Operator uploads new mapping
+      | 3plShipperName | {3pl-shipper-name} |
+      | 3plShipperId   | {3pl-shipper-id}   |
+    Then Operator verify upload results on Third Party Order Management page:
+      | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                                                                                          |
+      | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                                                                                           |
+      | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}                                                                                   |
+      | status            | Order {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId} uploaded with 3PL {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId} |
+    And API Operator verifies order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status         | COMPLETED                                  |
+      | granularStatus | COMPLETED                                  |
+
   @KillBrowser
   Scenario: Kill Browser
     Given no-op

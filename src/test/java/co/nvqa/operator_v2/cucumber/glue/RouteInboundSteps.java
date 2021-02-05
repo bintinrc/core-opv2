@@ -142,6 +142,47 @@ public class RouteInboundSteps extends AbstractSteps {
         waypointPerformance, null);
   }
 
+  @Then("Operator verifies that Problematic Parcels table exactly contains records:")
+  public void operatorVerifyProblematicParcelsRecordsExactly(List<Map<String, String>> data) {
+    assertEquals("Number of problematic parcels", data.size(),
+        routeInboundPage.problematicParcelsTable.getRowsCount());
+
+    List<WaypointOrderInfo> actualRecords = routeInboundPage.problematicParcelsTable
+        .readAllEntities();
+
+    data.forEach(entry -> {
+      WaypointOrderInfo expected = new WaypointOrderInfo(resolveKeyValues(entry));
+      WaypointOrderInfo actual = actualRecords.stream()
+          .filter(
+              val -> StringUtils.equalsIgnoreCase(expected.getTrackingId(), val.getTrackingId()))
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              "Order " + expected.getTrackingId() + " was not found in Problematic Orders table"));
+      expected.compareWithActual(actual);
+    });
+  }
+
+  @Then("Operator verifies that Problematic Waypoints table exactly contains records:")
+  public void operatorVerifyProblematicWaypointsRecordsExactly(List<Map<String, String>> data) {
+    assertEquals("Number of problematic waypoints", data.size(),
+        routeInboundPage.problematicWaypointsTable.getRowsCount());
+
+    List<WaypointOrderInfo> actualRecords = routeInboundPage.problematicWaypointsTable
+        .readAllEntities();
+
+    data.forEach(entry -> {
+      WaypointOrderInfo expected = new WaypointOrderInfo(resolveKeyValues(entry));
+      WaypointOrderInfo actual = actualRecords.stream()
+          .filter(
+              val -> StringUtils.equalsIgnoreCase(expected.getLocation(), val.getLocation()))
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              "Waypoint " + expected.getLocation()
+                  + " was not found in Problematic Waypoints table"));
+      expected.compareWithActual(actual);
+    });
+  }
+
   @Then("^Operator verify the Route Inbound Details is correct using data below:$")
   public void operatorVerifyTheRouteInboundDetailsIsCorrectUsingDataBelow(
       Map<String, String> mapOfData) {
@@ -199,6 +240,14 @@ public class RouteInboundSteps extends AbstractSteps {
     value = mapOfData.get("failedDeliveriesInvalidScans");
     if (StringUtils.isNotBlank(value)) {
       expectedScans.setFailedDeliveriesInvalidScans(Integer.parseInt(value));
+    }
+    value = mapOfData.get("pendingC2cReturnPickupsTotal");
+    if (StringUtils.isNotBlank(value)) {
+      expectedScans.setPendingC2cReturnPickupsTotal(Integer.parseInt(value));
+    }
+    value = mapOfData.get("pendingC2cReturnPickupsScans");
+    if (StringUtils.isNotBlank(value)) {
+      expectedScans.setPendingC2cReturnPickupsScans(Integer.parseInt(value));
     }
     value = mapOfData.get("c2cReturnPickupsTotal");
     if (StringUtils.isNotBlank(value)) {
@@ -484,6 +533,11 @@ public class RouteInboundSteps extends AbstractSteps {
   @When("^Operator open C2C / Return Pickups dialog on Route Inbound page$")
   public void operatorOpenC2CReturnPickupsDialogOnRouteInboundPage() {
     routeInboundPage.openC2CReturnPickupsDialog();
+  }
+
+  @When("^Operator open Pending C2C / Return Pickups dialog on Route Inbound page$")
+  public void operatorOpenPendingC2CReturnPickupsDialogOnRouteInboundPage() {
+    routeInboundPage.openPendingC2CReturnPickupsDialog();
   }
 
   @When("^Operator open Reservation Pickups dialog on Route Inbound page$")

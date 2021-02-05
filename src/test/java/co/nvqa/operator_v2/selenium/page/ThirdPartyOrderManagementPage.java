@@ -11,13 +11,11 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.platform.commons.util.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -63,11 +61,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
   public static final String ACTION_BUTTON_COMPLETE = "container.third-party-order.complete-order";
   public static final String CONFIRM_BUTTON_ARIA_LABEL = "Confirm";
 
-  public UploadResultsPage uploadResultsPage;
-
   public ThirdPartyOrderManagementPage(WebDriver webDriver) {
     super(webDriver);
-    uploadResultsPage = new UploadResultsPage(webDriver);
   }
 
   public void uploadSingleMapping(ThirdPartyOrderMapping thirdPartyOrderMapping) {
@@ -109,7 +104,11 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping) {
-    uploadResultsPage.verifyUploadResultsData(expectedOrderMapping);
+    uploadSingleMappingDialog.waitUntilVisible();
+    pause2s();
+    ThirdPartyOrderMapping actualOrderMappings = uploadSingleMappingDialog.uploadResultsTable
+        .readEntity(1);
+    expectedOrderMapping.compareWithActual(actualOrderMappings, "shipperName");
     refreshPage();
     loadOrders();
     verifyOrderMappingRecord(expectedOrderMapping);
@@ -117,7 +116,13 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
 
   public void verifyMultipleOrderMappingCreatedSuccessfully(
       List<ThirdPartyOrderMapping> expectedOrderMappings) {
-    uploadResultsPage.verifyUploadResultsData(expectedOrderMappings);
+    uploadBulkMappingDialog.waitUntilVisible();
+    pause2s();
+    List<ThirdPartyOrderMapping> actualOrderMappings = uploadBulkMappingDialog.uploadResultsTable
+        .readAllEntities();
+    for (int i = 0; i < expectedOrderMappings.size(); i++) {
+      expectedOrderMappings.get(i).compareWithActual(actualOrderMappings.get(i), "shipperName");
+    }
     refreshPage();
     loadOrders();
     verifyOrderMappingRecords(expectedOrderMappings);
@@ -222,8 +227,28 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
     @FindBy(name = "Submit")
     public NvButtonSave submit;
 
+    public UploadResultsTable uploadResultsTable;
+
     public UploadSingleMappingDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+      uploadResultsTable = new UploadResultsTable(webDriver);
+    }
+
+    public static class UploadResultsTable extends NgRepeatTable<ThirdPartyOrderMapping> {
+
+      public static final String NG_REPEAT = "row in result";
+
+      public UploadResultsTable(WebDriver webDriver) {
+        super(webDriver);
+        setNgRepeat(NG_REPEAT);
+        setColumnLocators(ImmutableMap.<String, String>builder()
+            .put("trackingId", "//td[1]")
+            .put("shipperId", "//td[2]")
+            .put("thirdPlTrackingId", "//td[3]")
+            .put("status", "/td[4]")
+            .build());
+        setEntityClass(ThirdPartyOrderMapping.class);
+      }
     }
   }
 
@@ -235,8 +260,11 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
     @FindBy(name = "Submit")
     public NvButtonSave submit;
 
+    public UploadSingleMappingDialog.UploadResultsTable uploadResultsTable;
+
     public UploadBulkMappingDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+      uploadResultsTable = new UploadSingleMappingDialog.UploadResultsTable(webDriver);
     }
   }
 
@@ -253,66 +281,6 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
 
     public EditMappingDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
-    }
-  }
-
-  public static class UploadResultsPage extends OperatorV2SimplePage {
-
-    private static final String DIALOG_LOCATOR = "//md-dialog[contains(@class,'third-party-order-add-result')]";
-    private static final String BUTTON_CLOSE_NAME = "Cancel";
-
-    public UploadResultsPage(WebDriver webDriver) {
-      super(webDriver);
-    }
-
-    public List<ThirdPartyOrderMapping> readMappingUploadResults() {
-      waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
-      String xpathForCounting = DIALOG_LOCATOR + "//table/tbody/tr[not(@class='ng-hide')]";
-      String cellLocatorTemplate = xpathForCounting + "[%d]/td[%d]";
-      int recordsCount = getElementsCount(By.xpath(xpathForCounting));
-      List<ThirdPartyOrderMapping> orderMappings = new ArrayList<>();
-
-      for (int rowIndex = 1; rowIndex <= recordsCount; rowIndex++) {
-        ThirdPartyOrderMapping orderMapping = new ThirdPartyOrderMapping();
-        String locator = String.format(cellLocatorTemplate, rowIndex, 1);
-        orderMapping.setTrackingId(getText(locator));
-        locator = String.format(cellLocatorTemplate, rowIndex, 2);
-        orderMapping.setShipperId(Integer.parseInt(getText(locator)));
-        locator = String.format(cellLocatorTemplate, rowIndex, 3);
-        orderMapping.setThirdPlTrackingId(getText(locator));
-        locator = String.format(cellLocatorTemplate, rowIndex, 4);
-        orderMapping.setStatus(getText(locator));
-        orderMappings.add(orderMapping);
-      }
-
-      return orderMappings;
-    }
-
-    public void verifyUploadResultsData(ThirdPartyOrderMapping expectedOrderMapping) {
-      verifyUploadResultsData(Collections.singletonList(expectedOrderMapping));
-    }
-
-    public void verifyUploadResultsData(List<ThirdPartyOrderMapping> expectedOrderMappings) {
-      List<ThirdPartyOrderMapping> orderMappings = readMappingUploadResults();
-      assertEquals("Unexpected number of created order mappings", expectedOrderMappings.size(),
-          orderMappings.size());
-
-      for (int i = 0; i < expectedOrderMappings.size(); i++) {
-        ThirdPartyOrderMapping expectedOrderMapping = expectedOrderMappings.get(i);
-        ThirdPartyOrderMapping actualOrderMapping = orderMappings.get(i);
-        assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Tracking ID",
-            expectedOrderMapping.getTrackingId(), actualOrderMapping.getTrackingId());
-        assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] 3PL Tracking ID",
-            expectedOrderMapping.getThirdPlTrackingId(), actualOrderMapping.getThirdPlTrackingId());
-        assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] 3PL Shipper ID",
-            expectedOrderMapping.getShipperId(), actualOrderMapping.getShipperId());
-        assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Upload Status",
-            expectedOrderMapping.getStatus(), actualOrderMapping.getStatus());
-      }
-    }
-
-    public void closeDialog() {
-      clickNvIconButtonByName(BUTTON_CLOSE_NAME);
     }
   }
 

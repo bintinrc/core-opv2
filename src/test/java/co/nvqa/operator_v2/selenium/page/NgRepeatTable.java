@@ -61,4 +61,11 @@ public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T> {
   public void clickColumn(int rowNumber, String columnId) {
     throw new UnsupportedOperationException();
   }
+
+  @Override
+  public String getRowLocator(int index) {
+    return f(
+        "%s//tr[@ng-repeat='%s'][not(contains(@class, 'last-row'))][%d]",
+        getTableLocator(), ngRepeat, index);
+  }
 }

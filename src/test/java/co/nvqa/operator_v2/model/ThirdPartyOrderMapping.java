@@ -1,11 +1,14 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
+import java.util.Map;
+
 /**
  * @author Sergey Mishanin
  */
-public class ThirdPartyOrderMapping {
+public class ThirdPartyOrderMapping extends DataEntity<ThirdPartyOrderMapping> {
 
-  private int shipperId;
+  private Long shipperId;
   private String shipperName;
   private String trackingId;
   private String thirdPlTrackingId;
@@ -14,16 +17,20 @@ public class ThirdPartyOrderMapping {
   public ThirdPartyOrderMapping() {
   }
 
-  public int getShipperId() {
+  public ThirdPartyOrderMapping(Map<String, ?> data) {
+    fromMap(data);
+  }
+
+  public Long getShipperId() {
     return shipperId;
   }
 
-  public void setShipperId(int shipperId) {
+  public void setShipperId(Long shipperId) {
     this.shipperId = shipperId;
   }
 
   public void setShipperId(String shipperId) {
-    setShipperId(Integer.parseInt(shipperId));
+    setShipperId(Long.valueOf(shipperId));
   }
 
   public String getTrackingId() {
