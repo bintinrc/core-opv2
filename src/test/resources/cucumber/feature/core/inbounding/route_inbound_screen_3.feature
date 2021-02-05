@@ -387,6 +387,53 @@ Feature: Route Inbound
       | hubName | {hub-name}             |
 
   @DeleteOrArchiveRoute
+  Scenario: Route Inbound Expected Scans : Pending Return Pickups (uid:18423e35-086c-46e8-8e46-b67f46dc2264)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    When Operator go to menu Inbounding -> Route Inbound
+    And Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}             |
+      | fetchBy      | FETCH_BY_ROUTE_ID      |
+      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+    When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
+    Then Operator verify the Route Inbound Details is correct using data below:
+      | routeId                      | {KEY_CREATED_ROUTE_ID} |
+      | driverName                   | {ninja-driver-name}    |
+      | hubName                      | {hub-name}             |
+      | routeDate                    | GET_FROM_CREATED_ROUTE |
+      | parcelProcessedScans         | 0                      |
+      | parcelProcessedTotal         | 1                      |
+      | pendingC2cReturnPickupsScans | 0                      |
+      | pendingC2cReturnPickupsTotal | 1                      |
+    When Operator open Pending C2C / Return Pickups dialog on Route Inbound page
+    Then Operator verify Shippers Info in Pending C2C / Return Pickups Waypoints dialog using data below:
+      | shipperName       | scanned | total |
+      | {shipper-v4-name} | 0       | 1     |
+    When Operator click 'View orders or reservations' button for shipper #1 in Pending C2C / Return Pickups Waypoints dialog
+    Then Operator verify Orders table in Pending C2C / Return Pickups Waypoints dialog using data below:
+      | trackingId                                 | stampId | location             | type             | status  | cmiCount | routeInboundStatus |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | CREATED_ORDER_FROM_1 | Pick Up (Return) | Pending | 0        |                    |
+    When Operator close Pending C2C / Return Pickups dialog on Route Inbound page
+    And Operator scan a tracking ID of created order on Route Inbound page
+    Then Operator verify the Route Inbound Details is correct using data below:
+      | parcelProcessedScans         | 1 |
+      | parcelProcessedTotal         | 1 |
+      | pendingC2cReturnPickupsScans | 1 |
+      | pendingC2cReturnPickupsTotal | 1 |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator verify order event on Edit order page using data below:
+      | name    | ROUTE INBOUND SCAN     |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubName | {hub-name}             |
+
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Reservation Pickups (uid:c6dd80a8-6a15-4283-b9a4-850aa645d7e7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:

@@ -5,8 +5,11 @@ import co.nvqa.commons.util.JsonUtils;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -122,6 +125,8 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
 
   public abstract void clickActionButton(int rowNumber, String actionId);
 
+  public abstract String getRowLocator(int index);
+
   public abstract int getRowsCount();
 
   public Map<String, String> readRow(int rowIndex) {
@@ -143,6 +148,26 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
   public List<T> readAllEntities() {
     return IntStream.rangeClosed(1, getRowsCount())
         .mapToObj(this::readEntity)
+        .collect(Collectors.toList());
+  }
+
+  public List<T> readAllEntities(String keyProperty) {
+    boolean done = false;
+    List<T> entries = new ArrayList<>();
+    while (!done) {
+      List<T> nextEntries = readAllEntities();
+      if (!entries.isEmpty()) {
+        Object last = entries.get(entries.size() - 1).getProperty(keyProperty);
+        Object nextLast = nextEntries.get(nextEntries.size() - 1).getProperty(keyProperty);
+        if (Objects.equals(last, nextLast)) {
+          done = true;
+        }
+      }
+      entries.addAll(nextEntries);
+      scrollIntoView(getRowLocator(nextEntries.size()));
+    }
+    Set<Object> set = new HashSet<>(entries.size());
+    return entries.stream().filter(p -> set.add(p.getProperty(keyProperty)))
         .collect(Collectors.toList());
   }
 

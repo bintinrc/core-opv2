@@ -46,6 +46,18 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     thirdPartyOrderManagementPage.verifyOrderMappingCreatedSuccessfully(expectedOrderMapping);
   }
 
+  @Then("Operator verify upload results on Third Party Order Management page:")
+  public void operatorVerifyUploadResults(Map<String, String> data) {
+    ThirdPartyOrderMapping expected = new ThirdPartyOrderMapping(resolveKeyValues(data));
+    thirdPartyOrderManagementPage.uploadSingleMappingDialog.waitUntilVisible();
+    pause2s();
+    assertEquals("Number of Upload Results records", 1,
+        thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount());
+    ThirdPartyOrderMapping actual = thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable
+        .readEntity(1);
+    expected.compareWithActual(actual);
+  }
+
   @When("^Operator edit the new mapping with a new data$")
   public void operatorEditTheNewMappingWithANewData() {
     ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);

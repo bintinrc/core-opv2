@@ -4,6 +4,7 @@ import co.nvqa.commons.client.auth.AuthClient;
 import co.nvqa.commons.client.core.BulkyTrackingClient;
 import co.nvqa.commons.model.auth.AuthResponse;
 import co.nvqa.commons.model.auth.ClientCredentialsAuth;
+import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.commons.model.core.bukly.BulkyOrder;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.SamedayRouteEnginePage;
@@ -65,7 +66,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
 
   @When("^Operator 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
   public void runRouteEngine(DataTable dataTable) {
-    String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
 
     Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);
     String hubName = mapOfData.get("hub");
@@ -77,7 +78,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
     String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity"))
         .orElse("10");
 
-    samedayRouteEnginePage.selectRouteGroup(routeGroupName);
+    samedayRouteEnginePage.selectRouteGroup(routeGroup.getName());
     samedayRouteEnginePage.selectRoutingAlgorithm(routingAlgorithm);
     samedayRouteEnginePage.selectHub(hubName);
     samedayRouteEnginePage.setFleetType1Capacity(fleetType1Capacity);
@@ -99,7 +100,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
 
   @When("^op 'Run Route Engine' without break on Same-Day Route Engine menu using data below:$")
   public void runRouteEngineWithoutBreak(DataTable dataTable) {
-    String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
 
     Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);
     String hubName = mapOfData.get("hub");
@@ -111,7 +112,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
     String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity"))
         .orElse("10");
 
-    samedayRouteEnginePage.selectRouteGroup(routeGroupName);
+    samedayRouteEnginePage.selectRouteGroup(routeGroup.getName());
     samedayRouteEnginePage.selectHub(hubName);
     samedayRouteEnginePage.selectRoutingAlgorithm(routingAlgorithm);
     samedayRouteEnginePage.setFleetType1Capacity(fleetType1Capacity);

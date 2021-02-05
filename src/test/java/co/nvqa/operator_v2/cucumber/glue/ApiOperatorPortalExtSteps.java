@@ -19,6 +19,8 @@ import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.sort.hub.CrossDockStationRelation;
+import co.nvqa.commons.model.sort.nodes.Node;
+import co.nvqa.commons.model.sort.nodes.Node.NodeType;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -809,5 +811,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_ZONE, zone);
     put(KEY_CREATED_ZONE_ID, zone.getId());
     getZoneClient().reloadCache();
+  }
+
+  @Given("^API Operator create Middle Tier sort node:$")
+  public void apiOperatorCreateSortNode(Map<String, String> data) {
+    Node node = new Node(resolveKeyValues(data));
+    node.setType(new NodeType(10));
+    node = getNodesClient().createMiddleTierNode(node);
+    put(KEY_CREATED_MIDDLE_TIER_NAME, node.getName());
+    put(KEY_CREATED_MIDDLE_TIER_NODE, node);
   }
 }

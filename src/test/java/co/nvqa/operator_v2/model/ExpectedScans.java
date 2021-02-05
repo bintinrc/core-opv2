@@ -13,6 +13,8 @@ public class ExpectedScans {
   private Integer failedDeliveriesValidScans;
   private Integer failedDeliveriesInvalidTotal;
   private Integer failedDeliveriesInvalidScans;
+  private Integer pendingC2cReturnPickupsTotal;
+  private Integer pendingC2cReturnPickupsScans;
   private Integer c2cReturnPickupsTotal;
   private Integer c2cReturnPickupsScans;
   private Integer reservationPickupsTotal;
@@ -124,5 +126,21 @@ public class ExpectedScans {
 
   public void setReservationPickupsExtraOrders(Integer reservationPickupsExtraOrders) {
     this.reservationPickupsExtraOrders = reservationPickupsExtraOrders;
+  }
+
+  public Integer getPendingC2cReturnPickupsTotal() {
+    return pendingC2cReturnPickupsTotal;
+  }
+
+  public void setPendingC2cReturnPickupsTotal(Integer pendingC2cReturnPickupsTotal) {
+    this.pendingC2cReturnPickupsTotal = pendingC2cReturnPickupsTotal;
+  }
+
+  public Integer getPendingC2cReturnPickupsScans() {
+    return pendingC2cReturnPickupsScans;
+  }
+
+  public void setPendingC2cReturnPickupsScans(Integer pendingC2cReturnPickupsScans) {
+    this.pendingC2cReturnPickupsScans = pendingC2cReturnPickupsScans;
   }
 }

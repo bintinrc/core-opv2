@@ -90,4 +90,9 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
     }
     click(xpath);
   }
+
+  @Override
+  public String getRowLocator(int index) {
+    throw new UnsupportedOperationException();
+  }
 }
