@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.shipper_support.AggregatedOrder;
 import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Given;
@@ -345,7 +346,19 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator verifies the order with status {string} is not displayed on billing report")
   public void operatorVerifiesTheOrderWithStatusArrivedAtDistributionPointIsNotDisplayedOnBillingReport(
       String status) {
-    assertNull(f("Priced order with status %s IS available in the CSV file", status),
-        get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
+    if (Objects.nonNull(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV))) {
+      PricedOrder pricedOrderCsv = orderBillingPage
+          .pricedOrderCsv(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
+      assertFalse(f("Order with status %s is available in billing report", status),
+          pricedOrderCsv.getGranularStatus().equalsIgnoreCase(status));
+    } else {
+      NvLogger.infof("Priced order with status %s is not available in the CSV file", status);
+    }
+  }
+
+  @Then("Operator verifies the order with status {string} is displayed on billing report")
+  public void operatorVerifiesTheOrderWithStatusCompletedIsDisplayedOnBillingReport(String status) {
+    NvLogger
+        .info("Auto verified in step 'Operator verifies the priced order details in the body' ");
   }
 }
