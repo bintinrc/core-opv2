@@ -8,7 +8,7 @@ Feature: Trigger Auto Generated Path
   @DeleteHubsViaAPI
   Scenario: Generate Default Path with which Default Path Doesn't Exist (uid:180126bf-69f8-4ab9-ba61-27e4cea737e1)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator creates 2 new Hub using data below:
+    Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -16,11 +16,21 @@ Feature: Trigger Auto Generated Path
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
+    And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     When Operator clicks add default path button
     And Operator create default path with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -34,7 +44,7 @@ Feature: Trigger Auto Generated Path
   @DeleteHubsViaAPI
   Scenario: Generate Default Path with which Default Path Exists and No Changes Made (uid:b2843b83-3ec8-4266-802a-e65328d1efb1)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator creates 2 new Hub using data below:
+    Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -42,8 +52,17 @@ Feature: Trigger Auto Generated Path
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
     Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
     And API Operator reloads hubs cache
@@ -67,7 +86,15 @@ Feature: Trigger Auto Generated Path
   @DeleteHubsViaAPI
   Scenario: Generate Default Path with Updated Transit Hub for Existing Default Path (uid:2f705e9c-d933-4e52-a3de-9ab00c786898)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator creates 3 new Hub using data below:
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -75,10 +102,20 @@ Feature: Trigger Auto Generated Path
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 2
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 3
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[1].id}"
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 2
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 3
     Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
     And API Operator reloads hubs cache
@@ -90,7 +127,7 @@ Feature: Trigger Auto Generated Path
     And Operator selects "Default Path" in "Path Type" filter
     And Operator clicks load selection button
     Then Operator verify "default paths" data appear in path table
-    When API Operator deletes movement schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with facility type "CROSSDOCK"
+    When API Operator deletes movement schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with facility type "STATIONS"
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
     When Operator clicks add default path button
