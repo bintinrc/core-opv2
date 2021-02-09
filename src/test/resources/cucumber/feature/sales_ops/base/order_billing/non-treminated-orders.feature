@@ -159,8 +159,7 @@ Feature: Order Billing
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Completed' is displayed on billing report
     Then Operator verifies the priced order details in the body
-    Then Operator verifies completed date of the priced order is the as the date when customer collect
-
+    Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:4f65e234-4a9f-4f5a-9949-71350459be2b)
@@ -301,7 +300,7 @@ Feature: Order Billing
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Returned To Sender' is displayed on billing report
     Then Operator verifies the priced order details in the body
-   # Then Operator verifies completed date of the priced order is the date when driver deliver parcel back to sender
+    Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
 
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:ddcd007e-92f6-4ab9-acdf-09e970a0cd83)
     Given API Shipper create V4 order using data below:
@@ -508,7 +507,6 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'Cancelled' is not displayed on billing report
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SCRIPT" Success Billing Report - `Cancelled` Order Exists (uid:fe78275d-b4b9-4bd3-881e-6d6dd5f8d6dc)
     Given API Shipper create V4 order using data below:
@@ -655,7 +653,6 @@ Feature: Order Billing
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Pending Reschedule` Order Exists (uid:534bc797-010e-408a-86d7-1db75441a0b2)
