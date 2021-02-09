@@ -200,6 +200,7 @@ Feature: Path Invalidation - Without Trip
       | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator update Hub column "facility type" with data:
       | facilityType | CROSSDOCK HUB |
+    And API Operator reloads hubs cache
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     When API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:

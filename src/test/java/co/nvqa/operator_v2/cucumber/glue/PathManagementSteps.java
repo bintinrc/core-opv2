@@ -86,6 +86,7 @@ public class PathManagementSteps extends AbstractSteps {
 
   @And("Operator clicks load selection button")
   public void operatorClicksLoadSelectionButton() {
+    pathManagementPage.loadSelectionButton.waitUntilClickable();
     pathManagementPage.loadSelectionButton.click();
     pause2s();
   }
