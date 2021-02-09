@@ -61,6 +61,12 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
   }
 
+  @Then("Operator verifies toast with message {string} is shown on movement page without closing")
+  public void operatorVerifiesToastWithMessageIsShownOnTripManagementPageWithoutClosing(String toastMessage) {
+    String resolvedToastMessage = resolveValue(toastMessage);
+    tripManagementPage.verifyToastContainingMessageIsShownWithoutClosing(resolvedToastMessage);
+  }
+
   @Then("Operator click force trip completion")
   public void operatorClickForceTripCompletion() {
     tripManagementPage.forceTripCompletion();

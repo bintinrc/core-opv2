@@ -154,6 +154,7 @@ Feature: Path Invalidation - With Trip
     And Operator update hub column facility type for first hub into type "DP"
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is deleted in hub_relation_schedules
     And DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 0 in movement_path table
+    And API Operator reloads hubs cache
     Given API Operator does the shipment van inbound scan for "<type>" movement "FAIL" for the following shipments:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |

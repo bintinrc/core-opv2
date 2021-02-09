@@ -623,6 +623,23 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }, getCurrentMethodName(), 1000, 5);
   }
 
+  public void verifyToastContainingMessageIsShownWithoutClosing(String expectedToastMessage) {
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        waitUntilVisibilityOfElementLocated(
+            "//div[contains(@class,'notification-notice-message')]");
+        WebElement toast = findElementByXpath(
+            "//div[contains(@class,'notification-notice-message')]");
+        String actualToastMessage = toast.getText();
+        assertThat("Trip Management toast message is the same", actualToastMessage,
+            containsString(expectedToastMessage));
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 1000, 5);
+  }
+
   public void forceTripCompletion() {
     forceTripCompletion.waitUntilClickable();
     forceTripCompletion.click();

@@ -234,7 +234,7 @@ Feature: Stations
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI
   Scenario: Delete Station Movement Schedule (uid:0bbb347d-4921-4eb7-868c-441f0d983fc4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -268,6 +268,7 @@ Feature: Stations
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
     When Operator deletes created movement schedule on Movement Management page
+    And Operator clicks close button in movement management page
     Then Operator verify all station schedules are correct
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is deleted in hub_relation_schedules
 

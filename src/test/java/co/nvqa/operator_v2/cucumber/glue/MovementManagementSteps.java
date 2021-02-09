@@ -435,6 +435,11 @@ public class MovementManagementSteps extends AbstractSteps {
     }
   }
 
+  @And("Operator clicks close button in movement management page")
+  public void operatorClicksCloseButtonInMovementManagementPage() {
+    movementManagementPage.closeButton.click();
+  }
+
   @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
   public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage() {
     movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");

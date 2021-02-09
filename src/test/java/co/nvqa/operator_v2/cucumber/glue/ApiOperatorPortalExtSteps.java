@@ -763,7 +763,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     } else {
       hubId = destHubId;
     }
-    getHubClient().shipmentInboundScanning(inboundType, shipmentId, hubId);
+    retryIfAssertionErrorOccurred(() -> {
+      getHubClient().shipmentInboundScanning(inboundType, shipmentId, hubId);
+    }, getCurrentMethodName(), 1000, 5);
   }
 
   @And("API Operator does the {string} scan from {string} to {string} for the following shipments:")
