@@ -46,7 +46,7 @@ Feature: Crossdock Hubs
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -82,7 +82,7 @@ Feature: Crossdock Hubs
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -131,7 +131,7 @@ Feature: Crossdock Hubs
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -177,7 +177,7 @@ Feature: Crossdock Hubs
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |

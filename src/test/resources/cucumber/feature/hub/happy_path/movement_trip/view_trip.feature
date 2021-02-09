@@ -118,7 +118,7 @@ Feature: Movement Trip - View Trips
     Then Operator verifies movement trip shown has status value "cancelled"
     And DB Operator verifies movement trip has event with status cancelled
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI #TODO
   Scenario: Cancel Trip - Trip Status Transit (uid:a6663576-da9a-40fb-807b-0e389322fba5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -158,7 +158,7 @@ Feature: Movement Trip - View Trips
     Then Operator verifies movement trip shown has status value "cancelled"
     And DB Operator verifies movement trip has event with status cancelled
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI #TODO
   Scenario: Cannot Cancel Invalid Trip - Trip status Completed (uid:1aefeba5-dbd3-4515-912f-f7c8e05108d2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
