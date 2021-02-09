@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -222,7 +223,9 @@ public class OrderBillingSteps extends AbstractSteps {
           pricedOrderDb.getCodCollected(), pricedOrderCsv.getCodCollected());
       assertEquals(
           "Success Billings Csv file does not contain expected information for column CodFee",
-          pricedOrderDb.getCodFee(), pricedOrderCsv.getCodFee());
+          pricedOrderDb.getCodFee(),
+          pricedOrderCsv.getCodFee().compareTo(BigDecimal.ZERO) == 0 ? new BigDecimal("0.00")
+              : pricedOrderCsv.getCodFee());
       assertEquals(
           "Success Billings Csv file does not contain expected information for column InsuredValue",
           pricedOrderDb.getInsuredValue(), pricedOrderCsv.getInsuredValue());
@@ -361,4 +364,5 @@ public class OrderBillingSteps extends AbstractSteps {
     NvLogger
         .info("Auto verified in step 'Operator verifies the priced order details in the body' ");
   }
+
 }

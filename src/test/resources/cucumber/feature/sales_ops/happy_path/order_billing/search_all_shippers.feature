@@ -45,7 +45,7 @@ Feature: Order Billing
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
-    Then Operator gets completed price order details from the dwh_qa_gl.priced_orders table
+    Then Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
