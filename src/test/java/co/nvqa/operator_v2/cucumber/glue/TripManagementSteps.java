@@ -61,6 +61,12 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
   }
 
+  @Then("Operator verifies toast with message {string} is shown on movement page without closing")
+  public void operatorVerifiesToastWithMessageIsShownOnTripManagementPageWithoutClosing(String toastMessage) {
+    String resolvedToastMessage = resolveValue(toastMessage);
+    tripManagementPage.verifyToastContainingMessageIsShownWithoutClosing(resolvedToastMessage);
+  }
+
   @Then("Operator click force trip completion")
   public void operatorClickForceTripCompletion() {
     tripManagementPage.forceTripCompletion();
@@ -74,6 +80,11 @@ public class TripManagementSteps extends AbstractSteps {
   @When("Operator arrive trip")
   public void operatorClickArriveTripButton() {
     tripManagementPage.arriveTrip();
+  }
+
+  @When("Operator complete trip")
+  public void operatorClickCompleteTripButton() {
+    tripManagementPage.completeTrip();
   }
 
   @Then("Operator verifies trip has departed")
@@ -293,6 +304,13 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.verifyStatusValue(tripId, statusValue.toLowerCase());
   }
 
+  @Then("Operator verifies movement trip shown has status value {string} for trip id {string}")
+  public void operatorVerifiesMovementTripShownHasStatusValue(String statusValue,
+      String tripIdAsString) {
+    String tripId = resolveValue(tripIdAsString);
+    tripManagementPage.verifyStatusValue(tripId, statusValue.toLowerCase());
+  }
+
   @Then("Operator verifies {string} button disabled")
   public void operatorVerifiesButtonDisabled(String buttonValue) {
     assertFalse(tripManagementPage.isElementEnabled(buttonValue));
@@ -303,7 +321,18 @@ public class TripManagementSteps extends AbstractSteps {
       String tripStatus) {
     String stringTripId = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
     Long longTripId = Long.valueOf(stringTripId);
-    navigateTo(f("%s/%s/movement-trips/%d/events", TestConstants.OPERATOR_PORTAL_BASE_URL,
+    navigateTo(f("%s/%s/movement-trips/%d/detail", TestConstants.OPERATOR_PORTAL_BASE_URL,
+        TestConstants.COUNTRY_CODE, longTripId));
+    tripManagementPage.switchTo();
+    tripManagementPage.verifyEventExist(tripEvent, tripStatus);
+  }
+
+  @Then("Operator verifies event {string} with status {string} is present for trip on Trip events page for trip with id {string}")
+  public void operatorVerifiesEventIsPresentForTripOnTripEventsPage(String tripEvent,
+      String tripStatus, String tripIdAsString) {
+    String stringTripId = resolveValue(tripIdAsString);
+    Long longTripId = Long.valueOf(stringTripId);
+    navigateTo(f("%s/%s/movement-trips/%d/detail", TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, longTripId));
     tripManagementPage.switchTo();
     tripManagementPage.verifyEventExist(tripEvent, tripStatus);

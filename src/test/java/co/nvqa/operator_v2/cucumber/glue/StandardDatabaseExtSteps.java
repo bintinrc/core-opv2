@@ -9,6 +9,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
+import co.nvqa.commons.model.core.hub.MovementTrip;
 import co.nvqa.commons.model.core.hub.PathSchedule;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
@@ -22,6 +23,7 @@ import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
+import co.nvqa.commons.model.sort.hub.movement_trips.MovementTripScheduleResponse;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -42,6 +44,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -1171,12 +1174,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       String originHubIdAsString, String destinationHubIdAsString, Integer numberOfPaths) {
     Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
     Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
-
-    List<MovementPath> movementPaths = getHubJdbc()
-        .getAllMovementPath(originHubId, destinationHubId);
-    movementPaths
-        .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
-    assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
+    retryIfAssertionErrorOccurred(() -> {
+      List<MovementPath> movementPaths = getHubJdbc()
+          .getAllMovementPath(originHubId, destinationHubId);
+      assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
+      movementPaths
+          .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
+    }, getCurrentMethodName(), 1000, 5);
   }
 
   @Then("DB Operator verifies number of path for {string} movement existence")
@@ -1298,11 +1302,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         assertThat("Movement Event not found", movementEventEntityExistence, equalTo(false));
         continue;
       }
-      MovementEventEntity movementEventEntity = getHubJdbc()
-          .getMovementEventByShipmentId(shipmentId);
-      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
-      assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      retryIfAssertionErrorOccurred(() -> {
+        MovementEventEntity movementEventEntity = getHubJdbc()
+            .getMovementEventByShipmentId(shipmentId);
+        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+        assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      }, getCurrentMethodName(), 1000, 5);
       pause2s();
     }
   }
@@ -1311,12 +1317,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifySlaInMovementEventsTableForNoPathForTheFollowingShipmentsFromTo(
       String scheduleType, String originHub, String destHub, List<String> shipmentIds) {
     switch (scheduleType) {
-      case HUB_CD_CD:
-        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "FAILED", originHub, destHub, shipmentIds.subList(0,1));
-        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "NOT FOUND", originHub, destHub, shipmentIds.subList(1,2));
-        break;
       case HUB_ST_ST_DIFF_CD:
       case HUB_ST_CD_DIFF_CD:
       case HUB_CD_ST_DIFF_CD:
@@ -1324,6 +1324,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
             "FAILED", originHub, destHub, shipmentIds);
         break;
+      case HUB_CD_CD:
       case HUB_CD_ITS_ST:
       case HUB_ST_ITS_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
@@ -1625,5 +1626,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertThat("deleted at is not null", pathScheduleElement.getDeletedAt(),
           not(equalTo(null)));
     });
+  }
+
+  @Then("DB Operator verify trip with id {string} status is {string}")
+  public void dbOperatorVerifyTripWithIdStatusIs(String tripIdAsString, String tripStatus) {
+    Long resolvedTripId = Long.valueOf(resolveValue(tripIdAsString));
+    MovementTrip movementTrip = getHubJdbc().getMovementTrip(resolvedTripId);
+
+    assertThat("Trip status is the same", movementTrip.getStatus().toLowerCase(),
+        equalTo(tripStatus.toLowerCase()));
   }
 }

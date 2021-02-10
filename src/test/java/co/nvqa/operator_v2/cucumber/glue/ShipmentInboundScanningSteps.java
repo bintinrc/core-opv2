@@ -203,4 +203,15 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     assertThat("value does not exist", scanningPage.inboundHub.isValueExist(hubNameResolved),
         equalTo(false));
   }
+
+  @When("Operator inbound scanning wrong Shipment {long} Into Van in hub {string} on Shipment Inbound Scanning page")
+  public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId, String hubName) {
+    String resolvedHubName = resolveValue(hubName);
+    scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
+  }
+
+  @Then("Operator verify error message in shipment inbound scanning is {string} for shipment {long}")
+  public void operatorVerifyErrorMessageInShipmentInboundScanningIs(String errorMessage, Long errorShipmentId) {
+    scanningPage.checkAlert(errorShipmentId, errorMessage);
+  }
 }

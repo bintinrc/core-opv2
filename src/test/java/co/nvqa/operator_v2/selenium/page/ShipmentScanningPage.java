@@ -22,6 +22,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -51,6 +52,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[contains(@class,'scan-barcode-container')]//small";
+  public static final String XPATH_STATUS_CARD_BOX = "//div[contains(@class,'status-card')]";
+  public static final String XPATH_ZONE_CARD_BOX = "//div[contains(@class,'zone-card')]";
+
 
   @FindBy(xpath = "//div[span[.='Driver']]//p")
   public TextBox driverText;
@@ -136,6 +140,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-table[@param='ctrl.unregisteredTableParam']//table[@class='table-body']")
   public NvTable<ErrorShipmentRow> unregisteredShipmentRow;
 
+  @FindBy(xpath = "//button[.='Force Complete Trip']")
+  public Button forceCompleteButton;
 
   public ShipmentScanningPage(WebDriver webDriver) {
     super(webDriver);
@@ -238,13 +244,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void removeOrderFromShipment(String firstTrackingId) {
     pause1s();
     sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
+
     pause1s();
     waitUntilVisibilityOfElementLocated(
         "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+    waitUntilElementIsClickable("//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
     click(
         "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+
+    pause1s();
     waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+    waitUntilElementIsClickable("//button[@aria-label='Delete']");
     click("//button[@aria-label='Delete']");
+    waitUntilInvisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+
     waitUntilVisibilityOfToast(f("Success delete order tracking ID %s", firstTrackingId));
     waitUntilInvisibilityOfToast();
   }
@@ -279,6 +292,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     isElementExist("//div[contains(@class,'error-border')]");
   }
 
+  public void verifyOrderIsBlueHighlighted() {
+    Color statusCardColor = getBackgroundColor(XPATH_STATUS_CARD_BOX);
+    Color zoneCardColor = getBackgroundColor(XPATH_ZONE_CARD_BOX);
+    String expectedColor = "#55a1e8";
+    assertThat("Status Card color is blue", statusCardColor.asHex(), equalTo(expectedColor));
+    assertThat("Zone Card color is blue", zoneCardColor.asHex(), equalTo(expectedColor));
+  }
+
   public void verifyToastWithMessageIsShown(String expectedToastMessage) {
     retryIfAssertionErrorOccurred(() -> {
       try {
@@ -289,7 +310,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(), 500,10);
     pause5s();
   }
 
@@ -297,6 +318,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualToastMessage = getToastBottomText();
     assertEquals(expectedToastMessage, actualToastMessage);
     pause5s();
+  }
+
+  public void verifyBottomToastContainingMessageIsShown(String expectedToastMessageContain) {
+    String actualToastMessage = getToastBottomText();
+    assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
+        containsString(expectedToastMessageContain));
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessageContain) {

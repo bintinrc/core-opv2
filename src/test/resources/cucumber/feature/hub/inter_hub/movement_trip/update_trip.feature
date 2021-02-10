@@ -367,8 +367,8 @@ Feature: Movement Trip - Update Trip
     And Operator arrive trip
     Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
-  Scenario: Register Trip Departure with Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
+  @DeleteHubsViaAPI @DeleteDriver #TODO: Update UID
+  Scenario: Register Trip Departure with single Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -403,7 +403,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page
+    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
     And Operator click force trip completion
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
