@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -117,20 +118,31 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   }
 
   public ArmCombinationContainer getArmCombinationContainer(String armName) {
-    String xpath = f("//div[contains(@class,'ArmCombinationContainer')][.//span[.='%s']]", armName);
-    return new ArmCombinationContainer(getWebDriver(), xpath);
+    int index = Integer.parseInt(armName.replaceAll(".*Arm\\s*", "")) - 1;
+    return armCombinationContainers.get(index);
   }
+
+  @FindBy(css = "div.arm-combination-unit-content")
+  public List<ArmCombinationContainer> armCombinationContainers;
 
   public static class ArmCombinationContainer extends PageElement {
 
-    @FindBy(css = "button[class*='AddCombinationButton']")
+    @FindBy(xpath = ".//button[i[contains(@class, 'anticon-plus')]]")
     public Button addCombination;
 
     @FindBy(css = "button[class*='ArmSwitch']")
     public MdSwitch enable;
 
-    public ArmCombinationContainer(WebDriver webDriver, String xpath) {
-      super(webDriver, xpath);
+    @FindBy(css = "div.ant-select")
+    public AntSelect sameAs;
+
+    public ArmCombinationContainer(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public void removeSameAs(String armName) {
+      String xpath = f(".//div[contains(@class,'ant-tag')][span[.='%s']]//i", armName);
+      new Button(getWebDriver(), getWebElement(), xpath).click();
     }
 
     public int getCombinationsCount() {
@@ -138,7 +150,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     }
 
     public Button getRemoveButton(int index) {
-      String xpath = f("(.//button[contains(@class,'RemoveFilterButton')])[%d]", index);
+      String xpath = f("(.//button[i[contains(@class, 'anticon-close')]])[%d]", index);
       return new Button(getWebDriver(), getWebElement(), xpath);
     }
 
