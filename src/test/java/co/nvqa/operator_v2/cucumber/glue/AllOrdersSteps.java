@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableList;
@@ -216,6 +217,52 @@ public class AllOrdersSteps extends AbstractSteps {
       listOfTrackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     }
     allOrdersPage.addToRoute(listOfTrackingIds, data.get("routeId"), data.get("tag"));
+  }
+
+  @When("Operator fill Add Selected to Route form using Set To All:")
+  public void operatorFillAddSelectedToRouteFormOnAllOrdersPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    List<String> listOfTrackingIds = null;
+    String trackingIds = data.get("trackingIds");
+    if (StringUtils.isNotBlank(trackingIds)) {
+      listOfTrackingIds = splitAndNormalize(trackingIds);
+    } else {
+      listOfTrackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    }
+    allOrdersPage
+        .fillAddToRouteFormUsingSetToAll(listOfTrackingIds, data.get("routeId"), data.get("tag"));
+  }
+
+  @When("Operator suggest routes on Add Selected to Route form:")
+  public void operatorSuggestRoutes(List<Map<String, String>> data) {
+    List<AddToRouteData> tagsMap = data.stream()
+        .map(val -> new AddToRouteData(resolveKeyValues(val)))
+        .collect(Collectors.toList());
+    allOrdersPage.fillRouteSuggestion(tagsMap);
+  }
+
+  @When("Operator suggest routes on Add Selected to Route form using Set To All:")
+  public void operatorSuggestRoutes(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String tag = data.get("tag");
+    String type = data.getOrDefault("type", "Delivery");
+    allOrdersPage.fillRouteSuggestionUsingSetToAll(type, tag);
+  }
+
+  @When("Operator verify Route Id values on Add Selected to Route form:")
+  public void operatorVerifyRouteIdValues(List<Map<String, String>> data) {
+    data.forEach(orderData -> {
+      orderData = resolveKeyValues(orderData);
+      String trackingId = orderData.get("trackingId");
+      String expectedRouteId = orderData.get("routeId");
+      assertEquals(f("Route Id for %s order", trackingId), expectedRouteId,
+          allOrdersPage.addToRouteDialog.getRouteId(trackingId));
+    });
+  }
+
+  @When("Operator submit Add Selected to Route form on All Orders page")
+  public void operatorSubmitAddSelectedToRouteFormOnAllOrdersPage() {
+    allOrdersPage.addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
   }
 
   @When("^Operator print Waybill for single order on All Orders page$")

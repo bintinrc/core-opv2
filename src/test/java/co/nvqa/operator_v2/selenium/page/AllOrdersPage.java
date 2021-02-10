@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -17,6 +18,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -445,6 +447,13 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void addToRoute(List<String> listOfExpectedTrackingId, String routeId, String tag) {
+    fillAddToRouteFormUsingSetToAll(listOfExpectedTrackingId, routeId, tag);
+    addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
+    addToRouteDialog.waitUntilInvisible();
+  }
+
+  public void fillAddToRouteFormUsingSetToAll(List<String> listOfExpectedTrackingId, String routeId,
+      String tag) {
     clearFilterTableOrderByTrackingId();
     selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
@@ -457,14 +466,50 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
     addToRouteDialog.setToAll.click();
     if (StringUtils.isNotBlank(routeId)) {
-      addToRouteDialog.routes.get(0).setValue(routeId);
+      addToRouteDialog.routeInputs.get(0).setValue(routeId);
     } else if (StringUtils.isNotBlank(tag)) {
       addToRouteDialog.routeFinder.click();
       addToRouteDialog.routeTags.get(0).selectValues(ImmutableList.of(tag));
       addToRouteDialog.suggestRoutes.clickAndWaitUntilDone();
     }
-    addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
-    addToRouteDialog.waitUntilInvisible();
+  }
+
+  public void fillRouteSuggestionUsingSetToAll(String type, String tag) {
+    clearFilterTableOrderByTrackingId();
+    selectAllShown();
+    actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
+    addToRouteDialog.waitUntilVisible();
+    addToRouteDialog.setToAll.click();
+    addToRouteDialog.types.get(0).selectValue(type);
+    addToRouteDialog.routeFinder.click();
+    addToRouteDialog.routeTags.get(0).selectValues(ImmutableList.of(tag));
+    addToRouteDialog.suggestRoutes.clickAndWaitUntilDone();
+  }
+
+  public void fillRouteSuggestion(List<AddToRouteData> data) {
+    clearFilterTableOrderByTrackingId();
+    selectAllShown();
+    actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
+    addToRouteDialog.waitUntilVisible();
+    Map<String, AddToRouteData> dataAsMap = data.stream()
+        .collect(Collectors.toMap(
+            AddToRouteData::getTrackingId,
+            val -> val
+        ));
+    for (int i = 0; i < data.size(); i++) {
+      String trackingId = addToRouteDialog.trackingIds.get(i).getText();
+      String type = dataAsMap.get(trackingId).getType();
+      if (StringUtils.isNotBlank(type)) {
+        addToRouteDialog.types.get(i).selectValue(dataAsMap.get(trackingId).getType());
+      }
+    }
+    addToRouteDialog.routeFinder.click();
+    for (int i = 0; i < data.size(); i++) {
+      String trackingId = addToRouteDialog.trackingIds.get(i).getText();
+      addToRouteDialog.routeTags.get(i)
+          .selectValues(ImmutableList.of(dataAsMap.get(trackingId).getTag()));
+    }
+    addToRouteDialog.suggestRoutes.clickAndWaitUntilDone();
   }
 
   public void printWaybill(String trackingId) {
@@ -754,7 +799,10 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     public List<MdSelect> types;
 
     @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders']  input[name^='container.order.edit.route']")
-    public List<TextBox> routes;
+    public List<TextBox> routeInputs;
+
+    @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders']  div.table-edit-route>span")
+    public List<PageElement> routeTexts;
 
     @FindBy(css = "div[md-virtual-repeat='order in ctrl.formData.orders']  md-select[name^='container.order.edit.route-tags']")
     public List<MdSelect> routeTags;
@@ -765,5 +813,27 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     public AddToRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+
+    public List<String> getRouteIds() {
+      List<String> routeIds = routeInputs.stream()
+          .map(TextBox::getValue)
+          .collect(Collectors.toList());
+      routeIds.addAll(
+          routeTexts.stream().map(PageElement::getNormalizedText).collect(Collectors.toList()));
+      return routeIds;
+    }
+
+    public String getRouteId(String trackingId) {
+      int size = trackingIds.size();
+      List<String> routeIds = getRouteIds();
+      for (int i = 0; i < size; i++) {
+        String nextTrackingId = trackingIds.get(i).getText();
+        if (StringUtils.equals(trackingId, nextTrackingId)) {
+          return routeIds.get(i);
+        }
+      }
+      throw new AssertionError(f("Tracking Id [%s] was not found", trackingId));
+    }
+
   }
 }

@@ -12,6 +12,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -98,17 +99,11 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
 
     RtsDetails rtsDetails = new RtsDetails();
-    rtsDetails.fromMap(mapOfData);
+    rtsDetails.fromMap(resolveKeyValues(mapOfData));
 
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
-    failedDeliveryManagementPage.waitWhilePageIsLoading();
-    failedDeliveryManagementPage
-        .openEditRtsDetailsDialog(trackingId)
-        .fillForm(rtsDetails)
-        .submitForm();
-
-    if (rtsDetails.getAddress() == null) {
+    if (StringUtils.equalsIgnoreCase("RANDOM", mapOfData.get("address"))) {
       Address randomAddress = AddressFactory.getRandomAddress();
 
       RtsDetails.RtsAddress rtsAddress = new RtsDetails.RtsAddress();
@@ -120,13 +115,21 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
       rtsDetails.setAddress(rtsAddress);
     }
 
+    failedDeliveryManagementPage.waitWhilePageIsLoading();
+    failedDeliveryManagementPage
+        .openEditRtsDetailsDialog(trackingId)
+        .fillForm(rtsDetails)
+        .submitForm();
+
     RtsDetails.RtsAddress newAddress = rtsDetails.getAddress();
-    Order createdOrder = get(KEY_CREATED_ORDER);
-    createdOrder.setFromCountry(newAddress.getCountry());
-    createdOrder.setFromCity(newAddress.getCity());
-    createdOrder.setFromAddress1(newAddress.getAddress1());
-    createdOrder.setFromAddress2(newAddress.getAddress2());
-    createdOrder.setFromPostcode(newAddress.getPostcode());
+    if (newAddress != null) {
+      Order createdOrder = get(KEY_CREATED_ORDER);
+      createdOrder.setFromCountry(newAddress.getCountry());
+      createdOrder.setFromCity(newAddress.getCity());
+      createdOrder.setFromAddress1(newAddress.getAddress1());
+      createdOrder.setFromAddress2(newAddress.getAddress2());
+      createdOrder.setFromPostcode(newAddress.getPostcode());
+    }
   }
 
   @Then("^Operator verify failed delivery order RTS-ed successfully$")

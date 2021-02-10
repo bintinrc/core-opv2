@@ -153,26 +153,39 @@ public class AddShipperToPresetSteps extends AbstractSteps {
 
   @Then("Operator clicks Select All Shown on Add Shipper To Preset page")
   public void operatorClicksSelectAllShown() {
-    addShipperToPresetPage.dropdownTrigger.click();
+    if (!addShipperToPresetPage.selectAllShown.isDisplayedFast()) {
+      addShipperToPresetPage.dropdownTrigger.click();
+    }
     addShipperToPresetPage.selectAllShown.click();
+    addShipperToPresetPage.dropdownTrigger.click();
+    pause500ms();
   }
 
   @Then("Operator clicks Deselect All Shown on Add Shipper To Preset page")
   public void operatorClicksDeselectAllShown() {
-    addShipperToPresetPage.dropdownTrigger.click();
+    if (!addShipperToPresetPage.deselectAllShown.isDisplayedFast()) {
+      addShipperToPresetPage.dropdownTrigger.click();
+    }
     addShipperToPresetPage.deselectAllShown.click();
+    addShipperToPresetPage.dropdownTrigger.click();
+    pause500ms();
   }
 
   @Then("Operator clicks Clear Current Selection on Add Shipper To Preset page")
   public void operatorClicksClearCurrentSelection() {
-    addShipperToPresetPage.dropdownTrigger.click();
+    if (!addShipperToPresetPage.clearCurrentSelection.isDisplayedFast()) {
+      addShipperToPresetPage.dropdownTrigger.click();
+    }
     addShipperToPresetPage.clearCurrentSelection.click();
   }
 
   @Then("Operator checks Show Only Selected on Add Shipper To Preset page")
   public void operatorChecksShowOnlySelected() {
-    addShipperToPresetPage.dropdownTrigger.click();
+    if (!addShipperToPresetPage.showOnlySelected.isDisplayedFast()) {
+      addShipperToPresetPage.dropdownTrigger.click();
+    }
     addShipperToPresetPage.showOnlySelected.check();
+    addShipperToPresetPage.dropdownTrigger.click();
   }
 
   @Then("Operator unchecks Show Only Selected on Add Shipper To Preset page")

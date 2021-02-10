@@ -528,6 +528,29 @@ public class RouteLogsSteps extends AbstractSteps {
     assertTrue("Toast " + finalData.toString() + " is displayed", found);
   }
 
+  @And("Operator verifies that success toast displayed:")
+  public void operatorVerifySuccessToast(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    long start = new Date().getTime();
+    boolean found;
+    do {
+      found = routeLogsPage.toastSuccess.stream().anyMatch(toast -> {
+        String value = finalData.get("top");
+        if (StringUtils.isNotBlank(value)) {
+          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+            return false;
+          }
+        }
+        value = finalData.get("bottom");
+        if (StringUtils.isNotBlank(value)) {
+          return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+        }
+        return true;
+      });
+    } while (!found && new Date().getTime() - start < 20000);
+    assertTrue("Toast " + finalData.toString() + " is displayed", found);
+  }
+
   @And("Operator verifies that error toast displayed:")
   public void operatorVerifyErrorToast(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);

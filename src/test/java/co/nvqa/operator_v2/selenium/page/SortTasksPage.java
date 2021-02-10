@@ -1,14 +1,18 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import java.util.List;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Niko Susanto
@@ -17,6 +21,7 @@ import org.openqa.selenium.support.FindBy;
 public class SortTasksPage extends OperatorV2SimplePage {
 
   private static final String OUTPUT_XPATH = "//div[@class='ant-col content-holder']/span[text()='%s']";
+  private static final String EDIT_NAME_XPATH = "//div[@class='ant-row'][.//div[@class='ant-col content-holder']/span[text()='%s']]//a[.='Edit Name']";
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -81,6 +86,9 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Cancel']")
   public AntButton cancel;
 
+  @FindBy(className = "ant-modal-content")
+  public EditMiddleTierNameModal editMiddleTierNameModal;
+
   public SortTasksPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -89,11 +97,30 @@ public class SortTasksPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
+  public void clickEditName(String sortName) {
+    clickf(EDIT_NAME_XPATH, sortName);
+  }
+
   public void verifyOutput(String sortName) {
     assertTrue(sortName + " node displayed", isElementExistFast(f(OUTPUT_XPATH, sortName)));
   }
 
   public void verifyOutputDeleted(String sortName) {
     assertFalse(sortName + " node displayed", isElementExistFast(f(OUTPUT_XPATH, sortName)));
+  }
+
+  public static class EditMiddleTierNameModal extends AntModal {
+
+    public EditMiddleTierNameModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(id = "name")
+    public TextBox name;
+
+    @FindBy(xpath = ".//button[.='Save']")
+    public AntButton save;
+
   }
 }

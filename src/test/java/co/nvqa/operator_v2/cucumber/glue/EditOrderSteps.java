@@ -996,6 +996,9 @@ public class EditOrderSteps extends AbstractSteps {
     if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CASH")) {
       editOrderPage.eventsTable().verifyVerifyUpdateCashDescription(order, eventDescription);
     }
+    if (StringUtils.equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN")) {
+      editOrderPage.eventsTable().verifyHubInboundEventDescription(order, eventDescription);
+    }
   }
 
   @When("Operator change Cash on Pickup toggle to yes")
@@ -1165,5 +1168,28 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.resumeOrderDialog.waitUntilVisible();
     editOrderPage.resumeOrderDialog.resumeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("1 order(s) resumed", true);
+  }
+
+  @And("^Operator verify the tags shown on Edit Order page$")
+  public void operatorVerifyTheTagsShownOnEditOrderPage(List<String> expectedOrderTags) {
+    expectedOrderTags = resolveValues(expectedOrderTags);
+    Order order = get(KEY_CREATED_ORDER);
+
+    List<String> actualOrderTags = editOrderPage.getTags();
+
+    final List<String> normalizedExpectedList = expectedOrderTags.stream().map(String::toLowerCase)
+        .sorted().collect(Collectors.toList());
+    final List<String> normalizedActualList = actualOrderTags.stream().map(String::toLowerCase)
+        .sorted().collect(Collectors.toList());
+
+    assertEquals(
+        f("Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
+            order.getId()), normalizedExpectedList, normalizedActualList);
+  }
+
+  @And("^Operator verifies no tags shown on Edit Order page$")
+  public void operatorVerifyNoTagsShownOnEditOrderPage() {
+    List<String> actualOrderTags = editOrderPage.getTags();
+    assertThat("List of displayed order tags", actualOrderTags, Matchers.empty());
   }
 }
