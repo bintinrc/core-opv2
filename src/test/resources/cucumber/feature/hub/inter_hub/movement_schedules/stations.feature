@@ -5,7 +5,7 @@ Feature: Stations
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Create New Station Hub (uid:db3123ca-4459-49bf-88fe-1bccd5c6203b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Hubs -> Facilities Management
@@ -22,7 +22,7 @@ Feature: Stations
     And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Hub Type to Station (uid:ef20d628-b61d-473a-b9c1-30c0f63d9b5e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:

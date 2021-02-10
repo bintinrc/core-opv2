@@ -5,7 +5,7 @@ Feature: Path Management - View Path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Auto Generated Path Details (uid:d0bbb16d-916d-43f9-a762-3872976900b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -37,7 +37,7 @@ Feature: Path Management - View Path
     When Operator click "view" hyperlink button
     Then Operator verify shown "default paths" path details modal data
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Manual Path Details (uid:ffb3f437-ba21-45cc-a45e-495a18b3bce9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:

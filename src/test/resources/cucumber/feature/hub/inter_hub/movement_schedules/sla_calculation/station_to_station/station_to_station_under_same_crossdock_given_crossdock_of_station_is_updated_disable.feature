@@ -5,7 +5,7 @@ Feature: Station to Station Under Same Crossdock Given Crossdock of Station is U
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock Given Crossdock of Station is Updated/Disable - Crossdock is Updated (uid:c8ec3481-1de6-41dc-a145-b80b4d35c879)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -76,7 +76,7 @@ Feature: Station to Station Under Same Crossdock Given Crossdock of Station is U
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock Given Crossdock of Station is Updated/Disable - Crossdock is Disable (uid:2f548aab-0ee0-4719-86db-0b0d5411d909)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:

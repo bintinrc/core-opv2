@@ -5,7 +5,7 @@ Feature: Trigger Auto Generated Path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Generate Default Path with which Default Path Doesn't Exist (uid:60e6a5b8-5fc6-40e8-ac58-3afd5883b21b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -31,7 +31,7 @@ Feature: Trigger Auto Generated Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Generate Default Path with which Default Path Exists and No Changes Made (uid:fb034cfa-a9bc-4939-9569-e50a931afe26)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -62,7 +62,7 @@ Feature: Trigger Auto Generated Path
     Then Operator verify no new path created
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Generate Default Path with Updated Transit Hub for Existing Default Path (uid:ed488699-ec4f-45d6-942c-675d5d8a735e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 3 new Hub using data below:
@@ -98,7 +98,7 @@ Feature: Trigger Auto Generated Path
     Then Operator verify no new path created
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Generate Default Path with Path Can't Be Found (uid:adf8f889-2bd8-4782-8e01-2ad650f6e644)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -120,7 +120,7 @@ Feature: Trigger Auto Generated Path
     Then Operator verify no path found from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" message is shown in create default path modal
     And DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 0 in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Unable to Generate Default Path without Selecting Origin Hub & Destination Hub (uid:f723558d-ea7b-48a7-af5c-a678b897fa9d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Path Management
@@ -131,7 +131,7 @@ Feature: Trigger Auto Generated Path
       | destinationHubName | empty |
     Then Operator verify "both" error info shown on create default path modal
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Unable to Generate Default Path without Selecting Origin Hub/Destination Hub (uid:17153a6f-bf19-46ae-b2bc-d8d3e287ffaa)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Path Management
