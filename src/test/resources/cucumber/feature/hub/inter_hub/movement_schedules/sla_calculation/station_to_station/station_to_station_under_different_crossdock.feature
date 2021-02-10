@@ -45,13 +45,13 @@ Feature: Station to Station Under Different Crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -67,7 +67,7 @@ Feature: Station to Station Under Different Crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
@@ -75,7 +75,7 @@ Feature: Station to Station Under Different Crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
@@ -139,7 +139,7 @@ Feature: Station to Station Under Different Crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
@@ -210,13 +210,13 @@ Feature: Station to Station Under Different Crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
