@@ -5,7 +5,7 @@ Feature: Shipment Van Inbound With Trip Scanning
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Start Van Inbound After Select Driver and Trip (uid:b9598c79-7362-4022-9db1-89550e0d5d4d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -47,7 +47,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Transit Shipment To Go With Trip for Van Inbound (uid:b25c140f-1f09-4aaf-a602-3606a95e0e15)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -131,7 +131,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     When Operator clicks shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verifies it will direct to shipment details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Pending Shipment In Shipment's Origin Hub (uid:b28b3541-8d56-462a-b525-1575b1aa6997)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -212,7 +212,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Remove Shipment From Van Inbounded List (uid:d64807fc-8bb0-46a4-9ce7-518f7052d266)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -251,7 +251,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator verifies shipment counter is "0"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @ForceSuccessOrder
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @ForceSuccessOrder @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct MAWB to Van Inbound (uid:06042018-e5ee-4c19-b7fb-ef7b2650191a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -345,7 +345,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appear in trip_shipment_scans table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan to  Remove Shipment at Van Inbound (uid:c4b4a1d7-b81e-42d8-87b6-94fe372b5839)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -385,7 +385,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Different Trips (Validation at End Inbound) (uid:ff970b91-5463-456e-894e-8c3e6163a0eb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -467,7 +467,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Different Trips (Validation at Start Inbound) (uid:c35030b6-81b6-4481-9938-cf9123594758)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

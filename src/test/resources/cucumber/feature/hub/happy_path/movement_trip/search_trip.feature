@@ -5,7 +5,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Trip Use Filter - Departure Tab - Filter by Origin Hub (uid:5bf84fdf-4adf-486a-adcc-69e19a6cb8e3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -35,7 +35,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Trip Use Filter - Departure Tab - Filter by Origin Hub, Movement Type, and Departure Date (uid:1fbbdf02-35b9-4a1e-b908-6cc425617216)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -67,7 +67,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub (uid:1588464b-9ca0-466d-af47-82b5305669c2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -96,7 +96,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  @DeleteDriver @DeleteHubsViaAPI
+  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub, Movement Type, Arrival Date (uid:35437019-aa8a-4045-bf8b-b509494a3fd7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:

@@ -5,7 +5,7 @@ Feature: Path Management - Create Manual Path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Create New Path with Transit Hubs and Single Schedule (uid:86707205-cc88-4cae-b03d-97f8e82ec7f1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 3 new Hub using data below:
@@ -41,7 +41,7 @@ Feature: Path Management - Create Manual Path
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
     Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Create New Path without Transit Hub with Single Schedule (uid:80efbc62-9d82-41af-9648-5aa8568da26b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -71,7 +71,7 @@ Feature: Path Management - Create Manual Path
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Unable to Create New Path - Adding Transit Hub Fails no schedule from Origin to Transit Hub (uid:10ecf3e4-d121-4cea-97ad-8e549e3c6864)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 3 new Hub using data below:
@@ -97,7 +97,7 @@ Feature: Path Management - Create Manual Path
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Unable to Create New Path - Adding Transit Hub Fails no schedule from Transit Hub to Destination Hub (uid:2fcbcd7d-8a3a-4575-ae45-4010d7c4193a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 3 new Hub using data below:
@@ -123,7 +123,7 @@ Feature: Path Management - Create Manual Path
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Unable to Create New Path - Removing Transit Hub (uid:89da40be-3767-46d4-a46c-7359b2162646)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 3 new Hub using data below:
@@ -152,7 +152,7 @@ Feature: Path Management - Create Manual Path
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
 
-  @DeleteHubsViaAPI @CloseNewWindows
+  @DeleteHubsViaAPI @CloseNewWindows @DeleteHubsViaDb @DeletePaths
   Scenario: Create New Path with Different Path and Same Schedule using 2 tabs (uid:3437b826-d724-43f5-a9ae-c619bd4a14e4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 4 new Hub using data below:

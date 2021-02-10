@@ -5,7 +5,7 @@ Feature: Movement Trip - Update Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Register Trip Departure (uid:3fd58bb7-7b5d-423a-ba8a-971659d2a495)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -30,7 +30,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Movement trip departed" is shown on movement page
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Register Trip Departure without Driver (uid:edeb922e-d50d-4e9d-82cd-0841f0a477fc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -52,7 +52,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip must have assigned drivers" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Main Driver Employment Status is Inactive (uid:c728623c-a1b4-4723-91a4-3d8a2fdf6179)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -78,7 +78,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Register Trip Arrival (uid:934db9ad-2339-442e-993e-fe64d7bca4f8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -116,7 +116,7 @@ Feature: Movement Trip - Update Trip
     And Operator arrive trip
     Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Register Trip Departure with Single Driver Still In Transit (uid:a88470f0-3722-4792-a31c-e1e05eafcf18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -149,7 +149,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Register Trip Complete (uid:a6fae735-a995-4322-90ec-5edb7af71bae)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:

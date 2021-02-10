@@ -5,7 +5,7 @@ Feature: Stations
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Create New Station Hub (uid:5f261101-65b8-4790-8928-d55cba446f01)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Hubs -> Facilities Management
@@ -22,7 +22,7 @@ Feature: Stations
     And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Update Hub Type to Station (uid:bae5cf22-4c6a-4984-b9ea-0666ded1818e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -44,7 +44,7 @@ Feature: Stations
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: View Station Schedule - Show All Station Schedule under Selected Crossdock Hub (uid:17d9e2b0-2270-4b04-a7d5-db15cd188eb7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -75,7 +75,7 @@ Feature: Stations
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: View Station Schedule - Show Station Schedules based on selected Crossdock Hub, Origin Hub and Destination Hub (uid:eabf7da9-8930-4f44-ae35-d2d3486d4e95)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -108,7 +108,7 @@ Feature: Stations
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Create Station Schedule - Add Schedule for New Relations (uid:0415f542-2185-42a4-bfd2-ea4dbed56b8a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -146,7 +146,7 @@ Feature: Stations
       | endTime        | 00:15                              |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Create Station Schedule - Add Schedule for Existing Relations (uid:6bc7dd61-3868-4bb3-9dfb-388a728c02e3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -195,7 +195,7 @@ Feature: Stations
       | endTime        | 00:15                              |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Create Station Schedule - Add Multiple Schedules (uid:4852437d-c268-4529-a2e3-9204ef59de19)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -234,7 +234,7 @@ Feature: Stations
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario: Delete Station Movement Schedule (uid:0bbb347d-4921-4eb7-868c-441f0d983fc4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -272,7 +272,7 @@ Feature: Stations
     Then Operator verify all station schedules are correct
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is deleted in hub_relation_schedules
 
-  @DeleteHubsViaAPI 
+  @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Update Station Schedule - Succeed Update Schedule (uid:d4c469cf-4f7f-41fb-9afb-2ff695479b13)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:

@@ -5,7 +5,7 @@ Feature: Path Invalidation - With Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario: Disable Hub - Van Inbound w/ Trip (uid:ccacfd65-f06e-4894-bd3e-13805e9a0563)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates hubs for "CD->CD" movement
@@ -16,7 +16,7 @@ Feature: Path Invalidation - With Trip
     When Operator disable hub with name "{KEY_LIST_OF_CREATED_HUBS[1].name}" on Facilities Management page
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 0 in movement_path table
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario Outline: Create Schedule - Van Inbound w/ Trip - <type> - (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator reloads hubs cache
@@ -48,7 +48,7 @@ Feature: Path Invalidation - With Trip
       | ST->its CD              | uid:f4d92967-25df-42d9-b0fe-6943140df265 |
       | ST->another CD          | uid:30e1fe63-c920-43db-8838-23f60ef5f0b5 |
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario: Create Schedule (CD->CD) - Van Inbound w/ Trip (uid:13c6c5a7-b889-40f8-a1a2-480d38bf192a)
     Given API Operator creates hubs for "CD->CD" movement
     And API Operator reloads hubs cache
@@ -72,7 +72,7 @@ Feature: Path Invalidation - With Trip
     Then DB Operator verifies number of path for "CD->CD" movement existence after van inbound
     And DB Operator verify created hub relation schedules is not deleted
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario Outline: Update Schedule - Van Inbound w/ Trip - (<type>) - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates hubs for "<type>" movement
@@ -109,7 +109,7 @@ Feature: Path Invalidation - With Trip
       | ST->its CD              | uid:0cb2af56-3c14-4e98-92d3-f26161167f71 |
       | ST->another CD          | uid:f0bf3668-5740-4fa5-8658-457a23fa4687 |
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario Outline: Delete Schedule - Van Inbound w/ Trip - <type> - (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator creates paths for "<type>" movement
@@ -140,7 +140,7 @@ Feature: Path Invalidation - With Trip
       | ST->its CD              | uid:fc0fee7b-b7a4-4781-8eb0-666c00c1cdcf |
       | ST->another CD          | uid:e9f964f4-b2c8-4ba4-bcac-98957b35c949 |
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario Outline: Update Hub Facility Type - Van Inbound w/ Trip - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates hubs for "<type>" movement
@@ -160,6 +160,7 @@ Feature: Path Invalidation - With Trip
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |
     Given Operator refresh page
     When Operator revert hub column facility type for first hub for type "<type>"
+    And API Operator reloads hubs cache
     And API Operator assign stations to its crossdock for "<type>" movement
     And API Operator creates schedules for "<type>" movement
     Given API Operator create new Driver using data below:
@@ -183,7 +184,7 @@ Feature: Path Invalidation - With Trip
       | Station to its Crossdock                       | uid:59eaf7f5-eb64-45f1-be05-53ef33709a79 | ST->its CD              |
       | Station to different Crossdock                 | uid:8182c2b2-2f65-4c7a-9beb-9356c3330429 | ST->another CD          |
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario Outline: Update Hub LatLong - Van Inbound w/ Trip - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates hubs for "<type>" movement
@@ -228,7 +229,7 @@ Feature: Path Invalidation - With Trip
       | Station to its Crossdock                       | uid:920fd545-4fc0-4549-8fd4-9b42bbf10c7e | ST->its CD              |
       | Station to different Crossdock                 | uid:52ebbf20-c974-4f52-bba5-d8931ff0d84b | ST->another CD          |
 
-  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver
+  @DeleteHubsViaAPI @DeleteShipments @DeleteDriver @DeleteHubsViaDb @DeletePaths
   Scenario: Update Hub Crossdock - Van Inbound w/ Trip (uid:8814b598-b88b-4019-97d6-4f2844852a46)
     Given API Operator creates hubs for "ST->its CD" movement
     Given API Operator creates 1 new Hub using data below:

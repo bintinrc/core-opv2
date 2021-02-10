@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Start Hub Inbound After Select Driver and Trip (uid:3b2464c9-178f-477a-b134-49c087fb6707)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -48,7 +48,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct Shipment to Destination Hub Inbound (uid:f9d8e74a-94e5-4701-a208-df52cb9c2d62)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -132,7 +132,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[2].id}   |
       | descriptionString | Shipment {KEY_CREATED_SHIPMENT_ID} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct Shipment to Transit Hub Inbound (uid:f3391510-608e-44ee-b22c-62960f6004bb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -226,7 +226,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
       | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[3].id} ({KEY_LIST_OF_CREATED_HUBS[3].name}) Hub Location Type ORIGIN |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Incorrect Shipment to Hub Inbound (uid:161791cc-b353-46bf-ab39-37b9ed88d622)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -274,7 +274,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
     Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Remove Shipment From Hub Inbounded List (uid:3c3440d8-b110-4619-b786-bfa7ba1f7121)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -333,7 +333,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
 
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Shipments To Unload for Hub Inbound (uid:4f0495d8-3d96-439e-a816-5475aba764b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -396,7 +396,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     When Operator clicks shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verifies it will direct to shipment details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @ForceSuccessOrder
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @ForceSuccessOrder @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct MAWB to Hub Inbound at Destination Hub (uid:0223b394-5da6-4fac-838c-2af21222be24)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -487,7 +487,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[2].id}   |
       | descriptionString | Shipment                           |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan to  Remove Shipment at Hub Inbound (uid:cbeb480f-5b43-468a-9055-c192b9276658)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

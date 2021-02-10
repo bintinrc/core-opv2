@@ -5,7 +5,7 @@ Feature: Movement Trip - View Trips
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Departure Trip (uid:b297f8a1-7178-4c17-9e07-0311edbff9fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -29,7 +29,7 @@ Feature: Movement Trip - View Trips
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteDriver @DeleteHubsViaAPI
+  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Arrival Trip (uid:78d3df1b-2cb5-488f-a49a-ada0ed15a7a8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -82,7 +82,7 @@ Feature: Movement Trip - View Trips
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cancel Trip - Trip Status Pending (uid:e5ef8333-b536-49dd-8d34-e5180c646837)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -118,7 +118,7 @@ Feature: Movement Trip - View Trips
     Then Operator verifies movement trip shown has status value "cancelled"
     And DB Operator verifies movement trip has event with status cancelled
 
-  @DeleteHubsViaAPI #TODO
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cancel Trip - Trip Status Transit (uid:a6663576-da9a-40fb-807b-0e389322fba5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -158,7 +158,7 @@ Feature: Movement Trip - View Trips
     Then Operator verifies movement trip shown has status value "cancelled"
     And DB Operator verifies movement trip has event with status cancelled
 
-  @DeleteHubsViaAPI #TODO
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cannot Cancel Invalid Trip - Trip status Completed (uid:1aefeba5-dbd3-4515-912f-f7c8e05108d2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips

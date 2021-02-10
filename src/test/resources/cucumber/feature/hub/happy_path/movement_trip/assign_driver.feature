@@ -5,7 +5,7 @@ Feature: Movement Trip - Assign Driver
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Assign Single Driver to Movement Trips (uid:2ca044d2-2915-4c3f-9063-c9b6a724dc31)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -31,7 +31,7 @@ Feature: Movement Trip - Assign Driver
     And Operator assign driver "({KEY_LIST_OF_CREATED_DRIVERS[1].username})" to created movement trip
     Then Operator verifies toast with message "1 driver(s) successfully assigned to the trip" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Assign Multiple Drivers to Movement Trips (uid:5e39d162-01ba-48c2-8d79-9ee44a57c770)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -61,7 +61,7 @@ Feature: Movement Trip - Assign Driver
       | additionalDriver | ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
     Then Operator verifies toast with message "2 driver(s) successfully assigned to the trip" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Assign Single Driver to Movement Schedules (uid:653cba36-243a-4adc-9322-f31dec79db64)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -87,7 +87,7 @@ Feature: Movement Trip - Assign Driver
     And Operator assign driver "({KEY_LIST_OF_CREATED_DRIVERS[1].username})" to created movement schedule
     Then Operator verifies toast with message "1 driver(s) successfully assigned to the schedule" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteDriver
+  @DeleteHubsViaAPI @DeleteDriver @DeleteHubsViaDb
   Scenario: Assign Multiple Drivers to Movement Schedules (uid:b19af7a9-2f41-406c-b206-b513d60f2367)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:

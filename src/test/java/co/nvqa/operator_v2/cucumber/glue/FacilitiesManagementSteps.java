@@ -398,5 +398,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
         break;
     }
     facilitiesManagementPage.updateHubByColumn(hub.get(0), "facility type", beforeType);
+    pause5s();
   }
 }

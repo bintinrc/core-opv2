@@ -5,7 +5,7 @@ Feature: Trigger Auto Generated Path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Generate Default Path with which Default Path Doesn't Exist (uid:180126bf-69f8-4ab9-ba61-27e4cea737e1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -41,7 +41,7 @@ Feature: Trigger Auto Generated Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Generate Default Path with which Default Path Exists and No Changes Made (uid:b2843b83-3ec8-4266-802a-e65328d1efb1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -83,7 +83,7 @@ Feature: Trigger Auto Generated Path
     Then Operator verify no new path created
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 1 in movement_path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Generate Default Path with Updated Transit Hub for Existing Default Path (uid:2f705e9c-d933-4e52-a3de-9ab00c786898)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:

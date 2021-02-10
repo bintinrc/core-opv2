@@ -5,7 +5,7 @@ Feature: Path Management - Search Path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Load Path by Filter - Origin Hub (uid:a6f1a01a-47f0-4ccc-88d3-5aff23443fbf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -35,7 +35,7 @@ Feature: Path Management - Search Path
     And Operator clicks load selection button
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Load Path by Filter - Destination Hub (uid:e882569f-98a6-44aa-a1db-aa148cdcca84)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -65,7 +65,7 @@ Feature: Path Management - Search Path
     And Operator clicks load selection button
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Load Path by Filter - Path Type (uid:3049c9bf-15c7-44da-9b82-d66c78aae99f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -96,7 +96,7 @@ Feature: Path Management - Search Path
     And Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name}" in "Origin Hub" field
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Search Path by Paths Search Field (uid:e3f1dbc2-caff-4972-8c2c-7ba202afc22d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
