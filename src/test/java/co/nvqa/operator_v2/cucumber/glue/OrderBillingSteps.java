@@ -3,11 +3,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.shipper_support.AggregatedOrder;
 import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -221,7 +223,9 @@ public class OrderBillingSteps extends AbstractSteps {
           pricedOrderDb.getCodCollected(), pricedOrderCsv.getCodCollected());
       assertEquals(
           "Success Billings Csv file does not contain expected information for column CodFee",
-          pricedOrderDb.getCodFee(), pricedOrderCsv.getCodFee());
+          pricedOrderDb.getCodFee(),
+          pricedOrderCsv.getCodFee().compareTo(BigDecimal.ZERO) == 0 ? new BigDecimal("0.00")
+              : pricedOrderCsv.getCodFee());
       assertEquals(
           "Success Billings Csv file does not contain expected information for column InsuredValue",
           pricedOrderDb.getInsuredValue(), pricedOrderCsv.getInsuredValue());
@@ -341,4 +345,24 @@ public class OrderBillingSteps extends AbstractSteps {
     assertThat("Actual error message does not contain expected error message",
         orderBillingPage.getOrderBillingBodyFromEmail(), containsString(expectedErrorMessage));
   }
+
+  @Then("Operator verifies the order with status {string} is not displayed on billing report")
+  public void operatorVerifiesTheOrderWithStatusArrivedAtDistributionPointIsNotDisplayedOnBillingReport(
+      String status) {
+    if (Objects.nonNull(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV))) {
+      PricedOrder pricedOrderCsv = orderBillingPage
+          .pricedOrderCsv(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
+      assertFalse(f("Order with status %s is available in billing report", status),
+          pricedOrderCsv.getGranularStatus().equalsIgnoreCase(status));
+    } else {
+      NvLogger.infof("Priced order with status %s is not available in the CSV file", status);
+    }
+  }
+
+  @Then("Operator verifies the order with status {string} is displayed on billing report")
+  public void operatorVerifiesTheOrderWithStatusCompletedIsDisplayedOnBillingReport(String status) {
+    NvLogger
+        .info("Auto verified in step 'Operator verifies the priced order details in the body' ");
+  }
+
 }
