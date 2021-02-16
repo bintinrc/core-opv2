@@ -247,7 +247,6 @@ Feature: Order Billing
     Then Operator verifies the order with status 'Completed' is displayed on billing report
     Then Operator verifies the priced order details in the body
 
-   # @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:2700aa48-d75b-49da-8493-6b8f6ea4dd77)
     Given API Shipper create V4 order using data below:
