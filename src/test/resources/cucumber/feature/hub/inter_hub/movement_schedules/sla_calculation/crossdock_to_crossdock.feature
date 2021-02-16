@@ -201,15 +201,7 @@ Feature: Crossdock to Crossdock
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to Crossdock - Crossdock Movement found and do Van Inbound Shipment using MAWB (uid:9970caa4-9e90-4a8b-b05c-b25105cfa8f6)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When API Operator creates new Hub using data below:
+    When API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -218,15 +210,9 @@ Feature: Crossdock to Crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}                                 |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}                                 |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd} |
-    When Operator click "Load All Selection" on Shipment Management page
-    When Operator edit Shipment on Shipment Management page including MAWB using data below:
-      | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd} |
-      | mawb     | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                          |
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign mawb "mawb_{KEY_CREATED_SHIPMENT_ID}" to following shipmentIds
+      | {KEY_CREATED_SHIPMENT_ID} |
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
