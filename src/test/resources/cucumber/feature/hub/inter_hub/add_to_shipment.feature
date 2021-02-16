@@ -248,7 +248,7 @@ Feature: Add To Shipment
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
@@ -271,7 +271,7 @@ Feature: Add To Shipment
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
