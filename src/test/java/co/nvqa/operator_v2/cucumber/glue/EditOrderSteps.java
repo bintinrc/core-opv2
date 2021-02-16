@@ -9,6 +9,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -650,14 +651,32 @@ public class EditOrderSteps extends AbstractSteps {
 
     String value = mapOfData.get("status");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals(f("%s transaction status", transactionType), value,
-          editOrderPage.transactionsTable().getStatus(rowIndex));
+      TransactionInfo actual = editOrderPage.transactionsTable.readEntity(rowIndex);
+      assertEquals(f("%s transaction status", transactionType), value, actual.getStatus());
     }
     if (mapOfData.containsKey("routeId")) {
+      TransactionInfo actual = editOrderPage.transactionsTable.readEntity(rowIndex);
       value = mapOfData.get("routeId") == null ? "" : String.valueOf(mapOfData.get("routeId"));
-      assertEquals(f("%s transaction Route Id", transactionType), value,
-          editOrderPage.transactionsTable().getRouteId(rowIndex));
+      assertEquals(f("%s transaction Route Id", transactionType), value, actual.getRouteId());
     }
+  }
+
+  @Then("Operator verify transaction on Edit order page using data below:")
+  public void operatorVerifyTransactionOnEditOrderPage(Map<String, String> data) {
+    TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
+    List<TransactionInfo> transactions = editOrderPage.transactionsTable.readAllEntities();
+    transactions.stream()
+        .filter(actual -> {
+          try {
+            expected.compareWithActual(actual);
+            return true;
+          } catch (AssertionError err) {
+            return false;
+          }
+        })
+        .findFirst()
+        .orElseThrow(
+            () -> new AssertionError("Transaction " + expected.toMap() + " was not found"));
   }
 
   @Then("^Operator verify order summary on Edit order page using data below:$")

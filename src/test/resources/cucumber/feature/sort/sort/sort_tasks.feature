@@ -232,6 +232,30 @@ Feature: Sort Task
       | SORT-1          |
       | SORT-SG-2-HUB   |
 
+  Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-4} |
+    And Operator search for "{hub-name-4}" node on Sort Tasks page
+    Then Operator verify displayed nodes on Sort Tasks page:
+      | {hub-name-4} |
+    And Operator verify following nodes are highlighted on Sort Tasks page:
+      | {hub-name-4} |
+
+  Scenario: Searches child node (uid:380f6bb5-4538-48bc-9699-cbcc7af3b987)
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-4} |
+    And Operator search for "{mid-tier-name}" node on Sort Tasks page
+    Then Operator verify displayed nodes on Sort Tasks page:
+      | {hub-name-4}    |
+      | {mid-tier-name} |
+      | SORT-1          |
+    And Operator verify following nodes are highlighted on Sort Tasks page:
+      | {mid-tier-name} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

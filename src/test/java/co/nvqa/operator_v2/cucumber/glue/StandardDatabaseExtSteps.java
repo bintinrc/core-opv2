@@ -23,7 +23,6 @@ import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
-import co.nvqa.commons.model.sort.hub.movement_trips.MovementTripScheduleResponse;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -44,7 +43,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -1640,5 +1638,17 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     assertThat("Trip status is the same", movementTrip.getStatus().toLowerCase(),
         equalTo(tripStatus.toLowerCase()));
+  }
+
+  @Then("DB Operator verify 'inbound_weight_tolerance' parameter is {string}")
+  public void dbOperatorVerifyInboundWeightTolerance(String expected) {
+    assertEquals("inbound_weight_tolerance value", Double.valueOf(resolveValue(expected)),
+        getCoreJdbc().getInboundWeighToleranceParameter());
+  }
+
+  @Then("DB Operator verify 'inbound_max_weight' parameter is {string}")
+  public void dbOperatorVerifyInboundMaxWeight(String expected) {
+    assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
+        getCoreJdbc().getInboundMaxWeighParameter());
   }
 }
