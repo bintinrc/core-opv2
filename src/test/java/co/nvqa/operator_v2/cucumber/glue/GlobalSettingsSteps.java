@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.page.GlobalSettingsPage;
 import cucumber.api.java.en.And;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Sergey Mishanin
@@ -63,5 +64,57 @@ public class GlobalSettingsSteps extends AbstractSteps {
   @And("^Operator save Weight Limit settings on Global Settings page$")
   public void operatorSaveWeightLimitOnGlobalSettingsPage() {
     globalSettingsPage.updateMaxWeightLimit.clickAndWaitUntilDone();
+  }
+
+  @And("^Operator check 'Enable Van Inbound SMS Shipper Ids' checkbox on Global Settings page$")
+  public void checkEnableVanInboundSMSShipperIdsCheckbox() {
+    globalSettingsPage.enableVanInboundSms.check();
+  }
+
+  @And("^Operator check 'Enable Return Pickup SMS Shipper Ids' checkbox on Global Settings page$")
+  public void checkEnableReturnPickupSmsShipperIdsCheckbox() {
+    globalSettingsPage.enableVanInboundSms.check();
+  }
+
+  @And("Operator add {string} shipper to Exempted Shippers from Van Inbound SMS on Global Settings page")
+  public void addShipperToExemptedShippersFromVanInboundSms(String shipper) {
+    globalSettingsPage.exemptedShippersFromVanInboundSms.selectValue(resolveValue(shipper));
+  }
+
+  @And("Operator add {string} shipper to Exempted Shippers from Return Pickup SMS on Global Settings page")
+  public void addShipperToExemptedShippersFromReturnPickupSms(String shipper) {
+    globalSettingsPage.exemptedShippersFromReturnPickupSms.selectValue(resolveValue(shipper));
+  }
+
+  @And("Operator clicks 'Update SMS Settings' button on Global Settings page")
+  public void clickUpdateSmsSettingsButton() {
+    globalSettingsPage.updateSmsSettings.clickAndWaitUntilDone();
+  }
+
+  @And("Operator verifies that Exempted Shippers from Van Inbound SMS contains {string} shipper on Global Settings page")
+  public void verifyShipperToExemptedShippersFromVanInboundSms(String shipper) {
+    pause2s();
+    String expected = resolveValue(shipper);
+    retryIfAssertionErrorOccurred(() ->
+        globalSettingsPage.selectedVanInboundShippers.stream()
+            .filter(element -> StringUtils.equalsIgnoreCase(expected, element.getAttribute("name")))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError(
+                "Exempted Shippers from Van Inbound SMS list doesn't contain [" + expected
+                    + "] shipper")), "Check Exempted Shippers from Van Inbound SMS list", 1000, 5);
+  }
+
+  @And("Operator verifies that Exempted Shippers from Return Pickup SMS contains {string} shipper on Global Settings page")
+  public void verifyShipperToExemptedShippersFromReturnPickupSms(String shipper) {
+    pause2s();
+    String expected = resolveValue(shipper);
+    retryIfAssertionErrorOccurred(() ->
+            globalSettingsPage.selectedReturnPickupShipper.stream()
+                .filter(element -> StringUtils.equalsIgnoreCase(expected, element.getAttribute("name")))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                    "Exempted Shippers from Return Pickup SMS list doesn't contain [" + expected
+                        + "] shipper")), "Check Exempted Shippers from Return Pickup SMS list", 1000,
+        5);
   }
 }
