@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SortTasksPage;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage.TreeNode.NodeType;
@@ -9,8 +10,10 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
+import org.openqa.selenium.By;
 
 /**
  * @author Niko Susanto
@@ -225,6 +228,31 @@ public class SortTasksSteps extends AbstractSteps {
     assertThat("Sort Name", sortTasksPage.actualSortName.getText(), equalToIgnoringCase(sortName));
     assertThat("Hub Name", sortTasksPage.actualHubName.getText(), equalToIgnoringCase(hubName));
     assertThat("Sort Name", sortTasksPage.actualSortType.getText(), equalToIgnoringCase(sortType));
+  }
+
+  @Then("Operator search for {string} node on Sort Tasks page")
+  public void operatorSearchNode(String value) {
+    sortTasksPage.searchHubMiddleZone.setValue(resolveValue(value));
+    pause3s();
+  }
+
+  @Then("Operator verify displayed nodes on Sort Tasks page:")
+  public void operatorVerifyDisplayedNodes(List<String> expected) {
+    expected = resolveValues(expected);
+    List<String> actual = sortTasksPage.nodeNames.stream().map(PageElement::getNormalizedText)
+        .collect(Collectors.toList());
+    assertThat("List of displayed nodes", actual,
+        Matchers.contains(expected.toArray(new String[0])));
+  }
+
+  @Then("Operator verify following nodes are highlighted on Sort Tasks page:")
+  public void operatorVerifyHighlightedNodes(List<String> values) {
+    List<String> expected = resolveValues(values);
+    sortTasksPage.nodeNames.stream()
+        .filter(pageElement -> expected.contains(pageElement.getNormalizedText()))
+        .forEach(
+            pageElement -> assertTrue("Node " + pageElement.getNormalizedText() + " is highlighted",
+                pageElement.findElement(By.cssSelector("mark.highlight")).isDisplayed()));
   }
 
   @Then("^Operator delete the middle tier$")

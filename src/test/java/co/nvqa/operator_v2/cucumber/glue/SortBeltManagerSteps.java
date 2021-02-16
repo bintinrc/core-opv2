@@ -109,6 +109,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
     String status = data.get("status");
     String destinationHubs = data.get("destinationHubs");
     String orderTags = data.get("orderTags");
+    String sameAs = data.get("sameAs");
     ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
     container.enable.setValue(StringUtils.equalsAnyIgnoreCase(status, "enable", "enabled"));
     if (StringUtils.isNotBlank(destinationHubs)) {
@@ -117,6 +118,31 @@ public class SortBeltManagerSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(orderTags)) {
       container.getFilterSelect("Order Tag", 1).selectValue(orderTags);
     }
+    if (StringUtils.isNotBlank(sameAs)) {
+      container.sameAs.selectValues(splitAndNormalize(sameAs));
+    }
+  }
+
+  @Given("Operator remove {string} Same As value from {string} arm")
+  public void operatorRemoveSameAsValue(String sameAsArmName, String armName) {
+    sameAsArmName = resolveValue(sameAsArmName);
+    armName = resolveValue(armName);
+    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
+    container.removeSameAs(sameAsArmName);
+  }
+
+  @Given("Operator verify {string} arm is enabled on Create Configuration page")
+  public void operatorVerifyArmEnabled(String armName) {
+    armName = resolveValue(armName);
+    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
+    assertTrue(armName + " is enabled", container.enable.isEnabled());
+  }
+
+  @Given("Operator verify {string} arm is disabled on Create Configuration page")
+  public void operatorVerifyArmDisabled(String armName) {
+    armName = resolveValue(armName);
+    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
+    assertFalse(armName + " is enabled", container.enable.isEnabled());
   }
 
   @Given("Operator remove {int} combination for {string}")

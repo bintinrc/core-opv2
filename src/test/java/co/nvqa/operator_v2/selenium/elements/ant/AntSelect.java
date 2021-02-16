@@ -43,6 +43,10 @@ public class AntSelect extends PageElement {
     clickMenuItem(value);
   }
 
+  public void selectValues(Iterable<String> values) {
+    values.forEach(this::selectValue);
+  }
+
   public void selectByIndex(int index) {
     openMenu();
     clickMenuItemByIndex(index);

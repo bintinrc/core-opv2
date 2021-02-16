@@ -13,6 +13,7 @@ import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -48,6 +49,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
+import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -102,7 +104,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
   public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
-  private TransactionsTable transactionsTable;
+
+  public TransactionsTable transactionsTable;
 
   @FindBy(css = "md-dialog")
   public EditPriorityLevelDialog editPriorityLevelDialog;
@@ -397,9 +400,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void verifyPriorityLevel(String txnType, int priorityLevel) {
-    transactionsTable.searchByTxnType(txnType);
+    transactionsTable.filterByColumn(COLUMN_TYPE, txnType);
+    TransactionInfo actual = transactionsTable.readEntity(1);
     assertEquals(txnType + " Priority Level", String.valueOf(priorityLevel),
-        transactionsTable.getPriorityLevel(1));
+        actual.getPriorityLevel());
   }
 
   public void verifyOrderInstructions(String expectedPickupInstructions,
@@ -625,28 +629,25 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void verifyPickupDetailsInTransaction(Order order, String txnType) {
-    transactionsTable.searchByTxnType(txnType);
-    assertEquals("From Name", order.getFromName(), transactionsTable.getName(1));
-    assertEquals("From Email", order.getFromEmail(), transactionsTable.getEmail(1));
-    assertEquals("From Contact", order.getFromContact(), transactionsTable.getContact(1));
-    String fromAddress = transactionsTable.getAddress(1);
-    assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
-    assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
-  }
-
-  public void verifyRouteIdInTransactionTable(String routeId, String txnType) {
-    transactionsTable.searchByTxnType(txnType);
-    assertEquals("Route ID", routeId, transactionsTable.getRouteId(1));
+    transactionsTable.filterByColumn(COLUMN_TYPE, txnType);
+    TransactionInfo actual = transactionsTable.readEntity(1);
+    assertEquals("From Name", order.getFromName(), actual.getName());
+    assertEquals("From Email", order.getFromEmail(), actual.getEmail());
+    assertEquals("From Contact", order.getFromContact(), actual.getContact());
+    assertThat("From Address", actual.getDestinationAddress(),
+        containsString(order.getFromAddress1()));
+    assertThat("From Address", actual.getDestinationAddress(),
+        containsString(order.getFromAddress2()));
   }
 
   public void verifyDeliveryDetailsInTransaction(Order order, String txnType) {
-    transactionsTable.searchByTxnType(txnType);
-    assertEquals("To Name", order.getToName(), transactionsTable.getName(1));
-    assertEquals("To Email", order.getToEmail(), transactionsTable.getEmail(1));
-    assertEquals("To Contact", order.getToContact(), transactionsTable.getContact(1));
-    String toAddress = transactionsTable.getAddress(1);
-    assertThat("To Address", toAddress, containsString(order.getToAddress1()));
-    assertThat("To Address", toAddress, containsString(order.getToAddress2()));
+    transactionsTable.filterByColumn(COLUMN_TYPE, txnType);
+    TransactionInfo actual = transactionsTable.readEntity(1);
+    assertEquals("To Name", order.getToName(), actual.getName());
+    assertEquals("To Email", order.getToEmail(), actual.getEmail());
+    assertEquals("To Contact", order.getToContact(), actual.getContact());
+    assertThat("To Address", actual.getDestinationAddress(), containsString(order.getToAddress1()));
+    assertThat("To Address", actual.getDestinationAddress(), containsString(order.getToAddress1()));
   }
 
   public String getDeliveryTitle() {
@@ -748,9 +749,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void verifiesOrderIsTaggedToTheRecommendedRouteId() {
-    String actualRouteId = transactionsTable.getRouteId(2);
-    assertTrue("Order is not tagged to any route: ",
-        actualRouteId != null && !actualRouteId.equalsIgnoreCase(""));
+    TransactionInfo actual = transactionsTable.readEntity(2);
+    assertTrue("Order is not tagged to any route: ", StringUtils.isNotBlank(actual.getRouteId()));
   }
 
   public void updatePickupDetails(Map<String, String> mapOfData) {
@@ -882,65 +882,30 @@ public class EditOrderPage extends OperatorV2SimplePage {
         f("%s has been pulled from route %d successfully", trackingId, routeId), true);
   }
 
-  /**
-   * Accessor for Reservations table
-   */
-  public static class TransactionsTable extends OperatorV2SimplePage {
+  public static class TransactionsTable extends NgRepeatTable<TransactionInfo> {
 
-    private static final String NG_REPEAT = "transaction in getTableData()";
-    private static final String COLUMN_CLASS_PRIORITY_LEVEL = "priority-level";
-    private static final String COLUMN_CLASS_TXN_TYPE = "type";
-    private static final String COLUMN_CLASS_STATUS = "status";
-    private static final String COLUMN_CLASS_ROUTE_ID = "route-id";
-    private static final String COLUMN_CLASS_NAME = "name";
-    private static final String COLUMN_CLASS_CONTACT = "contact";
-    private static final String COLUMN_CLASS_EMAIL = "email";
-    private static final String COLUMN_CLASS_ADDRESS = "_address";
+    public static final String COLUMN_TYPE = "type";
 
     public TransactionsTable(WebDriver webDriver) {
       super(webDriver);
-    }
-
-    public String getPriorityLevel(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_PRIORITY_LEVEL);
-    }
-
-    @SuppressWarnings("unused")
-    public String getStatus(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_STATUS);
-    }
-
-    public String getRouteId(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_ROUTE_ID);
-    }
-
-    public String getTxnType(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_TXN_TYPE);
-    }
-
-    public String getName(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_NAME);
-    }
-
-    public String getContact(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_CONTACT);
-    }
-
-    public String getEmail(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_EMAIL);
-    }
-
-    public String getAddress(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_ADDRESS);
-    }
-
-    private String getTextOnTable(int rowNumber, String columnDataClass) {
-      String text = getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
-      return StringUtils.normalizeSpace(text);
-    }
-
-    public void searchByTxnType(String txnType) {
-      searchTableCustom1(COLUMN_CLASS_TXN_TYPE, txnType);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("serviceEndTime", "_service-end-time")
+          .put(COLUMN_TYPE, "type")
+          .put("status", "status")
+          .put("driver", "_driver")
+          .put("routeId", "route-id")
+          .put("routeDate", "_route-date")
+          .put("dpId", "distribution-point-id")
+          .put("failureReason", "failure_reason_code")
+          .put("priorityLevel", "priority-level")
+          .put("dnr", "dnr")
+          .put("name", "name")
+          .put("contact", "contact")
+          .put("email", "email")
+          .put("destinationAddress", "_address")
+          .build());
+      setNgRepeat("transaction in getTableData()");
+      setEntityClass(TransactionInfo.class);
     }
   }
 
