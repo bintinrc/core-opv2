@@ -335,7 +335,7 @@ Feature: Global Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -380,7 +380,7 @@ Feature: Global Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -422,7 +422,7 @@ Feature: Global Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel

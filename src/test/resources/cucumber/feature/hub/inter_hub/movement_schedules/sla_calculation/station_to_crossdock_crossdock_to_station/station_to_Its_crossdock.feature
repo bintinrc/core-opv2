@@ -73,7 +73,7 @@ Feature: Station to it's Crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule (uid:be4d5366-99e4-432d-879f-7647efbf7d6b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-id} to hub id = {hub-relation-destination-hub-id}

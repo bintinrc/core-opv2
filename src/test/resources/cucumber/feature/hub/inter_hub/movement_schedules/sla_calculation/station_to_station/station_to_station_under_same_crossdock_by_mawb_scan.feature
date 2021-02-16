@@ -8,16 +8,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Same Crossdock by MAWB Scan - Station Movement found and there is available schedule (uid:1396f758-e6d7-4677-9d7e-3ea04346c958)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | STATION   |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When API Operator creates new Hub using data below:
+    When API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | STATION   |
@@ -36,14 +27,9 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}                                  |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}                                  |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    And Operator click "Load All Selection" on Shipment Management page
-    And Operator edit Shipment on Shipment Management page including MAWB using data below:
-      | mawb | AUTO-{gradle-current-date-yyyyMMddHHmmsss} |
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign mawb "mawb_{KEY_CREATED_SHIPMENT_ID}" to following shipmentIds
+      | {KEY_CREATED_SHIPMENT_ID} |
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
@@ -56,7 +42,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -64,7 +50,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
     And Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:
       | label      | Into Van                         |
       | hub        | {KEY_LIST_OF_CREATED_HUBS[1].id} |
-      | mawb       | {KEY_MAWB}                       |
+      | mawb       | {KEY_SHIPMENT_AWB}               |
       | shipmentId | {KEY_CREATED_SHIPMENT_ID}        |
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -84,7 +70,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to Station Under Same Crossdock by MAWB Scan - Station Movement Found but there is no available schedule (uid:08df57d8-f3a5-4bc7-9418-c310c9031201)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
