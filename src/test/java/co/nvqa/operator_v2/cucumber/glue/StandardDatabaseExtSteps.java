@@ -9,6 +9,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
+import co.nvqa.commons.model.core.hub.MovementTrip;
 import co.nvqa.commons.model.core.hub.PathSchedule;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
@@ -1171,12 +1172,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       String originHubIdAsString, String destinationHubIdAsString, Integer numberOfPaths) {
     Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
     Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
-
-    List<MovementPath> movementPaths = getHubJdbc()
-        .getAllMovementPath(originHubId, destinationHubId);
-    movementPaths
-        .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
-    assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
+    retryIfAssertionErrorOccurred(() -> {
+      List<MovementPath> movementPaths = getHubJdbc()
+          .getAllMovementPath(originHubId, destinationHubId);
+      assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
+      movementPaths
+          .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
+    }, getCurrentMethodName(), 1000, 5);
   }
 
   @Then("DB Operator verifies number of path for {string} movement existence")
@@ -1298,11 +1300,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         assertThat("Movement Event not found", movementEventEntityExistence, equalTo(false));
         continue;
       }
-      MovementEventEntity movementEventEntity = getHubJdbc()
-          .getMovementEventByShipmentId(shipmentId);
-      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
-      assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      retryIfAssertionErrorOccurred(() -> {
+        MovementEventEntity movementEventEntity = getHubJdbc()
+            .getMovementEventByShipmentId(shipmentId);
+        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+        assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+      }, getCurrentMethodName(), 1000, 5);
       pause2s();
     }
   }
@@ -1313,9 +1317,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     switch (scheduleType) {
       case HUB_CD_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "FAILED", originHub, destHub, shipmentIds.subList(0,1));
+            "FAILED", originHub, destHub, shipmentIds.subList(0, 0));
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "NOT FOUND", originHub, destHub, shipmentIds.subList(1,2));
+            "NOT FOUND", originHub, destHub, shipmentIds.subList(1, 1));
         break;
       case HUB_ST_ST_DIFF_CD:
       case HUB_ST_CD_DIFF_CD:
@@ -1625,5 +1629,26 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertThat("deleted at is not null", pathScheduleElement.getDeletedAt(),
           not(equalTo(null)));
     });
+  }
+
+  @Then("DB Operator verify trip with id {string} status is {string}")
+  public void dbOperatorVerifyTripWithIdStatusIs(String tripIdAsString, String tripStatus) {
+    Long resolvedTripId = Long.valueOf(resolveValue(tripIdAsString));
+    MovementTrip movementTrip = getHubJdbc().getMovementTrip(resolvedTripId);
+
+    assertThat("Trip status is the same", movementTrip.getStatus().toLowerCase(),
+        equalTo(tripStatus.toLowerCase()));
+  }
+
+  @Then("DB Operator verify 'inbound_weight_tolerance' parameter is {string}")
+  public void dbOperatorVerifyInboundWeightTolerance(String expected) {
+    assertEquals("inbound_weight_tolerance value", Double.valueOf(resolveValue(expected)),
+        getCoreJdbc().getInboundWeighToleranceParameter());
+  }
+
+  @Then("DB Operator verify 'inbound_max_weight' parameter is {string}")
+  public void dbOperatorVerifyInboundMaxWeight(String expected) {
+    assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
+        getCoreJdbc().getInboundMaxWeighParameter());
   }
 }

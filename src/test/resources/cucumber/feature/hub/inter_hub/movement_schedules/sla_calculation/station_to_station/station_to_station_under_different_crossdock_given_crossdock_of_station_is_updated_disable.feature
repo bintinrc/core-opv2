@@ -5,7 +5,7 @@ Feature: Station to Station Under Different Crossdock Given Crossdock of Station
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock Given Crossdock of Station is Updated/Disable - Crossdock is Updated (uid:d2599bc7-ff19-4986-8072-23a5b55aef00)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -45,13 +45,13 @@ Feature: Station to Station Under Different Crossdock Given Crossdock of Station
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -86,7 +86,7 @@ Feature: Station to Station Under Different Crossdock Given Crossdock of Station
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock Given Crossdock of Station is Updated/Disable - Crossdock is Disable (uid:3c88f84e-7200-4867-a65c-b1b13c2f69bd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -126,13 +126,13 @@ Feature: Station to Station Under Different Crossdock Given Crossdock of Station
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |

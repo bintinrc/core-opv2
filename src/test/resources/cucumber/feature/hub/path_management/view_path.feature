@@ -5,7 +5,7 @@ Feature: Path Management - View Path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Auto Generated Path Details (uid:d0bbb16d-916d-43f9-a762-3872976900b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -25,7 +25,7 @@ Feature: Path Management - View Path
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create "auto generated" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
@@ -37,7 +37,7 @@ Feature: Path Management - View Path
     When Operator click "view" hyperlink button
     Then Operator verify shown "default paths" path details modal data
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Manual Path Details (uid:ffb3f437-ba21-45cc-a45e-495a18b3bce9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -57,7 +57,7 @@ Feature: Path Management - View Path
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create "manual" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management

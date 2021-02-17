@@ -207,6 +207,20 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
     return this;
   }
 
+  public void clearColumnFilter(String columnId) {
+    Preconditions.checkArgument(StringUtils.isNotBlank(columnId),
+        "'columnId' cannot be null or blank string.");
+    String columnLocator = columnLocators.get(columnId);
+    Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator),
+        "Locator for columnId [" + columnId + "] was not defined.");
+    executeInContext(getTableLocator(), () -> {
+      WebElement we = findElementBy(By.cssSelector(
+          f("th.%s > nv-search-input-filter > md-input-container input", columnLocator)));
+      we.clear();
+      pause400ms();
+    });
+  }
+
   protected abstract String getTableLocator();
 
   public boolean isEmpty() {

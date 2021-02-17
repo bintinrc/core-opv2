@@ -126,12 +126,18 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @Then("Operator verifies that the parcel shown is zero")
   public void operatorVerifiesThatTheParcelShownIsZero() {
+    pause2s();
     shipmentScanningPage.verifyTheSumOfOrderIsZero();
   }
 
   @And("Operator verifies that the row of the added order is red highlighted")
   public void operatorVerifiesThatTheRowOfTheAddedOrderIsRedHighlighted() {
     shipmentScanningPage.verifyOrderIsRedHighlighted();
+  }
+
+  @And("Operator verifies that the row of the added order is blue highlighted")
+  public void operatorVerifiesThatTheRowOfTheAddedOrderIsBlueHighlighted() {
+    shipmentScanningPage.verifyOrderIsBlueHighlighted();
   }
 
   @And("Operator scan shipment with id {string}")
@@ -157,6 +163,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorVerifiesToastContainingMessageIsShown(String toastMessage) {
     toastMessage = resolveValue(toastMessage);
     shipmentScanningPage.verifyToastContainingMessageIsShown(toastMessage);
+  }
+
+  @Then("Operator verifies toast bottom containing message {string} is shown on Shipment Inbound Scanning page")
+  public void operatorVerifiesToastBottomContainingMessageIsShownOnShipmentInboundScanningPage(
+      String toastMessage) {
+    toastMessage = resolveValue(toastMessage);
+    shipmentScanningPage.verifyBottomToastContainingMessageIsShown(toastMessage);
   }
 
   @And("Operator verifies Scan Shipment Container color is {string}")
@@ -350,4 +363,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
 //            shipmentScanningPage.switchTo();
     }
   }
+
+  @When("Operator click force complete trip in shipment inbound scanning page")
+  public void operatorClickForceCompleteTripInShipmentInboundScanningPage() {
+    shipmentScanningPage.forceCompleteButton.waitUntilClickable();
+    shipmentScanningPage.forceCompleteButton.click();
+  }
+
 }

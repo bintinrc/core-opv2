@@ -5,7 +5,7 @@ Feature: Station to its Crossdock using MAWB
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock using MAWB - Station Movement found and there is available schedule (uid:fb792834-7f86-4bc0-95f2-22914dc2bb58)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -27,14 +27,9 @@ Feature: Station to its Crossdock using MAWB
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}                                  |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}                                  |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    When Operator click "Load All Selection" on Shipment Management page
-    When Operator edit Shipment on Shipment Management page including MAWB using data below:
-      | mawb | AUTO-{gradle-current-date-yyyyMMddHHmmsss} |
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign mawb "mawb_{KEY_CREATED_SHIPMENT_ID}" to following shipmentIds
+      | {KEY_CREATED_SHIPMENT_ID} |
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
@@ -44,7 +39,7 @@ Feature: Station to its Crossdock using MAWB
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -68,7 +63,7 @@ Feature: Station to its Crossdock using MAWB
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to its Crossdock using MAWB - Station Movement Found but there is no available schedule (uid:b490f397-0beb-4fcf-8ee1-b8b979097a30)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -107,7 +102,7 @@ Feature: Station to its Crossdock using MAWB
       | status   | FAILED                                                                                        |
       | comments | found no path from origin {hub-relation-destination-hub-id} (sg) to destination {hub-id} (sg) |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock using MAWB - Station Movement not found (uid:0f908fa5-4d52-4b0a-8e9d-d30d13889c26)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

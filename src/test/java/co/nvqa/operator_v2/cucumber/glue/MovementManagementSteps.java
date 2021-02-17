@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.Hub;
+import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
+import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
@@ -227,26 +229,24 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
-      try {
-        final Map<String, String> finalData = resolveKeyValues(data);
-        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
-        movementManagementPage.stationsTab.click();
-        movementManagementPage.addSchedule.click();
-        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
-        movementManagementPage.addStationMovementScheduleModal.create.click();
-        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
-      } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying...");
-        movementManagementPage.refreshPage();
-        movementManagementPage.switchTo();
-        movementManagementPage.stationsTab.waitUntilClickable(60);
-        throw ex;
-      }
-    }, 10);
+    final Map<String, String> finalData = resolveKeyValues(data);
+    StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+    movementManagementPage.stationsTab.click();
+    movementManagementPage.addSchedule.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+    movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
+    putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+    if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
+      movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
+      StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
+          finalData);
+      secondStationMovementSchedule.setDepartureTime("21:15");
+      movementManagementPage.addStationMovementScheduleModal
+          .fillAnother(secondStationMovementSchedule);
+      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+    }
+    movementManagementPage.addStationMovementScheduleModal.create.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
   }
 
   @And("Operator load schedules on Movement Management page using data below:")
@@ -429,6 +429,15 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.delete.click();
     pause1s();
     movementManagementPage.modalDeleteButton.click();
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    if (hubRelations != null) {
+      hubRelations.remove(0);
+    }
+  }
+
+  @And("Operator clicks close button in movement management page")
+  public void operatorClicksCloseButtonInMovementManagementPage() {
+    movementManagementPage.closeButton.click();
   }
 
   @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
@@ -707,5 +716,91 @@ public class MovementManagementSteps extends AbstractSteps {
     assertThat("comments 2 is true",
         movementManagementPage.comments.get(0).getText(),
         equalTo("This schedule has been updated by Automation Test"));
+  }
+
+  @Then("Operator verify all station schedules are correct from UI")
+  public void operatorVerifyAllStationSchedulesAreCorrectFromUI() {
+    List<StationMovementSchedule> stationMovementSchedules = get(
+        KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE);
+    assertThat("Number of displayed schedules",
+        movementManagementPage.stationMovementSchedulesTable.getRowsCount(),
+        equalTo(stationMovementSchedules.size()));
+    for (int i = 0; i < stationMovementSchedules.size(); i++) {
+      StationMovementSchedule actual = movementManagementPage.stationMovementSchedulesTable
+          .readEntity(i + 1);
+      stationMovementSchedules.get(i).setCrossdockHub(null);
+      stationMovementSchedules.get(i).setDuration((Integer) null);
+      stationMovementSchedules.get(i).compareWithActual(actual);
+    }
+    assertThat("Monday is checked",
+        movementManagementPage.stationMovementSchedulesTable.monday.isChecked(), equalTo(true));
+    movementManagementPage.stationMovementSchedulesTable.monday.click();
+    assertThat("Monday still checked",
+        movementManagementPage.stationMovementSchedulesTable.monday.isChecked(), equalTo(true));
+
+    movementManagementPage.stationMovementSchedulesTable.filterStationsColumn();
+    assertThat("Number of displayed schedules",
+        movementManagementPage.stationMovementSchedulesTable.getRowsCount(),
+        equalTo(1));
+    StationMovementSchedule actual = movementManagementPage.stationMovementSchedulesTable
+        .readEntity(1);
+    stationMovementSchedules.get(0).setCrossdockHub(null);
+    stationMovementSchedules.get(0).setDuration((Integer) null);
+    stationMovementSchedules.get(0).compareWithActual(actual);
+  }
+
+  @Then("Operator verify all station schedules are correct")
+  public void operatorVerifyAllStationSchedulesAreCorrect() {
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    assertThat("Number of displayed schedules",
+        movementManagementPage.schedulesTable.getRowsCount(),
+        equalTo(hubRelations.size()));
+    for (int i = 0; i < hubRelations.size(); i++) {
+      HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
+          .readEntity(i + 1);
+      hubRelations.get(i).getSchedules().get(i).setId(null);
+      hubRelations.get(i).getSchedules().get(i).setStartTime(null);
+      hubRelations.get(i).getSchedules().get(i).setDay(null);
+      hubRelations.get(i).getSchedules().get(i)
+          .setOriginHubName(hubRelations.get(i).getOriginHubName());
+      hubRelations.get(i).getSchedules().get(i)
+          .setDestinationHubName(hubRelations.get(i).getDestinationHubName());
+      hubRelations.get(i).getSchedules().get(i).compareWithActual(actual);
+    }
+    assertThat("Monday is checked",
+        movementManagementPage.hubRelationScheduleTable.monday.isChecked(), equalTo(true));
+    movementManagementPage.hubRelationScheduleTable.monday.click();
+    assertThat("Monday still checked",
+        movementManagementPage.hubRelationScheduleTable.monday.isChecked(), equalTo(true));
+
+    movementManagementPage.hubRelationScheduleTable.filterStationsColumn();
+    assertThat("Number of displayed schedules",
+        movementManagementPage.hubRelationScheduleTable.getRowsCount(),
+        equalTo(1));
+    HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
+        .readEntity(1);
+    hubRelations.get(0).getSchedules().get(0).setId(null);
+    hubRelations.get(0).getSchedules().get(0).setStartTime(null);
+    hubRelations.get(0).getSchedules().get(0).setDay(null);
+    hubRelations.get(0).getSchedules().get(0).compareWithActual(actual);
+  }
+
+  @When("Operator updates created station schedule")
+  public void operatorUpdatesCreatedStationSchedule() {
+    movementManagementPage.modify.click();
+    movementManagementPage.departureTimeInputs.get(0).setValue("21:15");
+    movementManagementPage.durationInputs.get(0).setValue("00:45");
+    movementManagementPage.commentInputs.get(0)
+        .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+        .verifyNotificationWithMessage("1 schedule(s) have been updated.");
+    movementManagementPage.closeButton.click();
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:00:45");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:15");
+    hubRelations.get(0).getSchedules().get(0)
+        .setComment("This schedule has been updated by Automation Test");
   }
 }

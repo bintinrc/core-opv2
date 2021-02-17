@@ -86,6 +86,7 @@ public class PathManagementSteps extends AbstractSteps {
 
   @And("Operator clicks load selection button")
   public void operatorClicksLoadSelectionButton() {
+    pathManagementPage.loadSelectionButton.waitUntilClickable();
     pathManagementPage.loadSelectionButton.click();
     pause2s();
   }
@@ -232,9 +233,6 @@ public class PathManagementSteps extends AbstractSteps {
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
 
     pathManagementPage.createDefaultPath(originHubName, destinationHubName);
-    if (!"empty".equals(originHubName) && !"empty".equals(destinationHubName)) {
-      pathManagementPage.verifyCreatingDefaultPath(originHubName, destinationHubName);
-    }
     pause2s();
   }
 

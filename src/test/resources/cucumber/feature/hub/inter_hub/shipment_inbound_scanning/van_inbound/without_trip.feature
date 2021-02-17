@@ -406,6 +406,13 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
 
+  @DeleteShipment
+  Scenario: Van Inbound Wrong Shipment (uid:9596ed71-8be2-4343-b7ad-e35544e6b819)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator inbound scanning wrong Shipment 1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
+    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment 1
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

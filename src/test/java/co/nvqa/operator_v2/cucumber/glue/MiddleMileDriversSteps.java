@@ -111,7 +111,19 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorSelectsTheHubOnTheMiddleMileDriversPage() {
     Hub hub = get(KEY_HUB_INFO);
     String hubName = hub.getName();
-    middleMileDriversPage.selectHubFilter(hubName);
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        middleMileDriversPage.selectHubFilter(hubName);
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Element in middle mile driver page not found, retrying...");
+        middleMileDriversPage.refreshPage();
+        middleMileDriversPage.switchTo();
+        middleMileDriversPage.loadButton.waitUntilClickable();
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 5);
   }
 
   @When("Operator create new Middle Mile Driver with details:")
@@ -179,7 +191,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           }
           middleMileDriversPage.fillLicenseNumber(middleMileDriver.getLicenseNumber());
 
-          middleMileDriver.setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriver
+              .setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
           middleMileDriversPage.fillLicenseExpiryDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
 
           if (country == null) {
@@ -254,7 +267,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.loadButton.waitUntilClickable();
         throw ex;
       }
-    }, 10);
+    }, 5);
 
   }
 
@@ -307,7 +320,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         break;
 
       case EMPLOYMENT_TYPE_FILTER:
-        middleMileDriversPage.tableFilterCombobox(middleMileDriver.get(0), EMPLOYMENT_TYPE_FILTER);
+        middleMileDriversPage
+            .tableFilterCombobox(middleMileDriver.get(0), EMPLOYMENT_TYPE_FILTER);
         break;
 
       case EMPLOYMENT_STATUS_FILTER:

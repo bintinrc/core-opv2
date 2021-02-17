@@ -10,6 +10,7 @@ import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.SalesPerson;
 import co.nvqa.commons.model.core.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.hub.Hub;
@@ -763,7 +764,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     } else {
       hubId = destHubId;
     }
-    getHubClient().shipmentInboundScanning(inboundType, shipmentId, hubId);
+    retryIfAssertionErrorOccurred(() -> {
+      getHubClient().shipmentInboundScanning(inboundType, shipmentId, hubId);
+    }, getCurrentMethodName(), 1000, 5);
   }
 
   @And("API Operator does the {string} scan from {string} to {string} for the following shipments:")
@@ -820,5 +823,19 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     node = getNodesClient().createMiddleTierNode(node);
     put(KEY_CREATED_MIDDLE_TIER_NAME, node.getName());
     put(KEY_CREATED_MIDDLE_TIER_NODE, node);
+  }
+
+  @Given("API Operator create sales person:")
+  public void apiOperatorCreateSalesPerson(Map<String, String> data) {
+    SalesPerson salesPerson = new SalesPerson(resolveKeyValues(data));
+    String uniqueString = generateDateUniqueString();
+    if (StringUtils.endsWithIgnoreCase(salesPerson.getName(), "{uniqueString}")) {
+      salesPerson.setName(salesPerson.getName().replace("{uniqueString}", uniqueString));
+    }
+    if (StringUtils.endsWithIgnoreCase(salesPerson.getCode(), "{uniqueString}")) {
+      salesPerson.setCode(salesPerson.getCode().replace("{uniqueString}", uniqueString));
+    }
+    salesPerson = getSalesClient().createSalesPerson(salesPerson);
+    putInList(KEY_LIST_OF_SALES_PERSON, salesPerson);
   }
 }

@@ -14,7 +14,7 @@ Feature: Middle Mile Driver Management - Search Driver
     When Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
 
-  @DeleteDriver @DeleteHubsViaAPI
+  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Driver by Filter - Hub (uid:c629d70f-53d3-4327-805f-e988e6b1e25c)
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |

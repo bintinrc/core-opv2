@@ -86,7 +86,9 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       Order order = get(KEY_CREATED_ORDER);
       hub = order.getDestinationHub();
     }
-
+    if (mawb == null) {
+      mawb = get(KEY_SHIPMENT_AWB);
+    }
     scanningPage.inboundScanningUsingMawb(shipmentId, mawb, label, hub);
   }
 
@@ -202,5 +204,16 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage.inboundHub.searchValue(hubNameResolved);
     assertThat("value does not exist", scanningPage.inboundHub.isValueExist(hubNameResolved),
         equalTo(false));
+  }
+
+  @When("Operator inbound scanning wrong Shipment {long} Into Van in hub {string} on Shipment Inbound Scanning page")
+  public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId, String hubName) {
+    String resolvedHubName = resolveValue(hubName);
+    scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
+  }
+
+  @Then("Operator verify error message in shipment inbound scanning is {string} for shipment {long}")
+  public void operatorVerifyErrorMessageInShipmentInboundScanningIs(String errorMessage, Long errorShipmentId) {
+    scanningPage.checkAlert(errorShipmentId, errorMessage);
   }
 }

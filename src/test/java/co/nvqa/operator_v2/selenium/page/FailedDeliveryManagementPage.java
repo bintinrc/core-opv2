@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.model.RtsDetails;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -32,12 +33,15 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public SetSelectedToReturnToSenderDialog setSelectedToReturnToSenderDialog;
 
+  @FindBy(css = "md-dialog")
+  public RescheduleSelectedOrdersDialog rescheduleSelectedOrdersDialog;
+
+  @FindBy(css = "div.navigation md-menu")
+  public MdMenu actionsMenu;
+
   public final FailedDeliveriesTable failedDeliveriesTable;
 
   private static final String CSV_FILENAME_PATTERN = "failed-delivery-list";
-  protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
-  protected static final int ACTION_RESCHEDULE_SELECTED = 2;
-  protected static final int ACTION_DOWNLOAD_CSV_FILE = 3;
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -49,7 +53,7 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
         .filterByColumn(CommonParcelManagementPage.FailedDeliveriesTable.COLUMN_TRACKING_ID,
             trackingId);
     failedDeliveriesTable.selectRow(1);
-    selectAction(ACTION_DOWNLOAD_CSV_FILE);
+    actionsMenu.selectOption("Download CSV File");
   }
 
   public void rescheduleNext2Days(String trackingId) {
@@ -65,9 +69,10 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
       failedDeliveriesTable.selectRow(1);
     });
 
-    selectAction(ACTION_RESCHEDULE_SELECTED);
-    setMdDatepickerById("commons.model.date", TestUtils.getNextDate(2));
-    clickNvIconTextButtonByNameAndWaitUntilDone("commons.reschedule");
+    actionsMenu.selectOption("Reschedule Selected");
+    rescheduleSelectedOrdersDialog.waitUntilVisible();
+    rescheduleSelectedOrdersDialog.date.setDate(TestUtils.getNextDate(2));
+    rescheduleSelectedOrdersDialog.reschedule.click();
     waitUntilInvisibilityOfToast("Order Rescheduling Success");
   }
 
@@ -105,49 +110,13 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
         .filterByColumn(CommonParcelManagementPage.FailedDeliveriesTable.COLUMN_TRACKING_ID,
             trackingId);
     failedDeliveriesTable.selectRow(1);
-    selectAction(ACTION_SET_RTS_TO_SELECTED);
+    actionsMenu.selectOption("Set RTS to Selected");
     setSelectedToReturnToSenderDialog.waitUntilVisible();
     setSelectedToReturnToSenderDialog.deliveryDate.setDate(TestUtils.getNextDate(1));
     setSelectedToReturnToSenderDialog.timeslot.selectValue("3PM - 6PM");
     setSelectedToReturnToSenderDialog.setOrderToRts.clickAndWaitUntilDone();
     setSelectedToReturnToSenderDialog.waitUntilInvisible();
     waitUntilInvisibilityOfToast("Set Selected to Return to Sender");
-  }
-
-  public void rtsSelectedOrderNext2Days(List<String> trackingIds) {
-    trackingIds.forEach(trackingId ->
-    {
-      failedDeliveriesTable
-          .filterByColumn(CommonParcelManagementPage.FailedDeliveriesTable.COLUMN_TRACKING_ID,
-              trackingId);
-      failedDeliveriesTable.selectRow(1);
-    });
-
-    selectAction(ACTION_SET_RTS_TO_SELECTED);
-    setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(2));
-    selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
-    String suitButtonLocator = trackingIds.size() > 1 ? "container.order.edit.set-orders-to-rts"
-        : "container.order.edit.set-order-to-rts";
-    clickNvApiTextButtonByNameAndWaitUntilDone(suitButtonLocator);
-    waitUntilInvisibilityOfToast("Set Selected to Return to Sender");
-  }
-
-  public void selectAction(int actionType) {
-    click("//span[text()='Apply Action']");
-
-    switch (actionType) {
-      case ACTION_SET_RTS_TO_SELECTED:
-        clickButtonByAriaLabel("Set RTS to Selected");
-        break;
-      case ACTION_RESCHEDULE_SELECTED:
-        clickButtonByAriaLabel("Reschedule Selected");
-        break;
-      case ACTION_DOWNLOAD_CSV_FILE:
-        clickButtonByAriaLabel("Download CSV File");
-        break;
-    }
-
-    pause500ms();
   }
 
   /**
@@ -199,6 +168,9 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
+
+    @FindBy(css = "[name*='-to-rts']")
+    public NvApiTextButton setOrderToRts;
 
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -296,6 +268,19 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     public NvApiTextButton setOrderToRts;
 
     public SetSelectedToReturnToSenderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class RescheduleSelectedOrdersDialog extends MdDialog {
+
+    @FindBy(name = "commons.model.date")
+    public MdDatepicker date;
+
+    @FindBy(name = "commons.reschedule")
+    public NvIconTextButton reschedule;
+
+    public RescheduleSelectedOrdersDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

@@ -152,15 +152,11 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     setMdDatepicker("ctrl.date", date);
   }
 
-  private void checkAlert(Long shipmentId, String condition) {
+  public void checkAlert(Long shipmentId, String condition) {
     scanAlertMessage.waitUntilVisible();
     String errorMessage = scanAlertMessage.getText();
     switch (condition) {
       case "Completed":
-        assertEquals("Error Message is not the same : ", errorMessage,
-            f("shipment %d is in terminal state: [%s]", shipmentId, condition));
-        break;
-
       case "Cancelled":
         assertEquals("Error Message is not the same : ", errorMessage,
             f("shipment %d is in terminal state: [%s]", shipmentId, condition));
@@ -186,6 +182,11 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
       case "closed shipment":
         assertTrue("Error Message is not the same : ",
             errorMessage.contains(f("shipment %d is [Closed]", shipmentId)));
+        break;
+
+      case "shipment not found":
+        assertThat("Error Message is true",
+            errorMessage, containsString(f("shipment for %d not found", shipmentId)));
         break;
     }
   }

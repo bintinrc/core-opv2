@@ -4,6 +4,7 @@ import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Sergey Mishanin
@@ -18,6 +19,10 @@ public class RtsDetails extends DataEntity<RtsDetails> {
   private RtsAddress address;
 
   public RtsDetails() {
+  }
+
+  public RtsDetails(Map<String, ?> data) {
+    super(data);
   }
 
   public String getReason() {
