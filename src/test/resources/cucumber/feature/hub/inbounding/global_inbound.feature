@@ -172,7 +172,7 @@ Feature: Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId     | GET_FROM_CREATED_ORDER             |
-      | overrideWeight | 7                                  |
+      | overrideWeight | 6                                  |
     Then API Operator verify order info after Global Inbound
     When API Operator save current order cost
     When API Operator recalculate order price
