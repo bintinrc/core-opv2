@@ -980,7 +980,7 @@ public class OperatorV2SimplePage extends SimplePage {
     clickf(".//md-select[starts-with(@id, '%s')]", mdSelectId);
     pause1s();
     clickf(
-        "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,\"%s\") or contains(./div/text(),\"%s\")]",
+        "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value= \"%s\" or contains(./div/text(),\"%s\")]",
         value, value);
     pause50ms();
   }

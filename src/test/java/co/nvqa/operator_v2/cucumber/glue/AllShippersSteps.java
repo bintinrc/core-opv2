@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
@@ -365,9 +366,26 @@ public class AllShippersSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.comments.setValue(value);
     }
+    value = data.get("insuranceMinFee");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceMin
+          .setValue(value);
+    }
+    value = data.get("insurancePercentage");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insurancePercent
+          .setValue(value);
+    }
+    value = data.get("insuranceThreshold");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceThreshold
+          .setValue(value);
+    }
+    if (Objects.nonNull(value) && !value.contains("insurance")) {
+      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox
+          .check();
+    }
     allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.codCountryDefaultCheckbox
-        .check();
-    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox
         .check();
     allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.saveChanges
         .clickAndWaitUntilDone();
