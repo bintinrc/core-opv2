@@ -1236,7 +1236,7 @@ public class AllShippersSteps extends AbstractSteps {
     assertEquals("COD min fee is not the same: ", pricingLeversFromDb.getCodMinFee(),
         pricingProfile.getCodMin());
     assertEquals("COD percentage is not the same: ", pricingLeversFromDb.getCodPercentage(),
-        pricingProfile.getCodMin());
+        pricingProfile.getCodPercentage());
     assertEquals("INS min fee is not the same: ", pricingLeversFromDb.getInsuranceMinFee(),
         pricingProfile.getInsMin());
     assertEquals("INS min fee is not the same: ", pricingLeversFromDb.getInsurancePercentage(),
