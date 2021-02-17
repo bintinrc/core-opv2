@@ -5,7 +5,7 @@ Feature: Station to Station Under Same Crossdock
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Same Crossdock - Station Movement Found and there is available schedule (uid:3958c45b-c383-42a0-a703-cd1b2049981d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -36,7 +36,7 @@ Feature: Station to Station Under Same Crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
@@ -49,7 +49,7 @@ Feature: Station to Station Under Same Crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -73,10 +73,10 @@ Feature: Station to Station Under Same Crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to Station Under Same Crossdock - Station Movement Found but there is no available schedule (uid:2ee4bf00-db13-4c9e-8d62-65ef2c3b0ad8)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
@@ -109,7 +109,7 @@ Feature: Station to Station Under Same Crossdock
       | status   | FAILED                                                                 |
       | comments | found no path from origin {hub-id} (sg) to destination {hub-id-2} (sg) |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Same Crossdock - Station Movement not found (uid:819bcd3c-2da6-4a3c-8e96-20a9558567b1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -140,7 +140,7 @@ Feature: Station to Station Under Same Crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And Operator refresh page
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management

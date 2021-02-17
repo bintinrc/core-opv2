@@ -1889,7 +1889,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(id = "container.order.edit.delivery-priority-level-1")
+    @FindBy(xpath = "//md-input-container[label]//input")
     public TextBox priorityLevel;
 
 

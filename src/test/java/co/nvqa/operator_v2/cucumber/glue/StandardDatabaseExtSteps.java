@@ -1315,6 +1315,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifySlaInMovementEventsTableForNoPathForTheFollowingShipmentsFromTo(
       String scheduleType, String originHub, String destHub, List<String> shipmentIds) {
     switch (scheduleType) {
+      case HUB_CD_CD:
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "FAILED", originHub, destHub, shipmentIds.subList(0, 0));
+        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
+            "NOT FOUND", originHub, destHub, shipmentIds.subList(1, 1));
+        break;
       case HUB_ST_ST_DIFF_CD:
       case HUB_ST_CD_DIFF_CD:
       case HUB_CD_ST_DIFF_CD:
@@ -1322,7 +1328,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
             "FAILED", originHub, destHub, shipmentIds);
         break;
-      case HUB_CD_CD:
       case HUB_CD_ITS_ST:
       case HUB_ST_ITS_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(

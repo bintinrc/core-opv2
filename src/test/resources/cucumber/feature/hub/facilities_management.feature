@@ -5,7 +5,7 @@ Feature: Facilities Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Disable Hub - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -32,7 +32,7 @@ Feature: Facilities Management
       | Station - Crossdock | CROSSDOCK_STATION | uid:4d9e12db-b529-4b93-b7fc-776ac32bc7dc |
       | Hub - Crossdock     | CROSSDOCK         | uid:846081f6-4fa4-4ecc-b3a4-2a2ee1e2b68e |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Disable Hub - DP/Recovery/Others - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -59,7 +59,7 @@ Feature: Facilities Management
       | Recovery | RECOVERY | uid:578bf271-1547-407f-8abb-00e42525e4c2 |
       | Others   | OTHERS   | uid:2de00e90-0f48-4617-90d5-355eb3e1045a |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Facility Type - <type> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -87,7 +87,7 @@ Feature: Facilities Management
       | Hub - Crossdock     | CROSSDOCK         | uid:58bba508-9557-46b3-b863-10c6c9445961 |
       | Station - Crossdock | CROSSDOCK_STATION | uid:580558a4-ea3d-4813-8770-36fc9c5c3a97 |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Facility Type - DP/Recovery/Others - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -115,7 +115,7 @@ Feature: Facilities Management
       | Recovery | RECOVERY | uid:a6c0f1b1-2e29-4cd4-b0ef-fc04ecb44198 |
       | Others   | OTHERS   | uid:7147944e-cffd-4292-a2e6-41dad805678c |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Lat/Long of Facility - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -144,7 +144,7 @@ Feature: Facilities Management
       | Hub - Crossdock     | CROSSDOCK         | uid:8d07757e-b05d-4b85-8069-761105214f2a |
       | Station - Crossdock | CROSSDOCK_STATION | uid:2e18f1fe-0e8c-45d7-a8d8-26d783312cbf |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Lat/Long of Facility - DP/Recovery/Others - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -173,7 +173,7 @@ Feature: Facilities Management
       | Recovery | RECOVERY | uid:da01bdee-c78a-40ca-809a-2a16dd518bd9 |
       | Others   | OTHERS   | uid:ddc729c8-15b5-4cec-b086-ed3ca0bb81e0 |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Lat/Long and Facility Type - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
@@ -203,7 +203,7 @@ Feature: Facilities Management
       | Hub - Crossdock     | CROSSDOCK         | uid:55dc4d29-3f3c-4c0e-aa49-994a832ca3e2 |
       | Station - Crossdock | CROSSDOCK_STATION | uid:71919b9e-e0b3-466e-a187-882456f9b488 |
 
-  @DeleteHubsViaAPI
+  @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Lat/Long and Facility Type - DP/Recovery/Others - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:

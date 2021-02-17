@@ -5,7 +5,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock by MAWB Scan - Given Crossdocks have relation (uid:7e1c0094-17b4-4119-a9db-b4ee8f39108c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -110,7 +110,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock by MAWB Scan - Given Crossdocks have no relation (uid:7f843b3b-4dbb-4abd-8897-0341a9ecee2a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

@@ -86,7 +86,9 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       Order order = get(KEY_CREATED_ORDER);
       hub = order.getDestinationHub();
     }
-
+    if (mawb == null) {
+      mawb = get(KEY_SHIPMENT_AWB);
+    }
     scanningPage.inboundScanningUsingMawb(shipmentId, mawb, label, hub);
   }
 
