@@ -1400,8 +1400,23 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
     public CheckBox codCountryDefaultCheckbox;
 
+    @FindBy(id = "cod-min")
+    public TextBox codMin;
+
+    @FindBy(id = "cod-percent")
+    public TextBox codPercent;
+
     @FindBy(css = "md-input-container[label$='Insured Value'] div.md-container")
     public CheckBox insuranceCountryDefaultCheckbox;
+
+    @FindBy(id = "insurance-min")
+    public TextBox insuranceMin;
+
+    @FindBy(id = "insurance-percent")
+    public TextBox insurancePercent;
+
+    @FindBy(id = "insurance-threshold")
+    public TextBox insuranceThreshold;
 
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
