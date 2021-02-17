@@ -28,8 +28,7 @@ Feature: Failed Delivery Management
       | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
       | deliveryDate  | {{next-1-day-yyyy-MM-dd}}                                                 |
       | timeSlot      | <timeslot>                                                                |
-    And Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "<status>" on Edit Order page
     And Operator verify order granular status is "<granularStatus>" on Edit Order page
     And Operator verify order delivery title is "<deliveryTitle>" on Edit Order page
@@ -228,6 +227,149 @@ Feature: Failed Delivery Management
       | Note   | hiptest-uid                              | orderType | isPickupRequired |
       | Normal | uid:8a5c4ede-96ec-4cb6-98c2-776bbfe1e3c3 | Normal    | false            |
       | Return | uid:13de8904-3423-4f4c-b27d-4d1050873bc4 | Return    | true             |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator RTS Multiple Failed Deliveries
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    And API Driver failed the delivery of multiple parcels
+    And Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator RTS failed delivery orders with following properties:
+      | reason        | Nobody at address                                                         |
+      | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
+      | deliveryDate  | {{next-1-day-yyyy-MM-dd}}                                                 |
+      | timeSlot      | 6PM - 10PM                                                                |
+    Then Operator verifies that info toast displayed:
+      | top    | 2 order(s) updated               |
+      | bottom | Set Selected to Return to Sender |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | RESCHEDULING                          |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                                      |
+      | status | PENDING                                       |
+      | dnr    | NORMAL                                        |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} (RTS) |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | RESCHEDULING                          |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                                      |
+      | status | PENDING                                       |
+      | dnr    | NORMAL                                        |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} (RTS) |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Reschedule Multiple Failed Deliveries
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    And API Driver failed the delivery of multiple parcels
+    And Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator reschedule failed delivery orders using data below:
+      | date | {gradle-next-2-day-yyyy-MM-dd} |
+    Then Operator verifies that success toast displayed:
+      | top    | Order Rescheduling Success     |
+      | bottom | Success to reschedule 2 orders |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

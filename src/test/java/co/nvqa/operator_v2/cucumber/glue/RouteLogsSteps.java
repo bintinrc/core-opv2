@@ -566,7 +566,11 @@ public class RouteLogsSteps extends AbstractSteps {
         }
         value = finalData.get("bottom");
         if (StringUtils.isNotBlank(value)) {
-          return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+          if (value.startsWith("^")) {
+            return value.matches(value);
+          } else {
+            return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+          }
         }
         return true;
       });
