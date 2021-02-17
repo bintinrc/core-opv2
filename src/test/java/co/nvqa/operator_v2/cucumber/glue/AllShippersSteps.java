@@ -4,6 +4,7 @@ import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.MilkrunSettings;
 import co.nvqa.commons.model.other.LatLong;
+import co.nvqa.commons.model.pricing.PricingLevers;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
@@ -37,7 +38,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
@@ -338,6 +338,7 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
   public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data) {
     data = resolveKeyValues(data);
+    Boolean isShipperInsLeversAvailable = false;
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
     allShippersPage.allShippersCreateEditPage.addNewProfile.click();
     allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilVisible();
@@ -370,18 +371,21 @@ public class AllShippersSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceMin
           .setValue(value);
+      isShipperInsLeversAvailable = true;
     }
     value = data.get("insurancePercentage");
     if (StringUtils.isNotBlank(value)) {
       allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insurancePercent
           .setValue(value);
+      isShipperInsLeversAvailable = true;
     }
     value = data.get("insuranceThreshold");
     if (StringUtils.isNotBlank(value)) {
       allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceThreshold
           .setValue(value);
+      isShipperInsLeversAvailable = true;
     }
-    if (Objects.nonNull(value) && !value.contains("insurance")) {
+    if (!isShipperInsLeversAvailable) {
       allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox
           .check();
     }
@@ -459,7 +463,9 @@ public class AllShippersSteps extends AbstractSteps {
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
       allShippersPage.editShipper(shipper);
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
-      put(KEY_CREATED_PRICING_SCRIPT_OPV2, allShippersPage.getCreatedPricingProfile());
+      Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
+      put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
       allShippersPage.allShippersCreateEditPage.backToShipperList();
       pause3s();
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
@@ -853,12 +859,18 @@ public class AllShippersSteps extends AbstractSteps {
     String discount = mapOfData.get("discount");
     String comments = mapOfData.get("comments");
     String type = mapOfData.get("type");
+    String insuranceMinFee = mapOfData.get("insuranceMinFee");
+    String insurancePercentage = mapOfData.get("insurancePercentage");
+    String insuranceThreshold = mapOfData.get("insuranceThreshold");
 
     Pricing pricing = new Pricing();
     pricing.setScriptName(pricingScriptName);
     pricing.setDiscount(discount);
     pricing.setComments(comments);
     pricing.setType(type);
+    pricing.setInsThreshold(insuranceThreshold);
+    pricing.setInsPercentage(insurancePercentage);
+    pricing.setInsMin(insuranceMinFee);
     pricing.setEffectiveDate(TestUtils.getNextDate(1));
     pricing.setContractEndDate(TestUtils.getNextDate(10));
 
@@ -868,7 +880,7 @@ public class AllShippersSteps extends AbstractSteps {
 
     pricing.setTemplateId(Long.parseLong(pricingProfileId));
 
-    put(KEY_CREATED_PRICING_SCRIPT, pricing);
+    put(KEY_PRICING_PROFILE, pricing);
     put(KEY_PRICING_PROFILE_ID, pricingProfileId);
 
   }
@@ -1034,7 +1046,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies the pricing profile and shipper discount details are correct")
   public void OperatorVerifiesThePricingProfileAndShipperDiscountDetailsAreCorrect() {
-    Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
+    Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
     Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_SCRIPT_OPV2);
     allShippersPage
@@ -1214,5 +1226,22 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("Operator verifies that Start Date is populated as today's date and is not editable")
   public void operatorVerifiesThatStartDateIsPopulatedAsTodaySDateAndIsNotEditable() {
     allShippersPage.allShippersCreateEditPage.verifyStartDateInNewPricingScript();
+  }
+
+  @And("Operator verifies the pricing lever details")
+  public void operatorVerifiesThePricingLeverDetails() {
+    Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
+    PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
+
+    assertEquals("COD min fee is not the same: ", pricingLeversFromDb.getCodMinFee(),
+        pricingProfile.getCodMin());
+    assertEquals("COD percentage is not the same: ", pricingLeversFromDb.getCodPercentage(),
+        pricingProfile.getCodMin());
+    assertEquals("INS min fee is not the same: ", pricingLeversFromDb.getInsuranceMinFee(),
+        pricingProfile.getInsMin());
+    assertEquals("INS min fee is not the same: ", pricingLeversFromDb.getInsurancePercentage(),
+        pricingProfile.getInsPercentage());
+    assertEquals("INS threshold is not the same: ", pricingLeversFromDb.getInsuranceThreshold(),
+        pricingProfile.getInsThreshold());
   }
 }

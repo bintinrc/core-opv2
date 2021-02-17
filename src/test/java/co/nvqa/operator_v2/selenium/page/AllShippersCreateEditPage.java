@@ -175,6 +175,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='pricing-script-name']";
   public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='comments']";
   public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='contract-end-date']";
+  public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//tr[1]//td[@class='cod-min']";
+  public static final String XPATH_PRICING_PROFILE_COD_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='cod-percent']";
+  public static final String XPATH_PRICING_PROFILE_INS_THRESHOLD = "//table[@class='table-body']//tr[1]//td[@class='insurance-threshold']";
+  public static final String XPATH_PRICING_PROFILE_INS_MIN = "//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
+  public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]/div[@ng-repeat='e in errorMsgs']";
   public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
@@ -1257,8 +1262,18 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
           moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
           sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
         }
+        String shipperInsMin = pricing.getInsMin();
+        String shipperInsPercentage = pricing.getInsPercentage();
+        String shipperInsThreshold = pricing.getInsThreshold();
+        if (Objects.isNull(shipperInsMin) || Objects.isNull(shipperInsPercentage) || Objects
+            .isNull(shipperInsThreshold)) {
+          newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
+        } else {
+          sendKeysById("insurance-min", pricing.getInsMin());
+          sendKeysById("insurance-percent", pricing.getInsPercentage());
+          sendKeysById("insurance-threshold", pricing.getInsThreshold());
+        }
         newPricingProfileDialog.codCountryDefaultCheckbox.check();
-        newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
         if (pricing.getComments() != null) {
           sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
         }
@@ -1282,7 +1297,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
     Pricing addedPricingProfileOPV2 = new Pricing();
-    addedPricingProfileOPV2.setScriptId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
+    addedPricingProfileOPV2.setTemplateId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
     addedPricingProfileOPV2.setEffectiveDate(
         DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)));
     addedPricingProfileOPV2.setDiscount(getText(XPATH_PRICING_PROFILE_DISCOUNT));
@@ -1290,6 +1305,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     addedPricingProfileOPV2.setComments(getText(XPATH_PRICING_PROFILE_COMMENTS));
     addedPricingProfileOPV2.setContractEndDate(
         DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE)));
+    addedPricingProfileOPV2.setCodMin(getText(XPATH_PRICING_PROFILE_COD_MIN));
+    addedPricingProfileOPV2.setCodPercentage(getText(XPATH_PRICING_PROFILE_COD_PERCENTAGE));
+    addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
+    addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
+    addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
     return addedPricingProfileOPV2;
   }
 

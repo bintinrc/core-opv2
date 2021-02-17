@@ -383,6 +383,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
         pricingProfileFromDb.getComments());
     assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
     assertNotNull("End Date is null:", pricingProfileFromOPV2.getContractEndDate());
+
     final String discount = pricingProfile.getDiscount();
     if (Objects.isNull(discount)) {
       assertEquals("Discount amount is not blank:", "-", pricingProfileFromOPV2.getDiscount());
@@ -398,6 +399,46 @@ public class AllShippersPage extends OperatorV2SimplePage {
           pricingProfileFromDb.getDiscount().contains(pricingProfile.getDiscount()));
       assertEquals("Type is not the same:", pricingProfile.getType(),
           pricingProfileFromDb.getType());
+    }
+
+    if (Objects.isNull(pricingProfile.getCodMin())) {
+      assertEquals("COD min fee is not - ", "-",
+          pricingProfileFromOPV2.getCodMin());
+    } else {
+      assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
+          pricingProfileFromOPV2.getCodMin());
+    }
+
+    if (Objects.isNull(pricingProfile.getCodMin())) {
+      assertEquals("COD percentage is - ", "-",
+          pricingProfileFromOPV2.getCodPercentage());
+    } else {
+      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
+          pricingProfileFromOPV2.getCodPercentage());
+    }
+
+    if (Objects.isNull(pricingProfile.getInsMin())) {
+      assertEquals("INS min fee is not - ", "-",
+          pricingProfileFromOPV2.getInsMin());
+    } else {
+      assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
+          pricingProfileFromOPV2.getInsMin());
+    }
+
+    if (Objects.isNull(pricingProfile.getInsPercentage())) {
+      assertEquals("INS percentage is - ", "-",
+          pricingProfileFromOPV2.getInsPercentage());
+    } else {
+      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage(),
+          pricingProfileFromOPV2.getInsPercentage());
+    }
+
+    if (Objects.isNull(pricingProfile.getInsThreshold())) {
+      assertEquals("INS threshold is - ", "-",
+          pricingProfileFromOPV2.getInsThreshold());
+    } else {
+      assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
+          pricingProfileFromOPV2.getInsThreshold());
     }
   }
 
