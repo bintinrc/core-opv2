@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
@@ -1230,18 +1231,28 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies the pricing lever details")
   public void operatorVerifiesThePricingLeverDetails() {
-    Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
+    Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
 
-    assertEquals("COD min fee is not the same: ", pricingLeversFromDb.getCodMinFee(),
-        pricingProfile.getCodMin());
-    assertEquals("COD percentage is not the same: ", pricingLeversFromDb.getCodPercentage(),
-        pricingProfile.getCodPercentage());
-    assertEquals("INS min fee is not the same: ", pricingLeversFromDb.getInsuranceMinFee(),
-        pricingProfile.getInsMin());
-    assertEquals("INS min fee is not the same: ", pricingLeversFromDb.getInsurancePercentage(),
-        pricingProfile.getInsPercentage());
-    assertEquals("INS threshold is not the same: ", pricingLeversFromDb.getInsuranceThreshold(),
-        pricingProfile.getInsThreshold());
+    if (Objects.nonNull(pricingProfile.getCodMin())) {
+      assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
+          pricingLeversFromDb.getCodMinFee().toString());
+    }
+    if (Objects.nonNull(pricingProfile.getCodPercentage())) {
+      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
+          pricingLeversFromDb.getCodPercentage().toString());
+    }
+    if (Objects.nonNull(pricingProfile.getInsMin())) {
+      assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
+          pricingLeversFromDb.getInsuranceMinFee().toString());
+    }
+    if (Objects.nonNull(pricingProfile.getInsPercentage())) {
+      assertEquals("INS percentage fee is not the same: ", pricingProfile.getInsPercentage(),
+          pricingLeversFromDb.getInsurancePercentage().toString());
+    }
+    if (Objects.nonNull(pricingProfile.getInsThreshold())) {
+      assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
+          pricingLeversFromDb.getInsuranceThreshold().toString());
+    }
   }
 }
