@@ -1094,7 +1094,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.goToTabCorporateSubShipper();
   }
 
-    @When("Operator verifies corporate sub shipper is correct")
+  @When("Operator verifies corporate sub shipper is correct")
   public void operatorVerifiesCorporateSubShipper() {
     operatorGoToTabCorporateSubShipper();
     List<Shipper> subShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
@@ -1204,7 +1204,8 @@ public class AllShippersSteps extends AbstractSteps {
     String name = allShippersPage.allShippersCreateEditPage.b2bManagementPage.getSubShipperTable()
         .getColumnText(1, NAME_COLUMN_LOCATOR_KEY);
     put(KEY_SHIPPER_NAME, name);
-    String branchId = allShippersPage.allShippersCreateEditPage.b2bManagementPage.getSubShipperTable()
+    String branchId = allShippersPage.allShippersCreateEditPage.b2bManagementPage
+        .getSubShipperTable()
         .getColumnText(1, ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY);
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.getSubShipperTable()
         .clickActionButton(ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY, branchId,
@@ -1214,7 +1215,8 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("Operator verifies corporate sub shipper details page is displayed")
   public void qaVerifyShipperDetailsPageWithIdIsDisplayed() {
     String shipperName = get(KEY_SHIPPER_NAME);
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.shipperDetailsDisplayed(shipperName);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage
+        .shipperDetailsDisplayed(shipperName);
   }
 
   @Then("Operator verifies error message {string} is displayed on b2b management page")
@@ -1236,23 +1238,23 @@ public class AllShippersSteps extends AbstractSteps {
 
     if (Objects.nonNull(pricingProfile.getCodMin())) {
       assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
-          pricingLeversFromDb.getCodMinFee().toString());
+          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee()));
     }
     if (Objects.nonNull(pricingProfile.getCodPercentage())) {
       assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
-          pricingLeversFromDb.getCodPercentage().toString());
+          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodPercentage()));
     }
     if (Objects.nonNull(pricingProfile.getInsMin())) {
       assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
-          pricingLeversFromDb.getInsuranceMinFee().toString());
+          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee()));
     }
     if (Objects.nonNull(pricingProfile.getInsPercentage())) {
       assertEquals("INS percentage fee is not the same: ", pricingProfile.getInsPercentage(),
-          pricingLeversFromDb.getInsurancePercentage().toString());
+          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage()));
     }
     if (Objects.nonNull(pricingProfile.getInsThreshold())) {
       assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
-          pricingLeversFromDb.getInsuranceThreshold().toString());
+          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()));
     }
   }
 }
