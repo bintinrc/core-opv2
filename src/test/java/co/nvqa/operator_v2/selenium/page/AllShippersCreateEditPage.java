@@ -171,7 +171,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
   public static final String XPATH_VALIDATION_ERROR = "//md-dialog[contains(@class, 'nv-container-shipper-errors-dialog')] ";
   public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
-  public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
   public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//tr[1]//td[@class='id']";
   public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//tr[1]//td[@class='effective-date']";
   public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//tr[1]//td[@class='discount']";
