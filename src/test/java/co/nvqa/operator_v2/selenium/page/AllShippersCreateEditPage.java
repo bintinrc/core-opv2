@@ -1250,19 +1250,21 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public String addNewPricingProfile(Shipper shipper) {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    tabs.selectTab("Pricing and Billing");
+    addNewProfile.click();
+    newPricingProfileDialog.waitUntilVisible();
+
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
-      if (StringUtils.isNotBlank(pricing.getScriptName())) {
-        fillPricingProfileDetails(pricing);
-        click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
-      }
+      fillPricingProfileDetails(pricing);
+      newPricingProfileDialog.saveChanges.click();
+      newPricingProfileDialog.waitUntilInvisible();
     }
 
     String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
     assertEquals("Status is not Pending ", status, "Pending");
     saveChanges.click();
-    waitUntilInvisibilityOfElementLocated(XPATH_DISCOUNT_VALUE);
 
     return retryIfAssertionErrorOccurred(() ->
     {
@@ -1274,11 +1276,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   private void fillPricingProfileDetails(Pricing pricing) {
-    click(XPATH_ADD_NEW_PROFILE);
-    pause2s();
-    selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT,
-        pricing.getScriptName());
-
     try {
       setMdDatepickerById(LOCATOR_START_DATE, pricing.getEffectiveDate());
     } catch (InvalidElementStateException ex) {
@@ -1286,7 +1283,18 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
     setMdDatepickerById(LOCATOR_END_DATE, pricing.getContractEndDate());
 
-    if (pricing.getDiscount() != null) {
+    String pricingScriptName = pricing.getScriptName();
+    if (Objects.nonNull(pricingScriptName)) {
+      newPricingProfileDialog.pricingScript.searchAndSelectValue(pricingScriptName);
+    }
+
+    String comments = pricing.getComments();
+    if (Objects.nonNull(comments)) {
+      newPricingProfileDialog.comments.setValue(comments);
+    }
+
+    String discount = pricing.getDiscount();
+    if (Objects.nonNull(discount)) {
       newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());
     }
 
@@ -1332,10 +1340,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       } else if (Objects.nonNull(shipperCodPercentage)) {
         newPricingProfileDialog.codPercent.sendKeys(shipperCodPercentage);
       }
-    }
-
-    if (pricing.getComments() != null) {
-      sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
     }
   }
 

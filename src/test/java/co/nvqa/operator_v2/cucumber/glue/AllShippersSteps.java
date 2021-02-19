@@ -342,7 +342,7 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
   public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data) {
     data = resolveKeyValues(data);
-    Boolean isShipperInsLeversAvailable = false;
+    boolean isShipperInsLeversAvailable = false;
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
     allShippersPage.allShippersCreateEditPage.addNewProfile.click();
     allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilVisible();
