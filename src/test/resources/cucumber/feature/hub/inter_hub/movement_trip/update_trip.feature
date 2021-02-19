@@ -370,15 +370,7 @@ Feature: Movement Trip - Update Trip
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with single Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    Given API Operator creates new Hub using data below:
+    Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -471,12 +463,86 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Movement trip departed" is shown on movement page
 
-    @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT #TODO: FIX IT
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Multiple Different Trips (uid:d7dbab63-4e63-4f98-b1f2-5b9c18e5a39c)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates 3 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {hub-relation-destination-hub-id}
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {hub-relation-destination-hub-id}
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {hub-relation-destination-hub-id}
+    And API Operator assign following drivers to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id}"
+      | primaryDriver    | {KEY_LIST_OF_CREATED_DRIVERS[1].id} |
+      | additionalDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
+    And API Operator depart trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    And API Operator depart trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}              |
+    Given Operator go to menu Inter-Hub -> Movement Trips
+    And Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
+    And Operator depart trip
+    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
+    And Operator click force trip completion
+    And Operator depart trip
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
 
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Same Trip (uid:4203b43a-1aec-43dd-b791-84e4a071f791)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates 2 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {hub-relation-destination-hub-id}
+    And API Operator assign following drivers to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+      | primaryDriver    | {KEY_LIST_OF_CREATED_DRIVERS[1].id} |
+      | additionalDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {hub-relation-destination-hub-id}
+    And API Operator assign following drivers to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+      | primaryDriver    | {KEY_LIST_OF_CREATED_DRIVERS[1].id} |
+      | additionalDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
+    And API Operator depart trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    Given Operator go to menu Inter-Hub -> Movement Trips
+    And Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
+    And Operator depart trip
+    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
+    And Operator click force trip completion
+    And Operator depart trip
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
