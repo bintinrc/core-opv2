@@ -73,6 +73,41 @@ Feature: All Shippers
     Then DB Operator fetches pricing profile details
     And Operator verifies the pricing profile and shipper discount details are correct
 
+  @CloseNewWindows
+  Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:63d13a1d-cdbb-4a48-bde9-7c962f0101f8)
+    Given Operator changes the country to "Indonesia"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And Operator edits the created shipper
+    When Operator adds new Shipper's Pricing Profile
+      | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
+      | type                | FLAT                                            |
+      | discount            | 20                                              |
+      | insuranceMinFee     | 3000                                            |
+      | insurancePercentage | 1                                               |
+      | insuranceThreshold  | 0                                               |
+      | comments            | This is a test pricing script                   |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing profile and shipper discount details
+    Then Operator verifies the pricing profile and shipper discount details are correct
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -4,97 +4,6 @@ Feature: All Shippers
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Create Pricing Profile - with Int Discount (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
-      | discount          | 20                                              |
-      | comments          | This is a test pricing script                   |
-      | type              | FLAT                                            |
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    Then DB Operator fetches pricing profile and shipper discount details
-    And Operator verifies the pricing profile and shipper discount details are correct
-
-  Scenario: Add New Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator adds new pricing Profile
-    Then Operator verifies that Start Date is populated as today's date and is not editable
-
-  Scenario: Create a new Shipper - Create Pricing Profile (uid:78dadc9d-16ea-429f-88ff-eb472bad435f)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
-    Then Operator verifies that Pricing Script is "Active" and ""
-
-  @CloseNewWindows
-  Scenario: Create a new Shipper - Create Pricing Profile and Update it before Created (uid:15c1b8b1-546f-4f30-95f4-492b86e7bd7c)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings and updates pricing script using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
-    Then Operator verifies that Pricing Script is "Active" and ""
-
-  @CloseNewWindows
-  Scenario: Create a new Shipper - Not Creating Pricing Profile (uid:5f2fdf58-bc27-4a5f-9961-9f2b0b06f820)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings and without Pricing profile using data below:
-      | isShipperActive              | true            |
-      | shipperType                  | Normal          |
-      | ocVersion                    | v4              |
-      | services                     | STANDARD        |
-      | trackingType                 | Fixed           |
-      | isAllowCod                   | true            |
-      | isAllowCashPickup            | true            |
-      | isPrepaid                    | true            |
-      | isAllowStagedOrders          | true            |
-      | isMultiParcelShipper         | true            |
-      | isDisableDriverAppReschedule | true            |
-      | industryName                 | {industry-name} |
-      | salesPerson                  | {sales-person}  |
-
   @CloseNewWindows @DeletePricingProfile
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
     Given Operator go to menu Shipper -> All Shippers
@@ -109,36 +18,6 @@ Feature: All Shippers
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
-
-  @CloseNewWindows
-  Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
-      | discount          | 20                                              |
-      | comments          | This is a test pricing script                   |
-      | type              | FLAT                                            |
-    And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
-    Then Operator verifies that Pricing Script is "Pending" and "Active"
-    And Operator edits the created shipper
-    And Operator verifies that Edit Pending Profile is displayed
 
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
@@ -163,7 +42,6 @@ Feature: All Shippers
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 0                                               |
       | errorMessage      | 0 is not a valid discount value                 |
-
 
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with none Flat Discount (uid:3895c1e8-58b5-4625-9175-788c133a4b92)
@@ -294,6 +172,32 @@ Feature: All Shippers
       | comments          | This is an invalid discount                     |
       | errorMessage      | Discounts cannot exceed 6 figures.              |
 
+  Scenario: Create Pricing Profile - with Int Discount (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Profile
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 20                                              |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details are correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

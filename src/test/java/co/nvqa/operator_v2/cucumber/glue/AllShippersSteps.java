@@ -31,6 +31,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,6 +65,8 @@ public class AllShippersSteps extends AbstractSteps {
   private static final String KEY_CURRENT_COUNTRY = "KEY_CURRENT_COUTRY";
   private AllShippersPage allShippersPage;
   private ProfilePage profilePage;
+
+  private static final DecimalFormat NO_TRAILING_ZERO_DF = new DecimalFormat("###.##");
 
   public AllShippersSteps() {
   }
@@ -855,6 +858,20 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator adds new Shipper's Pricing Profile")
   public void OperatorAddsNewShippersPricingProfile(Map<String, String> mapOfData) {
+    Shipper shipper = setShipperPricingProfile(mapOfData);
+    String pricingProfileId = allShippersPage.addNewPricingProfile(shipper);
+    put(KEY_PRICING_PROFILE, shipper.getPricing());
+    put(KEY_PRICING_PROFILE_ID, pricingProfileId);
+  }
+
+  @Then("Operator adds pricing profile with below details and verifies save button is disabled")
+  public void operatorAddsPricingProfileWithBelowDetailsAndVerifiesSaveButtonIsDisabled(
+      Map<String, String> mapOfData) {
+    Shipper shipper = setShipperPricingProfile(mapOfData);
+    allShippersPage.addPricingProfileAndVerifySaveButtonIsDisabled(shipper);
+  }
+
+  private Shipper setShipperPricingProfile(Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     String pricingScriptName = mapOfData.get("pricingScriptName");
     String discount = mapOfData.get("discount");
@@ -876,14 +893,7 @@ public class AllShippersSteps extends AbstractSteps {
     pricing.setContractEndDate(TestUtils.getNextDate(10));
 
     shipper.setPricing(pricing);
-
-    String pricingProfileId = allShippersPage.addNewPricingScript(shipper);
-
-    pricing.setTemplateId(Long.parseLong(pricingProfileId));
-
-    put(KEY_PRICING_PROFILE, pricing);
-    put(KEY_PRICING_PROFILE_ID, pricingProfileId);
-
+    return shipper;
   }
 
   @Then("Operator edits the Pending Pricing Script")
@@ -1067,20 +1077,11 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.verifyEditPendingProfileIsDisplayed();
   }
 
-  @Then("Operator adds pricing script with invalid discount and verifies the error message")
+  @Then("Operator adds pricing script with invalid discount/pricing_lever and verifies the error message")
   public void operatorAddsPricingScriptWithInvalidDiscountAndVerifiesTheErrorMessage(
       Map<String, String> mapOfData) {
-    Shipper shipper = get(KEY_CREATED_SHIPPER);
-    String pricingScriptName = mapOfData.get("pricingScriptName");
-    String discount = mapOfData.get("discount");
     String errorMessage = mapOfData.get("errorMessage");
-
-    Pricing pricing = new Pricing();
-    pricing.setScriptName(pricingScriptName);
-    pricing.setDiscount(discount);
-
-    shipper.setPricing(pricing);
-
+    Shipper shipper = setShipperPricingProfile(mapOfData);
     allShippersPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
   }
 
