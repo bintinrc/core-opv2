@@ -6,47 +6,40 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Soewandi Wirjawan
- *
+ * <p>
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class BlockedDatesSteps extends AbstractSteps
-{
-    private BlockedDatesPage blockedDatesPage;
+public class BlockedDatesSteps extends AbstractSteps {
 
-    public BlockedDatesSteps()
-    {
-    }
+  private BlockedDatesPage blockedDatesPage;
 
-    @Override
-    public void init()
-    {
-        blockedDatesPage = new BlockedDatesPage(getWebDriver());
-    }
+  public BlockedDatesSteps() {
+  }
 
-    @When("^Operator adds Blocked Date$")
-    public void operatorAddsBlockedDate()
-    {
-        blockedDatesPage.addBlockedDate();
-    }
+  @Override
+  public void init() {
+    blockedDatesPage = new BlockedDatesPage(getWebDriver());
+  }
 
-    @Then("^Operator verifies new Blocked Date is added successfully$")
-    public void operatorVerifiesNewBlockedDateIsAddedSuccessfully()
-    {
-        blockedDatesPage.verifyBlockedDateAddedSuccessfully();
-    }
+  @When("^Operator adds Blocked Date$")
+  public void operatorAddsBlockedDate() {
+    blockedDatesPage.addBlockedDate();
+  }
 
-    @When("^Operator removes Blocked Date$")
-    public void operatorRemovesBlockedDate()
-    {
-        blockedDatesPage.removeBlockedDate();
-    }
+  @Then("^Operator verifies new Blocked Date is added successfully$")
+  public void operatorVerifiesNewBlockedDateIsAddedSuccessfully() {
+    blockedDatesPage.verifyBlockedDateAddedSuccessfully();
+  }
 
-    @Then("^Operator verifies Blocked Date is removed successfully$")
-    public void operatorVerifiesBlockedDateIsRemovedSuccessfully()
-    {
-        blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
-    }
+  @When("^Operator removes Blocked Date$")
+  public void operatorRemovesBlockedDate() {
+    blockedDatesPage.removeBlockedDate();
+  }
+
+  @Then("^Operator verifies Blocked Date is removed successfully$")
+  public void operatorVerifiesBlockedDateIsRemovedSuccessfully() {
+    blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
+  }
 }

@@ -1,199 +1,214 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class TxnRsvn extends DataEntity<TxnRsvn>
-{
-    private Long sequence;
-    private Long id;
-    private Long orderId;
-    private String waypointId;
-    private String trackingId;
-    private String type;
-    private String shipper;
-    private String address;
-    private String routeId;
-    private String status;
-    private String startDateTime;
-    private String endDateTime;
-    private String dp;
-    private String pickupSize;
-    private String comments;
+public class TxnRsvn extends DataEntity<TxnRsvn> {
 
-    public TxnRsvn()
-    {
-    }
+  private Long sequence;
+  private Long id;
+  private Long orderId;
+  private String waypointId;
+  private String trackingId;
+  private String type;
+  private String shipper;
+  private String address;
+  private String routeId;
+  private String status;
+  private String startDateTime;
+  private String endDateTime;
+  private String dp;
+  private String pickupSize;
+  private String comments;
 
-    public Long getSequence()
-    {
-        return sequence;
-    }
+  public TxnRsvn() {
+  }
 
-    public void setSequence(Long sequence)
-    {
-        this.sequence = sequence;
-    }
+  public TxnRsvn(Map<String, ?> data) {
+    fromMap(data);
+  }
 
-    public void setSequence(String sequence)
-    {
-        setSequence(Long.valueOf(sequence));
-    }
+  public Long getSequence() {
+    return sequence;
+  }
 
-    public Long getId()
-    {
-        return id;
-    }
+  public void setSequence(Long sequence) {
+    this.sequence = sequence;
+  }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public void setSequence(String sequence) {
+    setSequence(Long.valueOf(sequence));
+  }
 
-    public void setId(String id)
-    {
-        setId(Long.valueOf(id));
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getOrderId()
-    {
-        return orderId;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setOrderId(Long orderId)
-    {
-        this.orderId = orderId;
+  public void setId(String id) {
+    if (id != null) {
+      setId(Long.valueOf(id));
     }
+  }
 
-    public void setOrderId(String orderId)
-    {
-        setOrderId(Long.valueOf(orderId));
-    }
+  public Long getOrderId() {
+    return orderId;
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public void setOrderId(Long orderId) {
+    this.orderId = orderId;
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
+  public void setOrderId(String orderId) {
+    if (orderId != null) {
+      setOrderId(Long.valueOf(orderId));
     }
+  }
 
-    public String getType()
-    {
-        return type;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public String getShipper()
-    {
-        return shipper;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public void setShipper(String shipper)
-    {
-        this.shipper = shipper;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public String getAddress()
-    {
-        return address;
-    }
+  public String getShipper() {
+    return shipper;
+  }
 
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
+  public void setShipper(String shipper) {
+    this.shipper = shipper;
+  }
 
-    public String getRouteId()
-    {
-        return routeId;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public void setRouteId(String routeId)
-    {
-        if (!StringUtils.equalsIgnoreCase(routeId, "-"))
-        {
-            this.routeId = routeId;
-        }
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public String getStatus()
-    {
-        return status;
-    }
+  public String getRouteId() {
+    return routeId;
+  }
 
-    public void setStatus(String status)
-    {
-        this.status = status;
+  public void setRouteId(String routeId) {
+    if (!StringUtils.equalsIgnoreCase(routeId, "-")) {
+      this.routeId = routeId;
     }
+  }
 
-    public String getStartDateTime()
-    {
-        return startDateTime;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public void setStartDateTime(String startDateTime)
-    {
-        this.startDateTime = startDateTime;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public String getEndDateTime()
-    {
-        return endDateTime;
-    }
+  public String getStartDateTime() {
+    return startDateTime;
+  }
 
-    public void setEndDateTime(String endDateTime)
-    {
-        this.endDateTime = endDateTime;
-    }
+  public void setStartDateTime(String startDateTime) {
+    this.startDateTime = startDateTime;
+  }
 
-    public String getDp()
-    {
-        return dp;
-    }
+  public String getEndDateTime() {
+    return endDateTime;
+  }
 
-    public void setDp(String dp)
-    {
-        this.dp = dp;
-    }
+  public void setEndDateTime(String endDateTime) {
+    this.endDateTime = endDateTime;
+  }
 
-    public String getPickupSize()
-    {
-        return pickupSize;
-    }
+  public String getDp() {
+    return dp;
+  }
 
-    public void setPickupSize(String pickupSize)
-    {
-        this.pickupSize = pickupSize;
-    }
+  public void setDp(String dp) {
+    this.dp = dp;
+  }
 
-    public String getComments()
-    {
-        return comments;
-    }
+  public String getPickupSize() {
+    return pickupSize;
+  }
 
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
+  public void setPickupSize(String pickupSize) {
+    this.pickupSize = pickupSize;
+  }
 
-    public String getWaypointId()
-    {
-        return waypointId;
-    }
+  public String getComments() {
+    return comments;
+  }
 
-    public void setWaypointId(String waypointId)
-    {
-        this.waypointId = waypointId;
-    }
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
+
+  public String getWaypointId() {
+    return waypointId;
+  }
+
+  public void setWaypointId(String waypointId) {
+    this.waypointId = waypointId;
+  }
+
+  @Override
+  public void fromCsvLine(String csvLine) {
+    String[] values = splitCsvLine(csvLine);
+    setSequence(getValueIfIndexExists(values, 0));
+    setId(getValueIfIndexExists(values, 1));
+    setOrderId(getValueIfIndexExists(values, 2));
+    setTrackingId(getValueIfIndexExists(values, 3));
+    setWaypointId(getValueIfIndexExists(values, 4));
+    setType(getValueIfIndexExists(values, 5));
+    setShipper(getValueIfIndexExists(values, 6));
+    setAddress(getValueIfIndexExists(values, 7));
+    setRouteId(getValueIfIndexExists(values, 8));
+    setStatus(getValueIfIndexExists(values, 9));
+    setStartDateTime(getValueIfIndexExists(values, 10));
+    setEndDateTime(getValueIfIndexExists(values, 11));
+    setDp(getValueIfIndexExists(values, 12));
+    setPickupSize(getValueIfIndexExists(values, 13));
+    setComments(getValueIfIndexExists(values, 14));
+  }
+
+  @Override
+  public String toString() {
+    return "TxnRsvn{" +
+        "sequence=" + sequence +
+        ", id=" + id +
+        ", orderId=" + orderId +
+        ", waypointId='" + waypointId + '\'' +
+        ", trackingId='" + trackingId + '\'' +
+        ", type='" + type + '\'' +
+        ", shipper='" + shipper + '\'' +
+        ", address='" + address + '\'' +
+        ", routeId='" + routeId + '\'' +
+        ", status='" + status + '\'' +
+        ", startDateTime='" + startDateTime + '\'' +
+        ", endDateTime='" + endDateTime + '\'' +
+        ", dp='" + dp + '\'' +
+        ", pickupSize='" + pickupSize + '\'' +
+        ", comments='" + comments + '\'' +
+        '}';
+  }
 }

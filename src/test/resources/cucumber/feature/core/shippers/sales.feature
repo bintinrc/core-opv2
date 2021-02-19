@@ -20,12 +20,39 @@ Feature: Sales
 
   @DeleteSalesPerson
   Scenario: Operator Verifies All filters on Sales Page Works Fine (uid:550e3406-2ed8-4c41-9ffb-f73e4307384c)
-    Given Operator go to menu Shipper -> Sales
-    When Operator upload CSV contains multiple Sales Persons on Sales page using data below:
-      | numberOfSalesPerson | 1 |
-    When Operator refresh page
-    Then Operator verifies all Sales Persons created successfully
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create sales person:
+      | code | DSP-{uniqueString}   |
+      | name | Dummy-{uniqueString} |
+    When Operator go to menu Shipper -> Sales
     Then Operator verifies all filters on Sales page works fine
+
+  @DeleteSalesPerson
+  Scenario: Operator Creates Sales Person by Uploading CSV With Duplicate Code (uid:5504e1c8-78c0-44aa-a30d-8eb3c7051d56)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create sales person:
+      | code | DSP-{uniqueString}   |
+      | name | Dummy-{uniqueString} |
+    When Operator go to menu Shipper -> Sales
+    And Operator upload CSV with following Sales Persons data on Sales page:
+      | code                               | name                 |
+      | {KEY_LIST_OF_SALES_PERSON[1].code} | Dummy-{uniqueString} |
+    Then Operator verifies that Upload CSV dialog contains following error records:
+      | 1.Sales {KEY_LIST_OF_SALES_PERSON[2].name}: The sales person with code - {KEY_LIST_OF_SALES_PERSON[2].code} already exists |
+    And Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                            |
+      | bottom | ^.*400 Unknown.*The sales person with code - {KEY_LIST_OF_SALES_PERSON[2].code} already exists.* |
+
+  @DeleteSalesPerson
+  Scenario: Operator Update a Sales Person (uid:735c72d2-e24a-4fde-81bb-817aad5c840f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create sales person:
+      | code | DSP-{uniqueString}   |
+      | name | Dummy-{uniqueString} |
+    When Operator go to menu Shipper -> Sales
+    And Operator edit "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page using data below:
+      | name | {KEY_LIST_OF_SALES_PERSON[1].name}EDITED |
+    Then Operator verifies all sales persons parameters on Sales page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

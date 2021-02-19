@@ -5,7 +5,7 @@ Feature: Crossdock to other station belong to another crossdock
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement Found and there is available schedule (uid:6b2b71e2-4d64-4ebe-8437-aa9323d75613)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -36,13 +36,13 @@ Feature: Crossdock to other station belong to another crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 20:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -55,7 +55,7 @@ Feature: Crossdock to other station belong to another crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -88,7 +88,7 @@ Feature: Crossdock to other station belong to another crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement Found but there is no schedule (uid:de3b62b5-e244-446c-9665-ed69cf4ffa3d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -128,13 +128,13 @@ Feature: Crossdock to other station belong to another crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -147,7 +147,7 @@ Feature: Crossdock to other station belong to another crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -168,7 +168,7 @@ Feature: Crossdock to other station belong to another crossdock
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
-  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement not found (uid:dd887208-e154-43b0-913b-6d8e59ccdeb1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -208,7 +208,7 @@ Feature: Crossdock to other station belong to another crossdock
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
@@ -218,7 +218,7 @@ Feature: Crossdock to other station belong to another crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
-      | movementType   | Air Haul                           |
+      | movementType   | Land Haul                           |
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |

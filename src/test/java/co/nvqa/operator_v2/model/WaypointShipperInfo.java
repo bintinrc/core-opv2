@@ -1,53 +1,53 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class WaypointShipperInfo extends DataEntity<WaypointShipperInfo>
-{
-    private String shipperName;
-    private Long scanned;
-    private Long total;
+public class WaypointShipperInfo extends DataEntity<WaypointShipperInfo> {
 
-    public String getShipperName()
-    {
-        return shipperName;
-    }
+  private String shipperName;
+  private Long scanned;
+  private Long total;
 
-    public void setShipperName(String shipperName)
-    {
-        this.shipperName = shipperName;
-    }
+  public WaypointShipperInfo() {
+  }
 
-    public Long getScanned()
-    {
-        return scanned;
-    }
+  public WaypointShipperInfo(Map<String, ?> data) {
+    super(data);
+  }
 
-    public void setScanned(long scanned)
-    {
-        this.scanned = scanned;
-    }
+  public String getShipperName() {
+    return shipperName;
+  }
 
-    public void setScanned(String scanned)
-    {
-        setScanned(Long.parseLong(scanned));
-    }
+  public void setShipperName(String shipperName) {
+    this.shipperName = shipperName;
+  }
 
-    public Long getTotal()
-    {
-        return total;
-    }
+  public Long getScanned() {
+    return scanned;
+  }
 
-    public void setTotal(long total)
-    {
-        this.total = total;
-    }
+  public void setScanned(long scanned) {
+    this.scanned = scanned;
+  }
 
-    public void setTotal(String total)
-    {
-        setTotal(Long.parseLong(total));
-    }
+  public void setScanned(String scanned) {
+    setScanned(Long.parseLong(scanned));
+  }
+
+  public Long getTotal() {
+    return total;
+  }
+
+  public void setTotal(long total) {
+    this.total = total;
+  }
+
+  public void setTotal(String total) {
+    setTotal(Long.parseLong(total));
+  }
 }

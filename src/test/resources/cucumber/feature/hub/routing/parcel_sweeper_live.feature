@@ -161,8 +161,9 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}        |
+      | trackingId | CREATED           |
+      | task       | SORTHUBTESTFROMQA |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | NOT ROUTED TODAY       |
@@ -299,14 +300,13 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED               |
-      | hubId      | {KEY_DESTINATION_HUB} |
+      | trackingId | CREATED                              |
+      | hubId      | {KEY_DESTINATION_HUB_PARCEL_SWEEPER} |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN                |
-      | hubName   | {KEY_CREATED_ORDER.destinationHub} |
-      | hubId     | {KEY_DESTINATION_HUB}              |
+      | eventName | PARCEL ROUTING SCAN                  |
+      | hubName   | {KEY_CREATED_ORDER.destinationHub}   |
+      | hubId     | {KEY_DESTINATION_HUB_PARCEL_SWEEPER} |
     And Operator verify order status is "Transit" on Edit Order page
-
     Examples:
       | scenarioName    | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
       | Priority 1      | uid:79172574-1375-48fb-ad29-d2212e585d15 | 1             | #f8cf5c                 |

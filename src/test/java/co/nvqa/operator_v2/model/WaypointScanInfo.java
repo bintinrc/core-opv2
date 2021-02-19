@@ -1,65 +1,54 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class WaypointScanInfo extends DataEntity<WaypointScanInfo>
-{
-    private String trackingId;
-    private String status;
-    private String reason;
-    private String tags;
+public class WaypointScanInfo extends DataEntity<WaypointScanInfo> {
 
-    public WaypointScanInfo()
-    {
-    }
+  private String trackingId;
+  private String status;
+  private String reason;
+  private String tags;
 
-    public WaypointScanInfo(Map<String, String> data)
-    {
-        fromMap(data);
-    }
+  public WaypointScanInfo() {
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public WaypointScanInfo(Map<String, String> data) {
+    fromMap(data);
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getStatus()
-    {
-        return status;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public String getReason()
-    {
-        return reason;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public void setReason(String reason)
-    {
-        this.reason = reason;
-    }
+  public String getReason() {
+    return reason;
+  }
 
-    public String getTags()
-    {
-        return tags;
-    }
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
 
-    public void setTags(String tags)
-    {
-        this.tags = tags;
-    }
+  public String getTags() {
+    return tags;
+  }
+
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
 }

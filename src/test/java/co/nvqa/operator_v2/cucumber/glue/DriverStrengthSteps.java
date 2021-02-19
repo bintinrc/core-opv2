@@ -6,111 +6,93 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class DriverStrengthSteps extends AbstractSteps
-{
-    private DriverStrengthPage dsPage;
+public class DriverStrengthSteps extends AbstractSteps {
 
-    public DriverStrengthSteps()
-    {
-    }
+  private DriverStrengthPage dsPage;
 
-    @Override
-    public void init()
-    {
-        dsPage = new DriverStrengthPage(getWebDriver());
-    }
+  public DriverStrengthSteps() {
+  }
 
-    @When("^download driver csv list$")
-    public void downloadFile()
-    {
-        dsPage.downloadFile();
-    }
+  @Override
+  public void init() {
+    dsPage = new DriverStrengthPage(getWebDriver());
+  }
 
-    @Then("^driver list should exist$")
-    public void verifyDownloadedFile()
-    {
-        dsPage.verifyDownloadedFile();
-    }
+  @When("^download driver csv list$")
+  public void downloadFile() {
+    dsPage.downloadFile();
+  }
 
-    @When("^in driver strength driver strength is filtered by ([^\"]*)$")
-    public void filteredBy(String type)
-    {
-        dsPage.filteredBy(type);
-    }
+  @Then("^driver list should exist$")
+  public void verifyDownloadedFile() {
+    dsPage.verifyDownloadedFile();
+  }
 
-    @When("^in driver find zone and type of the driver$")
-    public void findZoneAndType()
-    {
-        dsPage.findZoneAndType();
-    }
+  @When("^in driver strength driver strength is filtered by ([^\"]*)$")
+  public void filteredBy(String type) {
+    dsPage.filteredBy(type);
+  }
 
-    @When("^in driver strength searching driver$")
-    public void searchDriver()
-    {
-        dsPage.searchDriver();
-    }
+  @When("^in driver find zone and type of the driver$")
+  public void findZoneAndType() {
+    dsPage.findZoneAndType();
+  }
 
-    @Then("^in driver strength verifying driver$")
-    public void verifyDriver()
-    {
-        dsPage.verifyDriver();
-    }
+  @When("^in driver strength searching driver$")
+  public void searchDriver() {
+    dsPage.searchDriver();
+  }
 
-    @When("^in driver strength driver coming status is changed$")
-    public void changeComingStatus()
-    {
-        dsPage.changeComingStatus();
-    }
+  @Then("^in driver strength verifying driver$")
+  public void verifyDriver() {
+    dsPage.verifyDriver();
+  }
 
-    @When("^in driver strength clicking on view contact button$")
-    public void clickViewContactButton()
-    {
-        dsPage.clickViewContactButton();
-    }
+  @When("^in driver strength driver coming status is changed$")
+  public void changeComingStatus() {
+    dsPage.changeComingStatus();
+  }
 
-    @When("^in driver strength add new driver button is clicked$")
-    public void clickAddNewDriver()
-    {
-        dsPage.clickAddNewDriver();
-    }
+  @When("^in driver strength clicking on view contact button$")
+  public void clickViewContactButton() {
+    dsPage.clickViewContactButton();
+  }
 
-    @When("^in driver strength enter default value of new driver$")
-    public void enterDefaultValue()
-    {
-        dsPage.enterDefaultValue();
-    }
+  @When("^in driver strength add new driver button is clicked$")
+  public void clickAddNewDriver() {
+    dsPage.clickAddNewDriver();
+  }
 
-    @Then("^in driver strength new driver should get created$")
-    public void verifyNewDriver()
-    {
-        dsPage.verifyNewDriver();
-    }
+  @When("^in driver strength enter default value of new driver$")
+  public void enterDefaultValue() {
+    dsPage.enterDefaultValue();
+  }
 
-    @When("^in driver strength searching new created driver$")
-    public void searchingNewDriver()
-    {
-        dsPage.searchingNewDriver();
-    }
+  @Then("^in driver strength new driver should get created$")
+  public void verifyNewDriver() {
+    dsPage.verifyNewDriver();
+  }
 
-    @When("^in driver strength edit new driver button is clicked$")
-    public void editNewDriver()
-    {
-        dsPage.editNewDriver();
-    }
+  @When("^in driver strength searching new created driver$")
+  public void searchingNewDriver() {
+    dsPage.searchingNewDriver();
+  }
 
-    @When("^in driver strength delete new driver button is clicked$")
-    public void deleteNewDriver()
-    {
-        dsPage.deleteNewDriver();
-    }
+  @When("^in driver strength edit new driver button is clicked$")
+  public void editNewDriver() {
+    dsPage.editNewDriver();
+  }
 
-    @Then("^in driver strength the created driver should not exist$")
-    public void createdDriverShouldNotExist()
-    {
-        dsPage.createdDriverShouldNotExist();
-    }
+  @When("^in driver strength delete new driver button is clicked$")
+  public void deleteNewDriver() {
+    dsPage.deleteNewDriver();
+  }
+
+  @Then("^in driver strength the created driver should not exist$")
+  public void createdDriverShouldNotExist() {
+    dsPage.createdDriverShouldNotExist();
+  }
 }

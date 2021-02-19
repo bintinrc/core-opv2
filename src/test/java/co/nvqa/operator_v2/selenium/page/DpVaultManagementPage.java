@@ -4,132 +4,122 @@ import co.nvqa.operator_v2.model.DpVault;
 import org.openqa.selenium.WebDriver;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class DpVaultManagementPage extends OperatorV2SimplePage
-{
-    private static final String MD_VIRTUAL_REPEAT = "station in getTableData()";
-    private static final String CSV_FILENAME = "station.csv";
+public class DpVaultManagementPage extends OperatorV2SimplePage {
 
-    public static final String COLUMN_CLASS_DATA_NAME = "name";
-    public static final String COLUMN_CLASS_DATA_ADDRESS = "_address";
-    public static final String COLUMN_CLASS_DATA_LAT_LONG = "_latlng";
-    public static final String COLUMN_CLASS_DATA_DP_NAME = "_distribution-point";
+  private static final String MD_VIRTUAL_REPEAT = "station in getTableData()";
+  private static final String CSV_FILENAME = "station.csv";
 
-    public static final String ACTION_BUTTON_EDIT = "Edit";
-    public static final String ACTION_BUTTON_DELETE = "Delete";
+  public static final String COLUMN_CLASS_DATA_NAME = "name";
+  public static final String COLUMN_CLASS_DATA_ADDRESS = "_address";
+  public static final String COLUMN_CLASS_DATA_LAT_LONG = "_latlng";
+  public static final String COLUMN_CLASS_DATA_DP_NAME = "_distribution-point";
 
-    public DpVaultManagementPage(WebDriver webDriver)
-    {
-        super(webDriver);
-    }
+  public static final String ACTION_BUTTON_EDIT = "Edit";
+  public static final String ACTION_BUTTON_DELETE = "Delete";
 
-    public void addDpVault(DpVault dpVault)
-    {
-        click("//button[@aria-label='Add Station']");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-station-add')]");
-        fillTheFormAndSubmit(dpVault);
-    }
+  public DpVaultManagementPage(WebDriver webDriver) {
+    super(webDriver);
+  }
 
-    private void fillTheFormAndSubmit(DpVault dpVault)
-    {
-        sendKeys("//input[@aria-label='Name']", dpVault.getName());
-        sendKeys("//input[@aria-label='commons.model.appVersion']", String.valueOf(dpVault.getAppVersion()));
-        sendKeys("//input[@aria-label='Distribution Point']", dpVault.getDpName());
-        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", dpVault.getDpName());
-        sendKeys("//input[@aria-label='Address 1']", dpVault.getAddress1());
-        sendKeys("//input[@aria-label='Address 2']", dpVault.getAddress2());
-        sendKeys("(//input[@aria-label='City'])[1]", dpVault.getCity());
-        sendKeys("//input[@aria-label='Country']", dpVault.getCountry());
-        sendKeys("(//input[@aria-label='City'])[2]", dpVault.getCity());
-        sendKeys("//input[@aria-label='commons.latitude']", String.valueOf(dpVault.getLatitude()));
-        sendKeys("//input[@aria-label='commons.longitude']", String.valueOf(dpVault.getLongitude()));
-        clickButtonByAriaLabel("Save Button");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
-    }
+  public void addDpVault(DpVault dpVault) {
+    click("//button[@aria-label='Add Station']");
+    waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-station-add')]");
+    fillTheFormAndSubmit(dpVault);
+  }
 
-    public void deleteDpVault(DpVault dpVault)
-    {
-        searchTableByName(dpVault.getName());
-        clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause100ms();
-        click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
-    }
+  private void fillTheFormAndSubmit(DpVault dpVault) {
+    sendKeys("//input[@aria-label='Name']", dpVault.getName());
+    sendKeys("//input[@aria-label='commons.model.appVersion']",
+        String.valueOf(dpVault.getAppVersion()));
+    sendKeys("//input[@aria-label='Distribution Point']", dpVault.getDpName());
+    clickf(
+        "//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']",
+        dpVault.getDpName());
+    sendKeys("//input[@aria-label='Address 1']", dpVault.getAddress1());
+    sendKeys("//input[@aria-label='Address 2']", dpVault.getAddress2());
+    sendKeys("(//input[@aria-label='City'])[1]", dpVault.getCity());
+    sendKeys("//input[@aria-label='Country']", dpVault.getCountry());
+    sendKeys("(//input[@aria-label='City'])[2]", dpVault.getCity());
+    sendKeys("//input[@aria-label='commons.latitude']", String.valueOf(dpVault.getLatitude()));
+    sendKeys("//input[@aria-label='commons.longitude']", String.valueOf(dpVault.getLongitude()));
+    clickButtonByAriaLabel("Save Button");
+    waitUntilInvisibilityOfElementLocated(
+        "//button[@aria-label='Save Button']//md-progress-circular");
+  }
 
-    public void downloadCsvFile()
-    {
-        click("//button[@aria-label='Download CSV File']");
-    }
+  public void deleteDpVault(DpVault dpVault) {
+    searchTableByName(dpVault.getName());
+    clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
+    pause100ms();
+    click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+  }
 
-    public void verifyCsvFileDownloadedSuccessfully(DpVault dpVault)
-    {
-        verifyFileDownloadedSuccessfully(CSV_FILENAME, dpVault.getName());
-    }
+  public void downloadCsvFile() {
+    click("//button[@aria-label='Download CSV File']");
+  }
 
-    public void verifyDpCompanyIsCreatedSuccessfully(DpVault dpVault)
-    {
-        searchTableByName(dpVault.getName());
-        verifyDpVaultInfoIsCorrect(dpVault);
-    }
+  public void verifyCsvFileDownloadedSuccessfully(DpVault dpVault) {
+    verifyFileDownloadedSuccessfully(CSV_FILENAME, dpVault.getName());
+  }
 
-    private void verifyDpVaultInfoIsCorrect(DpVault dpVault)
-    {
-        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        assertEquals("DP Vault Name", dpVault.getName(), actualName);
+  public void verifyDpCompanyIsCreatedSuccessfully(DpVault dpVault) {
+    searchTableByName(dpVault.getName());
+    verifyDpVaultInfoIsCorrect(dpVault);
+  }
 
-        String expectedAddress = dpVault.getAddress1()+' '+dpVault.getAddress2()+' '+dpVault.getCity()+' '+dpVault.getCountry();
-        String actualAddress = getTextOnTable(1, COLUMN_CLASS_DATA_ADDRESS);
-        assertEquals("DP Vault Address", expectedAddress, actualAddress);
+  private void verifyDpVaultInfoIsCorrect(DpVault dpVault) {
+    String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
+    assertEquals("DP Vault Name", dpVault.getName(), actualName);
 
-        String expectedLatLong = "("+dpVault.getLatitude()+", "+dpVault.getLongitude()+')';
-        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
-        assertEquals("DP Vault Lat/Long", expectedLatLong, actualLatLong);
+    String expectedAddress =
+        dpVault.getAddress1() + ' ' + dpVault.getAddress2() + ' ' + dpVault.getCity() + ' '
+            + dpVault.getCountry();
+    String actualAddress = getTextOnTable(1, COLUMN_CLASS_DATA_ADDRESS);
+    assertEquals("DP Vault Address", expectedAddress, actualAddress);
 
-        String actualDpName = getTextOnTable(1, COLUMN_CLASS_DATA_DP_NAME);
-        assertEquals("DP Vault DP Name", dpVault.getDpName(), actualDpName);
-    }
+    String expectedLatLong = "(" + dpVault.getLatitude() + ", " + dpVault.getLongitude() + ')';
+    String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
+    assertEquals("DP Vault Lat/Long", expectedLatLong, actualLatLong);
 
-    public void verifyDpVaultIsDeletedSuccessfully(DpVault dpVault)
-    {
-        searchTableByName(dpVault.getName());
-        boolean isTableEmpty = isTableEmpty();
-        assertTrue("DP Vault still exist in table. Fail to delete DP Vault.", isTableEmpty);
-    }
+    String actualDpName = getTextOnTable(1, COLUMN_CLASS_DATA_DP_NAME);
+    assertEquals("DP Vault DP Name", dpVault.getDpName(), actualDpName);
+  }
 
-    public void verifyAllFiltersWorkFine(DpVault dpVault)
-    {
-        searchTableByName(dpVault.getName());
-        verifyDpVaultInfoIsCorrect(dpVault);
-        searchTableByAddress(dpVault.getAddress1());
-        verifyDpVaultInfoIsCorrect(dpVault);
-        searchTableByLatLong("("+dpVault.getLatitude()+", "+dpVault.getLongitude()+')');
-        verifyDpVaultInfoIsCorrect(dpVault);
-    }
+  public void verifyDpVaultIsDeletedSuccessfully(DpVault dpVault) {
+    searchTableByName(dpVault.getName());
+    boolean isTableEmpty = isTableEmpty();
+    assertTrue("DP Vault still exist in table. Fail to delete DP Vault.", isTableEmpty);
+  }
 
-    public void searchTableByName(String name)
-    {
-        searchTableCustom1("name", name);
-    }
+  public void verifyAllFiltersWorkFine(DpVault dpVault) {
+    searchTableByName(dpVault.getName());
+    verifyDpVaultInfoIsCorrect(dpVault);
+    searchTableByAddress(dpVault.getAddress1());
+    verifyDpVaultInfoIsCorrect(dpVault);
+    searchTableByLatLong("(" + dpVault.getLatitude() + ", " + dpVault.getLongitude() + ')');
+    verifyDpVaultInfoIsCorrect(dpVault);
+  }
 
-    public void searchTableByAddress(String address)
-    {
-        searchTableCustom1("_address", address);
-    }
+  public void searchTableByName(String name) {
+    searchTableCustom1("name", name);
+  }
 
-    public void searchTableByLatLong(String latLong)
-    {
-        searchTableCustom1("_latlng", latLong);
-    }
+  public void searchTableByAddress(String address) {
+    searchTableCustom1("_address", address);
+  }
 
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-    }
+  public void searchTableByLatLong(String latLong) {
+    searchTableCustom1("_latlng", latLong);
+  }
 
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-    }
+  public String getTextOnTable(int rowNumber, String columnDataClass) {
+    return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+  }
+
+  public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
+    clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+  }
 }

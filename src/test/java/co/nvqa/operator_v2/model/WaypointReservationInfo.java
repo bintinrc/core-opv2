@@ -6,88 +6,75 @@ import co.nvqa.commons.model.core.Address;
 /**
  * @author Sergey Mishanin
  */
-public class WaypointReservationInfo extends DataEntity<WaypointReservationInfo>
-{
-    private Long reservationId;
-    private String location;
-    private String readyToLatestTime;
-    private String approxVolume;
-    private String status;
-    private Long receivedParcels;
+public class WaypointReservationInfo extends DataEntity<WaypointReservationInfo> {
 
-    public Long getReservationId()
-    {
-        return reservationId;
-    }
+  private Long reservationId;
+  private String location;
+  private String readyToLatestTime;
+  private String approxVolume;
+  private String status;
+  private Long receivedParcels;
 
-    public void setReservationId(Long reservationId)
-    {
-        this.reservationId = reservationId;
-    }
+  public Long getReservationId() {
+    return reservationId;
+  }
 
-    public void setReservationId(String reservationId)
-    {
-        setReservationId(Long.parseLong(reservationId));
-    }
+  public void setReservationId(Long reservationId) {
+    this.reservationId = reservationId;
+  }
 
-    public String getLocation()
-    {
-        return location;
-    }
+  public void setReservationId(String reservationId) {
+    setReservationId(Long.parseLong(reservationId));
+  }
 
-    public void setLocation(String location)
-    {
-        this.location = location;
-    }
+  public String getLocation() {
+    return location;
+  }
 
-    public void setLocation(Address location)
-    {
-        String address = location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode() + " " + location.getCountry();
-        setLocation(address.trim());
-    }
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
-    public String getReadyToLatestTime()
-    {
-        return readyToLatestTime;
-    }
+  public void setLocation(Address location) {
+    String address =
+        location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode() + " "
+            + location.getCountry();
+    setLocation(address.trim());
+  }
 
-    public void setReadyToLatestTime(String readyToLatestTime)
-    {
-        this.readyToLatestTime = readyToLatestTime;
-    }
+  public String getReadyToLatestTime() {
+    return readyToLatestTime;
+  }
 
-    public String getApproxVolume()
-    {
-        return approxVolume;
-    }
+  public void setReadyToLatestTime(String readyToLatestTime) {
+    this.readyToLatestTime = readyToLatestTime;
+  }
 
-    public void setApproxVolume(String approxVolume)
-    {
-        this.approxVolume = approxVolume;
-    }
+  public String getApproxVolume() {
+    return approxVolume;
+  }
 
-    public Long getReceivedParcels()
-    {
-        return receivedParcels;
-    }
+  public void setApproxVolume(String approxVolume) {
+    this.approxVolume = approxVolume;
+  }
 
-    public void setReceivedParcels(Long receivedParcels)
-    {
-        this.receivedParcels = receivedParcels;
-    }
+  public Long getReceivedParcels() {
+    return receivedParcels;
+  }
 
-    public void setReceivedParcels(String receivedParcels)
-    {
-        setReceivedParcels(Long.parseLong(receivedParcels));
-    }
+  public void setReceivedParcels(Long receivedParcels) {
+    this.receivedParcels = receivedParcels;
+  }
 
-    public String getStatus()
-    {
-        return status;
-    }
+  public void setReceivedParcels(String receivedParcels) {
+    setReceivedParcels(Long.parseLong(receivedParcels));
+  }
 
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
 }

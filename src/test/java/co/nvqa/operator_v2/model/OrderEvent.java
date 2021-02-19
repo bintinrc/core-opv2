@@ -1,121 +1,100 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-
 import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class OrderEvent extends DataEntity<OrderEvent>
-{
-    private String eventTime;
-    private String tags;
-    private String name;
-    private String userType;
-    private String user;
-    private String scanId;
-    private String routeId;
-    private String hubName;
-    private String description;
+public class OrderEvent extends DataEntity<OrderEvent> {
 
-    public String getEventTime()
-    {
-        return eventTime;
-    }
+  private String eventTime;
+  private String tags;
+  private String name;
+  private String userType;
+  private String user;
+  private String scanId;
+  private String routeId;
+  private String hubName;
+  private String description;
 
-    public void setEventTime(String eventTime)
-    {
-        this.eventTime = eventTime;
-    }
+  public String getEventTime() {
+    return eventTime;
+  }
 
-    public String getTags()
-    {
-        return tags;
-    }
+  public void setEventTime(String eventTime) {
+    this.eventTime = eventTime;
+  }
 
-    public void setTags(String tags)
-    {
-        this.tags = tags;
-    }
+  public String getTags() {
+    return tags;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getUserType()
-    {
-        return userType;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setUserType(String userType)
-    {
-        this.userType = userType;
-    }
+  public String getUserType() {
+    return userType;
+  }
 
-    public String getUser()
-    {
-        return user;
-    }
+  public void setUserType(String userType) {
+    this.userType = userType;
+  }
 
-    public void setUser(String user)
-    {
-        this.user = user;
-    }
+  public String getUser() {
+    return user;
+  }
 
-    public String getScanId()
-    {
-        return scanId;
-    }
+  public void setUser(String user) {
+    this.user = user;
+  }
 
-    public void setScanId(String scanId)
-    {
-        this.scanId = scanId;
-    }
+  public String getScanId() {
+    return scanId;
+  }
 
-    public String getRouteId()
-    {
-        return routeId;
-    }
+  public void setScanId(String scanId) {
+    this.scanId = scanId;
+  }
 
-    public void setRouteId(String routeId)
-    {
-        this.routeId = routeId;
-    }
+  public String getRouteId() {
+    return routeId;
+  }
 
-    public String getHubName()
-    {
-        return hubName;
-    }
+  public void setRouteId(String routeId) {
+    this.routeId = routeId;
+  }
 
-    public void setHubName(String hubName)
-    {
-        this.hubName = hubName;
-    }
+  public String getHubName() {
+    return hubName;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public void setHubName(String hubName) {
+    this.hubName = hubName;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public OrderEvent()
-    {
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public OrderEvent(Map<String, ?> dataMap)
-    {
-        fromMap(dataMap);
-    }
+  public OrderEvent() {
+  }
+
+  public OrderEvent(Map<String, ?> dataMap) {
+    fromMap(dataMap);
+  }
 
 }

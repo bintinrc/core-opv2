@@ -1,35 +1,29 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ContactType
-{
-    private Long id;
-    private String name;
+public class ContactType {
 
-    public ContactType()
-    {
-    }
+  private Long id;
+  private String name;
 
-    public Long getId()
-    {
-        return id;
-    }
+  public ContactType() {
+  }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }

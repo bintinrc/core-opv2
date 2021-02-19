@@ -10,45 +10,39 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class NvApiTextButton extends PageElement
-{
-    public NvApiTextButton(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class NvApiTextButton extends PageElement {
 
-    public NvApiTextButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public NvApiTextButton(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(tagName = "button")
-    private Button button;
+  public NvApiTextButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(css = "md-progress-circular")
-    private PageElement spinner;
+  @FindBy(tagName = "button")
+  private Button button;
 
-    public void click()
-    {
-        button.scrollIntoView();
-        button.click();
-    }
+  @FindBy(css = "md-progress-circular")
+  private PageElement spinner;
 
-    public void waitUntilDone()
-    {
-        spinner.waitUntilInvisible();
-    }
+  public void click() {
+    button.scrollIntoView();
+    button.click();
+  }
 
-    public void clickAndWaitUntilDone()
-    {
-        click();
-        waitUntilDone();
-    }
+  public void waitUntilDone() {
+    spinner.waitUntilInvisible();
+  }
 
-    public boolean isDisabled()
-    {
-        return StringUtils.equalsIgnoreCase(getAttribute("disabled"), "disabled");
-    }
+  public void clickAndWaitUntilDone() {
+    click();
+    waitUntilDone();
+  }
+
+  public boolean isDisabled() {
+    return StringUtils.equalsIgnoreCase(getAttribute("disabled"), "disabled");
+  }
 }

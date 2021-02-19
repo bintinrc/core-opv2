@@ -12,108 +12,101 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class RouteCashInboundSteps extends AbstractSteps
-{
-    private RouteCashInboundPage routeCashInboundPage;
+public class RouteCashInboundSteps extends AbstractSteps {
 
-    public RouteCashInboundSteps()
-    {
-    }
+  private RouteCashInboundPage routeCashInboundPage;
 
-    @Override
-    public void init()
-    {
-        routeCashInboundPage = new RouteCashInboundPage(getWebDriver());
-    }
+  public RouteCashInboundSteps() {
+  }
 
-    @When("^Operator create new COD on Route Cash Inbound page$")
-    public void operatorCreateNewCod()
-    {
-        Order order = get(KEY_CREATED_ORDER);
-        Long routeId = get(KEY_CREATED_ROUTE_ID);
+  @Override
+  public void init() {
+    routeCashInboundPage = new RouteCashInboundPage(getWebDriver());
+  }
 
-        Cod cod = order.getCod();
-        assertNotNull("COD should not be null.", cod);
-        Double codGoodsAmount = cod.getGoodsAmount();
-        assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
+  @When("^Operator create new COD on Route Cash Inbound page$")
+  public void operatorCreateNewCod() {
+    Order order = get(KEY_CREATED_ORDER);
+    Long routeId = get(KEY_CREATED_ROUTE_ID);
 
-        Double amountCollected = codGoodsAmount - (codGoodsAmount.intValue() / 2);
-        String receiptNumber = "#" + routeId + "-" + generateDateUniqueString();
+    Cod cod = order.getCod();
+    assertNotNull("COD should not be null.", cod);
+    Double codGoodsAmount = cod.getGoodsAmount();
+    assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
 
-        RouteCashInboundCod routeCashInboundCod = new RouteCashInboundCod();
-        routeCashInboundCod.setRouteId(routeId);
-        routeCashInboundCod.setTotalCollected(amountCollected);
-        routeCashInboundCod.setAmountCollected(amountCollected);
-        routeCashInboundCod.setReceiptNumber(receiptNumber);
+    Double amountCollected = codGoodsAmount - (codGoodsAmount.intValue() / 2);
+    String receiptNumber = "#" + routeId + "-" + generateDateUniqueString();
 
-        routeCashInboundPage.addCod(routeCashInboundCod);
-        put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
-        put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
-    }
+    RouteCashInboundCod routeCashInboundCod = new RouteCashInboundCod();
+    routeCashInboundCod.setRouteId(routeId);
+    routeCashInboundCod.setTotalCollected(amountCollected);
+    routeCashInboundCod.setAmountCollected(amountCollected);
+    routeCashInboundCod.setReceiptNumber(receiptNumber);
 
-    @Then("^Operator verify the new COD on Route Cash Inbound page is created successfully$")
-    public void operatorVerifyTheNewCodIsCreatedSuccessfully()
-    {
-        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
-        routeCashInboundPage.verifyNewCodIsCreatedSuccessfully(routeCashInboundCod);
-    }
+    routeCashInboundPage.addCod(routeCashInboundCod);
+    put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
+    put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
+  }
 
-    @Then("^Operator check filter on Route Cash Inbound page work fine$")
-    public void operatorCheckFilterOnRouteCashInboundPageWork()
-    {
-        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
-        routeCashInboundPage.verifyFilterWorkFine(routeCashInboundCod);
-    }
+  @Then("^Operator verify the new COD on Route Cash Inbound page is created successfully$")
+  public void operatorVerifyTheNewCodIsCreatedSuccessfully() {
+    RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
+    routeCashInboundPage.verifyNewCodIsCreatedSuccessfully(routeCashInboundCod);
+  }
 
-    @When("^Operator update the new COD on Route Cash Inbound page$")
-    public void operatorUpdateTheNewCod()
-    {
-        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
+  @Then("^Operator check filter on Route Cash Inbound page work fine$")
+  public void operatorCheckFilterOnRouteCashInboundPageWork() {
+    RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
+    routeCashInboundPage.verifyFilterWorkFine(routeCashInboundCod);
+  }
 
-        Double oldTotalCollected = routeCashInboundCod.getTotalCollected();
-        Double newTotalCollected = oldTotalCollected + (oldTotalCollected.intValue() / 2);
+  @When("^Operator update the new COD on Route Cash Inbound page$")
+  public void operatorUpdateTheNewCod() {
+    RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
 
-        RouteCashInboundCod routeCashInboundCodEdited = new RouteCashInboundCod();
-        routeCashInboundCodEdited.setRouteId(routeCashInboundCod.getRouteId());
-        routeCashInboundCodEdited.setTotalCollected(newTotalCollected);
-        routeCashInboundCodEdited.setAmountCollected(newTotalCollected);
-        routeCashInboundCodEdited.setReceiptNumber(routeCashInboundCod.getReceiptNumber() + "-EDITED");
+    Double oldTotalCollected = routeCashInboundCod.getTotalCollected();
+    Double newTotalCollected = oldTotalCollected + (oldTotalCollected.intValue() / 2);
 
-        routeCashInboundPage.editCod(routeCashInboundCod, routeCashInboundCodEdited);
-        put(KEY_ROUTE_CASH_INBOUND_COD_EDITED, routeCashInboundCodEdited);
-    }
+    RouteCashInboundCod routeCashInboundCodEdited = new RouteCashInboundCod();
+    routeCashInboundCodEdited.setRouteId(routeCashInboundCod.getRouteId());
+    routeCashInboundCodEdited.setTotalCollected(newTotalCollected);
+    routeCashInboundCodEdited.setAmountCollected(newTotalCollected);
+    routeCashInboundCodEdited.setReceiptNumber(routeCashInboundCod.getReceiptNumber() + "-EDITED");
 
-    @Then("^Operator verify the new COD on Route Cash Inbound page is updated successfully$")
-    public void operatorVerifyTheNewZoneIsUpdatedSuccessfully()
-    {
-        RouteCashInboundCod routeCashInboundCodEdited = get(KEY_ROUTE_CASH_INBOUND_COD_EDITED);
-        routeCashInboundPage.verifyCodIsUpdatedSuccessfully(routeCashInboundCodEdited);
-    }
+    routeCashInboundPage.editCod(routeCashInboundCod, routeCashInboundCodEdited);
+    put(KEY_ROUTE_CASH_INBOUND_COD_EDITED, routeCashInboundCodEdited);
+  }
 
-    @When("^Operator delete the new COD on Route Cash Inbound page$")
-    public void operatorDeleteTheNewZone()
-    {
-        RouteCashInboundCod routeCashInboundCod = containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED) : get(KEY_ROUTE_CASH_INBOUND_COD);
-        routeCashInboundPage.deleteCod(routeCashInboundCod);
-    }
+  @Then("^Operator verify the new COD on Route Cash Inbound page is updated successfully$")
+  public void operatorVerifyTheNewZoneIsUpdatedSuccessfully() {
+    RouteCashInboundCod routeCashInboundCodEdited = get(KEY_ROUTE_CASH_INBOUND_COD_EDITED);
+    routeCashInboundPage.verifyCodIsUpdatedSuccessfully(routeCashInboundCodEdited);
+  }
 
-    @Then("^Operator verify the new COD on Route Cash Inbound page is deleted successfully$")
-    public void operatorVerifyTheNewCodIsDeletedSuccessfully()
-    {
-        RouteCashInboundCod routeCashInboundCod = containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED) : get(KEY_ROUTE_CASH_INBOUND_COD);
-        routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod);
-    }
+  @When("^Operator delete the new COD on Route Cash Inbound page$")
+  public void operatorDeleteTheNewZone() {
+    RouteCashInboundCod routeCashInboundCod =
+        containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED)
+            : get(KEY_ROUTE_CASH_INBOUND_COD);
+    routeCashInboundPage.deleteCod(routeCashInboundCod);
+  }
 
-    @When("^Operator download COD CSV file on Route Cash Inbound page$")
-    public void operatorDownloadCodCsvFile()
-    {
-        routeCashInboundPage.downloadCsvFile();
-    }
+  @Then("^Operator verify the new COD on Route Cash Inbound page is deleted successfully$")
+  public void operatorVerifyTheNewCodIsDeletedSuccessfully() {
+    RouteCashInboundCod routeCashInboundCod =
+        containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED)
+            : get(KEY_ROUTE_CASH_INBOUND_COD);
+    routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod);
+  }
 
-    @Then("^Operator verify COD CSV file on Route Cash Inbound page is downloaded successfully$")
-    public void operatorVerifyCodCsvFileIsDownloadSuccessfully()
-    {
-        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
-        routeCashInboundPage.verifyCsvFileDownloadedSuccessfully(routeCashInboundCod);
-    }
+  @When("^Operator download COD CSV file on Route Cash Inbound page$")
+  public void operatorDownloadCodCsvFile() {
+    routeCashInboundPage.downloadCsvFile();
+  }
+
+  @Then("^Operator verify COD CSV file on Route Cash Inbound page is downloaded successfully$")
+  public void operatorVerifyCodCsvFileIsDownloadSuccessfully() {
+    RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
+    routeCashInboundPage.verifyCsvFileDownloadedSuccessfully(routeCashInboundCod);
+  }
 }

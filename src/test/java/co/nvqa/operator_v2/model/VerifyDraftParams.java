@@ -1,35 +1,29 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class VerifyDraftParams
-{
-    private Double startWeight;
-    private Double endWeight;
+public class VerifyDraftParams {
 
-    public VerifyDraftParams()
-    {
-    }
+  private Double startWeight;
+  private Double endWeight;
 
-    public Double getStartWeight()
-    {
-        return startWeight;
-    }
+  public VerifyDraftParams() {
+  }
 
-    public void setStartWeight(Double startWeight)
-    {
-        this.startWeight = startWeight;
-    }
+  public Double getStartWeight() {
+    return startWeight;
+  }
 
-    public Double getEndWeight()
-    {
-        return endWeight;
-    }
+  public void setStartWeight(Double startWeight) {
+    this.startWeight = startWeight;
+  }
 
-    public void setEndWeight(Double endWeight)
-    {
-        this.endWeight = endWeight;
-    }
+  public Double getEndWeight() {
+    return endWeight;
+  }
+
+  public void setEndWeight(Double endWeight) {
+    this.endWeight = endWeight;
+  }
 }

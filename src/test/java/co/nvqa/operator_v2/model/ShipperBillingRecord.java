@@ -1,120 +1,99 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
-import org.apache.commons.text.WordUtils;
-
 import java.util.Map;
+import org.apache.commons.text.WordUtils;
 
 /**
  * @author Sergey Mishanin
  */
-public class ShipperBillingRecord extends DataEntity<ShipperBillingRecord>
-{
-    private Long shipperId;
-    private String shipperName;
-    private String currency;
-    private String type;
-    private Double amount;
-    private String reason;
-    private String comment;
-    private String referenceNo;
+public class ShipperBillingRecord extends DataEntity<ShipperBillingRecord> {
 
-    public ShipperBillingRecord()
-    {
-    }
+  private Long shipperId;
+  private String shipperName;
+  private String currency;
+  private String type;
+  private Double amount;
+  private String reason;
+  private String comment;
+  private String referenceNo;
 
-    public ShipperBillingRecord(Map<String, ?> dataMap)
-    {
-        fromMap(dataMap);
-    }
+  public ShipperBillingRecord() {
+  }
 
-    public String getShipperName()
-    {
-        return shipperName;
-    }
+  public ShipperBillingRecord(Map<String, ?> dataMap) {
+    fromMap(dataMap);
+  }
 
-    public void setShipperName(String shipperName)
-    {
-        this.shipperName = shipperName;
-    }
+  public String getShipperName() {
+    return shipperName;
+  }
 
-    public Double getAmount()
-    {
-        return amount;
-    }
+  public void setShipperName(String shipperName) {
+    this.shipperName = shipperName;
+  }
 
-    public void setAmount(Double amount)
-    {
-        this.amount = amount;
-    }
+  public Double getAmount() {
+    return amount;
+  }
 
-    public void setAmount(String amount)
-    {
-        setAmount(Double.parseDouble(amount));
-    }
+  public void setAmount(Double amount) {
+    this.amount = amount;
+  }
 
-    public String getReason()
-    {
-        return reason;
-    }
+  public void setAmount(String amount) {
+    setAmount(Double.parseDouble(amount));
+  }
 
-    public void setReason(String reason)
-    {
-        this.reason = reason;
-    }
+  public String getReason() {
+    return reason;
+  }
 
-    public String getComment()
-    {
-        return comment;
-    }
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
 
-    public void setComment(String comment)
-    {
-        this.comment = comment;
-    }
+  public String getComment() {
+    return comment;
+  }
 
-    public String getType()
-    {
-        return type;
-    }
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 
-    public void setType(String type)
-    {
-        this.type = WordUtils.capitalizeFully(type);
-    }
+  public String getType() {
+    return type;
+  }
 
-    public Long getShipperId()
-    {
-        return shipperId;
-    }
+  public void setType(String type) {
+    this.type = WordUtils.capitalizeFully(type);
+  }
 
-    public void setShipperId(Long shipperId)
-    {
-        this.shipperId = shipperId;
-    }
+  public Long getShipperId() {
+    return shipperId;
+  }
 
-    public void setShipperId(String shipperId)
-    {
-        setShipperId(Long.parseLong(shipperId));
-    }
+  public void setShipperId(Long shipperId) {
+    this.shipperId = shipperId;
+  }
 
-    public String getReferenceNo()
-    {
-        return referenceNo;
-    }
+  public void setShipperId(String shipperId) {
+    setShipperId(Long.parseLong(shipperId));
+  }
 
-    public void setReferenceNo(String referenceNo)
-    {
-        this.referenceNo = referenceNo;
-    }
+  public String getReferenceNo() {
+    return referenceNo;
+  }
 
-    public String getCurrency()
-    {
-        return currency;
-    }
+  public void setReferenceNo(String referenceNo) {
+    this.referenceNo = referenceNo;
+  }
 
-    public void setCurrency(String currency)
-    {
-        this.currency = currency;
-    }
+  public String getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
+  }
 }
