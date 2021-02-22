@@ -46,6 +46,21 @@ Feature: Printer Settings
       | Edit IP Address | uid:be805b7b-f524-4bef-8356-b07cc3d9f30f | Printer - Edit IP Address {gradle-current-date-yyyyMMddHHmmsss} | ipAddress  | 192.168.0.1:9000                                                   |
       | Edit Version    | uid:2d8c86e8-2843-432e-9f82-6b25eb02b16a | Printer - Edit Version {gradle-current-date-yyyyMMddHHmmsss}    | version    | 2                                                                  |
 
+  @DeletePrinter
+  Scenario: Operator Set Printer as Default Printer (uid:d9508f36-1deb-429d-8e43-c21aaddfba22)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator adds new printer using data below:
+      | name      | Printer {gradle-current-date-yyyyMMddHHmmsss} |
+      | ipAddress | 127.0.0.1:9000                                |
+      | version   | 3                                             |
+      | isDefault | false                                         |
+    When Operator go to menu System Settings -> Printer Settings
+    And Operator set printer as default printer
+    Then Operator verifies that success toast displayed:
+      | top                | Set successfully |
+      | waitUntilInvisible | true             |
+    And Operator verify Printer Settings is set as default
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

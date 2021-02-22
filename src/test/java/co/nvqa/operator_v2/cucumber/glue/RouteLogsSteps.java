@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
+import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -531,24 +532,32 @@ public class RouteLogsSteps extends AbstractSteps {
   @And("Operator verifies that success toast displayed:")
   public void operatorVerifySuccessToast(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
+    boolean waitUntilInvisible = Boolean
+        .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
-    boolean found;
+    ToastInfo toastInfo;
     do {
-      found = routeLogsPage.toastSuccess.stream().anyMatch(toast -> {
-        String value = finalData.get("top");
-        if (StringUtils.isNotBlank(value)) {
-          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-            return false;
-          }
-        }
-        value = finalData.get("bottom");
-        if (StringUtils.isNotBlank(value)) {
-          return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
-        }
-        return true;
-      });
-    } while (!found && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", found);
+      toastInfo = routeLogsPage.toastSuccess.stream()
+          .filter(toast -> {
+            String value = finalData.get("top");
+            if (StringUtils.isNotBlank(value)) {
+              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+                return false;
+              }
+            }
+            value = finalData.get("bottom");
+            if (StringUtils.isNotBlank(value)) {
+              return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+            }
+            return true;
+          })
+          .findFirst()
+          .orElse(null);
+    } while (toastInfo == null && new Date().getTime() - start < 20000);
+    assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
+    if (waitUntilInvisible) {
+      toastInfo.waitUntilInvisible();
+    }
   }
 
   @And("Operator verifies that error toast displayed:")
