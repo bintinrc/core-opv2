@@ -479,6 +479,18 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
 
+  @And("Operator gets pricing profile values")
+  public void operatorGetsPricingProfileValues() {
+    try {
+      Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
+      put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
+  }
+
+
   @Then("^Operator go back to Shipper List page")
   public void operatorGoBackToShipperListPage() {
     allShippersPage.allShippersCreateEditPage.backToShipperList();
