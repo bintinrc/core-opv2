@@ -5,6 +5,7 @@ import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
+import static co.nvqa.operator_v2.selenium.page.OrderBillingPage.SHIPPER_BILLING_REPORT;
 
 
 /**
@@ -67,8 +70,12 @@ public class OrderBillingSteps extends AbstractSteps {
       orderBillingPage.setParentShipper(parentShipper);
       put(KEY_ORDER_BILLING_SHIPPER_NAME, parentShipper);
     }
-    if (Objects.nonNull(mapOfData.get("generateFile"))) {
-      orderBillingPage.tickGenerateTheseFilesOption(mapOfData.get("generateFile"));
+    String generateFile = mapOfData.get("generateFile");
+    if (Objects.nonNull(generateFile)) {
+      if (generateFile.contains("Orders consolidated by shipper")) {
+        put(KEY_ORDER_BILLING_REPORT_TYPE, "SHIPPER");
+      }
+      orderBillingPage.tickGenerateTheseFilesOption(generateFile);
     }
     if (Objects.nonNull(mapOfData.get("emailAddress"))) {
       orderBillingPage.setEmailAddress(mapOfData.get("emailAddress"));
@@ -121,7 +128,7 @@ public class OrderBillingSteps extends AbstractSteps {
     if (reportName.equals(OrderBillingPage.AGGREGATED_BILLING_REPORT)) {
       put(KEY_ORDER_BILLING_SSB_AGGREGATED_DATA, orderBillingPage.getAggregatedOrdersFromCsv());
     } else if (Arrays
-        .asList(OrderBillingPage.SHIPPER_BILLING_REPORT, OrderBillingPage.SCRIPT_BILLING_REPORT)
+        .asList(SHIPPER_BILLING_REPORT, OrderBillingPage.SCRIPT_BILLING_REPORT)
         .contains(reportName)) {
       put(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV, orderBillingPage.getOrderFromCsv());
     }
@@ -139,118 +146,128 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies the priced order details in the body")
   public void operatorVerifiesThePricedOrderDetailsInTheBody() {
+    String reportType = get(KEY_ORDER_BILLING_REPORT_TYPE);
+    NvLogger.infof("Checking priced order in %s report ", reportType);
+
+    PricedOrder pricedOrderDb = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_DB);
+    PricedOrder pricedOrderCsv = null;
+
     if (Objects.isNull(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV))) {
       fail("Priced order is not available in the CSV file");
+    } else if (Objects.nonNull(reportType) && reportType.equalsIgnoreCase("SHIPPER")
+        && StandardTestConstants.COUNTRY_CODE.equalsIgnoreCase("SG")) {
+      pricedOrderCsv = orderBillingPage
+          .pricedOrderCsvForSgShipperReport(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
     } else {
-      PricedOrder pricedOrderCsv = orderBillingPage
+      pricedOrderCsv = orderBillingPage
           .pricedOrderCsv(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
-      PricedOrder pricedOrderDb = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_DB);
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ShipperId",
-          pricedOrderDb.getShipperId(), pricedOrderCsv.getShipperId());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ShipperName",
-          pricedOrderDb.getShipperName(), pricedOrderCsv.getShipperName());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column BillingName",
-          pricedOrderDb.getBillingName(), pricedOrderCsv.getBillingName());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column TrackingId",
-          pricedOrderDb.getTrackingId(), pricedOrderCsv.getTrackingId());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ShipperOrderRef",
-          pricedOrderDb.getShipperOrderRef(), pricedOrderCsv.getShipperOrderRef());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column GranularStatus",
-          pricedOrderDb.getGranularStatus(), pricedOrderCsv.getGranularStatus());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column CustomerName",
-          pricedOrderDb.getCustomerName(), pricedOrderCsv.getCustomerName());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column DeliveryTypeName",
-          pricedOrderDb.getDeliveryTypeName(), pricedOrderCsv.getDeliveryTypeName());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column DeliveryTypeId",
-          pricedOrderDb.getDeliveryTypeId(), pricedOrderCsv.getDeliveryTypeId());
       assertEquals(
           "Success Billings Csv file does not contain expected information for column ParcelSizeId",
           pricedOrderDb.getParcelSizeId(), pricedOrderCsv.getParcelSizeId());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ParcelWeight",
-          pricedOrderDb.getParcelWeight(), pricedOrderCsv.getParcelWeight());
-      assertNotNull(
-          "Success Billings Csv file does not contain expected information for column CreatedTime",
-          pricedOrderCsv.getCreatedTime());
-      assertThat(
-          "Success Billings Csv file does not contain expected information for column DeliveryDate",
-          DateUtil.getDefaultDateTimeFromUTC(pricedOrderDb.getDeliveryDate()),
-          containsString(f("%s", pricedOrderCsv.getDeliveryDate())));
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column FromCity",
-          pricedOrderDb.getFromCity(), pricedOrderCsv.getFromCity());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column FromBillingZone",
-          pricedOrderDb.getFromBillingZone(), pricedOrderCsv.getFromBillingZone());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column OriginHub",
-          pricedOrderDb.getOriginHub(), pricedOrderCsv.getOriginHub());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column getL1Name",
-          pricedOrderDb.getL1Name(), pricedOrderCsv.getL1Name());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column getL2Name",
-          pricedOrderDb.getL2Name(), pricedOrderCsv.getL2Name());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column getL3Name",
-          pricedOrderDb.getL3Name(), pricedOrderCsv.getL3Name());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ToAddress",
-          pricedOrderDb.getToAddress(), pricedOrderCsv.getToAddress());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ToPostcode",
-          pricedOrderDb.getToPostcode(), pricedOrderCsv.getToPostcode());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ToBillingZone",
-          pricedOrderDb.getToBillingZone(), pricedOrderCsv.getToBillingZone());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column DestinationHub",
-          pricedOrderDb.getDestinationHub(), pricedOrderCsv.getDestinationHub());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column DeliveryFee",
-          pricedOrderDb.getDeliveryFee(), pricedOrderCsv.getDeliveryFee());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column CodCollected",
-          pricedOrderDb.getCodCollected(), pricedOrderCsv.getCodCollected());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column CodFee",
-          pricedOrderDb.getCodFee(),
-          pricedOrderCsv.getCodFee().compareTo(BigDecimal.ZERO) == 0 ? new BigDecimal("0.00")
-              : pricedOrderCsv.getCodFee());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column InsuredValue",
-          pricedOrderDb.getInsuredValue(), pricedOrderCsv.getInsuredValue());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column InsuredFee",
-          pricedOrderDb.getInsuredFee(), pricedOrderCsv.getInsuredFee());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column HandlingFee",
-          pricedOrderDb.getHandlingFee(), pricedOrderCsv.getHandlingFee());
-      assertEquals("Success Billings Csv file does not contain expected information for column Gst",
-          pricedOrderDb.getGst(), pricedOrderCsv.getGst());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column Total",
-          pricedOrderDb.getTotal(), pricedOrderCsv.getTotal());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ScriptId",
-          pricedOrderDb.getScriptId(), pricedOrderCsv.getScriptId());
-      assertEquals(
-          "Success Billings Csv file does not contain expected information for column ScriptVersion",
-          pricedOrderDb.getScriptVersion(), pricedOrderCsv.getScriptVersion());
-      assertThat(
-          "Success Billings Csv file does not contain expected information for column LastCalculatedDate",
-          DateUtil.getDefaultDateTimeFromUTC(pricedOrderDb.getLastCalculatedDate()),
-          containsString(f("%s", pricedOrderCsv.getLastCalculatedDate())));
     }
+
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ShipperId",
+        pricedOrderDb.getShipperId(), pricedOrderCsv.getShipperId());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ShipperName",
+        pricedOrderDb.getShipperName(), pricedOrderCsv.getShipperName());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column BillingName",
+        pricedOrderDb.getBillingName(), pricedOrderCsv.getBillingName());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column TrackingId",
+        pricedOrderDb.getTrackingId(), pricedOrderCsv.getTrackingId());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ShipperOrderRef",
+        pricedOrderDb.getShipperOrderRef(), pricedOrderCsv.getShipperOrderRef());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column GranularStatus",
+        pricedOrderDb.getGranularStatus(), pricedOrderCsv.getGranularStatus());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column CustomerName",
+        pricedOrderDb.getCustomerName(), pricedOrderCsv.getCustomerName());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column DeliveryTypeName",
+        pricedOrderDb.getDeliveryTypeName(), pricedOrderCsv.getDeliveryTypeName());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column DeliveryTypeId",
+        pricedOrderDb.getDeliveryTypeId(), pricedOrderCsv.getDeliveryTypeId());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ParcelWeight",
+        pricedOrderDb.getParcelWeight(), pricedOrderCsv.getParcelWeight());
+    assertNotNull(
+        "Success Billings Csv file does not contain expected information for column CreatedTime",
+        pricedOrderCsv.getCreatedTime());
+    assertThat(
+        "Success Billings Csv file does not contain expected information for column DeliveryDate",
+        DateUtil.getDefaultDateTimeFromUTC(pricedOrderDb.getDeliveryDate()),
+        containsString(f("%s", pricedOrderCsv.getDeliveryDate())));
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column FromCity",
+        pricedOrderDb.getFromCity(), pricedOrderCsv.getFromCity());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column FromBillingZone",
+        pricedOrderDb.getFromBillingZone(), pricedOrderCsv.getFromBillingZone());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column OriginHub",
+        pricedOrderDb.getOriginHub(), pricedOrderCsv.getOriginHub());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column getL1Name",
+        pricedOrderDb.getL1Name(), pricedOrderCsv.getL1Name());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column getL2Name",
+        pricedOrderDb.getL2Name(), pricedOrderCsv.getL2Name());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column getL3Name",
+        pricedOrderDb.getL3Name(), pricedOrderCsv.getL3Name());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ToAddress",
+        pricedOrderDb.getToAddress(), pricedOrderCsv.getToAddress());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ToPostcode",
+        pricedOrderDb.getToPostcode(), pricedOrderCsv.getToPostcode());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ToBillingZone",
+        pricedOrderDb.getToBillingZone(), pricedOrderCsv.getToBillingZone());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column DestinationHub",
+        pricedOrderDb.getDestinationHub(), pricedOrderCsv.getDestinationHub());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column DeliveryFee",
+        pricedOrderDb.getDeliveryFee(), pricedOrderCsv.getDeliveryFee());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column CodCollected",
+        pricedOrderDb.getCodCollected(), pricedOrderCsv.getCodCollected());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column CodFee",
+        pricedOrderDb.getCodFee(),
+        pricedOrderCsv.getCodFee().compareTo(BigDecimal.ZERO) == 0 ? new BigDecimal("0.00")
+            : pricedOrderCsv.getCodFee());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column InsuredValue",
+        pricedOrderDb.getInsuredValue(), pricedOrderCsv.getInsuredValue());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column InsuredFee",
+        pricedOrderDb.getInsuredFee(), pricedOrderCsv.getInsuredFee());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column HandlingFee",
+        pricedOrderDb.getHandlingFee(), pricedOrderCsv.getHandlingFee());
+    assertEquals("Success Billings Csv file does not contain expected information for column Gst",
+        pricedOrderDb.getGst(), pricedOrderCsv.getGst());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column Total",
+        pricedOrderDb.getTotal(), pricedOrderCsv.getTotal());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ScriptId",
+        pricedOrderDb.getScriptId(), pricedOrderCsv.getScriptId());
+    assertEquals(
+        "Success Billings Csv file does not contain expected information for column ScriptVersion",
+        pricedOrderDb.getScriptVersion(), pricedOrderCsv.getScriptVersion());
+    assertThat(
+        "Success Billings Csv file does not contain expected information for column LastCalculatedDate",
+        DateUtil.getDefaultDateTimeFromUTC(pricedOrderDb.getLastCalculatedDate()),
+        containsString(f("%s", pricedOrderCsv.getLastCalculatedDate())));
   }
 
   @Then("Operator verifies the orders grouped by shipper and parcel size and weight")
