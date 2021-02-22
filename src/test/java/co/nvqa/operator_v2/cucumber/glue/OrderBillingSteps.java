@@ -366,9 +366,17 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator verifies the order with status {string} is not displayed on billing report")
   public void operatorVerifiesTheOrderWithStatusArrivedAtDistributionPointIsNotDisplayedOnBillingReport(
       String status) {
-    if (Objects.nonNull(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV))) {
-      PricedOrder pricedOrderCsv = orderBillingPage
-          .pricedOrderCsv(get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV));
+    final String pricedOrderCsvLine = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_CSV);
+    PricedOrder pricedOrderCsv;
+    if (Objects.nonNull(pricedOrderCsvLine)) {
+      if (get(KEY_ORDER_BILLING_REPORT_TYPE).equals("SHIPPER")) {
+        pricedOrderCsv = orderBillingPage
+            .pricedOrderCsvForSgShipperReport(pricedOrderCsvLine);
+      } else {
+        pricedOrderCsv = orderBillingPage
+            .pricedOrderCsv(pricedOrderCsvLine);
+      }
+
       assertFalse(f("Order with status %s is available in billing report", status),
           pricedOrderCsv.getGranularStatus().equalsIgnoreCase(status));
     } else {
