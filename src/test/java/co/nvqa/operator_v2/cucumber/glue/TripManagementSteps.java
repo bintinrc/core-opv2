@@ -13,8 +13,12 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import org.openqa.selenium.WebElement;
 
 /**
  * @author Tristania Siagian
@@ -62,9 +66,23 @@ public class TripManagementSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies toast with message {string} is shown on movement page without closing")
-  public void operatorVerifiesToastWithMessageIsShownOnTripManagementPageWithoutClosing(String toastMessage) {
+  public void operatorVerifiesToastWithMessageIsShownOnTripManagementPageWithoutClosing(
+      String toastMessage) {
     String resolvedToastMessage = resolveValue(toastMessage);
     tripManagementPage.verifyToastContainingMessageIsShownWithoutClosing(resolvedToastMessage);
+  }
+
+  @Then("Operator verifies toast with following messages is shown on movement page without closing:")
+  public void operatorVerifiesToastWithFollowingMessagesIsShownOnMovementPageWithoutClosing(
+      List<String> toastMessages) {
+    List<String> resolvedToastMessages = resolveValues(toastMessages);
+    tripManagementPage.waitUntilVisibilityOfElementLocated(
+        "//div[contains(@class,'notification-notice-message')]");
+    WebElement toast = tripManagementPage.findElementByXpath(
+        "//div[contains(@class,'notification-notice-message')]");
+    String actualToastMessage = toast.getText().split(" with expected arrival time ")[0];
+    assertThat("Trip Management toast message is the same", actualToastMessage,
+        isOneOf(resolvedToastMessages.get(0), resolvedToastMessages.get(1)));
   }
 
   @Then("Operator click force trip completion")
