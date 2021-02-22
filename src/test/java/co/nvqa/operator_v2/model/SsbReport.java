@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.model;
 
-public enum SsbCsvColumns {
+public enum SsbReport {
   SHIPPER_ID,
   SHIPPER_NAME,
   BILLING_NAME,
