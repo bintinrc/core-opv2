@@ -17,6 +17,7 @@ import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
@@ -39,6 +40,8 @@ import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -168,15 +171,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
   public static final String XPATH_VALIDATION_ERROR = "//md-dialog[contains(@class, 'nv-container-shipper-errors-dialog')] ";
   public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
-  public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
-  public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
-  public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='effective-date']";
-  public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='discount']";
-  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='pricing-script-name']";
-  public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='comments']";
-  public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='contract-end-date']";
+  public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//tr[1]//td[@class='id']";
+  public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//tr[1]//td[@class='effective-date']";
+  public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//tr[1]//td[@class='discount']";
+  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "///table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
+  public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//tr[1]//td[@class='comments']";
+  public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//tr[1]//td[@class='contract-end-date']";
+  public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//tr[1]//td[@class='cod-min']";
+  public static final String XPATH_PRICING_PROFILE_COD_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='cod-percent']";
+  public static final String XPATH_PRICING_PROFILE_INS_THRESHOLD = "//table[@class='table-body']//tr[1]//td[@class='insurance-threshold']";
+  public static final String XPATH_PRICING_PROFILE_INS_MIN = "//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
+  public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
-  public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]/div[@ng-repeat='e in errorMsgs']";
+  public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
   public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
 
   public final B2bManagementPage b2bManagementPage;
@@ -1240,36 +1247,23 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     b2bManagementPage.backToSubShipperTable();
   }
 
-  public String addNewPricingScript(Shipper shipper) {
+  public String addNewPricingProfile(Shipper shipper) {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    tabs.selectTab("Pricing and Billing");
+    addNewProfile.click();
+    newPricingProfileDialog.waitUntilVisible();
+
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
-
-      if (StringUtils.isNotBlank(pricing.getScriptName())) {
-        click(XPATH_ADD_NEW_PROFILE);
-        pause2s();
-        selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT,
-            pricing.getScriptName());
-        setMdDatepickerById(LOCATOR_START_DATE, pricing.getEffectiveDate());
-        setMdDatepickerById(LOCATOR_END_DATE, pricing.getContractEndDate());
-        if (pricing.getDiscount() != null) {
-          moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
-          sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
-        }
-        newPricingProfileDialog.codCountryDefaultCheckbox.check();
-        newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
-        if (pricing.getComments() != null) {
-          sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
-        }
-        click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
-      }
+      fillPricingProfileDetails(pricing);
+      newPricingProfileDialog.saveChanges.click();
+      newPricingProfileDialog.waitUntilInvisible();
     }
 
     String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
     assertEquals("Status is not Pending ", status, "Pending");
     saveChanges.click();
-    waitUntilInvisibilityOfElementLocated(XPATH_DISCOUNT_VALUE);
 
     return retryIfAssertionErrorOccurred(() ->
     {
@@ -1280,9 +1274,77 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }, "Getting Pricing Profile ID");
   }
 
+  private void fillPricingProfileDetails(Pricing pricing) {
+    try {
+      setMdDatepickerById(LOCATOR_START_DATE, pricing.getEffectiveDate());
+    } catch (InvalidElementStateException ex) {
+      NvLogger.info("Start Date is already filled");
+    }
+    setMdDatepickerById(LOCATOR_END_DATE, pricing.getContractEndDate());
+
+    String pricingScriptName = pricing.getScriptName();
+    if (Objects.nonNull(pricingScriptName)) {
+      newPricingProfileDialog.pricingScript.searchAndSelectValue(pricingScriptName);
+    }
+
+    String comments = pricing.getComments();
+    if (Objects.nonNull(comments)) {
+      newPricingProfileDialog.comments.setValue(comments);
+    }
+
+    String discount = pricing.getDiscount();
+    if (Objects.nonNull(discount)) {
+      newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());
+    }
+
+    String shipperInsMin = pricing.getInsMin();
+    String shipperInsPercentage = pricing.getInsPercentage();
+    String shipperInsThreshold = pricing.getInsThreshold();
+    if (Objects.isNull(shipperInsMin) && Objects.isNull(shipperInsPercentage) && Objects
+        .isNull(shipperInsThreshold)) {
+      newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
+    } else {
+      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("OnlyClick")) {
+        newPricingProfileDialog.insuranceMin.sendKeys(Keys.TAB);
+      } else if (Objects.nonNull(shipperInsMin)) {
+        newPricingProfileDialog.insuranceMin.sendKeys(shipperInsMin);
+      }
+      if (Objects.nonNull(shipperInsPercentage) && shipperInsPercentage
+          .equalsIgnoreCase("OnlyClick")) {
+        newPricingProfileDialog.insurancePercent.sendKeys(Keys.TAB);
+      } else if (Objects.nonNull(shipperInsPercentage)) {
+        newPricingProfileDialog.insurancePercent.sendKeys(shipperInsPercentage);
+      }
+      if (Objects.nonNull(shipperInsThreshold) && shipperInsThreshold
+          .equalsIgnoreCase("OnlyClick")) {
+        newPricingProfileDialog.insuranceThreshold.sendKeys(Keys.TAB);
+      } else if (Objects.nonNull(shipperInsThreshold)) {
+        newPricingProfileDialog.insuranceThreshold.sendKeys(shipperInsThreshold);
+      }
+    }
+
+    String shipperCodMin = pricing.getCodMin();
+    String shipperCodPercentage = pricing.getCodPercentage();
+    if (Objects.isNull(shipperCodMin) && Objects.isNull(shipperCodPercentage)) {
+      newPricingProfileDialog.codCountryDefaultCheckbox.check();
+    } else {
+      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("OnlyClick")) {
+        newPricingProfileDialog.codMin.sendKeys(Keys.TAB);
+      } else if (Objects.nonNull(shipperCodMin)) {
+        newPricingProfileDialog.codMin.sendKeys(shipperCodMin);
+      }
+      if (Objects.nonNull(shipperCodPercentage) && shipperCodPercentage
+          .equalsIgnoreCase("OnlyClick")) {
+        newPricingProfileDialog.codPercent.sendKeys(Keys.TAB);
+      } else if (Objects.nonNull(shipperCodPercentage)) {
+        newPricingProfileDialog.codPercent.sendKeys(shipperCodPercentage);
+      }
+    }
+  }
+
   public Pricing getAddedPricingProfileDetails() throws ParseException {
     Pricing addedPricingProfileOPV2 = new Pricing();
-    addedPricingProfileOPV2.setScriptId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
+    addedPricingProfileOPV2.setTemplateId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
     addedPricingProfileOPV2.setEffectiveDate(
         DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)));
     addedPricingProfileOPV2.setDiscount(getText(XPATH_PRICING_PROFILE_DISCOUNT));
@@ -1290,6 +1352,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     addedPricingProfileOPV2.setComments(getText(XPATH_PRICING_PROFILE_COMMENTS));
     addedPricingProfileOPV2.setContractEndDate(
         DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE)));
+    addedPricingProfileOPV2.setCodMin(getText(XPATH_PRICING_PROFILE_COD_MIN));
+    addedPricingProfileOPV2.setCodPercentage(getText(XPATH_PRICING_PROFILE_COD_PERCENTAGE));
+    addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
+    addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
+    addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
     return addedPricingProfileOPV2;
   }
 
@@ -1350,20 +1417,29 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     pause3s();
   }
 
-  public void addNewPricingScriptAndVerifyErrorMessage(Shipper shipper, String errorMessage) {
+  public void addNewPricingScriptAndVerifyErrorMessage(Shipper shipper,
+      String expectedErrorMessage) {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       tabs.selectTab("Pricing and Billing");
+      fillPricingProfileDetails(pricing);
+      assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
+      pause3s();
+      waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
+      String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
+      assertEquals("Error Message is not expected ", expectedErrorMessage, actualErrorMessageText);
+
+      clickButtonByAriaLabel("Cancel");
+    }
+  }
+
+  public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    Pricing pricing = shipper.getPricing();
+    if (pricing != null) {
+      clickTabItem(" Pricing and Billing");
       if (StringUtils.isNotBlank(pricing.getScriptName())) {
-        addNewProfile.click();
-        pause2s();
-        selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT,
-            pricing.getScriptName());
-        moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
-        sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
-        String errorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
-        assertTrue("Error Message is not expected ",
-            errorMessage.equalsIgnoreCase(errorMessageText));
+        fillPricingProfileDetails(pricing);
         assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
         clickButtonByAriaLabel("Cancel");
       }

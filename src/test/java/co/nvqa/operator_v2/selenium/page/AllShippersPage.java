@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Objects;
 import org.junit.Assert;
@@ -54,6 +55,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
   public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
   public static final String XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN = "//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[contains(text(),'%s')]";
+
+  private static final DecimalFormat NO_TRAILING_ZERO_DF = new DecimalFormat("###.##");
 
   public final AllShippersCreateEditPage allShippersCreateEditPage;
 
@@ -357,9 +360,9 @@ public class AllShippersPage extends OperatorV2SimplePage {
     return searchValue;
   }
 
-  public String addNewPricingScript(Shipper shipper) {
+  public String addNewPricingProfile(Shipper shipper) {
     waitUntilPageLoaded();
-    return allShippersCreateEditPage.addNewPricingScript(shipper);
+    return allShippersCreateEditPage.addNewPricingProfile(shipper);
   }
 
   public void editPricingScript(Shipper shipper) {
@@ -376,13 +379,14 @@ public class AllShippersPage extends OperatorV2SimplePage {
       Pricing pricingProfileFromDb, Pricing pricingProfileFromOPV2) {
     assertTrue("Script id is not same: ",
         pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
-    assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(),
+    assertEquals("Pricing profile id is not same: ", pricingProfileFromOPV2.getTemplateId(),
         pricingProfileFromDb.getTemplateId());
     assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId() != null);
     assertEquals("Comments are not the same: ", pricingProfile.getComments(),
         pricingProfileFromDb.getComments());
     assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
     assertNotNull("End Date is null:", pricingProfileFromOPV2.getContractEndDate());
+
     final String discount = pricingProfile.getDiscount();
     if (Objects.isNull(discount)) {
       assertEquals("Discount amount is not blank:", "-", pricingProfileFromOPV2.getDiscount());
@@ -398,6 +402,47 @@ public class AllShippersPage extends OperatorV2SimplePage {
           pricingProfileFromDb.getDiscount().contains(pricingProfile.getDiscount()));
       assertEquals("Type is not the same:", pricingProfile.getType(),
           pricingProfileFromDb.getType());
+    }
+
+    if (Objects.isNull(pricingProfile.getCodMin())) {
+      assertEquals("COD min fee is not - ", "-",
+          pricingProfileFromOPV2.getCodMin());
+    } else {
+      assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
+          pricingProfileFromOPV2.getCodMin());
+    }
+
+    if (Objects.isNull(pricingProfile.getCodMin())) {
+      assertEquals("COD percentage is - ", "-",
+          pricingProfileFromOPV2.getCodPercentage());
+    } else {
+      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
+          pricingProfileFromOPV2.getCodPercentage());
+    }
+
+    if (Objects.isNull(pricingProfile.getInsMin())) {
+      assertEquals("INS min fee is not - ", "-",
+          pricingProfileFromOPV2.getInsMin());
+    } else {
+      assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
+          pricingProfileFromOPV2.getInsMin());
+    }
+
+    if (Objects.isNull(pricingProfile.getInsPercentage())) {
+      assertEquals("INS percentage is - ", "-",
+          pricingProfileFromOPV2.getInsPercentage());
+    } else {
+      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage(),
+          pricingProfileFromOPV2.getInsPercentage());
+    }
+
+    if (Objects.isNull(pricingProfile.getInsThreshold())) {
+      assertEquals("INS threshold is - ", "-",
+          pricingProfileFromOPV2.getInsThreshold());
+    } else {
+      assertEquals("INS threshold is not the same: ",
+          NO_TRAILING_ZERO_DF.format(Double.valueOf(pricingProfile.getInsThreshold())),
+          pricingProfileFromOPV2.getInsThreshold());
     }
   }
 
@@ -415,6 +460,11 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public void addNewPricingScriptAndVerifyErrorMessage(Shipper shipper, String errorMessage) {
     waitUntilPageLoaded();
     allShippersCreateEditPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
+  }
+
+  public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
+    waitUntilPageLoaded();
+    allShippersCreateEditPage.addPricingProfileAndVerifySaveButtonIsDisabled(shipper);
   }
 
   public static class ShippersTable extends MdVirtualRepeatTable<Shipper> {

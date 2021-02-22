@@ -159,7 +159,6 @@ Feature: Pricing Profiles
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | Please provide only 2 decimal places. |
 
-
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
     Given Operator go to menu Shipper -> All Shippers
@@ -273,7 +272,6 @@ Feature: Pricing Profiles
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discountValue | 30                         |
       | comments      | Edited test pricing script |
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
