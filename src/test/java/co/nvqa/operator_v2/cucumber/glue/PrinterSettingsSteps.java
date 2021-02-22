@@ -7,6 +7,8 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Map;
 
+import static co.nvqa.operator_v2.selenium.page.PrinterSettingsPage.PrintersTable.ACTION_SET_DEFAULT;
+
 /**
  * @author Lanang Jati
  */
@@ -58,6 +60,13 @@ public class PrinterSettingsSteps extends AbstractSteps {
     printerSettingsPage.deletePrinterSettingWithName(printerSettings.getName());
   }
 
+  @When("^Operator set printer as default printer$")
+  public void operatorSetDefaultPrinter() {
+    PrinterSettings printerSettings = get(KEY_PRINTER_SETTINGS);
+    printerSettingsPage.printersTable.filterByColumn("name", printerSettings.getName());
+    printerSettingsPage.printersTable.clickActionButton(1, ACTION_SET_DEFAULT);
+  }
+
   @Then("^Operator verify Printer Settings is deleted successfully$")
   public void operatorVerifyPrinterSettingsIsDeletedSuccessfully() {
     PrinterSettings printerSettings = get(KEY_PRINTER_SETTINGS);
@@ -68,6 +77,12 @@ public class PrinterSettingsSteps extends AbstractSteps {
         5
     );
     remove(KEY_PRINTER_SETTINGS);
+  }
+
+  @Then("^Operator verify Printer Settings is set as default$")
+  public void operatorVerifyPrinterIsDefault() {
+    PrinterSettings printerSettings = get(KEY_PRINTER_SETTINGS);
+    printerSettingsPage.verifyDefaultPrinter(printerSettings.getName());
   }
 
   @When("^Operator set \"([^\"]*)\" = \"([^\"]*)\" for Printer Settings with name = \"([^\"]*)\"$")

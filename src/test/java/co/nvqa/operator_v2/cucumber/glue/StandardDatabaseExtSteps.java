@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
+import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
@@ -29,6 +30,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
@@ -121,6 +123,56 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
               Assert.assertEquals(
                   f("order jaro score is archived for the %s waypoint ", transactionType),
                   new Integer(1), jaroScore.getArchived()));
+        }
+      } else {
+        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
+      }
+    });
+  }
+
+  @Then("^DB Operator unarchive Jaro Scores of (Delivery|Pickup) Transaction waypoint of created order$")
+  public void dbOperatorUnarchiveJaroScoresOfDeliveryWaypoint(String type) {
+    Order order = get(KEY_ORDER_DETAILS);
+    String trackingId = order.getTrackingId();
+
+    List<Transaction> transactions = order.getTransactions();
+
+    ImmutableList.of(type.toUpperCase()).forEach(transactionType ->
+    {
+      Optional<Transaction> transactionOptional = transactions.stream()
+          .filter(t -> transactionType.equals(t.getType())).findFirst();
+
+      if (transactionOptional.isPresent()) {
+        Transaction transaction = transactionOptional.get();
+        Long waypointId = transaction.getWaypointId();
+        if (waypointId != null) {
+          getCoreJdbc().unarchiveJaroScores(waypointId);
+        }
+      } else {
+        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
+      }
+    });
+  }
+
+  @Then("^DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived$")
+  public void dbOperatorVerifyJaroScoresArchived() {
+    Order order = get(KEY_ORDER_DETAILS);
+    String trackingId = order.getTrackingId();
+
+    List<Transaction> transactions = order.getTransactions();
+
+    ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+    {
+      Optional<Transaction> transactionOptional = transactions.stream()
+          .filter(t -> transactionType.equals(t.getType())).findFirst();
+
+      if (transactionOptional.isPresent()) {
+        Transaction transaction = transactionOptional.get();
+        Long waypointId = transaction.getWaypointId();
+        if (waypointId != null) {
+          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          assertEquals("Number of jaro scores", 1, jaroScores.size());
+          assertTrue("jaro scores are archived", jaroScores.get(0).getArchived() == 1);
         }
       } else {
         fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
@@ -1650,5 +1702,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyInboundMaxWeight(String expected) {
     assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
         getCoreJdbc().getInboundMaxWeighParameter());
+  }
+
+  @Then("DB Operator verify the new COD for created route is created successfully")
+  public void dbOperatorVerifyTheNewCodIsCreatedSuccessfully() {
+    RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
+    CodInbound expected = new CodInbound();
+    expected.setAmountCollected(
+        Double.valueOf(StringUtils.remove(routeCashInboundCod.getAmountCollected(), "S$")));
+    expected.setType("Cash");
+    CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
+    expected.compareWithActual(actual);
+  }
+
+  @Then("DB Operator verify the COD for created route is soft deleted")
+  public void dbOperatorVerifyTheNewCodSoftDeleted() {
+    CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
+    assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
+        Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
   }
 }
