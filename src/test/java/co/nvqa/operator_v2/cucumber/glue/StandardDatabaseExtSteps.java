@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
+import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
@@ -29,6 +30,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
@@ -1700,5 +1702,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyInboundMaxWeight(String expected) {
     assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
         getCoreJdbc().getInboundMaxWeighParameter());
+  }
+
+  @Then("DB Operator verify the new COD for created route is created successfully")
+  public void dbOperatorVerifyTheNewCodIsCreatedSuccessfully() {
+    RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
+    CodInbound expected = new CodInbound();
+    expected.setAmountCollected(
+        Double.valueOf(StringUtils.remove(routeCashInboundCod.getAmountCollected(), "S$")));
+    expected.setType("Cash");
+    CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
+    expected.compareWithActual(actual);
+  }
+
+  @Then("DB Operator verify the COD for created route is soft deleted")
+  public void dbOperatorVerifyTheNewCodSoftDeleted() {
+    CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
+    assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
+        Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
   }
 }
