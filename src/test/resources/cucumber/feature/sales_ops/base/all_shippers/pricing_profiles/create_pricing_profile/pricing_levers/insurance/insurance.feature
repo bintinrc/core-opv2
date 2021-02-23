@@ -1,5 +1,5 @@
 @OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Insurance @CreatePricingProfiles
-Feature: All Shippers
+Feature: Normal Shippers - Insurance
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"

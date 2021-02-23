@@ -194,7 +194,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(20);
+    shipperInformation.waitUntilClickable(40);
   }
 
   public void createNewShipper(Shipper shipper) {
@@ -1344,19 +1344,24 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
     Pricing addedPricingProfileOPV2 = new Pricing();
+    waitUntilVisibilityOfElementLocated(XPATH_PRICING_PROFILE_ID);
     addedPricingProfileOPV2.setTemplateId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
-    addedPricingProfileOPV2.setEffectiveDate(
-        DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)));
     addedPricingProfileOPV2.setDiscount(getText(XPATH_PRICING_PROFILE_DISCOUNT));
     addedPricingProfileOPV2.setScriptName(getText(XPATH_PRICING_PROFILE_SCRIPT_NAME));
     addedPricingProfileOPV2.setComments(getText(XPATH_PRICING_PROFILE_COMMENTS));
-    addedPricingProfileOPV2.setContractEndDate(
-        DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE)));
     addedPricingProfileOPV2.setCodMin(getText(XPATH_PRICING_PROFILE_COD_MIN));
     addedPricingProfileOPV2.setCodPercentage(getText(XPATH_PRICING_PROFILE_COD_PERCENTAGE));
     addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
     addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
     addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
+    String endDate = getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE);
+    if (!endDate.equals("-")) {
+      addedPricingProfileOPV2.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(endDate));
+    }
+    String startDate = getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE);
+    if (!startDate.equals("-")) {
+      addedPricingProfileOPV2.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(startDate));
+    }
     return addedPricingProfileOPV2;
   }
 

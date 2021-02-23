@@ -23,6 +23,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -48,6 +49,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
@@ -465,7 +467,8 @@ public class AllShippersSteps extends AbstractSteps {
 
       Shipper shipper = get(KEY_CREATED_SHIPPER);
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
-      allShippersPage.editShipper(shipper);
+      openSpecificShipperEditPage(shipper.getLegacyId().toString());
+
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
@@ -482,6 +485,7 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator gets pricing profile values")
   public void operatorGetsPricingProfileValues() {
     try {
+      allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
@@ -855,7 +859,27 @@ public class AllShippersSteps extends AbstractSteps {
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-    allShippersPage.editShipper(shipper);
+    openSpecificShipperEditPage(shipperLegacyId);
+  }
+
+  private void openSpecificShipperEditPage(String shipperLegacyId) {
+    for (String handle : getWebDriver().getWindowHandles()) {
+      if (!handle.equals(get(KEY_MAIN_WINDOW_HANDLE))) {
+        getWebDriver().switchTo().window(handle);
+        getWebDriver().close();
+      }
+    }
+
+    String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
+        TestConstants.OPERATOR_PORTAL_BASE_URL,
+        TestConstants.COUNTRY_CODE, shipperLegacyId));
+
+    getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
+    ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
+    getWebDriver().switchTo().window(tabs.get(1));
+    getWebDriver().get(editSpecificShipperPageURL);
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
   @And("Operator edits shipper with ID and Name {string}")
