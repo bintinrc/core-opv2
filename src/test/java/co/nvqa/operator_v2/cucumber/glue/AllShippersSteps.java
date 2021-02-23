@@ -50,6 +50,7 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
@@ -339,6 +340,20 @@ public class AllShippersSteps extends AbstractSteps {
       Assert.assertEquals("Comments", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue());
     }
+    value = data.get("insuranceMinFee");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.getValue();
+    }
+    value = data.get("insurancePercentage");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+          .getValue();
+    }
+    value = data.get("insuranceThreshold");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+          .getValue();
+    }
   }
 
   @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
@@ -438,6 +453,28 @@ public class AllShippersSteps extends AbstractSteps {
       NvLogger.infof("Set comments : %s", value);
       allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
     }
+
+    value = data.get("insuranceMinFee");
+    if (StringUtils.isNotBlank(value)) {
+      if (value.equalsIgnoreCase("removeValue")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.clear();
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+            .sendKeys(Keys.TAB);
+      } else {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+            .setValue(value);
+      }
+    }
+    value = data.get("insurancePercentage");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+          .setValue(value);
+    }
+    value = data.get("insuranceThreshold");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+          .setValue(value);
+    }
   }
 
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
@@ -508,11 +545,15 @@ public class AllShippersSteps extends AbstractSteps {
     pause1s();
     data = resolveKeyValues(data);
     String value = data.get("discountValue");
-    if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Discount Value Error message", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError
-              .getText());
-    }
+    String expectedErrorMsg = data.get("errorMessage");
+//    if (StringUtils.isNotBlank(value)) {
+//      Assert.assertEquals("Discount Value Error message", value,
+//          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError
+//              .getText());
+//    }
+
+    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog
+        .verifyErrorMsgEditPricingScript(expectedErrorMsg);
   }
 
   @Then("^Operator verify the new Shipper is updated successfully$")

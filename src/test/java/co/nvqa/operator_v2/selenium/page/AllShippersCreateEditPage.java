@@ -1539,8 +1539,24 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
 
+    @FindBy(id = "insurance-min")
+    public TextBox insuranceMin;
+
+    @FindBy(id = "insurance-percent")
+    public TextBox insurancePercent;
+
+    @FindBy(id = "insurance-threshold")
+    public TextBox insuranceThreshold;
+
     @FindBy(name = "Save Changes")
     public NvApiTextButton saveChanges;
+
+
+    public void verifyErrorMsgEditPricingScript(String expectedErrorMessage) {
+      waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
+      String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
+      assertEquals("Error Message is not expected ", expectedErrorMessage, actualErrorMessageText);
+    }
   }
 
   public static class DiscardChangesDialog extends MdDialog {
@@ -1569,4 +1585,5 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         getValueMdDatepickerById(LOCATOR_START_DATE));
     assertFalse(isEnabledMdDatepickerById(LOCATOR_START_DATE));
   }
+
 }
