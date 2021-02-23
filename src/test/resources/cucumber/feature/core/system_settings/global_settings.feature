@@ -1,7 +1,7 @@
 @OperatorV2 @Core @SystemSettings @GlobalSettings
 Feature: Global Settings
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

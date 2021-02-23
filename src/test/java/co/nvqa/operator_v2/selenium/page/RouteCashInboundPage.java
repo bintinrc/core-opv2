@@ -3,8 +3,12 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.TimeoutException;
@@ -33,6 +37,12 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
   @FindBy(name = "container.cod-list.cod-get")
   public NvApiTextButton fetchCod;
 
+  @FindBy(name = "Add COD")
+  public NvIconTextButton addCod;
+
+  @FindBy(css = "md-dialog")
+  public AddCodDialog addCodDialog;
+
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteDialog;
 
@@ -44,9 +54,12 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
   }
 
   public void addCod(RouteCashInboundCod routeCashInboundCod) {
-    clickNvIconTextButtonByName("Add COD");
-    waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-add')]");
-    fillTheFormAndSubmit(routeCashInboundCod);
+    addCod.click();
+    addCodDialog.waitUntilVisible();
+    addCodDialog.routeId.setValue(routeCashInboundCod.getRouteId());
+    addCodDialog.amountCollected.setValue(routeCashInboundCod.getAmountCollected());
+    addCodDialog.receiptNumber.setValue(routeCashInboundCod.getReceiptNumber());
+    addCodDialog.submit.clickAndWaitUntilDone();
     waitUntilToastErrorDisappear();
   }
 
@@ -192,6 +205,25 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
       ));
       setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit", ACTION_DELETE, "Delete"));
       setEntityClass(RouteCashInboundCod.class);
+    }
+  }
+
+  public static class AddCodDialog extends MdDialog {
+
+    @FindBy(css = "[id^='route-id']")
+    public TextBox routeId;
+
+    @FindBy(css = "[id^='amount-collected']")
+    public TextBox amountCollected;
+
+    @FindBy(css = "[id^='receipt-number']")
+    public TextBox receiptNumber;
+
+    @FindBy(name = "Submit")
+    public NvButtonSave submit;
+
+    public AddCodDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 }
