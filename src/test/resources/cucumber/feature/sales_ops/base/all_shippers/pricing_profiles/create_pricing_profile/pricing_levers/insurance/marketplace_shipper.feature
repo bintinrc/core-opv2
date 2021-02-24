@@ -8,6 +8,7 @@ Feature:  Create Pricing Profile - Marketplace Shippers - Insurance
 
   Scenario: Create Pricing Profile - Marketplace Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Marketplace Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:942b3175-b0ff-4830-88be-22103cc72579)
     Given DB Operator deletes "{shipper-sop-mktpl-v4-dummy-script-global-id}" shipper's pricing profiles
+    And DB Operator deletes "{sub-shipper-sop-mktpl-v4-dummy-script-global-id}" shipper's pricing profiles
     And Operator edits shipper "{shipper-sop-mktpl-v4-dummy-script-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
