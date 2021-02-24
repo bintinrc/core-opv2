@@ -23,6 +23,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -48,6 +49,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
@@ -337,6 +340,20 @@ public class AllShippersSteps extends AbstractSteps {
       Assert.assertEquals("Comments", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue());
     }
+    value = data.get("insuranceMinFee");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.getValue();
+    }
+    value = data.get("insurancePercentage");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+          .getValue();
+    }
+    value = data.get("insuranceThreshold");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+          .getValue();
+    }
   }
 
   @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
@@ -436,6 +453,28 @@ public class AllShippersSteps extends AbstractSteps {
       NvLogger.infof("Set comments : %s", value);
       allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
     }
+
+    value = data.get("insuranceMinFee");
+    if (StringUtils.isNotBlank(value)) {
+      if (value.equalsIgnoreCase("removeValue")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.clear();
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+            .sendKeys(Keys.TAB);
+      } else {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+            .setValue(value);
+      }
+    }
+    value = data.get("insurancePercentage");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+          .setValue(value);
+    }
+    value = data.get("insuranceThreshold");
+    if (StringUtils.isNotBlank(value)) {
+      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+          .setValue(value);
+    }
   }
 
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
@@ -465,7 +504,8 @@ public class AllShippersSteps extends AbstractSteps {
 
       Shipper shipper = get(KEY_CREATED_SHIPPER);
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
-      allShippersPage.editShipper(shipper);
+      openSpecificShipperEditPage(shipper.getLegacyId().toString());
+
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
@@ -473,6 +513,19 @@ public class AllShippersSteps extends AbstractSteps {
       allShippersPage.allShippersCreateEditPage.backToShipperList();
       pause3s();
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
+  }
+
+
+  @And("Operator gets pricing profile values")
+  public void operatorGetsPricingProfileValues() {
+    try {
+      allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+      Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
+      put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
@@ -491,12 +544,9 @@ public class AllShippersSteps extends AbstractSteps {
       Map<String, String> data) {
     pause1s();
     data = resolveKeyValues(data);
-    String value = data.get("discountValue");
-    if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Discount Value Error message", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError
-              .getText());
-    }
+    String expectedErrorMsg = data.get("errorMessage");
+    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog
+        .verifyErrorMsgEditPricingScript(expectedErrorMsg);
   }
 
   @Then("^Operator verify the new Shipper is updated successfully$")
@@ -843,7 +893,27 @@ public class AllShippersSteps extends AbstractSteps {
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-    allShippersPage.editShipper(shipper);
+    openSpecificShipperEditPage(shipperLegacyId);
+  }
+
+  private void openSpecificShipperEditPage(String shipperLegacyId) {
+    for (String handle : getWebDriver().getWindowHandles()) {
+      if (!handle.equals(get(KEY_MAIN_WINDOW_HANDLE))) {
+        getWebDriver().switchTo().window(handle);
+        getWebDriver().close();
+      }
+    }
+
+    String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
+        TestConstants.OPERATOR_PORTAL_BASE_URL,
+        TestConstants.COUNTRY_CODE, shipperLegacyId));
+
+    getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
+    ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
+    getWebDriver().switchTo().window(tabs.get(1));
+    getWebDriver().get(editSpecificShipperPageURL);
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
   @And("Operator edits shipper with ID and Name {string}")
