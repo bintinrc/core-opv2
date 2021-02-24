@@ -59,8 +59,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | This field is required. |
 
-#  Scenario: Update Pricing Profile - with 'Int' Insurance Min Fee, '0' Insurance Percentage (uid:d11c5ef9-d44b-4c87-8db1-50c4363439d5)
-
   Scenario: Update Pricing Profile - with '0' Insurance Min Fee, with 'Decimal' Insurance Percentage (uid:1c8cda6a-8a31-4429-beec-0e45eb0257e7)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
@@ -162,7 +160,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Negative value is not allowed |
 
-  @coverage-manual @coverage-operator-manual @step-done
   Scenario: Update Pricing Profile - input alphabets on Insurance Min Fee (uid:e2f34275-e5a1-49e1-9938-7fdbf01c0923)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
@@ -180,7 +177,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
 
-  @coverage-manual @coverage-operator-manual @step-done
   Scenario: Update Pricing Profile - input special characters on Insurance Percentage (uid:09ef1f55-56bf-4bb8-b428-d9361a643410)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
@@ -198,7 +194,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
 
-  @coverage-manual @coverage-operator-manual @step-done
   Scenario: Update Pricing Profile - input negative values on Insurance Percentage (uid:b5326674-d061-4600-b987-237a0c84598d)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
