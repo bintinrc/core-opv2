@@ -37,7 +37,7 @@ Feature: Pricing Profiles
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discountValue | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | 0 is not a valid discount value |
+      | errorMessage | 0 is not a valid discount value |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
@@ -120,7 +120,7 @@ Feature: Pricing Profiles
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discountValue | $#^$^#@5 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Special character is not allowed |
+      | errorMessage | Special character is not allowed |
 
   @CloseNewWindows @NotInGaia
   Scenario: Edit Pending Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
@@ -157,7 +157,7 @@ Feature: Pricing Profiles
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discountValue | 4.38656 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Please provide only 2 decimal places. |
+      | errorMessage | Please provide only 2 decimal places. |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
@@ -241,7 +241,7 @@ Feature: Pricing Profiles
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discountValue | 10000000 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Discounts cannot exceed 6 figures. |
+      | errorMessage | Discounts cannot exceed 6 figures. |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with Int Discount (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)

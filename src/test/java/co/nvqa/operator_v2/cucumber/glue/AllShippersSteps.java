@@ -544,14 +544,7 @@ public class AllShippersSteps extends AbstractSteps {
       Map<String, String> data) {
     pause1s();
     data = resolveKeyValues(data);
-    String value = data.get("discountValue");
     String expectedErrorMsg = data.get("errorMessage");
-//    if (StringUtils.isNotBlank(value)) {
-//      Assert.assertEquals("Discount Value Error message", value,
-//          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError
-//              .getText());
-//    }
-
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog
         .verifyErrorMsgEditPricingScript(expectedErrorMsg);
   }
