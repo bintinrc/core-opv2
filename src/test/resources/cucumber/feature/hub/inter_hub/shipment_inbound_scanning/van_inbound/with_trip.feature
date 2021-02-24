@@ -2019,6 +2019,10 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  Scenario: View At Transit Hub Shipment To Go With Trip - Shipment in Transit Trip is not shown on Shipments to Go list (uid:bc9b23da-e4fe-4553-b0d6-3e94b03079ed)
+    Given no-op
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
