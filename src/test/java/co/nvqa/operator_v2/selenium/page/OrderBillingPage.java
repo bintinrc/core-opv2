@@ -6,6 +6,8 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.GmailClient;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.model.SsbReport;
+import co.nvqa.operator_v2.model.SsbShipperReportSg;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.io.BufferedReader;
 import java.io.File;
@@ -312,40 +314,115 @@ public class OrderBillingPage extends OperatorV2SimplePage {
         .collect(Collectors.toList());
 
     PricedOrder pricedOrderInCsv = new PricedOrder();
-    pricedOrderInCsv.setShipperId(integerValue(columnArray.get(0)));
-    pricedOrderInCsv.setShipperName(columnArray.get(1));
-    pricedOrderInCsv.setBillingName(columnArray.get(2));
-    pricedOrderInCsv.setTrackingId(columnArray.get(3));
-    pricedOrderInCsv.setShipperOrderRef(columnArray.get(4));
-    pricedOrderInCsv.setGranularStatus(columnArray.get(5));
-    pricedOrderInCsv.setCustomerName(columnArray.get(6));
-    pricedOrderInCsv.setDeliveryTypeName(columnArray.get(7));
-    pricedOrderInCsv.setDeliveryTypeId(integerValue(columnArray.get(8)));
-    pricedOrderInCsv.setParcelSizeId(columnArray.get(9));
-    pricedOrderInCsv.setParcelWeight(Double.valueOf(columnArray.get(10)));
-    pricedOrderInCsv.setCreatedTime(columnArray.get(11));
-    pricedOrderInCsv.setDeliveryDate(columnArray.get(12));
-    pricedOrderInCsv.setFromCity(columnArray.get(13));
-    pricedOrderInCsv.setFromBillingZone(columnArray.get(14));
-    pricedOrderInCsv.setOriginHub(columnArray.get(15));
-    pricedOrderInCsv.setL1Name(columnArray.get(16));
-    pricedOrderInCsv.setL2Name(columnArray.get(17));
-    pricedOrderInCsv.setL3Name(columnArray.get(18));
-    pricedOrderInCsv.setToAddress(columnArray.get(19));
-    pricedOrderInCsv.setToPostcode(columnArray.get(20));
-    pricedOrderInCsv.setToBillingZone(columnArray.get(21));
-    pricedOrderInCsv.setDestinationHub(columnArray.get(22));
-    pricedOrderInCsv.setDeliveryFee(bigDecimalValue(columnArray.get(23)));
-    pricedOrderInCsv.setCodCollected(bigDecimalValue(columnArray.get(24)));
-    pricedOrderInCsv.setCodFee(bigDecimalValue(columnArray.get(25)));
-    pricedOrderInCsv.setInsuredValue(bigDecimalValue(columnArray.get(26)));
-    pricedOrderInCsv.setInsuredFee(bigDecimalValue(columnArray.get(27)));
-    pricedOrderInCsv.setHandlingFee(bigDecimalValue(columnArray.get(28)));
-    pricedOrderInCsv.setGst(bigDecimalValue(columnArray.get(29)));
-    pricedOrderInCsv.setTotal(bigDecimalValue(columnArray.get(30)));
-    pricedOrderInCsv.setScriptId(integerValue(columnArray.get(31)));
-    pricedOrderInCsv.setScriptVersion(columnArray.get(32));
-    pricedOrderInCsv.setLastCalculatedDate(columnArray.get(33));
+    pricedOrderInCsv
+        .setShipperId(integerValue(columnArray.get(SsbReport.SHIPPER_ID.ordinal())));
+    pricedOrderInCsv.setShipperName(columnArray.get(SsbReport.SHIPPER_NAME.ordinal()));
+    pricedOrderInCsv.setBillingName(columnArray.get(SsbReport.BILLING_NAME.ordinal()));
+    pricedOrderInCsv.setTrackingId(columnArray.get(SsbReport.TRACKING_ID.ordinal()));
+    pricedOrderInCsv.setShipperOrderRef(columnArray.get(SsbReport.SHIPPER_ORDER_REF.ordinal()));
+    pricedOrderInCsv.setGranularStatus(columnArray.get(SsbReport.GRANULAR_STATUS.ordinal()));
+    pricedOrderInCsv.setCustomerName(columnArray.get(SsbReport.CUSTOMER_NAME.ordinal()));
+    pricedOrderInCsv
+        .setDeliveryTypeName(columnArray.get(SsbReport.DELIVERY_TYPE_NAME.ordinal()));
+    pricedOrderInCsv
+        .setDeliveryTypeId(integerValue(columnArray.get(SsbReport.DELIVERY_TYPE_ID.ordinal())));
+    pricedOrderInCsv.setParcelSizeId(columnArray.get(SsbReport.PARCEL_SIZE_ID.ordinal()));
+    pricedOrderInCsv
+        .setParcelWeight(Double.valueOf(columnArray.get(SsbReport.PARCEL_WEIGHT.ordinal())));
+    pricedOrderInCsv.setCreatedTime(columnArray.get(SsbReport.CREATED_TIME.ordinal()));
+    pricedOrderInCsv.setDeliveryDate(columnArray.get(SsbReport.DELIVERY_DATE.ordinal()));
+    pricedOrderInCsv.setFromCity(columnArray.get(SsbReport.FROM_CITY.ordinal()));
+    pricedOrderInCsv.setFromBillingZone(columnArray.get(SsbReport.FROM_BILLING_ZONE.ordinal()));
+    pricedOrderInCsv.setOriginHub(columnArray.get(SsbReport.ORIGIN_HUB.ordinal()));
+    pricedOrderInCsv.setL1Name(columnArray.get(SsbReport.L1_NAME.ordinal()));
+    pricedOrderInCsv.setL2Name(columnArray.get(SsbReport.L2_NAME.ordinal()));
+    pricedOrderInCsv.setL3Name(columnArray.get(SsbReport.L3_NAME.ordinal()));
+    pricedOrderInCsv.setToAddress(columnArray.get(SsbReport.TO_ADDRESS.ordinal()));
+    pricedOrderInCsv.setToPostcode(columnArray.get(SsbReport.TO_POSTCODE.ordinal()));
+    pricedOrderInCsv.setToBillingZone(columnArray.get(SsbReport.TO_BILLING_ZONE.ordinal()));
+    pricedOrderInCsv.setDestinationHub(columnArray.get(SsbReport.DESTINATION_HUB.ordinal()));
+    pricedOrderInCsv
+        .setDeliveryFee(bigDecimalValue(columnArray.get(SsbReport.DELIVERY_FEE.ordinal())));
+    pricedOrderInCsv
+        .setCodCollected(bigDecimalValue(columnArray.get(SsbReport.COD_COLLECTED.ordinal())));
+    pricedOrderInCsv.setCodFee(bigDecimalValue(columnArray.get(SsbReport.COD_FEE.ordinal())));
+    pricedOrderInCsv
+        .setInsuredValue(bigDecimalValue(columnArray.get(SsbReport.INSURED_VALUE.ordinal())));
+    pricedOrderInCsv
+        .setInsuredFee(bigDecimalValue(columnArray.get(SsbReport.INSURED_FEE.ordinal())));
+    pricedOrderInCsv
+        .setHandlingFee(bigDecimalValue(columnArray.get(SsbReport.HANDLING_FEE.ordinal())));
+    pricedOrderInCsv.setGst(bigDecimalValue(columnArray.get(SsbReport.GST.ordinal())));
+    pricedOrderInCsv.setTotal(bigDecimalValue(columnArray.get(SsbReport.TOTAL.ordinal())));
+    pricedOrderInCsv.setScriptId(integerValue(columnArray.get(SsbReport.SCRIPT_ID.ordinal())));
+    pricedOrderInCsv.setScriptVersion(columnArray.get(SsbReport.SCRIPT_VERSION.ordinal()));
+    pricedOrderInCsv
+        .setLastCalculatedDate(columnArray.get(SsbReport.LAST_CALCULATED_DATE.ordinal()));
+    return pricedOrderInCsv;
+  }
+
+  public PricedOrder pricedOrderCsvForSgShipperReport(String line) {
+    // size column is removed from "SHIPPER" report for country SG
+    List<String> columnArray = Arrays.stream(line.replaceAll("^\"|\"$", "").split("\",\""))
+        .map((value) -> value.equals("") ? null : value)
+        .collect(Collectors.toList());
+
+    PricedOrder pricedOrderInCsv = new PricedOrder();
+    pricedOrderInCsv
+        .setShipperId(integerValue(columnArray.get(SsbShipperReportSg.SHIPPER_ID.ordinal())));
+    pricedOrderInCsv.setShipperName(columnArray.get(SsbShipperReportSg.SHIPPER_NAME.ordinal()));
+    pricedOrderInCsv.setBillingName(columnArray.get(SsbShipperReportSg.BILLING_NAME.ordinal()));
+    pricedOrderInCsv.setTrackingId(columnArray.get(SsbShipperReportSg.TRACKING_ID.ordinal()));
+    pricedOrderInCsv
+        .setShipperOrderRef(columnArray.get(SsbShipperReportSg.SHIPPER_ORDER_REF.ordinal()));
+    pricedOrderInCsv
+        .setGranularStatus(columnArray.get(SsbShipperReportSg.GRANULAR_STATUS.ordinal()));
+    pricedOrderInCsv
+        .setCustomerName(columnArray.get(SsbShipperReportSg.CUSTOMER_NAME.ordinal()));
+    pricedOrderInCsv
+        .setDeliveryTypeName(columnArray.get(SsbShipperReportSg.DELIVERY_TYPE_NAME.ordinal()));
+    pricedOrderInCsv.setDeliveryTypeId(
+        integerValue(columnArray.get(SsbShipperReportSg.DELIVERY_TYPE_ID.ordinal())));
+    pricedOrderInCsv.setParcelWeight(
+        Double.valueOf(columnArray.get(SsbShipperReportSg.PARCEL_WEIGHT.ordinal())));
+    pricedOrderInCsv.setCreatedTime(columnArray.get(SsbShipperReportSg.CREATED_TIME.ordinal()));
+    pricedOrderInCsv
+        .setDeliveryDate(columnArray.get(SsbShipperReportSg.DELIVERY_DATE.ordinal()));
+    pricedOrderInCsv.setFromCity(columnArray.get(SsbShipperReportSg.FROM_CITY.ordinal()));
+    pricedOrderInCsv
+        .setFromBillingZone(columnArray.get(SsbShipperReportSg.FROM_BILLING_ZONE.ordinal()));
+    pricedOrderInCsv.setOriginHub(columnArray.get(SsbShipperReportSg.ORIGIN_HUB.ordinal()));
+    pricedOrderInCsv.setL1Name(columnArray.get(SsbShipperReportSg.L1_NAME.ordinal()));
+    pricedOrderInCsv.setL2Name(columnArray.get(SsbShipperReportSg.L2_NAME.ordinal()));
+    pricedOrderInCsv.setL3Name(columnArray.get(SsbShipperReportSg.L3_NAME.ordinal()));
+    pricedOrderInCsv.setToAddress(columnArray.get(SsbShipperReportSg.TO_ADDRESS.ordinal()));
+    pricedOrderInCsv.setToPostcode(columnArray.get(SsbShipperReportSg.TO_POSTCODE.ordinal()));
+    pricedOrderInCsv
+        .setToBillingZone(columnArray.get(SsbShipperReportSg.TO_BILLING_ZONE.ordinal()));
+    pricedOrderInCsv
+        .setDestinationHub(columnArray.get(SsbShipperReportSg.DESTINATION_HUB.ordinal()));
+    pricedOrderInCsv.setDeliveryFee(
+        bigDecimalValue(columnArray.get(SsbShipperReportSg.DELIVERY_FEE.ordinal())));
+    pricedOrderInCsv.setCodCollected(
+        bigDecimalValue(columnArray.get(SsbShipperReportSg.COD_COLLECTED.ordinal())));
+    pricedOrderInCsv
+        .setCodFee(bigDecimalValue(columnArray.get(SsbShipperReportSg.COD_FEE.ordinal())));
+    pricedOrderInCsv.setInsuredValue(
+        bigDecimalValue(columnArray.get(SsbShipperReportSg.INSURED_VALUE.ordinal())));
+    pricedOrderInCsv.setInsuredFee(
+        bigDecimalValue(columnArray.get(SsbShipperReportSg.INSURED_FEE.ordinal())));
+    pricedOrderInCsv.setHandlingFee(
+        bigDecimalValue(columnArray.get(SsbShipperReportSg.HANDLING_FEE.ordinal())));
+    pricedOrderInCsv.setGst(bigDecimalValue(columnArray.get(SsbShipperReportSg.GST.ordinal())));
+    pricedOrderInCsv
+        .setTotal(bigDecimalValue(columnArray.get(SsbShipperReportSg.TOTAL.ordinal())));
+    pricedOrderInCsv
+        .setScriptId(integerValue(columnArray.get(SsbShipperReportSg.SCRIPT_ID.ordinal())));
+    pricedOrderInCsv
+        .setScriptVersion(columnArray.get(SsbShipperReportSg.SCRIPT_VERSION.ordinal()));
+    pricedOrderInCsv.setLastCalculatedDate(
+        columnArray.get(SsbShipperReportSg.LAST_CALCULATED_DATE.ordinal()));
+
     return pricedOrderInCsv;
   }
 

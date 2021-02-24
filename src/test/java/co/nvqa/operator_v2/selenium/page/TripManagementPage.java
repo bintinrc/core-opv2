@@ -643,6 +643,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void forceTripCompletion() {
     forceTripCompletion.waitUntilClickable();
     forceTripCompletion.click();
+    pause5s();
   }
 
   public void departTrip() {

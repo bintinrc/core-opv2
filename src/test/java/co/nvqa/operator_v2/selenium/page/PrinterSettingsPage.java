@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -119,6 +120,16 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
     printersTable.filterByColumn("name", value);
   }
 
+  public void verifyDefaultPrinter(String name) {
+    searchPrinterSettings(name);
+    String rowClass = getAttribute(printersTable.getRowLocator(1), "class");
+    assertTrue("Default printer is highlighted with background color = green", StringUtils
+        .contains(rowClass, "highlight"));
+    String buttonClass = getAttribute(
+        "//nv-icon-button[@name='container.printers.column-default']/button", "class");
+    assertTrue("printer icon in dark green", StringUtils.contains(buttonClass, "raised"));
+  }
+
   public static class AddPrinterDialog extends MdDialog {
 
     public AddPrinterDialog(WebDriver webDriver, WebElement webElement) {
@@ -167,6 +178,7 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
 
     public static final String ACTION_EDIT = "Edit";
     public static final String ACTION_DELETE = "Delete";
+    public static final String ACTION_SET_DEFAULT = "Set default";
 
     public PrintersTable(WebDriver webDriver) {
       super(webDriver);
@@ -180,7 +192,8 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
       setEntityClass(PrinterSettings.class);
       setActionButtonsLocators(ImmutableMap.of(
           ACTION_EDIT, "Edit",
-          ACTION_DELETE, "Delete"));
+          ACTION_DELETE, "Delete",
+          ACTION_SET_DEFAULT, "container.printers.column-default"));
     }
   }
 }
