@@ -1,5 +1,5 @@
 @OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfilesID @CreatePricingProfilesID
-Feature: Create Pricing Profil - ID
+Feature: Create Pricing Profile - ID
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
