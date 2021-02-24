@@ -114,7 +114,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
       | insuranceMinFee   | -1                                              |
       | errorMessage      | Negative value is not allowed                   |
-@nadeera
+
   Scenario: Create Pricing Profile - input alphabets on Insurance Min Fee (uid:279411a1-9620-477e-aac2-1b07d4c94818)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message

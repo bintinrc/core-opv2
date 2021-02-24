@@ -29,8 +29,9 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | pricingScript       | {pricing-script-name} |
-      | discountValue       | 1                     |
+      | pricingScriptName   | {pricing-script-name} |
+      | type                | FLAT                  |
+      | discount            | 1                     |
       | insuranceMinFee     | 5                     |
       | insurancePercentage | 5                     |
       | insuranceThreshold  | 5                     |
@@ -91,8 +92,9 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
       | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript       | {pricing-script-name}          |
-      | discountValue       | 40                             |
+      | pricingScriptName   | {pricing-script-name}          |
+      | type                | FLAT                           |
+      | discount            | 40                             |
       | insuranceMinFee     | 40                             |
       | insurancePercentage | 40                             |
       | insuranceThreshold  | 40                             |

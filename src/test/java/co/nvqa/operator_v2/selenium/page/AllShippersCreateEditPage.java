@@ -1248,19 +1248,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     b2bManagementPage.backToSubShipperTable();
   }
 
-  public String addNewPricingProfile(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
-    tabs.selectTab("Pricing and Billing");
-    addNewProfile.click();
-    newPricingProfileDialog.waitUntilVisible();
+  public void addNewPricingProfileWithoutSave(Shipper shipper) {
+    addNewPricingProfile(shipper);
+  }
 
-    Pricing pricing = shipper.getPricing();
-    if (pricing != null) {
-      clickTabItem(" Pricing and Billing");
-      fillPricingProfileDetails(pricing);
-      newPricingProfileDialog.saveChanges.click();
-      newPricingProfileDialog.waitUntilInvisible();
-    }
+  public String addNewPricingProfileAndSave(Shipper shipper) {
+    addNewPricingProfile(shipper);
 
     String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
     assertEquals("Status is not Pending ", status, "Pending");
@@ -1275,8 +1268,22 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }, "Getting Pricing Profile ID");
   }
 
-  private void fillPricingProfileDetails(Pricing pricing) {
+  private void addNewPricingProfile(Shipper shipper) {
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    tabs.selectTab("Pricing and Billing");
+    addNewProfile.click();
+    newPricingProfileDialog.waitUntilVisible();
 
+    Pricing pricing = shipper.getPricing();
+    if (pricing != null) {
+      clickTabItem(" Pricing and Billing");
+      fillPricingProfileDetails(pricing);
+      newPricingProfileDialog.saveChanges.click();
+      newPricingProfileDialog.waitUntilInvisible();
+    }
+  }
+
+  private void fillPricingProfileDetails(Pricing pricing) {
     Date effectiveDate = pricing.getEffectiveDate();
     if (Objects.nonNull(effectiveDate)) {
       try {
@@ -1350,6 +1357,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       }
     }
   }
+
+//  public void editPricingProfileWithoutSave(Shipper shipper) {
+//    fillPricingProfileDetails(shipper.getPricing());
+//  }
+
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
     Pricing addedPricingProfileOPV2 = new Pricing();

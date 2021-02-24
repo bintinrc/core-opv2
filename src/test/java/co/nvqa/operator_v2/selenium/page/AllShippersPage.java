@@ -362,8 +362,19 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   public String addNewPricingProfile(Shipper shipper) {
     waitUntilPageLoaded();
-    return allShippersCreateEditPage.addNewPricingProfile(shipper);
+    return allShippersCreateEditPage.addNewPricingProfileAndSave(shipper);
   }
+
+  public void addNewPricingProfileWithoutSaving(Shipper shipper) {
+    waitUntilPageLoaded();
+    allShippersCreateEditPage.addNewPricingProfileWithoutSave(shipper);
+  }
+
+//  public void editPricingProfileWithoutSaving(Shipper shipper) {
+//    waitUntilPageLoaded();
+//    allShippersCreateEditPage.editPricingProfileWithoutSave(shipper);
+//  }
+
 
   public void editPricingScript(Shipper shipper) {
     waitUntilPageLoaded();

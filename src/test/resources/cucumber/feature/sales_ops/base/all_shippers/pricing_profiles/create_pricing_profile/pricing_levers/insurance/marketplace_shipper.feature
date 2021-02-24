@@ -48,7 +48,7 @@ Feature:  Create Pricing Profile - Marketplace Shippers - Insurance
     And Operator verifies the pricing lever details
     When Operator edits shipper "{shipper-sop-mktpl-v4-dummy-script-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | pricingScript       | {pricing-script-name-2}       |
+      | pricingScriptName   | {pricing-script-name-2}       |
       | type                | FLAT                          |
       | discount            | 50                            |
       | insuranceMinFee     | 50                            |
