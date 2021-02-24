@@ -1,5 +1,5 @@
 @OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Insurance @Corporate
-Feature: Corporate Shippers - Insurance
+Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
 
   Background: Login to Operator Portal V2
     # Using the same corporate shipper used in 'Create Pricing Profile' scenarios

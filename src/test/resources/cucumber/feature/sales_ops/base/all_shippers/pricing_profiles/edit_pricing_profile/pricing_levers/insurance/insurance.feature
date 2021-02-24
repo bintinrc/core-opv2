@@ -1,5 +1,5 @@
 @OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Insurance
-Feature: Pricing Profiles
+Feature: Edit Pricing Profiles - Normal Shippers - Insurance
 
   Background: Login to Operator Portal V2 and set up shipper for testing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
