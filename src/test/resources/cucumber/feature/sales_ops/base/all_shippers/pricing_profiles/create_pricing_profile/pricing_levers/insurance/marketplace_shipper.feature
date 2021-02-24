@@ -11,6 +11,7 @@ Feature:  Create Pricing Profile - Marketplace Shippers - Insurance
     And DB Operator deletes "{sub-shipper-sop-mktpl-v4-dummy-script-global-id}" shipper's pricing profiles
     And Operator edits shipper "{shipper-sop-mktpl-v4-dummy-script-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -34,6 +35,7 @@ Feature:  Create Pricing Profile - Marketplace Shippers - Insurance
     And DB Operator deletes "{sub-shipper-sop-mktpl-v4-dummy-script-global-id}" shipper's pricing profiles
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-script-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |

@@ -25,7 +25,6 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -983,6 +982,8 @@ public class AllShippersSteps extends AbstractSteps {
     String insuranceMinFee = mapOfData.get("insuranceMinFee");
     String insurancePercentage = mapOfData.get("insurancePercentage");
     String insuranceThreshold = mapOfData.get("insuranceThreshold");
+    String startDate = mapOfData.get("startDate");
+    String endDate = mapOfData.get("endDate");
 
     if (Objects.nonNull(comments)) {
       pricing.setComments(comments);
@@ -1005,8 +1006,15 @@ public class AllShippersSteps extends AbstractSteps {
     if (Objects.nonNull(insuranceMinFee)) {
       pricing.setInsMin(insuranceMinFee);
     }
-    pricing.setEffectiveDate(TestUtils.getNextDate(1));
-    pricing.setContractEndDate(TestUtils.getNextDate(10));
+    if (Objects.nonNull(startDate)) {
+      pricing.setInsMin(startDate);
+    }
+    if (Objects.nonNull(endDate)) {
+      pricing.setInsMin(endDate);
+    }
+//    pricing.setEffectiveDate(TestUtils.getNextDate(1));
+//    pricing.setContractEndDate(TestUtils.getNextDate(10));
+
   }
 
   // TODO: check whether anyone uses

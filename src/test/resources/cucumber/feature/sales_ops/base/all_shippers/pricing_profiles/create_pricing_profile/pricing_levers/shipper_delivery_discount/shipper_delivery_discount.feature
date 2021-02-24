@@ -11,6 +11,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20.00                                           |
       | comments          | This is a test pricing script                   |
@@ -63,6 +64,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | comments          | This is a test pricing script                   |
       | type              | FLAT                                            |
@@ -139,6 +141,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 50000.00                                        |
       | comments          | This is a test pricing script                   |
@@ -191,6 +194,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20                                              |
       | comments          | This is a test pricing script                   |

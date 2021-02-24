@@ -7,6 +7,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-2-global-id}" shipper's pricing profiles
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |

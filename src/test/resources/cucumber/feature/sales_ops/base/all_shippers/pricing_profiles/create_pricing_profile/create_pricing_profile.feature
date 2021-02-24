@@ -84,6 +84,7 @@ Feature: Create Pricing Profile
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20                                              |
       | comments          | This is a test pricing script                   |
@@ -120,6 +121,7 @@ Feature: Create Pricing Profile
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     When Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
       | type              | FLAT                                        |
       | discount          | 20                                          |

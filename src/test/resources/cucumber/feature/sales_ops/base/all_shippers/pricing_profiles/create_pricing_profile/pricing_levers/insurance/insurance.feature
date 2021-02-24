@@ -9,6 +9,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage, '0' Insurance Threshold (uid:8109e55a-bfbd-4d95-8ef7-102a05d18618)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -45,6 +46,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee, '0' Insurance Percentage (uid:616e45b3-bb89-4bf0-abd8-1938427f8acc)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -61,6 +63,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile - with '0' Insurance Min Fee, with 'Decimal' Insurance Percentage (uid:dc05362f-dda9-4a35-a137-93c32d0f0976)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -77,6 +80,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile - with '0' Insurance Min Fee, '0' Insurance Percentage (uid:8ee68c2b-f41e-4e16-992f-ab87f6ca675f)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -142,6 +146,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Int” Insurance Threshold (uid:621df691-ec21-493e-9231-6229e2cf5913)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -158,6 +163,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Decimal” Insurance Threshold (uid:6ecdc11b-af58-4c66-bb83-9fd03546c95d)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -209,6 +215,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Up to 10 digits” Insurance Threshold (uid:ae509551-6fc3-4a91-b8dc-264d19793b40)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
@@ -225,6 +232,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Up to 10 digits” Insurance Threshold (uid:a359c010-4036-4975-96eb-eb99df587d1d)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
