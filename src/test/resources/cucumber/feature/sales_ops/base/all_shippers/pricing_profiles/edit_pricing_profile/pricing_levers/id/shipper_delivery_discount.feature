@@ -90,6 +90,69 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Percentage                     |
       | discountValue           | none                           |
 
+
+  Scenario: Update Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:9f2e8e1f-de51-4475-806a-c63e021f729d)
+    Given Operator changes the country to "Indonesia"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And Operator edits the created shipper
+    And Operator add New Pricing Profile on Edit Shipper Page using data below:
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd} |
+      | pricingScript       | {pricing-script-name}          |
+      | discountValue       | 10                             |
+      | insuranceMinFee     | 0                              |
+      | insurancePercentage | 0                              |
+      | insuranceThreshold  | 0                              |
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
+      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
+      | pricingScript           | {pricing-script-name}          |
+      | salespersonDiscountType | Percentage                     |
+      | discountValue           | 10                             |
+      | insuranceMinFee         | 0                              |
+      | insurancePercentage     | 0                              |
+      | insuranceThreshold      | 0                              |
+    When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate             | {gradle-next-2-day-yyyy-MM-dd} |
+      | pricingScript       | {pricing-script-name-2}        |
+      | discountValue       | none                           |
+      | insuranceMinFee     | 23                             |
+      | insurancePercentage | 35                             |
+      | insuranceThreshold  | 0                              |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits the created shipper
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
+      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate                 | {gradle-next-2-day-yyyy-MM-dd} |
+      | pricingScript           | {pricing-script-name-2}        |
+      | salespersonDiscountType | Percentage                     |
+      | discountValue           | none                           |
+      | insuranceMinFee         | 23                             |
+      | insurancePercentage     | 35                             |
+      | insuranceThreshold      | 0                              |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -1,7 +1,7 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles @nadeera
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Insurance
 Feature: Pricing Profiles
 
-  Background: Login to Operator Portal V2 and
+  Background: Login to Operator Portal V2 and set up shipper for testing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-2-global-id}" shipper's pricing profiles
@@ -15,7 +15,6 @@ Feature: Pricing Profiles
       | insuranceThreshold  | 0                                           |
       | comments            | This is a test pricing script               |
     And Operator save changes on Edit Shipper Page
-
 
   @CloseNewWindows
   Scenario: Update Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage (uid:3a379fd3-5464-46a3-817d-123ef0a13e23)
