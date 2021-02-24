@@ -95,7 +95,7 @@ Feature: Create Pricing Profile - ID
     And Operator edits the created shipper
     When Operator adds new Shipper's Pricing Profile
       | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
-      | type                | FLAT                                            |
+      | type                | PERCENTAGE                                      |
       | discount            | 20                                              |
       | insuranceMinFee     | 3000                                            |
       | insurancePercentage | 1                                               |

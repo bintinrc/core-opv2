@@ -508,7 +508,7 @@ public class AllShippersSteps extends AbstractSteps {
 
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
-      put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
+      put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
       allShippersPage.allShippersCreateEditPage.backToShipperList();
       pause3s();
@@ -524,7 +524,7 @@ public class AllShippersSteps extends AbstractSteps {
     try {
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
-      put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
+      put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
@@ -1129,7 +1129,7 @@ public class AllShippersSteps extends AbstractSteps {
   public void OperatorVerifiesThePricingProfileAndShipperDiscountDetailsAreCorrect() {
     Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
-    Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_SCRIPT_OPV2);
+    Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
     allShippersPage
         .verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb,
             pricingProfileFromOPV2);

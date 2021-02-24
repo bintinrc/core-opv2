@@ -33,6 +33,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -1275,12 +1276,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   private void fillPricingProfileDetails(Pricing pricing) {
-    try {
-      setMdDatepickerById(LOCATOR_START_DATE, pricing.getEffectiveDate());
-    } catch (InvalidElementStateException ex) {
-      NvLogger.info("Start Date is already filled");
+
+    Date effectiveDate = pricing.getEffectiveDate();
+    if (Objects.nonNull(effectiveDate)) {
+      try {
+        setMdDatepickerById(LOCATOR_START_DATE, effectiveDate);
+      } catch (InvalidElementStateException ex) {
+        NvLogger.info("Start Date is already filled");
+      }
     }
-    setMdDatepickerById(LOCATOR_END_DATE, pricing.getContractEndDate());
+
+    Date endDate = pricing.getContractEndDate();
+    if (Objects.nonNull(endDate)) {
+      setMdDatepickerById(LOCATOR_END_DATE, endDate);
+    }
 
     String pricingScriptName = pricing.getScriptName();
     if (Objects.nonNull(pricingScriptName)) {
@@ -1427,6 +1436,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       tabs.selectTab("Pricing and Billing");
+      addNewProfile.click();
+      newPricingProfileDialog.waitUntilVisible();
       fillPricingProfileDetails(pricing);
       assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
       pause3s();
@@ -1443,6 +1454,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
+      addNewProfile.click();
+      newPricingProfileDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(pricing.getScriptName())) {
         fillPricingProfileDetails(pricing);
         assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));

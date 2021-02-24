@@ -100,49 +100,42 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile - with 'more than 2 int after decimal (e.g 10.4073)' Insurance Percentage (uid:5ff79bb9-febf-46bc-b1c6-6ebb7b31ff4d)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | insurancePercentage | 10.4073                                         |
       | errorMessage        | Please provide only 2 decimal places.           |
 
   Scenario: Create Pricing Profile - input special characters on Insurance Min Fee (uid:8c170e88-d593-4d57-9cf3-931180f75a1c)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | insuranceMinFee   | !@#$%^&                                         |
       | errorMessage      | Special character is not allowed                |
 
   Scenario: Create Pricing Profile - input negative values on Insurance Min Fee (uid:e939d7e1-2452-4eb3-8c7d-b0d1ce71ff9a)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | insuranceMinFee   | -1                                              |
       | errorMessage      | Negative value is not allowed                   |
-
+@nadeera
   Scenario: Create Pricing Profile - input alphabets on Insurance Min Fee (uid:279411a1-9620-477e-aac2-1b07d4c94818)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | insuranceMinFee   | abcd                                            |
       | errorMessage      | Special character is not allowed                |
 
   Scenario: Create Pricing Profile - input special characters on Insurance Percentage (uid:26ba8e70-03eb-4b3c-aaad-8c0698663113)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | insurancePercentage | !@#$%^&                                         |
       | errorMessage        | Special character is not allowed                |
 
   Scenario: Create Pricing Profile - input negative values on Insurance Percentage (uid:807b39a5-1bfe-4b3a-b2ed-7327fa1781f4)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | insurancePercentage | -1                                              |
       | errorMessage        | Negative value is not allowed                   |
 
   Scenario: Create Pricing Profile - input alphabets on Insurance Percentage (uid:b8d5c94a-1534-4611-a293-f65c80974a3e)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | insurancePercentage | abcd                                            |
       | errorMessage        | Special character is not allowed                |
 
@@ -181,21 +174,18 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “More than 2 integer after decimal” Insurance Threshold (uid:02ed2d99-9da9-44ea-8661-84f208ade5df)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName  | {pricing-script-id-2} - {pricing-script-name-2} |
       | insuranceThreshold | 10.4073                                         |
       | errorMessage       | Please provide only 2 decimal places.           |
 
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Special Character” Insurance Threshold (uid:1ba232ab-ce75-47a8-80c3-bd996d4f2b03)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName  | {pricing-script-id-2} - {pricing-script-name-2} |
       | insuranceThreshold | !@#$%^&                                         |
       | errorMessage       | Special character is not allowed                |
 
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Negative Values” Insurance Threshold (uid:ee77e756-fd80-4c13-87e6-0f36e7d60eae)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
-      | pricingScriptName  | {pricing-script-id-2} - {pricing-script-name-2} |
       | insuranceThreshold | -12                                             |
       | errorMessage       | Negative value is not allowed                   |
 
