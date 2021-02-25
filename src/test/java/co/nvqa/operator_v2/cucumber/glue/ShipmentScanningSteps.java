@@ -368,6 +368,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorClickForceCompleteTripInShipmentInboundScanningPage() {
     shipmentScanningPage.forceCompleteButton.waitUntilClickable();
     shipmentScanningPage.forceCompleteButton.click();
+    pause5s();
   }
 
 }
