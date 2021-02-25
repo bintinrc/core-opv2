@@ -49,13 +49,14 @@ Feature:  Create Pricing Profile - Corporate Shippers - Insurance
     And Operator verifies the pricing lever details
     When Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | pricingScriptName   | {pricing-script-name-2}       |
-      | type                | FLAT                          |
-      | discount            | 50                            |
-      | insuranceMinFee     | 50                            |
-      | insurancePercentage | 50                            |
-      | insuranceThreshold  | 50                            |
-      | comments            | This is a test pricing script |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}                  |
+      | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
+      | type                | FLAT                                            |
+      | discount            | 50                                              |
+      | insuranceMinFee     | 50                                              |
+      | insurancePercentage | 50                                              |
+      | insuranceThreshold  | 50                                              |
+      | comments            | This is a test pricing script                   |
     And Operator save changes on Edit Shipper Page
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-script-legacy-id}"
     Then Operator verifies the pricing profile and shipper discount details are correct
