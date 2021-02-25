@@ -23,9 +23,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -49,9 +49,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5.8                            |
       | insurancePercentage | 5                              |
@@ -67,9 +67,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -85,9 +85,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -111,9 +111,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -137,9 +137,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -163,9 +163,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -181,9 +181,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -199,9 +199,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -217,9 +217,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -235,9 +235,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -253,9 +253,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -271,9 +271,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -289,9 +289,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -302,7 +302,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
 
-  @nadeera
   Scenario: Edit Pricing Profile with “Int” Insurance Threshold (uid:e8863180-8961-4908-8a6d-3b3870823cc4)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
@@ -336,22 +335,22 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
       | insuranceThreshold  | 5                              |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | insuranceThreshold | 80 |
+      | insuranceThreshold | 99.9 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | insuranceThreshold | 80 |
+      | insuranceThreshold | 99.9 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing profile and shipper discount details
@@ -364,9 +363,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -382,9 +381,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
@@ -401,9 +400,9 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
       | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | type                | FLAT                           |
-      | pricingScriptName   | {pricing-script-name}          |
-      | discount            | 1                              |
+      | type                | FLAT                                        |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | discount            | 1                                           |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
       | insuranceThreshold  | 5                              |
@@ -413,31 +412,24 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | This field is required. |
 
-  @todo
   Scenario: Edit Pricing Profile with "Use Country Default" Insurance Fee and Insurance Threshold (uid:0c082e43-7522-4004-ab2a-d5de3595b26d)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
       | discount            | 1                              |
       | insuranceMinFee     | 5                              |
       | insurancePercentage | 5                              |
       | insuranceThreshold  | 5                              |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | insuranceThreshold | 80 |
+      | isDefaultIns | true |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | insuranceThreshold | 80 |
-    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And DB Operator fetches pricing profile and shipper discount details
-    Then Operator verifies the pricing profile and shipper discount details are correct
-    And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+      | isDefaultIns | true |

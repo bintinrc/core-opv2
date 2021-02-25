@@ -1573,6 +1573,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(id = "insurance-threshold")
     public TextBox insuranceThreshold;
 
+    @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
+    public CheckBox codCountryDefaultCheckbox;
+
+    @FindBy(xpath = "//md-input-container[contains(@label,'Insured Value')]/md-checkbox")
+    public CheckBox insuranceCountryDefaultCheckbox;
+
     @FindBy(name = "Save Changes")
     public NvApiTextButton saveChanges;
 

@@ -21,6 +21,7 @@ Feature: All Shippers
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
+
   @CloseNewWindows
   Scenario: Create Pricing Profile - with none Percentage Discount (uid:e2d9b2a8-6013-4e50-aeee-91561108b174)
     Given Operator changes the country to "Indonesia"
@@ -36,13 +37,13 @@ Feature: All Shippers
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
+      | startDate         | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | comments          | This is a test pricing script                   |
       | type              | PERCENTAGE                                      |

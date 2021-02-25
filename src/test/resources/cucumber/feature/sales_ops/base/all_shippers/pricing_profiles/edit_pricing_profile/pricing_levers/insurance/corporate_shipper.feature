@@ -6,7 +6,6 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator go to menu Shipper -> All Shippers
 
-
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:9039d1db-af3f-44f6-a851-87353eceefcf)
     #Add new pricing profile and verify - corporate shipper
     Given DB Operator deletes "{shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
@@ -21,21 +20,18 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
       | insurancePercentage | 3                                           |
       | insuranceThreshold  | 0                                           |
       | comments            | This is a test pricing script               |
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And DB Operator fetches pricing profile and shipper discount details
-    Then  Operator verifies the pricing profile and shipper discount details are correct
-    And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    And Operator save changes on Edit Shipper Page
     #Add new pricing profile, edit and verify - corporate shipper
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | pricingScriptName   | {pricing-script-name} |
-      | type                | FLAT                  |
-      | discount            | 1                     |
-      | insuranceMinFee     | 5                     |
-      | insurancePercentage | 5                     |
-      | insuranceThreshold  | 5                     |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
+      | discount            | 1                                           |
+      | insuranceMinFee     | 5                                           |
+      | insurancePercentage | 5                                           |
+      | insuranceThreshold  | 5                                           |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     And Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | insuranceMinFee     | 10 |
@@ -49,7 +45,11 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
       | insuranceMinFee     | 10 |
       | insurancePercentage | 10 |
       | insuranceThreshold  | 10 |
-    And Operator save changes on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing profile and shipper discount details
+    Then  Operator verifies the pricing profile and shipper discount details are correct
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details
     #Verify pricing profile is the same as parents ACTIVE pricing profile- corporate subshipper
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-script-legacy-id}"
@@ -93,14 +93,14 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate             | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScriptName   | {pricing-script-name}          |
-      | type                | FLAT                           |
-      | discount            | 40                             |
-      | insuranceMinFee     | 40                             |
-      | insurancePercentage | 40                             |
-      | insuranceThreshold  | 40                             |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate             | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
+      | discount            | 40                                          |
+      | insuranceMinFee     | 40                                          |
+      | insurancePercentage | 40                                          |
+      | insuranceThreshold  | 40                                          |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     And Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | insuranceMinFee     | 40 |

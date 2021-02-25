@@ -47,7 +47,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -295,64 +294,80 @@ public class AllShippersSteps extends AbstractSteps {
 
     String value = data.get("shipperId");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Shipper ID", value,
+      assertEquals("Shipper ID", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperId.getText());
     }
     value = data.get("shipperName");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Shipper Name", value,
+      assertEquals("Shipper Name", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText());
     }
     value = data.get("startDate");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Start Date", value,
+      assertEquals("Start Date", value,
           getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText());
     }
     value = data.get("endDate");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("End Date", value,
+      assertEquals("End Date", value,
           getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText());
     }
     value = data.get("pricingScriptName");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertThat("Pricing Script",
+      assertThat("Pricing Script",
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
               .getValue(), Matchers.containsString(value));
     }
     value = data.get("type");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Salesperson Discount Type", value,
+      assertEquals("Salesperson Discount Type", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType
               .getText());
     }
     value = data.get("discountValue");
     if (StringUtils.equalsIgnoreCase("none", value)) {
-      Assert.assertThat("Discount Value",
+      assertThat("Discount Value",
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
               .getValue(), Matchers.is(Matchers.emptyOrNullString()));
     } else if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Discount Value", value,
+      assertEquals("Discount Value", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
               .getValue());
     }
     value = data.get("comments");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Comments", value,
+      assertEquals("Comments", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue());
     }
     value = data.get("insuranceMinFee");
     if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.getValue();
+      assertEquals("Insurance Min Fee", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+              .getValue());
     }
     value = data.get("insurancePercentage");
     if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
-          .getValue();
+      assertEquals("Insurance Percentage", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .getValue());
     }
     value = data.get("insuranceThreshold");
     if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
-          .getValue();
+      assertEquals("Insurance Threshold", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .getValue());
+    }
+    value = data.get("isDefaultIns");
+    if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+      assertTrue("Default Insurance",
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
+              .getAttribute("aria-checked").equalsIgnoreCase("true"));
+    }
+    value = data.get("isDefaultCod");
+    if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+      assertTrue("Default Cod",
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
+              .getAttribute("aria-checked").equalsIgnoreCase("true"));
     }
   }
 
@@ -489,6 +504,16 @@ public class AllShippersSteps extends AbstractSteps {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
             .setValue(value);
         pricing.setInsThreshold(value);
+      }
+      value = data.get("isDefaultIns");
+      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
+            .check();
+      }
+      value = data.get("isDefaultCod");
+      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
+            .check();
       }
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
@@ -962,56 +987,49 @@ public class AllShippersSteps extends AbstractSteps {
   private Shipper setShipperPricingProfile(Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     Pricing pricing = new Pricing();
-    setPricingProfile(mapOfData, pricing);
+    try {
+      String pricingScriptName = mapOfData.get("pricingScriptName");
+      String discount = mapOfData.get("discount");
+      String comments = mapOfData.get("comments");
+      String type = mapOfData.get("type");
+      String insuranceMinFee = mapOfData.get("insuranceMinFee");
+      String insurancePercentage = mapOfData.get("insurancePercentage");
+      String insuranceThreshold = mapOfData.get("insuranceThreshold");
+      String startDate = mapOfData.get("startDate");
+      String endDate = mapOfData.get("endDate");
+
+      if (Objects.nonNull(comments)) {
+        pricing.setComments(comments);
+      }
+      if (Objects.nonNull(pricingScriptName)) {
+        pricing.setScriptName(pricingScriptName);
+      }
+      if (Objects.nonNull(discount)) {
+        pricing.setDiscount(discount);
+      }
+      if (Objects.nonNull(type)) {
+        pricing.setType(type);
+      }
+      if (Objects.nonNull(insuranceThreshold)) {
+        pricing.setInsThreshold(insuranceThreshold);
+      }
+      if (Objects.nonNull(insurancePercentage)) {
+        pricing.setInsPercentage(insurancePercentage);
+      }
+      if (Objects.nonNull(insuranceMinFee)) {
+        pricing.setInsMin(insuranceMinFee);
+      }
+      if (Objects.nonNull(startDate)) {
+        pricing.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(startDate));
+      }
+      if (Objects.nonNull(endDate)) {
+        pricing.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(endDate));
+      }
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
     shipper.setPricing(pricing);
     return shipper;
-  }
-
-//  private Shipper setEditPricingProfile(Map<String, String> mapOfData) {
-//    Shipper shipper = get(KEY_CREATED_SHIPPER);
-//    Pricing pricing = shipper.getPricing();
-//    setPricingProfile(mapOfData, pricing);
-//    return shipper;
-//  }
-
-  private void setPricingProfile(Map<String, String> mapOfData, Pricing pricing) {
-    String pricingScriptName = mapOfData.get("pricingScriptName");
-    String discount = mapOfData.get("discount");
-    String comments = mapOfData.get("comments");
-    String type = mapOfData.get("type");
-    String insuranceMinFee = mapOfData.get("insuranceMinFee");
-    String insurancePercentage = mapOfData.get("insurancePercentage");
-    String insuranceThreshold = mapOfData.get("insuranceThreshold");
-    String startDate = mapOfData.get("startDate");
-    String endDate = mapOfData.get("endDate");
-
-    if (Objects.nonNull(comments)) {
-      pricing.setComments(comments);
-    }
-    if (Objects.nonNull(pricingScriptName)) {
-      pricing.setScriptName(pricingScriptName);
-    }
-    if (Objects.nonNull(discount)) {
-      pricing.setDiscount(discount);
-    }
-    if (Objects.nonNull(type)) {
-      pricing.setType(type);
-    }
-    if (Objects.nonNull(insuranceThreshold)) {
-      pricing.setInsThreshold(insuranceThreshold);
-    }
-    if (Objects.nonNull(insurancePercentage)) {
-      pricing.setInsPercentage(insurancePercentage);
-    }
-    if (Objects.nonNull(insuranceMinFee)) {
-      pricing.setInsMin(insuranceMinFee);
-    }
-    if (Objects.nonNull(startDate)) {
-      pricing.setInsMin(startDate);
-    }
-    if (Objects.nonNull(endDate)) {
-      pricing.setInsMin(endDate);
-    }
 //    pricing.setEffectiveDate(TestUtils.getNextDate(1));
 //    pricing.setContractEndDate(TestUtils.getNextDate(10));
 

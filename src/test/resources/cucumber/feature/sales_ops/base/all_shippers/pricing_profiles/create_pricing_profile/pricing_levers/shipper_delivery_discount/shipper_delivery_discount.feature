@@ -34,13 +34,12 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 0                                               |
       | errorMessage      | 0 is not a valid discount value                 |
 
@@ -58,9 +57,9 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
@@ -86,13 +85,12 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | $#^$^#@                                         |
       | errorMessage      | Special character is not allowed                |
 
@@ -110,13 +108,12 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20.54321                                        |
       | comments          | This is an invalid discount                     |
       | errorMessage      | Please provide only 2 decimal places.           |
@@ -135,9 +132,9 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
@@ -164,17 +161,17 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 10000000                                        |
       | comments          | This is an invalid discount                     |
       | errorMessage      | Discounts cannot exceed 6 figures.              |
 
+  @nadeera
   Scenario: Create Pricing Profile - with Int Discount (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -188,9 +185,9 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | isPrepaid                    | true                  |
       | isAllowStagedOrders          | true                  |
       | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
+      | isDisableDriverAppReschedule | true                                        |
+      | pricingScriptName            | {pricing-script-id} - {pricing-script-name} |
+      | industryName                 | {industry-name}                             |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile

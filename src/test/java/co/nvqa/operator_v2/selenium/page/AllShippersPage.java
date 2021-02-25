@@ -14,6 +14,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Objects;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
@@ -396,7 +397,12 @@ public class AllShippersPage extends OperatorV2SimplePage {
     assertEquals("Comments are not the same: ", pricingProfile.getComments(),
         pricingProfileFromDb.getComments());
     assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
-    assertNotNull("End Date is null:", pricingProfileFromOPV2.getContractEndDate());
+    final Date endDate = pricingProfile.getContractEndDate();
+    if (Objects.isNull(endDate)) {
+      assertNull("End Date is not the same: ", pricingProfileFromOPV2.getContractEndDate());
+    } else {
+      assertNotNull("End Date is not the same: ", pricingProfileFromOPV2.getContractEndDate());
+    }
 
     final String discount = pricingProfile.getDiscount();
     if (Objects.isNull(discount)) {
