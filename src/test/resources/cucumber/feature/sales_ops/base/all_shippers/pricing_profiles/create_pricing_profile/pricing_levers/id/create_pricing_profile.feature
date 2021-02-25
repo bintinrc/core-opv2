@@ -46,7 +46,8 @@ Feature: Create Pricing Profile - ID
       | discount          | 0                                               |
       | errorMessage      | 0 is not a valid discount value                 |
 
-  @CloseNewWindows
+    @nadeera
+    @CloseNewWindows
   Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
@@ -96,7 +97,7 @@ Feature: Create Pricing Profile - ID
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     When Operator adds new Shipper's Pricing Profile
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd}                  |
+      | startDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | type                | PERCENTAGE                                      |
       | discount            | 20                                              |

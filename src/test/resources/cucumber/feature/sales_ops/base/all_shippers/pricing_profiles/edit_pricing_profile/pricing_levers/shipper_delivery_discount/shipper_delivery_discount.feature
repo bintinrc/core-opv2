@@ -87,7 +87,7 @@ Feature: Edit Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | type              | Flat                                        |
       | discount          | none                                        |
 
-  @nadeera
+
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with special characters Discount (uid:35faef0b-1dc5-41d3-8c25-e623af2fbbde)
     Given Operator go to menu Shipper -> All Shippers
