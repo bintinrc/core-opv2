@@ -324,7 +324,7 @@ public class AllShippersSteps extends AbstractSteps {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType
               .getText());
     }
-    value = data.get("discountValue");
+    value = data.get("discount");
     if (StringUtils.equalsIgnoreCase("none", value)) {
       assertThat("Discount Value",
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue

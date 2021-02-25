@@ -171,7 +171,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | comments          | This is an invalid discount                     |
       | errorMessage      | Discounts cannot exceed 6 figures.              |
 
-  @nadeera
+
   Scenario: Create Pricing Profile - with Int Discount (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

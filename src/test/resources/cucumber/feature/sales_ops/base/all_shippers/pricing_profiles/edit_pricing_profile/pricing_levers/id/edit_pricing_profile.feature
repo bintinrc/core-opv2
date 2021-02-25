@@ -26,15 +26,15 @@ Feature: Edit Pricing Profiles - ID
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScriptName | {pricing-script-name}          |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName       | {KEY_CREATED_SHIPPER.name}     |
       | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScriptName | {pricing-script-name}          |
-      | type              | Percentage                     |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Percentage                                  |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discount | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
@@ -62,22 +62,22 @@ Feature: Edit Pricing Profiles - ID
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScriptName | {pricing-script-name}          |
-      | discount          | 10                             |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | discount          | 10                                          |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName       | {KEY_CREATED_SHIPPER.name}     |
       | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate           | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScriptName | {pricing-script-name}          |
-      | type              | Percentage                     |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Percentage                                  |
       | discount          | 10                             |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate           | {gradle-next-2-day-yyyy-MM-dd} |
-      | pricingScriptName | {pricing-script-name-2}        |
-      | discount          | none                           |
+      | endDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | none                                            |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
@@ -85,9 +85,9 @@ Feature: Edit Pricing Profiles - ID
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName       | {KEY_CREATED_SHIPPER.name}     |
       | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate           | {gradle-next-2-day-yyyy-MM-dd} |
-      | pricingScriptName | {pricing-script-name-2}        |
-      | type              | Percentage                     |
+      | endDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | type              | Percentage                                      |
       | discount          | none                           |
 
 
