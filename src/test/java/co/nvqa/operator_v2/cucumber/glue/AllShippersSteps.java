@@ -376,65 +376,6 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = setShipperPricingProfile(data);
     allShippersPage.addNewPricingProfileWithoutSaving(shipper);
     put(KEY_PRICING_PROFILE, shipper.getPricing());
-
-//
-//    data = resolveKeyValues(data);
-//    boolean isShipperInsLeversAvailable = false;
-//    allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
-//    allShippersPage.allShippersCreateEditPage.addNewProfile.click();
-//    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilVisible();
-//
-//    String value = data.get("startDate");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate
-//          .simpleSetValue(value);
-//    }
-//    value = data.get("endDate");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingEndDate
-//          .simpleSetValue(value);
-//    }
-//    value = data.get("pricingScript");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingScript
-//          .searchAndSelectValue(value);
-//    }
-//    value = data.get("discountValue");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.discountValue
-//          .setValue(value);
-//    }
-//    value = data.get("comments");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.comments.setValue(value);
-//    }
-//    value = data.get("insuranceMinFee");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceMin
-//          .setValue(value);
-//      isShipperInsLeversAvailable = true;
-//    }
-//    value = data.get("insurancePercentage");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insurancePercent
-//          .setValue(value);
-//      isShipperInsLeversAvailable = true;
-//    }
-//    value = data.get("insuranceThreshold");
-//    if (StringUtils.isNotBlank(value)) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceThreshold
-//          .setValue(value);
-//      isShipperInsLeversAvailable = true;
-//    }
-//    if (!isShipperInsLeversAvailable) {
-//      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox
-//          .check();
-//    }
-//    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.codCountryDefaultCheckbox
-//        .check();
-//    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.saveChanges
-//        .clickAndWaitUntilDone();
-//    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilInvisible();
   }
 
   @Then("^Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:$")
@@ -495,15 +436,31 @@ public class AllShippersSteps extends AbstractSteps {
       }
       value = data.get("insurancePercentage");
       if (StringUtils.isNotBlank(value)) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
-            .setValue(value);
-        pricing.setInsPercentage(value);
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .sendKeys(Keys.TAB);
+          pricing.setInsPercentage(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .setValue(value);
+          pricing.setInsPercentage(value);
+        }
       }
       value = data.get("insuranceThreshold");
       if (StringUtils.isNotBlank(value)) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
-            .setValue(value);
-        pricing.setInsThreshold(value);
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .sendKeys(Keys.TAB);
+          pricing.setInsThreshold(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .setValue(value);
+          pricing.setInsThreshold(value);
+        }
       }
       value = data.get("isDefaultIns");
       if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {

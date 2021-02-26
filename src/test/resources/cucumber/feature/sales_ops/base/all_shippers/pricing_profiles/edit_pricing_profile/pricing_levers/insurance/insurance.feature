@@ -3,8 +3,8 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
 
   Background: Login to Operator Portal V2 and set up shipper for testing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-2-global-id}" shipper's pricing profiles
+    And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -44,6 +44,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
       | insurancePercentage | 3   |
       | insuranceThreshold  | 0   |
 
+    #@nadeera
   Scenario: Edit Pricing Profile - with 'Decimal' Insurance Min Fee, 'NULL' Insurance Percentage (uid:67b66a36-cb7b-4ea7-ac45-932306403d8e)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
@@ -394,6 +395,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
 
+  @nadeera
   Scenario: Edit Pricing Profile with with “NULL” Insurance Threshold (uid:399bc2af-af14-463e-b35a-48b7433ad106)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-2-legacy-id}"
