@@ -157,7 +157,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         scanningPage.refreshPage();
         throw ex;
       }
-    }, getCurrentMethodName(), 5000, 10);
+    }, getCurrentMethodName(), 1000, 5);
   }
 
   @Then("Operator verify start inbound button is {string}")
