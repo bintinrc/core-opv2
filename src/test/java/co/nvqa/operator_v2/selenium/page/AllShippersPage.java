@@ -371,12 +371,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
     allShippersCreateEditPage.addNewPricingProfileWithoutSave(shipper);
   }
 
-//  public void editPricingProfileWithoutSaving(Shipper shipper) {
-//    waitUntilPageLoaded();
-//    allShippersCreateEditPage.editPricingProfileWithoutSave(shipper);
-//  }
-
-
   public void editPricingScript(Shipper shipper) {
     waitUntilPageLoaded();
     allShippersCreateEditPage.editPricingScript(shipper);
@@ -420,7 +414,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("Type is not the same:", pricingProfile.getType(),
           pricingProfileFromDb.getType());
     }
-
     if (Objects.isNull(pricingProfile.getCodMin())) {
       assertEquals("COD min fee is not - ", "-",
           pricingProfileFromOPV2.getCodMin());
@@ -428,7 +421,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
           pricingProfileFromOPV2.getCodMin());
     }
-
     if (Objects.isNull(pricingProfile.getCodMin())) {
       assertEquals("COD percentage is - ", "-",
           pricingProfileFromOPV2.getCodPercentage());
@@ -436,7 +428,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
           pricingProfileFromOPV2.getCodPercentage());
     }
-
     if (Objects.isNull(pricingProfile.getInsMin())) {
       assertEquals("INS min fee is not - ", "-",
           pricingProfileFromOPV2.getInsMin());
@@ -444,7 +435,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
           pricingProfileFromOPV2.getInsMin());
     }
-
     if (Objects.isNull(pricingProfile.getInsPercentage())) {
       assertEquals("INS percentage is - ", "-",
           pricingProfileFromOPV2.getInsPercentage());
@@ -452,7 +442,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage(),
           pricingProfileFromOPV2.getInsPercentage());
     }
-
     if (Objects.isNull(pricingProfile.getInsThreshold())) {
       assertEquals("INS threshold is - ", "-",
           pricingProfileFromOPV2.getInsThreshold());

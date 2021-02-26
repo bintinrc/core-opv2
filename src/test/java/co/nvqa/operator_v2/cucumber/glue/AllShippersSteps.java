@@ -955,44 +955,23 @@ public class AllShippersSteps extends AbstractSteps {
       String startDate = mapOfData.get("startDate");
       String endDate = mapOfData.get("endDate");
 
-      if (Objects.nonNull(comments)) {
         pricing.setComments(comments);
-      }
-      if (Objects.nonNull(pricingScriptName)) {
         pricing.setScriptName(pricingScriptName);
-      }
-      if (Objects.nonNull(discount)) {
         pricing.setDiscount(discount);
-      }
-      if (Objects.nonNull(type)) {
         pricing.setType(type);
-      }
-      if (Objects.nonNull(insuranceThreshold)) {
         pricing.setInsThreshold(insuranceThreshold);
-      }
-      if (Objects.nonNull(insurancePercentage)) {
         pricing.setInsPercentage(insurancePercentage);
-      }
-      if (Objects.nonNull(insuranceMinFee)) {
         pricing.setInsMin(insuranceMinFee);
-      }
-      if (Objects.nonNull(startDate)) {
         pricing.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(startDate));
-      }
-      if (Objects.nonNull(endDate)) {
         pricing.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(endDate));
-      }
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
     shipper.setPricing(pricing);
     return shipper;
-//    pricing.setEffectiveDate(TestUtils.getNextDate(1));
-//    pricing.setContractEndDate(TestUtils.getNextDate(10));
-
   }
 
-  // TODO: check whether anyone uses
+  @Deprecated
   @Then("Operator edits the Pending Pricing Script")
   public void operatorEditsThePendingPricingScript(Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);

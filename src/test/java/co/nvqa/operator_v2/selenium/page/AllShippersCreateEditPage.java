@@ -1292,27 +1292,22 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         NvLogger.info("Start Date is already filled");
       }
     }
-
     Date endDate = pricing.getContractEndDate();
     if (Objects.nonNull(endDate)) {
       setMdDatepickerById(LOCATOR_END_DATE, endDate);
     }
-
     String pricingScriptName = pricing.getScriptName();
     if (Objects.nonNull(pricingScriptName)) {
       newPricingProfileDialog.pricingScript.searchAndSelectValue(pricingScriptName);
     }
-
     String comments = pricing.getComments();
     if (Objects.nonNull(comments)) {
       newPricingProfileDialog.comments.setValue(comments);
     }
-
     String discount = pricing.getDiscount();
     if (Objects.nonNull(discount)) {
       newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());
     }
-
     String shipperInsMin = pricing.getInsMin();
     String shipperInsPercentage = pricing.getInsPercentage();
     String shipperInsThreshold = pricing.getInsThreshold();
@@ -1338,7 +1333,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.insuranceThreshold.sendKeys(shipperInsThreshold);
       }
     }
-
     String shipperCodMin = pricing.getCodMin();
     String shipperCodPercentage = pricing.getCodPercentage();
     if (Objects.isNull(shipperCodMin) && Objects.isNull(shipperCodPercentage)) {
@@ -1357,11 +1351,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       }
     }
   }
-
-//  public void editPricingProfileWithoutSave(Shipper shipper) {
-//    fillPricingProfileDetails(shipper.getPricing());
-//  }
-
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
     Pricing addedPricingProfileOPV2 = new Pricing();
