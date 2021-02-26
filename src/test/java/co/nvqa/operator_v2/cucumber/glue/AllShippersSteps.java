@@ -955,15 +955,17 @@ public class AllShippersSteps extends AbstractSteps {
       String startDate = mapOfData.get("startDate");
       String endDate = mapOfData.get("endDate");
 
-        pricing.setComments(comments);
-        pricing.setScriptName(pricingScriptName);
-        pricing.setDiscount(discount);
-        pricing.setType(type);
-        pricing.setInsThreshold(insuranceThreshold);
-        pricing.setInsPercentage(insurancePercentage);
-        pricing.setInsMin(insuranceMinFee);
-        pricing.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(startDate));
-        pricing.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(endDate));
+      pricing.setComments(comments);
+      pricing.setScriptName(pricingScriptName);
+      pricing.setDiscount(discount);
+      pricing.setType(type);
+      pricing.setInsThreshold(insuranceThreshold);
+      pricing.setInsPercentage(insurancePercentage);
+      pricing.setInsMin(insuranceMinFee);
+      pricing.setEffectiveDate(
+          Objects.nonNull(startDate) ? DateUtil.SDF_YYYY_MM_DD.parse(startDate) : null);
+      pricing.setContractEndDate(
+          Objects.nonNull(endDate) ? DateUtil.SDF_YYYY_MM_DD.parse(endDate) : null);
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
