@@ -463,6 +463,55 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
   }
 
+  public void verifyPricingProfileDetails(Pricing pricingProfile, Pricing pricingProfileFromOPV2) {
+    String scriptName = pricingProfile.getScriptName();
+    if (Objects.nonNull(scriptName)) {
+      assertTrue("Script Name is not same: ",
+          scriptName.contains(pricingProfileFromOPV2.getScriptName()));
+    }
+    Long discount = pricingProfile.getShipperDiscountId();
+    if (Objects.nonNull(discount)) {
+      assertEquals("Shipper Discount is not the same: ", discount,
+          pricingProfileFromOPV2.getShipperDiscountId());
+    }
+    String comments = pricingProfile.getComments();
+    if (Objects.nonNull(discount)) {
+      assertEquals("Comments are not the same: ", comments,
+          pricingProfileFromOPV2.getComments());
+    }
+    assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
+    Date endDate = pricingProfile.getContractEndDate();
+    if (Objects.nonNull(endDate)) {
+      assertEquals("End Date is not the same: ", endDate,
+          pricingProfileFromOPV2.getContractEndDate());
+    }
+    String codMin = pricingProfile.getCodMin();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("COD min fee is not the same: ", codMin,
+          pricingProfileFromOPV2.getCodMin());
+    }
+    String codPercentage = pricingProfile.getCodPercentage();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("COD min percentage is not the same: ", codPercentage,
+          pricingProfileFromOPV2.getCodPercentage());
+    }
+    String insMin = pricingProfile.getInsMin();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("INS min fee is not the same: ", insMin,
+          pricingProfileFromOPV2.getInsMin());
+    }
+    String insPercentage = pricingProfile.getInsPercentage();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("INS min percentage is not the same: ", insPercentage,
+          pricingProfileFromOPV2.getInsPercentage());
+    }
+    String insThreshold = pricingProfile.getInsThreshold();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("INS min threshold is not the same: ", insThreshold,
+          pricingProfileFromOPV2.getInsPercentage());
+    }
+  }
+
   public void changeCountry(String country) {
     click(XPATH_PROFILE);
     selectValueFromMdSelect("domain.current", country);

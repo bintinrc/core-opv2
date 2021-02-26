@@ -6,10 +6,11 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator go to menu Shipper -> All Shippers
 
+    @nadeera
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:9039d1db-af3f-44f6-a851-87353eceefcf)
-    #Add new pricing profile and verify - corporate shipper
     Given DB Operator deletes "{shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
+      #Add new pricing profile and verify - corporate shipper
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -45,16 +46,25 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
       | insuranceMinFee     | 10 |
       | insurancePercentage | 10 |
       | insuranceThreshold  | 10 |
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And DB Operator fetches pricing profile and shipper discount details
-    Then  Operator verifies the pricing profile and shipper discount details are correct
-    And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+      And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+      And DB Operator fetches pricing profile and shipper discount details
+      Then  Operator verifies the pricing profile and shipper discount details are correct
+      And DB Operator fetches pricing lever details
+      Then Operator verifies the pricing lever details in the database
     #Verify pricing profile is the same as parents ACTIVE pricing profile- corporate subshipper
-    And Operator go to menu Shipper -> All Shippers
-    And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-script-legacy-id}"
-    Then  Operator verifies the pricing profile and shipper discount details are correct
-    Then Operator verifies the pricing lever details
+      And Operator go to menu Shipper -> All Shippers
+      And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-script-legacy-id}"
+      And Operator gets pricing profile values
+      And Operator verifies the pricing profile details are like below:
+        | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+        | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+        | type                | FLAT                                        |
+        | discount            | 20                                          |
+        | insuranceMinFee     | 1.2                                         |
+        | insurancePercentage | 3                                           |
+        | insuranceThreshold  | 0                                           |
+        | comments            | This is a test pricing script               |
+
 
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who has their own Pricing Profile is Exists (uid:835aa273-b9be-45ef-ac50-835cdf12fab2)
     Given DB Operator deletes "{shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
@@ -88,7 +98,7 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then  Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
     #Add new pricing profile, edit and verify - corporate shipper
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
@@ -109,5 +119,16 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     #Verify existing pricing profile is not changed- corporate subshipper
-    Then  Operator verifies the pricing profile and shipper discount details are correct
-    Then Operator verifies the pricing lever details
+    And Operator go to menu Shipper -> All Shippers
+    And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-script-legacy-id}"
+    And Operator gets pricing profile values
+    And Operator verifies the pricing profile details are like below:
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
+      | discount            | 30                                          |
+      | insuranceMinFee     | 30                                          |
+      | insurancePercentage | 30                                          |
+      | insuranceThreshold  | 30                                          |
+      | comments            | This is a test pricing script               |
+

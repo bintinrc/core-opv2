@@ -46,7 +46,6 @@ Feature: Create Pricing Profile - ID
       | discount          | 0                                               |
       | errorMessage      | 0 is not a valid discount value                 |
 
-    @nadeera
     @CloseNewWindows
   Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
     Given Operator changes the country to "Indonesia"
@@ -109,7 +108,7 @@ Feature: Create Pricing Profile - ID
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
 
   @KillBrowser @ShouldAlwaysRun

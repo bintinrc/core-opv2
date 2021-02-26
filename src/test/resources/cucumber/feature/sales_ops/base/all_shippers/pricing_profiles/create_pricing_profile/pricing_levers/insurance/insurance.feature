@@ -21,7 +21,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile - with 'Decimal' Insurance Min Fee, 'NULL' Insurance Percentage (uid:ce7b838c-a0da-41d9-aa71-257781a11107)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
@@ -58,7 +58,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile - with '0' Insurance Min Fee, with 'Decimal' Insurance Percentage (uid:dc05362f-dda9-4a35-a137-93c32d0f0976)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
@@ -75,7 +75,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile - with '0' Insurance Min Fee, '0' Insurance Percentage (uid:8ee68c2b-f41e-4e16-992f-ab87f6ca675f)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
@@ -92,7 +92,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile - with 'more than 2 int after decimal (e.g 2.5647)' Insurance Min Fee (uid:07d0d6fd-0b1f-4b54-90d8-c8b90632887d)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
@@ -158,7 +158,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Decimal” Insurance Threshold (uid:6ecdc11b-af58-4c66-bb83-9fd03546c95d)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
@@ -175,7 +175,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “More than 2 integer after decimal” Insurance Threshold (uid:02ed2d99-9da9-44ea-8661-84f208ade5df)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"
@@ -227,7 +227,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “Up to 10 digits” Insurance Threshold (uid:a359c010-4036-4975-96eb-eb99df587d1d)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-legacy-id}"

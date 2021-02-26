@@ -328,7 +328,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Edit Pricing Profile with “Decimal” Insurance Threshold (uid:0b3845ea-aabc-4a56-9797-9e8896580b41)
     Given Operator go to menu Shipper -> All Shippers
@@ -356,7 +356,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   Scenario: Edit Pricing Profile with with “More than 2 integer after decimal” Insurance Threshold (uid:38e171e8-31d1-492a-8bdc-c450cb3974b3)
     Given Operator go to menu Shipper -> All Shippers

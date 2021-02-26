@@ -1372,7 +1372,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.verifyStartDateInNewPricingScript();
   }
 
-  @And("Operator verifies the pricing lever details")
+  @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
     Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
@@ -1397,5 +1397,14 @@ public class AllShippersSteps extends AbstractSteps {
       assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
           NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()));
     }
+  }
+
+  @And("Operator verifies the pricing profile details are like below:")
+  public void operatorVerifiesThePricingProfileDetailsAreLikeBelow(Map<String, String> data) {
+    Pricing pricingProfile = setShipperPricingProfile(data).getPricing();
+    Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
+    allShippersPage
+        .verifyPricingProfileDetails(pricingProfile,
+            pricingProfileFromOPV2);
   }
 }
