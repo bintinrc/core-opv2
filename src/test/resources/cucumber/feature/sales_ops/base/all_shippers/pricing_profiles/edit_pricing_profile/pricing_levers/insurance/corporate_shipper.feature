@@ -5,13 +5,13 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     # Using the same corporate shipper used in 'Create Pricing Profile' scenarios
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator go to menu Shipper -> All Shippers
-
-    @nadeera
-  Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:9039d1db-af3f-44f6-a851-87353eceefcf)
-    Given DB Operator deletes "{shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
+    And DB Operator deletes "{shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
-      #Add new pricing profile and verify - corporate shipper
-    And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
+
+
+  Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:9039d1db-af3f-44f6-a851-87353eceefcf)
+       #Add new pricing profile and verify - corporate shipper
+    Given Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
@@ -67,10 +67,8 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
 
 
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who has their own Pricing Profile is Exists (uid:835aa273-b9be-45ef-ac50-835cdf12fab2)
-    Given DB Operator deletes "{shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
-    And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-script-global-id}" shipper's pricing profiles
     #Add new pricing profile and verify - corporate shipper
-    And Operator go to menu Shipper -> All Shippers
+    Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-script-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
