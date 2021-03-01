@@ -462,6 +462,32 @@ public class AllShippersSteps extends AbstractSteps {
           pricing.setInsThreshold(value);
         }
       }
+      value = data.get("codMinFee");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
+              .sendKeys(Keys.TAB);
+          pricing.setCodMin(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
+              .setValue(value);
+          pricing.setCodMin(value);
+        }
+      }
+      value = data.get("codPercentage");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
+              .sendKeys(Keys.TAB);
+          pricing.setCodPercentage(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
+              .setValue(value);
+          pricing.setCodPercentage(value);
+        }
+      }
       value = data.get("isDefaultIns");
       if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox

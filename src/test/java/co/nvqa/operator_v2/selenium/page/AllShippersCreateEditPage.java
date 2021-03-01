@@ -44,6 +44,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -1562,6 +1563,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(id = "insurance-threshold")
     public TextBox insuranceThreshold;
 
+    @FindBy(id = "cod-min")
+    public TextBox codMin;
+
+    @FindBy(id = "cod-percent")
+    public TextBox codPercent;
+
     @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
     public CheckBox codCountryDefaultCheckbox;
 
@@ -1573,9 +1580,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
 
     public void verifyErrorMsgEditPricingScript(String expectedErrorMessage) {
-      waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
-      String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
-      assertEquals("Error Message is not expected ", expectedErrorMessage, actualErrorMessageText);
+      try {
+        waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
+        String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
+        assertEquals("Error Message is not expected ", expectedErrorMessage,
+            actualErrorMessageText);
+      } catch (TimeoutException e) {
+        fail("Error Message is not available");
+      }
     }
   }
 
