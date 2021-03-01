@@ -949,6 +949,8 @@ public class AllShippersSteps extends AbstractSteps {
       String discount = mapOfData.get("discount");
       String comments = mapOfData.get("comments");
       String type = mapOfData.get("type");
+      String codMinFee = mapOfData.get("codMinFee");
+      String codPercentage = mapOfData.get("codPercentage");
       String insuranceMinFee = mapOfData.get("insuranceMinFee");
       String insurancePercentage = mapOfData.get("insurancePercentage");
       String insuranceThreshold = mapOfData.get("insuranceThreshold");
@@ -959,6 +961,8 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setScriptName(pricingScriptName);
       pricing.setDiscount(discount);
       pricing.setType(type);
+      pricing.setCodMin(codMinFee);
+      pricing.setCodPercentage(codPercentage);
       pricing.setInsThreshold(insuranceThreshold);
       pricing.setInsPercentage(insurancePercentage);
       pricing.setInsMin(insuranceMinFee);

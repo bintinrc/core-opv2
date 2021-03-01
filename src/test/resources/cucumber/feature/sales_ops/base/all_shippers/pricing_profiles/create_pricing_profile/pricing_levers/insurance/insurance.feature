@@ -13,7 +13,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | FLAT                                        |
       | discount            | 20                                          |
-      | insuranceMinFee     | 1.2                                         |
+      | insuranceMinFee     | 1                                           |
       | insurancePercentage | 3                                           |
       | insuranceThreshold  | 0                                           |
       | comments            | This is a test pricing script               |
