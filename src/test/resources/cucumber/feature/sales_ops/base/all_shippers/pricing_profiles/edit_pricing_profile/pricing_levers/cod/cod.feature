@@ -133,6 +133,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - COD
       | discount          | 1                                           |
       | codMinFee         | 5                                           |
       | codPercentage     | 5                                           |
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | codMinFee     | 0 |
       | codPercentage | 0 |
