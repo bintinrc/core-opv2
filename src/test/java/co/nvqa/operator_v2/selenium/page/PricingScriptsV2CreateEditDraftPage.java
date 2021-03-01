@@ -110,7 +110,12 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
         runCheckParams.getOrderType());
     selectValueFromMdSelectById("container.pricing-scripts.description-time-slot-type",
         runCheckParams.getTimeslotType());
-    selectValueFromMdSelectById("commons.size", runCheckParams.getSize());
+    click(".//md-select[starts-with(@id, \"commons.size\")]");
+    pause1s();
+    clickf(
+        "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value= \"%s\"]",
+        runCheckParams.getSize());
+    pause50ms();
     sendKeysById("commons.weight", String.valueOf(runCheckParams.getWeight()));
 
     // Insured Value and COD Value have a special input method.

@@ -14,6 +14,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Objects;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
@@ -362,7 +363,12 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   public String addNewPricingProfile(Shipper shipper) {
     waitUntilPageLoaded();
-    return allShippersCreateEditPage.addNewPricingProfile(shipper);
+    return allShippersCreateEditPage.addNewPricingProfileAndSave(shipper);
+  }
+
+  public void addNewPricingProfileWithoutSaving(Shipper shipper) {
+    waitUntilPageLoaded();
+    allShippersCreateEditPage.addNewPricingProfileWithoutSave(shipper);
   }
 
   public void editPricingScript(Shipper shipper) {
@@ -385,7 +391,12 @@ public class AllShippersPage extends OperatorV2SimplePage {
     assertEquals("Comments are not the same: ", pricingProfile.getComments(),
         pricingProfileFromDb.getComments());
     assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
-    assertNotNull("End Date is null:", pricingProfileFromOPV2.getContractEndDate());
+    final Date endDate = pricingProfile.getContractEndDate();
+    if (Objects.isNull(endDate)) {
+      assertNull("End Date is not the same: ", pricingProfileFromOPV2.getContractEndDate());
+    } else {
+      assertNotNull("End Date is not the same: ", pricingProfileFromOPV2.getContractEndDate());
+    }
 
     final String discount = pricingProfile.getDiscount();
     if (Objects.isNull(discount)) {
@@ -403,7 +414,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("Type is not the same:", pricingProfile.getType(),
           pricingProfileFromDb.getType());
     }
-
     if (Objects.isNull(pricingProfile.getCodMin())) {
       assertEquals("COD min fee is not - ", "-",
           pricingProfileFromOPV2.getCodMin());
@@ -411,7 +421,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
           pricingProfileFromOPV2.getCodMin());
     }
-
     if (Objects.isNull(pricingProfile.getCodMin())) {
       assertEquals("COD percentage is - ", "-",
           pricingProfileFromOPV2.getCodPercentage());
@@ -419,7 +428,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
           pricingProfileFromOPV2.getCodPercentage());
     }
-
     if (Objects.isNull(pricingProfile.getInsMin())) {
       assertEquals("INS min fee is not - ", "-",
           pricingProfileFromOPV2.getInsMin());
@@ -427,7 +435,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
           pricingProfileFromOPV2.getInsMin());
     }
-
     if (Objects.isNull(pricingProfile.getInsPercentage())) {
       assertEquals("INS percentage is - ", "-",
           pricingProfileFromOPV2.getInsPercentage());
@@ -435,7 +442,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage(),
           pricingProfileFromOPV2.getInsPercentage());
     }
-
     if (Objects.isNull(pricingProfile.getInsThreshold())) {
       assertEquals("INS threshold is - ", "-",
           pricingProfileFromOPV2.getInsThreshold());
@@ -443,6 +449,55 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS threshold is not the same: ",
           NO_TRAILING_ZERO_DF.format(Double.valueOf(pricingProfile.getInsThreshold())),
           pricingProfileFromOPV2.getInsThreshold());
+    }
+  }
+
+  public void verifyPricingProfileDetails(Pricing pricingProfile, Pricing pricingProfileFromOPV2) {
+    String scriptName = pricingProfile.getScriptName();
+    if (Objects.nonNull(scriptName)) {
+      assertTrue("Script Name is not same: ",
+          scriptName.contains(pricingProfileFromOPV2.getScriptName()));
+    }
+    Long discount = pricingProfile.getShipperDiscountId();
+    if (Objects.nonNull(discount)) {
+      assertEquals("Shipper Discount is not the same: ", discount,
+          pricingProfileFromOPV2.getShipperDiscountId());
+    }
+    String comments = pricingProfile.getComments();
+    if (Objects.nonNull(discount)) {
+      assertEquals("Comments are not the same: ", comments,
+          pricingProfileFromOPV2.getComments());
+    }
+    assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
+    Date endDate = pricingProfile.getContractEndDate();
+    if (Objects.nonNull(endDate)) {
+      assertEquals("End Date is not the same: ", endDate,
+          pricingProfileFromOPV2.getContractEndDate());
+    }
+    String codMin = pricingProfile.getCodMin();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("COD min fee is not the same: ", codMin,
+          pricingProfileFromOPV2.getCodMin());
+    }
+    String codPercentage = pricingProfile.getCodPercentage();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("COD min percentage is not the same: ", codPercentage,
+          pricingProfileFromOPV2.getCodPercentage());
+    }
+    String insMin = pricingProfile.getInsMin();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("INS min fee is not the same: ", insMin,
+          pricingProfileFromOPV2.getInsMin());
+    }
+    String insPercentage = pricingProfile.getInsPercentage();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("INS min percentage is not the same: ", insPercentage,
+          pricingProfileFromOPV2.getInsPercentage());
+    }
+    String insThreshold = pricingProfile.getInsThreshold();
+    if (Objects.nonNull(codMin)) {
+      assertEquals("INS min threshold is not the same: ", insThreshold,
+          pricingProfileFromOPV2.getInsPercentage());
     }
   }
 
