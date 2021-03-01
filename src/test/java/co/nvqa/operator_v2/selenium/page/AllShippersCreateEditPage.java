@@ -1366,11 +1366,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
     String endDate = getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE);
     if (!endDate.equals("-")) {
-      addedPricingProfileOPV2.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(endDate));
+      addedPricingProfileOPV2.setContractEndDate(YYYY_MM_DD_SDF.parse(endDate));
     }
     String startDate = getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE);
     if (!startDate.equals("-")) {
-      addedPricingProfileOPV2.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(startDate));
+      addedPricingProfileOPV2.setEffectiveDate(YYYY_MM_DD_SDF.parse(startDate));
     }
     return addedPricingProfileOPV2;
   }
