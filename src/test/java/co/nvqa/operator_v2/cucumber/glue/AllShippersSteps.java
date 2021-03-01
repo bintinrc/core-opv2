@@ -19,7 +19,6 @@ import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
@@ -389,14 +388,14 @@ public class AllShippersSteps extends AbstractSteps {
         NvLogger.infof("Set Start date : %s", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate
             .simpleSetValue(value);
-        pricing.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(value));
+        pricing.setEffectiveDate(YYYY_MM_DD_SDF.parse(value));
       }
       value = data.get("endDate");
       if (StringUtils.isNotBlank(value)) {
         NvLogger.infof("Set End date : %s", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate
             .simpleSetValue(value);
-        pricing.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(value));
+        pricing.setContractEndDate(YYYY_MM_DD_SDF.parse(value));
       }
       value = data.get("pricingScriptName");
       if (StringUtils.isNotBlank(value)) {
@@ -963,9 +962,9 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsPercentage(insurancePercentage);
       pricing.setInsMin(insuranceMinFee);
       pricing.setEffectiveDate(
-          Objects.nonNull(startDate) ? DateUtil.SDF_YYYY_MM_DD.parse(startDate) : null);
+          Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
       pricing.setContractEndDate(
-          Objects.nonNull(endDate) ? DateUtil.SDF_YYYY_MM_DD.parse(endDate) : null);
+          Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
