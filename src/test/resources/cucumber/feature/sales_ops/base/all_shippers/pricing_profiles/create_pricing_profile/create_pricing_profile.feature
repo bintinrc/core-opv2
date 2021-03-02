@@ -102,6 +102,40 @@ Feature: Create Pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable
 
   @CloseNewWindows
+  Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And Operator edits the created shipper
+    When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
+      | type                | FLAT                                        |
+      | discount            | 20                                          |
+      | codMinFee           | 5.8                                         |
+      | codPercentage       | 5                                           |
+      | insuranceMinFee     | 10                                          |
+      | insurancePercentage | 10                                          |
+      | insuranceThreshold  | 10                                          |
+      | comments            | This is a test pricing script               |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details are correct
+
+  @CloseNewWindows
   Scenario: Create Pricing Profile with Use Country Level COD and Insurance (uid:0bee7a3c-9c6c-4260-bd68-21d110d4c40e)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
