@@ -29,7 +29,7 @@ Feature: Create Pricing Profile - Normal Shippers - COD
       | type              | FLAT                                            |
       | discount          | 20                                              |
       | codMinFee         | 10.05                                           |
-      | codPercentage     | OnlyClick                                       |
+      | codPercentage     | none                                            |
       | errorMessage      | This field is required.                         |
 
   Scenario: Create Pricing Profile - with 'NULL' COD Min Fee, with 'Decimal' COD Percentage (uid:90757d27-31b0-42ef-9470-54feacd987e2)
@@ -39,7 +39,7 @@ Feature: Create Pricing Profile - Normal Shippers - COD
       | type              | FLAT                                            |
       | discount          | 20                                              |
       | codPercentage     | 10.52                                           |
-      | codMinFee         | OnlyClick                                       |
+      | codMinFee         | none                                            |
       | errorMessage      | This field is required.                         |
 
   Scenario: Create Pricing Profile - with 'Int' COD Min Fee, '0' COD Percentage (uid:f0dcdb3e-7a99-450b-a2f5-94047ceae51d)

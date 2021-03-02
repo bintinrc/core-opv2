@@ -1316,19 +1316,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         .isNull(shipperInsThreshold)) {
       newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
     } else {
-      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("OnlyClick")) {
+      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("none")) {
         newPricingProfileDialog.insuranceMin.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsMin)) {
         newPricingProfileDialog.insuranceMin.sendKeys(shipperInsMin);
       }
       if (Objects.nonNull(shipperInsPercentage) && shipperInsPercentage
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.insurancePercent.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsPercentage)) {
         newPricingProfileDialog.insurancePercent.sendKeys(shipperInsPercentage);
       }
       if (Objects.nonNull(shipperInsThreshold) && shipperInsThreshold
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.insuranceThreshold.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsThreshold)) {
         newPricingProfileDialog.insuranceThreshold.sendKeys(shipperInsThreshold);
@@ -1339,13 +1339,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (Objects.isNull(shipperCodMin) && Objects.isNull(shipperCodPercentage)) {
       newPricingProfileDialog.codCountryDefaultCheckbox.check();
     } else {
-      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("OnlyClick")) {
+      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("none")) {
         newPricingProfileDialog.codMin.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperCodMin)) {
         newPricingProfileDialog.codMin.sendKeys(shipperCodMin);
       }
       if (Objects.nonNull(shipperCodPercentage) && shipperCodPercentage
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.codPercent.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperCodPercentage)) {
         newPricingProfileDialog.codPercent.sendKeys(shipperCodPercentage);

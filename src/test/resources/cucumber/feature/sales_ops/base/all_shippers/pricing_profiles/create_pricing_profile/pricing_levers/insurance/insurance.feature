@@ -30,7 +30,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
       | type                | FLAT                                            |
       | discount            | 20                                              |
       | insuranceMinFee     | 10.05                                           |
-      | insurancePercentage | OnlyClick                                       |
+      | insurancePercentage | none                                            |
       | errorMessage        | This field is required.                         |
 
   Scenario: Create Pricing Profile - with 'NULL' Insurance Min Fee, with 'Decimal' Insurance Percentage (uid:828c8d66-cd44-41b6-a24e-b358abe7b2a5)
@@ -40,7 +40,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
       | type                | FLAT                                            |
       | discount            | 20                                              |
       | insurancePercentage | 60.52                                           |
-      | insuranceMinFee     | OnlyClick                                       |
+      | insuranceMinFee     | none                                            |
       | errorMessage        | This field is required.                         |
 
   Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee, '0' Insurance Percentage (uid:616e45b3-bb89-4bf0-abd8-1938427f8acc)
@@ -202,7 +202,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
       | type               | FLAT                                            |
       | discount           | 20                                              |
       | insuranceMinFee    | 10.05                                           |
-      | insuranceThreshold | OnlyClick                                       |
+      | insuranceThreshold | none                                            |
       | errorMessage       | This field is required.                         |
 
   Scenario: Create Pricing Profile with Shipper Insurance Fee and “More than 10 digits” Insurance Threshold (uid:183acccc-fed4-40f9-976b-2d9aa7d397f3)
