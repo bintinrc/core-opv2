@@ -44,6 +44,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -1315,19 +1316,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         .isNull(shipperInsThreshold)) {
       newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
     } else {
-      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("OnlyClick")) {
+      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("none")) {
         newPricingProfileDialog.insuranceMin.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsMin)) {
         newPricingProfileDialog.insuranceMin.sendKeys(shipperInsMin);
       }
       if (Objects.nonNull(shipperInsPercentage) && shipperInsPercentage
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.insurancePercent.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsPercentage)) {
         newPricingProfileDialog.insurancePercent.sendKeys(shipperInsPercentage);
       }
       if (Objects.nonNull(shipperInsThreshold) && shipperInsThreshold
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.insuranceThreshold.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsThreshold)) {
         newPricingProfileDialog.insuranceThreshold.sendKeys(shipperInsThreshold);
@@ -1338,13 +1339,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (Objects.isNull(shipperCodMin) && Objects.isNull(shipperCodPercentage)) {
       newPricingProfileDialog.codCountryDefaultCheckbox.check();
     } else {
-      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("OnlyClick")) {
+      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("none")) {
         newPricingProfileDialog.codMin.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperCodMin)) {
         newPricingProfileDialog.codMin.sendKeys(shipperCodMin);
       }
       if (Objects.nonNull(shipperCodPercentage) && shipperCodPercentage
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.codPercent.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperCodPercentage)) {
         newPricingProfileDialog.codPercent.sendKeys(shipperCodPercentage);
@@ -1562,6 +1563,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(id = "insurance-threshold")
     public TextBox insuranceThreshold;
 
+    @FindBy(id = "cod-min")
+    public TextBox codMin;
+
+    @FindBy(id = "cod-percent")
+    public TextBox codPercent;
+
     @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
     public CheckBox codCountryDefaultCheckbox;
 
@@ -1573,9 +1580,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
 
     public void verifyErrorMsgEditPricingScript(String expectedErrorMessage) {
-      waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
-      String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
-      assertEquals("Error Message is not expected ", expectedErrorMessage, actualErrorMessageText);
+      try {
+        waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
+        String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
+        assertEquals("Error Message is not expected ", expectedErrorMessage,
+            actualErrorMessageText);
+      } catch (TimeoutException e) {
+        fail("Error Message is not available");
+      }
     }
   }
 

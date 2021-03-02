@@ -461,6 +461,32 @@ public class AllShippersSteps extends AbstractSteps {
           pricing.setInsThreshold(value);
         }
       }
+      value = data.get("codMinFee");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
+              .sendKeys(Keys.TAB);
+          pricing.setCodMin(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
+              .setValue(value);
+          pricing.setCodMin(value);
+        }
+      }
+      value = data.get("codPercentage");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
+              .sendKeys(Keys.TAB);
+          pricing.setCodPercentage(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
+              .setValue(value);
+          pricing.setCodPercentage(value);
+        }
+      }
       value = data.get("isDefaultIns");
       if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
@@ -948,6 +974,8 @@ public class AllShippersSteps extends AbstractSteps {
       String discount = mapOfData.get("discount");
       String comments = mapOfData.get("comments");
       String type = mapOfData.get("type");
+      String codMinFee = mapOfData.get("codMinFee");
+      String codPercentage = mapOfData.get("codPercentage");
       String insuranceMinFee = mapOfData.get("insuranceMinFee");
       String insurancePercentage = mapOfData.get("insurancePercentage");
       String insuranceThreshold = mapOfData.get("insuranceThreshold");
@@ -958,6 +986,8 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setScriptName(pricingScriptName);
       pricing.setDiscount(discount);
       pricing.setType(type);
+      pricing.setCodMin(codMinFee);
+      pricing.setCodPercentage(codPercentage);
       pricing.setInsThreshold(insuranceThreshold);
       pricing.setInsPercentage(insurancePercentage);
       pricing.setInsMin(insuranceMinFee);

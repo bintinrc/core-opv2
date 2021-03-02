@@ -480,24 +480,24 @@ public class AllShippersPage extends OperatorV2SimplePage {
           pricingProfileFromOPV2.getCodMin());
     }
     String codPercentage = pricingProfile.getCodPercentage();
-    if (Objects.nonNull(codMin)) {
-      assertEquals("COD min percentage is not the same: ", codPercentage,
+    if (Objects.nonNull(codPercentage)) {
+      assertEquals("COD percentage is not the same: ", codPercentage,
           pricingProfileFromOPV2.getCodPercentage());
     }
     String insMin = pricingProfile.getInsMin();
-    if (Objects.nonNull(codMin)) {
+    if (Objects.nonNull(insMin)) {
       assertEquals("INS min fee is not the same: ", insMin,
           pricingProfileFromOPV2.getInsMin());
     }
     String insPercentage = pricingProfile.getInsPercentage();
-    if (Objects.nonNull(codMin)) {
+    if (Objects.nonNull(insPercentage)) {
       assertEquals("INS min percentage is not the same: ", insPercentage,
           pricingProfileFromOPV2.getInsPercentage());
     }
     String insThreshold = pricingProfile.getInsThreshold();
-    if (Objects.nonNull(codMin)) {
+    if (Objects.nonNull(insThreshold)) {
       assertEquals("INS min threshold is not the same: ", insThreshold,
-          pricingProfileFromOPV2.getInsPercentage());
+          pricingProfileFromOPV2.getInsThreshold());
     }
   }
 
