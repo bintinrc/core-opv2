@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfiles @CreatePricingProfiles
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfiles @CreatePricingProfiles @Basic
 Feature: Create Pricing Profile
 
   Background: Login to Operator Portal V2
