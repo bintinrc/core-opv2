@@ -5,12 +5,16 @@ import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.JavascriptExecutor;
 
 /**
  * @author Lanang Jati
@@ -368,6 +372,52 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorClickForceCompleteTripInShipmentInboundScanningPage() {
     shipmentScanningPage.forceCompleteButton.waitUntilClickable();
     shipmentScanningPage.forceCompleteButton.click();
+    pause5s();
+  }
+
+  @When("Operator opens new tab and switch to new tab in shipment inbound scanning page")
+  public void operatorOpensNewTabInShipmentInboundScanningPage() {
+    String mainWindowHandle = shipmentScanningPage.getWebDriver().getWindowHandle();
+    put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+    ((JavascriptExecutor) shipmentScanningPage.getWebDriver()).executeScript("window.open()");
+    Set<String> windowHandles = shipmentScanningPage.getWebDriver().getWindowHandles();
+    for (String windowHandle : windowHandles) {
+      if (!windowHandle.equalsIgnoreCase(mainWindowHandle)) {
+        shipmentScanningPage.getWebDriver().switchTo().window(windowHandle);
+      }
+    }
+    shipmentScanningPage.getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
+    shipmentScanningPage.waitUntilPageLoaded();
+  }
+
+  @When("Operator switch to main tab in shipment inbound scanning page")
+  public void operatorSwitchToMainTabInShipmentInboundScanningPage() {
+    String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+    shipmentScanningPage.getWebDriver().switchTo().window(mainWindowHandle);
+  }
+
+  @When("Operator switch to new tab in shipment inbound scanning page")
+  public void operatorSwitchToNewTabInShipmentInboundScanningPage() {
+    Set<String> windowHandles = shipmentScanningPage.getWebDriver().getWindowHandles();
+    String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+    for (String windowHandle : windowHandles) {
+      if (!windowHandle.equalsIgnoreCase(mainWindowHandle)) {
+        shipmentScanningPage.getWebDriver().switchTo().window(windowHandle);
+      }
+    }
+
+  }
+
+  @When("Operator close new tab in shipment inbound scanning page")
+  public void operatorCloseNewTabInShipmentInboundScanningPage() {
+    Set<String> windowHandles = shipmentScanningPage.getWebDriver().getWindowHandles();
+    String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+    for (String windowHandle : windowHandles) {
+      if (!windowHandle.equalsIgnoreCase(mainWindowHandle)) {
+        shipmentScanningPage.getWebDriver().switchTo().window(windowHandle).close();
+      }
+    }
+    getWebDriver().switchTo().window(mainWindowHandle).switchTo();
   }
 
 }

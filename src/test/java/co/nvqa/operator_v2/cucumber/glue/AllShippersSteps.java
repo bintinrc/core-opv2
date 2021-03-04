@@ -23,7 +23,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
-import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -46,8 +46,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
@@ -292,149 +293,212 @@ public class AllShippersSteps extends AbstractSteps {
 
     String value = data.get("shipperId");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Shipper ID", value,
+      assertEquals("Shipper ID", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperId.getText());
     }
     value = data.get("shipperName");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Shipper Name", value,
+      assertEquals("Shipper Name", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText());
     }
     value = data.get("startDate");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Start Date", value,
+      assertEquals("Start Date", value,
           getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText());
     }
     value = data.get("endDate");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("End Date", value,
+      assertEquals("End Date", value,
           getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText());
     }
-    value = data.get("pricingScript");
+    value = data.get("pricingScriptName");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertThat("Pricing Script",
+      assertThat("Pricing Script",
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
               .getValue(), Matchers.containsString(value));
     }
-    value = data.get("salespersonDiscountType");
+    value = data.get("type");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Salesperson Discount Type", value,
+      assertEquals("Salesperson Discount Type", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType
               .getText());
     }
-    value = data.get("discountValue");
+    value = data.get("discount");
     if (StringUtils.equalsIgnoreCase("none", value)) {
-      Assert.assertThat("Discount Value",
+      assertThat("Discount Value",
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
               .getValue(), Matchers.is(Matchers.emptyOrNullString()));
     } else if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Discount Value", value,
+      assertEquals("Discount Value", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
               .getValue());
     }
     value = data.get("comments");
     if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Comments", value,
+      assertEquals("Comments", value,
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue());
+    }
+    value = data.get("insuranceMinFee");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Insurance Min Fee", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+              .getValue());
+    }
+    value = data.get("insurancePercentage");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Insurance Percentage", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .getValue());
+    }
+    value = data.get("insuranceThreshold");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Insurance Threshold", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .getValue());
+    }
+    value = data.get("isDefaultIns");
+    if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+      assertTrue("Default Insurance",
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
+              .getAttribute("aria-checked").equalsIgnoreCase("true"));
+    }
+    value = data.get("isDefaultCod");
+    if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+      assertTrue("Default Cod",
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
+              .getAttribute("aria-checked").equalsIgnoreCase("true"));
     }
   }
 
   @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
   public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    boolean isShipperInsLeversAvailable = false;
-    allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
-    allShippersPage.allShippersCreateEditPage.addNewProfile.click();
-    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilVisible();
-
-    String value = data.get("startDate");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate
-          .simpleSetValue(value);
-    }
-    value = data.get("endDate");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingEndDate
-          .simpleSetValue(value);
-    }
-    value = data.get("pricingScript");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingScript
-          .searchAndSelectValue(value);
-    }
-    value = data.get("discountValue");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.discountValue
-          .setValue(value);
-    }
-    value = data.get("comments");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.comments.setValue(value);
-    }
-    value = data.get("insuranceMinFee");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceMin
-          .setValue(value);
-      isShipperInsLeversAvailable = true;
-    }
-    value = data.get("insurancePercentage");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insurancePercent
-          .setValue(value);
-      isShipperInsLeversAvailable = true;
-    }
-    value = data.get("insuranceThreshold");
-    if (StringUtils.isNotBlank(value)) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceThreshold
-          .setValue(value);
-      isShipperInsLeversAvailable = true;
-    }
-    if (!isShipperInsLeversAvailable) {
-      allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox
-          .check();
-    }
-    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.codCountryDefaultCheckbox
-        .check();
-    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.saveChanges
-        .clickAndWaitUntilDone();
-    allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilInvisible();
+    Shipper shipper = setShipperPricingProfile(data);
+    allShippersPage.addNewPricingProfileWithoutSaving(shipper);
+    put(KEY_PRICING_PROFILE, shipper.getPricing());
   }
 
   @Then("^Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:$")
   public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
+    try {
+      data = resolveKeyValues(data);
+      Pricing pricing = get(KEY_PRICING_PROFILE);
 
-    String value = data.get("startDate");
-    if (StringUtils.isNotBlank(value)) {
-      NvLogger.infof("Set Start date : %s", value);
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate
-          .simpleSetValue(value);
-    }
-    value = data.get("endDate");
-    if (StringUtils.isNotBlank(value)) {
-      NvLogger.infof("Set End date : %s", value);
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate
-          .simpleSetValue(value);
-    }
-    value = data.get("pricingScript");
-    if (StringUtils.isNotBlank(value)) {
-      NvLogger.infof("Set Pricing Script value : %s", value);
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
-          .searchAndSelectValue(value);
-    }
-    value = data.get("discountValue");
-    if (StringUtils.equalsIgnoreCase("none", value)) {
-      NvLogger.infof("Set Discount value : %s", value);
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
-    } else if (StringUtils.isNotBlank(value)) {
-      NvLogger.infof("Set Discount value : %s", value);
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
-          .setValue(value);
-    }
-    value = data.get("comments");
-    if (StringUtils.isNotBlank(value)) {
-      NvLogger.infof("Set comments : %s", value);
-      allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
+      String value = data.get("startDate");
+      if (StringUtils.isNotBlank(value)) {
+        NvLogger.infof("Set Start date : %s", value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate
+            .simpleSetValue(value);
+        pricing.setEffectiveDate(YYYY_MM_DD_SDF.parse(value));
+      }
+      value = data.get("endDate");
+      if (StringUtils.isNotBlank(value)) {
+        NvLogger.infof("Set End date : %s", value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate
+            .simpleSetValue(value);
+        pricing.setContractEndDate(YYYY_MM_DD_SDF.parse(value));
+      }
+      value = data.get("pricingScriptName");
+      if (StringUtils.isNotBlank(value)) {
+        NvLogger.infof("Set Pricing Script value : %s", value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
+            .searchAndSelectValue(value);
+      }
+      value = data.get("discount");
+      if (StringUtils.equalsIgnoreCase("none", value)) {
+        NvLogger.infof("Set Discount value : %s", value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
+        pricing.setDiscount(null);
+      } else if (StringUtils.isNotBlank(value)) {
+        NvLogger.infof("Set Discount value : %s", value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
+            .setValue(value);
+        pricing.setDiscount(value);
+      }
+      value = data.get("comments");
+      if (StringUtils.isNotBlank(value)) {
+        NvLogger.infof("Set comments : %s", value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
+        pricing.setComments(value);
+      }
+      value = data.get("insuranceMinFee");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+              .sendKeys(Keys.TAB);
+          pricing.setInsMin(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
+              .setValue(value);
+          pricing.setInsMin(value);
+        }
+      }
+      value = data.get("insurancePercentage");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .sendKeys(Keys.TAB);
+          pricing.setInsPercentage(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
+              .setValue(value);
+          pricing.setInsPercentage(value);
+        }
+      }
+      value = data.get("insuranceThreshold");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .sendKeys(Keys.TAB);
+          pricing.setInsThreshold(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
+              .setValue(value);
+          pricing.setInsThreshold(value);
+        }
+      }
+      value = data.get("codMinFee");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
+              .sendKeys(Keys.TAB);
+          pricing.setCodMin(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
+              .setValue(value);
+          pricing.setCodMin(value);
+        }
+      }
+      value = data.get("codPercentage");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
+              .sendKeys(Keys.TAB);
+          pricing.setCodPercentage(null);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
+              .setValue(value);
+          pricing.setCodPercentage(value);
+        }
+      }
+      value = data.get("isDefaultIns");
+      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
+            .check();
+      }
+      value = data.get("isDefaultCod");
+      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
+            .check();
+      }
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
     }
   }
 
@@ -465,14 +529,28 @@ public class AllShippersSteps extends AbstractSteps {
 
       Shipper shipper = get(KEY_CREATED_SHIPPER);
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
-      allShippersPage.editShipper(shipper);
+      openSpecificShipperEditPage(shipper.getLegacyId().toString());
+
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
-      put(KEY_CREATED_PRICING_SCRIPT_OPV2, createdPricingProfile);
+      put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
       allShippersPage.allShippersCreateEditPage.backToShipperList();
       pause3s();
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
+  }
+
+
+  @And("Operator gets pricing profile values")
+  public void operatorGetsPricingProfileValues() {
+    try {
+      allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+      Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
+      put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
@@ -491,12 +569,9 @@ public class AllShippersSteps extends AbstractSteps {
       Map<String, String> data) {
     pause1s();
     data = resolveKeyValues(data);
-    String value = data.get("discountValue");
-    if (StringUtils.isNotBlank(value)) {
-      Assert.assertEquals("Discount Value Error message", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError
-              .getText());
-    }
+    String expectedErrorMsg = data.get("errorMessage");
+    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog
+        .verifyErrorMsgEditPricingScript(expectedErrorMsg);
   }
 
   @Then("^Operator verify the new Shipper is updated successfully$")
@@ -843,7 +918,27 @@ public class AllShippersSteps extends AbstractSteps {
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-    allShippersPage.editShipper(shipper);
+    openSpecificShipperEditPage(shipperLegacyId);
+  }
+
+  private void openSpecificShipperEditPage(String shipperLegacyId) {
+    for (String handle : getWebDriver().getWindowHandles()) {
+      if (!handle.equals(get(KEY_MAIN_WINDOW_HANDLE))) {
+        getWebDriver().switchTo().window(handle);
+        getWebDriver().close();
+      }
+    }
+
+    String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
+        TestConstants.OPERATOR_PORTAL_BASE_URL,
+        TestConstants.COUNTRY_CODE, shipperLegacyId));
+
+    getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
+    ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
+    getWebDriver().switchTo().window(tabs.get(1));
+    getWebDriver().get(editSpecificShipperPageURL);
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
   @And("Operator edits shipper with ID and Name {string}")
@@ -873,29 +968,41 @@ public class AllShippersSteps extends AbstractSteps {
 
   private Shipper setShipperPricingProfile(Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
-    String pricingScriptName = mapOfData.get("pricingScriptName");
-    String discount = mapOfData.get("discount");
-    String comments = mapOfData.get("comments");
-    String type = mapOfData.get("type");
-    String insuranceMinFee = mapOfData.get("insuranceMinFee");
-    String insurancePercentage = mapOfData.get("insurancePercentage");
-    String insuranceThreshold = mapOfData.get("insuranceThreshold");
-
     Pricing pricing = new Pricing();
-    pricing.setScriptName(pricingScriptName);
-    pricing.setDiscount(discount);
-    pricing.setComments(comments);
-    pricing.setType(type);
-    pricing.setInsThreshold(insuranceThreshold);
-    pricing.setInsPercentage(insurancePercentage);
-    pricing.setInsMin(insuranceMinFee);
-    pricing.setEffectiveDate(TestUtils.getNextDate(1));
-    pricing.setContractEndDate(TestUtils.getNextDate(10));
+    try {
+      String pricingScriptName = mapOfData.get("pricingScriptName");
+      String discount = mapOfData.get("discount");
+      String comments = mapOfData.get("comments");
+      String type = mapOfData.get("type");
+      String codMinFee = mapOfData.get("codMinFee");
+      String codPercentage = mapOfData.get("codPercentage");
+      String insuranceMinFee = mapOfData.get("insuranceMinFee");
+      String insurancePercentage = mapOfData.get("insurancePercentage");
+      String insuranceThreshold = mapOfData.get("insuranceThreshold");
+      String startDate = mapOfData.get("startDate");
+      String endDate = mapOfData.get("endDate");
 
+      pricing.setComments(comments);
+      pricing.setScriptName(pricingScriptName);
+      pricing.setDiscount(discount);
+      pricing.setType(type);
+      pricing.setCodMin(codMinFee);
+      pricing.setCodPercentage(codPercentage);
+      pricing.setInsThreshold(insuranceThreshold);
+      pricing.setInsPercentage(insurancePercentage);
+      pricing.setInsMin(insuranceMinFee);
+      pricing.setEffectiveDate(
+          Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
+      pricing.setContractEndDate(
+          Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
     shipper.setPricing(pricing);
     return shipper;
   }
 
+  @Deprecated
   @Then("Operator edits the Pending Pricing Script")
   public void operatorEditsThePendingPricingScript(Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -1059,7 +1166,7 @@ public class AllShippersSteps extends AbstractSteps {
   public void OperatorVerifiesThePricingProfileAndShipperDiscountDetailsAreCorrect() {
     Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
-    Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_SCRIPT_OPV2);
+    Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
     allShippersPage
         .verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb,
             pricingProfileFromOPV2);
@@ -1232,7 +1339,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.verifyStartDateInNewPricingScript();
   }
 
-  @And("Operator verifies the pricing lever details")
+  @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
     Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
@@ -1257,5 +1364,14 @@ public class AllShippersSteps extends AbstractSteps {
       assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
           NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()));
     }
+  }
+
+  @And("Operator verifies the pricing profile details are like below:")
+  public void operatorVerifiesThePricingProfileDetailsAreLikeBelow(Map<String, String> data) {
+    Pricing pricingProfile = setShipperPricingProfile(data).getPricing();
+    Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
+    allShippersPage
+        .verifyPricingProfileDetails(pricingProfile,
+            pricingProfileFromOPV2);
   }
 }

@@ -1,5 +1,5 @@
 @OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfilesID @CreatePricingProfilesID
-Feature: All Shippers
+Feature: Create Pricing Profile - ID
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -12,6 +12,7 @@ Feature: All Shippers
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20.00                                           |
       | comments          | This is a test pricing script                   |
@@ -66,6 +67,7 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | comments          | This is a test pricing script                   |
       | type              | PERCENTAGE                                      |
@@ -94,8 +96,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     When Operator adds new Shipper's Pricing Profile
+      | startDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
-      | type                | FLAT                                            |
+      | type                | PERCENTAGE                                      |
       | discount            | 20                                              |
       | insuranceMinFee     | 3000                                            |
       | insurancePercentage | 1                                               |
@@ -105,7 +108,41 @@ Feature: All Shippers
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details
+    Then Operator verifies the pricing lever details in the database
+
+  @CloseNewWindows
+  Scenario: Create Pricing Profile - with 'Int' COD Min Fee and 'Int' COD Percentage - ID (uid:eb8347c5-468c-4909-9dcd-d0f37f395f7c)
+    Given Operator changes the country to "Indonesia"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And Operator edits the created shipper
+    When Operator adds new Shipper's Pricing Profile
+      | startDate         | {gradle-next-2-day-yyyy-MM-dd}                  |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | type              | PERCENTAGE                                      |
+      | discount          | 20                                              |
+      | codMinFee         | 3000                                            |
+      | codPercentage     | 1                                               |
+      | comments          | This is a test pricing script                   |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing profile and shipper discount details
+    Then Operator verifies the pricing profile and shipper discount details are correct
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
 
   @KillBrowser @ShouldAlwaysRun

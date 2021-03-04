@@ -5,7 +5,7 @@ Feature: Facilities Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb 
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario Outline: Disable Hub - <name> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub with type "<type>" using data below:
