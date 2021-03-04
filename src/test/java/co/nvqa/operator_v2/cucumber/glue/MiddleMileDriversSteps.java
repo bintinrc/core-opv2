@@ -265,6 +265,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.refreshPage();
         middleMileDriversPage.switchTo();
         middleMileDriversPage.loadButton.waitUntilClickable();
+        middleMileDriversPage.clickCreateDriversButton();
         throw ex;
       }
     }, 5);
