@@ -31,14 +31,16 @@ further read: [confluence](https://confluence.ninjavan.co/display/NVQA/D+-+Envir
 
 <h2>Run</h2>
 from terminal:
-1. open terminal & change directory to your order create project
+1. open terminal & change directory to your operator v2 project
 2. run the following command
+
+QA environment :
 
 ```
 gradle --no-daemon --continue \
     clean runCucumber allureReport \
-    -Penvironment=qa-sg \
-    -Ptags=@order-create \
+    -Penvironment=${service-name}-qa-sg \
+    -Ptags=@opv2 \
     -PdbHost="10.80.0.33" \
     -PdbPort=6333 \
     -PdbUser=qa_automation \
@@ -47,7 +49,25 @@ gradle --no-daemon --continue \
     -PapiBaseUrl="https://api-qa.ninjavan.co" \
     -PsystemId=sg \
     -PseleniumDriver=CHROME \
-    -PseleniumDriverVersion=84 \
+    -PseleniumDriverVersion=89 \
+    -PseleniumHeadless=true
+```
+
+GAIA environment :
+```
+gradle --no-daemon --continue \
+    clean runCucumber allureReport \
+    -Penvironment=${service-name}-release-sg \
+    -Ptags=@opv2 \
+    -PdbHost="release-global-mysql-5-7-28.${gaia-release-name}.svc.cluster.local" \
+    -PdbPort=3306 \
+    -PdbUser=root \
+    -PdbPass=SrmDHYwQ8v4CwjNyF9VvwCL2V8ej0XMB \
+    -PdbEnvironment=release \
+    -PapiBaseUrl="https://api-${gaia-release-name}.ninjavan.io" \
+    -PsystemId=sg \
+    -PseleniumDriver=CHROME \
+    -PseleniumDriverVersion=89 \
     -PseleniumHeadless=true
 ```
 
@@ -55,18 +75,39 @@ from intellij gradle runner:
 1. go to configuration, create new gradle config
 2. fill in 'Name'
 3. fill in 'Tasks' as : clean runCucumber
-4. fill in 'Arguments' as : (please be careful with spaces, each variable must be separated with space and each value which contains space has to be in quotation mark "" e.g "not @webhook")
+4. fill in 'Arguments' as : (please be careful with spaces, each variable must be separated with space and each value which contains space has to be in quotation mark "" e.g "not @opv2-core")
 
+
+QA environment :
 ```
--Penvironment=qa-sg -Ptags=@ocv4 
--PdbHost="10.80.0.33" -PdbPort=6333 
--PdbUser=qa_automation 
--PdbPass=Jz43S0xG852hcxmG3BAbrs7YWml6x5c4 
--PdbEnvironment=qa 
--PapiBaseUrl="https://api-qa.ninjavan.co" 
+-Penvironment=${service-name}-qa-sg
+-Ptags=@opv2
+-PdbHost="10.80.0.33"
+-PdbPort=6333
+-PdbUser=qa_automation
+-PdbPass=Jz43S0xG852hcxmG3BAbrs7YWml6x5c4
+-PdbEnvironment=qa
+-PapiBaseUrl="https://api-qa.ninjavan.co"
 -PsystemId=sg
 -PseleniumDriver=CHROME
--PseleniumDriverVersion=84
+-PseleniumDriverVersion=89
+-PseleniumHeadless=true
+```
+
+GAIA environment :
+
+```
+-Penvironment=${service-name}-release-sg
+-Ptags=@opv2
+-PdbHost="release-global-mysql-5-7-28.${gaia-release-name}.svc.cluster.local"
+-PdbPort=3306
+-PdbUser=root
+-PdbPass=SrmDHYwQ8v4CwjNyF9VvwCL2V8ej0XMB
+-PdbEnvironment=release
+-PapiBaseUrl="https://api-${gaia-release-name}.ninjavan.io"
+-PsystemId=sg
+-PseleniumDriver=CHROME
+-PseleniumDriverVersion=89
 -PseleniumHeadless=true
 ```
 
