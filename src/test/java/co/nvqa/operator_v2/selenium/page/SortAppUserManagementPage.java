@@ -30,7 +30,7 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   private static final String RECENT_MONTH_XPATH = "//a[contains(@class,'month-select')]";
   private static final String PRIMARY_HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hubId']";
   private static final String ADDITIONAL_HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='additionalHubs[0]']";
-  private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//button[@id='btnUpsertUser']";
+  private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//div[@class='ant-modal-footer']//button[contains(@class,'ant-btn-primary')]";
   private static final String CLOSE_BUTTON_MODAL_XPATH = "//button[@aria-label='Close']";
   private static final String EDIT_LINK_TEXT_XPATH = "//a[contains(@class, 'edit-user')]";
   private static final String STATUS_COMBOBOX_XPATH = "//form[contains(@class,'StyledForm')]//div[@id='isActive']";
