@@ -45,10 +45,10 @@ Feature: Edit Pricing Profile - Normal Shippers
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName       | {KEY_CREATED_SHIPPER.name}                      |
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | type              | Flat                                            |
-      | discount          | none                                            |
+      | discount          | 10                                              |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - Edit Start Date / End Date (uid:86101231-638d-4d38-917d-79dbb1b1d07d)
