@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.model;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.util.TestUtils;
+import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,6 +33,13 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   private String password;
   private String comments;
   private String hub;
+
+  public DriverInfo() {
+  }
+
+  public DriverInfo(Map<String, ?> data) {
+    super(data);
+  }
 
   public String getHub() {
     return hub;

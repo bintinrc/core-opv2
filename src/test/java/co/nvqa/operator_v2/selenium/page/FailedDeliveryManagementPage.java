@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.model.RtsDetails;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -16,10 +17,11 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -151,6 +153,30 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.edit.change-address")
     public NvIconTextButton changeAddress;
 
+    @FindBy(name = "commons.save-location")
+    public NvApiTextButton saveLocation;
+
+    @FindBy(name = "commons.search")
+    public NvApiTextButton search;
+
+    @FindBy(css = "button[aria-label='Search by Coordinates']")
+    public Button searchByCoordinates;
+
+    @FindBy(css = "button[aria-label='Search by Name']")
+    public Button searchByName;
+
+    @FindBy(id = "searchTerm")
+    public TextBox searchTerm;
+
+    @FindBy(css = "[id^='commons.latitude']")
+    public TextBox latitude;
+
+    @FindBy(css = "[id^='commons.longitude']")
+    public TextBox longitude;
+
+    @FindBy(name = "commons.address-finder")
+    public NvIconTextButton addressFinder;
+
     @FindBy(css = "[id^='commons.country']")
     public TextBox country;
 
@@ -179,34 +205,80 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     public void changeAddress(RtsDetails.RtsAddress address) {
       changeAddress.click();
 
-      if (StringUtils.isNotBlank(address.getCountry())) {
-        country.setValue(address.getCountry());
-      }
-      if (StringUtils.isNotBlank(address.getCity())) {
-        city.setValue(address.getCity());
-      }
-      if (StringUtils.isNotBlank(address.getAddress1())) {
-        address1.setValue(address.getAddress1());
-      }
-      if (StringUtils.isNotBlank(address.getAddress2())) {
-        address2.setValue(address.getAddress1());
-      }
-      if (StringUtils.isNotBlank(address.getPostcode())) {
-        postcode.setValue(address.getPostcode());
+      if (isNotBlank(address.getLatitude())) {
+        addressFinder.click();
+        searchByCoordinates.click();
+        latitude.setValue(address.getLatitude());
+        longitude.setValue(address.getLongitude());
+        saveLocation.clickAndWaitUntilDone();
+
+        if (isNotBlank(address.getAddress1())) {
+          assertEquals("Found Address 1", address.getAddress1(), address1.getValue());
+        }
+        if (isNotBlank(address.getAddress2())) {
+          assertEquals("Found Address 2", address.getAddress2(), address2.getValue());
+        }
+        if (isNotBlank(address.getCountry())) {
+          country.setValue(address.getCountry());
+        }
+        if (isNotBlank(address.getCity())) {
+          city.setValue(address.getCity());
+        }
+        if (isNotBlank(address.getPostcode())) {
+          postcode.setValue(address.getPostcode());
+        }
+      } else if (isNotBlank(address.getName())) {
+        addressFinder.click();
+        searchByName.click();
+        searchTerm.setValue(address.getName());
+        search.click();
+        saveLocation.clickAndWaitUntilDone();
+
+        if (isNotBlank(address.getCountry())) {
+          assertEquals("Found Country", address.getCountry(), country.getValue());
+        }
+        if (isNotBlank(address.getCity())) {
+          assertEquals("Found City", address.getCity(), city.getValue());
+        }
+        if (isNotBlank(address.getAddress1())) {
+          assertEquals("Found Address 1", address.getAddress1(), address1.getValue());
+        }
+        if (isNotBlank(address.getAddress2())) {
+          assertEquals("Found Address 2", address.getAddress2(), address2.getValue());
+        }
+        if (isNotBlank(address.getPostcode())) {
+          assertEquals("Found Postcode", address.getPostcode(), postcode.getValue());
+        }
+      } else {
+        if (isNotBlank(address.getCountry())) {
+          country.setValue(address.getCountry());
+        }
+        if (isNotBlank(address.getCity())) {
+          city.setValue(address.getCity());
+        }
+        if (isNotBlank(address.getAddress1())) {
+          address1.setValue(address.getAddress1());
+        }
+        if (isNotBlank(address.getAddress2())) {
+          address2.setValue(address.getAddress1());
+        }
+        if (isNotBlank(address.getPostcode())) {
+          postcode.setValue(address.getPostcode());
+        }
       }
     }
 
     public EditRtsDetailsDialog fillForm(RtsDetails rtsDetails) {
-      if (StringUtils.isNotBlank(rtsDetails.getReason())) {
+      if (isNotBlank(rtsDetails.getReason())) {
         reason.selectValue(rtsDetails.getReason());
       }
-      if (StringUtils.isNotBlank(rtsDetails.getInternalNotes())) {
+      if (isNotBlank(rtsDetails.getInternalNotes())) {
         internalNotes.setValue(rtsDetails.getInternalNotes());
       }
       if (rtsDetails.getDeliveryDate() != null) {
         deliveryDate.setDate(rtsDetails.getDeliveryDate());
       }
-      if (StringUtils.isNotBlank(rtsDetails.getTimeSlot())) {
+      if (isNotBlank(rtsDetails.getTimeSlot())) {
         timeslot.selectValue(rtsDetails.getTimeSlot());
       }
       if (rtsDetails.getAddress() != null) {
