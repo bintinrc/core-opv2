@@ -36,4 +36,9 @@ public class NvButtonSave extends PageElement {
     pause100ms();
     spinner.waitUntilInvisible();
   }
+
+  @Override
+  public boolean isEnabled() {
+    return button.isEnabled();
+  }
 }

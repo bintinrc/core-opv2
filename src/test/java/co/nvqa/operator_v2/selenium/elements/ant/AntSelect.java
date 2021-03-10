@@ -12,7 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AntSelect extends PageElement {
 
-  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][contains(normalize-space(text()), '%s')]";
   public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
 
   public AntSelect(WebDriver webDriver, WebElement webElement) {
@@ -32,7 +32,7 @@ public class AntSelect extends PageElement {
   @FindBy(className = "ant-select-selection-selected-value")
   public PageElement selectValueElement;
 
-  @FindBy(className = "ant-select-search__field")
+  @FindBy(css = "input.ant-select-search__field,input.ant-select-selection-search-input")
   public PageElement searchInput;
 
   @FindBy(className = "ant-select-clear-icon")
@@ -89,5 +89,10 @@ public class AntSelect extends PageElement {
     return selectValueElement.isDisplayedFast() ?
         selectValueElement.getText() :
         null;
+  }
+
+  public boolean hasItem(String value) {
+    openMenu();
+    return isElementExistFast(f(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value)));
   }
 }

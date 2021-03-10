@@ -371,6 +371,118 @@ Feature: Failed Delivery Management
       | dnr    | NORMAL                                |
       | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator RTS a Single Parcel and Change to New Address - Search Address by Coordinates (uid:71e309a5-4beb-4add-ac51-44901c36cb50)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
+    And Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator RTS failed delivery order with following properties:
+      | reason            | Other Reason                                                                   |
+      | internalNotes     | Internal notes created by OpV2 automation on {gradle-current-date-yyyy-MM-dd}. |
+      | deliveryDate      | {gradle-next-1-day-yyyy-MM-dd}                                                 |
+      | timeSlot          | 3PM - 6PM                                                                      |
+      | address.latitude  | 1.3880089                                                                      |
+      | address.longitude | 103.8946339                                                                    |
+      | address.address1  | 204a Compassvale Drive, Singapore 541204, Singapore                            |
+      | address.address2  | 204a                                                                           |
+      | address.postcode  | 541204                                                                         |
+    Then Operator verify failed delivery order RTS-ed successfully
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | RESCHEDULING                          |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                                      |
+      | status | PENDING                                       |
+      | dnr    | NORMAL                                        |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} (RTS) |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator RTS a Single Parcel and Change to New Address - Search Address by Name (uid:f69825d7-4f2d-439e-94cb-49c78fc2328f)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
+    And Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator RTS failed delivery order with following properties:
+      | reason           | Other Reason                                                                   |
+      | internalNotes    | Internal notes created by OpV2 automation on {gradle-current-date-yyyy-MM-dd}. |
+      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd}                                                 |
+      | timeSlot         | 3PM - 6PM                                                                      |
+      | address.name     | Compassvale Drive                                                              |
+      | address.country  | Singapore                                                                      |
+      | address.city     | Singapore                                                                      |
+      | address.address1 | BLOCK 216C COMPASSVALE DRIVE                                                   |
+      | address.postcode | 543216                                                                         |
+    Then Operator verify failed delivery order RTS-ed successfully
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | RESCHEDULING                          |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                                      |
+      | status | PENDING                                       |
+      | dnr    | NORMAL                                        |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} (RTS) |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

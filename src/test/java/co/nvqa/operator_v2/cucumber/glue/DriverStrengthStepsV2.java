@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.hamcrest.Matchers;
 
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE;
@@ -39,6 +41,32 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     dsPage.addNewDriver(driverInfo);
   }
 
+  @When("^Operator opens Add Driver dialog on Driver Strength$")
+  public void operatorOpensAddDriverDialog() {
+    dsPage.addNewDriver.click();
+    dsPage.addDriverDialog.waitUntilVisible();
+  }
+
+  @When("^Operator fill Add Driver form on Driver Strength page using data below:$")
+  public void operatorFillAddDriverOnDriverStrengthPageUsingDataBelow(
+      Map<String, String> mapOfData) {
+    DriverInfo driverInfo = new DriverInfo(resolveKeyValues(mapOfData));
+    put(KEY_CREATED_DRIVER_INFO, driverInfo);
+    dsPage.addDriverDialog.fillForm(driverInfo);
+  }
+
+  @When("Operator verifies Submit button in Add Driver dialog is disabled")
+  public void operatorVerifiesSubmitButtonState() {
+    assertFalse("Submit button is enabled", dsPage.addDriverDialog.submit.isEnabled());
+  }
+
+  @When("Operator verifies hint {string} is displayed in Add Driver dialog")
+  public void operatorVerifiesAddDriverHint(String expected) {
+    expected = resolveValue(expected);
+    assertTrue("Hint is displayed", dsPage.addDriverDialog.hints.isDisplayed());
+    assertEquals("Hint text", expected, dsPage.addDriverDialog.hints.getNormalizedText());
+  }
+
   @When("^Operator edit created Driver on Driver Strength page using data below:$")
   public void operatorEditCreatedDriverOnDriverStrengthPageUsingDataBelow(
       Map<String, String> mapOfData) {
@@ -46,6 +74,36 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     String username = driverInfo.getUsername();
     driverInfo.fromMap(mapOfData);
     dsPage.editDriver(username, driverInfo);
+  }
+
+  @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
+  public void operatorRemoveContactDetails() {
+    if (dsPage.editDriverDialog.removeContact.size() > 0) {
+      dsPage.editDriverDialog.removeContact.forEach(Button::click);
+    }
+  }
+
+  @When("Operator removes vehicle details on Edit Driver dialog on Driver Strength page")
+  public void operatorRemoveVehicleDetails() {
+    if (dsPage.editDriverDialog.removeVehicle.size() > 0) {
+      dsPage.editDriverDialog.removeVehicle.forEach(Button::click);
+    }
+  }
+
+  @When("Operator removes zone preferences on Edit Driver dialog on Driver Strength page")
+  public void operatorRemoveZonePreference() {
+    if (dsPage.editDriverDialog.removeZonePreference.size() > 0) {
+      dsPage.editDriverDialog.removeZonePreference.forEach(Button::click);
+    }
+  }
+
+  @When("Operator opens Edit Driver dialog for created driver on Driver Strength page")
+  public void operatorOpensEditDriverDialogOnDriverStrengthPage() {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    String username = driverInfo.getUsername();
+    dsPage.filterBy(COLUMN_USERNAME, username);
+    dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+    dsPage.editDriverDialog.waitUntilVisible();
   }
 
   @Then("^Operator verify driver strength params of created driver on Driver Strength page$")

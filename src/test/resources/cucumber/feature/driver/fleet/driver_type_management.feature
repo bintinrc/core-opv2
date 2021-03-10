@@ -16,12 +16,12 @@ Feature: Driver Type Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
-      | driverTypeName  | GENERATED           |
-      | deliveryType    | Normal Delivery     |
-      | priorityLevel   | Priority            |
-      | reservationSize | Less Than 3 Parcels |
-      | parcelSize      | Small               |
-      | timeslot        | 9AM To 6PM          |
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
     And Operator get new Driver Type params on Driver Type Management page
     Then Operator verify new Driver Type params
 
@@ -38,12 +38,12 @@ Feature: Driver Type Management
       | timeslot        | 9AM To 6PM          |
     Given Operator get new Driver Type params on Driver Type Management page
     When Operator edit new Driver Type with the following attributes:
-      | driverTypeName  | GENERATED            |
-      | deliveryType    | C2C + Return Pick Up |
-      | priorityLevel   | Non-Priority         |
-      | reservationSize | Less Than 10 Parcels |
-      | parcelSize      | Medium               |
-      | timeslot        | 9AM To 10PM          |
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | C2C + Return Pick Up                     |
+      | priorityLevel   | Non-Priority                             |
+      | reservationSize | Less Than 10 Parcels                     |
+      | parcelSize      | Medium                                   |
+      | timeslot        | 9AM To 10PM                              |
     Then Operator verify new Driver Type params
 
   @DeleteDriverType
@@ -51,18 +51,33 @@ Feature: Driver Type Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
-      | driverTypeName | GENERATED |
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
     Given Operator get new Driver Type params on Driver Type Management page
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verify new Driver Type is deleted successfully
+
+  @DeleteDriverType @DeleteDriver
+  Scenario: Can Not Delete Driver Type That Is Being Used by Driver (uid:ea7d45b6-cc32-4362-8b8c-f57743a6d453)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Driver Type Management
+    Given Operator create new Driver Type with the following attributes:
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+    Given Operator get new Driver Type params on Driver Type Management page
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_DRIVER_TYPE_PARAMS.driverTypeName}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"driver.{{TIMESTAMP}}@ninjavan.co"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+    When Operator delete new Driver Type on on Driver Type Management page
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                   |
+      | bottom | ^.*Error Code: 105908.*Error Message: Driver type is still being used by some drivers.* |
+    And Operator verify new Driver Type params
 
   @DeleteDriverType
   Scenario Outline: Operator should be able to filter by '<value>' on Driver Type Management page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
-      | driverTypeName | GENERATED |
-      | <param>        | <value>   |
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | <param>        | <value>                                  |
     And Operator get new Driver Type params on Driver Type Management page
     When Operator configure filter on Driver Type Management page with the following attributes:
       | <param> | <value> |
