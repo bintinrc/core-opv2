@@ -684,6 +684,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
   }
 
+  @Given("DB Operator find drivers by {string} first name")
+  public void findDriversByFirstName(String firstName) {
+    List<Driver> drivers = getDriverJdbc().findDriversByFirstName(resolveValue(firstName));
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
+  @Given("DB Operator find drivers by {string} driver type name")
+  public void findDriversByDriverTypeName(String driverTypeName) {
+    List<Driver> drivers = getDriverJdbc()
+        .findDriversByDriverTypeName(resolveValue(driverTypeName));
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
   @After(value = "@DeleteShipment")
   public void deleteShipment() {
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);

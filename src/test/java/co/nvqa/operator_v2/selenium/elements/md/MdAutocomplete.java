@@ -2,6 +2,11 @@ package co.nvqa.operator_v2.selenium.elements.md;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -25,6 +30,9 @@ public class MdAutocomplete extends PageElement {
 
   @FindBy(xpath = ".//input")
   public PageElement inputElement;
+
+  @FindBy(xpath = "//ul[contains(@class,'md-autocomplete-suggestions')]/li")
+  public List<PageElement> options;
 
   public void selectValue(String value) {
     enterSearchTerm(value);
@@ -50,5 +58,16 @@ public class MdAutocomplete extends PageElement {
       throw new NoSuchElementException(
           f("Could not select value [%s] in md-autocomplete - Not Matched", value), ex);
     }
+  }
+
+  public List<String> getOptions() {
+    Set<String> opt = new LinkedHashSet<>();
+    List<String> next = options.stream().map(PageElement::getNormalizedText)
+        .collect(Collectors.toList());
+    while (opt.addAll(next)) {
+      options.get(options.size() - 1).scrollIntoView(true);
+      next = options.stream().map(PageElement::getNormalizedText).collect(Collectors.toList());
+    }
+    return new ArrayList<>(opt);
   }
 }
