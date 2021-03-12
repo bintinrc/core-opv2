@@ -1,11 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.text.ParseException;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -27,10 +31,16 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
   public static final String LOCATOR_BUTTON_LOAD_EVERYTHING = "container.driver-strength.load-everything";
   public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
 
-  private AddDriverDialog addDriverDialog;
-  private EditDriverDialog editDriverDialog;
-  private DriversTable driversTable;
+  public AddDriverDialog addDriverDialog;
+  public EditDriverDialog editDriverDialog;
+  public DriversTable driversTable;
   private ContactDetailsMenu contactDetailsMenu;
+
+  @FindBy(name = "container.driver-strength.load-everything")
+  public NvIconTextButton loadEverything;
+
+  @FindBy(name = "Add New Driver")
+  public NvIconTextButton addNewDriver;
 
   public DriverStrengthPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -53,17 +63,22 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
     clickAddNewDriver();
     addDriverDialog.fillForm(driverInfo);
+    addDriverDialog.submitForm();
   }
 
   public void editDriver(String username, DriverInfo newDriverInfo) {
     filterBy(COLUMN_USERNAME, username);
     driversTable.clickActionButton(1, ACTION_EDIT);
     editDriverDialog.fillForm(newDriverInfo);
+    editDriverDialog.submitForm();
   }
 
   public void filterBy(String columnName, String value) {
-    if (isElementExist(String.format("//*[@name='%s']", LOCATOR_BUTTON_LOAD_EVERYTHING), 0)) {
-      clickNvIconTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_LOAD_EVERYTHING);
+    if (loadEverything.isDisplayed()) {
+      loadEverything.click();
+      if (halfCircleSpinner.waitUntilVisible(2)) {
+        halfCircleSpinner.waitUntilInvisible();
+      }
     }
     driversTable.filterByColumn(columnName, value);
   }
@@ -169,6 +184,21 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     public static final String LOCATOR_BUTTON_SUBMIT = "Submit";
     public static final String LOCATOR_HUB = "Hub";
 
+    @FindBy(name = "Submit")
+    public NvButtonSave submit;
+
+    @FindBy(css = "div[ng-repeat*='contact in fields.contacts._values'] button[aria-label='Remove']")
+    public List<Button> removeContact;
+
+    @FindBy(css = "div[ng-repeat*='vehicle in fields.vehicles._values'] button[aria-label='Remove']")
+    public List<Button> removeVehicle;
+
+    @FindBy(css = "div[ng-repeat*='zonePreference in fields.zonePreferences._values'] button[aria-label='Remove']")
+    public List<Button> removeZonePreference;
+
+    @FindBy(css = "div.hints")
+    public PageElement hints;
+
     public AddDriverDialog(WebDriver webDriver) {
       super(webDriver);
       dialogTittle = DIALOG_TITLE;
@@ -260,7 +290,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     }
 
     public void submitForm() {
-      clickNvButtonSaveByNameAndWaitUntilDone(locatorButtonSubmit);
+      submit.clickAndWaitUntilDone();
       waitUntilInvisibilityOfMdDialogByTitle(dialogTittle);
     }
 
@@ -285,7 +315,6 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
       setUsername(driverInfo.getUsername());
       setPassword(driverInfo.getPassword());
       setComments(driverInfo.getComments());
-      submitForm();
     }
 
     protected void fillIfNotNull(String locator, Object value) {

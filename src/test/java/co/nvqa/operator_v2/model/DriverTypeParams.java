@@ -1,31 +1,22 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.util.TestUtils;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import co.nvqa.commons.model.DataEntity;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.translate.CsvTranslators;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class DriverTypeParams {
-
-  private static final CsvTranslators.CsvUnescaper UNESCAPER = new CsvTranslators.CsvUnescaper();
+public class DriverTypeParams extends DataEntity<DriverTypeParams> {
 
   private Long driverTypeId;
   private String driverTypeName;
+
   private String deliveryType;
   private String priorityLevel;
   private String reservationSize;
@@ -33,6 +24,10 @@ public class DriverTypeParams {
   private String timeslot;
 
   public DriverTypeParams() {
+  }
+
+  public DriverTypeParams(Map<String, ?> data) {
+    super(data);
   }
 
   public Long getDriverTypeId() {
@@ -111,39 +106,14 @@ public class DriverTypeParams {
     this.timeslot = timeslot;
   }
 
-  @SuppressWarnings("WeakerAccess")
-  public static DriverTypeParams fromCsvLine(String csvLine) {
+  public void fromCsvLine(String csvLine) {
     String[] values = csvLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-    DriverTypeParams params = new DriverTypeParams();
-    params
-        .setDriverTypeId(Long.parseLong(Objects.requireNonNull(getValueIfIndexExists(values, 0))));
-    params.setDriverTypeName(getValueIfIndexExists(values, 1));
-    params.setDeliveryType(getValueIfIndexExists(values, 2));
-    params.setPriorityLevel(getValueIfIndexExists(values, 3));
-    params.setReservationSize(getValueIfIndexExists(values, 4));
-    params.setParcelSize(getValueIfIndexExists(values, 5));
-    return params;
-  }
-
-  private static String getValueIfIndexExists(String[] values, int index) {
-    if (values.length > index) {
-      return StringUtils.trimToNull(StringUtils.strip(UNESCAPER.translate(values[index]), "\""));
-    } else {
-      return null;
-    }
-  }
-
-  public static List<DriverTypeParams> fromCsvFile(String fileName, boolean ignoreHeader) {
-    try {
-      List<String> csvLines = FileUtils.readLines(new File(fileName), Charset.defaultCharset());
-      if (ignoreHeader) {
-        csvLines.remove(0);
-      }
-      return csvLines.stream().map(DriverTypeParams::fromCsvLine).collect(Collectors.toList());
-    } catch (IOException ex) {
-      NvLogger.warn("Could not read file [" + fileName + "]");
-      return new ArrayList<>();
-    }
+    setDriverTypeId(Long.parseLong(Objects.requireNonNull(getValueIfIndexExists(values, 0))));
+    setDriverTypeName(getValueIfIndexExists(values, 1));
+    setDeliveryType(getValueIfIndexExists(values, 2));
+    setPriorityLevel(getValueIfIndexExists(values, 3));
+    setReservationSize(getValueIfIndexExists(values, 4));
+    setParcelSize(getValueIfIndexExists(values, 5));
   }
 
   private Set<String> stringToSet(String value) {
@@ -153,33 +123,7 @@ public class DriverTypeParams {
         });
   }
 
-  public void fromMap(Map<String, String> dataMap) {
-    String value = dataMap.get("driverTypeName");
-    if (StringUtils.isNotBlank(value)) {
-      if (value.equalsIgnoreCase("GENERATED")) {
-        value = "DT-" + TestUtils.generateDateUniqueString();
-      }
-      setDriverTypeName(value);
-    }
-    value = dataMap.get("deliveryType");
-    if (StringUtils.isNotBlank(value)) {
-      setDeliveryType(value);
-    }
-    value = dataMap.get("priorityLevel");
-    if (StringUtils.isNotBlank(value)) {
-      setPriorityLevel(value);
-    }
-    value = dataMap.get("reservationSize");
-    if (StringUtils.isNotBlank(value)) {
-      setReservationSize(value);
-    }
-    value = dataMap.get("parcelSize");
-    if (StringUtils.isNotBlank(value)) {
-      setParcelSize(value);
-    }
-    value = dataMap.get("timeslot");
-    if (StringUtils.isNotBlank(value)) {
-      setTimeslot(value);
-    }
+  public static List<DriverTypeParams> fromCsvFile(String fileName, boolean ignoreHeader) {
+    return fromCsvFile(DriverTypeParams.class, fileName, ignoreHeader);
   }
 }

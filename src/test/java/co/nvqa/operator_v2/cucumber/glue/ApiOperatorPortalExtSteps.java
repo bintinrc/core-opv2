@@ -188,6 +188,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
   @When("^API Operator create new Driver using data below:$")
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
     String dateUniqueString = TestUtils.generateDateUniqueString();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();

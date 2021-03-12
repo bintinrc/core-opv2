@@ -46,8 +46,7 @@ public class DriverTypeManagementSteps extends AbstractSteps {
 
   @When("^Operator create new Driver Type with the following attributes:$")
   public void operatorCreateNewDriverTypeWithTheFollowingAttributes(Map<String, String> dataMap) {
-    DriverTypeParams driverTypeParams = new DriverTypeParams();
-    driverTypeParams.fromMap(dataMap);
+    DriverTypeParams driverTypeParams = new DriverTypeParams(resolveKeyValues(dataMap));
     dtmPage.createDriverType(driverTypeParams);
     put(KEY_DRIVER_TYPE_PARAMS, driverTypeParams);
     putInList(KEY_LIST_OF_DRIVER_TYPE_PARAMS, driverTypeParams);
