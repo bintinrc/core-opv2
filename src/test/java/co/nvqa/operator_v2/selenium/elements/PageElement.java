@@ -9,6 +9,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
 public class PageElement extends SimplePage {
@@ -65,6 +66,18 @@ public class PageElement extends SimplePage {
     }
   }
 
+  public void dragAndDropBy(int x, int y) {
+    Actions actions = new Actions(getWebDriver());
+    actions
+        .moveToElement(getWebElement())
+        .clickAndHold()
+        .pause(2000)
+        .moveByOffset(x, y)
+        .pause(2000)
+        .release()
+        .perform();
+  }
+
   public void jsClick() {
     executeScript("arguments[0].click()", getWebElement());
   }
@@ -111,6 +124,7 @@ public class PageElement extends SimplePage {
     try {
       webElement.getTagName();
     } catch (StaleElementReferenceException ex) {
+      webElement = refreshWebElement(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
     return webElement;
@@ -211,4 +225,66 @@ public class PageElement extends SimplePage {
   public <T> T executeScript(String script) {
     return executeScript(script, getWebElement());
   }
+
+  private WebElement refreshWebElement(WebDriver webDriver, WebElement webEl) {
+    String elementInfo = webEl.toString();
+    if (elementInfo.contains("->")) {
+      elementInfo = elementInfo.substring(elementInfo.indexOf("->"));
+      String elementLocator = elementInfo.substring(elementInfo.indexOf(": "));
+      elementLocator = elementLocator.substring(2, elementLocator.length() - 1);
+
+      WebElement retWebEl = null;
+      if (elementInfo.contains("-> link text:")) {
+        retWebEl = webDriver.findElement(By.linkText(elementLocator));
+      } else if (elementInfo.contains("-> name:")) {
+        retWebEl = webDriver.findElement(By.name(elementLocator));
+      } else if (elementInfo.contains("-> id:")) {
+        retWebEl = webDriver.findElement(By.id(elementLocator));
+      } else if (elementInfo.contains("-> xpath:")) {
+        retWebEl = webDriver.findElement(By.xpath(elementLocator));
+      } else if (elementInfo.contains("-> class name:")) {
+        retWebEl = webDriver.findElement(By.className(elementLocator));
+      } else if (elementInfo.contains("-> css selector:")) {
+        retWebEl = webDriver.findElement(By.cssSelector(elementLocator));
+      } else if (elementInfo.contains("-> partial link text:")) {
+        retWebEl = webDriver.findElement(By.partialLinkText(elementLocator));
+      } else if (elementInfo.contains("-> tag name:")) {
+        retWebEl = webDriver.findElement(By.tagName(elementLocator));
+      } else {
+        System.out.println("No valid locator found. Couldn't refresh element");
+      }
+      return retWebEl;
+    } else {
+      return refreshProxyWebElement(webDriver, elementInfo);
+    }
+  }
+
+  private WebElement refreshProxyWebElement(WebDriver webDriver, String webElementStr) {
+    String elementInfo = webElementStr.substring(webElementStr.indexOf("By"));
+    String elementLocator = elementInfo.substring(elementInfo.indexOf(": "));
+    elementLocator = elementLocator.substring(2, elementLocator.length() - 1);
+
+    WebElement retWebEl = null;
+    if (elementInfo.contains("linkText:")) {
+      retWebEl = webDriver.findElement(By.linkText(elementLocator));
+    } else if (elementInfo.contains("name:")) {
+      retWebEl = webDriver.findElement(By.name(elementLocator));
+    } else if (elementInfo.contains("id:")) {
+      retWebEl = webDriver.findElement(By.id(elementLocator));
+    } else if (elementInfo.contains("xpath:")) {
+      retWebEl = webDriver.findElement(By.xpath(elementLocator));
+    } else if (elementInfo.contains("className:")) {
+      retWebEl = webDriver.findElement(By.className(elementLocator));
+    } else if (elementInfo.contains("cssSelector:")) {
+      retWebEl = webDriver.findElement(By.cssSelector(elementLocator));
+    } else if (elementInfo.contains("partialLinkText:")) {
+      retWebEl = webDriver.findElement(By.partialLinkText(elementLocator));
+    } else if (elementInfo.contains("tagName:")) {
+      retWebEl = webDriver.findElement(By.tagName(elementLocator));
+    } else {
+      System.out.println("No valid locator found. Couldn't refresh element");
+    }
+    return retWebEl;
+  }
+
 }

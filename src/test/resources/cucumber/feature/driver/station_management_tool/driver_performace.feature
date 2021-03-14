@@ -15,7 +15,9 @@ Feature: Driver Performance
     And Operator verifies Route Date range is 30 days on Driver Performance page
     And Operator verifies Load Selection button is disabled on Driver Performance page
     When Operator select following filters on Driver Performance page:
-      | hubs | JKB |
+      | routeDateFrom | 2021-02-01 |
+      | routeDateTo   | 2021-03-01 |
+      | hubs          | JKB        |
     Then Operator verifies Load Selection button is enabled on Driver Performance page
     When Operator select following filters on Driver Performance page:
       | driverNames | Andhar Driver |
@@ -40,6 +42,8 @@ Feature: Driver Performance
     When Operator go to menu Station Management Tool -> Driver Performance
     And Driver Performance page is loaded
     When Operator select following filters on Driver Performance page:
+      | routeDateFrom         | 2021-02-01    |
+      | routeDateTo           | 2021-03-01    |
       | displayIndividualRows | true          |
       | hubs                  | JKB           |
       | driverNames           | Andhar Driver |

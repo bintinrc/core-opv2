@@ -61,8 +61,8 @@ public class DriverPerformanceSteps extends AbstractSteps {
 
   @Then("Operator verifies Route Date range is {int} days on Driver Performance page")
   public void checkRouteRange(long range) throws ParseException {
-    String startDateVal = driverPerformancePage.filtersForm.startDate.getValue();
-    String endDateVal = driverPerformancePage.filtersForm.endDate.getValue();
+    String startDateVal = driverPerformancePage.filtersForm.routeDate.fromInput.getValue();
+    String endDateVal = driverPerformancePage.filtersForm.routeDate.toInput.getValue();
     assertEquals("Route Date range", range,
         ChronoUnit.DAYS.between(LocalDate.parse(startDateVal), LocalDate.parse(endDateVal)));
 
@@ -101,7 +101,16 @@ public class DriverPerformanceSteps extends AbstractSteps {
   @Then("Operator select following filters on Driver Performance page:")
   public void selectFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String value = data.get("displayIndividualRows");
+    String value = data.get("routeDateFrom");
+    String toDate = data.get("routeDateTo");
+    if (StringUtils.isNotBlank(value) && StringUtils.isNotBlank(toDate)) {
+      driverPerformancePage.filtersForm.routeDate.setDateRange(value, toDate);
+    } else if (StringUtils.isNotBlank(value)) {
+      driverPerformancePage.filtersForm.routeDate.setFromDate(value);
+    } else if (StringUtils.isNotBlank(toDate)) {
+      driverPerformancePage.filtersForm.routeDate.setToDate(toDate);
+    }
+    value = data.get("displayIndividualRows");
     if (StringUtils.isNotBlank(value)) {
       driverPerformancePage.filtersForm.displayIndividualRows.setValue(value);
     }

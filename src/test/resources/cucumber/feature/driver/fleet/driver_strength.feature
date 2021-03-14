@@ -163,7 +163,7 @@ Feature: Driver Strength
     And Operator verifies hint "At least one preferred zone required." is displayed in Add Driver dialog
 
   @DeleteDriver
-  Scenario: Can Not Create New Driver Account Without Active Contact (uid:30bcd5fd-376f-45be-bbf5-2e420a760f2c)
+  Scenario: Can Not Update Driver Account Without Active Contact (uid:d2db97f9-190d-4b03-8bb5-249fd1bf60c5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"driver.{{TIMESTAMP}}@ninjavan.co"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |

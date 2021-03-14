@@ -1734,4 +1734,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
         Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
   }
+
+  @When("DB Operator sets flags of driver with id {string} to {int}")
+  public void setDriverFlags(String driverId, int flags) {
+    getDriverJdbc().setDriverFlags(Long.parseLong(resolveValue(driverId)), flags);
+  }
 }
