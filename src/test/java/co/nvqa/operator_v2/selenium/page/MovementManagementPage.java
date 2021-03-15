@@ -223,8 +223,9 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
   public void assignDriver(String driverId) {
     assignDriverModal.waitUntilVisible();
+    assignDriverModal.addDriver.click();
     assignDriverModal.assignDriver(driverId);
-    assignDriverModal.saveDriver.click();
+    assignDriverModal.saveButton.click();
     assignDriverModal.waitUntilInvisible();
   }
 

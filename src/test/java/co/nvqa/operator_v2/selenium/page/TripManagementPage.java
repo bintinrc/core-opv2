@@ -1065,6 +1065,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
+    @FindBy(xpath = "//button[.='Save']")
+    public Button saveButton;
+
     @FindBy(xpath = "//button[.='Save Driver']")
     public Button saveDriver;
 
@@ -1079,6 +1082,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//button[.='Add Another Driver']")
     public Button addAnotherDriver;
+
+    @FindBy(xpath = "//button[.='Add Driver']")
+    public Button addDriver;
 
     @FindBy(className = "remove-link")
     public Button removeDriver;
