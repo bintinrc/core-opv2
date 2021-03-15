@@ -339,7 +339,7 @@ public class TripManagementSteps extends AbstractSteps {
       String tripStatus) {
     String stringTripId = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
     Long longTripId = Long.valueOf(stringTripId);
-    navigateTo(f("%s/%s/movement-trips/%d/detail", TestConstants.OPERATOR_PORTAL_BASE_URL,
+    navigateTo(f("%s/%s/movement-trips/%d/details", TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, longTripId));
     tripManagementPage.switchTo();
     // TODO: Uncomment after ticket is fixed by the dev team
