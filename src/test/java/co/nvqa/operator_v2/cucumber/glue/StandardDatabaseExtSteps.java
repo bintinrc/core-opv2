@@ -1721,4 +1721,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
         Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
   }
+  @Then("DB Operator verify loyalty point for completed order is {string}")
+  public void checkLoyaltyPoint(String pointAdded) {
+    if (containsKey(KEY_LOYALTY_POINT) && get(KEY_LOYALTY_POINT) == null) {
+      retryIfAssertionErrorOccurred(()-> {
+            String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+            Double point = getLoyaltyJdbc().getLoyaltyPoint(trackingId);
+            assertNotNull(point);
+            put(KEY_LOYALTY_POINT, point);
+          },"DB loyalty check loyalty point"
+      );
+    }
+    Double actualLoyaltyPoint = get(KEY_LOYALTY_POINT);
+    Double expectedLoyaltyPoint = Double.valueOf(pointAdded);
+
+    assertEquals("Check added loyalty point", expectedLoyaltyPoint,  actualLoyaltyPoint);
+  }
 }
