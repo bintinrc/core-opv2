@@ -398,7 +398,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
+    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Complete (uid:b6d4ffd1-5960-48c6-bd09-4b311909f9e7)

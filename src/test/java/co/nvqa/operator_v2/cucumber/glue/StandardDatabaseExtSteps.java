@@ -1377,13 +1377,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case HUB_ST_CD_DIFF_CD:
       case HUB_CD_ST_DIFF_CD:
       case HUB_ST_ST_SAME_CD:
-        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "FAILED", originHub, destHub, shipmentIds);
-        break;
       case HUB_CD_ITS_ST:
       case HUB_ST_ITS_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "NOT FOUND", originHub, destHub, shipmentIds);
+            "FAILED", originHub, destHub, shipmentIds);
         break;
     }
   }

@@ -547,15 +547,17 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void assignDriver(String driverId) {
     assignTripModal.waitUntilVisible();
+    assignTripModal.addDriver.click();
     assignTripModal.assignDriver(driverId);
-    assignTripModal.saveDriver.click();
+    assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
 
   public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
     assignTripModal.waitUntilVisible();
+    assignTripModal.addDriver.click();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
-    assignTripModal.saveDriver.click();
+    assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
 
@@ -1096,8 +1098,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
       assignPrimaryDriverInput.selectValue(primaryDriver);
       pause1s();
-      addAnotherDriver.waitUntilClickable();
-      addAnotherDriver.click();
+      addDriver.waitUntilClickable();
+      addDriver.click();
       pause1s();
       assignAdditionalDriverInput.selectValue(additionalDriver);
     }
