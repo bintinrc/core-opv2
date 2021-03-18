@@ -1390,13 +1390,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case HUB_ST_CD_DIFF_CD:
       case HUB_CD_ST_DIFF_CD:
       case HUB_ST_ST_SAME_CD:
-        dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "FAILED", originHub, destHub, shipmentIds);
-        break;
       case HUB_CD_ITS_ST:
       case HUB_ST_ITS_CD:
         dbOperatorVerifySlaFailedAndPathNotFoundInExtDataMovementEventsTableWithDataBelow(
-            "NOT FOUND", originHub, destHub, shipmentIds);
+            "FAILED", originHub, destHub, shipmentIds);
         break;
     }
   }
@@ -1733,6 +1730,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
         Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
+  }
+  @Then("DB Operator verify loyalty point for completed order is {string}")
+  public void checkLoyaltyPoint(String pointAdded) {
+    if (containsKey(KEY_LOYALTY_POINT) && get(KEY_LOYALTY_POINT) == null) {
+      retryIfAssertionErrorOccurred(()-> {
+            String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+            Double point = getLoyaltyJdbc().getLoyaltyPoint(trackingId);
+            assertNotNull(point);
+            put(KEY_LOYALTY_POINT, point);
+          },"DB loyalty check loyalty point"
+      );
+    }
+    Double actualLoyaltyPoint = get(KEY_LOYALTY_POINT);
+    Double expectedLoyaltyPoint = Double.valueOf(pointAdded);
+
+    assertEquals("Check added loyalty point", expectedLoyaltyPoint,  actualLoyaltyPoint);
   }
 
   @When("DB Operator sets flags of driver with id {string} to {int}")
