@@ -1799,6 +1799,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     When Operator refresh Middle Mile Driver Page
+    And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
       | name   | hub           | contactNumber | licenseNumber | employmentType | username |
       | RANDOM | COUNTRY_BASED | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
