@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DriverInfo;
-import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -34,9 +33,8 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("^Operator create new Driver on Driver Strength page using data below:$")
   public void operatorCreateNewDriverOnDriverStrengthPageUsingDataBelow(
-      Map<String, String> mapOfData) {
-    DriverInfo driverInfo = new DriverInfo();
-    driverInfo.fromMap(mapOfData);
+      Map<String, String> data) {
+    DriverInfo driverInfo = new DriverInfo(resolveKeyValues(data));
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     dsPage.addNewDriver(driverInfo);
   }
@@ -78,22 +76,22 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveContactDetails() {
-    if (dsPage.editDriverDialog.removeContact.size() > 0) {
-      dsPage.editDriverDialog.removeContact.forEach(Button::click);
+    if (dsPage.editDriverDialog.contactsSettingsForms.size() > 0) {
+      dsPage.editDriverDialog.contactsSettingsForms.forEach(form -> form.remove.click());
     }
   }
 
   @When("Operator removes vehicle details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveVehicleDetails() {
-    if (dsPage.editDriverDialog.removeVehicle.size() > 0) {
-      dsPage.editDriverDialog.removeVehicle.forEach(Button::click);
+    if (dsPage.editDriverDialog.vehicleSettingsForm.size() > 0) {
+      dsPage.editDriverDialog.vehicleSettingsForm.forEach(form -> form.remove.click());
     }
   }
 
   @When("Operator removes zone preferences on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveZonePreference() {
-    if (dsPage.editDriverDialog.removeZonePreference.size() > 0) {
-      dsPage.editDriverDialog.removeZonePreference.forEach(Button::click);
+    if (dsPage.editDriverDialog.zoneSettingsForms.size() > 0) {
+      dsPage.editDriverDialog.zoneSettingsForms.forEach(form -> form.remove.click());
     }
   }
 
