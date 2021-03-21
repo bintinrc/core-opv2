@@ -8,186 +8,188 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class RouteMonitoringV2Page extends OperatorV2SimplePage
-{
-    @FindBy(css = ".ant-spin")
-    public PageElement spinner;
+public class RouteMonitoringV2Page extends OperatorV2SimplePage {
 
-    @FindBy(css = ".anticon-loading")
-    public PageElement smallSpinner;
+  @FindBy(css = ".ant-spin-dot")
+  public PageElement spinner;
 
-    @FindBy(css = "div.ant-collapse-header i.ant-collapse-arrow")
-    public Button openFilters;
+  @FindBy(css = ".ant-collapse-header")
+  public PageElement collapseHeader;
 
-    @FindBy(tagName = "iframe")
-    private PageElement pageFrame;
+  @FindBy(css = "i.ant-collapse-arrow")
+  public PageElement collapseArrow;
 
-    @FindBy(xpath = "//div[@class='filter-container'][contains(.,'Hubs')]")
-    public AntFilterSelect hubsFilter;
+  @FindBy(css = ".anticon-loading")
+  public PageElement smallSpinner;
 
-    @FindBy(xpath = "//div[@class='filter-container'][contains(.,'Zones')]")
-    public AntFilterSelect zonesFilter;
+  @FindBy(tagName = "iframe")
+  private PageElement pageFrame;
 
-    @FindBy(xpath = "//button[.='Load Selection']")
-    public Button loadSelection;
+  @FindBy(xpath = "//div[@class='filter-container'][contains(.,'Hubs')]")
+  public AntFilterSelect hubsFilter;
 
-    @FindBy(className = "ant-modal-wrap")
-    public PendingPriorityModal pendingPriorityModal;
+  @FindBy(xpath = "//div[@class='filter-container'][contains(.,'Zones')]")
+  public AntFilterSelect zonesFilter;
 
-    @FindBy(className = "ant-modal-wrap")
-    public InvalidFailedWpModal invalidFailedWpModal;
+  @FindBy(xpath = "//button[.='Load Selection']")
+  public Button loadSelection;
 
-    public final RouteMonitoringTable routeMonitoringTable;
+  @FindBy(className = "ant-modal-wrap")
+  public PendingPriorityModal pendingPriorityModal;
 
-    public RouteMonitoringV2Page(WebDriver webDriver)
-    {
+  @FindBy(className = "ant-modal-wrap")
+  public InvalidFailedWpModal invalidFailedWpModal;
+
+  public final RouteMonitoringTable routeMonitoringTable;
+
+  public RouteMonitoringV2Page(WebDriver webDriver) {
+    super(webDriver);
+    routeMonitoringTable = new RouteMonitoringTable(webDriver);
+  }
+
+  public void switchTo() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+  }
+
+  public void expandFilters() {
+    if (StringUtils.equalsIgnoreCase(collapseHeader.getAttribute("aria-expanded"), "false")) {
+      collapseArrow.click();
+    }
+  }
+
+  public static class RouteMonitoringTable extends AntTableV2<RouteMonitoringParams> {
+
+    public static final String COLUMN_ROUTE_ID = "routeId";
+    public static final String COLUMN_PENDING_PRIORITY_PARCELS = "pendingPriorityParcels";
+    public static final String COLUMN_INVALID_FAILED_WP = "numInvalidFailed";
+
+    public RouteMonitoringTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(COLUMN_ROUTE_ID, "routeId")
+          .put("totalParcels", "totalParcels")
+          .put("completionPercentage", "completionRate")
+          .put("totalWaypoint", "totalWaypoints")
+          .put(COLUMN_PENDING_PRIORITY_PARCELS, "pendingPriorityParcels")
+          .put("pendingCount", "numPending")
+          .put("numLateAndPending", "numLateAndPending")
+          .put("successCount", "numSuccess")
+          .put(COLUMN_INVALID_FAILED_WP, "numInvalidFailed")
+          .put("numValidFailed", "numValidFailed")
+          .put("earlyCount", "numEarlyWp")
+          .put("lateCount", "numLateWp")
+          .build()
+      );
+      setEntityClass(RouteMonitoringParams.class);
+    }
+  }
+
+  public static class PendingPriorityModal extends AntModal {
+
+    @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Deliveries')]")
+    public PageElement pendingPriorityDeliveriesTitle;
+    @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Pickups')]")
+    public PageElement pendingPriorityPickupsTitle;
+
+    public PendingPriorityTable pendingPriorityPickupsTable;
+    public PendingPriorityTable pendingPriorityDeliveriesTable;
+
+    public PendingPriorityModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+      pendingPriorityPickupsTable = new PendingPriorityTable(webDriver);
+      pendingPriorityPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
+      pendingPriorityDeliveriesTable = new PendingPriorityTable(webDriver);
+      pendingPriorityDeliveriesTable
+          .setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
+    }
+
+    public static class PendingPriorityTable extends AntTableV2<PendingPriorityOrder> {
+
+      private static final String TAG_LOCATOR = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tags']//div[contains(@class,'ant-tag')]";
+      public static final String COLUMN_TRACKING_ID = "trackingId";
+      public static final String COLUMN_TAGS = "tags";
+
+      public PendingPriorityTable(WebDriver webDriver) {
         super(webDriver);
-        routeMonitoringTable = new RouteMonitoringTable(webDriver);
+        setColumnLocators(ImmutableMap.<String, String>builder()
+            .put(COLUMN_TRACKING_ID, "trackingId")
+            .put("customerName", "name")
+            .put(COLUMN_TAGS, "tags")
+            .put("address", "address")
+            .build()
+        );
+        setColumnReaders(ImmutableMap.of(COLUMN_TAGS, this::getTags));
+        setEntityClass(PendingPriorityOrder.class);
+      }
+
+      public String getTags(int rowNumber) {
+        List<WebElement> elements = findElementsByXpath(tableLocator + f(TAG_LOCATOR, rowNumber));
+        return elements.stream().map(WebElement::getText).collect(Collectors.joining(","));
+      }
+    }
+  }
+
+  public static class InvalidFailedWpModal extends AntModal {
+
+    @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Deliveries')]")
+    public PageElement invalidFailedDeliveriesTitle;
+    @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Pickups')]")
+    public PageElement invalidFailedPickupsTitle;
+    @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Reservations')]")
+    public PageElement invalidFailedReservationsTitle;
+
+    public InvalidFailedOrdersTable invalidFailedPickupsTable;
+    public InvalidFailedOrdersTable invalidFailedDeliveriesTable;
+    public InvalidFailedOrdersTable invalidFailedReservationsTable;
+
+    public InvalidFailedWpModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+      invalidFailedDeliveriesTable = new InvalidFailedOrdersTable(webDriver);
+      invalidFailedDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
+      invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
+      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
+      invalidFailedReservationsTable = new InvalidFailedOrdersTable(webDriver);
+      invalidFailedReservationsTable
+          .setTableLocator("(//div[contains(@class,'ant-card-body')])[4]");
     }
 
-    public void switchTo()
-    {
-        getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    public static class InvalidFailedOrdersTable extends AntTableV2<PendingPriorityOrder> {
+
+      private static final String TAG_LOCATOR = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tags']//div[contains(@class,'ant-tag')]";
+      public static final String COLUMN_TRACKING_ID = "trackingId";
+      public static final String COLUMN_TAGS = "tags";
+
+      public InvalidFailedOrdersTable(WebDriver webDriver) {
+        super(webDriver);
+        setColumnLocators(ImmutableMap.<String, String>builder()
+            .put(COLUMN_TRACKING_ID, "trackingId")
+            .put("customerName", "name")
+            .put(COLUMN_TAGS, "tags")
+            .put("address", "address")
+            .build()
+        );
+        setColumnReaders(ImmutableMap.of(COLUMN_TAGS, this::getTags));
+        setEntityClass(PendingPriorityOrder.class);
+      }
+
+      public String getTags(int rowNumber) {
+        List<WebElement> elements = findElementsByXpath(tableLocator + f(TAG_LOCATOR, rowNumber));
+        return elements.stream().map(WebElement::getText).collect(Collectors.joining(","));
+      }
     }
-
-    public static class RouteMonitoringTable extends AntTableV2<RouteMonitoringParams>
-    {
-        public static final String COLUMN_ROUTE_ID = "routeId";
-        public static final String COLUMN_PENDING_PRIORITY_PARCELS = "pendingPriorityParcels";
-        public static final String COLUMN_INVALID_FAILED_WP = "numInvalidFailed";
-
-        public RouteMonitoringTable(WebDriver webDriver)
-        {
-            super(webDriver);
-            setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put(COLUMN_ROUTE_ID, "routeId")
-                    .put("totalParcels", "totalParcels")
-                    .put("completionPercentage", "completionRate")
-                    .put("totalWaypoint", "totalWaypoints")
-                    .put(COLUMN_PENDING_PRIORITY_PARCELS, "pendingPriorityParcels")
-                    .put("pendingCount", "numPending")
-                    .put("numLateAndPending", "numLateAndPending")
-                    .put("successCount", "numSuccess")
-                    .put(COLUMN_INVALID_FAILED_WP, "numInvalidFailed")
-                    .put("numValidFailed", "numValidFailed")
-                    .put("earlyCount", "numEarlyWp")
-                    .put("lateCount", "numLateWp")
-                    .build()
-            );
-            setEntityClass(RouteMonitoringParams.class);
-        }
-    }
-
-    public static class PendingPriorityModal extends AntModal
-    {
-        @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Deliveries')]")
-        public PageElement pendingPriorityDeliveriesTitle;
-        @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Pickups')]")
-        public PageElement pendingPriorityPickupsTitle;
-
-        public PendingPriorityTable pendingPriorityPickupsTable;
-        public PendingPriorityTable pendingPriorityDeliveriesTable;
-
-        public PendingPriorityModal(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-            pendingPriorityPickupsTable = new PendingPriorityTable(webDriver);
-            pendingPriorityPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
-            pendingPriorityDeliveriesTable = new PendingPriorityTable(webDriver);
-            pendingPriorityDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
-        }
-
-        public static class PendingPriorityTable extends AntTableV2<PendingPriorityOrder>
-        {
-            private static final String TAG_LOCATOR = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tags']//div[contains(@class,'ant-tag')]";
-            public static final String COLUMN_TRACKING_ID = "trackingId";
-            public static final String COLUMN_TAGS = "tags";
-
-            public PendingPriorityTable(WebDriver webDriver)
-            {
-                super(webDriver);
-                setColumnLocators(ImmutableMap.<String, String>builder()
-                        .put(COLUMN_TRACKING_ID, "trackingId")
-                        .put("customerName", "name")
-                        .put(COLUMN_TAGS, "tags")
-                        .put("address", "address")
-                        .build()
-                );
-                setColumnReaders(ImmutableMap.of(COLUMN_TAGS, this::getTags));
-                setEntityClass(PendingPriorityOrder.class);
-            }
-
-            public String getTags(int rowNumber)
-            {
-                List<WebElement> elements = findElementsByXpath(tableLocator + f(TAG_LOCATOR, rowNumber));
-                return elements.stream().map(WebElement::getText).collect(Collectors.joining(","));
-            }
-        }
-    }
-
-    public static class InvalidFailedWpModal extends AntModal
-    {
-        @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Deliveries')]")
-        public PageElement invalidFailedDeliveriesTitle;
-        @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Pickups')]")
-        public PageElement invalidFailedPickupsTitle;
-        @FindBy(xpath = ".//div[@class='ant-card-head-title'][contains(.,'Reservations')]")
-        public PageElement invalidFailedReservationsTitle;
-
-        public InvalidFailedOrdersTable invalidFailedPickupsTable;
-        public InvalidFailedOrdersTable invalidFailedDeliveriesTable;
-        public InvalidFailedOrdersTable invalidFailedReservationsTable;
-
-        public InvalidFailedWpModal(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-            invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
-            invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
-            invalidFailedDeliveriesTable = new InvalidFailedOrdersTable(webDriver);
-            invalidFailedDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
-            invalidFailedReservationsTable = new InvalidFailedOrdersTable(webDriver);
-            invalidFailedReservationsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
-        }
-
-        public static class InvalidFailedOrdersTable extends AntTableV2<PendingPriorityOrder>
-        {
-            private static final String TAG_LOCATOR = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tags']//div[contains(@class,'ant-tag')]";
-            public static final String COLUMN_TRACKING_ID = "trackingId";
-            public static final String COLUMN_TAGS = "tags";
-
-            public InvalidFailedOrdersTable(WebDriver webDriver)
-            {
-                super(webDriver);
-                setColumnLocators(ImmutableMap.<String, String>builder()
-                        .put(COLUMN_TRACKING_ID, "trackingId")
-                        .put("customerName", "name")
-                        .put(COLUMN_TAGS, "tags")
-                        .put("address", "address")
-                        .build()
-                );
-                setColumnReaders(ImmutableMap.of(COLUMN_TAGS, this::getTags));
-                setEntityClass(PendingPriorityOrder.class);
-            }
-
-            public String getTags(int rowNumber)
-            {
-                List<WebElement> elements = findElementsByXpath(tableLocator + f(TAG_LOCATOR, rowNumber));
-                return elements.stream().map(WebElement::getText).collect(Collectors.joining(","));
-            }
-        }
-    }
+  }
 }

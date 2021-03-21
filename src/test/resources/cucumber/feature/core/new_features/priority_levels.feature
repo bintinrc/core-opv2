@@ -14,8 +14,8 @@ Feature: Priority Levels
   Scenario: Operator Update Orders Priority Level by CSV upload (uid:1528790a-a26b-4b30-a61f-13bd89798fb7)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |

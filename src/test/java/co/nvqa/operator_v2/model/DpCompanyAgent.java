@@ -1,68 +1,56 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpCompanyAgent
-{
-    private Long id;
-    private String name;
-    private String email;
-    private String contact;
-    private String unlockCode;
+public class DpCompanyAgent {
 
-    public DpCompanyAgent()
-    {
-    }
+  private Long id;
+  private String name;
+  private String email;
+  private String contact;
+  private String unlockCode;
 
-    public Long getId()
-    {
-        return id;
-    }
+  public DpCompanyAgent() {
+  }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getEmail()
-    {
-        return email;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getContact()
-    {
-        return contact;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setContact(String contact)
-    {
-        this.contact = contact;
-    }
+  public String getContact() {
+    return contact;
+  }
 
-    public String getUnlockCode()
-    {
-        return unlockCode;
-    }
+  public void setContact(String contact) {
+    this.contact = contact;
+  }
 
-    public void setUnlockCode(String unlockCode)
-    {
-        this.unlockCode = unlockCode;
-    }
+  public String getUnlockCode() {
+    return unlockCode;
+  }
+
+  public void setUnlockCode(String unlockCode) {
+    this.unlockCode = unlockCode;
+  }
 }

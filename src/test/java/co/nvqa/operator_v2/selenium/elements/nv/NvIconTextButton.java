@@ -9,26 +9,28 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class NvIconTextButton extends PageElement
-{
-    public NvIconTextButton(WebDriver webDriver, WebElement webElement)
-    {
-        super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+public class NvIconTextButton extends PageElement {
 
-    public NvIconTextButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-    {
-        super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-    }
+  public NvIconTextButton(WebDriver webDriver, WebElement webElement) {
+    super(webDriver, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    @FindBy(tagName = "button")
-    private Button button;
+  public NvIconTextButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+  }
 
-    public void click()
-    {
-        button.scrollIntoView();
-        button.click();
-    }
+  @FindBy(tagName = "button")
+  private Button button;
+
+  public void click() {
+    button.scrollIntoView();
+    button.click();
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return button.isEnabled();
+  }
 }

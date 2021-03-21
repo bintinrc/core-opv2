@@ -1,112 +1,92 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RunCheckParams
-{
-    private String deliveryType;
-    private String orderType;
-    private String timeslotType;
-    private String size;
-    private Double weight;
-    private Double insuredValue;
-    private Double codValue;
-    private String fromZone;
-    private String toZone;
+public class RunCheckParams {
 
-    public RunCheckParams()
-    {
-    }
+  private String deliveryType;
+  private String orderType;
+  private String timeslotType;
+  private String size;
+  private Double weight;
+  private Double insuredValue;
+  private Double codValue;
+  private String fromZone;
+  private String toZone;
 
-    public String getDeliveryType()
-    {
-        return deliveryType;
-    }
+  public RunCheckParams() {
+  }
 
-    public void setDeliveryType(String deliveryType)
-    {
-        this.deliveryType = deliveryType;
-    }
+  public String getDeliveryType() {
+    return deliveryType;
+  }
 
-    public String getOrderType()
-    {
-        return orderType;
-    }
+  public void setDeliveryType(String deliveryType) {
+    this.deliveryType = deliveryType;
+  }
 
-    public void setOrderType(String orderType)
-    {
-        this.orderType = orderType;
-    }
+  public String getOrderType() {
+    return orderType;
+  }
 
-    public String getTimeslotType()
-    {
-        return timeslotType;
-    }
+  public void setOrderType(String orderType) {
+    this.orderType = orderType;
+  }
 
-    public void setTimeslotType(String timeslotType)
-    {
-        this.timeslotType = timeslotType;
-    }
+  public String getTimeslotType() {
+    return timeslotType;
+  }
 
-    public String getSize()
-    {
-        return size;
-    }
+  public void setTimeslotType(String timeslotType) {
+    this.timeslotType = timeslotType;
+  }
 
-    public void setSize(String size)
-    {
-        this.size = size;
-    }
+  public String getSize() {
+    return size;
+  }
 
-    public Double getWeight()
-    {
-        return weight;
-    }
+  public void setSize(String size) {
+    this.size = size;
+  }
 
-    public void setWeight(Double weight)
-    {
-        this.weight = weight;
-    }
+  public Double getWeight() {
+    return weight;
+  }
 
-    public Double getInsuredValue()
-    {
-        return insuredValue;
-    }
+  public void setWeight(Double weight) {
+    this.weight = weight;
+  }
 
-    public void setInsuredValue(Double insuredValue)
-    {
-        this.insuredValue = insuredValue;
-    }
+  public Double getInsuredValue() {
+    return insuredValue;
+  }
 
-    public Double getCodValue()
-    {
-        return codValue;
-    }
+  public void setInsuredValue(Double insuredValue) {
+    this.insuredValue = insuredValue;
+  }
 
-    public void setCodValue(Double codValue)
-    {
-        this.codValue = codValue;
-    }
+  public Double getCodValue() {
+    return codValue;
+  }
 
-    public String getFromZone()
-    {
-        return fromZone;
-    }
+  public void setCodValue(Double codValue) {
+    this.codValue = codValue;
+  }
 
-    public void setFromZone(String fromZone)
-    {
-        this.fromZone = fromZone;
-    }
+  public String getFromZone() {
+    return fromZone;
+  }
 
-    public String getToZone()
-    {
-        return toZone;
-    }
+  public void setFromZone(String fromZone) {
+    this.fromZone = fromZone;
+  }
 
-    public void setToZone(String toZone)
-    {
-        this.toZone = toZone;
-    }
+  public String getToZone() {
+    return toZone;
+  }
+
+  public void setToZone(String toZone) {
+    this.toZone = toZone;
+  }
 }

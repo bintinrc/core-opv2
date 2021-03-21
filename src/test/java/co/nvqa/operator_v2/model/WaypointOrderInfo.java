@@ -2,128 +2,119 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
-
 import java.util.Map;
 
 /**
  * @author Sergey Mishanin
  */
-public class WaypointOrderInfo extends DataEntity<WaypointOrderInfo>
-{
-    private String trackingId;
-    private String stampId;
-    private String location;
-    private String type;
-    private String status;
-    private Long cmiCount;
-    private String routeInboundStatus;
-    private String shipperName;
-    private String reservationId;
+public class WaypointOrderInfo extends DataEntity<WaypointOrderInfo> {
 
-    public WaypointOrderInfo(){}
+  private String trackingId;
+  private String stampId;
+  private String location;
+  private String type;
+  private String status;
+  private Long cmiCount;
+  private String routeInboundStatus;
+  private String shipperName;
+  private String reservationId;
+  private String issue;
 
-    public WaypointOrderInfo(Map<String, String> data){
-        fromMap(data);
-    }
+  public WaypointOrderInfo() {
+  }
 
-    public String getTrackingId()
-    {
-        return trackingId;
-    }
+  public WaypointOrderInfo(Map<String, String> data) {
+    fromMap(data);
+  }
 
-    public void setTrackingId(String trackingId)
-    {
-        this.trackingId = trackingId;
-    }
+  public String getTrackingId() {
+    return trackingId;
+  }
 
-    public String getStampId()
-    {
-        return stampId;
-    }
+  public void setTrackingId(String trackingId) {
+    this.trackingId = trackingId;
+  }
 
-    public void setStampId(String stampId)
-    {
-        this.stampId = stampId;
-    }
+  public String getStampId() {
+    return stampId;
+  }
 
-    public String getLocation()
-    {
-        return location;
-    }
+  public void setStampId(String stampId) {
+    this.stampId = stampId;
+  }
 
-    public void setLocation(String location)
-    {
-        this.location = location;
-    }
+  public String getLocation() {
+    return location;
+  }
 
-    public void setLocation(Order order)
-    {
-        String address = order.getToAddress1() + " " + order.getToAddress2() + " " + order.getToPostcode() + " " + order.getToCountry();
-        setLocation(address.trim());
-    }
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
-    public String getType()
-    {
-        return type;
-    }
+  public void setLocation(Order order) {
+    String address =
+        order.getToAddress1() + " " + order.getToAddress2() + " " + order.getToPostcode() + " "
+            + order.getToCountry();
+    setLocation(address.trim());
+  }
 
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public String getStatus()
-    {
-        return status;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public Long getCmiCount()
-    {
-        return cmiCount;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public void setCmiCount(Long cmiCount)
-    {
-        this.cmiCount = cmiCount;
-    }
+  public Long getCmiCount() {
+    return cmiCount;
+  }
 
-    public void setCmiCount(String cmiCount)
-    {
-        setCmiCount(Long.parseLong(cmiCount));
-    }
+  public void setCmiCount(Long cmiCount) {
+    this.cmiCount = cmiCount;
+  }
 
-    public String getRouteInboundStatus()
-    {
-        return routeInboundStatus;
-    }
+  public void setCmiCount(String cmiCount) {
+    setCmiCount(Long.parseLong(cmiCount));
+  }
 
-    public void setRouteInboundStatus(String routeInboundStatus)
-    {
-        this.routeInboundStatus = routeInboundStatus;
-    }
+  public String getRouteInboundStatus() {
+    return routeInboundStatus;
+  }
 
-    public String getShipperName()
-    {
-        return shipperName;
-    }
+  public void setRouteInboundStatus(String routeInboundStatus) {
+    this.routeInboundStatus = routeInboundStatus;
+  }
 
-    public void setShipperName(String shipperName)
-    {
-        this.shipperName = shipperName;
-    }
+  public String getShipperName() {
+    return shipperName;
+  }
 
-    public String getReservationId()
-    {
-        return reservationId;
-    }
+  public void setShipperName(String shipperName) {
+    this.shipperName = shipperName;
+  }
 
-    public void setReservationId(String reservationId)
-    {
-        this.reservationId = reservationId;
-    }
+  public String getReservationId() {
+    return reservationId;
+  }
+
+  public void setReservationId(String reservationId) {
+    this.reservationId = reservationId;
+  }
+
+  public String getIssue() {
+    return issue;
+  }
+
+  public void setIssue(String issue) {
+    this.issue = issue;
+  }
 }

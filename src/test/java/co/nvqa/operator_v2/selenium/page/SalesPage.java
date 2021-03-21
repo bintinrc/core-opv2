@@ -2,155 +2,126 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.SalesPerson;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
- * @author Daniel Joi Partogi Hutapea
+ * @author Sergey Mishanin
  */
-public class SalesPage extends OperatorV2SimplePage
-{
-    @FindBy(name = "container.sales-person.create-by-csv-upload")
-    public NvIconTextButton createByCsvUpload;
+public class SalesPage extends OperatorV2SimplePage {
 
-    @FindBy(css = "md-dialog")
-    public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
+  @FindBy(name = "container.sales-person.create-by-csv-upload")
+  public NvIconTextButton createByCsvUpload;
 
-    private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
-    private static final String SAMPLE_CSV_FILENAME = "sample-data-sales-person-upload.csv";
+  @FindBy(css = "md-dialog")
+  public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
 
-    private static final String COLUMN_CLASS_DATA_SALES_CODE = "code";
-    private static final String COLUMN_CLASS_DATA_SALES_NAME = "name";
-    private static final String COLUMN_CLASS_FILTER_SALES_CODE = "code";
-    private static final String COLUMN_CLASS_FILTER_SALES_NAME = "name";
+  @FindBy(css = "md-dialog")
+  public EditSalesPersonDialog editSalesPersonDialog;
 
-    public SalesPage(WebDriver webDriver)
-    {
-        super(webDriver);
+  public SalesPersonsTable salesPersonsTable;
+
+  private static final String SAMPLE_CSV_FILENAME = "sample-data-sales-person-upload.csv";
+
+  public SalesPage(WebDriver webDriver) {
+    super(webDriver);
+    salesPersonsTable = new SalesPersonsTable(webDriver);
+  }
+
+  public void downloadSampleCsvFile() {
+    createByCsvUpload.click();
+    findOrdersWithCsvDialog.waitUntilVisible();
+    findOrdersWithCsvDialog.downloadTemplate.click();
+    findOrdersWithCsvDialog.cancel.click();
+  }
+
+  public void verifySampleCsvFileDownloadedSuccessfully() {
+    verifyFileDownloadedSuccessfully(SAMPLE_CSV_FILENAME, "NAME-A,NA\nNAME-B,NB\nNAME-C,NC");
+  }
+
+  public void uploadCsvSales(List<SalesPerson> listOfSalesPerson) {
+    createByCsvUpload.click();
+    findOrdersWithCsvDialog.waitUntilVisible();
+
+    String csvContents = listOfSalesPerson.stream().map(it -> it.getName() + "," + it.getCode())
+        .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    File csvFile = createFile(
+        f("sample-data-sales-person-upload_%s.csv", generateDateUniqueString()), csvContents);
+
+    findOrdersWithCsvDialog.selectFile.setValue(csvFile);
+    findOrdersWithCsvDialog.fileName.waitUntilVisible();
+    assertEquals("Uploaded file name", csvFile.getName(),
+        findOrdersWithCsvDialog.fileName.getText());
+    findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
+  }
+
+  public static class FindOrdersWithCsvDialog extends MdDialog {
+
+    public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
 
-    public void downloadSampleCsvFile()
-    {
-        createByCsvUpload.click();
-        findOrdersWithCsvDialog.waitUntilVisible();
-        findOrdersWithCsvDialog.downloadTemplate.click();
-        findOrdersWithCsvDialog.cancel.click();
+    @FindBy(css = "div[translate='container.sales-person.download-template'] a")
+    public PageElement downloadTemplate;
+
+    @FindBy(css = "[label='Select File']")
+    public NvButtonFilePicker selectFile;
+
+    @FindBy(css = "h5")
+    public PageElement fileName;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.upload")
+    public NvApiTextButton upload;
+
+    @FindBy(xpath = "//div[@ng-repeat='error in ctrl.payload.errors track by $index']")
+    public List<PageElement> errorRecords;
+  }
+
+  public static class EditSalesPersonDialog extends MdDialog {
+
+    public EditSalesPersonDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
 
-    public void verifySampleCsvFileDownloadedSuccessfully()
-    {
-        verifyFileDownloadedSuccessfully(SAMPLE_CSV_FILENAME, "NAME-A,NA\nNAME-B,NB\nNAME-C,NC");
+    @FindBy(id = "commons.name")
+    public TextBox name;
+
+    @FindBy(id = "commons.code")
+    public TextBox code;
+
+    @FindBy(name = "commons.save")
+    public NvApiTextButton save;
+  }
+
+  public static class SalesPersonsTable extends MdVirtualRepeatTable<SalesPerson> {
+
+    public static final String COLUMN_CODE = "code";
+    public static final String COLUMN_NAME = "name";
+    public static final String ACTION_EDIT = "edit";
+
+    public SalesPersonsTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(COLUMN_CODE, "code")
+          .put(COLUMN_NAME, "name")
+          .build()
+      );
+      setEntityClass(SalesPerson.class);
+      setActionButtonsLocators(
+          ImmutableMap.of(ACTION_EDIT, "container.sales-person.edit-sales-person"));
     }
-
-    public void uploadCsvSales(List<SalesPerson> listOfSalesPerson)
-    {
-        clickNvIconTextButtonByName("container.sales-person.create-by-csv-upload");
-        waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
-
-        String csvContents = listOfSalesPerson.stream().map(it -> it.getName() + "," + it.getCode()).collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
-        File csvFile = createFile(f("sample-data-sales-person-upload_%s.csv", generateDateUniqueString()), csvContents);
-
-        sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
-        waitUntilVisibilityOfElementLocated(f("//h5[contains(text(), '%s')]", csvFile.getName()));
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
-
-        waitUntilInvisibilityOfToast(f("%d of %<d Sales Person created successfully", listOfSalesPerson.size()));
-    }
-
-    public void verifySalesPersonCreatedSuccessfully(List<SalesPerson> listOfSalesPerson)
-    {
-        for (SalesPerson salesPerson : listOfSalesPerson)
-        {
-            searchTableByCode(salesPerson.getCode());
-            boolean isTableEmpty = isTableEmpty();
-            assertFalse("Table is empty.", isTableEmpty);
-            String actualCode = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_CODE);
-            String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_NAME);
-            assertEquals("Sales Code", salesPerson.getCode(), actualCode);
-            assertEquals("Sales Name", salesPerson.getName(), actualName);
-        }
-    }
-
-    public void verifiesAllFiltersWorksFine(List<SalesPerson> listOfSalesPerson)
-    {
-        for (SalesPerson salesPerson : listOfSalesPerson)
-        {
-            String[] filters = {"code", "name"};
-
-            for (String filter : filters)
-            {
-                if ("code".equals(filter))
-                {
-                    searchTableByCode(salesPerson.getCode());
-                } else if ("name".equals(filter))
-                {
-                    searchTableByName(salesPerson.getName());
-                }
-
-                boolean isTableEmpty = isTableEmpty();
-                assertFalse("Table is empty.", isTableEmpty);
-                String actualCode = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_CODE);
-                String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_NAME);
-                assertEquals("Sales Code", salesPerson.getCode(), actualCode);
-                assertEquals("Sales Name", salesPerson.getName(), actualName);
-
-                if ("code".equals(filter))
-                {
-                    clearSearchTableCustom1(COLUMN_CLASS_FILTER_SALES_CODE);
-                } else if ("name".equals(filter))
-                {
-                    clearSearchTableCustom1(COLUMN_CLASS_FILTER_SALES_NAME);
-                }
-            }
-        }
-    }
-
-    public void searchTableByCode(String salesPersonCode)
-    {
-        searchTableCustom1(COLUMN_CLASS_FILTER_SALES_CODE, salesPersonCode);
-    }
-
-    public void searchTableByName(String salesPersonName)
-    {
-        searchTableCustom1(COLUMN_CLASS_FILTER_SALES_NAME, salesPersonName);
-    }
-
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-    }
-
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-    }
-
-    public static class FindOrdersWithCsvDialog extends MdDialog
-    {
-        public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-
-        @FindBy(css = "div[translate='container.sales-person.download-template'] a")
-        public PageElement downloadTemplate;
-
-        @FindBy(css = "[label='Select File']")
-        public NvButtonFilePicker selectFile;
-
-        @FindBy(name = "commons.cancel")
-        public NvIconTextButton cancel;
-
-        @FindBy(name = "commons.upload")
-        public NvApiTextButton upload;
-    }
+  }
 }

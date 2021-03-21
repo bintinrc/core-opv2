@@ -5,98 +5,81 @@ import co.nvqa.commons.model.DataEntity;
 /**
  * @author Kateryna Skakunova
  */
-public class ReservationRejectionEntity extends DataEntity<ReservationRejectionEntity>
-{
-    private String timeRejected;
-    private String pickupInfo;
-    private String priorityLevel;
-    private String timeslot;
-    private String reasonForRejection;
-    private String driverInfo;
-    private String route;
-    private String hub;
+public class ReservationRejectionEntity extends DataEntity<ReservationRejectionEntity> {
 
-    public ReservationRejectionEntity()
-    {
-    }
+  private String timeRejected;
+  private String pickupInfo;
+  private String priorityLevel;
+  private String timeslot;
+  private String reasonForRejection;
+  private String driverInfo;
+  private String route;
+  private String hub;
 
-    public String getTimeRejected()
-    {
-        return timeRejected;
-    }
+  public ReservationRejectionEntity() {
+  }
 
-    public void setTimeRejected(String timeRejected)
-    {
-        this.timeRejected = timeRejected;
-    }
+  public String getTimeRejected() {
+    return timeRejected;
+  }
 
-    public String getPickupInfo()
-    {
-        return pickupInfo;
-    }
+  public void setTimeRejected(String timeRejected) {
+    this.timeRejected = timeRejected;
+  }
 
-    public void setPickupInfo(String pickupInfo)
-    {
-        this.pickupInfo = pickupInfo;
-    }
+  public String getPickupInfo() {
+    return pickupInfo;
+  }
 
-    public String getPriorityLevel()
-    {
-        return priorityLevel;
-    }
+  public void setPickupInfo(String pickupInfo) {
+    this.pickupInfo = pickupInfo;
+  }
 
-    public void setPriorityLevel(String priorityLevel)
-    {
-        this.priorityLevel = priorityLevel;
-    }
+  public String getPriorityLevel() {
+    return priorityLevel;
+  }
 
-    public String getTimeslot()
-    {
-        return timeslot;
-    }
+  public void setPriorityLevel(String priorityLevel) {
+    this.priorityLevel = priorityLevel;
+  }
 
-    public void setTimeslot(String timeslot)
-    {
-        this.timeslot = timeslot;
-    }
+  public String getTimeslot() {
+    return timeslot;
+  }
 
-    public String getReasonForRejection()
-    {
-        return reasonForRejection;
-    }
+  public void setTimeslot(String timeslot) {
+    this.timeslot = timeslot;
+  }
 
-    public void setReasonForRejection(String reasonForRejection)
-    {
-        this.reasonForRejection = reasonForRejection;
-    }
+  public String getReasonForRejection() {
+    return reasonForRejection;
+  }
 
-    public String getDriverInfo()
-    {
-        return driverInfo;
-    }
+  public void setReasonForRejection(String reasonForRejection) {
+    this.reasonForRejection = reasonForRejection;
+  }
 
-    public void setDriverInfo(String driverInfo)
-    {
-        this.driverInfo = driverInfo;
-    }
+  public String getDriverInfo() {
+    return driverInfo;
+  }
 
-    public String getRoute()
-    {
-        return route;
-    }
+  public void setDriverInfo(String driverInfo) {
+    this.driverInfo = driverInfo;
+  }
 
-    public void setRoute(String route)
-    {
-        this.route = route;
-    }
+  public String getRoute() {
+    return route;
+  }
 
-    public String getHub()
-    {
-        return hub;
-    }
+  public void setRoute(String route) {
+    this.route = route;
+  }
 
-    public void setHub(String hub)
-    {
-        this.hub = hub;
-    }
+  public String getHub() {
+    return hub;
+  }
+
+  public void setHub(String hub) {
+    this.hub = hub;
+  }
 }

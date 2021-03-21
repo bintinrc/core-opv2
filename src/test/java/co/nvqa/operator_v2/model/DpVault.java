@@ -1,112 +1,92 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpVault
-{
-    private String name;
-    private Long appVersion;
-    private String dpName;
-    private String address1;
-    private String address2;
-    private String city;
-    private String country;
-    private Double latitude;
-    private Double longitude;
+public class DpVault {
 
-    public DpVault()
-    {
-    }
+  private String name;
+  private Long appVersion;
+  private String dpName;
+  private String address1;
+  private String address2;
+  private String city;
+  private String country;
+  private Double latitude;
+  private Double longitude;
 
-    public String getName()
-    {
-        return name;
-    }
+  public DpVault() {
+  }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Long getAppVersion()
-    {
-        return appVersion;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setAppVersion(Long appVersion)
-    {
-        this.appVersion = appVersion;
-    }
+  public Long getAppVersion() {
+    return appVersion;
+  }
 
-    public String getDpName()
-    {
-        return dpName;
-    }
+  public void setAppVersion(Long appVersion) {
+    this.appVersion = appVersion;
+  }
 
-    public void setDpName(String dpName)
-    {
-        this.dpName = dpName;
-    }
+  public String getDpName() {
+    return dpName;
+  }
 
-    public String getAddress1()
-    {
-        return address1;
-    }
+  public void setDpName(String dpName) {
+    this.dpName = dpName;
+  }
 
-    public void setAddress1(String address1)
-    {
-        this.address1 = address1;
-    }
+  public String getAddress1() {
+    return address1;
+  }
 
-    public String getAddress2()
-    {
-        return address2;
-    }
+  public void setAddress1(String address1) {
+    this.address1 = address1;
+  }
 
-    public void setAddress2(String address2)
-    {
-        this.address2 = address2;
-    }
+  public String getAddress2() {
+    return address2;
+  }
 
-    public String getCity()
-    {
-        return city;
-    }
+  public void setAddress2(String address2) {
+    this.address2 = address2;
+  }
 
-    public void setCity(String city)
-    {
-        this.city = city;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public String getCountry()
-    {
-        return country;
-    }
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    public void setCountry(String country)
-    {
-        this.country = country;
-    }
+  public String getCountry() {
+    return country;
+  }
 
-    public Double getLatitude()
-    {
-        return latitude;
-    }
+  public void setCountry(String country) {
+    this.country = country;
+  }
 
-    public void setLatitude(Double latitude)
-    {
-        this.latitude = latitude;
-    }
+  public Double getLatitude() {
+    return latitude;
+  }
 
-    public Double getLongitude()
-    {
-        return longitude;
-    }
+  public void setLatitude(Double latitude) {
+    this.latitude = latitude;
+  }
 
-    public void setLongitude(Double longitude)
-    {
-        this.longitude = longitude;
-    }
+  public Double getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(Double longitude) {
+    this.longitude = longitude;
+  }
 }

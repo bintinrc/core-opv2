@@ -1,5 +1,5 @@
-@ShipmentGlobalInbound @InterHub @Shipment @MiddleMile
-Feature: Shipment Global Inbound
+@OperatorV2 @MiddleMile @Hub @Inbounding @GlobalInbound
+Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -24,14 +24,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | hiptest-uid                              |
@@ -58,7 +62,7 @@ Feature: Shipment Global Inbound
       | destinationHub | <message>             |
       | rackInfo       | sync_problem RECOVERY |
       | color          | #e86161               |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note      | hiptest-uid                              | status    | message   |
@@ -76,8 +80,9 @@ Feature: Shipment Global Inbound
       | hubName    | {hub-name-2}        |
       | trackingId | {AUTOMATIONTESTING} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo | INVALID |
-      | color    | #f45050 |
+      | destinationHub | INVALID               |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Original Size (uid:7dd3c726-fb0d-4acd-98d4-2d67b03dee47)
@@ -98,14 +103,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -128,14 +137,18 @@ Feature: Shipment Global Inbound
       | overrideSize | L                                  |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -159,22 +172,30 @@ Feature: Shipment Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId     | GET_FROM_CREATED_ORDER             |
-      | overrideWeight | 7                                  |
+      | overrideWeight | 6                                  |
     Then API Operator verify order info after Global Inbound
     When API Operator save current order cost
     When API Operator recalculate order price
     When API Operator verify the order price is updated
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    When Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 1 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -203,14 +224,18 @@ Feature: Shipment Global Inbound
       | overrideDimLength | 5                                  |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -241,14 +266,18 @@ Feature: Shipment Global Inbound
       | overrideDimLength | 5                                  |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
       | Note         | orderType | hiptest-uid                              |
@@ -268,8 +297,7 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator change Priority Level to "<priorityLevel>" on Edit Order page
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
@@ -281,10 +309,7 @@ Feature: Shipment Global Inbound
     Then API Operator verify order info after Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
@@ -310,7 +335,7 @@ Feature: Shipment Global Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -324,14 +349,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -351,7 +380,7 @@ Feature: Shipment Global Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -368,9 +397,12 @@ Feature: Shipment Global Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | GET_FROM_CREATED_ORDER             |
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -390,7 +422,7 @@ Feature: Shipment Global Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+    Then API Operator verify order info after delivery "DELIVERY_FAIL"
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -400,12 +432,12 @@ Feature: Shipment Global Inbound
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
-      | routeDate       | {gradle-next-2-day-yyyy-MM-dd} |
-      | routeTags       | [{route-tag-name}]             |
-      | zoneName        | {zone-name}                    |
-      | hubName         | {hub-name}                     |
-      | ninjaDriverName | {ninja-driver-name}            |
-      | vehicleName     | {vehicle-name}                 |
+      | date            | {gradle-next-2-day-yyyy-MM-dd} |
+      | tags            | {route-tag-name}               |
+      | zone            | {zone-name}                    |
+      | hub             | {hub-name}                     |
+      | driverName      | {ninja-driver-name}            |
+      | vehicle         | {vehicle-name}                 |
     When API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
@@ -413,9 +445,12 @@ Feature: Shipment Global Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | GET_FROM_CREATED_ORDER             |
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -449,14 +484,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -499,15 +538,10 @@ Feature: Shipment Global Inbound
       | hubId      | {hub-id}               |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -521,9 +555,10 @@ Feature: Shipment Global Inbound
       | shipperName     | {shipper-v4-name} |
       | status          | Pending           |
       | granular status | Pending Pickup    |
-    And Operator searches and selects orders created on Add Tags to Order page
+    And Operator searches and selects orders created first row on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1 |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify the tags shown on Edit Order page
       | OPV2AUTO1 |
     And DB Operator verify order_events record for the created order:
@@ -539,14 +574,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -568,14 +607,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -601,9 +644,12 @@ Feature: Shipment Global Inbound
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -625,14 +671,18 @@ Feature: Shipment Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {KEY_CREATED_ORDER.destinationHub} on Shipment Management page
+    And Operator filter with following data on Shipment Management Page
+      | shipmentStatus | completed                          |
+      | lastInboundHub | {KEY_CREATED_ORDER.destinationHub} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -658,9 +708,12 @@ Feature: Shipment Global Inbound
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     And API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -681,9 +734,12 @@ Feature: Shipment Global Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
@@ -704,9 +760,12 @@ Feature: Shipment Global Inbound
       | hubName    | {hub-name}             |
       | trackingId | GET_FROM_CREATED_ORDER |
     Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
-    And DB Operator verify the last order_events record for the created order:
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | TRANSIT                                       |
+      | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
+      | deliveryStatus | PENDING                                       |
+    And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
 
   @KillBrowser @ShouldAlwaysRun

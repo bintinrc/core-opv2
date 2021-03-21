@@ -1,5 +1,5 @@
-@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @HubInbound @WithoutTrip
-Feature: Shipment Inbound Scanning
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @HubInbound @WithoutTrip
+Feature: Shipment Hub Inbound Without Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -58,6 +58,7 @@ Feature: Shipment Inbound Scanning
   Scenario: Hub Inbound Completed Shipment In Destination Hub (uid:c902a96e-576e-4911-b3c2-651d3515efa7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And Operator refresh page
     When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
@@ -195,82 +196,6 @@ Feature: Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB with Cancelled alert
 
   @DeleteShipment
-  Scenario: Hub Inbound Pending Shipment In Other Country (uid:9e17df8b-32ee-4ef9-8e3d-086c99c5330f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When Operator change the country to "Indonesia"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
-    When Operator change the country to "Singapore"
-
-  @DeleteShipment @ForceSuccessOrder
-  Scenario: Hub Inbound Closed Shipment In Other Country (uid:82e16097-1c55-4c6c-b6c9-443f6da987d0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {hub-name}                                                          |
-      | destHubName | {hub-name-2}                                                        |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
-    When Operator scan the created order to shipment in hub {hub-name}
-    And Operator close the shipment which has been created
-    When Operator change the country to "Indonesia"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
-    When Operator change the country to "Singapore"
-
-  @DeleteShipment
-  Scenario: Hub Inbound Transit Shipment In Other Country (uid:55af1d76-d503-42f0-9f8d-1ee26c6a90b1)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
-    When Operator change the country to "Indonesia"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
-    When Operator change the country to "Singapore"
-
-  @DeleteShipment
-  Scenario: Hub Inbound Completed Shipment In Other Country (uid:0d696345-fb79-43bd-9ea7-db003977e066)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Completed"
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Completed |
-    When Operator change the country to "Indonesia"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
-    When Operator change the country to "Singapore"
-
-  @DeleteShipment
-  Scenario: Hub Inbound Cancelled Shipment In Other Country (uid:850c0816-c8de-4e1d-888f-690fcc87e1e1)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Cancelled"
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Cancelled |
-    When Operator change the country to "Indonesia"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
-    When Operator change the country to "Singapore"
-
-  @DeleteShipment
   Scenario: Hub Inbound Pending Shipment In Destination Hub (uid:69f49406-b51b-4629-bf0e-5291cff60d28)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -306,8 +231,8 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
-    When Operator scan the created order to shipment in hub {hub-name}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Closed on Shipment Management page
@@ -334,8 +259,8 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
-    When Operator scan the created order to shipment in hub {hub-name}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Closed on Shipment Management page
@@ -417,8 +342,8 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
-    When Operator scan the created order to shipment in hub {hub-name}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -450,8 +375,8 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
-    When Operator scan the created order to shipment in hub {hub-name}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -460,6 +385,115 @@ Feature: Shipment Inbound Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
+  Scenario: Hub Inbound Pending Shipment In Other Country (uid:9e17df8b-32ee-4ef9-8e3d-086c99c5330f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Singapore"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator change the country to "Singapore"
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Hub Inbound Closed Shipment In Other Country (uid:82e16097-1c55-4c6c-b6c9-443f6da987d0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator change the country to "Singapore"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
+    And Operator close the shipment which has been created
+    When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator change the country to "Singapore"
+
+  @DeleteShipment
+  Scenario: Hub Inbound Transit Shipment In Other Country (uid:55af1d76-d503-42f0-9f8d-1ee26c6a90b1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Singapore"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
+    When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator change the country to "Singapore"
+
+  @DeleteShipment
+  Scenario: Hub Inbound Completed Shipment In Other Country (uid:0d696345-fb79-43bd-9ea7-db003977e066)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When API Operator change the status of the shipment into "Completed"
+    When Operator change the country to "Singapore"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Completed |
+    When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator change the country to "Singapore"
+
+  @DeleteShipment
+  Scenario: Hub Inbound Cancelled Shipment In Other Country (uid:850c0816-c8de-4e1d-888f-690fcc87e1e1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When API Operator change the status of the shipment into "Cancelled"
+    When Operator change the country to "Singapore"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
+    When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator change the country to "Singapore"
+
+  @DeleteShipment
+  Scenario: Hub Inbound Transit MAWB Not In Destination Hub (uid:d2456b1b-4cfd-4c68-9490-52743be767c1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | origHubName | {hub-name}                                                           |
+      | destHubName | {hub-name-2}                                                         |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page

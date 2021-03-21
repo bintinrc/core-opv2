@@ -2,147 +2,123 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.Map;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class DpPartner extends DataEntity<DpPartner>
-{
-    private Long id;
-    private Long dpmsPartnerId;
-    private String name;
-    private String pocName;
-    private String pocTel;
-    private String pocEmail;
-    private String restrictions;
+public class DpPartner extends DataEntity<DpPartner> {
 
-    public Long getId()
-    {
-        return id;
-    }
+  private Long id;
+  private Long dpmsPartnerId;
+  private String name;
+  private String pocName;
+  private String pocTel;
+  private String pocEmail;
+  private String restrictions;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(String id)
-    {
-        setId(Long.parseLong(id));
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Long getDpmsPartnerId()
-    {
-        return dpmsPartnerId;
-    }
+  public void setId(String id) {
+    setId(Long.parseLong(id));
+  }
 
-    public void setDpmsPartnerId(Long dpmsPartnerId)
-    {
-        this.dpmsPartnerId = dpmsPartnerId;
-    }
+  public Long getDpmsPartnerId() {
+    return dpmsPartnerId;
+  }
 
-    public void setDpmsPartnerId(String dpmsPartnerId)
-    {
-        setDpmsPartnerId(Long.parseLong(dpmsPartnerId));
-    }
+  public void setDpmsPartnerId(Long dpmsPartnerId) {
+    this.dpmsPartnerId = dpmsPartnerId;
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public void setDpmsPartnerId(String dpmsPartnerId) {
+    setDpmsPartnerId(Long.parseLong(dpmsPartnerId));
+  }
 
-    public void setName(String name)
-    {
-        if("GENERATED".equalsIgnoreCase(name))
-        {
-            name = "DP-Partner-" + TestUtils.generateDateUniqueString();
-        }
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getPocName()
-    {
-        return pocName;
+  public void setName(String name) {
+    if ("GENERATED".equalsIgnoreCase(name)) {
+      name = "DP-Partner-" + TestUtils.generateDateUniqueString();
     }
+    this.name = name;
+  }
 
-    public void setPocName(String pocName)
-    {
-        this.pocName = pocName;
-    }
+  public String getPocName() {
+    return pocName;
+  }
 
-    public String getPocTel()
-    {
-        return pocTel;
-    }
+  public void setPocName(String pocName) {
+    this.pocName = pocName;
+  }
 
-    public void setPocTel(String pocTel)
-    {
-        if("GENERATED".equalsIgnoreCase(pocTel))
-        {
-            pocTel = TestUtils.generatePhoneNumber();
-        }
-        this.pocTel = pocTel;
-    }
+  public String getPocTel() {
+    return pocTel;
+  }
 
-    public String getPocEmail()
-    {
-        return pocEmail;
+  public void setPocTel(String pocTel) {
+    if ("GENERATED".equalsIgnoreCase(pocTel)) {
+      pocTel = TestUtils.generatePhoneNumber();
     }
+    this.pocTel = pocTel;
+  }
 
-    public void setPocEmail(String pocEmail)
-    {
-        if("GENERATED".equalsIgnoreCase(pocEmail))
-        {
-            pocEmail = TestUtils.generateDateUniqueString() + "@ninjavan.co";
-        }
-        this.pocEmail = pocEmail;
-    }
+  public String getPocEmail() {
+    return pocEmail;
+  }
 
-    public String getRestrictions()
-    {
-        return restrictions;
+  public void setPocEmail(String pocEmail) {
+    if ("GENERATED".equalsIgnoreCase(pocEmail)) {
+      pocEmail = TestUtils.generateDateUniqueString() + "@ninjavan.co";
     }
+    this.pocEmail = pocEmail;
+  }
 
-    public void setRestrictions(String restrictions)
-    {
-        this.restrictions = restrictions;
-    }
+  public String getRestrictions() {
+    return restrictions;
+  }
 
-    public DpPartner()
-    {
-    }
+  public void setRestrictions(String restrictions) {
+    this.restrictions = restrictions;
+  }
 
-    public DpPartner(Map<String, ?> dataMap)
-    {
-        fromMap(dataMap);
-    }
+  public DpPartner() {
+  }
 
-    @Override
-    public void fromCsvLine(String csvLine)
-    {
-        String[] values = splitCsvLine(csvLine);
-        setId(getValueIfIndexExists(values, 0));
-        setName(getValueIfIndexExists(values, 1));
-        setPocName(getValueIfIndexExists(values, 2));
-        setPocTel(getValueIfIndexExists(values, 3));
-        setPocEmail(getValueIfIndexExists(values, 4));
-        setRestrictions(getValueIfIndexExists(values, 5));
-    }
+  public DpPartner(Map<String, ?> dataMap) {
+    fromMap(dataMap);
+  }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("name", name)
-                .append("pocName", pocName)
-                .append("pocTel", pocTel)
-                .append("pocEmail", pocEmail)
-                .append("restrictions", restrictions)
-                .toString();
-    }
+  @Override
+  public void fromCsvLine(String csvLine) {
+    String[] values = splitCsvLine(csvLine);
+    setId(getValueIfIndexExists(values, 0));
+    setName(getValueIfIndexExists(values, 1));
+    setPocName(getValueIfIndexExists(values, 2));
+    setPocTel(getValueIfIndexExists(values, 3));
+    setPocEmail(getValueIfIndexExists(values, 4));
+    setRestrictions(getValueIfIndexExists(values, 5));
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("name", name)
+        .append("pocName", pocName)
+        .append("pocTel", pocTel)
+        .append("pocEmail", pocEmail)
+        .append("restrictions", restrictions)
+        .toString();
+  }
 }

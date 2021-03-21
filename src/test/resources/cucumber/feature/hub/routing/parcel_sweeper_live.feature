@@ -1,4 +1,4 @@
-@ParcelSweeperLive @ShipmentInbound @InterHub @Shipment @MiddleMile
+@OperatorV2 @MiddleMile @Hub @Routing @ParcelSweeperLive
 Feature: Parcel Sweeper Live
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -161,8 +161,9 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}        |
+      | trackingId | CREATED           |
+      | task       | SORTHUBTESTFROMQA |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | NOT ROUTED TODAY       |
@@ -175,7 +176,7 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
     And DB Operator verify the order_events record exists for the created order with type:
-      | 27    |
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |
@@ -218,14 +219,14 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #e86161            |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
+      | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
     And DB Operator verify the order_events record exists for the created order with type:
-      | 27    |
+      | 27 |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN   |
-      | hubName   | {hub-name-2}          |
-      | hubId     | {hub-id-2}            |
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name-2}        |
+      | hubId     | {hub-id-2}          |
     And Operator verify order status is "Transit" on Edit Order page
 
   @DeleteShipment @ForceSuccessOrder
@@ -262,7 +263,7 @@ Feature: Parcel Sweeper Live
   Scenario Outline: Sweep Parcel In Shipment with Priority Level (<hiptest-uid>) - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
@@ -271,8 +272,7 @@ Feature: Parcel Sweeper Live
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator change Priority Level to "<priorityLevel>" on Edit Order page
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
@@ -293,21 +293,20 @@ Feature: Parcel Sweeper Live
       | driverName |         |
       | color      | #55a1e8 |
     Then Operator verifies priority level dialog box shows correct priority level info using data below:
-      | priorityLevel           | <priorityLevel>             |
-      | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
+      | priorityLevel           | <priorityLevel>           |
+      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED               |
-      | hubId      | {KEY_DESTINATION_HUB} |
+      | trackingId | CREATED                              |
+      | hubId      | {KEY_DESTINATION_HUB_PARCEL_SWEEPER} |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN                |
-      | hubName   | {KEY_CREATED_ORDER.destinationHub} |
-      | hubId     | {KEY_DESTINATION_HUB}              |
+      | eventName | PARCEL ROUTING SCAN                  |
+      | hubName   | {KEY_CREATED_ORDER.destinationHub}   |
+      | hubId     | {KEY_DESTINATION_HUB_PARCEL_SWEEPER} |
     And Operator verify order status is "Transit" on Edit Order page
-
     Examples:
       | scenarioName    | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
       | Priority 1      | uid:79172574-1375-48fb-ad29-d2212e585d15 | 1             | #f8cf5c                 |

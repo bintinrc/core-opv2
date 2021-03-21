@@ -6,75 +6,63 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class DpSteps extends AbstractSteps
-{
-    private DpPage dpPage;
+public class DpSteps extends AbstractSteps {
 
-    public DpSteps()
-    {
-    }
+  private DpPage dpPage;
 
-    @Override
-    public void init()
-    {
-        dpPage = new DpPage(getWebDriver());
-    }
+  public DpSteps() {
+  }
 
-    @When("^download button in ([^\"]*) is clicked$")
-    public void downloadFile(String type)
-    {
-        dpPage.downloadFile(type);
-    }
+  @Override
+  public void init() {
+    dpPage = new DpPage(getWebDriver());
+  }
 
-    @Then("^file ([^\"]*) should exist$")
-    public void verifyDownloadedFile(String type)
-    {
-        dpPage.verifyDownloadedFile(type);
-    }
+  @When("^download button in ([^\"]*) is clicked$")
+  public void downloadFile(String type) {
+    dpPage.downloadFile(type);
+  }
 
-    @When("^searching for ([^\"]*)$")
-    public void search(String type)
-    {
-        dpPage.search(type);
-    }
+  @Then("^file ([^\"]*) should exist$")
+  public void verifyDownloadedFile(String type) {
+    dpPage.verifyDownloadedFile(type);
+  }
 
-    @When("^add ([^\"]*) button is clicked$")
-    public void clickAddBtn(String type)
-    {
-        dpPage.clickAddBtn(type);
-    }
+  @When("^searching for ([^\"]*)$")
+  public void search(String type) {
+    dpPage.search(type);
+  }
 
-    @When("^enter default value of ([^\"]*)$")
-    public void enterDefaultValue(String type)
-    {
-        dpPage.enterDefaultValue(type);
-    }
+  @When("^add ([^\"]*) button is clicked$")
+  public void clickAddBtn(String type) {
+    dpPage.clickAddBtn(type);
+  }
 
-    @Then("^verify result ([^\"]*)$")
-    public void verifyResult(String type)
-    {
-        dpPage.verifyResult(type);
-    }
+  @When("^enter default value of ([^\"]*)$")
+  public void enterDefaultValue(String type) {
+    dpPage.enterDefaultValue(type);
+  }
 
-    @When("^edit ([^\"]*) button is clicked$")
-    public void clickEditBtn(String type)
-    {
-        dpPage.clickEditBtn(type);
-    }
+  @Then("^verify result ([^\"]*)$")
+  public void verifyResult(String type) {
+    dpPage.verifyResult(type);
+  }
 
-    @When("^view ([^\"]*) button is clicked$")
-    public void clickViewBtn(String type)
-    {
-        dpPage.clickViewBtn(type);
-    }
+  @When("^edit ([^\"]*) button is clicked$")
+  public void clickEditBtn(String type) {
+    dpPage.clickEditBtn(type);
+  }
 
-    @Then("^verify page ([^\"]*)$")
-    public void verifyPage(String type)
-    {
-        dpPage.verifyPage(type);
-    }
+  @When("^view ([^\"]*) button is clicked$")
+  public void clickViewBtn(String type) {
+    dpPage.clickViewBtn(type);
+  }
+
+  @Then("^verify page ([^\"]*)$")
+  public void verifyPage(String type) {
+    dpPage.verifyPage(type);
+  }
 }

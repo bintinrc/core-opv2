@@ -1,8 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper_support.PricedOrder;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -10,7 +11,6 @@ import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,245 +18,251 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class PricingScriptsV2Steps extends AbstractSteps
-{
-    private PricingScriptsV2Page pricingScriptsV2Page;
+public class PricingScriptsV2Steps extends AbstractSteps {
 
-    public PricingScriptsV2Steps()
-    {
-    }
+  private PricingScriptsV2Page pricingScriptsV2Page;
 
-    @Override
-    public void init()
-    {
-        pricingScriptsV2Page = new PricingScriptsV2Page(getWebDriver());
-    }
+  public PricingScriptsV2Steps() {
+  }
 
-    @When("^Operator create new Draft Script using data below:$")
-    public void operatorCreateNewDraftScript(Map<String,String> mapOfData)
-    {
-        String source = mapOfData.get("source");
-        String activeParameters = mapOfData.get("activeParameters");
-        String scenarioName = getScenarioManager().getCurrentScenario().getName();
-        String dateUniqueString = generateDateUniqueString();
+  @Override
+  public void init() {
+    pricingScriptsV2Page = new PricingScriptsV2Page(getWebDriver());
+  }
 
-        List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim).collect(Collectors.toList());
+  @When("^Operator create new Draft Script using data below:$")
+  public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
+    String source = mapOfData.get("source");
+    String activeParameters = mapOfData.get("activeParameters");
+    String scenarioName = getScenarioManager().getCurrentScenario().getName();
+    String dateUniqueString = generateDateUniqueString();
 
-        String createdDate = CREATED_DATE_SDF.format(new Date());
-        String name = "Dummy Script #"+dateUniqueString;
-        String description = f("This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".", createdDate, scenarioName);
+    List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim)
+        .collect(Collectors.toList());
 
-        Script script = new Script();
-        script.setName(name);
-        script.setDescription(description);
-        script.setSource(source);
-        script.setActiveParameters(listOfActiveParameters);
-        pricingScriptsV2Page.createDraft(script);
+    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String name = "Dummy Script #" + dateUniqueString;
+    String description = f(
+        "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
+        createdDate, scenarioName);
+    NvLogger.infof("Created Pricing Script Name :" + name);
 
-        put(KEY_CREATED_PRICING_SCRIPT, script);
-    }
+    Script script = new Script();
+    script.setName(name);
+    script.setDescription(description);
+    script.setSource(source);
+    script.setActiveParameters(listOfActiveParameters);
+    pricingScriptsV2Page.createDraft(script);
 
-    @Then("^Operator verify the new Script is created successfully on Drafts$")
-    public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
 
-        pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
-    }
+  @Then("^Operator verify the new Script is created successfully on Drafts$")
+  public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
-    @When("^Operator delete Draft Script$")
-    public void operatorDeleteDraftScript()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
-        pricingScriptsV2Page.deleteDraftScript(script);
-    }
+    pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
+  }
 
-    @Then("^Operator verify the Draft Script is deleted successfully$")
-    public void operatorVerifyTheDraftScriptIsDeletedSuccessfully()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
-        pricingScriptsV2Page.verifyDraftScriptIsDeleted(script);
-    }
+  @When("^Operator delete Draft Script$")
+  public void operatorDeleteDraftScript() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.deleteDraftScript(script);
+  }
 
-    @When("^Operator do Run Check on specific Draft Script using this data below:$")
-    public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(Map<String,String> mapOfData)
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
+  @Then("^Operator verify the Draft Script is deleted successfully$")
+  public void operatorVerifyTheDraftScriptIsDeletedSuccessfully() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.verifyDraftScriptIsDeleted(script);
+  }
 
-        String deliveryType = mapOfData.get("deliveryType");
-        String orderType = mapOfData.get("orderType");
-        String timeslotType = mapOfData.get("timeslotType");
-        String size = mapOfData.get("size");
-        double weight = Double.parseDouble(mapOfData.get("weight"));
-        double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
-        double codValue = Double.parseDouble(mapOfData.get("codValue"));
-        String fromZone = mapOfData.get("fromZone");
-        String toZone = mapOfData.get("toZone");
+  @When("^Operator do Run Check on specific Draft Script using this data below:$")
+  public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
+      Map<String, String> mapOfData) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
-        RunCheckParams runCheckParams = new RunCheckParams();
-        runCheckParams.setDeliveryType(deliveryType);
-        runCheckParams.setOrderType(orderType);
-        runCheckParams.setTimeslotType(timeslotType);
-        runCheckParams.setSize(size);
-        runCheckParams.setWeight(weight);
-        runCheckParams.setInsuredValue(insuredValue);
-        runCheckParams.setCodValue(codValue);
-        runCheckParams.setFromZone(fromZone);
-        runCheckParams.setToZone(toZone);
-        pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
-    }
+    String deliveryType = mapOfData.get("deliveryType");
+    String orderType = mapOfData.get("orderType");
+    String timeslotType = mapOfData.get("timeslotType");
+    String size = mapOfData.get("size");
+    double weight = Double.parseDouble(mapOfData.get("weight"));
+    double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
+    double codValue = Double.parseDouble(mapOfData.get("codValue"));
+    String fromZone = mapOfData.get("fromZone");
+    String toZone = mapOfData.get("toZone");
 
-    @Then("^Operator verify the Run Check Result is correct using data below:$")
-    public void operatorVerifyTheRunCheckResultIsCorrectUsingDataBelow(Map<String,String> mapOfData)
-    {
-        Double grandTotal = Double.parseDouble(mapOfData.get("grandTotal"));
-        Double gst = Double.parseDouble(mapOfData.get("gst"));
-        Double deliveryFee = Double.parseDouble(mapOfData.get("deliveryFee"));
-        Double insuranceFee = Double.parseDouble(mapOfData.get("insuranceFee"));
-        Double codFee = Double.parseDouble(mapOfData.get("codFee"));
-        Double handlingFee = Double.parseDouble(mapOfData.get("handlingFee"));
-        String comments = mapOfData.get("comments");
+    RunCheckParams runCheckParams = new RunCheckParams();
+    runCheckParams.setDeliveryType(deliveryType);
+    runCheckParams.setOrderType(orderType);
+    runCheckParams.setTimeslotType(timeslotType);
+    runCheckParams.setSize(size);
+    runCheckParams.setWeight(weight);
+    runCheckParams.setInsuredValue(insuredValue);
+    runCheckParams.setCodValue(codValue);
+    runCheckParams.setFromZone(fromZone);
+    runCheckParams.setToZone(toZone);
+    pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
+  }
 
-        RunCheckResult runCheckResult = new RunCheckResult();
-        runCheckResult.setGrandTotal(grandTotal);
-        runCheckResult.setGst(gst);
-        runCheckResult.setDeliveryFee(deliveryFee);
-        runCheckResult.setInsuranceFee(insuranceFee);
-        runCheckResult.setCodFee(codFee);
-        runCheckResult.setHandlingFee(handlingFee);
-        runCheckResult.setComments(comments);
-        pricingScriptsV2Page.verifyTheRunCheckResultIsCorrect(runCheckResult);
-    }
+  @Then("^Operator verify the Run Check Result is correct using data below:$")
+  public void operatorVerifyTheRunCheckResultIsCorrectUsingDataBelow(
+      Map<String, String> mapOfData) {
+    Double grandTotal = Double.parseDouble(mapOfData.get("grandTotal"));
+    Double gst = Double.parseDouble(mapOfData.get("gst"));
+    Double deliveryFee = Double.parseDouble(mapOfData.get("deliveryFee"));
+    Double insuranceFee = Double.parseDouble(mapOfData.get("insuranceFee"));
+    Double codFee = Double.parseDouble(mapOfData.get("codFee"));
+    Double handlingFee = Double.parseDouble(mapOfData.get("handlingFee"));
+    String comments = mapOfData.get("comments");
 
-    @When("^Operator validate and release Draft Script using this data below:$")
-    public void operatorValidateAndReleaseDraftScriptUsingThisDataBelow(Map<String,String> mapOfData)
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    RunCheckResult runCheckResult = new RunCheckResult();
+    runCheckResult.setGrandTotal(grandTotal);
+    runCheckResult.setGst(gst);
+    runCheckResult.setDeliveryFee(deliveryFee);
+    runCheckResult.setInsuranceFee(insuranceFee);
+    runCheckResult.setCodFee(codFee);
+    runCheckResult.setHandlingFee(handlingFee);
+    runCheckResult.setComments(comments);
+    pricingScriptsV2Page.verifyTheRunCheckResultIsCorrect(runCheckResult);
+  }
 
-        Double startWeight = Double.parseDouble(mapOfData.get("startWeight"));
-        Double endWeight = Double.parseDouble(mapOfData.get("endWeight"));
+  @When("^Operator validate and release Draft Script using this data below:$")
+  public void operatorValidateAndReleaseDraftScriptUsingThisDataBelow(
+      Map<String, String> mapOfData) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
-        VerifyDraftParams verifyDraftParams = new VerifyDraftParams();
-        verifyDraftParams.setStartWeight(startWeight);
-        verifyDraftParams.setEndWeight(endWeight);
-        pricingScriptsV2Page.validateDraftAndReleaseScript(script, verifyDraftParams);
-    }
+    Double startWeight = Double.parseDouble(mapOfData.get("startWeight"));
+    Double endWeight = Double.parseDouble(mapOfData.get("endWeight"));
 
-    @Then("^Operator verify Draft Script is released successfully$")
-    public void operatorVerifyDraftScriptIsReleasedSuccessfully()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
-        pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
-    }
+    VerifyDraftParams verifyDraftParams = new VerifyDraftParams();
+    verifyDraftParams.setStartWeight(startWeight);
+    verifyDraftParams.setEndWeight(endWeight);
+    pricingScriptsV2Page.validateDraftAndReleaseScript(script, verifyDraftParams);
+  }
 
-    @When("^Operator link Script to Shipper with name = \"([^\"]*)\"$")
-    public void operatorLinkShipperToTheScript(String shipperName)
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
+  @Then("^Operator verify Draft Script is released successfully$")
+  public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
+  }
 
-        Shipper shipper = new Shipper();
-        shipper.setName(shipperName);
+  @When("^Operator link Script to Shipper with ID = \"([^\"]*)\"$")
+  public void operatorLinkShipperToTheScript(String shipperId) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
-        pricingScriptsV2Page.linkShippers(script, shipper);
-        put(KEY_CREATED_SHIPPER, shipper);
-    }
+    Shipper shipper = new Shipper();
+    shipper.setLegacyId(Long.parseLong(shipperId));
 
-    @When("^Operator link Script with name = \"([^\"]*)\" to Shipper with name = \"([^\"]*)\"$")
-    public void operatorLinkScriptWithNameToShipperWithName(String scriptName, String shipperName)
-    {
-        Script script = new Script();
-        script.setName(scriptName);
+    pricingScriptsV2Page.linkShippers(script, shipper);
+    put(KEY_CREATED_SHIPPER, shipper);
+  }
 
-        Shipper shipper = new Shipper();
-        shipper.setName(shipperName);
+  @When("^Operator link Script to Shipper with ID and Name = \"([^\"]*)\"$")
+  public void operatorLinkShipperWithIdAndNameToTheScript(String shipperIdAndName) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
-        pricingScriptsV2Page.linkShippers(script, shipper);
-    }
+    Shipper shipper = new Shipper();
+    String shipperId = shipperIdAndName.split("-", 2)[0];
+    String shipperName = shipperIdAndName.split("-", 2)[1];
+    shipper.setLegacyId(Long.parseLong(shipperId));
+    shipper.setName(shipperName);
 
-    @Then("^Operator verify the Script is linked successfully$")
-    public void operatorVerifyTheScriptIsLinkedSuccessfully()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
-        Shipper shipper = get(KEY_CREATED_SHIPPER);
-        pricingScriptsV2Page.verifyShipperIsLinked(script, shipper);
-    }
+    pricingScriptsV2Page.linkShippersWithIdAndName(script, shipper);
+    put(KEY_CREATED_SHIPPER, shipper);
+  }
 
-    @When("^Operator delete Active Script$")
-    public void operatorDeleteActiveScript()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
-        pricingScriptsV2Page.deleteActiveScript(script);
-    }
+  @When("^Operator link Script with name = \"([^\"]*)\" to Shipper with name = \"([^\"]*)\"$")
+  public void operatorLinkScriptWithNameToShipperWithName(String scriptName, String shipperName) {
+    Script script = new Script();
+    script.setName(scriptName);
 
-    @Then("^Operator verify the Active Script is deleted successfully$")
-    public void operatorVerifyTheActiveScriptIsDeletedSuccessfully()
-    {
-        Script script = get(KEY_CREATED_PRICING_SCRIPT);
-        pricingScriptsV2Page.verifyActiveScriptIsDeleted(script);
-    }
+    Shipper shipper = new Shipper();
+    shipper.setName(shipperName);
 
-    @Then("^Operator verify the price is correct using data below:$")
-    public void operatorVerifyThePriceIsCorrectUsingDataBelow(Map<String,String> mapOfData)
-    {
-        Order order = get(KEY_ORDER_DETAILS);
-        Double expectedCost = Double.parseDouble(mapOfData.get("expectedCost"));
-        assertEquals("Order Cost", expectedCost, order.getCost());
-    }
+    pricingScriptsV2Page.linkShippers(script, shipper);
+  }
 
-    @When("^Operator create and release new Time-Bounded Script using data below:$")
-    public void operatorCreateAndReleaseNewTimeBoundedScriptUsingDataBelow(Map<String,String> mapOfData)
-    {
-        Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
+  @Then("^Operator verify the Script is linked successfully$")
+  public void operatorVerifyTheScriptIsLinkedSuccessfully() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    pricingScriptsV2Page.verifyShipperIsLinked(script, shipper);
+  }
 
-        String source = mapOfData.get("source");
-        String activeParameters = mapOfData.get("activeParameters");
-        Double startWeight = Double.parseDouble(mapOfData.get("startWeight"));
-        Double endWeight = Double.parseDouble(mapOfData.get("endWeight"));
-        String dateUniqueString = generateDateUniqueString();
+  @When("^Operator delete Active Script$")
+  public void operatorDeleteActiveScript() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.deleteActiveScript(script);
+  }
 
-        List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim).collect(Collectors.toList());
-        String name = parentScript.getName()+" - "+dateUniqueString;
+  @Then("^Operator verify the Active Script is deleted successfully$")
+  public void operatorVerifyTheActiveScriptIsDeletedSuccessfully() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.verifyActiveScriptIsDeleted(script);
+  }
 
-        Script script = new Script();
-        script.setName(name);
-        script.setSource(source);
-        script.setActiveParameters(listOfActiveParameters);
-        script.setVersionEffectiveStartDate(getBeforeDate(1));
-        script.setVersionEffectiveEndDate(getNextDate(1));
+  @Then("^Operator verify the price is correct using data below:$")
+  public void operatorVerifyThePriceIsCorrectUsingDataBelow(Map<String, String> mapOfData) {
+    PricedOrder order = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_DB);
+    NvLogger.info(f("Delivery fee is : %s", order.getDeliveryFee()));
+    String expectedCost = mapOfData.get("expectedCost");
+    assertEquals("Expected and Actual order cost mismatch ", expectedCost,
+        order.getDeliveryFee().toString());
+  }
 
-        VerifyDraftParams verifyDraftParams = new VerifyDraftParams();
-        verifyDraftParams.setStartWeight(startWeight);
-        verifyDraftParams.setEndWeight(endWeight);
+  @When("^Operator create and release new Time-Bounded Script using data below:$")
+  public void operatorCreateAndReleaseNewTimeBoundedScriptUsingDataBelow(
+      Map<String, String> mapOfData) {
+    Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
 
-        pricingScriptsV2Page.createAndReleaseNewTimeBoundedScripts(parentScript, script, verifyDraftParams);
-        put(KEY_CREATED_PRICING_SCRIPT_CHILD_1, script);
-    }
+    String source = mapOfData.get("source");
+    String activeParameters = mapOfData.get("activeParameters");
+    Double startWeight = Double.parseDouble(mapOfData.get("startWeight"));
+    Double endWeight = Double.parseDouble(mapOfData.get("endWeight"));
+    String dateUniqueString = generateDateUniqueString();
 
-    @Then("^Operator verify the new Time-Bounded Script is created and released successfully$")
-    public void operatorVerifyTheNewTimeBoundedScriptIsCreatedAndReleasedSuccessfully()
-    {
-        Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
-        Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
-        pricingScriptsV2Page.verifyTheNewTimeBoundedScriptIsCreatedAndReleasedSuccessfully(parentScript, script);
-    }
+    List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim)
+        .collect(Collectors.toList());
+    String name = parentScript.getName() + " - " + dateUniqueString;
 
-    @When("^Operator delete the Time-Bounded Script$")
-    public void operatorDeleteTheTimeBoundedScript()
-    {
-        Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
-        Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
-        pricingScriptsV2Page.deleteTimeBoundedScript(parentScript, script);
-    }
+    Script script = new Script();
+    script.setName(name);
+    script.setSource(source);
+    script.setActiveParameters(listOfActiveParameters);
+    script.setVersionEffectiveStartDate(getBeforeDate(1));
+    script.setVersionEffectiveEndDate(getNextDate(1));
 
-    @Then("^Operator verify the Time-Bounded Script is deleted successfully$")
-    public void operatorVerifyTheTimeBoundedScriptIsDeletedSuccessfully()
-    {
-        Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
-        Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
-        pricingScriptsV2Page.verifyTimeBoundedScriptIsDeleted(parentScript, script);
-    }
+    VerifyDraftParams verifyDraftParams = new VerifyDraftParams();
+    verifyDraftParams.setStartWeight(startWeight);
+    verifyDraftParams.setEndWeight(endWeight);
+
+    pricingScriptsV2Page
+        .createAndReleaseNewTimeBoundedScripts(parentScript, script, verifyDraftParams);
+    put(KEY_CREATED_PRICING_SCRIPT_CHILD_1, script);
+  }
+
+  @Then("^Operator verify the new Time-Bounded Script is created and released successfully$")
+  public void operatorVerifyTheNewTimeBoundedScriptIsCreatedAndReleasedSuccessfully() {
+    Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
+    Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
+    pricingScriptsV2Page
+        .verifyTheNewTimeBoundedScriptIsCreatedAndReleasedSuccessfully(parentScript, script);
+  }
+
+  @When("^Operator delete the Time-Bounded Script$")
+  public void operatorDeleteTheTimeBoundedScript() {
+    Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
+    Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
+    pricingScriptsV2Page.deleteTimeBoundedScript(parentScript, script);
+  }
+
+  @Then("^Operator verify the Time-Bounded Script is deleted successfully$")
+  public void operatorVerifyTheTimeBoundedScriptIsDeletedSuccessfully() {
+    Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
+    Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
+    pricingScriptsV2Page.verifyTimeBoundedScriptIsDeleted(parentScript, script);
+  }
 }
