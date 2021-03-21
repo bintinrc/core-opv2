@@ -20,4 +20,11 @@ out
 
 /hiptest
 chromedriver
+bin/
+.vscode/
+.settings/
+.classpath
+.project
+.classpath/
+
 
