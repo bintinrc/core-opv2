@@ -685,6 +685,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
   }
 
+  @Given("DB Operator find drivers by {string} first name")
+  public void findDriversByFirstName(String firstName) {
+    List<Driver> drivers = getDriverJdbc().findDriversByFirstName(resolveValue(firstName));
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
+  @Given("DB Operator find drivers by {string} driver type name")
+  public void findDriversByDriverTypeName(String driverTypeName) {
+    List<Driver> drivers = getDriverJdbc()
+        .findDriversByDriverTypeName(resolveValue(driverTypeName));
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
   @After(value = "@DeleteShipment")
   public void deleteShipment() {
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
@@ -1744,8 +1757,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     String scanType = mapOfData.get("scanType");
     UnscannedShipment unscannedShipment = getHubJdbc().getUnscannedShipment(shipmentId);
 
-    assertThat("Unscanned shipment type id is the same", unscannedShipment.getShipmentId(), equalTo(shipmentId));
-    assertThat("Unscanned shipment type is the same", unscannedShipment.getType(), equalTo(unscannedShipmentType));
-    assertThat("Unscanned shipment scan type is the same", unscannedShipment.getScanType(), equalTo(scanType));
+    assertThat("Unscanned shipment type id is the same", unscannedShipment.getShipmentId(),
+        equalTo(shipmentId));
+    assertThat("Unscanned shipment type is the same", unscannedShipment.getType(),
+        equalTo(unscannedShipmentType));
+    assertThat("Unscanned shipment scan type is the same", unscannedShipment.getScanType(),
+        equalTo(scanType));
+  }
+
+  @When("DB Operator sets flags of driver with id {string} to {int}")
+  public void setDriverFlags(String driverId, int flags) {
+    getDriverJdbc().setDriverFlags(Long.parseLong(resolveValue(driverId)), flags);
   }
 }

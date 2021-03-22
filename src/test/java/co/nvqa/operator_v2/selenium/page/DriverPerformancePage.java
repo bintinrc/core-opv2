@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
@@ -70,11 +71,8 @@ public class DriverPerformancePage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "input[placeholder='Start date']")
-    public TextBox startDate;
-
-    @FindBy(css = "input[placeholder='End date']")
-    public TextBox endDate;
+    @FindBy(css = "div.ant-picker-range")
+    public AntDateRangePicker routeDate;
 
     @FindBy(id = "displayIndividualRows")
     public AntSwitch displayIndividualRows;
