@@ -1185,6 +1185,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
       | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[2].id} ({KEY_LIST_OF_CREATED_HUBS[2].name}) Hub Location Type ORIGIN |
+    And DB Operator verify unscanned shipment with following data:
+      | shipmentId | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+      | type       | MISSING                               |
+      | scanType   | SHIPMENT_HUB_INBOUND                  |
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Shipment with No Path Found (uid:75cb600a-19e8-4262-b1ff-2f2b5ca6a114)
