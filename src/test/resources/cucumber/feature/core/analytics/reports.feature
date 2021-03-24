@@ -42,9 +42,9 @@ Feature: Order Creation V4
     Then Operator verifies that success toast displayed:
       | top | Downloaded CSV |
     Then Operator verifies order statuses report file contains following data:
-      | trackingId                                 | status    | size    | inboundDate | orderCreationDate                   | estimatedDeliveryDate          | firstDeliveryAttempt                | lastDeliveryAttempt                 | deliveryAttempts | secondDeliveryAttempt | thirdDeliveryAttempt | lastUpdateScan                      | failureReason |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
+      | trackingId                                 | status    | size    | inboundDate | orderCreationDate                   | estimatedDeliveryDate                  | firstDeliveryAttempt                | lastDeliveryAttempt                 | deliveryAttempts | secondDeliveryAttempt | thirdDeliveryAttempt | lastUpdateScan                      | failureReason |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -10,6 +10,7 @@ import java.util.Map;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_RESIGNED;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE;
@@ -134,6 +135,53 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     dsPage.filterBy(COLUMN_TYPE, driverType);
   }
 
+  @When("Operator click Load Everything on Driver Strength page")
+  public void operatorClickLoadEverything() {
+    dsPage.loadEverything();
+  }
+
+  @When("Operator filter driver strength using data below:")
+  public void operatorFilterDriverStrengthUsingDataBelow(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    if (dsPage.editSearchFilter.isDisplayedFast()) {
+      dsPage.editSearchFilter.click();
+    }
+
+    dsPage.addFilter.waitUntilClickable();
+
+    if (data.containsKey("zones")) {
+      if (!dsPage.zonesFilter.isDisplayedFast()) {
+        dsPage.addFilter("Zones");
+      }
+      List<String> tags = splitAndNormalize(data.get("zones"));
+      dsPage.zonesFilter.clearAll();
+      dsPage.zonesFilter.selectFilter(tags);
+    }
+
+    if (data.containsKey("driverTypes")) {
+      if (!dsPage.driverTypesFilter.isDisplayedFast()) {
+        dsPage.addFilter("Driver Types");
+      }
+      List<String> tags = splitAndNormalize(data.get("driverTypes"));
+      dsPage.driverTypesFilter.clearAll();
+      dsPage.driverTypesFilter.selectFilter(tags);
+    }
+
+    if (data.containsKey("resigned")) {
+      if (!dsPage.resignedFilter.isDisplayedFast()) {
+        dsPage.addFilter("Resigned");
+      }
+      dsPage.resignedFilter.setFilter(data.get("resigned").toLowerCase());
+    }
+
+    if (dsPage.loadSelection.isDisplayedFast()) {
+      dsPage.loadSelection();
+    } else {
+      dsPage.loadEverything();
+    }
+  }
+
   @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" zone$")
   public void operatorVerifyDriverStrengthIsFilteredByZone(String expectedZone) {
     if ("GET_FROM_CREATED_DRIVER".equalsIgnoreCase(expectedZone)) {
@@ -155,6 +203,15 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
     assertThat("Type values", actualDriverTypes,
         Matchers.everyItem(containsString(expectedDriverType)));
+  }
+
+  @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" resigned")
+  public void operatorVerifyDriverStrengthIsFilteredByResigned(String expected) {
+    List<String> actualDriverTypes = dsPage.driversTable()
+        .readFirstRowsInColumn(COLUMN_RESIGNED, 10);
+    assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
+    assertThat("Resigned", actualDriverTypes,
+        Matchers.everyItem(containsString(expected.toUpperCase())));
   }
 
   @Then("^Operator delete created driver on Driver Strength page$")

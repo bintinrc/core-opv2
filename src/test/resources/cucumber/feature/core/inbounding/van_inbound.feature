@@ -20,16 +20,16 @@ Feature: Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     Then Operator verify the van inbound process is succeed
-    When Operator go to menu Order -> All Orders
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order scan updated
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
     And Operator go to menu Routing -> Route Logs
     Then Operator verify the route is started after van inbounding using data below:
-      | routeDateFrom | TODAY      |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+      | routeDateFrom | {gradle-current-date-yyyy-MM-dd} |
+      | routeDateTo   | {gradle-current-date-yyyy-MM-dd} |
+      | hubName       | {hub-name}                       |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds with Invalid Tracking ID (uid:fd5c0c47-7a31-44f7-b2dd-d07bd9a0645f)
