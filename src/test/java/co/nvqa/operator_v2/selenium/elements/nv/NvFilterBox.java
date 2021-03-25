@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,11 +20,11 @@ public class NvFilterBox extends AbstractFilterBox {
   public NvAutocomplete searchOrSelect;
 
   @FindBy(name = "commons.clear-all")
-  public PageElement clearAll;
+  public NvIconButton clearAll;
 
   public void clearAll() {
     if (clearAll.isDisplayedFast()) {
-      clearAll.moveAndClick();
+      clearAll.click();
     }
   }
 

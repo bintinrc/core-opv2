@@ -4,11 +4,14 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -41,16 +44,53 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
   public DriversTable driversTable;
   private ContactDetailsMenu contactDetailsMenu;
 
+  @FindBy(name = "container.driver-strength.edit-search-filter")
+  public NvIconTextButton editSearchFilter;
+
+  @FindBy(name = "container.driver-strength.load-selection")
+  public NvIconTextButton loadSelection;
+
   @FindBy(name = "container.driver-strength.load-everything")
   public NvIconTextButton loadEverything;
 
   @FindBy(name = "Add New Driver")
   public NvIconTextButton addNewDriver;
 
+  @FindBy(xpath = "//nv-filter-box[@item-types='Zones']")
+  public NvFilterBox zonesFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Driver Types']")
+  public NvFilterBox driverTypesFilter;
+
+  @FindBy(css = "nv-filter-boolean-box[main-title='Resigned']")
+  public NvFilterBooleanBox resignedFilter;
+
+  @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
+  public MdAutocomplete addFilter;
+
   public DriverStrengthPageV2(WebDriver webDriver) {
     super(webDriver);
     driversTable = new DriversTable(webDriver);
     contactDetailsMenu = new ContactDetailsMenu(webDriver);
+  }
+
+  public void addFilter(String value) {
+    addFilter.selectValue(value);
+    addFilter.closeSuggestions();
+  }
+
+  public void loadEverything() {
+    loadEverything.click();
+    if (halfCircleSpinner.waitUntilVisible(2)) {
+      halfCircleSpinner.waitUntilInvisible();
+    }
+  }
+
+  public void loadSelection() {
+    loadSelection.click();
+    if (halfCircleSpinner.waitUntilVisible(2)) {
+      halfCircleSpinner.waitUntilInvisible();
+    }
   }
 
   public DriversTable driversTable() {
@@ -570,6 +610,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_ZONE = "zoneId";
     public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartName";
+    public static final String COLUMN_EMPLOYMENT_END_DATE = "employmentEndName";
+    public static final String COLUMN_RESIGNED = "resign";
 
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_DELETE = "delete";
@@ -590,6 +632,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
           .put("zoneMax", "zone-preferences-max-waypoints")
           .put("comments", "comments")
           .put(COLUMN_EMPLOYMENT_START_DATE, "_employment-start-date")
+          .put(COLUMN_EMPLOYMENT_END_DATE, "_employment-end-date")
+          .put(COLUMN_RESIGNED, "resign")
           .build()
       );
       setActionButtonsLocators(ImmutableMap

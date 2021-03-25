@@ -5,7 +5,7 @@ Feature: Add Shipper To Preset
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipper @DeleteShipperPickupFilterTemplate @Close@CloseNewWindows
+  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address (uid:c5345ae2-e212-42c7-866a-59d5f1a80e42)
     Given API Operator creates new Shipper Pickup Filter Template using data below:
       | name                | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
