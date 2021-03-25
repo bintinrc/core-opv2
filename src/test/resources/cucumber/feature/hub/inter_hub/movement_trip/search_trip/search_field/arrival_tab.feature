@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @ArrivalTab @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @ArrivalTab
 Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
 
   @LaunchBrowser @ShouldAlwaysRun
