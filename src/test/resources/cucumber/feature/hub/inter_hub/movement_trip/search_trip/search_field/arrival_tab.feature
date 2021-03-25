@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @ArrivalTab
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @ArrivalTab @CWF
 Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -12,7 +12,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "origin_hub"
     Then Operator verifies that the trip management shown with "origin_hub" as its filter is right
 
@@ -23,7 +23,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "trip_id"
     Then Operator verifies that the trip management shown with "trip_id" as its filter is right
 
@@ -34,7 +34,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
@@ -45,7 +45,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "expected_departure_time"
     Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
 
@@ -56,7 +56,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "actual_departure_time"
     Then Operator verifies that the trip management shown with "actual_departure_time" as its filter is right
 
@@ -67,7 +67,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "expected_arrival_time" on arrival tab
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right on arrival tab
 
@@ -78,7 +78,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
 
@@ -89,7 +89,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator clicks on "Arrival" tab
     When Operator searches and selects the "destination hub" with value "{hub-relation-destination-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-destination-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator searches for the Trip Management based on its "status"
     Then Operator verifies that the trip management shown with "status" as its filter is right
 
