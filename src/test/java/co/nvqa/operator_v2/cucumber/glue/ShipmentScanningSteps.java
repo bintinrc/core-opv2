@@ -13,7 +13,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.JavascriptExecutor;
 
 /**
@@ -408,6 +407,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   }
 
+  @Then("Operator close new tabs")
   @When("Operator close new tab in shipment inbound scanning page")
   public void operatorCloseNewTabInShipmentInboundScanningPage() {
     Set<String> windowHandles = shipmentScanningPage.getWebDriver().getWindowHandles();
