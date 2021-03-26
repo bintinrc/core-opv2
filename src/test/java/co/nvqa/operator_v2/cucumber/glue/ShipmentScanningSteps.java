@@ -10,9 +10,11 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.openqa.selenium.JavascriptExecutor;
 
 /**
@@ -173,6 +175,23 @@ public class ShipmentScanningSteps extends AbstractSteps {
       String toastMessage) {
     toastMessage = resolveValue(toastMessage);
     shipmentScanningPage.verifyBottomToastContainingMessageIsShown(toastMessage);
+  }
+
+  @Then("Operator verifies toast bottom containing following messages is shown on Shipment Inbound Scanning page:")
+  public void operatorVerifiesToastBottomContainingFollowingMessagesIsShownOnShipmentInboundScanningPage(
+      List<String> listOfMessages) {
+    List<String> resolvedListOfMessages = listOfMessages.stream().<String>map(this::resolveValue)
+        .collect(Collectors.toList());
+    shipmentScanningPage
+        .verifyBottomToastDriverInTripContainingEitherMessage(resolvedListOfMessages);
+    shipmentScanningPage.forceCompleteButton.waitUntilClickable();
+    shipmentScanningPage.forceCompleteButton.click();
+    pause5s();
+    shipmentScanningPage
+        .verifyBottomToastDriverInTripContainingEitherMessage(resolvedListOfMessages);
+    shipmentScanningPage.forceCompleteButton.waitUntilClickable();
+    shipmentScanningPage.forceCompleteButton.click();
+    pause5s();
   }
 
   @And("Operator verifies Scan Shipment Container color is {string}")

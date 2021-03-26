@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip @CWF
 Feature: Shipment Van Inbound With Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1917,10 +1917,9 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
-    Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name}" is shown on Shipment Inbound Scanning page
-    When Operator click force complete trip in shipment inbound scanning page
-    Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {KEY_LIST_OF_CREATED_HUBS[2].name}" is shown on Shipment Inbound Scanning page
-    When Operator click force complete trip in shipment inbound scanning page
+    Then Operator verifies toast bottom containing following messages is shown on Shipment Inbound Scanning page:
+      | Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} has departed." is shown on Shipment Inbound Scanning page
 #    When Operator go to menu Inter-Hub -> Movement Trips
@@ -1997,10 +1996,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}              |
     And Operator click start inbound
-    Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name}" is shown on Shipment Inbound Scanning page
-    When Operator click force complete trip in shipment inbound scanning page
-    Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {KEY_LIST_OF_CREATED_HUBS[2].name}" is shown on Shipment Inbound Scanning page
-    When Operator click force complete trip in shipment inbound scanning page
+    Then Operator verifies toast bottom containing following messages is shown on Shipment Inbound Scanning page:
+      | Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator click start inbound
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
