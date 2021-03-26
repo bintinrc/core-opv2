@@ -213,7 +213,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     waitUntilInvisibilityOfToast();
   }
 
-  public void closeShipmentWithData(String originHubName, String destinationHubName, String shipmentType, String shipmentId) {
+  public void closeShipmentWithData(String originHubName, String destinationHubName,
+      String shipmentType, String shipmentId) {
     waitUntilVisibilityOfElementLocated("//div[@class='hub-selection']//nv-autocomplete");
     selectOriginHub.waitUntilVisible();
     selectOriginHub.selectValue(originHubName);
@@ -248,7 +249,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     pause1s();
     waitUntilVisibilityOfElementLocated(
         "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
-    waitUntilElementIsClickable("//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+    waitUntilElementIsClickable(
+        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
     click(
         "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
 
@@ -310,7 +312,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500,10);
+    }, getCurrentMethodName(), 500, 10);
     pause5s();
   }
 
@@ -331,6 +333,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
         containsString(expectedToastMessageContain));
   }
+
+  public void verifyBottomToastDriverInTripContainingEitherMessage(List<String> expectedToastMessages) {
+    String actualToastMessage = getToastBottomText().split(" with expected ")[0];
+    assertThat(f("Toast message contains either %s or %s", expectedToastMessages.get(0),
+        expectedToastMessages.get(1)), actualToastMessage,
+        isOneOf(expectedToastMessages.get(0), expectedToastMessages.get(1)));
+  }
+
 
   public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
     String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
