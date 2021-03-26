@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.route.Route;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
@@ -11,6 +12,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -588,10 +590,10 @@ public class RouteLogsSteps extends AbstractSteps {
   }
 
   @Then("^Operator verify the route is started after van inbounding using data below:$")
-  public void verifyRouteIsStarted(Map<String, String> mapOfData) {
+  public void verifyRouteIsStarted(Map<String, String> mapOfData) throws ParseException {
     long routeId = get(KEY_CREATED_ROUTE_ID);
-    Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
-    Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
+    Date routeDateFrom = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateFrom"));
+    Date routeDateTo = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateTo"));
     String hubName = mapOfData.get("hubName");
 
     routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);

@@ -57,6 +57,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span")
   public PageElement scanAlertMessage;
 
+  @FindBy(xpath = "//md-card[contains(@class,'scan-status-card')]")
+  public PageElement scanStatusCard;
+
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
@@ -187,6 +190,16 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
       case "shipment not found":
         assertThat("Error Message is true",
             errorMessage, containsString(f("shipment for %d not found", shipmentId)));
+        break;
+
+      case "transit":
+        assertThat("Last scanned is true",
+            errorMessage, containsString(
+                f("Last scanned:%d", shipmentId)));
+        String scanStatusCardString = scanStatusCard.getText();
+        assertThat("Scan card is true",
+            scanStatusCardString, containsString(
+                f("Still In Transit\nContinue Shipment\n1 Shipment ID(s)\n%s", shipmentId)));
         break;
     }
   }

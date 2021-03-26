@@ -1,5 +1,5 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles
-Feature: Pricing Profiles
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles @DeliveryDiscount
+Feature: Edit Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -24,20 +24,20 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | 0 |
+      | discount | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | 0 is not a valid discount value |
+      | errorMessage | 0 is not a valid discount value |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
@@ -59,33 +59,34 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
-      | discountValue | 10                             |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | discount          | 10                                          |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-      | discountValue           | 10                             |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
+      | discount          | 10                                          |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
-      | discountValue | none                           |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-2-day-yyyy-MM-dd} |
+      | discount  | none                           |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-2-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-      | discountValue           | none                           |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-2-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
+      | discount          | none                                        |
+
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with special characters Discount (uid:35faef0b-1dc5-41d3-8c25-e623af2fbbde)
@@ -107,20 +108,20 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | $#^$^#@5 |
+      | discount | $#^$^#@5 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Special character is not allowed |
+      | errorMessage | Special character is not allowed |
 
   @CloseNewWindows @NotInGaia
   Scenario: Edit Pending Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
@@ -142,22 +143,22 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
-      | discountValue | 10                             |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | discount          | 10                                          |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-      | discountValue           | 10                             |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
+      | discount          | 10                                          |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | 4.38656 |
+      | discount | 4.38656 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Please provide only 2 decimal places. |
+      | errorMessage | Please provide only 2 decimal places. |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
@@ -179,34 +180,34 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
-      | discountValue | 10                             |
-      | comments      | This is a test pricing script  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | discount          | 10                                          |
+      | comments          | This is a test pricing script               |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-      | discountValue           | 10                             |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
+      | discount          | 10                                          |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-2-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
-      | discountValue | 50000                          |
+      | startDate | {gradle-next-2-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd} |
+      | discount  | 50000                          |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-2-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-      | discountValue           | 50000                          |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-2-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
+      | discount          | 50000                                       |
 
   @CloseNewWindows @NotInGaia
   Scenario: Edit Pending Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
@@ -228,20 +229,20 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | type              | Flat                                        |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | 10000000 |
+      | discount | 10000000 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Discounts cannot exceed 6 figures. |
+      | errorMessage | Discounts cannot exceed 6 figures. |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with Int Discount (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)
@@ -263,14 +264,14 @@ Feature: Pricing Profiles
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
-      | discountValue | 20                             |
-      | comments      | This is a test pricing script  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
+      | endDate           | {gradle-next-2-day-yyyy-MM-dd}              |
+      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
+      | discount          | 20                                          |
+      | comments          | This is a test pricing script               |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | 30                         |
+      | discount | 30                         |
       | comments      | Edited test pricing script |
 
   @KillBrowser @ShouldAlwaysRun

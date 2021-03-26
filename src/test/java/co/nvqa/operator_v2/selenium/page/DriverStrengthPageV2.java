@@ -1,11 +1,20 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.text.ParseException;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -24,20 +33,64 @@ import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTabl
 public class DriverStrengthPageV2 extends OperatorV2SimplePage {
 
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
-  public static final String LOCATOR_BUTTON_LOAD_EVERYTHING = "container.driver-strength.load-everything";
   public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
 
-  private AddDriverDialog addDriverDialog;
-  private EditDriverDialog editDriverDialog;
-  private DriversTable driversTable;
+  @FindBy(css = "md-dialog")
+  public AddDriverDialog addDriverDialog;
+
+  @FindBy(css = "md-dialog")
+  public EditDriverDialog editDriverDialog;
+
+  public DriversTable driversTable;
   private ContactDetailsMenu contactDetailsMenu;
+
+  @FindBy(name = "container.driver-strength.edit-search-filter")
+  public NvIconTextButton editSearchFilter;
+
+  @FindBy(name = "container.driver-strength.load-selection")
+  public NvIconTextButton loadSelection;
+
+  @FindBy(name = "container.driver-strength.load-everything")
+  public NvIconTextButton loadEverything;
+
+  @FindBy(name = "Add New Driver")
+  public NvIconTextButton addNewDriver;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Zones']")
+  public NvFilterBox zonesFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Driver Types']")
+  public NvFilterBox driverTypesFilter;
+
+  @FindBy(css = "nv-filter-boolean-box[main-title='Resigned']")
+  public NvFilterBooleanBox resignedFilter;
+
+  @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
+  public MdAutocomplete addFilter;
 
   public DriverStrengthPageV2(WebDriver webDriver) {
     super(webDriver);
-    addDriverDialog = new AddDriverDialog(webDriver);
-    editDriverDialog = new EditDriverDialog(webDriver);
     driversTable = new DriversTable(webDriver);
     contactDetailsMenu = new ContactDetailsMenu(webDriver);
+  }
+
+  public void addFilter(String value) {
+    addFilter.selectValue(value);
+    addFilter.closeSuggestions();
+  }
+
+  public void loadEverything() {
+    loadEverything.click();
+    if (halfCircleSpinner.waitUntilVisible(2)) {
+      halfCircleSpinner.waitUntilInvisible();
+    }
+  }
+
+  public void loadSelection() {
+    loadSelection.click();
+    if (halfCircleSpinner.waitUntilVisible(2)) {
+      halfCircleSpinner.waitUntilInvisible();
+    }
   }
 
   public DriversTable driversTable() {
@@ -53,17 +106,22 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
     clickAddNewDriver();
     addDriverDialog.fillForm(driverInfo);
+    addDriverDialog.submitForm();
   }
 
   public void editDriver(String username, DriverInfo newDriverInfo) {
     filterBy(COLUMN_USERNAME, username);
     driversTable.clickActionButton(1, ACTION_EDIT);
     editDriverDialog.fillForm(newDriverInfo);
+    editDriverDialog.submitForm();
   }
 
   public void filterBy(String columnName, String value) {
-    if (isElementExist(String.format("//*[@name='%s']", LOCATOR_BUTTON_LOAD_EVERYTHING), 0)) {
-      clickNvIconTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_LOAD_EVERYTHING);
+    if (loadEverything.isDisplayed()) {
+      loadEverything.click();
+      if (halfCircleSpinner.waitUntilVisible(2)) {
+        halfCircleSpinner.waitUntilInvisible();
+      }
     }
     driversTable.filterByColumn(columnName, value);
   }
@@ -138,130 +196,238 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
    * Accessor for Add Driver dialog
    */
   @SuppressWarnings("UnusedReturnValue")
-  public static class AddDriverDialog extends OperatorV2SimplePage {
+  public static class AddDriverDialog extends MdDialog {
 
-    protected String dialogTittle;
-    protected String locatorButtonSubmit;
+    @FindBy(name = "Submit")
+    public NvButtonSave submit;
 
-    public static final String DIALOG_TITLE = "Add Driver";
-    public static final String LOCATOR_FIELD_FIRST_NAME = "First Name";
-    public static final String LOCATOR_FIELD_EMPLOYMENT_START_DATE = "employment-start-date";
-    public static final String LOCATOR_FIELD_LAST_NAME = "Last Name";
-    public static final String LOCATOR_FIELD_DRIVER_LICENSE_NUMBER = "Driver License Number";
-    public static final String LOCATOR_FIELD_DRIVER_COD_LIMIT = "COD Limit";
-    public static final String LOCATOR_VEHICLES_BUTTON_ADD_MORE_VEHICLES = "Add More Vehicles";
-    public static final String LOCATOR_VEHICLES_BUTTON_REMOVE = "//*[@label='Vehicles']//button[@aria-label='Remove']";
-    public static final String LOCATOR_VEHICLES_FIELD_LICENSE_NUMBER = "License Number";
-    public static final String LOCATOR_VEHICLES_FIELD_CAPACITY = "Vehicle Capacity";
-    public static final String LOCATOR_CONTACTS_BUTTON_ADD_MORE_CONTACTS = "Add More Contacts";
-    public static final String LOCATOR_CONTACTS_BUTTON_REMOVE = "//*[@label='Contacts']//button[@aria-label='Remove']";
-    public static final String LOCATOR_CONTACTS_FIELD_CONTACT_TYPE = "contact-type";
-    public static final String LOCATOR_CONTACTS_FIELD_CONTACT = "Contact";
-    public static final String LOCATOR_ZONES_BUTTON_ADD_MORE_ZONES = "Add More Zones";
-    public static final String LOCATOR_ZONES_BUTTON_REMOVE = "//*[@label='Preferred Zones + Capacity']//button[@aria-label='Remove']";
-    public static final String LOCATOR_ZONES_FIELD_ZONE_ID = "zone";
-    public static final String LOCATOR_ZONES_FIELD_MIN = "Min";
-    public static final String LOCATOR_ZONES_FIELD_MAX = "Max";
-    public static final String LOCATOR_ZONES_FIELD_COST = "Cost";
-    public static final String LOCATOR_FIELD_USERNAME = "Username";
-    public static final String LOCATOR_FIELD_PASSWORD = "Password";
-    public static final String LOCATOR_FIELD_COMMENTS = "Comments";
-    public static final String LOCATOR_BUTTON_SUBMIT = "Submit";
-    public static final String LOCATOR_HUB = "Hub";
+    @FindBy(css = "div.hints")
+    public PageElement hints;
 
-    public AddDriverDialog(WebDriver webDriver) {
-      super(webDriver);
-      dialogTittle = DIALOG_TITLE;
-      locatorButtonSubmit = LOCATOR_BUTTON_SUBMIT;
+    @FindBy(css = "nv-autocomplete[placeholder='Hub']")
+    public NvAutocomplete hub;
+
+    @FindBy(id = "employment-start-date")
+    public MdDatepicker employmentStartDate;
+
+    @FindBy(css = "input[aria-label='First Name']")
+    public TextBox firstName;
+
+    @FindBy(css = "input[aria-label='Last Name']")
+    public TextBox lastName;
+
+    @FindBy(css = "input[aria-label='COD Limit']")
+    public TextBox codLimit;
+
+    @FindBy(css = "input[aria-label='Driver License Number']")
+    public TextBox driverLicenseNumber;
+
+    @FindBy(css = "input[aria-label='Username']")
+    public TextBox username;
+
+    @FindBy(css = "input[aria-label='Password']")
+    public TextBox password;
+
+    @FindBy(name = "commons.comments")
+    public TextBox comments;
+
+    @FindBy(css = "button[aria-label='Check Availability']")
+    public Button checkAvailability;
+
+    @FindBy(name = "Add More Vehicles")
+    public NvIconTextButton addMoreVehicles;
+
+    @FindBy(css = "div[ng-repeat='vehicle in fields.vehicles._values track by $index']")
+    public List<VehicleSettingsForm> vehicleSettingsForm;
+
+    @FindBy(name = "Add More Contacts")
+    public NvIconTextButton addMoreContacts;
+
+    @FindBy(css = "div[ng-repeat='contact in fields.contacts._values track by $index']")
+    public List<ContactsSettingsForm> contactsSettingsForms;
+
+    @FindBy(name = "Add More Zones")
+    public NvIconTextButton addMoreZones;
+
+    @FindBy(css = "div[ng-repeat='zonePreference in fields.zonePreferences._values track by $index']")
+    public List<ZoneSettingsForm> zoneSettingsForms;
+
+    public static class VehicleSettingsForm extends PageElement {
+
+      public VehicleSettingsForm(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
+
+      @FindBy(css = "input[aria-label='License Number']")
+      public TextBox vehicleLicenseNumber;
+
+      @FindBy(css = "input[aria-label='Vehicle Capacity']")
+      public TextBox vehicleCapacity;
+
+      @FindBy(css = "button[aria-label='Remove']")
+      public Button remove;
+
     }
 
-    public AddDriverDialog waitUntilVisible() {
-      waitUntilVisibilityOfMdDialogByTitle(dialogTittle);
-      return this;
+    public static class ContactsSettingsForm extends PageElement {
+
+      public ContactsSettingsForm(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
+
+      @FindBy(css = "md-select[id^='contact-type']")
+      public MdSelect contactType;
+
+      @FindBy(css = "input[aria-label='Contact']")
+      public TextBox contact;
+
+      @FindBy(css = "button[aria-label='Remove']")
+      public Button remove;
+
+    }
+
+    public static class ZoneSettingsForm extends PageElement {
+
+      public ZoneSettingsForm(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
+
+      @FindBy(css = "md-select[id^='zone']")
+      public MdSelect zoneName;
+
+      @FindBy(css = "input[aria-label='Min']")
+      public TextBox min;
+
+      @FindBy(css = "input[aria-label='Max']")
+      public TextBox max;
+
+      @FindBy(css = "input[aria-label='Cost']")
+      public TextBox cost;
+
+      @FindBy(css = "input[aria-label='Seed Latitude']")
+      public TextBox seedLatitude;
+
+      @FindBy(css = "input[aria-label='Seed Longitude']")
+      public TextBox seedLongitude;
+
+      @FindBy(css = "button[aria-label='Remove']")
+      public Button remove;
+
+    }
+
+    public AddDriverDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
 
     public AddDriverDialog setHub(String value) {
-      selectValueFromMdAutocomplete(LOCATOR_HUB, value);
+      hub.selectValue(value);
       return this;
     }
 
     public AddDriverDialog setFirstName(String value) {
-      fillIfNotNull(LOCATOR_FIELD_FIRST_NAME, value);
+      if (value != null) {
+        firstName.setValue(value);
+      }
       return this;
     }
 
     public AddDriverDialog setLastName(String value) {
-      fillIfNotNull(LOCATOR_FIELD_LAST_NAME, value);
+      if (value != null) {
+        lastName.setValue(value);
+      }
       return this;
     }
 
     public AddDriverDialog setEmploymentStartDate(String value) {
-      try {
-        setMdDatepickerById(LOCATOR_FIELD_EMPLOYMENT_START_DATE,
-            TestUtils.MD_DATEPICKER_SDF.parse(value));
-      } catch (ParseException e) {
-        throw new RuntimeException("Incorrect value for Employment Satrt Field", e);
+      if (value != null) {
+        employmentStartDate.simpleSetValue(value);
       }
-
       return this;
     }
 
     public AddDriverDialog setDriverLicenseNumber(String value) {
-      fillIfNotNull(LOCATOR_FIELD_DRIVER_LICENSE_NUMBER, value);
+      if (value != null) {
+        driverLicenseNumber.setValue(value);
+      }
       return this;
     }
 
     public AddDriverDialog setCodLimit(Integer value) {
-      fillIfNotNull(LOCATOR_FIELD_DRIVER_COD_LIMIT, value);
+      if (value != null) {
+        codLimit.setValue(value);
+      }
       return this;
     }
 
     public AddDriverDialog addVehicle(String licenseNumber, Integer capacity) {
-      clickNvIconTextButtonByName(LOCATOR_VEHICLES_BUTTON_ADD_MORE_VEHICLES);
-      fillIfNotNull(LOCATOR_VEHICLES_FIELD_LICENSE_NUMBER, licenseNumber);
-      fillIfNotNull(LOCATOR_VEHICLES_FIELD_CAPACITY, capacity);
+      addMoreVehicles.click();
+      VehicleSettingsForm form = vehicleSettingsForm.get(vehicleSettingsForm.size() - 1);
+      if (licenseNumber != null) {
+        form.vehicleLicenseNumber.setValue(licenseNumber);
+      }
+      if (capacity != null) {
+        form.vehicleCapacity.setValue(capacity);
+      }
       return this;
     }
 
     public AddDriverDialog addContact(String contactType, String contact) {
-      clickNvIconTextButtonByName(LOCATOR_CONTACTS_BUTTON_ADD_MORE_CONTACTS);
+      addMoreContacts.click();
+      ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
       if (StringUtils.isNotBlank(contactType)) {
-        selectValueFromMdSelectById(LOCATOR_CONTACTS_FIELD_CONTACT_TYPE, contactType);
+        form.contactType.searchAndSelectValue(contactType);
       }
-      fillIfNotNull(LOCATOR_CONTACTS_FIELD_CONTACT, contact);
+      if (contact != null) {
+        form.contact.setValue(contact);
+      }
       return this;
     }
 
-    public AddDriverDialog addZone(String zoneId, Integer min, Integer max, Integer cost) {
-      scrollIntoView("//nv-icon-text-button[@name='Add More Zones']");
-      clickNvIconTextButtonByName(LOCATOR_ZONES_BUTTON_ADD_MORE_ZONES);
-      if (StringUtils.isNotBlank(zoneId)) {
-        selectValueFromMdSelectById(LOCATOR_ZONES_FIELD_ZONE_ID, zoneId);
+    public AddDriverDialog addZone(String zoneName, Integer min, Integer max, Integer cost) {
+      addMoreZones.click();
+      ZoneSettingsForm form = zoneSettingsForms.get(zoneSettingsForms.size() - 1);
+      if (StringUtils.isNotBlank(zoneName)) {
+        form.zoneName.searchAndSelectValue(zoneName);
       }
-      fillIfNotNull(LOCATOR_ZONES_FIELD_MIN, min);
-      fillIfNotNull(LOCATOR_ZONES_FIELD_MAX, max);
-      fillIfNotNull(LOCATOR_ZONES_FIELD_COST, cost);
+      if (min != null) {
+        form.min.setValue(min);
+      }
+      if (max != null) {
+        form.max.setValue(max);
+      }
+      if (cost != null) {
+        form.cost.setValue(cost);
+      }
       return this;
     }
 
     public AddDriverDialog setUsername(String value) {
-      fillIfNotNull(LOCATOR_FIELD_USERNAME, value);
+      if (value != null) {
+        username.setValue(value);
+      }
       return this;
     }
 
     public AddDriverDialog setPassword(String value) {
-      fillIfNotNull(LOCATOR_FIELD_PASSWORD, value);
+      if (value != null) {
+        password.setValue(value);
+      }
       return this;
     }
 
     public AddDriverDialog setComments(String value) {
-      fillIfNotNull(LOCATOR_FIELD_COMMENTS, value);
+      if (value != null) {
+        comments.setValue(value);
+      }
       return this;
     }
 
     public void submitForm() {
-      clickNvButtonSaveByNameAndWaitUntilDone(locatorButtonSubmit);
-      waitUntilInvisibilityOfMdDialogByTitle(dialogTittle);
+      submit.clickAndWaitUntilDone();
+      waitUntilInvisible();
     }
 
     public void fillForm(DriverInfo driverInfo) {
@@ -285,13 +451,6 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
       setUsername(driverInfo.getUsername());
       setPassword(driverInfo.getPassword());
       setComments(driverInfo.getComments());
-      submitForm();
-    }
-
-    protected void fillIfNotNull(String locator, Object value) {
-      if (value != null) {
-        sendKeysByAriaLabel(locator, String.valueOf(value));
-      }
     }
   }
 
@@ -360,38 +519,48 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
   /**
    * Accessor for Edit Driver dialog
    */
-  @SuppressWarnings("UnusedReturnValue")
   public static class EditDriverDialog extends AddDriverDialog {
 
-    static final String DIALOG_TITLE = "Edit Driver";
-
-    public EditDriverDialog(WebDriver webDriver) {
-      super(webDriver);
-      dialogTittle = DIALOG_TITLE;
+    public EditDriverDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
 
     public EditDriverDialog editVehicle(String licenseNumber, Integer capacity) {
-      fillIfNotNull(LOCATOR_VEHICLES_FIELD_LICENSE_NUMBER, licenseNumber);
-      fillIfNotNull(LOCATOR_VEHICLES_FIELD_CAPACITY, capacity);
+      VehicleSettingsForm form = vehicleSettingsForm.get(vehicleSettingsForm.size() - 1);
+      if (licenseNumber != null) {
+        form.vehicleLicenseNumber.setValue(licenseNumber);
+      }
+      if (capacity != null) {
+        form.vehicleCapacity.setValue(capacity);
+      }
       return this;
     }
 
     public EditDriverDialog editContact(String contactType, String contact) {
+      ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
       if (StringUtils.isNotBlank(contactType)) {
-        selectValueFromMdSelectById(LOCATOR_CONTACTS_FIELD_CONTACT_TYPE, contactType);
+        form.contactType.searchAndSelectValue(contactType);
       }
-      fillIfNotNull(LOCATOR_CONTACTS_FIELD_CONTACT, contact);
+      if (contact != null) {
+        form.contact.setValue(contact);
+      }
       return this;
     }
 
-    public EditDriverDialog editZone(String zoneId, Integer min, Integer max, Integer cost) {
-      scrollIntoView("//nv-container-box[@label='Preferred Zones + Capacity']");
-      if (StringUtils.isNotBlank(zoneId)) {
-        selectValueFromMdSelectById(LOCATOR_ZONES_FIELD_ZONE_ID, zoneId);
+    public EditDriverDialog editZone(String zoneName, Integer min, Integer max, Integer cost) {
+      ZoneSettingsForm form = zoneSettingsForms.get(zoneSettingsForms.size() - 1);
+      if (StringUtils.isNotBlank(zoneName)) {
+        form.zoneName.searchAndSelectValue(zoneName);
       }
-      fillIfNotNull(LOCATOR_ZONES_FIELD_MIN, min);
-      fillIfNotNull(LOCATOR_ZONES_FIELD_MAX, max);
-      fillIfNotNull(LOCATOR_ZONES_FIELD_COST, cost);
+      if (min != null) {
+        form.min.setValue(min);
+      }
+      if (max != null) {
+        form.max.setValue(max);
+      }
+      if (cost != null) {
+        form.cost.setValue(cost);
+      }
       return this;
     }
 
@@ -402,21 +571,21 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
       setCodLimit(driverInfo.getCodLimit());
       if (driverInfo.hasVehicleInfo()) {
-        if (isElementExistFast(LOCATOR_VEHICLES_BUTTON_REMOVE)) {
+        if (vehicleSettingsForm.size() > 0) {
           editVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
         } else {
           addVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
         }
       }
       if (driverInfo.hasContactsInfo()) {
-        if (isElementExistFast(LOCATOR_CONTACTS_BUTTON_REMOVE)) {
+        if (contactsSettingsForms.size() > 0) {
           editContact(driverInfo.getContactType(), driverInfo.getContact());
         } else {
           addContact(driverInfo.getContactType(), driverInfo.getContact());
         }
       }
       if (driverInfo.hasZoneInfo()) {
-        if (isElementExistFast(LOCATOR_ZONES_BUTTON_REMOVE)) {
+        if (zoneSettingsForms.size() > 0) {
           editZone(driverInfo.getZoneId(), driverInfo.getZoneMin(), driverInfo.getZoneMax(),
               driverInfo.getZoneCost());
         } else {
@@ -426,7 +595,6 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
       }
       setPassword(driverInfo.getPassword());
       setComments(driverInfo.getComments());
-      submitForm();
     }
   }
 
@@ -442,6 +610,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_ZONE = "zoneId";
     public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartName";
+    public static final String COLUMN_EMPLOYMENT_END_DATE = "employmentEndName";
+    public static final String COLUMN_RESIGNED = "resign";
 
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_DELETE = "delete";
@@ -462,6 +632,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
           .put("zoneMax", "zone-preferences-max-waypoints")
           .put("comments", "comments")
           .put(COLUMN_EMPLOYMENT_START_DATE, "_employment-start-date")
+          .put(COLUMN_EMPLOYMENT_END_DATE, "_employment-end-date")
+          .put(COLUMN_RESIGNED, "resign")
           .build()
       );
       setActionButtonsLocators(ImmutableMap

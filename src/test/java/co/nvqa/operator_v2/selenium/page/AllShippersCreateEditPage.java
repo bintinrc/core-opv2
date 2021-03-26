@@ -33,6 +33,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -174,7 +176,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//tr[1]//td[@class='id']";
   public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//tr[1]//td[@class='effective-date']";
   public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//tr[1]//td[@class='discount']";
-  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "///table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
+  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
   public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//tr[1]//td[@class='comments']";
   public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//tr[1]//td[@class='contract-end-date']";
   public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//tr[1]//td[@class='cod-min']";
@@ -344,6 +346,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       clickToggleButtonByLabel("Corporate", "No");
       clickToggleButtonByLabel("Corporate Return", "No");
+      clickToggleButtonByLabel("Corporate Manual AWB", "No");
     }
 
     if (isCreateForm) {
@@ -1247,19 +1250,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     b2bManagementPage.backToSubShipperTable();
   }
 
-  public String addNewPricingProfile(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
-    tabs.selectTab("Pricing and Billing");
-    addNewProfile.click();
-    newPricingProfileDialog.waitUntilVisible();
+  public void addNewPricingProfileWithoutSave(Shipper shipper) {
+    addNewPricingProfile(shipper);
+  }
 
-    Pricing pricing = shipper.getPricing();
-    if (pricing != null) {
-      clickTabItem(" Pricing and Billing");
-      fillPricingProfileDetails(pricing);
-      newPricingProfileDialog.saveChanges.click();
-      newPricingProfileDialog.waitUntilInvisible();
-    }
+  public String addNewPricingProfileAndSave(Shipper shipper) {
+    addNewPricingProfile(shipper);
 
     String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
     assertEquals("Status is not Pending ", status, "Pending");
@@ -1274,29 +1270,46 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }, "Getting Pricing Profile ID");
   }
 
-  private void fillPricingProfileDetails(Pricing pricing) {
-    try {
-      setMdDatepickerById(LOCATOR_START_DATE, pricing.getEffectiveDate());
-    } catch (InvalidElementStateException ex) {
-      NvLogger.info("Start Date is already filled");
-    }
-    setMdDatepickerById(LOCATOR_END_DATE, pricing.getContractEndDate());
+  private void addNewPricingProfile(Shipper shipper) {
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    tabs.selectTab("Pricing and Billing");
+    addNewProfile.click();
+    newPricingProfileDialog.waitUntilVisible();
 
+    Pricing pricing = shipper.getPricing();
+    if (pricing != null) {
+      clickTabItem(" Pricing and Billing");
+      fillPricingProfileDetails(pricing);
+      newPricingProfileDialog.saveChanges.click();
+      newPricingProfileDialog.waitUntilInvisible();
+    }
+  }
+
+  private void fillPricingProfileDetails(Pricing pricing) {
+    Date effectiveDate = pricing.getEffectiveDate();
+    if (Objects.nonNull(effectiveDate)) {
+      try {
+        setMdDatepickerById(LOCATOR_START_DATE, effectiveDate);
+      } catch (InvalidElementStateException ex) {
+        NvLogger.info("Start Date is already filled");
+      }
+    }
+    Date endDate = pricing.getContractEndDate();
+    if (Objects.nonNull(endDate)) {
+      setMdDatepickerById(LOCATOR_END_DATE, endDate);
+    }
     String pricingScriptName = pricing.getScriptName();
     if (Objects.nonNull(pricingScriptName)) {
       newPricingProfileDialog.pricingScript.searchAndSelectValue(pricingScriptName);
     }
-
     String comments = pricing.getComments();
     if (Objects.nonNull(comments)) {
       newPricingProfileDialog.comments.setValue(comments);
     }
-
     String discount = pricing.getDiscount();
     if (Objects.nonNull(discount)) {
       newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());
     }
-
     String shipperInsMin = pricing.getInsMin();
     String shipperInsPercentage = pricing.getInsPercentage();
     String shipperInsThreshold = pricing.getInsThreshold();
@@ -1304,37 +1317,36 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         .isNull(shipperInsThreshold)) {
       newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
     } else {
-      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("OnlyClick")) {
+      if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("none")) {
         newPricingProfileDialog.insuranceMin.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsMin)) {
         newPricingProfileDialog.insuranceMin.sendKeys(shipperInsMin);
       }
       if (Objects.nonNull(shipperInsPercentage) && shipperInsPercentage
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.insurancePercent.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsPercentage)) {
         newPricingProfileDialog.insurancePercent.sendKeys(shipperInsPercentage);
       }
       if (Objects.nonNull(shipperInsThreshold) && shipperInsThreshold
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.insuranceThreshold.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperInsThreshold)) {
         newPricingProfileDialog.insuranceThreshold.sendKeys(shipperInsThreshold);
       }
     }
-
     String shipperCodMin = pricing.getCodMin();
     String shipperCodPercentage = pricing.getCodPercentage();
     if (Objects.isNull(shipperCodMin) && Objects.isNull(shipperCodPercentage)) {
       newPricingProfileDialog.codCountryDefaultCheckbox.check();
     } else {
-      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("OnlyClick")) {
+      if (Objects.nonNull(shipperCodMin) && shipperCodMin.equalsIgnoreCase("none")) {
         newPricingProfileDialog.codMin.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperCodMin)) {
         newPricingProfileDialog.codMin.sendKeys(shipperCodMin);
       }
       if (Objects.nonNull(shipperCodPercentage) && shipperCodPercentage
-          .equalsIgnoreCase("OnlyClick")) {
+          .equalsIgnoreCase("none")) {
         newPricingProfileDialog.codPercent.sendKeys(Keys.TAB);
       } else if (Objects.nonNull(shipperCodPercentage)) {
         newPricingProfileDialog.codPercent.sendKeys(shipperCodPercentage);
@@ -1344,19 +1356,24 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
     Pricing addedPricingProfileOPV2 = new Pricing();
+    waitUntilVisibilityOfElementLocated(XPATH_PRICING_PROFILE_ID);
     addedPricingProfileOPV2.setTemplateId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
-    addedPricingProfileOPV2.setEffectiveDate(
-        DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)));
     addedPricingProfileOPV2.setDiscount(getText(XPATH_PRICING_PROFILE_DISCOUNT));
     addedPricingProfileOPV2.setScriptName(getText(XPATH_PRICING_PROFILE_SCRIPT_NAME));
     addedPricingProfileOPV2.setComments(getText(XPATH_PRICING_PROFILE_COMMENTS));
-    addedPricingProfileOPV2.setContractEndDate(
-        DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE)));
     addedPricingProfileOPV2.setCodMin(getText(XPATH_PRICING_PROFILE_COD_MIN));
     addedPricingProfileOPV2.setCodPercentage(getText(XPATH_PRICING_PROFILE_COD_PERCENTAGE));
     addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
     addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
     addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
+    String endDate = getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE);
+    if (!endDate.equals("-")) {
+      addedPricingProfileOPV2.setContractEndDate(YYYY_MM_DD_SDF.parse(endDate));
+    }
+    String startDate = getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE);
+    if (!startDate.equals("-")) {
+      addedPricingProfileOPV2.setEffectiveDate(YYYY_MM_DD_SDF.parse(startDate));
+    }
     return addedPricingProfileOPV2;
   }
 
@@ -1422,6 +1439,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       tabs.selectTab("Pricing and Billing");
+      addNewProfile.click();
+      newPricingProfileDialog.waitUntilVisible();
       fillPricingProfileDetails(pricing);
       assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
       pause3s();
@@ -1438,6 +1457,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
+      addNewProfile.click();
+      newPricingProfileDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(pricing.getScriptName())) {
         fillPricingProfileDetails(pricing);
         assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
@@ -1534,8 +1555,41 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
 
+    @FindBy(id = "insurance-min")
+    public TextBox insuranceMin;
+
+    @FindBy(id = "insurance-percent")
+    public TextBox insurancePercent;
+
+    @FindBy(id = "insurance-threshold")
+    public TextBox insuranceThreshold;
+
+    @FindBy(id = "cod-min")
+    public TextBox codMin;
+
+    @FindBy(id = "cod-percent")
+    public TextBox codPercent;
+
+    @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
+    public CheckBox codCountryDefaultCheckbox;
+
+    @FindBy(xpath = "//md-input-container[contains(@label,'Insured Value')]/md-checkbox")
+    public CheckBox insuranceCountryDefaultCheckbox;
+
     @FindBy(name = "Save Changes")
     public NvApiTextButton saveChanges;
+
+
+    public void verifyErrorMsgEditPricingScript(String expectedErrorMessage) {
+      try {
+        waitUntilVisibilityOfElementLocated(XPATH_DISCOUNT_ERROR_MESSAGE);
+        String actualErrorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
+        assertEquals("Error Message is not expected ", expectedErrorMessage,
+            actualErrorMessageText);
+      } catch (TimeoutException e) {
+        fail("Error Message is not available");
+      }
+    }
   }
 
   public static class DiscardChangesDialog extends MdDialog {
@@ -1564,4 +1618,5 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         getValueMdDatepickerById(LOCATOR_START_DATE));
     assertFalse(isEnabledMdDatepickerById(LOCATOR_START_DATE));
   }
+
 }

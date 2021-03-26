@@ -121,6 +121,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Trip Use Filter - Departure Tab - Filter by Origin Hub, Movement Type, and Departure Date (uid:f215de60-efdd-46e6-80fb-0a9fb6132b93)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |

@@ -57,7 +57,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning wrong Shipment 1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
-    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment 1
+    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment "1"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

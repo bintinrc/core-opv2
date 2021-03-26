@@ -74,6 +74,10 @@ public class NvAutocomplete extends PageElement {
     selectValue(String.valueOf(value));
   }
 
+  public void selectValues(Iterable<?> values) {
+    values.forEach(this::selectValue);
+  }
+
   public void clear() {
     clear.click();
   }

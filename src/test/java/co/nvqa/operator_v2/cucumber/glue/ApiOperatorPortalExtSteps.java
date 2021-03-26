@@ -9,6 +9,8 @@ import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
+import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.SalesPerson;
 import co.nvqa.commons.model.core.ShipperPickupFilterTemplate;
@@ -18,6 +20,7 @@ import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.driver.DriverFilter;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.sort.hub.CrossDockStationRelation;
 import co.nvqa.commons.model.sort.nodes.Node;
@@ -188,6 +191,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
   @When("^API Operator create new Driver using data below:$")
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
     String dateUniqueString = TestUtils.generateDateUniqueString();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
@@ -221,6 +225,27 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   @And("API Operator refresh drivers data")
   public void refreshDriversData() {
     getDriverClient().getAllDriver();
+  }
+
+  @And("API Operator verifies coordinates of created driver were updated")
+  public void verifyChangedCoordinates() {
+    Driver oldDriver = get(KEY_CREATED_DRIVER);
+    DriverFilter driverFilter = new DriverFilter();
+    driverFilter.setAll(true);
+    driverFilter.setRefresh(true);
+    GetDriverResponse drivers = getDriverClient().getAllDriver(driverFilter);
+    Driver newDriver = drivers.getData().getDrivers().stream()
+        .filter(drv -> Objects.equals(drv.getId(), oldDriver.getId()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+            "Could not find driver with id=" + oldDriver.getId()));
+
+    assertFalse("Driver latitude was not changed", Objects.equals(
+        oldDriver.getZonePreferences().get(0).getLatitude(),
+        newDriver.getZonePreferences().get(0).getLatitude()));
+    assertFalse("Driver longitude was not changed", Objects.equals(
+        oldDriver.getZonePreferences().get(0).getLongitude(),
+        newDriver.getZonePreferences().get(0).getLongitude()));
   }
 
   @After("@DeleteFilersPreset")
@@ -812,7 +837,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     zone = getZoneClient().create(zone);
     zone.setHubName(data.get("hubName"));
     put(KEY_CREATED_ZONE, zone);
+    putInList(KEY_LIST_OF_CREATED_ZONES, zone);
     put(KEY_CREATED_ZONE_ID, zone.getId());
+    putInList(KEY_LIST_OF_CREATED_ZONES_ID, zone.getId());
     getZoneClient().reloadCache();
   }
 

@@ -5,6 +5,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   private AddDriverTypeDialog addDriverTypeDialog;
   private EditDriverTypeDialog editDriverTypeDialog;
   private FiltersForm filtersForm;
+
+  @FindBy(name = "Create Driver Type")
+  public NvIconTextButton createDriverType;
 
   @FindBy(css = "md-dialog")
   private ConfirmDeleteDialog confirmDeleteDialog;
@@ -133,7 +137,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   }
 
   public void createDriverType(DriverTypeParams driverTypeParams) {
-    clickButtonByAriaLabel("Create Driver Type");
+    createDriverType.click();
     addDriverTypeDialog.fillForm(driverTypeParams);
     addDriverTypeDialog.submitForm();
   }

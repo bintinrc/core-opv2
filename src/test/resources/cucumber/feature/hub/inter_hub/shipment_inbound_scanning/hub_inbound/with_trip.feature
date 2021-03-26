@@ -1185,6 +1185,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
       | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[2].id} ({KEY_LIST_OF_CREATED_HUBS[2].name}) Hub Location Type ORIGIN |
+    And DB Operator verify unscanned shipment with following data:
+      | shipmentId | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+      | type       | MISSING                               |
+      | scanType   | SHIPMENT_HUB_INBOUND                  |
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Shipment with No Path Found (uid:75cb600a-19e8-4262-b1ff-2f2b5ca6a114)
@@ -1799,6 +1803,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     When Operator refresh Middle Mile Driver Page
+    And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
       | name   | hub           | contactNumber | licenseNumber | employmentType | username |
       | RANDOM | COUNTRY_BASED | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
@@ -1940,6 +1945,75 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
+
+  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  Scenario: Hub Start Inbound - Trip Completion Dialog for Transit Trip (uid:7a8aa0d0-09cd-482f-b9ea-bef4ec569eea)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    Given API Operator creates 2 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator depart trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    When Operator fill Shipment Inbound Scanning page with data below:
+      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
+      | inboundType          | Into Hub                                                                                                                        |
+      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                                              |
+    And Operator click start inbound
+    And Operator click proceed in trip completion dialog
+    Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
+      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
+      | inboundType    | Into Hub                                                                                                                        |
+      | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                                              |
+    And Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has arrived." is shown on Shipment Inbound Scanning page
+
+  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  Scenario: Hub Start Inbound - No Trip Completion Dialog for Arrived Trip (uid:dd213e6d-f654-432f-8e6e-02713bf0115b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    Given API Operator creates 2 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator depart trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    And API Operator arrival trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    When Operator fill Shipment Inbound Scanning page with data below:
+      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
+      | inboundType          | Into Hub                                                                                                                        |
+      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                                              |
+    And Operator click start inbound
+    Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
+      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
+      | inboundType    | Into Hub                                                                                                                        |
+      | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                                              |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

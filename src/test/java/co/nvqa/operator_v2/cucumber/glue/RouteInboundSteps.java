@@ -14,20 +14,26 @@ import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointScanInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.RouteInboundPage;
+import co.nvqa.operator_v2.selenium.page.RouteInboundPage.PhotoAuditDialog.WaypointsSection;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+
+import static org.hamcrest.Matchers.blankString;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -448,12 +454,207 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.continueToInbound.click();
   }
 
+  @When("^Operator click 'Photo Audit' button on Route Inbound page$")
+  public void operatorClickPhotoAuditButtonOnRouteInboundPage() {
+    routeInboundPage.photoAudit.click();
+  }
+
   @When("^Operator click 'I have completed photo audit' button on Route Inbound page$")
-  public void operatorClickCompletePhotoAuditdButtonOnRouteInboundPage() {
+  public void operatorClickCompletePhotoAuditButtonOnRouteInboundPage() {
     routeInboundPage.photoAuditDialog.waitUntilVisible();
     pause5s();
     routeInboundPage.photoAuditDialog.completePhotoAudit.click();
     routeInboundPage.photoAuditDialog.waitUntilInvisible();
+  }
+
+  @When("Operator search {string} Tracking ID in Photo Audit dialog")
+  public void operatorSearchTrackingIdInPhotoAuditDialog(String trackingId) {
+    routeInboundPage.photoAuditDialog.searchTrackingId.setValue(resolveValue(trackingId));
+  }
+
+  @When("^Operator close Photo Audit dialog$")
+  public void operatorClosePhotoAuditDialogOnRouteInboundPage() {
+    routeInboundPage.photoAuditDialog.close();
+  }
+
+  @When("Operator verifies unsuccessful waypoints title is {string} in Photo Audit dialog")
+  public void operatorVerifyUnsuccessfulWaypointTitle(String expected) {
+    operatorVerifyWaypointTitle(routeInboundPage.photoAuditDialog.unsuccessfulWaypoints, expected,
+        "Unsuccessful");
+  }
+
+  @When("Operator verifies successful waypoints title is {string} in Photo Audit dialog")
+  public void operatorVerifySuccessfulWaypointTitle(String expected) {
+    operatorVerifyWaypointTitle(routeInboundPage.photoAuditDialog.successfulWaypoints, expected,
+        "Successful");
+  }
+
+  @When("Operator verifies partial waypoints title is {string} in Photo Audit dialog")
+  public void operatorVerifyPartialWaypointTitle(String expected) {
+    operatorVerifyWaypointTitle(routeInboundPage.photoAuditDialog.partialWaypoints, expected,
+        "Partial");
+  }
+
+  public void operatorVerifyWaypointTitle(WaypointsSection section, String expected, String type) {
+    pause5s();
+    String actual = section.title.getNormalizedText();
+    assertEquals(type + " waypoints title", resolveValue(expected), actual);
+  }
+
+  @When("Operator clicks on {int} unsuccessful waypoint address in Photo Audit dialog")
+  public void clickUnsuccessfulWaypointAddress(int index) {
+    routeInboundPage.photoAuditDialog.unsuccessfulWaypoints.photos.get(index - 1).address.click();
+  }
+
+  @When("Operator clicks on {int} successful waypoint address in Photo Audit dialog")
+  public void clickSuccessfulWaypointAddress(int index) {
+    routeInboundPage.photoAuditDialog.successfulWaypoints.photos.get(index - 1).address.click();
+  }
+
+  @When("Operator clicks on {int} partial waypoint address in Photo Audit dialog")
+  public void clickPartialWaypointAddress(int index) {
+    routeInboundPage.photoAuditDialog.partialWaypoints.photos.get(index - 1).address.click();
+  }
+
+  @When("Operator clicks on {int} unsuccessful waypoint photo in Photo Audit dialog")
+  public void clickUnsuccessfulWaypointPhoto(int index) {
+    routeInboundPage.photoAuditDialog.unsuccessfulWaypoints.photos.get(index - 1).image.click();
+  }
+
+  @When("Operator clicks on {int} successful waypoint photo in Photo Audit dialog")
+  public void clickSuccessfulWaypointPhoto(int index) {
+    routeInboundPage.photoAuditDialog.successfulWaypoints.photos.get(index - 1).image.click();
+  }
+
+  @When("Operator clicks on {int} partial waypoint photo in Photo Audit dialog")
+  public void clickPartialWaypointPhoto(int index) {
+    routeInboundPage.photoAuditDialog.partialWaypoints.photos.get(index - 1).image.click();
+  }
+
+  @Then("Operator close Photo Details dialog")
+  @When("Operator close Waypoint Details dialog")
+  public void closeWaypointDetailsDialog() {
+    routeInboundPage.photoAuditDialog.forceClose();
+  }
+
+  @When("Operator verifies waypoint parameters in Waypoint Details dialog:")
+  public void checkWaypointParams(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    routeInboundPage.waypointsDetailsDialog.waitUntilVisible();
+    String value = data.get("address");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Waypoint address", value,
+          routeInboundPage.waypointsDetailsDialog.address.getNormalizedText());
+    }
+    value = data.get("contact");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Waypoint contact", value,
+          routeInboundPage.waypointsDetailsDialog.contact.getNormalizedText());
+    }
+    value = data.get("trackingId");
+    if (StringUtils.isNotBlank(value)) {
+      List<String> trackingIds = routeInboundPage.waypointsDetailsDialog.trackingId.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      assertThat("Waypoint Tracking IDs", splitAndNormalize(value),
+          Matchers.containsInAnyOrder(trackingIds.toArray(new String[0])));
+    }
+  }
+
+  @When("Operator verifies waypoint photo parameters in Photo Details dialog:")
+  public void checkWaypointPhotoParams(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    routeInboundPage.photoDetailsDialog.waitUntilVisible();
+    String value = data.get("address");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Waypoint address", value,
+          routeInboundPage.photoDetailsDialog.address.getNormalizedText());
+    }
+    value = data.get("contact");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Waypoint contact", value,
+          routeInboundPage.photoDetailsDialog.contact.getNormalizedText());
+    }
+    String submissionDate = routeInboundPage.photoDetailsDialog.submissionDate.getNormalizedText();
+    assertThat("Submission date", submissionDate, Matchers.not(blankString()));
+    assertEquals("Submission date below the photo", submissionDate,
+        routeInboundPage.photoDetailsDialog.submissionDate2.getNormalizedText());
+    assertTrue("Photo is displayed", routeInboundPage.photoDetailsDialog.image.isDisplayedFast());
+  }
+
+  @When("Operator clicks on {string} Tracking Id in Waypoint Details dialog")
+  public void clickTrackingId(String value) {
+    String trackingId = resolveValue(value);
+    routeInboundPage.waypointsDetailsDialog.trackingId.stream()
+        .filter(element -> StringUtils.equals(trackingId, element.getNormalizedText()))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Tracking ID " + trackingId + " was not found"))
+        .click();
+  }
+
+  @When("Operator verifies unsuccessful waypoints parameters in Photo Audit dialog:")
+  public void operatorVerifyUnsuccessfulWaypointParams(List<Map<String, String>> data) {
+    operatorVerifyWaypointParams(routeInboundPage.photoAuditDialog.unsuccessfulWaypoints, data);
+  }
+
+  @When("Operator verifies successful waypoints parameters in Photo Audit dialog:")
+  public void operatorVerifySuccessfulWaypointParams(List<Map<String, String>> data) {
+    operatorVerifyWaypointParams(routeInboundPage.photoAuditDialog.successfulWaypoints, data);
+  }
+
+  @When("Operator verifies no successful waypoints photos displayed in Photo Audit dialog")
+  public void operatorVerifyNoSuccessfulWaypointPhotosDisplayed() {
+    assertEquals("Number of displayed successful waypoint photos", 0,
+        routeInboundPage.photoAuditDialog.successfulWaypoints.photos.size());
+  }
+
+  @When("Operator verifies partial waypoints parameters in Photo Audit dialog:")
+  public void operatorVerifyPartialWaypointParams(List<Map<String, String>> data) {
+    operatorVerifyWaypointParams(routeInboundPage.photoAuditDialog.partialWaypoints, data);
+  }
+
+  public void operatorVerifyWaypointParams(WaypointsSection section,
+      List<Map<String, String>> data) {
+    List<Map<String, String>> actualParams = section.photos
+        .stream()
+        .map(photoContainer -> {
+          Map<String, String> wpParams = new HashMap<>();
+          wpParams.put("address", photoContainer.address.getNormalizedText());
+          wpParams.put("photo",
+              photoContainer.image.isDisplayedFast() ? photoContainer.image.getAttribute("src")
+                  : null);
+          wpParams.put("count",
+              photoContainer.count.isDisplayedFast() ? photoContainer.count.getNormalizedText()
+                  : null);
+          return wpParams;
+        }).collect(Collectors.toList());
+
+    data.forEach(waypointParams -> {
+          waypointParams = resolveKeyValues(waypointParams);
+          String value = waypointParams.get("address");
+          if (StringUtils.isBlank(value)) {
+            throw new IllegalArgumentException("Waypoint address was not defined");
+          }
+          String finalValue = value;
+          Map<String, String> actualWpParams = actualParams.stream()
+              .filter(params -> StringUtils.equalsIgnoreCase(params.get("address"), finalValue))
+              .findFirst().orElseThrow(
+                  () -> new AssertionError("Waypoint with address [" + finalValue + "] was not found"));
+          value = waypointParams.get("photo");
+          if (StringUtils.isNotBlank(value)) {
+            assertEquals("Photo src", value, actualWpParams.get("photo"));
+          }
+          value = waypointParams.get("photoCount");
+          if (StringUtils.isNotBlank(value)) {
+            int count = Integer.parseInt(value);
+            if (count > 0) {
+              assertNotNull("Waypoint photo is displayed", actualWpParams.get("photo"));
+              assertEquals("Waypoint photos count", count,
+                  Integer.parseInt(actualWpParams.get("count")));
+            }
+          }
+        }
+    );
   }
 
   @When("^Operator add route inbound comment \"(.+)\"  on Route Inbound page$")
