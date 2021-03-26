@@ -2727,6 +2727,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Singapore"
+    And Operator refresh page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page using data below:
