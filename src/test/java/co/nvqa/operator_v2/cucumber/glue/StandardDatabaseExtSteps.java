@@ -60,7 +60,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 
-import static co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
+import static co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 import static co.nvqa.commons.support.DateUtil.TIME_FORMATTER_1;
 import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 
