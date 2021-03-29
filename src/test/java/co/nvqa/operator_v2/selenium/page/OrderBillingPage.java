@@ -149,7 +149,6 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     sendKeysAndEnterByAriaLabel("Email", emailAddress);
   }
 
-
   public void clickGenerateSuccessBillingsButton() {
     clickButtonByAriaLabelAndWaitUntilDone("Generate Success Billings");
   }
