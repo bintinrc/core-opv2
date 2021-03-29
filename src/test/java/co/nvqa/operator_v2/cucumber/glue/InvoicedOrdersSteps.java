@@ -48,14 +48,15 @@ public class InvoicedOrdersSteps extends AbstractSteps {
   }
 
   @And("Operator upload a CSV file with below order ids")
-  public void operatorUploadACSVFileWithBelowOrderIds(String trackingIds) {
-    trackingIds = resolveValue(trackingIds);
-    File csvFile = createFile("upload.csv", trackingIds);
+  public void operatorUploadACSVFileWithBelowOrderIds(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
+    File csvFile = createFile("upload.csv", String.join("\n", trackingIds));
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
     uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
     uploadInvoicedOrdersPage.verifySuccessUploadNewFileIsDisplayed();
   }
+
 
   @Then("Operator verifies below details in dwh_qa_gl.invoiced_orders table")
   public void operatorVerifiesBelowDetailsInDwh_qa_glInvoiced_ordersTable(
@@ -109,7 +110,7 @@ public class InvoicedOrdersSteps extends AbstractSteps {
   @Then("Operator opens Gmail and verifies email with below details")
   public void operatorOpensGmailAndVerifiesEmailWithBelowDetails(
       Map<String, String> dataTableAsMap) {
-    pause2s();
+    pause3s();
     String expectedSubject = dataTableAsMap.get("subject");
     String expectedBody = dataTableAsMap.get("body");
     Boolean isZipFileAvailable = Boolean.parseBoolean(dataTableAsMap.get("isZipFileAvailable"));
@@ -119,7 +120,6 @@ public class InvoicedOrdersSteps extends AbstractSteps {
     {
       if (message.getSubject().equals(expectedSubject)) {
         String emailBody = gmailClient.getSimpleContentBody(message);
-        System.out.println("NADEERA" + emailBody);
         assertThat("Actual and expected body message mismatch", emailBody,
             containsString(expectedBody));
         if (isZipFileAvailable) {
@@ -151,6 +151,7 @@ public class InvoicedOrdersSteps extends AbstractSteps {
   public void operatorClicksOnLinkToDownloadOnEmailAndVerifiesCSVFile() {
     List<String> body = new LinkedList<>();
     String attachmentUrl = get(KEY_INVOICED_ORDER_URL);
+    assertTrue("Attachment Url is null ", Objects.nonNull(attachmentUrl));
 
     String zipName = "upload_invoiced-orders.zip";
     String pathToZip = TestConstants.TEMP_DIR + "invoiced_orders_" + DateUtil.getTimestamp() + "/";
@@ -181,11 +182,14 @@ public class InvoicedOrdersSteps extends AbstractSteps {
 
   }
 
-  @Then("Operator verifies Tracking ID is available in the CSV file")
-  public void operatorVerifiesTrackingIDIsAvailableInTheCSVFile() {
+  @Then("Operator verifies below tracking id\\(s) is\\are available in the CSV file")
+  public void operatorVerifiesBelowTrackingIdSIsAreAvailableInTheCSVFile(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
     List<String> body = get(KEY_INVOICED_ORDER_CSV_BODY);
-    String trackingID = get(KEY_CREATED_ORDER_TRACKING_ID);
-    assertTrue(f("Tracking_ID %s is not found in CSV", trackingID), body.contains(trackingID));
+
+    for (String trackingID : trackingIds) {
+      assertTrue(f("Tracking_ID %s is not found in CSV", trackingID), body.contains(trackingID));
+    }
   }
 
   @And("Operator clicks on Upload New File Button")
@@ -195,4 +199,35 @@ public class InvoicedOrdersSteps extends AbstractSteps {
     uploadInvoicedOrdersPage.waitUntilPageLoaded();
   }
 
+  @Then("Operator uploads a PDF and verifies that any other file except csv is not allowed")
+  public void operatorUploadsAPDFAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed() {
+    String pdfFileName = "invalid-upload.pdf";
+    File pdfFile = createFile(pdfFileName, "TEST");
+    uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.chooseButton.setValue(pdfFile);
+    String actualErrorMsg = uploadInvoicedOrdersPage.getToastTopText();
+    String expectedToastText = "\"" + pdfFileName + "\" is not allowed.";
+    assertEquals(expectedToastText, actualErrorMsg);
+  }
+
+  @Then("Operator uploads an invalid CSV and verifies error message")
+  public void operatorUploadsAnInvalidCSVAndVerifiesErrorMessage() {
+    String csvFileName = "upload.csv";
+    File csvFile = createFile(csvFileName, "TEST1 , TEST2");
+    uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
+    String actualErrorMsg = uploadInvoicedOrdersPage.getToastTopText();
+    String expectedToastText = "Error parsing csv";
+    assertEquals(expectedToastText, actualErrorMsg);
+  }
+
+  @And("Operator clicks Download sample CSV template button on the Upload Invoiced Orders Page")
+  public void operatorClicksDownloadSampleCSVTemplateButtonOnTheUploadInvoicedOrdersPage() {
+    uploadInvoicedOrdersPage.clickDownloadCsvButton();
+  }
+
+  @Then("Operator verify Sample CSV file on Upload Invoiced Orders page downloaded successfully with below data")
+  public void operatorVerifySampleCSVFileOnUploadInvoicedOrdersPageDownloadedSuccessfullyWithBelowData(
+      List<String> trackingIds) {
+    String expectedString = String.join("\n", trackingIds);
+    uploadInvoicedOrdersPage.verifyCsvFileDownloadedSuccessfully(expectedString);
+  }
 }

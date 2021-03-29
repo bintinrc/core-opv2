@@ -12,8 +12,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
 
+  public static final String CSV_FILENAME_PATTERN = "sample_csv";
+
   @FindBy(name = "Upload Invoiced Orders with CSV")
   public NvIconTextButton uploadInvoicedOrdersButton;
+
+  @FindBy(name = "Download sample CSV template")
+  public NvIconTextButton downloadSampleCsvButton;
 
   @FindBy(name = "Upload New File")
   public NvIconTextButton uploadNewFileButton;
@@ -32,6 +37,11 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
     uploadInvoicedOrdersButton.click();
   }
 
+  public void clickDownloadCsvButton() {
+    downloadSampleCsvButton.click();
+  }
+
+
   public void verifyUploadInvoicedOrdersDialogIsDisplayed() {
     uploadInvoicedOrdersDialog.waitUntilVisible();
     assertTrue("Upload Invoiced Orders Dialog is not displayed",
@@ -39,14 +49,19 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
   }
 
   public void verifySuccessMsgIsDisplayed() {
-    assertTrue(isElementVisible(
+    assertTrue("Success message is not displayed", isElementVisible(
         "//p[text()='Your upload is being processed. An email alert will be sent upon completion. Thank you!']"));
   }
 
   public void verifySuccessUploadNewFileIsDisplayed() {
-    assertTrue(uploadNewFileButton.isDisplayed());
+    assertTrue("Upload New Button is not displayed", uploadNewFileButton.isDisplayed());
 //    assertTrue(isElementVisible(
 //        "//nv-icon-text-button[@name='Upload New File']"));
+  }
+
+  public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {
+    verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN),
+        expectedBody);
   }
 
   public static class UploadInvoicedOrdersDialog extends MdDialog {
