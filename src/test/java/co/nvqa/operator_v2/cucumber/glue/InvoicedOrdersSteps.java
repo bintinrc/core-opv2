@@ -110,10 +110,10 @@ public class InvoicedOrdersSteps extends AbstractSteps {
   @Then("Operator opens Gmail and verifies email with below details")
   public void operatorOpensGmailAndVerifiesEmailWithBelowDetails(
       Map<String, String> dataTableAsMap) {
-    pause3s();
+    pause5s();
     String expectedSubject = dataTableAsMap.get("subject");
     String expectedBody = dataTableAsMap.get("body");
-    Boolean isZipFileAvailable = Boolean.parseBoolean(dataTableAsMap.get("isZipFileAvailable"));
+    boolean isZipFileAvailable = Boolean.parseBoolean(dataTableAsMap.get("isZipFileAvailable"));
 
     GmailClient gmailClient = new GmailClient();
     gmailClient.readUnseenMessage(message ->

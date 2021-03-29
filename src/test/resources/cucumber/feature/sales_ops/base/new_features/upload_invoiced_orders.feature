@@ -69,7 +69,7 @@ Feature: Upload Invoiced Orders
       | isZipFileAvailable | true                                       |
     When Operator clicks on link to download on email and verifies CSV file
     Then Operator verifies below tracking id(s) is\are available in the CSV file
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID} |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Upload Invoice Orders CSV - With Orders are already in invoiced_orders (has-invoiced) (uid:0736ad19-8d02-49a4-b5a1-07368a743daa)

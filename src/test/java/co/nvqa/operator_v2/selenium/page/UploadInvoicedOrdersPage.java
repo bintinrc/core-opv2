@@ -55,8 +55,6 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
 
   public void verifySuccessUploadNewFileIsDisplayed() {
     assertTrue("Upload New Button is not displayed", uploadNewFileButton.isDisplayed());
-//    assertTrue(isElementVisible(
-//        "//nv-icon-text-button[@name='Upload New File']"));
   }
 
   public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {
