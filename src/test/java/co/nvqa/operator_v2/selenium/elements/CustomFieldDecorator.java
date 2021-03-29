@@ -10,9 +10,12 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WrapsElement;
+import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -122,6 +125,15 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
     return proxyForListElements(loader, locator, clazz);
   }
 
+  protected WebElement proxyForLocator(ClassLoader loader, ElementLocator locator) {
+    InvocationHandler handler = new LocatingElementHandler(locator);
+
+    WebElement proxy;
+    proxy = (WebElement) Proxy.newProxyInstance(
+        loader, new Class[]{WebElement.class, WrapsElement.class, Locatable.class}, handler);
+    return proxy;
+  }
+
   @SuppressWarnings("unchecked")
   protected <T> List<T> proxyForListElements(ClassLoader loader, ElementLocator locator,
       Class<T> clazz) {
@@ -171,4 +183,41 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
       }
     }
   }
+
+  public class LocatingElementHandler implements InvocationHandler {
+
+    private final ElementLocator locator;
+
+    public LocatingElementHandler(ElementLocator locator) {
+      this.locator = locator;
+    }
+
+    public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
+      WebElement element;
+      try {
+        if ("toString".equals(method.getName())) {
+          return "Proxy element for: " + locator.toString();
+        }
+        element = locator.findElement();
+      } catch (NoSuchElementException e) {
+        if ("toString".equals(method.getName())) {
+          return "Proxy element for: " + locator.toString();
+        }
+        throw e;
+      }
+
+      if ("getWrappedElement".equals(method.getName())) {
+        return element;
+      }
+
+      try {
+        return method.invoke(element, objects);
+      } catch (InvocationTargetException e) {
+        // Unwrap the underlying exception
+        throw e.getCause();
+      }
+    }
+  }
+
+
 }

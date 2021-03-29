@@ -531,19 +531,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     return (date + " " + time).trim();
   }
 
-  public void verifyInboundIsSucceed(String trackingId) {
-    String mainWindowHandle = getWebDriver().getWindowHandle();
-
-    try {
-      searchTrackingId(trackingId);
-      switchToNewOpenedWindow(mainWindowHandle);
-      editOrderPage.waitUntilInvisibilityOfLoadingOrder();
-      editOrderPage.verifyInboundIsSucceed();
-    } finally {
-      closeAllWindows(mainWindowHandle);
-    }
-  }
-
   public void searchTrackingId(String trackingId) {
     specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
   }

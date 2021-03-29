@@ -212,8 +212,9 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
   }
 
-  @Then("Operator verify error message in shipment inbound scanning is {string} for shipment {long}")
-  public void operatorVerifyErrorMessageInShipmentInboundScanningIs(String errorMessage, Long errorShipmentId) {
-    scanningPage.checkAlert(errorShipmentId, errorMessage);
+  @Then("Operator verify error message in shipment inbound scanning is {string} for shipment {string}")
+  public void operatorVerifyErrorMessageInShipmentInboundScanningIs(String errorMessage, String errorShipmentId) {
+    String resolvedShipmentId = resolveValue(errorShipmentId);
+    scanningPage.checkAlert(Long.valueOf(resolvedShipmentId), errorMessage);
   }
 }

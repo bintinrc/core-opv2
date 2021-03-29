@@ -547,22 +547,24 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void assignDriver(String driverId) {
     assignTripModal.waitUntilVisible();
+    assignTripModal.addDriver.click();
     assignTripModal.assignDriver(driverId);
-    assignTripModal.saveDriver.click();
+    assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
 
   public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
     assignTripModal.waitUntilVisible();
+    assignTripModal.addDriver.click();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
-    assignTripModal.saveDriver.click();
+    assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
 
   public void clearAssignedDriver() {
     assignTripModal.waitUntilVisible();
     assignTripModal.clearAssignedDriver();
-    assignTripModal.saveDriver.click();
+    assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
 
@@ -1086,8 +1088,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Add Driver']")
     public Button addDriver;
 
-    @FindBy(className = "remove-link")
+    @FindBy(xpath= "//div[contains(@class, 'remove-link')]")
     public Button removeDriver;
+
+    @FindBy(xpath = "//button[.='Unassign All']")
+    public Button unassignAllDrivers;
 
     public void assignDriver(String driverName) {
       assignPrimaryDriverInput.selectValue(driverName);
@@ -1096,18 +1101,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
       assignPrimaryDriverInput.selectValue(primaryDriver);
       pause1s();
-      addAnotherDriver.waitUntilClickable();
-      addAnotherDriver.click();
+      addDriver.waitUntilClickable();
+      addDriver.click();
       pause1s();
       assignAdditionalDriverInput.selectValue(additionalDriver);
     }
 
     public void clearAssignedDriver() {
-      if (assignAdditionalDriverInput.isDisplayedFast()) {
-        removeDriver.click();
-        pause500ms();
-      }
-      assignPrimaryDriverInput.clearValue();
+      addDriver.click();
+      pause500ms();
+      unassignAllDrivers.click();
     }
   }
 }

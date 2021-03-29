@@ -247,15 +247,7 @@ Feature: Crossdock to Crossdock
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to Crossdock - Facility Type of Origin/Destination Crossdock Hub is changed to 'Station' (uid:2bc56464-c419-4627-939c-932a3ae5dd72)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When API Operator creates new Hub using data below:
+    When API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
@@ -287,7 +279,7 @@ Feature: Crossdock to Crossdock
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page using data below:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | origHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Transit                            |
       | sla         | -                                  |
@@ -295,7 +287,7 @@ Feature: Crossdock to Crossdock
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
       | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |

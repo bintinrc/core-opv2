@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.VanInboundPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -13,7 +13,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 public class VanInboundSteps extends AbstractSteps {
 
   private VanInboundPage vanInboundPage;
-  private AllOrdersPage allOrdersPage;
+  private EditOrderPage editOrderPage;
 
   public VanInboundSteps() {
   }
@@ -21,7 +21,7 @@ public class VanInboundSteps extends AbstractSteps {
   @Override
   public void init() {
     vanInboundPage = new VanInboundPage(getWebDriver());
-    allOrdersPage = new AllOrdersPage(getWebDriver());
+    editOrderPage = new EditOrderPage(getWebDriver());
   }
 
   @And("^Operator fill the route ID on Van Inbound Page then click enter$")
@@ -43,8 +43,8 @@ public class VanInboundSteps extends AbstractSteps {
 
   @Then("^Operator verify order scan updated$")
   public void verifyOrderScanUpdated() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.verifyInboundIsSucceed(trackingId);
+    editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+    editOrderPage.verifyInboundIsSucceed();
   }
 
   @And("^Operator click on start route after van inbounding$")
