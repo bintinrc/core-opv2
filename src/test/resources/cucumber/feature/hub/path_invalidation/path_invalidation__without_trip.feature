@@ -34,20 +34,6 @@ Feature: Path Invalidation - Without Trip
     And DB Operator verify "{KEY_LIST_OF_CREATED_PATH_ID[1]}" is deleted in movement_path table
     And DB Operator verify "{KEY_LIST_OF_CREATED_PATH_ID[2]}" is deleted in movement_path table
     And DB Operator verify "{KEY_LIST_OF_CREATED_PATH_ID[3]}" is deleted in movement_path table
-    Given API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:
-      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
-      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
-    And DB Operator verify sla in movement_events table is "FAILED" no path for the following shipments from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}":
-      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
-      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
-    And DB Operator verify path in movement_path table is not found for shipments from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    And API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    Given API Operator does the "van-inbound" scan from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" for the following shipments:
-      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
-      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
-    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "LAND_HAUL" is created in movement_path table
-    Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" with type "AIR_HAUL" is created in movement_path table
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipments @DeletePaths
   Scenario: Create Schedule (CD->CD) - Van Inbound w/o Trip (uid:7ecb6050-6f12-4856-be11-b25f27e8c3a1)

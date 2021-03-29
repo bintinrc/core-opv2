@@ -61,6 +61,7 @@ public class TripManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies toast with message {string} is shown on movement page")
   public void operatorVerifiesToastWithMessageIsShownOnTripManagementPage(String toastMessage) {
+    toastMessage = toastMessage.replace("#n","\n");
     String resolvedToastMessage = resolveValue(toastMessage);
     tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
   }
@@ -226,11 +227,13 @@ public class TripManagementSteps extends AbstractSteps {
     TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType
         .fromString(filteringName);
     int latestIndex = tripManagementDetailsData.getData().size() - 1;
-    ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(latestIndex)
-        .getExpectedArrivalTime().plusDays(1);
-    tripManagementDetailsData.getData().get(latestIndex)
-        .setExpectedArrivalTime(expectedArrivalTime);
-    tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+    if (tripManagementDetailsData.getData().size() > 0) {
+      ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(latestIndex)
+          .getExpectedArrivalTime().plusDays(1);
+      tripManagementDetailsData.getData().get(latestIndex)
+          .setExpectedArrivalTime(expectedArrivalTime);
+      tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+    }
   }
 
   @Then("Operator verifies that the trip management shown with {string} as its filter is right")

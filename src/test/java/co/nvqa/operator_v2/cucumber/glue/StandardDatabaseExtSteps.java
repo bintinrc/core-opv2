@@ -12,6 +12,7 @@ import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
 import co.nvqa.commons.model.core.hub.MovementTrip;
 import co.nvqa.commons.model.core.hub.PathSchedule;
+import co.nvqa.commons.model.core.hub.UnscannedShipment;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.model.entity.DriverEntity;
@@ -59,7 +60,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 
-import static co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
+import static co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 import static co.nvqa.commons.support.DateUtil.TIME_FORMATTER_1;
 import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 
@@ -1746,6 +1747,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Double expectedLoyaltyPoint = Double.valueOf(pointAdded);
 
     assertEquals("Check added loyalty point", expectedLoyaltyPoint,  actualLoyaltyPoint);
+  }
+
+  @Then("DB Operator verify unscanned shipment with following data:")
+  public void dbOperatorVerifyUnscannedShipmentWithFollowingData(Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+    Long shipmentId = Long.valueOf(resolvedMapOfData.get("shipmentId"));
+    String unscannedShipmentType = mapOfData.get("type");
+    String scanType = mapOfData.get("scanType");
+    UnscannedShipment unscannedShipment = getHubJdbc().getUnscannedShipment(shipmentId);
+
+    assertThat("Unscanned shipment type id is the same", unscannedShipment.getShipmentId(),
+        equalTo(shipmentId));
+    assertThat("Unscanned shipment type is the same", unscannedShipment.getType(),
+        equalTo(unscannedShipmentType));
+    assertThat("Unscanned shipment scan type is the same", unscannedShipment.getScanType(),
+        equalTo(scanType));
   }
 
   @When("DB Operator sets flags of driver with id {string} to {int}")

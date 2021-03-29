@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.operator_v2.selenium.page.PriorityLevelsPage;
