@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
@@ -14,8 +15,14 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
   @FindBy(name = "Upload Invoiced Orders with CSV")
   public NvIconTextButton uploadInvoicedOrdersButton;
 
+  @FindBy(name = "Upload New File")
+  public NvIconTextButton uploadNewFileButton;
+
   @FindBy(css = "md-dialog")
   public UploadInvoicedOrdersDialog uploadInvoicedOrdersDialog;
+
+  @FindBy(css = "md-dialog")
+  public UploadNewCsvDialog uploadNewCsvDialog;
 
   public UploadInvoicedOrdersPage(WebDriver webDriver) {
     super(webDriver);
@@ -37,8 +44,9 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
   }
 
   public void verifySuccessUploadNewFileIsDisplayed() {
-    assertTrue(isElementVisible(
-        "//nv-icon-text-button[@name='Upload New File']"));
+    assertTrue(uploadNewFileButton.isDisplayed());
+//    assertTrue(isElementVisible(
+//        "//nv-icon-text-button[@name='Upload New File']"));
   }
 
   public static class UploadInvoicedOrdersDialog extends MdDialog {
@@ -57,6 +65,15 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
       chooseButton.setValue(file);
       submit.clickAndWaitUntilDone();
     }
+  }
 
+  public static class UploadNewCsvDialog extends MdDialog {
+
+    @FindBy(xpath = "//button//span[text()='Upload New File']")
+    public Button uploadNewFile;
+
+    public UploadNewCsvDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

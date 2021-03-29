@@ -1,12 +1,31 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.InvoicedOrder;
+import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.GmailClient;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import org.apache.commons.io.FileUtils;
 
 import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
@@ -26,28 +45,6 @@ public class InvoicedOrdersSteps extends AbstractSteps {
   public void operatorClicksUploadInvoicedOrdersWithCSVButtonOnTheUploadInvoicedOrdersPage() {
     uploadInvoicedOrdersPage.clickUploadCsvButton();
     uploadInvoicedOrdersPage.verifyUploadInvoicedOrdersDialogIsDisplayed();
-  }
-
-  @And("Operator uploads a CSV file with below order ids")
-  public void operatorUploadsACSVFileWithBelowOrderIds(String orderIds) {
-    int countOfShipperIds = orderIds.split(",").length;
-    File csvFile = createFile("upload.csv", orderIds);
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
-    uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
-    uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.submit.click();
-
-//    clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
-//    clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
-//
-//    waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_SHIPPER_ID_XPATH);
-//    waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
-//    sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL,
-//        csvFile.getAbsolutePath());
-//    waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
-//    clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
-
-//    assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
-//        getToastTopText());
   }
 
   @And("Operator upload a CSV file with below order ids")
@@ -108,4 +105,94 @@ public class InvoicedOrdersSteps extends AbstractSteps {
     }
 
   }
+
+  @Then("Operator opens Gmail and verifies email with below details")
+  public void operatorOpensGmailAndVerifiesEmailWithBelowDetails(
+      Map<String, String> dataTableAsMap) {
+    pause2s();
+    String expectedSubject = dataTableAsMap.get("subject");
+    String expectedBody = dataTableAsMap.get("body");
+    Boolean isZipFileAvailable = Boolean.parseBoolean(dataTableAsMap.get("isZipFileAvailable"));
+
+    GmailClient gmailClient = new GmailClient();
+    gmailClient.readUnseenMessage(message ->
+    {
+      if (message.getSubject().equals(expectedSubject)) {
+        String emailBody = gmailClient.getSimpleContentBody(message);
+        System.out.println("NADEERA" + emailBody);
+        assertThat("Actual and expected body message mismatch", emailBody,
+            containsString(expectedBody));
+        if (isZipFileAvailable) {
+          String REPORT_ATTACHMENT_NAME_PATTERN = "https://.*ninjavan.*invoicing/invoicing-results.*zip";
+
+          Pattern pattern = Pattern.compile(REPORT_ATTACHMENT_NAME_PATTERN);
+          Matcher matcher = pattern.matcher(emailBody);
+
+          String attachmentUrl;
+
+          if (matcher.find()) {
+            attachmentUrl = matcher.group();
+            NvLogger.infof("Zip file received in mail - %s", attachmentUrl);
+            if (Objects.nonNull(attachmentUrl)) {
+              put(KEY_INVOICED_ORDER_URL, attachmentUrl);
+            } else {
+              fail("Zip file link unavailable in the email ");
+            }
+          }
+        }
+      } else {
+        fail(f("No email with '%s' subject in the mailbox", expectedSubject));
+      }
+    });
+  }
+
+
+  @When("Operator clicks on link to download on email and verifies CSV file")
+  public void operatorClicksOnLinkToDownloadOnEmailAndVerifiesCSVFile() {
+    List<String> body = new LinkedList<>();
+    String attachmentUrl = get(KEY_INVOICED_ORDER_URL);
+
+    String zipName = "upload_invoiced-orders.zip";
+    String pathToZip = TestConstants.TEMP_DIR + "invoiced_orders_" + DateUtil.getTimestamp() + "/";
+    try {
+      FileUtils.copyURLToFile(new URL(attachmentUrl), new File(pathToZip + zipName));
+    } catch (IOException ex) {
+      throw new NvTestRuntimeException("Could not get file from " + attachmentUrl, ex);
+    }
+
+    try (ZipFile zipFile = new ZipFile(pathToZip + zipName)) {
+      Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = entries.nextElement();
+        InputStream is = zipFile.getInputStream(entry);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+        while (reader.ready()) {
+          body.add(reader.readLine());
+        }
+      }
+      put(KEY_INVOICED_ORDER_CSV_BODY, body);
+    } catch (IOException ex) {
+      throw new NvTestRuntimeException("Could not read from file " + attachmentUrl, ex);
+    }
+    assertFalse(f("Body is not found in CSV received in email (%s)", attachmentUrl),
+        body.isEmpty());
+
+  }
+
+  @Then("Operator verifies Tracking ID is available in the CSV file")
+  public void operatorVerifiesTrackingIDIsAvailableInTheCSVFile() {
+    List<String> body = get(KEY_INVOICED_ORDER_CSV_BODY);
+    String trackingID = get(KEY_CREATED_ORDER_TRACKING_ID);
+    assertTrue(f("Tracking_ID %s is not found in CSV", trackingID), body.contains(trackingID));
+  }
+
+  @And("Operator clicks on Upload New File Button")
+  public void operatorClicksOnUploadNewFileButton() {
+    uploadInvoicedOrdersPage.uploadNewFileButton.click();
+    uploadInvoicedOrdersPage.uploadNewCsvDialog.uploadNewFile.click();
+    uploadInvoicedOrdersPage.waitUntilPageLoaded();
+  }
+
 }
