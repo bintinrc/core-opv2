@@ -176,12 +176,6 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     }
   }
 
-  public void markGmailMessageAsRead() {
-    GmailClient gmailClient = new GmailClient();
-    gmailClient.markUnreadMessagesAsRead();
-  }
-
-
   public String getOrderBillingAttachmentFromEmail() {
     pause10s();
 

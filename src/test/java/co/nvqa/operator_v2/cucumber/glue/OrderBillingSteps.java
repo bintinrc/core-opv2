@@ -116,11 +116,6 @@ public class OrderBillingSteps extends AbstractSteps {
     assertTrue("One or more CSV files attached in the ZIP", getNoOfFilesInZipAttachment() == 0);
   }
 
-  @Then("^operator marks gmail messages as read$")
-  public void operatorMarkGmailMessageAsRead() {
-    orderBillingPage.markGmailMessageAsRead();
-  }
-
   @Then("Operator reads the CSV attachment for {string}")
   public void operatorReadsTheCSVAttachmentFor(String reportName) {
     orderBillingPage.readOrderBillingCsvAttachment(get(KEY_ORDER_BILLING_SSB_URL),
