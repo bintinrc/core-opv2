@@ -10,7 +10,6 @@ Feature: Order Billing
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
 
-    @nadeera
     @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` Order Exists (uid:e7eee954-af8d-471c-8c60-42df489fe56a)
     Given API Shipper create V4 order using data below:

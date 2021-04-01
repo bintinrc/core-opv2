@@ -33,7 +33,7 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
-    Then Operator verifies the report only contains shipper IDs like below:
+    Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id}
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -56,7 +56,7 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
-    Then Operator verifies the report only contains shipper IDs like below:
+    Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id}
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -80,7 +80,7 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
-    Then Operator verifies the report only contains shipper IDs like below:
+    Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id}
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -95,5 +95,5 @@ Feature: Order Billing
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
-    Then Operator verifies the report only contains shipper IDs like below:
+    Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id}

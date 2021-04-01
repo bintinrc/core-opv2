@@ -23,7 +23,6 @@ Feature: Order Billing
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
 
-    @nadeera
     @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:59af6bea-ac85-446d-97ba-4d386577f447)
     Given API Shipper create V4 order using data below:
