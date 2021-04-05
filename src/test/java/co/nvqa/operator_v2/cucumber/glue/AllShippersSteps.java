@@ -103,6 +103,22 @@ public class AllShippersSteps extends AbstractSteps {
   @When("^Operator create new Shipper with basic settings using data below:$")
   public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(
       Map<String, String> mapOfData) {
+    Shipper shipper = prepareShipperData(mapOfData);
+
+    allShippersPage.createNewShipper(shipper);
+    put(KEY_CREATED_SHIPPER, shipper);
+    putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
+  }
+
+  @When("Operator fail create new Shipper with basic settings using data below:")
+  public void operatorCreateNewShipperWithBasicSettingsFail(
+      Map<String, String> mapOfData) {
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    Shipper shipper = prepareShipperData(mapOfData);
+    allShippersPage.createNewShipperFail(shipper);
+  }
+
+  private Shipper prepareShipperData(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String dateUniqueString = generateDateUniqueString();
 
@@ -115,10 +131,7 @@ public class AllShippersSteps extends AbstractSteps {
     setBilling(shipper, dateUniqueString);
     fillMarketplaceProperties(shipper, mapOfData);
     generatePickupAddresses(shipper, mapOfData);
-
-    allShippersPage.createNewShipper(shipper);
-    put(KEY_CREATED_SHIPPER, shipper);
-    putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
+    return shipper;
   }
 
   private void generatePickupAddresses(Shipper shipper, Map<String, String> mapOfData) {
@@ -1094,6 +1107,7 @@ public class AllShippersSteps extends AbstractSteps {
     Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
     Boolean isDisableDriverAppReschedule = Boolean
         .parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
+    Boolean isCorporateReturn = Boolean.parseBoolean(mapOfData.get("isCorporateReturn"));
     String ocVersion = mapOfData.get("ocVersion");
     String servicesTemp = mapOfData.get("services");
     String trackingType = mapOfData.get("trackingType");
@@ -1115,6 +1129,7 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setIsPrePaid(isPrepaid);
     orderCreate.setAllowStagedOrders(isAllowStagedOrders);
     orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
+    orderCreate.setIsCorporateReturn(isCorporateReturn);
     shipper.setOrderCreate(orderCreate);
 
     DistributionPoint distributionPoint = new DistributionPoint();
@@ -1160,6 +1175,20 @@ public class AllShippersSteps extends AbstractSteps {
 
     allShippersPage.createNewShipperWithoutPricingScript(shipper);
     put(KEY_CREATED_SHIPPER, shipper);
+  }
+
+  @When("Operator set service type {string} to {string} on edit shipper page")
+  public void setServiceTypeOnShipperEditOrCreatePage(
+      String serviceType, String value) {
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabel(serviceType, value);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+  }
+
+  @When("Operator verifies toast {string} displayed on edit shipper page")
+  public void verifiesToast(String msg) {
+    String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
+    assertTrue(actualMsg.contains(msg));
   }
 
   @And("Operator verifies the pricing profile and shipper discount details are correct")
