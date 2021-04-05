@@ -674,7 +674,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//nv-filter-box[@main-title='Zones']")
     public NvFilterBox zonesFilter;
 
-    @FindBy(name = "Load Selection")
+    @FindBy(name = "commons.load-selection")
     public NvApiTextButton loadSelection;
 
     public FiltersForm(WebDriver webDriver) {
