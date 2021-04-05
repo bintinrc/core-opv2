@@ -21,7 +21,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
   Scenario: Van Inbound Completed Shipment Not In Origin Hub (uid:eab6d9b4-d433-41de-ae68-dfb2da3eb59e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Cancelled"
+    When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
@@ -328,6 +328,61 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
   @DeleteShipment
+  Scenario: Van Inbound Wrong Shipment (uid:9596ed71-8be2-4343-b7ad-e35544e6b819)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator inbound scanning wrong Shipment 1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
+    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment "1"
+
+  @DeleteShipment
+  Scenario: Van Inbound Transit Shipment In Origin Hub (uid:43f4bacc-e862-4410-89b1-15be54463875)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
+    And Operator refresh page
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
+    Then Operator verify error message in shipment inbound scanning is "transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page using data below:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | destHubName | {hub-name-2}              |
+      | status      | Transit                   |
+    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    Then Operator verify shipment event on Shipment Details page using data below:
+      | source | SHIPMENT_VAN_INBOUND   |
+      | result | Transit                |
+      | userId | automation@ninjavan.co |
+
+  @DeleteShipment
+  Scenario: Van Inbound Transit Shipment Not In Origin Hub (uid:b04b3727-aa95-488d-a65c-ee80513fa5df)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
+    And Operator refresh page
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page
+    Then Operator verify error message in shipment inbound scanning is "transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page using data below:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name-2}              |
+      | destHubName | {hub-name-2}              |
+      | status      | Transit                   |
+    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    Then Operator verify shipment event on Shipment Details page using data below:
+      | source | SHIPMENT_VAN_INBOUND   |
+      | result | Transit                |
+      | userId | automation@ninjavan.co |
+
+  @DeleteShipment
   Scenario: Van Inbound Pending Shipment In Other Country (uid:cfea52a0-fa58-4815-80a9-825f21efdd3a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
@@ -405,13 +460,6 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
-
-  @DeleteShipment
-  Scenario: Van Inbound Wrong Shipment (uid:9596ed71-8be2-4343-b7ad-e35544e6b819)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator inbound scanning wrong Shipment 1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
-    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment 1
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

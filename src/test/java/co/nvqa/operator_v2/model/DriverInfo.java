@@ -21,6 +21,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   private String type;
   private Integer codLimit;
   private String employmentStartDate;
+  private String employmentEndDate;
   private String vehicleLicenseNumber;
   private Integer vehicleCapacity;
   private String contactType;
@@ -33,6 +34,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   private String password;
   private String comments;
   private String hub;
+  private String resigned;
 
   public DriverInfo() {
   }
@@ -301,5 +303,21 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     setUsername(driver.getUsername());
     setPassword(driver.getPassword());
     setComments(driver.getComments());
+  }
+
+  public String getEmploymentEndDate() {
+    return employmentEndDate;
+  }
+
+  public void setEmploymentEndDate(String employmentEndDate) {
+    this.employmentEndDate = employmentEndDate;
+  }
+
+  public String getResigned() {
+    return resigned;
+  }
+
+  public void setResigned(String resigned) {
+    this.resigned = resigned;
   }
 }

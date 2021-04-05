@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -68,8 +69,14 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ReservationPickupsDialog reservationPickupsDialog;
 
-  @FindBy(name = "Cancel")
-  public NvIconButton closeDialog;
+  @FindBy(css = "md-dialog.route-inbound-waypoint-details-dialog")
+  public WaypointsDetailsDialog waypointsDetailsDialog;
+
+  @FindBy(css = "md-dialog.route-inbound-photo-details-dialog")
+  public WaypointsPhotoDetailsDialog photoDetailsDialog;
+
+  @FindBy(name = "container.route-inbound.photo-audit")
+  public NvIconTextButton photoAudit;
 
   @FindBy(xpath = "//nv-autocomplete[@search-text='ctrl.hubSelection.searchText']")
   public NvAutocomplete selectHub;
@@ -916,13 +923,94 @@ public class RouteInboundPage extends OperatorV2SimplePage {
     }
   }
 
+  public static class WaypointsDetailsDialog extends MdDialog {
+
+    @FindBy(xpath = "(.//p[@class='content'])[1]")
+    public PageElement address;
+
+    @FindBy(xpath = "(.//p[@class='content'])[2]")
+    public PageElement contact;
+
+    @FindBy(css = "tr:not(.last-row) td.tracking-id a")
+    public List<PageElement> trackingId;
+
+    public WaypointsDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class WaypointsPhotoDetailsDialog extends MdDialog {
+
+    @FindBy(css = "p.address")
+    public PageElement address;
+
+    @FindBy(xpath = "(.//p[@class='content'])[1]")
+    public PageElement contact;
+
+    @FindBy(xpath = "(.//p[@class='content'])[2]")
+    public PageElement submissionDate;
+
+    @FindBy(css = "h5")
+    public PageElement submissionDate2;
+
+    @FindBy(css = "img")
+    public PageElement image;
+
+    public WaypointsPhotoDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
   public static class PhotoAuditDialog extends MdDialog {
 
     @FindBy(css = "[aria-label='I have completed photo audit']")
     public Button completePhotoAudit;
 
+    @FindBy(css = "input[placeholder='Search Tracking ID']")
+    public TextBox searchTrackingId;
+
+    @FindBy(css = "div.unsuccessful-waypoints")
+    public WaypointsSection unsuccessfulWaypoints;
+
+    @FindBy(css = "div.successful-waypoints")
+    public WaypointsSection successfulWaypoints;
+
+    @FindBy(css = "div.partial-waypoints")
+    public WaypointsSection partialWaypoints;
+
     public PhotoAuditDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+
+    public static class WaypointsSection extends PageElement {
+
+      @FindBy(css = "h5")
+      public PageElement title;
+
+      @FindBy(css = "div.photo-container")
+      public List<PhotoContainer> photos;
+
+      public WaypointsSection(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
+    }
+
+    public static class PhotoContainer extends PageElement {
+
+      @FindBy(css = "p.address")
+      public PageElement address;
+
+      @FindBy(css = "img")
+      public PageElement image;
+
+      @FindBy(css = "div.count")
+      public PageElement count;
+
+      public PhotoContainer(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
     }
   }
 

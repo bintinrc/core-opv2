@@ -352,6 +352,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       clickToggleButtonByLabel("Corporate", "No");
       clickToggleButtonByLabel("Corporate Return", "No");
+      clickToggleButtonByLabel("Corporate Manual AWB", "No");
     }
     clickToggleButtonByLabel("Corporate Return",
         convertBooleanToString(orderCreate.getIsCorporateReturn(), "Yes", "No"));

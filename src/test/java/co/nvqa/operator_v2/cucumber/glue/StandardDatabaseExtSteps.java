@@ -12,6 +12,7 @@ import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.hub.MovementPath;
 import co.nvqa.commons.model.core.hub.MovementTrip;
 import co.nvqa.commons.model.core.hub.PathSchedule;
+import co.nvqa.commons.model.core.hub.UnscannedShipment;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.model.entity.DriverEntity;
@@ -59,7 +60,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 
-import static co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
+import static co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 import static co.nvqa.commons.support.DateUtil.TIME_FORMATTER_1;
 import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 
@@ -682,6 +683,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     driverInfo.setId(driverEntity.getId());
     driverInfo.setUuid(driverEntity.getUuid());
     put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
+  }
+
+  @Given("DB Operator find drivers by {string} first name")
+  public void findDriversByFirstName(String firstName) {
+    List<Driver> drivers = getDriverJdbc().findDriversByFirstName(resolveValue(firstName));
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
+  @Given("DB Operator find drivers by {string} driver type name")
+  public void findDriversByDriverTypeName(String driverTypeName) {
+    List<Driver> drivers = getDriverJdbc()
+        .findDriversByDriverTypeName(resolveValue(driverTypeName));
+    put(KEY_DB_FOUND_DRIVERS, drivers);
   }
 
   @After(value = "@DeleteShipment")
@@ -1692,13 +1706,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("DB Operator verify 'inbound_weight_tolerance' parameter is {string}")
   public void dbOperatorVerifyInboundWeightTolerance(String expected) {
     assertEquals("inbound_weight_tolerance value", Double.valueOf(resolveValue(expected)),
-        getCoreJdbc().getInboundWeighToleranceParameter());
+        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getWeightTolerance());
   }
 
   @Then("DB Operator verify 'inbound_max_weight' parameter is {string}")
   public void dbOperatorVerifyInboundMaxWeight(String expected) {
     assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
-        getCoreJdbc().getInboundMaxWeighParameter());
+        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getMaxWeight());
   }
 
   @Then("DB Operator verify the new COD for created route is created successfully")
@@ -1733,5 +1747,26 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Double expectedLoyaltyPoint = Double.valueOf(pointAdded);
 
     assertEquals("Check added loyalty point", expectedLoyaltyPoint,  actualLoyaltyPoint);
+  }
+
+  @Then("DB Operator verify unscanned shipment with following data:")
+  public void dbOperatorVerifyUnscannedShipmentWithFollowingData(Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+    Long shipmentId = Long.valueOf(resolvedMapOfData.get("shipmentId"));
+    String unscannedShipmentType = mapOfData.get("type");
+    String scanType = mapOfData.get("scanType");
+    UnscannedShipment unscannedShipment = getHubJdbc().getUnscannedShipment(shipmentId);
+
+    assertThat("Unscanned shipment type id is the same", unscannedShipment.getShipmentId(),
+        equalTo(shipmentId));
+    assertThat("Unscanned shipment type is the same", unscannedShipment.getType(),
+        equalTo(unscannedShipmentType));
+    assertThat("Unscanned shipment scan type is the same", unscannedShipment.getScanType(),
+        equalTo(scanType));
+  }
+
+  @When("DB Operator sets flags of driver with id {string} to {int}")
+  public void setDriverFlags(String driverId, int flags) {
+    getDriverJdbc().setDriverFlags(Long.parseLong(resolveValue(driverId)), flags);
   }
 }

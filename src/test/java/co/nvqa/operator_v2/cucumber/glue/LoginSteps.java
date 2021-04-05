@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
