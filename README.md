@@ -39,6 +39,7 @@ QA environment :
 ```
 gradle --no-daemon --continue \
     clean runCucumber allureReport \
+    -Dfile.encoding=UTF8 \
     -Penvironment=${service-name}-qa-sg \
     -Ptags=@opv2 \
     -PdbHost="10.80.0.33" \

@@ -4,9 +4,11 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,16 +40,22 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   private static final String PARCEL_SIZE = "Parcel Size";
   private static final String TIMESLOT = "Timeslot";
 
-  private DriverTypesTable driverTypesTable;
+  public DriverTypesTable driverTypesTable;
   private AddDriverTypeDialog addDriverTypeDialog;
-  private EditDriverTypeDialog editDriverTypeDialog;
+  public EditDriverTypeDialog editDriverTypeDialog;
   private FiltersForm filtersForm;
 
   @FindBy(name = "Create Driver Type")
   public NvIconTextButton createDriverType;
 
+  @FindBy(css = "input[placeholder='Search Driver Types...']")
+  public TextBox searchDriverType;
+
+  @FindBy(css = "ng-pluralize")
+  public PageElement rowsCount;
+
   @FindBy(css = "md-dialog")
-  private ConfirmDeleteDialog confirmDeleteDialog;
+  public ConfirmDeleteDialog confirmDeleteDialog;
 
   public DriverTypeManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -55,10 +63,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     addDriverTypeDialog = new AddDriverTypeDialog(webDriver);
     editDriverTypeDialog = new EditDriverTypeDialog(webDriver);
     filtersForm = new FiltersForm(webDriver);
-  }
-
-  public DriverTypesTable driverTypesTable() {
-    return driverTypesTable;
   }
 
   public FiltersForm filtersForm() {
@@ -101,7 +105,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyFilterResults(DriverTypeParams filterParams) {
-    List<DriverTypeParams> filterResults = driverTypesTable.getAllDriverTypeParams();
+    List<DriverTypeParams> filterResults = driverTypesTable.readAllEntities();
 
     filterResults.forEach(driverTypeParams ->
     {
@@ -142,70 +146,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     addDriverTypeDialog.submitForm();
   }
 
-  public void editDriverType(DriverTypeParams driverTypeParams, String searchString) {
-    searchingCreatedDriver(searchString);
-    driverTypesTable.clickEditButton(1);
-    editDriverTypeDialog.fillForm(driverTypeParams);
-    editDriverTypeDialog.submitForm();
-  }
-
-  public void verifyDriverType(DriverTypeParams expectedDriverTypeParams) {
-    searchingCreatedDriver(expectedDriverTypeParams.getDriverTypeName());
-    DriverTypeParams actualDriverTypeParams = driverTypesTable.getDriverTypeParams(1);
-    if (expectedDriverTypeParams.getDriverTypeId() != null) {
-      assertThat("Driver Type ID", actualDriverTypeParams.getDriverTypeId(),
-          equalTo(expectedDriverTypeParams.getDriverTypeId()));
-    }
-    if (expectedDriverTypeParams.getDriverTypeName() != null) {
-      assertThat("Driver Type Name", actualDriverTypeParams.getDriverTypeName(),
-          equalToIgnoringCase(expectedDriverTypeParams.getDriverTypeName()));
-    }
-    if (expectedDriverTypeParams.getDeliveryType() != null) {
-      assertThat(DELIVERY_TYPE, actualDriverTypeParams.getDeliveryType(),
-          equalToIgnoringCase(expectedDriverTypeParams.getDeliveryType()));
-    }
-    if (expectedDriverTypeParams.getPriorityLevel() != null) {
-      String expectedPriorityLevel = expectedDriverTypeParams.getPriorityLevel();
-      if (!StringUtils.containsAny(expectedPriorityLevel, "Only", "All", "Both")) {
-        expectedPriorityLevel += " Only";
-      }
-
-      assertThat(PRIORITY_LEVEL, actualDriverTypeParams.getPriorityLevel(),
-          equalToIgnoringCase(expectedPriorityLevel));
-    }
-    if (expectedDriverTypeParams.getReservationSize() != null) {
-      assertThat(RESERVATION_SIZE, actualDriverTypeParams.getReservationSize(),
-          equalToIgnoringCase(expectedDriverTypeParams.getReservationSize()));
-    }
-    if (expectedDriverTypeParams.getParcelSize() != null) {
-      assertThat(PARCEL_SIZE, actualDriverTypeParams.getParcelSize(),
-          equalToIgnoringCase(expectedDriverTypeParams.getParcelSize()));
-    }
-    if (expectedDriverTypeParams.getTimeslot() != null) {
-      assertThat(TIMESLOT, actualDriverTypeParams.getTimeslot(),
-          equalToIgnoringCase(expectedDriverTypeParams.getTimeslot()));
-    }
-  }
-
-  public DriverTypeParams getDriverTypeParams(String driverTypeName) {
-    searchingCreatedDriver(driverTypeName);
-    return driverTypesTable.getDriverTypeParams(1);
-  }
-
-  public void searchingCreatedDriver(String driverTypeName) {
-    searchTable(driverTypeName);
-    pause1s();
-  }
-
-  public void deleteDriverType(DriverTypeParams driverTypeParams) {
-    searchingCreatedDriver(driverTypeParams.getDriverTypeName());
-    driverTypesTable.clickDeleteButton(1);
-    confirmDeleteDialog.waitUntilVisible();
-    confirmDeleteDialog.delete.click();
-    confirmDeleteDialog.waitUntilInvisible();
-    pause2s();
-  }
-
   public static class ConfirmDeleteDialog extends MdDialog {
 
     public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement) {
@@ -229,96 +169,35 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
   }
 
-  /**
-   * Accessor for Reservations table
-   */
-  public static class DriverTypesTable extends OperatorV2SimplePage {
+  public static class DriverTypesTable extends MdVirtualRepeatTable<DriverTypeParams> {
 
-    private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
-    private static final String COLUMN_CLASS_ID = "id";
-    private static final String COLUMN_CLASS_NAME = "name";
-    private static final String COLUMN_CLASS_DELIVERY_TYPE = "delivery-type";
-    private static final String COLUMN_CLASS_PRIORITY_LEVEL = "priority-level";
-    private static final String COLUMN_CLASS_RESERVATION_SIZE = "reservation-size";
-    private static final String COLUMN_CLASS_PARCEL_SIZE = "parcel-size";
-    private static final String COLUMN_CLASS_TIMESLOT = "timeslot";
+    public static final String COLUMN_ID = "driverTypeId";
+    public static final String COLUMN_NAME = "driverTypeName";
+    private static final String COLUMN_DELIVERY_TYPE = "deliveryType";
+    private static final String COLUMN_PRIORITY_LEVEL = "priorityLevel";
+    private static final String COLUMN_RESERVATION_SIZE = "reservationSize";
+    private static final String COLUMN_PARCEL_SIZE = "parcelSize";
+    private static final String COLUMN_TIMESLOT = "timeslot";
 
-    public static final String ACTION_BUTTON_EDIT = "Edit";
-    public static final String ACTION_BUTTON_DELETE = "Delete";
+    public static final String ACTION_EDIT = "Edit";
+    public static final String ACTION_DELETE = "Delete";
 
     public DriverTypesTable(WebDriver webDriver) {
       super(webDriver);
-    }
-
-    public List<DriverTypeParams> getAllDriverTypeParams() {
-      waitUntilVisibilityOfElementLocated(
-          String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT));
-      int rowsCount = getRowsCount();
-      List<DriverTypeParams> params = new ArrayList<>(rowsCount);
-      for (int rowIndex = 1; rowIndex <= rowsCount; rowIndex++) {
-        params.add(getDriverTypeParams(rowIndex));
-      }
-      return params;
-    }
-
-    public DriverTypeParams getDriverTypeParams(int rowIndex) {
-      DriverTypeParams driverTypeParams = new DriverTypeParams();
-      driverTypeParams.setDriverTypeId(Long.parseLong(getId(rowIndex)));
-      driverTypeParams.setDriverTypeName(getName(rowIndex));
-      driverTypeParams.setDeliveryType(getDeliveryType(rowIndex));
-      driverTypeParams.setPriorityLevel(getPriorityLevel(rowIndex));
-      driverTypeParams.setReservationSize(getReservationSize(rowIndex));
-      driverTypeParams.setParcelSize(getParcelSize(rowIndex));
-      driverTypeParams.setTimeslot(getTimeslot(rowIndex));
-      return driverTypeParams;
-    }
-
-    public String getId(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_ID);
-    }
-
-    public String getName(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_NAME);
-    }
-
-    public String getDeliveryType(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_DELIVERY_TYPE);
-    }
-
-    public String getPriorityLevel(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_PRIORITY_LEVEL);
-    }
-
-    public String getReservationSize(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_RESERVATION_SIZE);
-    }
-
-    public String getParcelSize(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_PARCEL_SIZE);
-    }
-
-    public String getTimeslot(int rowNumber) {
-      return getTextOnTable(rowNumber, COLUMN_CLASS_TIMESLOT);
-    }
-
-    private String getTextOnTable(int rowNumber, String columnDataClass) {
-      String text = getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass,
-          MD_VIRTUAL_REPEAT);
-      text = StringUtils.normalizeSpace(text);
-      return text.equals("-") ? null : text;
-    }
-
-    public void clickEditButton(int rowNumber) {
-      clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, ACTION_BUTTON_EDIT, MD_VIRTUAL_REPEAT);
-    }
-
-    public void clickDeleteButton(int rowNumber) {
-      clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, ACTION_BUTTON_DELETE,
-          MD_VIRTUAL_REPEAT);
-    }
-
-    public int getRowsCount() {
-      return getRowsCountOfTableWithMdVirtualRepeatFast(MD_VIRTUAL_REPEAT);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(COLUMN_ID, "id")
+          .put(COLUMN_NAME, "name")
+          .put(COLUMN_DELIVERY_TYPE, "delivery-type")
+          .put(COLUMN_PRIORITY_LEVEL, "priority-level")
+          .put(COLUMN_RESERVATION_SIZE, "reservation-size")
+          .put(COLUMN_PARCEL_SIZE, "parcel-size")
+          .put(COLUMN_TIMESLOT, "timeslot")
+          .build()
+      );
+      setActionButtonsLocators(ImmutableMap
+          .of(ACTION_EDIT, "Edit", ACTION_DELETE, "Delete"));
+      setEntityClass(DriverTypeParams.class);
+      setMdVirtualRepeat("driverTypeProp in ctrl.tableData");
     }
   }
 
