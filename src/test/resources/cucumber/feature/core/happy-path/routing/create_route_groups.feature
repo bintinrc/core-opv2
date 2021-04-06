@@ -1,5 +1,5 @@
-@core
-Feature: 1. Create Route Groups
+@OperatorV2 @Core @Routing @CreateRouteGroups @happy-path
+Feature: Create Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -7,30 +7,24 @@ Feature: 1. Create Route Groups
 
   @core @category-core @coverage-auto @coverage-operator-auto @step-done @happy-path @JIRA-SHIP-2002
   Scenario: Operator Add Transaction to Route Group (uid:369cd974-fa30-4b93-96e9-4d5c5e82833b)
-  Created by Ian Gumilang at 03 February 2017
-    Given Shipper creates multiple "Parcel" orders
-    And Operator global inbound the order
-    And Shipper creates multiple "Return" orders
-    When Operator goes to "Create Route Groups" page
-    And Operator applies some filters based on "created transaction"
-    And Operator select "Shipper filter" from dropdown menu
-    And Operator select "Creation Date filter" from dropdown menu
-    And Operator clicks switch "'Include Transactions'" toggle button
-    And Operator adds "Transaction" field filter
-    And Operator clicks "'Load Selection'" button
-    And Operator clicks on checkbox for selected "Transaction > Delivery (for Parcel Order)" from the list
-    And Operator clicks on checkbox for selected "Transaction > Pickup (for Return Order)" from the list
-    And Operator clicks "'+Add To Route Group ($total)'" button
-    Then Verify that "'Add to Route Group'" modal is shown
-    When Operator select "'Create New Route Group'" from "Route Group" toggle menu
-    And Operator fills in "route group name" details
-    And Operator clicks "'Add Transactions/Reservations'" button
-    Then Verify that success toast message is displayed with message = "'Added'"
-    And Verify that "selected transaction has been added to route group" successfully
-    When Operator goes to "Route Group Managements" page
-    And Operator filters "created Route Group Name" field
-    And Operator clicks on "'Edit Route Group' button"
-    Then Verify that "Added Transactions" result is shown correctly
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new Route Group:
+      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator click Load Selection on Create Route Group page
+    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
+      | trackingId                                 |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verifies that success toast displayed:
+      | top | Added successfully |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

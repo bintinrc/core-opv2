@@ -1,12 +1,12 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @happy-path
-Feature: End Route Inbound Session
+Feature: Inbound COD & COP
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: End a Route Inbound Session : Completed Scans (uid:f1af21ad-eed6-438b-93b3-85c0ad0dbe54)
+  Scenario Outline: Inbound Cash for COD (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                |
@@ -24,9 +24,9 @@ Feature: End Route Inbound Session
     And API Driver deliver the created parcel successfully
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}                      |
-      | fetchBy      | FETCH_BY_TRACKING_ID            |
-      | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
     Then Operator verify the Route Summary Details is correct using data below:
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
@@ -39,22 +39,22 @@ Feature: End Route Inbound Session
       | wpTotal     | 1                      |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
-    And Operator scan a tracking ID of created order on Route Inbound page
-    Then Operator verify Waypoint Scans record using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | reason     | Order completed                            |
     Then Operator verify 'Money to collect' value is "<cashOnDelivery>" on Route Inbound page
     And Operator open Money Collection dialog on Route Inbound page
     Then Operator verify 'Expected Total' value is "<cashOnDelivery>" on Money Collection dialog
     And Operator verify 'Outstanding amount' value is "<cashOnDelivery>" on Money Collection dialog
     When Operator submit following values on Money Collection dialog:
-      | cashCollected | <cashCollected> |
+      | cashCollected   | <cashCollected>   |
+      | creditCollected | <creditCollected> |
+      | receiptId       | <receiptId>       |
     Then Operator verify 'Money to collect' value is "Fully Collected" on Route Inbound page
-    And Operator removes route from driver app on Route Inbound page
-    And Operator ends Route Inbound session for route "{KEY_CREATED_ROUTE_ID}" on Route Inbound page
+    And Operator open Money Collection dialog on Route Inbound page
+    And Operator verify 'Outstanding amount' value is "Fully Collected" on Money Collection dialog
     Examples:
-      | cashCollected | cashOnDelivery |
-      | 23.57         | 23.57          |
+      | Title                            | hiptest-uid                              | cashCollected | creditCollected | receiptId | cashOnDelivery |
+      | Inbound Cash Only                | uid:24674576-d71b-44a9-bb42-8f2b42fb97d6 | 23.57         |                 |           | 23.57          |
+      | Inbound Credit Only              | uid:a61424da-030c-4e3c-8371-c0b0d42eaeb3 |               | 23.57           | 123       | 23.57          |
+      | Inbound Split Into Cash & Credit | uid:0fd362ee-b81d-4a2e-8805-c4724a4d78d0 | 10.0          | 13.57           | 123       | 23.57          |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
