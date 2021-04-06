@@ -16,7 +16,7 @@ public class AntFilterSelect extends PageElement {
   }
 
   @FindBy(css = ".ant-select")
-  public AntSelect searchOrSelect;
+  public AntSelect2 searchOrSelect;
 
   @FindBy(css = "div > button > i.anticon-border")
   public Button clearAll;
