@@ -237,21 +237,6 @@ Feature: Shipment Management - Edit Shipment
     Then Operator verifies that the shipment is reopened
     And Operator verify the following parameters of all created shipments status is pending
 
-  @DeleteShipment
-  Scenario: Force Success Shipment by Action Button (uid:01f3b1fc-b9ce-46c7-92d5-044d5e71a5bf)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {hub-name}                                                          |
-      | destHubName | {hub-name-2}                                                        |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    And Operator click "Load All Selection" on Shipment Management page
-    When Operator force success the created shipment on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Completed |
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
