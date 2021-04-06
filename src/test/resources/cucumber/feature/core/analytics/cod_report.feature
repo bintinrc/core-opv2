@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Analytics @CodReport @Saas
+@OperatorV2 @Core @Analytics @CodReport
 Feature: COD Report
 
   @LaunchBrowser @ShouldAlwaysRun

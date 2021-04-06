@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @Saas
+@OperatorV2 @Core @Order @EditOrder
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -145,7 +145,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE INSTRUCTION |
 
-  Scenario: Operator Edit Priority Level - Pending DD Transaction (uid:849b151c-967b-4a20-afba-73fc9334570d)
+  Scenario: Operator Edit Priority Level (uid:849b151c-967b-4a20-afba-73fc9334570d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -179,7 +179,7 @@ Feature: Edit Order
     When Operator Edit Order Details on Edit Order page
     Then Operator Edit Order Details on Edit Order page successfully
 
-  Scenario: Edit Cash Collection Details - Add Cash on Pickup PP (uid:f38119f4-8baf-48bc-ad02-8d0d98a8cd03)
+  Scenario: Edit Cash Collection Details - Add Cash on Pickup (uid:f38119f4-8baf-48bc-ad02-8d0d98a8cd03)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -192,7 +192,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
-  Scenario: Edit Cash Collection Details - Add Cash on Delivery DD (uid:a1290675-50c1-4c63-b371-3af1f2b61e22)
+  Scenario: Edit Cash Collection Details - Add Cash on Delivery (uid:a1290675-50c1-4c63-b371-3af1f2b61e22)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -205,7 +205,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
-  Scenario: Edit Cash Collection Details - Edit Cash on Pickup PP (uid:24a93b3a-11be-4488-820e-fb055ecef040)
+  Scenario: Edit Cash Collection Details - Update Cash on Pickup (uid:24a93b3a-11be-4488-820e-fb055ecef040)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -218,7 +218,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
-  Scenario: Edit Cash Collection Details - Edit Cash on Delivery DD (uid:c747a488-2545-4cba-8982-f148bffd3c57)
+  Scenario: Edit Cash Collection Details - Update Cash on Delivery (uid:c747a488-2545-4cba-8982-f148bffd3c57)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -231,7 +231,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
-  Scenario: Edit Cash Collection Details - Remove Cash on Pickup PP (uid:998f5cfa-c712-4dcd-b3a0-e06bf8f4fd13)
+  Scenario: Edit Cash Collection Details - Remove Cash on Pickup (uid:998f5cfa-c712-4dcd-b3a0-e06bf8f4fd13)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -243,7 +243,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
-  Scenario: Edit Cash Collection Details - Remove Cash on Delivery DD (uid:6da65f1f-b866-424f-8cf3-2e4a982c9191)
+  Scenario: Edit Cash Collection Details - Remove Cash on Delivery (uid:6da65f1f-b866-424f-8cf3-2e4a982c9191)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
