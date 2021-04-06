@@ -60,7 +60,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 
-import static co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
+import static co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 import static co.nvqa.commons.support.DateUtil.TIME_FORMATTER_1;
 import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 
@@ -1706,13 +1706,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("DB Operator verify 'inbound_weight_tolerance' parameter is {string}")
   public void dbOperatorVerifyInboundWeightTolerance(String expected) {
     assertEquals("inbound_weight_tolerance value", Double.valueOf(resolveValue(expected)),
-        getCoreJdbc().getInboundWeighToleranceParameter());
+        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getWeightTolerance());
   }
 
   @Then("DB Operator verify 'inbound_max_weight' parameter is {string}")
   public void dbOperatorVerifyInboundMaxWeight(String expected) {
     assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
-        getCoreJdbc().getInboundMaxWeighParameter());
+        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getMaxWeight());
   }
 
   @Then("DB Operator verify the new COD for created route is created successfully")
