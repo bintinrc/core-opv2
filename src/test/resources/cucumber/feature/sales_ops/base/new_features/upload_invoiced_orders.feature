@@ -53,7 +53,7 @@ Feature: Upload Invoiced Orders
       | updated_at | notNull        |
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
-      | subject | Invoicing result                               |
+      | subject | Invoicing Result                               |
       | body    | All tracking numbers are successfully invoiced |
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -79,12 +79,13 @@ Feature: Upload Invoiced Orders
       | updated_at | notNull        |
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
-      | subject            | Invoicing result                           |
+      | subject            | Invoicing Result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |
       | isZipFileAvailable | true                                       |
     When Operator clicks on link to download on email and verifies CSV file
     Then Operator verifies below tracking id(s) is\are available in the CSV file
       | {KEY_CREATED_ORDER_TRACKING_ID} |
+
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Upload Invoice Orders CSV - With Orders are already in invoiced_orders (has-invoiced) (uid:0736ad19-8d02-49a4-b5a1-07368a743daa)
@@ -125,8 +126,9 @@ Feature: Upload Invoiced Orders
       | updated_at | notNull        |
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
-      | subject | Invoicing result                               |
+      | subject | Invoicing Result                               |
       | body    | All tracking numbers are successfully invoiced |
+
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Upload Invoice Orders CSV - Some Orders are non-invoiced, Some Orders are non-priced neither non-invoiced (uid:531d9dea-0866-48e5-9fb8-522d029e696d)
@@ -143,7 +145,7 @@ Feature: Upload Invoiced Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     Then Operator opens Gmail and verifies email with below details
-      | subject            | Invoicing result                           |
+      | subject            | Invoicing Result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |
       | isZipFileAvailable | true                                       |
     When Operator clicks on link to download on email and verifies CSV file
