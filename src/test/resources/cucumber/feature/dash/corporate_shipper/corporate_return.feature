@@ -82,6 +82,40 @@ Feature: B2B Corporate Return
       | salesPerson                  | {sales-person}        |
     And DB Shipper verifies available service types for created shipper contains "Corporate Return"
 
+  @CloseNewWindows
+  Scenario: Inheritance corporate return service - parent toggled off (uid:c39cd56e-7151-4fbb-970f-8e45927b387c)
+    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    And Operator set service type "Corporate Return" to "Yes" on edit shipper page
+    And DB Shipper verifies available service types for shipper id "{operator-b2b-master-shipper-id}" contains "Corporate Return"
+
+    When Operator go to tab corporate sub shipper
+    And Operator create corporate sub shipper with data below:
+      | branchId | generated |
+      | name     | generated |
+      | email    | generated |
+    Then Operator verifies corporate sub shipper is created
+    When Operator click edit action button for newly created corporate sub shipper
+    Then Operator verifies corporate sub shipper details page is displayed
+    When Operator set shipper on this page as newly created shipper
+    And DB Shipper verifies available service types for created shipper not contains "Corporate Return"
+
+  @CloseNewWindows
+  Scenario: Inheritance corporate return service - parent toggled on (uid:ddcbb6b2-2ca0-4566-a742-b39e81eddf75)
+    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    And Operator set service type "Corporate Return" to "No" on edit shipper page
+    And DB Shipper verifies available service types for shipper id "{operator-b2b-master-shipper-id}" contains "Corporate Return"
+
+    When Operator go to tab corporate sub shipper
+    And Operator create corporate sub shipper with data below:
+      | branchId | generated |
+      | name     | generated |
+      | email    | generated |
+    Then Operator verifies corporate sub shipper is created
+    When Operator click edit action button for newly created corporate sub shipper
+    Then Operator verifies corporate sub shipper details page is displayed
+    When Operator set shipper on this page as newly created shipper
+    And DB Shipper verifies available service types for created shipper not contains "Corporate Return"
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

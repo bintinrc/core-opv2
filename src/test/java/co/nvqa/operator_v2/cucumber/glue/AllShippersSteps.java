@@ -1295,6 +1295,7 @@ public class AllShippersSteps extends AbstractSteps {
       fixedName = f("sub shipper %s", random);
     }
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.fillName(fixedName);
+    put(KEY_SHIPPER_NAME, fixedName);
 
     String fixedEmail = mapOfData.get("email");
     if ("generated".equalsIgnoreCase(fixedEmail)) {
@@ -1334,6 +1335,25 @@ public class AllShippersSteps extends AbstractSteps {
       assertTrue(isSubShipperExist);
 
     });
+  }
+
+  @When("Operator click edit action button for newly created corporate sub shipper")
+  public void operatorClickEditActionButtonForNewSubShipperOnBBManagementPage() {
+    List<String> expectedSellerIds = get(KEY_SUB_SHIPPER_SELLER_IDS);
+
+    String branchId = expectedSellerIds.get(0);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.getSubShipperTable()
+        .clickActionButton(ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY, branchId,
+            SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX);
+  }
+
+  @When("Operator set shipper on this page as newly created shipper")
+  public void setShipperAsNewlyCreatedShipper() {
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    String url = getCurrentUrl();
+    Shipper shipper = new Shipper();
+    shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
+    put(KEY_CREATED_SHIPPER, shipper);
   }
 
   @When("Operator click edit action button for first corporate sub shipper")
