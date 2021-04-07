@@ -69,7 +69,6 @@ Feature: B2B Management
       | hiptest-uid                              |
       | uid:678abdf3-d232-437c-8e14-b267561be0e9 |
 
-
   Scenario Outline: View list of sub shippers (<hiptest-uid>)
     When API Operator get b2b sub shippers for master shipper id "<masterShipperId>"
     Then Operator verifies corporate sub shipper is correct

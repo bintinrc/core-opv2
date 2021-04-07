@@ -103,6 +103,22 @@ public class AllShippersSteps extends AbstractSteps {
   @When("^Operator create new Shipper with basic settings using data below:$")
   public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(
       Map<String, String> mapOfData) {
+    Shipper shipper = prepareShipperData(mapOfData);
+
+    allShippersPage.createNewShipper(shipper);
+    put(KEY_CREATED_SHIPPER, shipper);
+    putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
+  }
+
+  @When("Operator fail create new Shipper with basic settings using data below:")
+  public void operatorCreateNewShipperWithBasicSettingsFail(
+      Map<String, String> mapOfData) {
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    Shipper shipper = prepareShipperData(mapOfData);
+    allShippersPage.createNewShipperFail(shipper);
+  }
+
+  private Shipper prepareShipperData(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String dateUniqueString = generateDateUniqueString();
 
@@ -115,10 +131,7 @@ public class AllShippersSteps extends AbstractSteps {
     setBilling(shipper, dateUniqueString);
     fillMarketplaceProperties(shipper, mapOfData);
     generatePickupAddresses(shipper, mapOfData);
-
-    allShippersPage.createNewShipper(shipper);
-    put(KEY_CREATED_SHIPPER, shipper);
-    putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
+    return shipper;
   }
 
   private void generatePickupAddresses(Shipper shipper, Map<String, String> mapOfData) {
@@ -1094,6 +1107,7 @@ public class AllShippersSteps extends AbstractSteps {
     Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
     Boolean isDisableDriverAppReschedule = Boolean
         .parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
+    Boolean isCorporateReturn = Boolean.parseBoolean(mapOfData.get("isCorporateReturn"));
     String ocVersion = mapOfData.get("ocVersion");
     String servicesTemp = mapOfData.get("services");
     String trackingType = mapOfData.get("trackingType");
@@ -1115,6 +1129,7 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setIsPrePaid(isPrepaid);
     orderCreate.setAllowStagedOrders(isAllowStagedOrders);
     orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
+    orderCreate.setIsCorporateReturn(isCorporateReturn);
     shipper.setOrderCreate(orderCreate);
 
     DistributionPoint distributionPoint = new DistributionPoint();
@@ -1160,6 +1175,20 @@ public class AllShippersSteps extends AbstractSteps {
 
     allShippersPage.createNewShipperWithoutPricingScript(shipper);
     put(KEY_CREATED_SHIPPER, shipper);
+  }
+
+  @When("Operator set service type {string} to {string} on edit shipper page")
+  public void setServiceTypeOnShipperEditOrCreatePage(
+      String serviceType, String value) {
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabel(serviceType, value);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+  }
+
+  @When("Operator verifies toast {string} displayed on edit shipper page")
+  public void verifiesToast(String msg) {
+    String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
+    assertTrue(actualMsg.contains(msg));
   }
 
   @And("Operator verifies the pricing profile and shipper discount details are correct")
@@ -1266,6 +1295,7 @@ public class AllShippersSteps extends AbstractSteps {
       fixedName = f("sub shipper %s", random);
     }
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.fillName(fixedName);
+    put(KEY_SHIPPER_NAME, fixedName);
 
     String fixedEmail = mapOfData.get("email");
     if ("generated".equalsIgnoreCase(fixedEmail)) {
@@ -1305,6 +1335,25 @@ public class AllShippersSteps extends AbstractSteps {
       assertTrue(isSubShipperExist);
 
     });
+  }
+
+  @When("Operator click edit action button for newly created corporate sub shipper")
+  public void operatorClickEditActionButtonForNewSubShipperOnBBManagementPage() {
+    List<String> expectedSellerIds = get(KEY_SUB_SHIPPER_SELLER_IDS);
+
+    String branchId = expectedSellerIds.get(0);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.getSubShipperTable()
+        .clickActionButton(ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY, branchId,
+            SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX);
+  }
+
+  @When("Operator set shipper on this page as newly created shipper")
+  public void setShipperAsNewlyCreatedShipper() {
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    String url = getCurrentUrl();
+    Shipper shipper = new Shipper();
+    shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
+    put(KEY_CREATED_SHIPPER, shipper);
   }
 
   @When("Operator click edit action button for first corporate sub shipper")

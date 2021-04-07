@@ -154,6 +154,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public EditPendingProfileDialog editPendingProfileDialog;
   @FindBy(css = "md-dialog")
   public DiscardChangesDialog discardChangesDialog;
+  @FindBy(css = "md-dialog")
+  public ErrorSaveDialog errorSaveDialog;
 
   private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";
 
@@ -202,6 +204,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public void createNewShipper(Shipper shipper) {
     String currentWindowHandle = switchToNewWindow();
 
+    createNewShipperSteps(shipper);
+    waitUntilInvisibilityOfToast("All changes saved successfully");
+    String url = getWebDriver().getCurrentUrl();
+    shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
+    backToShipperList();
+    pause3s();
+    getWebDriver().switchTo().window(currentWindowHandle);
+  }
+
+  public void createNewShipperSteps(Shipper shipper) {
     waitUntilShipperCreateEditPageIsLoaded();
     pause2s();
     fillBasicSettingsForm(shipper);
@@ -214,12 +226,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     fillPricingAndBillingForm(shipper);
 
     createShipper.click();
-    waitUntilInvisibilityOfToast("All changes saved successfully");
-    String url = getWebDriver().getCurrentUrl();
-    shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
-    backToShipperList();
-    pause3s();
-    getWebDriver().switchTo().window(currentWindowHandle);
   }
 
   public void createNewShipperWithUpdatedPricingScript(Shipper shipper) {
@@ -339,7 +345,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     //Service Type
     // TO-DO: Add 'Parcel Delivery', 'Return', 'Marketplace', 'Ninja Pack', 'Bulky', 'International' and 'Marketplace International'.
-    if ("Normal".equals(shipper.getType())) {
+     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
       clickToggleButtonByLabel("Marketplace", "No");
       clickToggleButtonByLabel("Marketplace International", "No");
     }
@@ -348,6 +354,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       clickToggleButtonByLabel("Corporate Return", "No");
       clickToggleButtonByLabel("Corporate Manual AWB", "No");
     }
+    clickToggleButtonByLabel("Corporate Return",
+        convertBooleanToString(orderCreate.getIsCorporateReturn(), "Yes", "No"));
 
     if (isCreateForm) {
       selectMultipleValuesFromMdSelectById("container.shippers.service-level",
@@ -355,7 +363,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
 
         /*
-          ===== OPERATIONAL SETTINGS =====
+          ===== OPERATIONAL SETTINGS =====ctrl.data.basic.serviceType[key]
          */
     clickToggleButton("ctrl.data.basic.allowCod",
         convertBooleanToString(orderCreate.getAllowCodService(), "Yes", "No"));
@@ -1601,6 +1609,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "button[aria-label='Leave']")
     public Button leave;
   }
+
+  public static class ErrorSaveDialog extends MdDialog {
+
+    @FindBy(css = ".md-dialog-content")
+    public PageElement message;
+
+    @FindBy(css = "[aria-label='Close']")
+    public Button close;
+
+    public ErrorSaveDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
 
   public void addNewPricingProfile() {
     waitUntilPageLoaded();
