@@ -1,5 +1,5 @@
 @OperatorV2 @Core @Inbounding @RouteInbound
-Feature: Route Inbound
+Feature: Route Inbound Screen 1
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

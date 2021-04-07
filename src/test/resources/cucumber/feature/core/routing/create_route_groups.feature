@@ -7,7 +7,6 @@ Feature: Create Route Groups
 
   @DeleteRouteGroups
   Scenario: Operator Add Transaction to Route Group (uid:d23d9e3d-bc53-4a52-9388-325d803f9616)
-    #Notes: Shipper create sameday parcel with OC V2
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
