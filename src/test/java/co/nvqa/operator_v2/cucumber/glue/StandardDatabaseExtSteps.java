@@ -1706,13 +1706,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("DB Operator verify 'inbound_weight_tolerance' parameter is {string}")
   public void dbOperatorVerifyInboundWeightTolerance(String expected) {
     assertEquals("inbound_weight_tolerance value", Double.valueOf(resolveValue(expected)),
-        getCoreJdbc().getInboundWeighToleranceParameter());
+        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getWeightTolerance());
   }
 
   @Then("DB Operator verify 'inbound_max_weight' parameter is {string}")
   public void dbOperatorVerifyInboundMaxWeight(String expected) {
     assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
-        getCoreJdbc().getInboundMaxWeighParameter());
+        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getMaxWeight());
   }
 
   @Then("DB Operator verify the new COD for created route is created successfully")
