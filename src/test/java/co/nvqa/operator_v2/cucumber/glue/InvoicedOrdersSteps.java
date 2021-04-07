@@ -35,6 +35,7 @@ public class InvoicedOrdersSteps extends AbstractSteps {
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
     uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
     uploadInvoicedOrdersPage.verifySuccessUploadNewFileIsDisplayed();
+    pause3s();
   }
 
   @And("Operator clicks on Upload New File Button")

@@ -1,5 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @UploadInvoicedOrders
-
+# Will be deleted after deprecation of DWH
 Feature: Upload Invoiced Orders
   non-invoiced = orders that are in priced_orders table, but not yet in invoiced_orders table
   has-invoiced = orders that are in priced_orders table and in invoiced_orders table
@@ -27,31 +26,23 @@ Feature: Upload Invoiced Orders
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
+    And Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
+    And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
     Given Operator go to menu New Features -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
-    Then Operator verifies below details in billing_qa_gl.invoiced_orders table
+    And DB Operator verifies the order is in dwh_qa_gl.invoiced_orders table
+    Then Operator verifies below details in dwh_qa_gl.invoiced_orders table
       | column              | expected_value                   |
-      | order_id            | {KEY_CREATED_ORDER_ID}           |
-      | shipper_id          | {shipper-sop-v4-global-id}       |
-      | system_id           | SG                               |
+      | shipper_id          | {shipper-sop-v4-legacy-id}       |
+      | system_id           | sg                               |
       | invoiced_at         | {gradle-current-date-yyyy-MM-dd} |
       | invoiced_local_date | {gradle-current-date-yyyyMMdd}   |
       | created_at          | {gradle-current-date-yyyy-MM-dd} |
       | updated_at          | null                             |
       | deleted_at          | null                             |
-    And DB Operator verifies the order is in billing_qa_gl.invoicing_jobs table
-    Then Operator verifies below details in billing_qa_gl.invoicing_jobs table
-      | column     | expected_value |
-      | status     | SUCCESS        |
-      | system_id  | SG             |
-      | created_at | notNull        |
-      | updated_at | notNull        |
-      | deleted_at | notNull        |
+    And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing result                               |
       | body    | All tracking numbers are successfully invoiced |
@@ -63,21 +54,14 @@ Feature: Upload Invoiced Orders
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator verifies the order with status 'Completed' is not in billing_qa_gl.priced_orders
-    And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
+    And Operator verifies the order with status 'Completed' is not in dwh_qa_gl.priced_orders
+    And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
     Given Operator go to menu New Features -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    And DB Operator verifies the order is in billing_qa_gl.invoicing_jobs table
-    Then Operator verifies below details in billing_qa_gl.invoicing_jobs table
-      | column     | expected_value |
-      | status     | SUCCESS        |
-      | system_id  | SG             |
-      | created_at | notNull        |
-      | updated_at | notNull        |
-      | deleted_at | notNull        |
+    And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
+    And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
     Then Operator opens Gmail and verifies email with below details
       | subject            | Invoicing result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |
@@ -95,35 +79,22 @@ Feature: Upload Invoiced Orders
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
+    And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
     Given Operator go to menu New Features -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
-    And DB Operator verifies the order is in billing_qa_gl.invoicing_jobs table
-    Then Operator verifies below details in billing_qa_gl.invoicing_jobs table
-      | column     | expected_value |
-      | status     | SUCCESS        |
-      | system_id  | SG             |
-      | created_at | notNull        |
-      | updated_at | notNull        |
-      | deleted_at | notNull        |
+    And DB Operator verifies the order is in dwh_qa_gl.invoiced_orders table
+    And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
     # Upload again
     And Operator clicks on Upload New File Button
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
-    And DB Operator verifies there is\are 1 order(s) in billing_qa_gl.invoiced_orders table
-    And DB Operator verifies the order is in billing_qa_gl.invoicing_jobs table
-    Then Operator verifies below details in billing_qa_gl.invoicing_jobs table
-      | column     | expected_value |
-      | status     | SUCCESS        |
-      | system_id  | SG             |
-      | created_at | notNull        |
-      | updated_at | notNull        |
-      | deleted_at | notNull        |
+    And DB Operator verifies the order is in dwh_qa_gl.invoiced_orders table
+    And DB Operator verifies there is\are 1 order(s) in dwh_qa_gl.invoiced_orders table
+    And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
+    And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing result                               |
       | body    | All tracking numbers are successfully invoiced |
