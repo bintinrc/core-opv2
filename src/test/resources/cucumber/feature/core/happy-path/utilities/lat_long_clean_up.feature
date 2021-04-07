@@ -1,23 +1,33 @@
-@NOT_AUTOMATED_OPV2
+@OperatorV2 @Core @Utilities @LatLongCleanup @happy-path
 Feature: Lat/Long Clean Up
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @core @category-core @coverage-operator-auto @coverage-auto @step-done @happy-path
+  @DeleteOrArchiveRoute
   Scenario: Operator Update Waypoint Details on Lat/Long Cleanup Page (uid:95f9adf5-dd68-4499-985f-bf84ce18c707)
-    Given Order "has been created"
-    When Operator goes to "Lat/Long Cleanup" page
-    And Operator clicks "'Edit Waypoint Details'" button
-    Then Verify that "'Edit Waypoint Details'" modal is shown
-    When Operator fills in "waypoint ID of created order" details
-    Then Verify that "Waypoint Details" is shown on modal
-    When Operator fills in "new Waypoint" details
-    And Operator clicks "'Save Changes'" button
-    Then Verify that success toast message is displayed with message = "'Waypoint updated successfully'"
-    And Verify that "waypoint details have been updated" successfully
-    And Verify that in "core_qa_sg" / "waypoints"."(address1, address2, latitude, longitude, postcode, country, city)" is "updated with current waypoint details"
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    When Operator go to menu Utilities -> Lat/Lng Cleanup
+    And Operator edit created delivery waypoint on Lat/Lng Cleanup page using data below:
+      | address1   | GENERATED |
+      | address2   | GENERATED |
+      | city       | GENERATED |
+      | country    | GENERATED |
+      | postalCode | GENERATED |
+      | latitude   | GENERATED |
+      | longitude  | GENERATED |
+    Then Operator verify waypoint details on Lat/Lng Cleanup page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

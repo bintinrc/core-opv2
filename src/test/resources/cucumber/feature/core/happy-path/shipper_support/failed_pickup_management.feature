@@ -1,4 +1,4 @@
-@OperatorV2 @Core @ShipperSupport @FailedPickupManagement
+@OperatorV2 @Core @ShipperSupport @FailedPickupManagement @happy-path
 Feature: Failed Pickup Management
 
   @LaunchBrowser @ShouldAlwaysRun
