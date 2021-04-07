@@ -6,7 +6,7 @@ Feature: End Route Inbound Session
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: End a Route Inbound Session : Completed Scans (uid:f1af21ad-eed6-438b-93b3-85c0ad0dbe54)
+  Scenario Outline: End a Route Inbound Session : Completed Scans (uid:f1af21ad-eed6-438b-93b3-85c0ad0dbe54)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                |
