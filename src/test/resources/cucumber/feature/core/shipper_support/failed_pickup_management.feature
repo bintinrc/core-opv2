@@ -1,4 +1,4 @@
-@OperatorV2 @Core @ShipperSupport @FailedPickupManagement @Saas @Inbound
+@OperatorV2 @Core @ShipperSupport @FailedPickupManagement
 Feature: Failed Pickup Management
 
   @LaunchBrowser @ShouldAlwaysRun
