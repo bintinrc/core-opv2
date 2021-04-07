@@ -1,4 +1,4 @@
-@OperatorV2 @Core @SystemSettings @PrinterSettings @Saas
+@OperatorV2 @Core @SystemSettings @PrinterSettings
 Feature: Printer Settings
 
   @LaunchBrowser @ShouldAlwaysRun

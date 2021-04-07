@@ -110,10 +110,10 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
       pendingPriorityPickupsTable = new PendingPriorityTable(webDriver);
-      pendingPriorityPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
+      pendingPriorityPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
       pendingPriorityDeliveriesTable = new PendingPriorityTable(webDriver);
       pendingPriorityDeliveriesTable
-          .setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
+          .setTableLocator("(//div[contains(@class,'ant-card-body')])[1]");
     }
 
     public static class PendingPriorityTable extends AntTableV2<PendingPriorityOrder> {
@@ -159,12 +159,12 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
       invalidFailedDeliveriesTable = new InvalidFailedOrdersTable(webDriver);
-      invalidFailedDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
+      invalidFailedDeliveriesTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[1]");
       invalidFailedPickupsTable = new InvalidFailedOrdersTable(webDriver);
-      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
+      invalidFailedPickupsTable.setTableLocator("(//div[contains(@class,'ant-card-body')])[2]");
       invalidFailedReservationsTable = new InvalidFailedOrdersTable(webDriver);
       invalidFailedReservationsTable
-          .setTableLocator("(//div[contains(@class,'ant-card-body')])[4]");
+          .setTableLocator("(//div[contains(@class,'ant-card-body')])[3]");
     }
 
     public static class InvalidFailedOrdersTable extends AntTableV2<PendingPriorityOrder> {

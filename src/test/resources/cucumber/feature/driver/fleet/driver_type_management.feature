@@ -40,10 +40,10 @@ Feature: Driver Type Management
     When Operator edit new Driver Type with the following attributes:
       | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
       | deliveryType    | C2C + Return Pick Up                     |
-      | priorityLevel   | Non-Priority                             |
-      | reservationSize | Less Than 10 Parcels                     |
+      | priorityLevel   | Non-Priority Only                        |
+      | reservationSize | Less than 10 Parcels                     |
       | parcelSize      | Medium                                   |
-      | timeslot        | 9AM To 10PM                              |
+      | timeslot        | 9AM to 10PM                              |
     Then Operator verify new Driver Type params
 
   @DeleteDriverType
@@ -105,6 +105,35 @@ Feature: Driver Type Management
       | timeslot: 12PM To 3PM                 | uid:2b0d5790-9d3f-492f-955f-cee9b22f9879 | timeslot        | 12PM To 3PM          |
       | timeslot: 3PM To 6PM                  | uid:08e3f316-04a9-4aae-b55f-94eb86aa719f | timeslot        | 3PM To 6PM           |
       | timeslot: 6PM To 10PM                 | uid:5ceba73a-806b-4115-824f-01345fec3ed9 | timeslot        | 6PM To 10PM          |
+
+  @DeleteDriverType
+  Scenario: Search Driver Type by ID
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Driver Type Management
+    Given Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    And Operator get new Driver Type params on Driver Type Management page
+    Then Operator search created Driver Type using ID
+
+  @DeleteDriverType
+  Scenario: Search Driver Type by ID
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    And API Operator get all driver types
+    And Operator refresh page
+    Then Operator verify all driver types are displayed on Driver Type Management page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
