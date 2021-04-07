@@ -85,6 +85,15 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     checkSessionScan(String.valueOf(shipmentId));
   }
 
+  public void inboundScanningUsingMawbCheckSessionUsingMAWB(String mawb, String label, String hub) {
+    pause2s();
+    inboundHub.searchAndSelectValue(hub);
+    click(grabXpathButton(label));
+    startInboundButton.click();
+    fillShipmentId(mawb);
+    checkSessionScan(String.valueOf(mawb));
+  }
+
   public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub,
       String condition) {
     pause2s();
@@ -134,6 +143,24 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
             shipmentId));
   }
 
+  public void checkSessionScanResult(Long shipmentId, String condition) {
+    String resultWebElement = findElementByXpath(
+        XPATH_SCANNING_SESSION_NO_CHANGE + "//td[@class='result']").getText();
+    switch (condition) {
+      case "Completed":
+      case "Cancelled":
+        assertTrue("Error Message is not the same : ", resultWebElement
+            .contains(f("shipment %d is in terminal state: [%s]", shipmentId, condition)));
+        break;
+      case "Pending":
+      case "Closed":
+        assertTrue("Error Message is different : ",
+            resultWebElement.contains(f("shipment %d is [%s]", shipmentId, condition)));
+        break;
+    }
+
+  }
+
   public void checkEndDateSessionScanChange(List<String> mustCheckId, Date endDate) {
     String formattedEndDate = MD_DATEPICKER_SDF.format(endDate);
 
@@ -161,10 +188,14 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        assertEquals("Error Message is not the same : ", errorMessage,
-            f("shipment %d is in terminal state: [%s]", shipmentId, condition));
+        assertTrue("Error Message is not the same : ", errorMessage
+            .contains(f("shipment %d is in terminal state: [%s]", shipmentId, condition)));
         break;
-
+      case "Pending":
+      case "Closed":
+        assertTrue("Error Message is different : ",
+            errorMessage.contains(f("shipment %d is [%s]", shipmentId, condition)));
+        break;
       case "different country van":
         assertEquals("Error Message is not the same : ", errorMessage,
             f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",

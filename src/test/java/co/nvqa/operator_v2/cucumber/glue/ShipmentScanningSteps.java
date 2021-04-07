@@ -46,7 +46,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
             ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
-        shipmentScanningPage.selectHub(hub);
+        shipmentScanningPage.selectHub(resolveValue(hub));
         shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
         shipmentScanningPage.selectShipmentType(shipmentType);
         shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
@@ -61,7 +61,31 @@ public class ShipmentScanningSteps extends AbstractSteps {
         pause2s();
         throw ex;
       }
-    }, 10);
+    }, 5);
+  }
+
+  @When("Operator open add to shipment for shipment {string} in hub {string} to hub id = {string} with shipmentType {string}")
+  public void operatorScanTheCreatedOrderToShipmentInHub(String shipmentIdAsString, String hub,
+      String destHub, String shipmentType) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+
+        shipmentScanningPage.selectHub(resolveValue(hub));
+        shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
+        shipmentScanningPage.selectShipmentType(shipmentType);
+        shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
+        shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
+        shipmentScanningPage.clickSelectShipment();
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        pause2s();
+        throw ex;
+      }
+    }, 5);
   }
 
   @And("Operator close the shipment which has been created")

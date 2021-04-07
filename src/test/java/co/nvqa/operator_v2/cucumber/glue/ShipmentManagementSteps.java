@@ -327,6 +327,16 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), expectedShipmentInfo);
   }
 
+  @Then("Operator verify the following parameters of shipment {string} on Shipment Management page:")
+  public void operatorVerifyTheFollowingParametersForShipmentOnShipmentManagementPage(
+      String shipmentIdAsString, Map<String, String> mapOfData) {
+    String resolvedShipment = resolveValue(shipmentIdAsString);
+    ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
+    Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);
+    expectedShipmentInfo.fromMap(resolvedKeyValues);
+    shipmentManagementPage.validateShipmentInfo(Long.valueOf(resolvedShipment), expectedShipmentInfo);
+  }
+
   @Then("Operator verify the following parameters of all created shipments status is pending")
   public void operatorVerifyTheFollowingParametersOfTheAllCreatedShipmentsStatusIsPending() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);

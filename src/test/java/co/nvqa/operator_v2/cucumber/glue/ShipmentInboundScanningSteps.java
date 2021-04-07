@@ -49,6 +49,24 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }, 5);
   }
 
+  @When("Operator inbound scanning Shipment {string} with type {string} in hub {string} on Shipment Inbound Scanning page")
+  public void operatorInboundScanningShipmentWithType(String shipmentId, String label, String hub) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Long resolvedShipmentId = Long.valueOf(resolveValue(shipmentId));
+        final String finalHub = resolveValue(hub);
+
+        scanningPage.inboundScanning(resolvedShipmentId, label, finalHub);
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw ex;
+      }
+    }, 5);
+  }
+
   @When("^Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:$")
   public void inboundScanningUsingDataBelow(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -90,6 +108,22 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       mawb = get(KEY_SHIPMENT_AWB);
     }
     scanningPage.inboundScanningUsingMawb(shipmentId, mawb, label, hub);
+  }
+
+  @When("Operator inbound scanning Shipment {string} in hub {string} on Shipment Inbound Scanning page using MAWB check session using MAWB")
+  public void operatorInboundScanningShipmentIntoVanInHubHubNameOnShipmentInboundScanningPageUsingMAWBCheckSessionUsingMAWB(
+      String label, String hub) {
+    String mawb = get(KeyConstants.KEY_MAWB);
+    hub = resolveValue(hub);
+
+    if ("orderDestHubName".equalsIgnoreCase(hub)) {
+      Order order = get(KEY_CREATED_ORDER);
+      hub = order.getDestinationHub();
+    }
+    if (mawb == null) {
+      mawb = get(KEY_SHIPMENT_AWB);
+    }
+    scanningPage.inboundScanningUsingMawbCheckSessionUsingMAWB(mawb, label, hub);
   }
 
   @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page with ([^\"]*) alert$")
@@ -207,14 +241,23 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   }
 
   @When("Operator inbound scanning wrong Shipment {long} Into Van in hub {string} on Shipment Inbound Scanning page")
-  public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId, String hubName) {
+  public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId,
+      String hubName) {
     String resolvedHubName = resolveValue(hubName);
     scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
   }
 
   @Then("Operator verify error message in shipment inbound scanning is {string} for shipment {string}")
-  public void operatorVerifyErrorMessageInShipmentInboundScanningIs(String errorMessage, String errorShipmentId) {
+  public void operatorVerifyErrorMessageInShipmentInboundScanningIs(String errorMessage,
+      String errorShipmentId) {
     String resolvedShipmentId = resolveValue(errorShipmentId);
     scanningPage.checkAlert(Long.valueOf(resolvedShipmentId), errorMessage);
+  }
+
+  @Then("Operator verify result in shipment inbound scanning session log is {string} for shipment {string}")
+  public void operatorVerifyErrorMessageInShipmentInboundScanningSessionLogIs(String condition,
+      String errorShipmentId) {
+    String resolvedShipmentId = resolveValue(errorShipmentId);
+    scanningPage.checkSessionScanResult(Long.valueOf(resolvedShipmentId), condition);
   }
 }
