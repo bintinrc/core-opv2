@@ -74,6 +74,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String XPATH_OPERATING_TO_HOURS = "//div[@id='operatingHours.allWeek.endHour']";
   private static final String XPATH_OPERATING_TO_MINUTES = "//div[@id='operatingHours.allWeek.endMinute']";
   private static final String XPATH_SELECT_TIME = "//div[contains(@class,'select-dropdown')]/../div[not(contains(@class,'hidden'))]//li[text()='%s']";
+  private static final String XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION = "//div[@class='ant-modal-confirm-content']";
 
   private AddPartnerDialog addPartnerDialog;
   private EditPartnerDialog editPartnerDialog;
@@ -1012,5 +1013,17 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
   public void verifyCutOffTime(String expectedCutOffTime, String actualCutOffTime) {
     assertEquals("Cut off time is not correct", expectedCutOffTime, actualCutOffTime);
+  }
+
+  public void verifyErrorMessageForDpCreation(String field) {
+    assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase().contains(f("Dp with %s already exists",field).toLowerCase()));
+  }
+
+  public String getErrorMessage() {
+    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    getWebDriver().switchTo().frame(frame);
+    String errorMessage = getText(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
+    getWebDriver().switchTo().defaultContent();
+    return errorMessage;
   }
 }
