@@ -82,7 +82,6 @@ public class ShipmentScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, 5);
