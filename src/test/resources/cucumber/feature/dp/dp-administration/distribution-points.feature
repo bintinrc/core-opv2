@@ -255,7 +255,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the cut off time is "19:00:00"
 
   @DeleteDpAndPartner
-  Scenario: Create New DP - Short name is duplicate - Return Error
+  Scenario: Create New DP - Short name is duplicate - Return Error (uid:c61d83b1-dd57-4bfc-8ffc-315980a55609)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -287,7 +287,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the error message for duplicate "short_name TEST-DP"
 
   @DeleteDpAndPartner
-  Scenario: Create New DP - External Store ID is Duplicate - Return Error
+  Scenario: Create New DP - External Store ID is Duplicate - Return Error (uid:1c5bf620-8782-49cd-843d-4da1e50ab281)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
