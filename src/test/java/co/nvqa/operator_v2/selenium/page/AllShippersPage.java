@@ -84,6 +84,13 @@ public class AllShippersPage extends OperatorV2SimplePage {
     allShippersCreateEditPage.createNewShipper(shipper);
   }
 
+  public void createNewShipperFail(Shipper shipper) {
+    waitUntilPageLoaded();
+    createShipper.click();
+    switchToNewWindow();
+    allShippersCreateEditPage.createNewShipperSteps(shipper);
+  }
+
   public void createNewShipperWithUpdatedPricingScript(Shipper shipper) {
     waitUntilPageLoaded();
     createShipper.click();
