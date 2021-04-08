@@ -174,4 +174,9 @@ public class DpAdministrationSteps extends AbstractSteps {
     String actualCutOffTime = get(KEY_DP_SETTING_DP_CUT_OFF_TIME);
     dpAdminPage.verifyCutOffTime(expectedCutOffTime, actualCutOffTime);
   }
+
+  @Then("Operator verifies the error message for duplicate {string}")
+  public void operatorVerifiesTheErrorMessageForDuplicate(String field) {
+    dpAdminPage.verifyErrorMessageForDpCreation(field);
+  }
 }
