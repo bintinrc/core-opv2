@@ -5,7 +5,7 @@ Feature: Priority Levels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be Able to Download All Sample CSV File on Priority Levels Page (uid:69f77818-72e2-4f8c-9eb1-de0230fee4fb)
+  Scenario: Operator should be Able to Download All Sample CSV File on Priority Levels Page (uid:b1912952-f664-472f-814b-df9ae4232d5b)
     Given Operator go to menu Order -> All Orders
     And Operator go to menu New Features -> Priority Levels
     Then Operator verifies "Orders Sample CSV" is downloaded successfully and correct
