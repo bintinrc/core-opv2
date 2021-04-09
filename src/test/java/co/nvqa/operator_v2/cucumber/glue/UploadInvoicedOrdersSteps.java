@@ -9,11 +9,11 @@ import java.util.List;
 
 import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
-public class InvoicedOrdersSteps extends AbstractSteps {
+public class UploadInvoicedOrdersSteps extends AbstractSteps {
 
   private UploadInvoicedOrdersPage uploadInvoicedOrdersPage;
 
-  public InvoicedOrdersSteps() {
+  public UploadInvoicedOrdersSteps() {
   }
 
   @Override
