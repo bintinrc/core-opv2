@@ -79,7 +79,7 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.refreshPage();
         operatorMovementTripPageIsLoaded();
         operatorClickShowHideFilters();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }

@@ -108,7 +108,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() ->
     {
       navigateRefresh();
-      pause2s();
       facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
     }, "Unable to find the hub, retrying...");
   }
@@ -191,7 +190,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() ->
     {
       navigateRefresh();
-      pause2s();
       facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
     }, "Unable to find the hub, retrying...");
   }
@@ -210,7 +208,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
         put("searchHubsKeyword", searchHubsKeyword);
       } catch (Exception ex) {
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, "Unable to find the hub, retrying...", 1000, 10);
@@ -260,7 +257,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
         hub.setActive(false);
       } catch (Exception ex) {
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, "Unable to find the hub, retrying...");
@@ -278,7 +274,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
         hub.setActive(false);
       } catch (Exception ex) {
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, "Unable to find the hub, retrying...");
@@ -303,7 +298,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
         hub.setActive(true);
       } catch (Exception ex) {
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, "Unable to find the hub, retrying...");

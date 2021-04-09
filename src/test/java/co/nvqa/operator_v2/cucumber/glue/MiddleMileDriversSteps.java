@@ -6,6 +6,7 @@ import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -121,7 +122,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.refreshPage();
         middleMileDriversPage.switchTo();
         middleMileDriversPage.loadButton.waitUntilClickable();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, getCurrentMethodName(), 500, 5);
   }
@@ -266,7 +267,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.switchTo();
         middleMileDriversPage.loadButton.waitUntilClickable();
         middleMileDriversPage.clickCreateDriversButton();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
 

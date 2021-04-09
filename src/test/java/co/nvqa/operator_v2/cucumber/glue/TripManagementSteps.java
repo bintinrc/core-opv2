@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
@@ -147,7 +148,7 @@ public class TripManagementSteps extends AbstractSteps {
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         tripManagementPage.refreshPage();
         tripManagementPage.switchTo();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
