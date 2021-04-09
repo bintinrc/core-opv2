@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -44,7 +45,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
         scanningPage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }
@@ -62,7 +63,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
         scanningPage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }
@@ -137,7 +138,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         scanningPage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
 
@@ -189,7 +190,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
         scanningPage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, getCurrentMethodName(), 1000, 5);
   }

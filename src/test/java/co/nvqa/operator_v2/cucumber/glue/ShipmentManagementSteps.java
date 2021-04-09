@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.management.RuntimeErrorException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -87,7 +89,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         shipmentManagementPage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, getCurrentMethodName(), 3000, 10);
   }
@@ -105,7 +107,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -208,7 +210,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }

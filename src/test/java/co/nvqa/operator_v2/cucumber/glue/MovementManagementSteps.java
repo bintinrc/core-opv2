@@ -5,6 +5,7 @@ import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -67,7 +68,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addSchedule.waitUntilClickable(60);
         movementManagementPage.addSchedule.click();
         movementManagementPage.addMovementScheduleModal.waitUntilVisible();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -108,7 +109,7 @@ public class MovementManagementSteps extends AbstractSteps {
         navigateRefresh();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -177,7 +178,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.refreshPage();
         movementManagementPage.switchTo();
         movementManagementPage.relationsTab.waitUntilClickable(60);
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -200,7 +201,7 @@ public class MovementManagementSteps extends AbstractSteps {
         navigateRefresh();
         movementManagementPage.switchTo();
         movementManagementPage.relationsTab.waitUntilClickable(60);
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -272,7 +273,7 @@ public class MovementManagementSteps extends AbstractSteps {
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         movementManagementPage.refreshPage();
         movementManagementPageIsLoaded();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -344,7 +345,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addSchedule.waitUntilClickable(60);
         movementManagementPage.addSchedule.click();
         movementManagementPage.addMovementScheduleModal.waitUntilVisible();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
@@ -618,7 +619,7 @@ public class MovementManagementSteps extends AbstractSteps {
             f("Cannot select hub name value in Origin Crossdock Hub field on the Movement Schedule page"));
         movementManagementPage.refreshPage();
         movementManagementPage.switchTo();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }
@@ -668,7 +669,7 @@ public class MovementManagementSteps extends AbstractSteps {
             f("Cannot select hub name value in Origin Crossdock Hub field on the Movement Schedule page"));
         movementManagementPage.refreshPage();
         movementManagementPage.switchTo();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
     movementManagementPage.loadSchedules.click();

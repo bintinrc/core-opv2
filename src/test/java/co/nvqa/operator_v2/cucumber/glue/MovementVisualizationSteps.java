@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.HubRelationData;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MovementVisualizationPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -43,7 +44,7 @@ public class MovementVisualizationSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }

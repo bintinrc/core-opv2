@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -58,7 +59,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }
@@ -70,7 +71,6 @@ public class ShipmentScanningSteps extends AbstractSteps {
     {
       try {
         Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
-
         shipmentScanningPage.selectHub(resolveValue(hub));
         shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
         shipmentScanningPage.selectShipmentType(shipmentType);
@@ -81,7 +81,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }
@@ -127,7 +127,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
