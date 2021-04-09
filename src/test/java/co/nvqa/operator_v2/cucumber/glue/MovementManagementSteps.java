@@ -63,7 +63,6 @@ public class MovementManagementSteps extends AbstractSteps {
             f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog",
                 hubName));
         navigateRefresh();
-        pause2s();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
         movementManagementPage.addSchedule.click();
@@ -107,7 +106,6 @@ public class MovementManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        pause2s();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
         throw ex;
@@ -200,7 +198,6 @@ public class MovementManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        pause2s();
         movementManagementPage.switchTo();
         movementManagementPage.relationsTab.waitUntilClickable(60);
         throw ex;
@@ -343,7 +340,6 @@ public class MovementManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        pause2s();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
         movementManagementPage.addSchedule.click();

@@ -105,7 +105,6 @@ public class ShipmentManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, 10);
@@ -209,7 +208,6 @@ public class ShipmentManagementSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
-        pause2s();
         throw ex;
       }
     }, 10);
