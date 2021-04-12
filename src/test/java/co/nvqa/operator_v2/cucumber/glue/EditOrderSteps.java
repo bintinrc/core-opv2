@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -33,14 +34,19 @@ import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
+import static org.hamcrest.Matchers.blankOrNullString;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class EditOrderSteps extends AbstractSteps {
+
+  public static final String KEY_CHAT_MESSAGE = "KEY_CHAT_MESSAGE";
+  public static final String KEY_CHAT_MESSAGE_ID = "KEY_CHAT_MESSAGE_ID";
 
   private EditOrderPage editOrderPage;
 
@@ -1210,5 +1216,88 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorVerifyNoTagsShownOnEditOrderPage() {
     List<String> actualOrderTags = editOrderPage.getTags();
     assertThat("List of displayed order tags", actualOrderTags, Matchers.empty());
+  }
+
+  @When("^Operator click Chat With Driver on Edit Order page$")
+  public void clickChatWithDriver() {
+    editOrderPage.chatWithDriver.click();
+  }
+
+  @When("^Chat With Driver dialog is displayed on Edit Order page$")
+  public void verifyChatWithDriverDialogDisplayed() {
+    pause5s();
+    editOrderPage.chatWithDriverDialog.waitUntilVisible();
+  }
+
+  @When("Operator click on {string} tracking ID in Chat With Driver dialog")
+  public void clickTrackingIdInChatWithDriverDialog(String trackingId) {
+    editOrderPage.chatWithDriverDialog.findOrderItemByTrackingId(resolveValue(trackingId))
+        .trackingId.click();
+  }
+
+  @When("Number of replays for {string} tracking ID in Chat With Driver dialog is {int}")
+  public void verifyNumberOfReplays(String trackingId, int expectedNumber) {
+    String actual = editOrderPage.chatWithDriverDialog
+        .findOrderItemByTrackingId(resolveValue(trackingId))
+        .replaysNumber.getText();
+    assertEquals("Number of replays", expectedNumber, Integer.parseInt(actual));
+  }
+
+  @When("Go to order details button is displayed in Chat With Driver dialog")
+  public void goToOrderDetailsButtonIsDisplayed() {
+    assertTrue("Go to order details button is displayed",
+        editOrderPage.chatWithDriverDialog.goToOrderDetails.isDisplayed());
+  }
+
+  @When("Date of {string} order is {string} in Chat With Driver dialog")
+  public void verifyDateOfOrderInChatWithDriverDialog(String trackingId, String expected) {
+    trackingId = resolveValue(trackingId);
+    String actual = editOrderPage.chatWithDriverDialog.findOrderItemByTrackingId(trackingId)
+        .date.getText();
+    assertEquals("Date of chat for order " + trackingId, resolveValue(expected), actual);
+  }
+
+  @When("Operator send {string} message to driver in Chat With Driver dialog")
+  public void sendMessageToDriver(String message) {
+    message = resolveValue(message);
+    editOrderPage.chatWithDriverDialog.messageInput.setValue(message + Keys.ENTER);
+    put(KEY_CHAT_MESSAGE, message);
+    pause1s();
+  }
+
+  @When("message {string} is displayed in Chat With Driver dialog")
+  public void verifyChatMessageIsDisplayed(String value) {
+    String expected = resolveValue(value);
+    ChatMessage messageItem = editOrderPage.chatWithDriverDialog.messages.stream()
+        .filter(
+            chatMessage -> StringUtils.equals(expected, chatMessage.message.getNormalizedText()))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Chat message [" + expected + "] was not found"));
+    String id = messageItem.getAttribute("id");
+    put(KEY_CHAT_MESSAGE_ID, id);
+    assertThat("Chat message date", messageItem.date.getNormalizedText(), not(blankOrNullString()));
+  }
+
+  @When("chat date is {string} in Chat With Driver dialog")
+  public void verifyChatDate(String expected) {
+    assertEquals("Chat date", resolveValue(expected),
+        editOrderPage.chatWithDriverDialog.chatDate.getNormalizedText());
+  }
+
+  @When("Read label is displayed Chat With Driver dialog")
+  public void verifyReadLabelIsDisplayed() {
+    assertTrue("Read label is displayed",
+        editOrderPage.chatWithDriverDialog.readLabel.isDisplayed());
+  }
+
+  @When("Read label is not displayed Chat With Driver dialog")
+  public void verifyReadLabelIsNotDisplayed() {
+    assertFalse("Read label is displayed",
+        editOrderPage.chatWithDriverDialog.readLabel.waitUntilVisible(5));
+  }
+
+  @When("^Operator close Chat With Driver dialog$")
+  public void closeChatWithDriverDialog() {
+    editOrderPage.chatWithDriverDialog.close();
   }
 }
