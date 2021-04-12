@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.PathManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
@@ -79,7 +80,7 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.refreshPage();
         operatorMovementTripPageIsLoaded();
         operatorClickShowHideFilters();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }

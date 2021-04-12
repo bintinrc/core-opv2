@@ -157,7 +157,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void selectDestinationHub(String destHub) {
     sendKeys("//nv-autocomplete[contains(@search-text,'destinationHub')]//input", destHub);
     pause1s();
-    clickf("//li//span[text()='%s']", destHub);
+    try {
+      clickf("//li//span[text()='%s']", destHub);
+    } catch (Exception e) {
+      clickf("(//li//span[text()='%s'])[2]", destHub);
+    }
     pause50ms();
   }
 

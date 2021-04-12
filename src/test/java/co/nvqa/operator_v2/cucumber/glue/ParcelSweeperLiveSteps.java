@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperLivePage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -74,7 +75,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
         parcelSweeperLivePage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }

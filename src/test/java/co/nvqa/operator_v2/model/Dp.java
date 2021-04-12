@@ -94,6 +94,9 @@ public class Dp extends DataEntity<Dp> {
   }
 
   public void setShortName(String shortName) {
+    if ("generated".equalsIgnoreCase(shortName)) {
+      shortName = TestUtils.generateDateUniqueString();
+    }
     this.shortName = shortName;
   }
 
@@ -321,6 +324,9 @@ public class Dp extends DataEntity<Dp> {
   }
 
   public void setExternalStoreId(String externalStoreId) {
+    if ("generated".equalsIgnoreCase(externalStoreId)) {
+      externalStoreId = TestUtils.generateDateUniqueString();
+    }
     this.externalStoreId = externalStoreId;
   }
 

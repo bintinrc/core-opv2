@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
 import cucumber.api.java.en.And;
@@ -89,7 +90,7 @@ public class GlobalInboundSteps extends AbstractSteps {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Global inbound scanning not found, retrying...");
         globalInboundPage.refreshPage();
-        throw ex;
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
   }

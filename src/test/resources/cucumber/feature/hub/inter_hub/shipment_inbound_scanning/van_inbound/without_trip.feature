@@ -461,6 +461,96 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
 
+  @DeleteShipment
+  Scenario: Van Inbound MAWB with Mix Status In Origin Hub (uid:3803c0f8-e188-44b5-9ab3-a8971f8586c6)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator assign mawb "AUTO-{gradle-current-date-yyyyMMddHHmmsss}" to following shipmentIds
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]} |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator open add to shipment for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" in hub "{hub-name}" to hub id = "{hub-name-2}" with shipmentType "Air Haul"
+    And Operator close the shipment which has been created
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]}" with type "Into Van" in hub "{hub-name}" on Shipment Inbound Scanning page
+    When API Operator change the status of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]}" into "Completed"
+    When API Operator change the status of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]}" into "Cancelled"
+    And Operator refresh page
+    When Operator inbound scanning Shipment "Into Van" in hub "{hub-name}" on Shipment Inbound Scanning page using MAWB check session using MAWB
+    Then Operator verify error message in shipment inbound scanning is "Completed" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]}"
+    And Operator verify error message in shipment inbound scanning is "Cancelled" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]}"
+    Then Operator verify result in shipment inbound scanning session log is "Completed" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]}"
+    And Operator verify result in shipment inbound scanning session log is "Cancelled" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]}"
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]} |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management page:
+      | status | Pending |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" on Shipment Management page:
+      | status | Closed |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]}" on Shipment Management page:
+      | status | Transit |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]}" on Shipment Management page:
+      | status | Completed |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]}" on Shipment Management page:
+      | status | Cancelled |
+    Then Operator verifies event is present for shipment on Shipment Detail page
+      | source | SHIPMENT_VAN_INBOUND   |
+      | result | Transit                |
+      | hub    | {hub-name}             |
+      | userId | automation@ninjavan.co |
+
+  @DeleteShipment
+  Scenario: Van Inbound MAWB with Mix Status Not In Origin Hub (uid:ed30531a-fc2a-4fe0-9a1a-fa0cc96969bb)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator assign mawb "AUTO-{gradle-current-date-yyyyMMddHHmmsss}" to following shipmentIds
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]} |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator open add to shipment for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" in hub "{hub-name}" to hub id = "{hub-name-2}" with shipmentType "Air Haul"
+    And Operator close the shipment which has been created
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]}" with type "Into Van" in hub "{hub-name}" on Shipment Inbound Scanning page
+    When API Operator change the status of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]}" into "Completed"
+    When API Operator change the status of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]}" into "Cancelled"
+    And Operator refresh page
+    When Operator inbound scanning Shipment "Into Van" in hub "{hub-name-2}" on Shipment Inbound Scanning page using MAWB check session using MAWB
+    Then Operator verify error message in shipment inbound scanning is "Pending" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+    Then Operator verify result in shipment inbound scanning session log is "Pending" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
+      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]} |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management page:
+      | status | Pending |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" on Shipment Management page:
+      | status | Closed |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]}" on Shipment Management page:
+      | status | Transit |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]}" on Shipment Management page:
+      | status | Completed |
+    Then Operator verify the following parameters of shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]}" on Shipment Management page:
+      | status | Cancelled |
+    Then Operator verifies event is present for shipment on Shipment Detail page
+      | source | SHIPMENT_VAN_INBOUND   |
+      | result | Transit                |
+      | hub    | {hub-name-2}           |
+      | userId | automation@ninjavan.co |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
