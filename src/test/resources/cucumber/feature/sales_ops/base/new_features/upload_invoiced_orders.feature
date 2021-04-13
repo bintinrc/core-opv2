@@ -1,5 +1,4 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @UploadInvoicedOrders
-
 Feature: Upload Invoiced Orders
   non-invoiced = orders that are in priced_orders table, but not yet in invoiced_orders table
   has-invoiced = orders that are in priced_orders table and in invoiced_orders table
@@ -54,7 +53,7 @@ Feature: Upload Invoiced Orders
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing Result                               |
-      | body    | All tracking numbers are successfully invoiced |
+      | body    | All Tracking IDs are successfully invoiced |
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Upload Invoice Orders CSV - When Orders are not in priced_orders neither invoiced_orders (non-priced) (uid:6c8bb540-5f3e-428f-a271-5fa05bf154aa)
@@ -127,7 +126,7 @@ Feature: Upload Invoiced Orders
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing Result                               |
-      | body    | All tracking numbers are successfully invoiced |
+      | body    | All Tracking IDs are successfully invoiced |
 
 
   @DeleteOrArchiveRoute @KillBrowser
