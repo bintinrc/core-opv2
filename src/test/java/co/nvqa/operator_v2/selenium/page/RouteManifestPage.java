@@ -29,7 +29,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   public static final String ACTION_BUTTON_EDIT = "container.route-manifest.choose-outcome-for-waypoint";
   private static final String MD_VIRTUAL_REPEAT = "waypoint in getTableData()";
   private final WaypointDetailsDialog waypointDetailsDialog;
-  private final WaypointsTable waypointsTable;
+  public final WaypointsTable waypointsTable;
 
   @FindBy(css = "md-dialog")
   public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
@@ -293,16 +293,20 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   public static class WaypointsTable extends MdVirtualRepeatTable<RouteManifestWaypointDetails> {
 
+    public static final String COLUMN_ORDER_TAGS = "orderTags";
+    public static final String COLUMN_TRACKING_IDS = "trackingIds";
+
     public WaypointsTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put("address", "address")
           .put("status", "status")
+          .put(COLUMN_ORDER_TAGS, "order-tags")
           .put("id", "id")
           .put("deliveriesCount", "count-d")
           .put("pickupsCount", "count-p")
           .put("comments", "comments")
-          .put("trackingIds", "tracking-ids")
+          .put(COLUMN_TRACKING_IDS, "tracking-ids")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of("details", "Waypoint Details", "edit",

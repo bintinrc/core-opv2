@@ -46,6 +46,11 @@ public class StampDisassociationSteps extends AbstractSteps {
     stampDisassociationPage.enterStampId(trackingId);
   }
 
+  @And("Operator enters {string} value into 'Scan Stamp ID' field on Stamp Disassociation page")
+  public void operatorEnterIScanStampIdField(String value) {
+    stampDisassociationPage.enterStampId(resolveValue(value));
+  }
+
   @Then("Operator will get the ([^\"]*) alert")
   public void operatorWillGetTheAlertOfMessageShown(String toastText) {
     stampDisassociationPage.checkAlert(toastText);

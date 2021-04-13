@@ -229,7 +229,7 @@ Feature: Failed Delivery Management
       | Return | uid:13de8904-3423-4f4c-b27d-4d1050873bc4 | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS Multiple Failed Deliveries
+  Scenario: Operator RTS Multiple Failed Deliveries (uid:02bc7568-b4d6-48f7-8d69-14bbfc57130d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -309,7 +309,7 @@ Feature: Failed Delivery Management
       | rts | 1 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Reschedule Multiple Failed Deliveries
+  Scenario: Operator Reschedule Multiple Failed Deliveries (uid:aec2fa4a-bd14-4541-9820-b3370cbd564a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -482,6 +482,70 @@ Feature: Failed Delivery Management
       | name   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} (RTS) |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Reschedule Multiple Failed Deliveries by Upload CSV (uid:7e2f169f-1e30-41a7-8d7c-f87a8a844c79)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    And API Driver failed the delivery of multiple parcels
+    And Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator reschedule failed delivery orders using CSV:
+      | date | {gradle-next-2-day-yyyy-MM-dd} |
+    Then Operator verifies that info toast displayed:
+      | top    | 2 order(s) updated |
+      | bottom | CSV Reschedule     |
+    Then csv-reschedule-result CSV file is successfully downloaded
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

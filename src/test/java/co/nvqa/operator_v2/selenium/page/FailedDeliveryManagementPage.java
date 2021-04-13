@@ -11,6 +11,8 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -26,8 +28,13 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("WeakerAccess")
 public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
+
+  @FindBy(name = "container.failed-delivery-management.csv-reschedule")
+  public NvIconTextButton csvReschedule;
+
+  @FindBy(css = "md-dialog")
+  public UploadCsvRescheduleDialog uploadCsvRescheduleDialog;
 
   @FindBy(css = "md-dialog")
   public EditRtsDetailsDialog editRtsDetailsDialog;
@@ -399,5 +406,21 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
     assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId),
         failedDeliveriesTable.isEmpty());
+  }
+
+  public static class UploadCsvRescheduleDialog extends MdDialog {
+
+    @FindBy(css = "[label='Choose']")
+    public NvButtonFilePicker selectFile;
+
+    @FindBy(name = "commons.download-sample-excel")
+    public NvIconTextButton downloadSample;
+
+    @FindBy(name = "Upload CSV")
+    public NvButtonSave upload;
+
+    public UploadCsvRescheduleDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

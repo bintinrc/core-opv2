@@ -1169,11 +1169,10 @@ Feature: Edit Order
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verify order event on Edit order page using data below:
-      | name | RTS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE ADDRESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE CONTACT INFORMATION |
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
@@ -1209,12 +1208,11 @@ Feature: Edit Order
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verify order event on Edit order page using data below:
-      | name | RTS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE ADDRESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE CONTACT INFORMATION |
+    Then Operator verify order events on Edit order page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
@@ -1231,7 +1229,7 @@ Feature: Edit Order
       | rts | 1 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS an Order on Edit Order Page - Delivery Fail / Pending Reschedule (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
+  Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -1242,7 +1240,6 @@ Feature: Edit Order
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -1265,12 +1262,12 @@ Feature: Edit Order
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verify order event on Edit order page using data below:
-      | name | RTS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE ADDRESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE CONTACT INFORMATION |
+    Then Operator verify order events on Edit order page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+      | DRIVER INBOUND SCAN        |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
