@@ -6,6 +6,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.openqa.selenium.Keys;
 
 /**
  * @author Sergey Mishanin
@@ -23,41 +24,41 @@ public class StampDisassociationSteps extends AbstractSteps {
     stampDisassociationPage = new StampDisassociationPage(getWebDriver());
   }
 
-  @And("^Operator enter Stamp ID of the created order on Stamp Disassociation page$")
-  public void operatorEnterStampIDOfTheCreatedOrder() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    stampDisassociationPage.enterStampId(trackingId);
-  }
-
   @Then("^Operator verify order details on Stamp Disassociation page$")
   public void operatorVerifyOrderDetailsOnStampDisassociationPage() {
     Order order = get(KEY_CREATED_ORDER);
-    stampDisassociationPage.verifyOrderDetails(order);
+    String expectedOrderId = String.format("#%d - %s", order.getId(), order.getTrackingId());
+    assertEquals("Order ID", expectedOrderId, stampDisassociationPage.orderId.getText());
+    assertEquals("Delivery Address", order.buildCompleteToAddress(),
+        stampDisassociationPage.deliveryAddress.getNormalizedText());
   }
 
   @Then("^Operator verify the label says \"([^\"]*)\" on Stamp Disassociation page$")
   public void operatorVerifyTheLabelSaysOnStampDisassociationPage(String labelText) {
-    stampDisassociationPage.verifyLabelText(labelText);
-  }
-
-  @And("^Operator enter Invalid Stamp ID on Stamp Disassociation page$")
-  public void operatorEnterInvalidStampID() {
-    String trackingId = "INVALID_TR_ID";
-    stampDisassociationPage.enterStampId(trackingId);
+    assertEquals("Label Text", resolveValue(labelText),
+        stampDisassociationPage.stampLabel.getText());
   }
 
   @And("Operator enters {string} value into 'Scan Stamp ID' field on Stamp Disassociation page")
   public void operatorEnterIScanStampIdField(String value) {
-    stampDisassociationPage.enterStampId(resolveValue(value));
+    stampDisassociationPage.waitWhilePageIsLoading();
+    stampDisassociationPage.stampIdInput.setValue(resolveValue(value).toString() + Keys.ENTER);
   }
 
-  @Then("Operator will get the ([^\"]*) alert")
-  public void operatorWillGetTheAlertOfMessageShown(String toastText) {
-    stampDisassociationPage.checkAlert(toastText);
+  @Then("Operator will get the ([^\"]*) alert on Stamp Disassociation page")
+  public void operatorWillGetTheAlertOfMessageShown(String alert) {
+    assertEquals("Not Found Alert", resolveValue(alert),
+        stampDisassociationPage.alertLabel.getText());
   }
 
   @When("Operator click on the Disassociate Stamp button")
   public void operatorClickOnTheDisassociateStampButton() {
-    stampDisassociationPage.clickOnTheDisassociateStampButton();
+    stampDisassociationPage.disassociateStamp.clickAndWaitUntilDone();
+  }
+
+  @When("Disassociate Stamp button is disabled")
+  public void disassociateStampButtonIsDisabled() {
+    assertTrue("Disassociate Stamp button is disabled",
+        stampDisassociationPage.disassociateStamp.isDisabled());
   }
 }
