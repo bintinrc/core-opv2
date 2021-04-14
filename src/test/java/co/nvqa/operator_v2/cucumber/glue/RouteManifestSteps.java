@@ -10,14 +10,18 @@ import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_CODE_ID_ALL;
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_DELIVERY;
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_INDEX_MODE_FIRST;
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_PICKUP;
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_TYPE_NORMAL;
+import static co.nvqa.operator_v2.selenium.page.RouteManifestPage.WaypointsTable.COLUMN_ORDER_TAGS;
+import static co.nvqa.operator_v2.selenium.page.RouteManifestPage.WaypointsTable.COLUMN_TRACKING_IDS;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -66,6 +70,17 @@ public class RouteManifestSteps extends AbstractSteps {
     waypointDetails.fromMap(mapOfData);
 
     routeManifestPage.verifyWaypointDetails(waypointDetails);
+  }
+
+  @Then("^Operator verify waypoint tags at Route Manifest using data below:$")
+  public void operatorVerifyWaypointTagsAtRouteManifest(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    data.forEach((tag, expected) -> {
+      routeManifestPage.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
+      List<String> actual = routeManifestPage.waypointsTable.readColumn(COLUMN_TRACKING_IDS);
+      assertThat("List of Tracking IDs for tag " + tag, actual,
+          Matchers.containsInAnyOrder(splitAndNormalize(expected).toArray(new String[0])));
+    });
   }
 
   @When("^Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page$")

@@ -194,6 +194,35 @@ Feature: Route Manifest
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
 
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Show Order Tags in Route Manifest Page (uid:a8166b12-af7e-4d59-88a2-fd14d6181f08)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
+      | {order-tag-id} |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
+      | {order-tag-id-2} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Routing -> Route Logs
+    And Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    Then Operator verify waypoint tags at Route Manifest using data below:
+      | {order-tag-name}   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {order-tag-name-2} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams> {
 
+  private String driverName;
   private Long routeId;
   private Integer totalParcels;
   private Double completionPercentage;
@@ -28,6 +29,14 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams> {
 
   public RouteMonitoringParams(Map<String, String> data) {
     fromMap(data);
+  }
+
+  public String getDriverName() {
+    return driverName;
+  }
+
+  public void setDriverName(String driverName) {
+    this.driverName = driverName;
   }
 
   public Long getRouteId() {

@@ -1806,7 +1806,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     }
 
     public void confirmOrderDeliveryRescheduledUpdated() {
-      waitUntilVisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE);
+      waitUntilInvisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE, true);
     }
   }
 
