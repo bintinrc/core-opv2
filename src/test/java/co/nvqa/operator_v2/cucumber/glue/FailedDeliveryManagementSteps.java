@@ -10,9 +10,11 @@ import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -86,6 +88,34 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementPage.rescheduleSelectedOrdersDialog.date
         .simpleSetValue(data.get("date"));
     failedDeliveryManagementPage.rescheduleSelectedOrdersDialog.reschedule.click();
+  }
+
+  @When("^Operator reschedule failed delivery orders using CSV:$")
+  public void operatorRescheduleFailedDeliveryOrdersUsingCsv(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String date = data.get("date");
+
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+
+    String csvContents = trackingIds.stream()
+        .map(trackingId -> trackingId + "," + date)
+        .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    csvContents = "tracking_id,delivery_date" + System.lineSeparator() + csvContents;
+    File csvFile = failedDeliveryManagementPage.createFile(
+        String.format("csv_reschedule_%s.csv", generateDateUniqueString()), csvContents);
+
+    failedDeliveryManagementPage.waitWhilePageIsLoading();
+    failedDeliveryManagementPage.csvReschedule.click();
+    failedDeliveryManagementPage.uploadCsvRescheduleDialog.waitUntilVisible();
+    failedDeliveryManagementPage.uploadCsvRescheduleDialog.selectFile.setValue(csvFile);
+    failedDeliveryManagementPage.uploadCsvRescheduleDialog.upload.clickAndWaitUntilDone();
+  }
+
+  @When("^csv-reschedule-result CSV file is successfully downloaded$")
+  public void verifyCsvRescheduleResultCsvDownloaded() {
+    String fileName = failedDeliveryManagementPage
+        .getLatestDownloadedFilename("csv-reschedule-result.xlsx");
+    failedDeliveryManagementPage.verifyFileDownloadedSuccessfully(fileName);
   }
 
   @Then("^Operator verify failed delivery order rescheduled on next day successfully$")

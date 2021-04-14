@@ -485,6 +485,21 @@ public class EditOrderSteps extends AbstractSteps {
     expectedEvent.compareWithActual(actualEvent);
   }
 
+  @Then("^Operator verify order events on Edit order page using data below:$")
+  public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
+    List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+    data.forEach(eventData -> {
+      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+      OrderEvent actualEvent = events.stream()
+          .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              f("There is no [%s] event on Edit Order page", expectedEvent.getName())));
+
+      expectedEvent.compareWithActual(actualEvent);
+    });
+  }
+
   @Then("^Operator verify Delivery details on Edit order page using data below:$")
   public void verifyDeliveryDetails(Map<String, String> expectedData) throws ParseException {
     expectedData = resolveKeyValues(expectedData);
@@ -662,8 +677,8 @@ public class EditOrderSteps extends AbstractSteps {
     }
     if (mapOfData.containsKey("routeId")) {
       TransactionInfo actual = editOrderPage.transactionsTable.readEntity(rowIndex);
-      value = mapOfData.get("routeId") == null ? "" : String.valueOf(mapOfData.get("routeId"));
-      assertEquals(f("%s transaction Route Id", transactionType), value, actual.getRouteId());
+      assertEquals(f("%s transaction Route Id", transactionType),
+          StringUtils.trimToNull(mapOfData.get("routeId")), actual.getRouteId());
     }
   }
 

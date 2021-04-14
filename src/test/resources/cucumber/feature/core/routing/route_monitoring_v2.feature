@@ -797,6 +797,52 @@ Feature: Route Monitoring
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
+  @DeleteOrArchiveRoute @DeleteDriver
+  Scenario: Show Updated Driver Name in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}               |
+      | zones   | {zone-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}   |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | driverName | {ninja-driver-name}    |
+      | routeId    | {KEY_CREATED_ROUTE_ID} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator edits details of created route using data below:
+      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | tags       | {route-tag-name}                        |
+      | zone       | {zone-name}                             |
+      | hub        | {hub-name}                              |
+      | driverName | {KEY_CREATED_DRIVER_INFO.getFullName}   |
+      | vehicle    | {vehicle-name}                          |
+      | comments   | Route has been edited by automated test |
+    And Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}               |
+      | zones   | {zone-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}   |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | driverName | {KEY_CREATED_DRIVER_INFO.getFullName} |
+      | routeId    | {KEY_CREATED_ROUTE_ID}                |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
