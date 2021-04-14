@@ -76,9 +76,9 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
   public void selectHub(String hubName) {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH_MOVEMENT_VISUALIZATION));
     click(f(ELEMENT_USING_ID_XPATH, DIV_ELEMENT, HUB_ID));
-    sendKeys(f(ELEMENT_USING_ID_XPATH, INPUT_ELEMENT, HUB_ID), hubName.toUpperCase());
-    waitUntilVisibilityOfElementLocated(f(HUB_SELECTED_XPATH, hubName.toUpperCase()));
-    click(f(HUB_SELECTED_XPATH, hubName.toUpperCase()));
+    sendKeys(f(ELEMENT_USING_ID_XPATH, INPUT_ELEMENT, HUB_ID), hubName);
+    waitUntilVisibilityOfElementLocated(f(HUB_SELECTED_XPATH, hubName));
+    click(f(HUB_SELECTED_XPATH, hubName));
     pause1s();
     verifiesSelectedHubBecomeHubTag();
     getWebDriver().switchTo().parentFrame();
