@@ -118,7 +118,7 @@ Feature: Trigger Auto Generated Path
     Then Operator verify no path found from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" message is shown in create default path modal
     And DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 0 in movement_path table
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @RT
   Scenario: Unable to Generate Default Path without Selecting Origin Hub & Destination Hub (uid:f723558d-ea7b-48a7-af5c-a678b897fa9d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Path Management

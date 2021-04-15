@@ -93,7 +93,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-wrap")
   public CreateDefaultPathModal createDefaultPathModal;
 
-  @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
+  @FindBy(className = "ant-modal-wrap")
   public PathDetailsModal createdPathDetailsModal;
 
   @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
@@ -459,10 +459,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
   public void createDefaultPath(String originHubName, String destinationHubName) {
     if (!"empty".equals(originHubName)) {
-      createDefaultPathModal.originHubFilter.selectValue(originHubName);
+      createDefaultPathModal.originHubFilter.click();
+      sendKeysAndEnter("//input[@id='originHub']", originHubName);
     }
     if (!"empty".equals(destinationHubName)) {
-      createDefaultPathModal.destinationHubFilter.selectValue(destinationHubName);
+      createDefaultPathModal.destinationHubFilter.click();
+      sendKeysAndEnter("//input[@id='destinationHub']", destinationHubName);
     }
     createDefaultPathModal.generateButton.click();
   }
@@ -674,11 +676,11 @@ public class PathManagementPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(id = "originHub")
-    public AntSelect originHubFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-col ant-col')][.//*[.='Origin Hub']]//div[contains(@class,'ant-select ant-select')]")
+    public PageElement originHubFilter;
 
-    @FindBy(id = "destinationHub")
-    public AntSelect destinationHubFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-col ant-col')][.//*[.='Origin Hub']]//div[contains(@class,'ant-select ant-select')]")
+    public PageElement destinationHubFilter;
 
     @FindBy(xpath = ".//button[.='Generate']")
     public Button generateButton;
@@ -689,10 +691,10 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-body")
     public TextBox createDefaultPathInfo;
 
-    @FindBy(xpath = "//div[div[.='Origin Hub']]//div[@class='ant-form-explain']")
+    @FindBy(xpath = ".//div[div[.='Origin Hub']]//div[@role='alert']")
     public TextBox originHubErrorInfo;
 
-    @FindBy(xpath = "//div[div[.='Destination Hub']]//div[@class='ant-form-explain']")
+    @FindBy(xpath = ".//div[div[.='Destination Hub']]//div[@role='alert']")
     public TextBox destinationHubErrorInfo;
   }
 
