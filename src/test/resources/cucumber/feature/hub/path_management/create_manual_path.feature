@@ -589,7 +589,6 @@ Feature: Path Management - Create Manual Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     When Operator clicks add manual path button
     And Operator create manual path with following data:
@@ -601,7 +600,6 @@ Feature: Path Management - Create Manual Path
     And Operator switch to new tab in path management page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     When Operator clicks add manual path button
     And Operator create manual path with following data:
@@ -665,7 +663,6 @@ Feature: Path Management - Create Manual Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     When Operator clicks add manual path button
     And Operator create manual path with following data:
@@ -677,7 +674,6 @@ Feature: Path Management - Create Manual Path
     And Operator switch to new tab in path management page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     When Operator clicks add manual path button
     And Operator create manual path with following data:
