@@ -33,17 +33,17 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Default Path']")
   public Button addDefaultPathButton;
 
-  @FindBy(xpath = "//span[.='Show / Hide Filters']")
+  @FindBy(xpath = "//div[.='Show / Hide Filters']")
   public PageElement showHideFilters;
 
-  @FindBy(id = "pathType")
-  public AntSelect pathTypeFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-col ant-col')][.//*[.='Path Type']]//div[contains(@class,'ant-select ant-select')]")
+  public PageElement pathTypeFilter;
 
-  @FindBy(id = "originHubs")
-  public AntSelect originHubFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-col ant-col')][.//*[.='Origin Hub']]//div[contains(@class,'ant-select ant-select')]")
+  public PageElement originHubFilter;
 
-  @FindBy(id = "destinationHubs")
-  public AntSelect destinationHubFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-col ant-col')][.//*[.='Destination Hub']]//div[contains(@class,'ant-select ant-select')]")
+  public PageElement destinationHubFilter;
 
   @FindBy(xpath = "//button[.='Load Selection']")
   public Button loadSelectionButton;
@@ -54,20 +54,29 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-spin-blur')]")
   public PageElement antBlurSpinner;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'originHubName')]//span")
+  @FindBy(xpath = "//tr[2]//td[1]")
   public TextBox originHubFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'destinationHubName')]//span")
+  @FindBy(xpath = "//tr[2]//td[2]")
   public TextBox destinationHubFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'path')]//div[@class='ant-tag']")
+  @FindBy(xpath = "//tr[2]//td[3]//span[@class='ant-tag']")
   public TextBox pathTagFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'pathItems')]//span")
+  @FindBy(xpath = "//tr[2]//td[3]//span[contains(text(),'→')]")
   public TextBox pathFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]")
+  @FindBy(xpath = "//tr[2]//td[4]")
   public TextBox actionFirstRow;
+
+  @FindBy(xpath = "//tr[2]//td[4]//div//a[.='View']")
+  public PageElement viewActionFirstRow;
+
+  @FindBy(xpath = "//tr[2]//td[4]//div//a[.='Edit']")
+  public PageElement editActionFirstRow;
+
+  @FindBy(xpath = "//tr[2]//td[4]//div//a[.='Remove']")
+  public PageElement removeActionFirstRow;
 
   @FindBy(className = "ant-modal-wrap")
   public PathDetailsModal pathDetailsModal;
@@ -124,15 +133,18 @@ public class PathManagementPage extends OperatorV2SimplePage {
   }
 
   public void selectPathType(String value) {
-    pathTypeFilter.selectValueWithoutSearch(value);
+    pathTypeFilter.click();
+    sendKeysAndEnter("//input[@id='pathType']", value);
   }
 
   public void selectOriginHub(String value) {
-    originHubFilter.selectValue(value);
+    originHubFilter.click();
+    sendKeysAndEnter("//input[@id='originHubs']", value);
   }
 
   public void selectDestinationHub(String value) {
-    destinationHubFilter.selectValue(value);
+    destinationHubFilter.click();
+    sendKeysAndEnter("//input[@id='destinationHubs']", value);
   }
 
   public void verifyDataAppearInPathTable(String pathType) {
@@ -149,7 +161,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
     }
     if ("manual paths".equals(pathType)) {
       pathType = "";
-      expectedActionText += "EditRemove";
+      expectedActionText += "\nEdit\nRemove";
     }
 
     assertThat("Origin Hub not empty", originHubName, not(equalTo("")));

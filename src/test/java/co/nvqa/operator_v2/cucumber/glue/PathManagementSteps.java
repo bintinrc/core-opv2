@@ -82,7 +82,7 @@ public class PathManagementSteps extends AbstractSteps {
         operatorClickShowHideFilters();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, 5);
   }
 
   @And("Operator clicks load selection button")
@@ -140,13 +140,13 @@ public class PathManagementSteps extends AbstractSteps {
   @When("Operator click {string} hyperlink button")
   public void operatorClickHyperlinkButton(String hyperlinkAction) {
     if ("view".equals(hyperlinkAction)) {
-      pathManagementPage.pathRowNvTable.getRow(0).viewAction.click();
+      pathManagementPage.viewActionFirstRow.click();
     }
     if ("remove".equals(hyperlinkAction)) {
-      pathManagementPage.pathRowNvTable.getRow(0).removeAction.click();
+      pathManagementPage.removeActionFirstRow.click();
     }
     if ("edit".equals(hyperlinkAction)) {
-      pathManagementPage.pathRowNvTable.getRow(0).editAction.click();
+      pathManagementPage.editActionFirstRow.click();
     }
     pause1s();
   }
