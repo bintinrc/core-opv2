@@ -99,16 +99,16 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
   public EditManualPathModal createdEditPathModal;
 
-  @FindBy(xpath = "//div[contains(@class,'footer-row')]")
+  @FindBy(xpath = "//div[contains(@class,'ant-empty-description')]")
   public TextBox footerRowDiv;
 
-  @FindBy(xpath = "//th[contains(@class,'originHubName')]//input")
+  @FindBy(xpath = "//th//input[@aria-label='input-origin_hub_name']")
   public PageElement originHubField;
 
-  @FindBy(xpath = "//th[contains(@class,'destinationHubName')]//input")
+  @FindBy(xpath = "//th//input[@aria-label='input-destination_hub_name']")
   private PageElement destinationHubField;
 
-  @FindBy(xpath = "//th[contains(@class,'pathItems')]//input")
+  @FindBy(xpath = "//th//input[@aria-label='input-_pathItems']")
   private PageElement pathField;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
@@ -265,7 +265,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
   public void verifyNoResultsFound() {
     String actualMessage = footerRowDiv.getText();
-    String expectedMessage = "No Results Found";
+    String expectedMessage = "No data";
     assertThat("Message is no results found", actualMessage, equalTo(expectedMessage));
   }
 

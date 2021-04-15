@@ -79,7 +79,6 @@ public class PathManagementSteps extends AbstractSteps {
         NvLogger.info("Hub not found, retrying...");
         pathManagementPage.refreshPage();
         operatorMovementTripPageIsLoaded();
-        operatorClickShowHideFilters();
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
