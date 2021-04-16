@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @CreateManualPath @CWF
+@OperatorV2 @MiddleMile @Hub @PathManagement @CreateManualPath
 Feature: Path Management - Create Manual Path
 
   @LaunchBrowser @ShouldAlwaysRun
