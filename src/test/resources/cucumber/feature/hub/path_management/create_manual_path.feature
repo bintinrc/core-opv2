@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @CreateManualPath
+@OperatorV2 @MiddleMile @Hub @PathManagement @CreateManualPath @CWF
 Feature: Path Management - Create Manual Path
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -189,7 +189,7 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | selectSchedule     | false                              |
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
@@ -215,7 +215,7 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | selectSchedule     | false                              |
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
 
@@ -401,10 +401,10 @@ Feature: Path Management - Create Manual Path
       | transitHubNameThird  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | selectSchedule       | false                              |
     And Operator update "first" transit hub with "{KEY_LIST_OF_CREATED_HUBS[6].name}"
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[6].name} |
-    And Operator verify it cannot create manual path "no schedules between hubs" with data:
+    And Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[6].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
@@ -436,10 +436,10 @@ Feature: Path Management - Create Manual Path
       | transitHubNameThird  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | selectSchedule       | false                              |
     And Operator update "second" transit hub with "{KEY_LIST_OF_CREATED_HUBS[6].name}"
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[6].name} |
-    And Operator verify it cannot create manual path "no schedules between hubs" with data:
+    And Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[6].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
 
@@ -471,7 +471,7 @@ Feature: Path Management - Create Manual Path
       | transitHubNameThird  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | selectSchedule       | false                              |
     And Operator update "third" transit hub with "{KEY_LIST_OF_CREATED_HUBS[6].name}"
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[6].name} |
 
@@ -503,7 +503,7 @@ Feature: Path Management - Create Manual Path
       | transitHubNameThird  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | selectSchedule       | false                              |
     And Operator remove "first" transit hub
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
@@ -535,7 +535,7 @@ Feature: Path Management - Create Manual Path
       | transitHubNameThird  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | selectSchedule       | false                              |
     And Operator remove "second" transit hub
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
 
@@ -567,7 +567,7 @@ Feature: Path Management - Create Manual Path
       | transitHubNameThird  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | selectSchedule       | false                              |
     And Operator remove "third" transit hub
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[5].name} |
 
@@ -711,7 +711,11 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
     When Operator switch to main tab in path management page
+    When Operator refresh page
     And Operator verifies path management page is loaded
+    And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
+    And Operator clicks load selection button
+    When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     And Operator click "view" hyperlink button
     Then Operator verify created manual path data in path detail empty schedule with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
