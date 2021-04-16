@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import java.util.List;
 
 /**
  * @author Sergey Mishanin
@@ -9,6 +10,7 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
 
   private Long id;
   private String address;
+  private List<String> orderTags;
   private String status;
   private String priority;
   private String timeslot;
@@ -42,6 +44,18 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public List<String> getOrderTags() {
+    return orderTags;
+  }
+
+  public void setOrderTags(List<String> orderTags) {
+    this.orderTags = orderTags;
+  }
+
+  public void setOrderTags(String tags) {
+    setOrderTags(splitAndNormalize(tags));
   }
 
   public String getStatus() {

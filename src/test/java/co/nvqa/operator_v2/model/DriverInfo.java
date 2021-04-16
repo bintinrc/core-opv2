@@ -320,4 +320,8 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   public void setResigned(String resigned) {
     this.resigned = resigned;
   }
+
+  public String getFullName() {
+    return StringUtils.normalizeSpace(firstName + " " + lastName);
+  }
 }

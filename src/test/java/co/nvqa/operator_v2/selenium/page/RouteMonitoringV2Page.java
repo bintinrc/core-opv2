@@ -78,6 +78,7 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage {
     public RouteMonitoringTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("driverName", "driverName")
           .put(COLUMN_ROUTE_ID, "routeId")
           .put("totalParcels", "totalParcels")
           .put("completionPercentage", "completionRate")

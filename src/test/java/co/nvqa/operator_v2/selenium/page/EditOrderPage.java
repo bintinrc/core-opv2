@@ -7,7 +7,6 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -102,6 +101,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(css = "nv-tag[name^='COD']")
   public NvTag codValue;
 
+  @FindBy(css = "button[ng-click='ctrl.startChatWithDriver($event)']")
+  public Button chatWithDriver;
+
   private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
   public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
 
@@ -152,6 +154,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ResumeOrderDialog resumeOrderDialog;
 
+  public ChatWithDriverDialog chatWithDriverDialog;
+
   @FindBy(id = "delivery-details")
   public DeliveryDetailsBox deliveryDetailsBox;
 
@@ -174,6 +178,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     dpDropOffSettingDialog = new DpDropOffSettingDialog(webDriver);
     deleteOrderDialog = new DeleteOrderDialog(webDriver);
     pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
+    chatWithDriverDialog = new ChatWithDriverDialog(webDriver);
   }
 
   public EventsTable eventsTable() {
@@ -611,20 +616,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
 
       assertEquals("Cost", NO_TRAILING_ZERO_DF.format(expectedOrderCost), totalAsString);
-    }
-
-    try {
-//            retryIfAssertionErrorOccurred(() ->
-//            {
-//                eventsTable.waitUntilVisibility();
-//                OrderEvent orderEvent = eventsTable.readEntity(1);
-//                assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
-//                assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
-//            }, "Check the last event params", 10, 5);
-    } catch (RuntimeException | AssertionError ex) {
-      NvLogger.warn(
-          "Ignore this Assertion error for now because the event sometimes is not created right away.",
-          ex);
     }
   }
 
@@ -1815,7 +1806,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     }
 
     public void confirmOrderDeliveryRescheduledUpdated() {
-      waitUntilVisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE);
+      waitUntilInvisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE, true);
     }
   }
 
@@ -2104,5 +2095,89 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(name = "container.order.edit.resume-order")
     public NvApiTextButton resumeOrder;
+  }
+
+  public static class ChatWithDriverDialog extends OperatorV2SimplePage {
+
+    @FindBy(xpath = "//div[@data-testid='driverChat.container']//div[./span[contains(@class,'ant-typography-ellipsis-single-line')]]/..")
+    public List<ChatOrderItem> orderItems;
+
+    @FindBy(xpath = "//div[@data-testid='driverChat.chatMessagesContainer']//div[@id]")
+    public List<ChatMessage> messages;
+
+    @FindBy(css = "[data-testid='MessageInput.input']")
+    public TextBox messageInput;
+
+    @FindBy(css = "[data-testid='GoToOrderDetails.button']")
+    public Button goToOrderDetails;
+
+    @FindBy(css = "md-dialog iframe")
+    public PageElement iframe;
+
+    @FindBy(css = "[data-testid='driverChat.chatMessagesContainer'] p")
+    public PageElement chatDate;
+
+    @FindBy(xpath = "//div[text()='Read']")
+    public PageElement readLabel;
+
+    @FindBy(name = "Cancel")
+    public NvIconButton close;
+
+    public ChatWithDriverDialog(WebDriver webDriver) {
+      super(webDriver);
+    }
+
+    public void close() {
+      getWebDriver().switchTo().defaultContent();
+      close.click();
+    }
+
+    public void switchTo() {
+      getWebDriver().switchTo().defaultContent();
+      getWebDriver().switchTo().frame(iframe.getWebElement());
+    }
+
+    public ChatOrderItem findOrderItemByTrackingId(String trackingId) {
+      return orderItems.stream()
+          .filter(chatOrderItem -> StringUtils
+              .equalsIgnoreCase(trackingId, chatOrderItem.trackingId.getText()))
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              "Tracking ID " + trackingId + " not found in Chat With Driver dialog"));
+    }
+
+    public void waitUntilVisible() {
+      switchTo();
+      messageInput.waitUntilVisible();
+    }
+
+    public static class ChatOrderItem extends PageElement {
+
+      @FindBy(css = "span.ant-typography-ellipsis-single-line > strong")
+      public PageElement trackingId;
+
+      @FindBy(xpath = ".//div[2]/span")
+      public PageElement date;
+
+      @FindBy(xpath = ".//div[2]/div")
+      public PageElement replaysNumber;
+
+      public ChatOrderItem(WebDriver webDriver, WebElement webElement) {
+        super(webDriver, webElement);
+      }
+    }
+
+    public static class ChatMessage extends PageElement {
+
+      @FindBy(xpath = "./div/div[1]")
+      public PageElement message;
+
+      @FindBy(xpath = "./div/div[2]")
+      public PageElement date;
+
+      public ChatMessage(WebDriver webDriver, WebElement webElement) {
+        super(webDriver, webElement);
+      }
+    }
   }
 }

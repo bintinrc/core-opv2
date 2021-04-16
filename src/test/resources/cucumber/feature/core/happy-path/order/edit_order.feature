@@ -373,7 +373,7 @@ Feature: Edit Order
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verify Delivery transaction on Edit order page using data below:
       | routeId |  |
-    Then Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit order page using data below:
       | name | PULL OUT OF ROUTE |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
