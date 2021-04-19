@@ -1,4 +1,5 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @UploadInvoicedOrders
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @SearchInvoicedOrders
+
 Feature: Upload Invoiced Orders
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
@@ -28,7 +29,6 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
-
   @KillBrowser
   Scenario: Search by Uploading CSV which contains non-invoiced orders (uid:22a4abe1-b971-4f06-b2a6-d82d92c16169)
     #pre-condition: Order is already in invoiced_orders
@@ -46,16 +46,15 @@ Feature: Upload Invoiced Orders
     And Operator clicks Search Invoiced Order button
     Then Operator verifies No Results Found is displayed
 
-#bug
-#  @KillBrowser
-#  Scenario: Search by Uploading Invalid File Type (uid:daf938d9-983d-477b-950b-1f9c8f3577ca)
-#    Given Operator go to menu New Features -> Invoiced Orders Search
-#    Then Operator uploads a PDF on Invoiced Orders Search Page and verifies that any other file except csv is not allowed
+  @KillBrowser
+  Scenario: Search by Uploading Invalid File Type (uid:daf938d9-983d-477b-950b-1f9c8f3577ca)
+    Given Operator go to menu New Features -> Invoiced Orders Search
+    Then Operator uploads a PDF on Invoiced Orders Search Page and verifies error message "Please select only .csv files"
 
   @KillBrowser
   Scenario: Search by Uploading CSV file with invalid format template (uid:e4e8b221-0776-45fd-9924-5229f390020d)
     Given Operator go to menu New Features -> Invoiced Orders Search
-    Then Operator uploads an invalid on Invoiced Orders Search Page CSV and verifies error message
+    Then Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message "More than 1 column detected in csv file"
 
   @KillBrowser
   Scenario: Search by Inputting invoiced order tracking IDs manually (uid:caceedb4-fdd5-4f71-a82c-e80271b6cc4b)
@@ -199,3 +198,8 @@ Feature: Upload Invoiced Orders
     And Operator clicks Refresh button
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+  @KillBrowser
+  Scenario: Search by Uploading Empty Csv File (uid:3c8f9e4e-ae03-4054-9b4e-b1fecd83bdc5)
+    Given Operator go to menu New Features -> Invoiced Orders Search
+    Then Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message "Empty csv file detected"

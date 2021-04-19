@@ -59,33 +59,44 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
         invoicedOrdersSearchPage.noResultsFound.isDisplayed());
   }
 
-  @Then("Operator uploads a PDF on Invoiced Orders Search Page and verifies that any other file except csv is not allowed")
-  public void operatorUploadsAPDFOnInvoicedOrdersSearchPageAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed() {
+  @Then("Operator uploads a PDF on Invoiced Orders Search Page and verifies error message {string}")
+  public void operatorUploadsAPDFOnInvoicedOrdersSearchPageAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed(
+      String expectedErrorMsg) {
     String pdfFileName = "invalid-upload.pdf";
     File pdfFile = createFile(pdfFileName, "TEST");
     invoicedOrdersSearchPage.uploadFile(pdfFile.getAbsolutePath());
-    String actualErrorMsg = invoicedOrdersSearchPage.getToastTopText();
-    String expectedToastText = "\"" + pdfFileName + "\" is not allowed.";
-    assertEquals(expectedToastText, actualErrorMsg);
+    String actualNotifText = invoicedOrdersSearchPage.getNotificationMessageText();
+    softAssert.assertEquals("Actual Notification Text is not expected", expectedErrorMsg,
+        actualNotifText);
   }
 
 
-  @Then("Operator uploads an invalid on Invoiced Orders Search Page CSV and verifies error message")
-  public void operatorUploadsAnInvalidOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage() {
+  @Then("Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message {string}")
+  public void operatorUploadsAnInvalidOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
+      String expectedErrorMsg) {
     String csvFileName = "upload.csv";
     File csvFile = createFile(csvFileName, "TEST1 , TEST2");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-    String actualNotifText = invoicedOrdersSearchPage.getNotificationMessageText();
-    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageDescText();
-    String expectedNotifText = "Error parsing csv";
-    String expectedNotifDescription = "More than 1 column detected";
-    softAssert.assertEquals("Actual Notification Text is not expected", expectedNotifText,
-        actualNotifText);
+    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
     softAssert
-        .assertEquals("Actual Notification Description is not expected", expectedNotifDescription,
+        .assertEquals("Actual Notification Description is not expected", expectedErrorMsg,
             actualNotifDescription);
   }
+
+  @Then("Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message {string}")
+  public void operatorUploadsAnEmptyCSVOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
+      String expectedErrorMsg) {
+    String csvFileName = "upload.csv";
+    File csvFile = createFile(csvFileName, "");
+    invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
+    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
+    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
+    softAssert
+        .assertEquals("Actual Notification Description is not expected", expectedErrorMsg,
+            actualNotifDescription);
+  }
+
 
   @When("Operator clicks in Enter Tracking ID\\(s) tab")
   public void operatorClicksInEnterTrackingIDSTab() {
@@ -174,4 +185,5 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     invoicedOrdersSearchPage.goBackToFilterBtn.click();
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.waitUntilClickable();
   }
+
 }
