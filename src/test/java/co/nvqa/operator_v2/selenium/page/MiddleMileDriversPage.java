@@ -612,6 +612,11 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     if (antDotSpinner.isDisplayedFast()) {
       antDotSpinner.waitUntilInvisible();
     }
+    // temporary close /aaa error alert if shown
+    if (isElementExist("//button[.='close']")) {
+      click("//button[.='close']");
+      pause1s();
+    }
   }
 
   public static class TableFilterPopup extends PageElement {
