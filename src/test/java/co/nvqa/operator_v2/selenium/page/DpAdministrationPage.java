@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 @SuppressWarnings("WeakerAccess")
 public class DpAdministrationPage extends OperatorV2SimplePage {
 
+  public static final String LOCATOR_SPINNER = "//md-progress-circular";
   private static final String CSV_FILENAME_PATTERN = "data-dp-users";
   private static final String CSV_DPS_FILENAME_PATTERN = "data-dps";
   private static final String CSV_DP_USERS_FILENAME_PATTERN = "data-dp-users";
@@ -29,10 +31,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String LOCATOR_BUTTON_ADD_DP = "container.dp-administration.dps.add-title";
   private static final String LOCATOR_BUTTON_ADD_DP_USER = "container.dp-administration.dp-users.add-title";
   private static final String LOCATOR_BUTTON_DOWNLOAD_CSV_FILE = "commons.download-csv";
-  public static final String LOCATOR_SPINNER = "//md-progress-circular";
-
   private static final String XPATH_PUDO_POINT_IFRAME = "//iframe[contains(@src,'pudo-point-form')]";
   private static final String XPATH_SAVE_SETTINGS = "//span[text()='Save Settings']/parent::button";
+  private static final String XPATH_RETURN_TO_LIST = "//span[text()='Return to List']/parent::button";
   private static final String XPATH_POINT_NAME = "//input[@id='name']";
   private static final String XPATH_SHORT_NAME = "//input[@id='shortName']";
   private static final String XPATH_CONTACT_NUMBER = "//input[@id='contact']";
@@ -76,15 +77,20 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String XPATH_SELECT_TIME = "//div[contains(@class,'select-dropdown')]/../div[not(contains(@class,'hidden'))]//li[text()='%s']";
   private static final String XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION = "//div[@class='ant-modal-confirm-content']";
 
-  private AddPartnerDialog addPartnerDialog;
-  private EditPartnerDialog editPartnerDialog;
-  private DpPartnersTable dpPartnersTable;
-  private DpTable dpTable;
-  private AddDpDialog addDpDialog;
-  private EditDpDialog editDpDialog;
-  private AddDpUserDialog addDpUserDialog;
-  private EditDpUserDialog editDpUserDialog;
-  private DpUsersTable dpUsersTable;
+  private static final String XPATH_UPLOAD_DP_IMAGE = "//input[@type='file']";
+  private static final String XPATH_DELETE_DP_IMAGE = "//i[@title='Remove file']";
+  private static final String XPATH_DELETE_PHOTO = "//span[text()='Delete Photo']/parent::button";
+  private static final String XPATH_UPLOAD_INVALID_DP_IMAGE_ERROR_MESSAGE = "//div[contains(@class,'ant-message-error')]//span";
+
+  private final AddPartnerDialog addPartnerDialog;
+  private final EditPartnerDialog editPartnerDialog;
+  private final DpPartnersTable dpPartnersTable;
+  private final DpTable dpTable;
+  private final AddDpDialog addDpDialog;
+  private final EditDpDialog editDpDialog;
+  private final AddDpUserDialog addDpUserDialog;
+  private final EditDpUserDialog editDpUserDialog;
+  private final DpUsersTable dpUsersTable;
 
   public DpAdministrationPage(WebDriver webDriver) {
     super(webDriver);
@@ -141,10 +147,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     editPartnerDialog.fillForm(newDpPartnerParams);
   }
 
-  public void addDistributionPoint(String dpPartnerName, Dp dpParams) {
+  public void addDistributionPoint(String dpPartnerName, Dp dpParams, File file) {
     openViewDpsScreen(dpPartnerName);
     clickAddDpButton();
-    fillCreateDpForm(dpParams);
+    fillCreateDpForm(dpParams, file);
   }
 
   public void setNameCreateDpForm(String name) {
@@ -280,7 +286,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     click(XPATH_SAVE_SETTINGS);
   }
 
-  public void fillCreateDpForm(Dp dpParams) {
+  public void clickReturnToList() {
+    click(XPATH_RETURN_TO_LIST);
+  }
+
+  public void fillCreateDpForm(Dp dpParams, File file) {
     WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
@@ -301,6 +311,12 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     setTypeCreateDpForm(dpParams.getType());
     setDirectionsCreateDpForm(dpParams.getDirections());
     setRetailPointNetwork();
+    if (file != null) {
+      uploadDpPhoto(file);
+      if (file.getName().toLowerCase().contains("invalid")) {
+        assertInvalidImageErrorMessage();
+      }
+    }
     isActiveCreateDpForm();
     isPublicCreateDpForm();
     setCapacityAndParcelStayCreateDpForm(dpParams.getMaxCap(), dpParams.getCapBuffer(),
@@ -310,6 +326,21 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     }
     clickSaveSettingsCreateDpForm();
     getWebDriver().switchTo().defaultContent();
+  }
+
+  public void assertInvalidImageErrorMessage() {
+    assertTrue("Error Message is displayed: ",
+        getErrorMessageForUploadInvalidDpImage().toLowerCase()
+            .equalsIgnoreCase("Unable to upload photo as it exceeds 2MB limit"));
+  }
+
+  public String getErrorMessageForUploadInvalidDpImage() {
+    waitUntilVisibilityOfElementLocated(XPATH_UPLOAD_INVALID_DP_IMAGE_ERROR_MESSAGE);
+    return getText(XPATH_UPLOAD_INVALID_DP_IMAGE_ERROR_MESSAGE);
+  }
+
+  public void uploadDpPhoto(File file) {
+    sendKeysWithoutClear(XPATH_UPLOAD_DP_IMAGE, file.getPath());
   }
 
   public void setRetailPointNetwork() {
@@ -348,6 +379,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
+    if (dpParams.getExternalStoreId() != null) {
+      if ("".equalsIgnoreCase(dpParams.getExternalStoreId())) {
+        setExternalStoreIdCreateDpForm(" ");
+      } else {
+        setExternalStoreIdCreateDpForm(dpParams.getExternalStoreId());
+      }
+    }
     setContactNumberCreateDpForm(dpParams.getContactNo());
     setPostcodeCreateDpForm(dpParams.getPostcode());
     setPointAddress1CreateDpForm(dpParams.getAddress1());
@@ -357,6 +395,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     setTypeCreateDpForm(dpParams.getType());
     setDirectionsCreateDpForm(dpParams.getDirections());
     canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
+    //assert PUDO Type is disabled while Editing
+    assertFalse("PUDO Type is disabled", isElementEnabled(XPATH_RETAIL_POINT_NETWORK));
     if (dpParams.getCutOffTime() != null) {
       setCutOffTime(dpParams.getCutOffTime());
     }
@@ -394,8 +434,6 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         actualDpParams.getShortName(), equalTo(expectedDpParams.getShortName()));
     assertThatIfExpectedValueNotNull("DP Hub", expectedDpParams.getHub(), actualDpParams.getHub(),
         containsString(expectedDpParams.getHub()));
-    assertThatIfExpectedValueNotNull("DP Address", expectedDpParams.getAddress(),
-        actualDpParams.getAddress(), startsWith(expectedDpParams.getAddress()));
     assertThatIfExpectedValueNotNull("DP Directions", expectedDpParams.getDirections(),
         actualDpParams.getDirections(), equalTo(expectedDpParams.getDirections()));
     assertThatIfExpectedValueNotNull("DP Activity", expectedDpParams.getActivity(),
@@ -506,14 +544,97 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     }
   }
 
+  public void verifyDpParamsWithDB(DpDetailsResponse dbParams, DpDetailsResponse apiParams) {
+    assertEquals("DP ID", dbParams.getId(), apiParams.getId());
+    assertEquals("DP NAME", dbParams.getName(), apiParams.getName());
+    assertEquals("DPMS ID", dbParams.getDpmsId(), apiParams.getDpmsId());
+    assertEquals("DP COUNTRY", dbParams.getCountry(), apiParams.getCountry());
+    assertEquals("DP CITY", dbParams.getCity(), apiParams.getCity());
+    assertEquals("DP ADDRESS 1", dbParams.getAddress1(), apiParams.getAddress1());
+    assertEquals("DP ADDRESS 2", dbParams.getAddress2(), apiParams.getAddress2());
+    assertEquals("Service Type is Corrrect: ", dbParams.getDpServiceType(),
+        apiParams.getDpServiceType());
+  }
+
+  public void verifyCutOffTime(String expectedCutOffTime, String actualCutOffTime) {
+    assertEquals("Cut off time is not correct", expectedCutOffTime, actualCutOffTime);
+  }
+
+  public void verifyErrorMessageForDpCreation(String field) {
+    if ("".equalsIgnoreCase(field)) {
+      assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase()
+          .contains("Dp with external_store_id TESTING-NewDP already exists".toLowerCase()));
+      assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase()
+          .contains("Dp with short_name TEST-DP already exists".toLowerCase()));
+    } else {
+      assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase()
+          .contains(f("Dp with %s already exists", field).toLowerCase()));
+    }
+  }
+
+  public String getErrorMessage() {
+    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    getWebDriver().switchTo().frame(frame);
+    String errorMessage = getText(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
+    getWebDriver().switchTo().defaultContent();
+    return errorMessage;
+  }
+
+  public void verifyImageIsPresent(String image, String status) {
+    if ("Present".equalsIgnoreCase(status)) {
+      assertTrue(image.toLowerCase().contains("png"));
+    } else {
+      assertFalse(image.toLowerCase().contains("png"));
+    }
+  }
+
+  public void deleteDpImageAndSaveSettings(String currentDpName, String action) {
+    dpTable.filterByColumn("name", currentDpName);
+    dpTable.clickActionButton(1, "edit");
+    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    getWebDriver().switchTo().frame(frame);
+    waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
+    deleteDpImage();
+    if ("Save Settings".equalsIgnoreCase(action)) {
+      clickSaveSettingsCreateDpForm();
+    } else {
+      clickReturnToList();
+    }
+    getWebDriver().switchTo().defaultContent();
+  }
+
+  public void deleteDpImage() {
+    moveToElementWithXpath(XPATH_DELETE_DP_IMAGE);
+    click(XPATH_DELETE_DP_IMAGE);
+    pause1s();
+    click(XPATH_DELETE_PHOTO);
+    pause2s();
+  }
+
+  public void editDpImageAndSaveSettings(String currentDpName, File file, String status) {
+    dpTable.filterByColumn("name", currentDpName);
+    dpTable.clickActionButton(1, "edit");
+    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    getWebDriver().switchTo().frame(frame);
+    waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
+    editDpImage(file, status);
+    clickSaveSettingsCreateDpForm();
+    getWebDriver().switchTo().defaultContent();
+  }
+
+  public void editDpImage(File file, String status) {
+    uploadDpPhoto(file);
+    if ("invalid".equalsIgnoreCase(status)) {
+      assertInvalidImageErrorMessage();
+    }
+    pause2s();
+  }
+
   /**
    * Accessor for Add Partner dialog
    */
   @SuppressWarnings("UnusedReturnValue")
   public static class AddPartnerDialog extends OperatorV2SimplePage {
-
-    protected String dialogTittle;
-    protected String locatorButtonSubmit;
 
     static final String DIALOG_TITLE = "Add Partner";
     static final String LOCATOR_FIELD_PARTNER_NAME = "Partner Name";
@@ -522,6 +643,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     static final String LOCATOR_FIELD_POC_EMAIL = "POC Email";
     static final String LOCATOR_FIELD_RESTRICTIONS = "Restrictions";
     static final String LOCATOR_BUTTON_SUBMIT = "Submit";
+    protected String dialogTittle;
+    protected String locatorButtonSubmit;
 
     public AddPartnerDialog(WebDriver webDriver) {
       super(webDriver);
@@ -654,9 +777,6 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   @SuppressWarnings("UnusedReturnValue")
   public static class AddDpDialog extends OperatorV2SimplePage {
 
-    protected String dialogTittle;
-    protected String locatorButtonSubmit;
-
     static final String DIALOG_TITLE = "Add Distribution Point";
     static final String LOCATOR_FIELD_NAME = "Name";
     static final String LOCATOR_FIELD_SHORT_NAME = "Shortname";
@@ -678,6 +798,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     static final String LOCATOR_FIELD_LONGITUDE = "Longitude";
     static final String LOCATOR_FIELD_DIRECTIONS = "Directions";
     static final String LOCATOR_BUTTON_SUBMIT = "Submit";
+    protected String dialogTittle;
+    protected String locatorButtonSubmit;
 
     public AddDpDialog(WebDriver webDriver) {
       super(webDriver);
@@ -872,9 +994,6 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   @SuppressWarnings("UnusedReturnValue")
   public static class AddDpUserDialog extends OperatorV2SimplePage {
 
-    protected String dialogTittle;
-    protected String locatorButtonSubmit;
-
     static final String DIALOG_TITLE = "Add User";
     static final String LOCATOR_FIELD_FIRST_NAME = "First Name";
     static final String LOCATOR_FIELD_LAST_NAME = "Last Name";
@@ -883,6 +1002,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     static final String LOCATOR_FIELD_USERNAME = "Username";
     static final String LOCATOR_FIELD_PASSWORD = "Password";
     static final String LOCATOR_BUTTON_SUBMIT = "Submit";
+    protected String dialogTittle;
+    protected String locatorButtonSubmit;
 
     public AddDpUserDialog(WebDriver webDriver) {
       super(webDriver);
@@ -999,31 +1120,5 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit"));
       setEntityClass(DpUser.class);
     }
-  }
-
-  public void verifyDpParamsWithDB(DpDetailsResponse dbParams, DpDetailsResponse apiParams) {
-    assertEquals("DP ID", dbParams.getId(), apiParams.getId());
-    assertEquals("DP NAME", dbParams.getName(), apiParams.getName());
-    assertEquals("DPMS ID", dbParams.getDpmsId(), apiParams.getDpmsId());
-    assertEquals("DP COUNTRY", dbParams.getCountry(), apiParams.getCountry());
-    assertEquals("DP CITY", dbParams.getCity(), apiParams.getCity());
-    assertEquals("DP ADDRESS 1", dbParams.getAddress1(), apiParams.getAddress1());
-    assertEquals("DP ADDRESS 2", dbParams.getAddress2(), apiParams.getAddress2());
-  }
-
-  public void verifyCutOffTime(String expectedCutOffTime, String actualCutOffTime) {
-    assertEquals("Cut off time is not correct", expectedCutOffTime, actualCutOffTime);
-  }
-
-  public void verifyErrorMessageForDpCreation(String field) {
-    assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase().contains(f("Dp with %s already exists",field).toLowerCase()));
-  }
-
-  public String getErrorMessage() {
-    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
-    getWebDriver().switchTo().frame(frame);
-    String errorMessage = getText(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
-    getWebDriver().switchTo().defaultContent();
-    return errorMessage;
   }
 }
