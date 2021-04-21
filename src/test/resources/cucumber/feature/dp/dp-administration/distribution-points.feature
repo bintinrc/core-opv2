@@ -92,8 +92,8 @@ Feature: DP Administration - Distribution Points
       | type              | Ninja Box                                           |
       | canShipperLodgeIn | false                                               |
       | contactNo         | GENERATED                                           |
-      | address1          | 311 NEW UPPER CHANGI ROAD                           |
-      | address2          | BEDOK MALL, #B2-17/18                               |
+      | address1          | 1 JELEBU ROAD                                       |
+      | address2          | BUKIT PANJANG PLAZA, #01-32                         |
       | unitNo            | 1                                                   |
       | floorNo           | 1                                                   |
       | postcode          | 467360                                              |
@@ -120,8 +120,8 @@ Feature: DP Administration - Distribution Points
       | type              | Ninja Point                                         |
       | canShipperLodgeIn | false                                               |
       | contactNo         | GENERATED                                           |
-      | address1          | 311 NEW UPPER CHANGI ROAD                           |
-      | address2          | BEDOK MALL, #B2-17/18                               |
+      | address1          | 1 JELEBU ROAD                                       |
+      | address2          | BUKIT PANJANG PLAZA, #01-32                         |
       | unitNo            | 1                                                   |
       | floorNo           | 1                                                   |
       | postcode          | 467360                                              |
@@ -317,6 +317,336 @@ Feature: DP Administration - Distribution Points
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
     Then Operator verifies the error message for duplicate "external_store_id TESTING-NewDP"
+
+  @DeleteDpAndPartner
+  Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given Operator go to menu Distribution Points -> DP Administration
+    When Operator add new DP for the DP Partner on DP Administration page with the following attributes:
+      | name                  | GENERATED                                                 |
+      | shortName             | TEST-DP                                                   |
+      | contactNo             | GENERATED                                                 |
+      | externalStoreId       | TESTING-NewDP                                             |
+      | shipperId             | 129623                                                    |
+      | postcode              | 677743                                                    |
+      | city                  | SG                                                        |
+      | address1              | 1 JELEBU ROAD                                             |
+      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
+      | floorNo               | 12                                                        |
+      | unitNo                | 11                                                        |
+      | hub                   | JKB                                                       |
+      | type                  | Ninja Point                                               |
+      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | canShipperLodgeIn     | true                                                      |
+      | canCustomerCollect    | true                                                      |
+      | maxParcelStayDuration | 2                                                         |
+      | maxCap                | 1000000                                                   |
+      | capBuffer             | 1000000                                                   |
+    Then Operator verifies the error message for duplicate ""
+
+  @DeleteDpAndPartner
+  Scenario: Update Existing DP - External Store ID is Unique - Success Update
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator update created DP for the DP Partner on DP Administration page with the following attributes:
+      | externalStoreId   | GENERATED                                           |
+      | type              | Ninja Box                                           |
+      | canShipperLodgeIn | false                                               |
+      | contactNo         | GENERATED                                           |
+      | address1          | 311 NEW UPPER CHANGI ROAD                           |
+      | address2          | BEDOK MALL, #B2-17/18                               |
+      | unitNo            | 1                                                   |
+      | floorNo           | 1                                                   |
+      | postcode          | 467360                                              |
+      | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
+    Then Operator verify new DP params
+    When DB Operator fetches dp details
+    And API DP get the DP Details by DP ID
+    Then Operator verifies dp Params with database
+
+  @DeleteDpAndPartner
+  Scenario: Update Existing DP - External Store ID is Duplicate - Error Message Displayed
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator update created DP for the DP Partner on DP Administration page with the following attributes:
+      | externalStoreId   | TESTING-NewDP                                       |
+      | type              | Ninja Box                                           |
+      | canShipperLodgeIn | false                                               |
+      | contactNo         | GENERATED                                           |
+      | address1          | 311 NEW UPPER CHANGI ROAD                           |
+      | address2          | BEDOK MALL, #B2-17/18                               |
+      | unitNo            | 1                                                   |
+      | floorNo           | 1                                                   |
+      | postcode          | 467360                                              |
+      | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
+    Then Operator verifies the error message for duplicate "external_store_id TESTING-NewDP"
+
+  @DeleteDpAndPartner
+  Scenario: Update Existing DP - External Store ID is NULL - Success Update
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator update created DP for the DP Partner on DP Administration page with the following attributes:
+      | type              | Ninja Box                                           |
+      | canShipperLodgeIn | false                                               |
+      | contactNo         | GENERATED                                           |
+      | address1          | 311 NEW UPPER CHANGI ROAD                           |
+      | address2          | BEDOK MALL, #B2-17/18                               |
+      | unitNo            | 1                                                   |
+      | floorNo           | 1                                                   |
+      | postcode          | 467360                                              |
+      | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
+    Then Operator verify new DP params
+    When DB Operator fetches dp details
+    And API DP get the DP Details by DP ID
+    Then Operator verifies dp Params with database
+
+  @DeleteDpAndPartner
+  Scenario: Update Existing DP - External Store ID is Space only - Success Update
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator update created DP for the DP Partner on DP Administration page with the following attributes:
+      | externalStoreId   |                                                     |
+      | type              | Ninja Box                                           |
+      | canShipperLodgeIn | false                                               |
+      | contactNo         | GENERATED                                           |
+      | address1          | 311 NEW UPPER CHANGI ROAD                           |
+      | address2          | BEDOK MALL, #B2-17/18                               |
+      | unitNo            | 1                                                   |
+      | floorNo           | 1                                                   |
+      | postcode          | 467360                                              |
+      | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
+    Then Operator verify new DP params
+    When DB Operator fetches dp details
+    And API DP get the DP Details by DP ID
+    Then Operator verifies dp Params with database
+
+  @DeleteDpAndPartner
+  Scenario: Create New DP - Upload DP Photos - Right Dimensions
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given Operator go to menu Distribution Points -> DP Administration
+    When Operator add new DP for the DP Partner on DP Administration page with the following attributes:
+      | name                  | GENERATED                                                 |
+      | shortName             | GENERATED                                                 |
+      | contactNo             | GENERATED                                                 |
+      | externalStoreId       | GENERATED                                                 |
+      | shipperId             | 129623                                                    |
+      | postcode              | 677743                                                    |
+      | city                  | SG                                                        |
+      | address1              | 1 JELEBU ROAD                                             |
+      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
+      | floorNo               | 12                                                        |
+      | unitNo                | 11                                                        |
+      | hub                   | JKB                                                       |
+      | type                  | Ninja Point                                               |
+      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | canShipperLodgeIn     | true                                                      |
+      | canCustomerCollect    | true                                                      |
+      | maxParcelStayDuration | 2                                                         |
+      | maxCap                | 1000000                                                   |
+      | capBuffer             | 1000000                                                   |
+      | dpPhoto               | valid                                                     |
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is "present"
+
+  @DeleteDpAndPartner
+  Scenario: Create New DP - Upload DP Photos - Wrong Dimension
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given Operator go to menu Distribution Points -> DP Administration
+    When Operator add new DP for the DP Partner on DP Administration page with the following attributes:
+      | name                  | GENERATED                                                 |
+      | shortName             | GENERATED                                                 |
+      | contactNo             | GENERATED                                                 |
+      | externalStoreId       | GENERATED                                                 |
+      | shipperId             | 129623                                                    |
+      | postcode              | 677743                                                    |
+      | city                  | SG                                                        |
+      | address1              | 1 JELEBU ROAD                                             |
+      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
+      | floorNo               | 12                                                        |
+      | unitNo                | 11                                                        |
+      | hub                   | JKB                                                       |
+      | type                  | Ninja Point                                               |
+      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | canShipperLodgeIn     | true                                                      |
+      | canCustomerCollect    | true                                                      |
+      | maxParcelStayDuration | 2                                                         |
+      | maxCap                | 1000000                                                   |
+      | capBuffer             | 1000000                                                   |
+      | dpPhoto               | invalid                                                   |
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is ""
+
+  @DeleteDpAndPartner
+  Scenario: Create New DP - Upload DP Photos - Delete DP Photo
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given Operator go to menu Distribution Points -> DP Administration
+    When Operator add new DP for the DP Partner on DP Administration page with the following attributes:
+      | name                  | GENERATED                                                 |
+      | shortName             | GENERATED                                                 |
+      | contactNo             | GENERATED                                                 |
+      | externalStoreId       | GENERATED                                                 |
+      | shipperId             | 129623                                                    |
+      | postcode              | 677743                                                    |
+      | city                  | SG                                                        |
+      | address1              | 1 JELEBU ROAD                                             |
+      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
+      | floorNo               | 12                                                        |
+      | unitNo                | 11                                                        |
+      | hub                   | JKB                                                       |
+      | type                  | Ninja Point                                               |
+      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | canShipperLodgeIn     | true                                                      |
+      | canCustomerCollect    | true                                                      |
+      | maxParcelStayDuration | 2                                                         |
+      | maxCap                | 1000000                                                   |
+      | capBuffer             | 1000000                                                   |
+      | dpPhoto               | valid                                                     |
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is "present"
+    When Operator deletes the dp image and "save settings"
+    When DB Operator fetches image details
+    Then Operator verifies the image is ""
+
+  @DeleteDpAndPartner
+  Scenario: Edit Existing DP - Upload DP Photos - Right Dimensions
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator edits the dp "valid" image and save settings
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is "present"
+
+  @DeleteDpAndPartner
+  Scenario: Edit Existing DPs - Update DP Photo - Wrong Dimensions
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator edits the dp "invalid" image and save settings
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is ""
+
+  @DeleteDpAndPartner
+  Scenario: Edit Existing DPs - Delete DP Photo
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator edits the dp "valid" image and save settings
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is "present"
+    When Operator deletes the dp image and "save settings"
+    When DB Operator fetches image details
+    Then Operator verifies the image is ""
+
+  @DeleteDpAndPartner
+  Scenario: Edit Existing DPs - Delete DP Photo without Save
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new DP Partner with the following attributes:
+      | name         | GENERATED                            |
+      | pocName      | GENERATED                            |
+      | pocTel       | GENERATED                            |
+      | pocEmail     | GENERATED                            |
+      | restrictions | Created for test automation purposes |
+    Given API Operator add new DP for the created DP Partner with the following attributes:
+      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator select View DPs action for created DP partner on DP Administration page
+    When Operator edits the dp "valid" image and save settings
+    Then Operator verify new DP params
+    When DB Operator fetches image details
+    Then Operator verifies the image is "present"
+    When Operator deletes the dp image and "return to list"
+    When DB Operator fetches image details
+    Then Operator verifies the image is "present"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
