@@ -288,7 +288,7 @@ Feature: Add To Shipment
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingDepartment | Recovery           |
       | investigatingHub        | {hub-name}         |
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
@@ -359,7 +359,7 @@ Feature: Add To Shipment
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
-      | name    | ADDED TO SHIPMENT |
+      | name | ADDED TO SHIPMENT |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Close Shipment (uid:1f5ea281-37d0-4f32-a5b7-52033eae0486)
@@ -422,7 +422,7 @@ Feature: Add To Shipment
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingDepartment | Recovery           |
       | investigatingHub        | {hub-name}         |
       | ticketType              | MISSING            |
       | orderOutcomeMissing     | LOST - DECLARED    |
