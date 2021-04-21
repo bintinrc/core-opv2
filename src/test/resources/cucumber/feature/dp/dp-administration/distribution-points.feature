@@ -319,7 +319,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the error message for duplicate "external_store_id TESTING-NewDP"
 
   @DeleteDpAndPartner
-  Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error
+  Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error (uid:5e810b71-6531-4be7-bcaa-4527ab217fcb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -351,7 +351,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the error message for duplicate ""
 
   @DeleteDpAndPartner
-  Scenario: Update Existing DP - External Store ID is Unique - Success Update
+  Scenario: Update Existing DP - External Store ID is Unique - Success Update (uid:7de0e75f-58df-49fc-a808-ef1f08583720)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -380,7 +380,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
-  Scenario: Update Existing DP - External Store ID is Duplicate - Error Message Displayed
+  Scenario: Update Existing DP - External Store ID is Duplicate - Error Message Displayed (uid:cc27b92b-5e1d-4781-9215-e318a0d4a4a4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -406,7 +406,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the error message for duplicate "external_store_id TESTING-NewDP"
 
   @DeleteDpAndPartner
-  Scenario: Update Existing DP - External Store ID is NULL - Success Update
+  Scenario: Update Existing DP - External Store ID is NULL - Success Update (uid:8067639b-8ceb-4b72-94ec-831afb3a1938)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -434,7 +434,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
-  Scenario: Update Existing DP - External Store ID is Space only - Success Update
+  Scenario: Update Existing DP - External Store ID is Space only - Success Update (uid:ff32b28b-b1af-4f14-93ba-a855126c64dd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -463,7 +463,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
-  Scenario: Create New DP - Upload DP Photos - Right Dimensions
+  Scenario: Create New DP - Upload DP Photos - Right Dimensions (uid:832a25fb-e77d-47a0-8b44-03d0ac98f1e3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -498,7 +498,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the image is "present"
 
   @DeleteDpAndPartner
-  Scenario: Create New DP - Upload DP Photos - Wrong Dimension
+  Scenario: Create New DP - Upload DP Photos - Wrong Dimension (uid:76be1fe1-8fe1-4cdb-8899-d5e8ff6dc11c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -533,7 +533,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the image is ""
 
   @DeleteDpAndPartner
-  Scenario: Create New DP - Upload DP Photos - Delete DP Photo
+  Scenario: Create New DP - Upload DP Photos - Delete DP Photo (uid:e5cd0a1d-323a-42b8-93a2-013f8bd49921)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -571,7 +571,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the image is ""
 
   @DeleteDpAndPartner
-  Scenario: Edit Existing DP - Upload DP Photos - Right Dimensions
+  Scenario: Edit Existing DP - Upload DP Photos - Right Dimensions (uid:7af87819-09c0-4970-b6f9-7610c31de4bc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -589,7 +589,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the image is "present"
 
   @DeleteDpAndPartner
-  Scenario: Edit Existing DPs - Update DP Photo - Wrong Dimensions
+  Scenario: Edit Existing DPs - Update DP Photo - Wrong Dimensions (uid:5b56865e-57ca-4ec4-8818-ff83ec25ef2b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -607,7 +607,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the image is ""
 
   @DeleteDpAndPartner
-  Scenario: Edit Existing DPs - Delete DP Photo
+  Scenario: Edit Existing DPs - Delete DP Photo (uid:a70e81f7-b333-47b4-bc00-ad7238ce816a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -628,7 +628,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the image is ""
 
   @DeleteDpAndPartner
-  Scenario: Edit Existing DPs - Delete DP Photo without Save
+  Scenario: Edit Existing DPs - Delete DP Photo without Save (uid:49212dd5-f298-46b4-90bf-95a9e38abdaf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
