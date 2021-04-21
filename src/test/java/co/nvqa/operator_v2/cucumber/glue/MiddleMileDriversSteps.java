@@ -60,12 +60,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String VENDOR_SELECTION = "Vendor";
   private static final String COUNTRY = "country";
 
-  private static final String SG_HUB = "OPV2-SG-HUB";
-  private static final String ID_HUB = "JKSLT-JKSLT-JKSLT-JKSLT";
-  private static final String TH_HUB = "DRIVER-APP-TH-HUB";
-  private static final String VN_HUB = "BAG - Bac Giang - NOR";
-  private static final String MY_HUB = "BUTTERWORTH";
-  private static final String PH_HUB = "CEBU-NAGA";
 
   private static final String SINGAPORE = "singapore";
   private static final String INDONESIA = "indonesia";
@@ -146,38 +140,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           }
           middleMileDriversPage.fillName(middleMileDriver.getFirstName());
 
-          middleMileDriver.setHub(data.get("hub"));
+          middleMileDriver.setHub(resolveValue(data.get("hub")));
           if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
-            middleMileDriversPage.chooseHub(middleMileDriver.getHub());
-          } else {
-            switch (country.toLowerCase()) {
-              case SINGAPORE:
-                middleMileDriver.setHub(SG_HUB);
-                break;
-
-              case INDONESIA:
-                middleMileDriver.setHub(ID_HUB);
-                break;
-
-              case THAILAND:
-                middleMileDriver.setHub(TH_HUB);
-                break;
-
-              case VIETNAM:
-                middleMileDriver.setHub(VN_HUB);
-                break;
-
-              case MALAYSIA:
-                middleMileDriver.setHub(MY_HUB);
-                break;
-
-              case PHILIPPINES:
-                middleMileDriver.setHub(PH_HUB);
-                break;
-
-              default:
-                NvLogger.warn("Country is not on the list");
-            }
             middleMileDriversPage.chooseHub(middleMileDriver.getHub());
           }
 

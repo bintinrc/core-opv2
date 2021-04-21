@@ -10,31 +10,15 @@ Feature: Order Billing
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
 
-    @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` Order Exists (uid:e7eee954-af8d-471c-8c60-42df489fe56a)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{opv2-dp-dpms-id}"
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator get order details
-    And DB Operator get DP job id
-    And API Operator do the DP Success for From Driver Flow
-    And API Driver v5 success dp drop off
-    And Operator verifies the order with status 'Arrived at Distribution Point' is not in dwh_qa_gl.priced_orders
-    And API Operator recalculate the priced order
-    And Operator verifies the order with status 'Arrived at Distribution Point' is in dwh_qa_gl.priced_orders
+    And API Operator force succeed created order
+    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point"
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -54,22 +38,8 @@ Feature: Order Billing
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{opv2-dp-dpms-id}"
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator get order details
-    And DB Operator get DP job id
-    And API Operator do the DP Success for From Driver Flow
-    And API Driver v5 success dp drop off
-    And Operator verifies the order with status 'Arrived at Distribution Point' is not in dwh_qa_gl.priced_orders
+    And API Operator force succeed created order
+    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point"
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
@@ -89,22 +59,8 @@ Feature: Order Billing
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{opv2-dp-dpms-id}"
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator get order details
-    And DB Operator get DP job id
-    And API Operator do the DP Success for From Driver Flow
-    And API Driver v5 success dp drop off
-    And Operator verifies the order with status 'Arrived at Distribution Point' is not in dwh_qa_gl.priced_orders
+    And API Operator force succeed created order
+    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point"
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
