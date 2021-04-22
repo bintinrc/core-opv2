@@ -47,6 +47,9 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
   @FindBy(name = "commons.load-orders")
   public NvApiTextButton loadOrders;
 
+  @FindBy(name = "Download CSV File")
+  public NvApiTextButton downloadCsvFile;
+
   @FindBy(css = "md-progress-linear")
   public PageElement loadingBar;
 

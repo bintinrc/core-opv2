@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
@@ -15,6 +16,8 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -44,10 +47,6 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  private String normalize(Object value) {
-    return value == null ? "" : String.valueOf(value);
-  }
-
   public String getTextOnTable(int rowNumber, String columnDataClass) {
     return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
   }
@@ -56,16 +55,14 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     Double weight = Double.parseDouble(map.get("new-weight-in-double-format"));
 
     StringBuilder orderAsSb = new StringBuilder()
-        .append(normalize(OrderTrackingNo)).append(',')
-        .append('"').append(normalize(weight)).append('"');
+        .append(trimToEmpty(OrderTrackingNo)).append(',')
+        .append('"').append(trimToEmpty(String.valueOf(weight))).append('"');
 
     try {
       File file = TestUtils.createFileOnTempFolder(
           String.format("create-order-update_%s.csv", generateDateUniqueString()));
 
       PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-      //pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
-      //pw.write(System.lineSeparator());
       pw.write(orderAsSb.toString());
       pw.write(System.lineSeparator());
       pw.close();
@@ -83,12 +80,10 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
           String.format("create-mutli-order-update_%s.csv", generateDateUniqueString()));
 
       PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-      //pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
-      //pw.write(System.lineSeparator());
 
       for (int i = 0; i < trackIds.size(); i++) {
-        String orderAsSb = normalize(trackIds.get(i)) + ',' +
-            '"' + normalize(listWeight.get(i)) + '"';
+        String orderAsSb = trimToEmpty(trackIds.get(i)) + ',' +
+            '"' + trimToEmpty(listWeight.get(i)) + '"';
         pw.write(orderAsSb);
         pw.write(System.lineSeparator());
 
@@ -122,6 +117,12 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.upload")
     public NvApiTextButton upload;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(xpath = ".//a[text()='here']")
+    public Button downloadSample;
 
     public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
