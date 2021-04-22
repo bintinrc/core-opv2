@@ -81,6 +81,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String XPATH_DELETE_DP_IMAGE = "//i[@title='Remove file']";
   private static final String XPATH_DELETE_PHOTO = "//span[text()='Delete Photo']/parent::button";
   private static final String XPATH_UPLOAD_INVALID_DP_IMAGE_ERROR_MESSAGE = "//div[contains(@class,'ant-message-error')]//span";
+  private static final String XPATH_RESET_PASSWORD_BUTTON = "//button[@aria-label='Reset Password']";
+  private static final String XPATH_INPUT_NEW_PASSWORD = "//input[@aria-label='New Password']";
+  private static final String XPATH_CONFIRM_NEW_PASSWORD = "//input[@aria-label='Confirm New Password']";
+  private static final String XPATH_SAVE_PASSWORD = "//button[@aria-label='Save Button']";
+  private static final String XPATH_BACK_TO_USER_EDIT = "//button[@aria-label='Back to User Edit']";
+  private static final String XPATH_SUCCESS_PASSWORD_MESSAGE = "//div[contains(text(),'New Password Saved')]";
+  private static final String XPATH_ERROR_MISMATCH_PASSWORD_MESSAGE = "//div[contains(@class,'password-match')]";
+
+  private static final String XPATH_LOGIN_BUTTON_NINJA_POINT = "//button[@type='submit']";
+  private static final String XPATH_USERNAME_NINJA_POINT = "//input[@id='username']";
+  private static final String XPATH_PASSWORD_NINJA_POINT = "//input[@id='password']";
+  private static final String XPATH_WELCOME_PAGE_NINJA_POINT = "//span[@data-key='welcome_back']";
 
   private final AddPartnerDialog addPartnerDialog;
   private final EditPartnerDialog editPartnerDialog;
@@ -628,6 +640,93 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       assertInvalidImageErrorMessage();
     }
     pause2s();
+  }
+
+  public void resetUserPassword(String username, String password, String status) {
+    dpUsersTable.filterByColumn(DpUsersTable.COLUMN_USERNAME, username);
+    dpUsersTable.clickActionButton(1, DpUsersTable.ACTION_EDIT);
+    resetPassword(password, status);
+  }
+
+  public void resetPassword(String password, String status) {
+    clickResetPassword();
+    if ("successfully".equalsIgnoreCase(status)) {
+      setNewPassword(password);
+      setConfirmPassword(password);
+      clickSavePassword();
+      verifySuccessPasswordChangeMessage();
+    } else if ("unsuccessfully".equalsIgnoreCase(status)) {
+      setNewPassword(password);
+      setConfirmPassword("Latika");
+      verifyMisMatchPasswordErrorMessage();
+      clickBackToUserEdit();
+    } else {
+      clickBackToUserEdit();
+    }
+  }
+
+  public void clickBackToUserEdit() {
+    waitUntilVisibilityOfElementLocated(XPATH_BACK_TO_USER_EDIT);
+    click(XPATH_BACK_TO_USER_EDIT);
+    assertFalse(isElementVisible(XPATH_BACK_TO_USER_EDIT));
+  }
+
+  public void verifyMisMatchPasswordErrorMessage() {
+    String expectedMessage = "Password does not match!";
+    String actualMessage = getText(XPATH_ERROR_MISMATCH_PASSWORD_MESSAGE);
+    assertTrue("Error message is not correct: ", expectedMessage.equalsIgnoreCase(actualMessage));
+  }
+
+  public void clickResetPassword() {
+    waitUntilVisibilityOfElementLocated(XPATH_RESET_PASSWORD_BUTTON);
+    moveToElementWithXpath(XPATH_RESET_PASSWORD_BUTTON);
+    click(XPATH_RESET_PASSWORD_BUTTON);
+  }
+
+  public void setNewPassword(String newPassword) {
+    waitUntilVisibilityOfElementLocated(XPATH_INPUT_NEW_PASSWORD);
+    sendKeys(XPATH_INPUT_NEW_PASSWORD, newPassword);
+  }
+
+  public void setConfirmPassword(String confirmPassword) {
+    waitUntilVisibilityOfElementLocated(XPATH_CONFIRM_NEW_PASSWORD);
+    sendKeys(XPATH_CONFIRM_NEW_PASSWORD, confirmPassword);
+  }
+
+  public void clickSavePassword() {
+    click(XPATH_SAVE_PASSWORD);
+    pause1s();
+  }
+
+  public void verifySuccessPasswordChangeMessage() {
+    String expectedText = "New Password Saved!";
+    String actualText = getText(XPATH_SUCCESS_PASSWORD_MESSAGE);
+    assertEquals("New password is saved: ", expectedText.toLowerCase(), actualText.toLowerCase());
+  }
+
+  public void loginNinjaPoint(String username, String password) {
+    waitUntilVisibilityOfElementLocated(XPATH_LOGIN_BUTTON_NINJA_POINT);
+    fillUsername(username);
+    fillPassword(password);
+    clickLoginNinjaPoint();
+  }
+
+  public void fillUsername(String username) {
+    moveToElementWithXpath(XPATH_USERNAME_NINJA_POINT);
+    sendKeys(XPATH_USERNAME_NINJA_POINT, username);
+  }
+
+  public void fillPassword(String password) {
+    moveToElementWithXpath(XPATH_PASSWORD_NINJA_POINT);
+    sendKeys(XPATH_PASSWORD_NINJA_POINT, password);
+  }
+
+  public void clickLoginNinjaPoint() {
+    click(XPATH_LOGIN_BUTTON_NINJA_POINT);
+  }
+
+  public void welcomePageDisplayed() {
+    assertTrue(isElementVisible(XPATH_WELCOME_PAGE_NINJA_POINT));
   }
 
   /**

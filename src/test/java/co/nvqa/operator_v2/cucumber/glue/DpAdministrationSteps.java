@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
@@ -21,6 +22,8 @@ import java.util.Objects;
 @ScenarioScoped
 public class DpAdministrationSteps extends AbstractSteps {
 
+  private static final String NINJA_POINT_URL = StandardTestConstants.API_BASE_URL
+      .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
 
   public DpAdministrationSteps() {
@@ -222,5 +225,33 @@ public class DpAdministrationSteps extends AbstractSteps {
     String currentDpName = dpParams.getName();
     File file = getDpPhoto(getResourcePath(status));
     dpAdminPage.editDpImageAndSaveSettings(currentDpName, file, status);
+  }
+
+  @When("Operator Reset password {string}")
+  public void operatorResetPassword(String status) {
+    DpUser dpUser = get(KEY_DP_USER);
+    String username = dpUser.getClientId();
+    String password = "password";
+    dpUser.setClientSecret(password);
+    dpAdminPage.resetUserPassword(username, password, status);
+    put(KEY_DP_USER, dpUser);
+  }
+
+  @Given("Open Ninja Point V3 Web Page")
+  public void openNinjaPointVWebPage() {
+    getWebDriver().get(NINJA_POINT_URL);
+  }
+
+  @When("User Login with username and new password")
+  public void userLoginWithUsernameAndNewPassword() {
+    DpUser dpUser = get(KEY_DP_USER);
+    String username = dpUser.getClientId();
+    String password = dpUser.getClientSecret();
+    dpAdminPage.loginNinjaPoint(username, password);
+  }
+
+  @Then("Ninja Point V3 Welcome Page displayed")
+  public void ninjaPointVWelcomePageDisplayed() {
+    dpAdminPage.welcomePageDisplayed();
   }
 }
