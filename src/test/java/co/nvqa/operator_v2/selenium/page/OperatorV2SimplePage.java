@@ -1232,8 +1232,7 @@ public class OperatorV2SimplePage extends SimplePage {
     }
     // temporary close /aaa error alert if exist
     if (isElementExist("//button[.='close']")) {
-      click("//button[.='close']");
-      pause1s();
+      pause7s();
     }
   }
 

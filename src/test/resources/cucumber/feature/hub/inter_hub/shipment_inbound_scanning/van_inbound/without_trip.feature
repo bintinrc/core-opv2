@@ -25,9 +25,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Cancelled |
+      | status | Completed |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with Cancelled alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with Completed alert
 
   @DeleteShipment
   Scenario: Van Inbound Cancelled Shipment Not In Origin Hub (uid:a7c716a4-aa89-4af7-b9d0-8d9e37caf766)

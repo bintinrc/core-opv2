@@ -199,7 +199,6 @@ Feature: Shipment Management - Search Shipment
     Then Operator verify parameters of the created shipment on Shipment Management page
     Examples:
       | Note                                        | scenarioName    | hiptest-uid                              | filterName      |
-      | Search Shipment by Filter - ETA (Date Time) | ETA (Date Time) | uid:5a65a7ea-12ef-4a59-a8b0-a15f261b52d2 | ETA (Date Time) |
       | Search Shipment by Filter - Shipment Date   | Shipment Date   | uid:e10f1ad8-cdc0-4795-b816-2ae3015a36d3 | Shipment Date   |
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)

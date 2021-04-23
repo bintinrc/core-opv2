@@ -608,7 +608,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   }
 
   public void refreshAndWaitUntilLoadingDone() {
-    getWebDriver().navigate().refresh();
+    refreshPage();
     if (antDotSpinner.isDisplayedFast()) {
       antDotSpinner.waitUntilInvisible();
     }
