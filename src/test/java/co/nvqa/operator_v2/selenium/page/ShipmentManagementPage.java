@@ -207,11 +207,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     clickButtonByAriaLabel("Action");
     clickButtonByAriaLabel("Save Current as Preset");
     waitUntilVisibilityOfMdDialogByTitle("Save Preset");
-    sendKeysById("preset-name", presetName);
+    sendKeysByAriaLabel("Preset Name", presetName);
     clickNvIconTextButtonByName("commons.save");
     waitUntilVisibilityOfToast("1 filter preset created");
     String presetId = getMdSelectValueById("commons.preset.load-filter-preset");
-    Pattern p = Pattern.compile("(\\d+)(-)(.+)");
+    Pattern p = Pattern.compile("(\\d+) (-) (.+)");
     Matcher m = p.matcher(presetId);
     if (m.matches()) {
       presetId = m.group(1);
@@ -224,7 +224,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     clickButtonByAriaLabel("Action");
     clickButtonByAriaLabel("Delete Preset");
     waitUntilVisibilityOfMdDialogByTitle("Delete Preset");
-    selectValueFromMdSelectById("select-preset", presetName);
+    selectValueFromMdSelectByAriaLabel("Select preset", presetName);
     clickNvIconTextButtonByName("commons.delete");
     waitUntilVisibilityOfToast("1 filter preset deleted");
   }
