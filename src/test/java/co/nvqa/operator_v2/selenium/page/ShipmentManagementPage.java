@@ -479,6 +479,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void selectAllAndClickBulkUpdateButton() {
+    // temporary close /aaa error alert if exist
+    if (isElementExist("//button[.='close']")) {
+      pause7s();
+    }
     click(XPATH_CHECKBOX_ON_SHIPMENT_TABLE);
     click(XPATH_SECOND_CHECKBOX_ON_SHIPMENT_TABLE);
 
