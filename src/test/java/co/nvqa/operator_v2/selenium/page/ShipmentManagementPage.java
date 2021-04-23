@@ -643,6 +643,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfToast("Network Request Error");
     assertThat("toast message is the same", getToastBottomText(),
         containsString("unable to edit completed/cancelled shipments"));
+    click("//button[.='close']");
   }
 
   public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid,
