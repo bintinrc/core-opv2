@@ -51,4 +51,20 @@ public class OrderWeightUpdateSteps extends AbstractSteps {
     orderWeightUpdatePage.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId, listWeight);
     pause5s();
   }
+
+  @When("^Operator download sample CSV file for 'Find Orders with CSV' on Order Weight Update page$")
+  public void operatorDownloadSampleCsvFileForFindOrdersWithCsv() {
+    orderWeightUpdatePage.findOrdersWithCsv.click();
+    orderWeightUpdatePage.findOrdersWithCsvDialog.waitUntilVisible();
+    orderWeightUpdatePage.findOrdersWithCsvDialog.downloadSample.click();
+    orderWeightUpdatePage.findOrdersWithCsvDialog.cancel.click();
+  }
+
+  @Then("^sample CSV file for 'Find Orders with CSV' on Order Weight Update page is downloaded successfully$")
+  public void operatorVerifySampleCsvFileForFindOrdersWithCsvIsDownloadedSuccessfully() {
+    orderWeightUpdatePage.verifyFileDownloadedSuccessfully("find-orders-with-csv.csv",
+        "NVSGNINJA000000001,20.0\n"
+            + "NVSGNINJA000000002,5.2\n"
+            + "NVSGNINJA000000003,1.4");
+  }
 }

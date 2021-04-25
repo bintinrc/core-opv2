@@ -130,4 +130,15 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
         f("Fail to complete Third Party Order (Tracking ID = %s).", orderMapping.getTrackingId())
     );
   }
+
+  @When("^Operator download CSV file on Third Party Order Management page$")
+  public void operatorDownloadCsvFile() {
+    thirdPartyOrderManagementPage.downloadCsvFile.click();
+  }
+
+  @Then("^3pl-orders CSV file is downloaded successfully$")
+  public void ordersCsvFileIsDownloadedSuccessfully() {
+    thirdPartyOrderManagementPage.verifyFileDownloadedSuccessfully("3pl-orders.csv",
+        "\"Tracking ID\",\"3PL Provider\",\"3PL Tracking ID\",\"Transferred to 3PL date\",\"Working days since transferred\",\"NV Order Status\"");
+  }
 }

@@ -5,6 +5,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.ArrayList;
@@ -79,5 +80,17 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
 
     put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);
     bulkAddressVerificationPage.uploadWaypointsData(jaroScores);
+  }
+
+  @When("^Operator download sample CSV file on Bulk Address Verification page$")
+  public void operatorDownloadSampleCsvFile() {
+    bulkAddressVerificationPage.downloadSampleCsv.click();
+  }
+
+  @Then("^sample CSV file on Bulk Address Verification page is downloaded successfully$")
+  public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
+    bulkAddressVerificationPage.verifyFileDownloadedSuccessfully("sample_csv.csv",
+        "\"waypoint\",\"latitude\",\"longitude\"\n"
+            + "5259518,1.32323,103.1212");
   }
 }
