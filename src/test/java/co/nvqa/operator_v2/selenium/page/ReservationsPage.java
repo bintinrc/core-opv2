@@ -4,7 +4,7 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
+import co.nvqa.operator_v2.selenium.elements.md.MdButtonGroup;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
@@ -34,7 +34,7 @@ public class ReservationsPage extends OperatorV2SimplePage {
   public Button createReservations;
 
   @FindBy(css = "nv-button-timeslot")
-  public ContainerSwitch timeslot;
+  public MdButtonGroup timeslot;
 
   @FindBy(css = "[aria-label='Approx. Volume']")
   public MdSelect approxVolume;

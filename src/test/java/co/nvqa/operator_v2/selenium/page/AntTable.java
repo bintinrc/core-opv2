@@ -30,7 +30,8 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    String xpath = getActionButtonsLocators().get(actionId);
+    clickf(xpath, rowNumber);
   }
 
   @Override

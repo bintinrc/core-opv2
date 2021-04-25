@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -83,6 +84,25 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorEditOrderDetailsOnEditOrderPageSuccessfully() {
     Order orderEdited = get("orderEdited");
     editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited);
+  }
+
+  @Then("^Operator verifies dimensions information on Edit Order page:$")
+  public void operatorVerifyDimensionInformation(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    SoftAssertions softAssertions = new SoftAssertions();
+    String expected = data.get("size");
+    if (StringUtils.isNotBlank(expected)) {
+      softAssertions.assertThat(editOrderPage.size.getText())
+          .as("Parcel size")
+          .isEqualToIgnoringCase(expected);
+    }
+    expected = data.get("weight");
+    if (StringUtils.isNotBlank(expected)) {
+      softAssertions.assertThat(editOrderPage.getWeight())
+          .as("Parcel weight")
+          .isEqualTo(Double.parseDouble(expected));
+    }
+    softAssertions.assertAll();
   }
 
   @When("^Operator enter Order Instructions on Edit Order page:$")
@@ -1161,8 +1181,9 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("Operator verifies Latest Event is {string} on Edit Order page")
   public void operatorVerifyLatestEvent(String value) {
-    assertEquals("Latest Event", resolveValue(value),
-        editOrderPage.latestEvent.getNormalizedText());
+    retryIfAssertionErrorOccurred(() ->
+        assertEquals("Latest Event", resolveValue(value),
+            editOrderPage.latestEvent.getNormalizedText()), "Latest Event", 1000, 3);
   }
 
   @Then("Operator RTS order on Edit Order page using data below:")
@@ -1314,5 +1335,10 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator close Chat With Driver dialog$")
   public void closeChatWithDriverDialog() {
     editOrderPage.chatWithDriverDialog.close();
+  }
+
+  @When("Operator selects {string} in Events Filter menu on Edit Order page")
+  public void selectEventsFilter(String option) {
+    editOrderPage.eventsTableFilter.selectOption(resolveValue(option));
   }
 }

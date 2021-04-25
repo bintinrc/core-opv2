@@ -327,7 +327,7 @@ Feature: Edit Order
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator print Airway Bill on Edit Order page
-    Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
+    Then Operator verify the pnew rinted Airway bill for single order on Edit Orders page contains correct info
 
   @DeleteOrArchiveRoute
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:c6ab425f-c508-451f-b84c-09eb267c5f27)
@@ -1757,6 +1757,95 @@ Feature: Edit Order
     Then Operator verify order event on Edit order page using data below:
       | name        | ADDED TO RESERVATION                         |
       | description | Reservation ID: {KEY_CREATED_RESERVATION_ID} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Applies Filter on Events Table (uid:966000fe-cb85-4093-90df-26b6f125a201)
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | KEY_CREATED_ADDRESS                                                                                                                                                                                                                                                                                                                    |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add reservation pick-up to the route
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}             |
+      | fetchBy      | FETCH_BY_ROUTE_ID      |
+      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+    When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
+    And Operator scan a tracking ID of created order on Route Inbound page
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator tags order to "12356" DP on Edit Order Page
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change Cash on Delivery toggle to yes
+    And Operator change the COD value to "100"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    When Operator selects "All Events" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags               | name                 |
+      | SYSTEM ACTION      | PRICING CHANGE       |
+      | MANUAL ACTION      | FORCED SUCCESS       |
+      | COD, MANUAL ACTION | UPDATE CASH          |
+      | MANUAL ACTION      | PULL OUT OF ROUTE    |
+      | MANUAL ACTION      | UPDATE STATUS        |
+      | MANUAL ACTION      | ADD TO ROUTE         |
+      | MANUAL ACTION      | UPDATE ADDRESS       |
+      | DP                 | ASSIGNED TO DP       |
+      | SCAN, DELIVERY     | ROUTE INBOUND SCAN   |
+      | SCAN, DELIVERY     | DRIVER INBOUND SCAN  |
+      | SORT, SCAN         | HUB INBOUND SCAN     |
+      | PICKUP             | ADDED TO RESERVATION |
+    When Operator selects "System Actions Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags          | name           |
+      | SYSTEM ACTION | PRICING CHANGE |
+    When Operator selects "Manual Actions Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags               | name              |
+      | MANUAL ACTION      | FORCED SUCCESS    |
+      | COD, MANUAL ACTION | UPDATE CASH       |
+      | MANUAL ACTION      | PULL OUT OF ROUTE |
+      | MANUAL ACTION      | UPDATE STATUS     |
+      | MANUAL ACTION      | ADD TO ROUTE      |
+      | MANUAL ACTION      | UPDATE ADDRESS    |
+    When Operator selects "Scans Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags           | name                |
+      | SORT, SCAN     | HUB INBOUND SCAN    |
+      | SCAN, DELIVERY | DRIVER INBOUND SCAN |
+      | SCAN, DELIVERY | ROUTE INBOUND SCAN  |
+    When Operator selects "Pickups Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags   | name                 |
+      | PICKUP | ADDED TO RESERVATION |
+    When Operator selects "Deliveries Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags           | name                |
+      | SCAN, DELIVERY | DRIVER INBOUND SCAN |
+      | SCAN, DELIVERY | ROUTE INBOUND SCAN  |
+    When Operator selects "CODs Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags               | name        |
+      | COD, MANUAL ACTION | UPDATE CASH |
+    When Operator selects "DPs Only" in Events Filter menu on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | tags | name           |
+      | DP   | ASSIGNED TO DP |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

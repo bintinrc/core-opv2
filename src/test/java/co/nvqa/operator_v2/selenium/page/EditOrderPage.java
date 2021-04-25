@@ -19,6 +19,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenuBar;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -62,6 +63,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(css = ".view-container md-menu-bar")
   public MdMenuBar menuBar;
 
+  @FindBy(css = "div[loading-message='Loading events...'] md-menu")
+  public MdMenu eventsTableFilter;
+
   @FindBy(xpath = "//div[label[.='Tracking ID']]/h3")
   public PageElement trackingId;
 
@@ -91,6 +95,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[./label[.='Delivery Verification Required']]/div/div")
   public PageElement deliveryVerificationType;
+
+  @FindBy(xpath = "//label[text()='Size']/following-sibling::p")
+  public PageElement size;
+
+  @FindBy(xpath = "//label[text()='Weight']/following-sibling::p")
+  public PageElement weight;
 
   @FindBy(css = "[name='commons.edit']")
   public NvIconButton deliveryVerificationTypeEdit;
@@ -433,7 +443,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
     Dimension expectedDimension = editedOrder.getDimensions();
-    assertEquals("Order Details - Size", editedOrder.getParcelSize(), getSize());
+    assertEquals("Order Details - Size", editedOrder.getParcelSize(), size.getText());
     assertEquals("Order Details - Weight", expectedDimension.getWeight(), getWeight());
   }
 
@@ -480,7 +490,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     assertThat("Shipper ID", shipperId.getText(),
         containsString(String.valueOf(order.getShipper().getId())));
     assertEquals("Order Type", order.getType(), orderType.getText());
-    assertEquals("Size", order.getParcelSize(), getSize());
+    assertEquals("Size", order.getParcelSize(), size.getText());
     assertEquals("Weight", order.getWeight(), getWeight(), 0.0);
 
     Transaction pickupTransaction = order.getTransactions().get(0);
@@ -664,13 +674,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
     return getText("//label[text()='Latest Event']/following-sibling::h3");
   }
 
-  public String getSize() {
-    return getText("//label[text()='Size']/following-sibling::p");
-  }
-
   public Double getWeight() {
     Double weight = null;
-    String actualText = getText("//label[text()='Weight']/following-sibling::p");
+    String actualText = this.weight.getText();
 
     if (!actualText.contains("-")) {
       String temp = actualText.replace("kg", "").trim();
