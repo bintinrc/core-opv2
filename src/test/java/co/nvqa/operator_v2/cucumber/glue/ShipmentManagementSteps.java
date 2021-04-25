@@ -539,7 +539,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @And("^Operator select created filters preset on Shipment Management page$")
   public void operatorSelectCreatedFiltersPresetOnShipmentManagementPage() {
-    String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(
+    String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + " - " + get(
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
     operatorSelectGivenFiltersPresetOnShipmentManagementPage(presetName);
   }
@@ -558,14 +558,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @And("^Operator delete created filters preset on Shipment Management page$")
   public void operatorDeleteCreatedFiltersPresetOnShipmentManagementPage() {
-    String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(
+    String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + " - " + get(
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
     shipmentManagementPage.deleteFiltersPreset(presetName);
   }
 
   @Then("^Operator verify filters preset was deleted$")
   public void operatorVerifyFiltersPresetWasDeleted() {
-    String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(
+    String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + " - " + get(
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
     shipmentManagementPage.verifyFiltersPresetWasDeleted(presetName);
     remove(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
