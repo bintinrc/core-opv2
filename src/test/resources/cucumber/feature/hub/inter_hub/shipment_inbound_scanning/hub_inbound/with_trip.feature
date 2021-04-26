@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @HubInbound @WithTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @HubInbound @WithTrip @CWF
 Feature: Shipment Hub Inbound With Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1898,6 +1898,18 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | result | Completed                |
       | userId | automation@ninjavan.co   |
     And Operator close current window and switch to Shipment management page
+
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @RT
+  Scenario: Hub Inbound Skip Scan Stayover Shipment with different drop off trip (uid:18780560-c00f-4b9b-af9f-32f59e732117)
+    Given no-op
+
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  Scenario: Hub Inbound Scan Stayover Shipment with different drop-off trip (uid:716ecf67-5763-4dd8-9cfe-fdfd99fb3e8f)
+    Given no-op
+
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  Scenario: Scan to  Remove Stayover Shipment at Hub Inbound With Different Dropoff Trip (uid:f4aeaff5-b11a-4e99-a8a6-a94242b1fc6e)
+    Given no-op
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Transit Shipment From Another Country to Hub Inbound (uid:476d787f-f99b-4375-a218-6893e319e440)
