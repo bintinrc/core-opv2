@@ -268,6 +268,17 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     waitUntilInvisibilityOfToast();
   }
 
+  public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
+    pause1s();
+    sendKeysAndEnterByAriaLabel("scan_barcode_remove", firstTrackingId);
+
+    pause1s();
+    String statusCardText = findElementByXpath("//div[contains(@class,'status-card')]").getText();
+    assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
+    assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
+        containsString("not in shipment"));
+  }
+
   public void verifyTheSumOfOrderIsDecreased(int expectedSumOfOrder) {
     String actualSumOfOrder = getText(
         "//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5")
@@ -338,7 +349,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         containsString(expectedToastMessageContain));
   }
 
-  public void verifyBottomToastDriverInTripContainingEitherMessage(List<String> expectedToastMessages) {
+  public void verifyBottomToastDriverInTripContainingEitherMessage(
+      List<String> expectedToastMessages) {
     String actualToastMessage = getToastBottomText().split(" with expected ")[0];
     assertThat(f("Toast message contains either %s or %s", expectedToastMessages.get(0),
         expectedToastMessages.get(1)), actualToastMessage,
