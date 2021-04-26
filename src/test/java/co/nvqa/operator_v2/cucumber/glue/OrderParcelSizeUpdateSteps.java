@@ -44,7 +44,7 @@ public class OrderParcelSizeUpdateSteps extends AbstractSteps {
             + "NVSGNINJA000000006,XSMALL");
   }
 
-  @When("^Operator Multiple Order Parcel Size update CSV Upload on Order Parcel Size Update page$")
+  @When("^Operator upload Multiple Order Parcel Size update CSV on Order Parcel Size Update page$")
   public void multiOrderParcelSizeUpdateUploadCsvFile(List<String> listSize) {
     List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
 
@@ -56,8 +56,10 @@ public class OrderParcelSizeUpdateSteps extends AbstractSteps {
     File createOrderUpdateCsv = orderParcelSizeUpdatePage
         .buildMultiCreateOrderUpdateCsv(listOfCreatedTrackingId, listSize);
     orderParcelSizeUpdatePage.findOrdersWithCsvDialog.uploadFile(createOrderUpdateCsv);
-    pause5s();
-    orderParcelSizeUpdatePage.findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
-    orderParcelSizeUpdatePage.waitUntilInvisibilityOfToast("Order weight update success", true);
+  }
+
+  @When("^Operator clicks Upload button on Order Parcel Size Update page$")
+  public void clickUploadButton() {
+    orderParcelSizeUpdatePage.upload.click();
   }
 }
