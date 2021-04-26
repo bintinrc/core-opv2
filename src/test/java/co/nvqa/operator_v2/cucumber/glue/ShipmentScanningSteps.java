@@ -64,6 +64,31 @@ public class ShipmentScanningSteps extends AbstractSteps {
     }, 5);
   }
 
+  @When("^Operator add to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
+  public void operatorAddToShipmentInHub(String hub, String destHub) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
+            ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
+            ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+
+        shipmentScanningPage.selectHub(resolveValue(hub));
+        shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
+        shipmentScanningPage.selectShipmentType(shipmentType);
+        shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
+        shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
+        shipmentScanningPage.clickSelectShipment();
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 5);
+  }
+
   @When("Operator open add to shipment for shipment {string} in hub {string} to hub id = {string} with shipmentType {string}")
   public void operatorScanTheCreatedOrderToShipmentInHub(String shipmentIdAsString, String hub,
       String destHub, String shipmentType) {
@@ -136,6 +161,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorRemovesTheParcelFromTheShipment() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     shipmentScanningPage.removeOrderFromShipment(trackingId);
+  }
+
+  @And("Operator removes the parcel from the shipment with error alert")
+  public void operatorRemovesTheParcelFromTheShipmentWithErrorAlert() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    shipmentScanningPage.removeOrderFromShipmentWithErrorAlert(trackingId);
   }
 
   @Then("Operator verifies that the parcels shown are decreased")

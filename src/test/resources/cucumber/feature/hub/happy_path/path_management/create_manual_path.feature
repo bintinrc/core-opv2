@@ -93,7 +93,7 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | selectSchedule     | false                              |
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
@@ -119,7 +119,7 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | selectSchedule     | false                              |
-    Then Operator verify it cannot create manual path "no schedules between hubs" with data:
+    Then Operator verify it cannot create manual path "no schedules between transit hubs" with data:
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
 
