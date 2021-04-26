@@ -327,7 +327,7 @@ Feature: Edit Order
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator print Airway Bill on Edit Order page
-    Then Operator verify the pnew rinted Airway bill for single order on Edit Orders page contains correct info
+    Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
   @DeleteOrArchiveRoute
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:c6ab425f-c508-451f-b84c-09eb267c5f27)
