@@ -106,7 +106,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-        navigateRefresh();
+        shipmentManagementPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
@@ -209,7 +209,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-        navigateRefresh();
+        shipmentManagementPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
@@ -414,6 +414,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     } else {
       shipmentInfo = get(KEY_SHIPMENT_INFO);
     }
+    shipmentManagementPage.refreshPage();
     shipmentManagementPage
         .verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
