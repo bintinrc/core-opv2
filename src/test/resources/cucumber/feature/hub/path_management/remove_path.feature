@@ -22,7 +22,6 @@ Feature: Remove Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
@@ -50,7 +49,6 @@ Feature: Remove Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button

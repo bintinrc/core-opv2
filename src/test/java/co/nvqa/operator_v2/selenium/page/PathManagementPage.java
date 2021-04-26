@@ -33,17 +33,17 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Default Path']")
   public Button addDefaultPathButton;
 
-  @FindBy(xpath = "//span[.='Show / Hide Filters']")
+  @FindBy(xpath = "//div[.='Show / Hide Filters']")
   public PageElement showHideFilters;
 
-  @FindBy(id = "pathType")
-  public AntSelect pathTypeFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-col ant-col')][.//*[.='Path Type']]//div[contains(@class,'ant-select ant-select')]")
+  public PageElement pathTypeFilter;
 
-  @FindBy(id = "originHubs")
-  public AntSelect originHubFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-col ant-col')][.//*[.='Origin Hub']]//div[contains(@class,'ant-select ant-select')]")
+  public PageElement originHubFilter;
 
-  @FindBy(id = "destinationHubs")
-  public AntSelect destinationHubFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-col ant-col')][.//*[.='Destination Hub']]//div[contains(@class,'ant-select ant-select')]")
+  public PageElement destinationHubFilter;
 
   @FindBy(xpath = "//button[.='Load Selection']")
   public Button loadSelectionButton;
@@ -54,20 +54,29 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-spin-blur')]")
   public PageElement antBlurSpinner;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'originHubName')]//span")
+  @FindBy(xpath = "//tr[2]//td[1]")
   public TextBox originHubFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'destinationHubName')]//span")
+  @FindBy(xpath = "//tr[2]//td[2]")
   public TextBox destinationHubFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'path')]//div[@class='ant-tag']")
+  @FindBy(xpath = "//tr[2]//td[3]//span[@class='ant-tag']")
   public TextBox pathTagFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'pathItems')]//span")
+  @FindBy(xpath = "//tr[2]//td[3]//span[contains(text(),'→')]")
   public TextBox pathFirstRow;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]")
+  @FindBy(xpath = "//tr[2]//td[4]")
   public TextBox actionFirstRow;
+
+  @FindBy(xpath = "//tr[2]//td[4]//div//a[.='View']")
+  public PageElement viewActionFirstRow;
+
+  @FindBy(xpath = "//tr[2]//td[4]//div//a[.='Edit']")
+  public PageElement editActionFirstRow;
+
+  @FindBy(xpath = "//tr[2]//td[4]//div//a[.='Remove']")
+  public PageElement removeActionFirstRow;
 
   @FindBy(className = "ant-modal-wrap")
   public PathDetailsModal pathDetailsModal;
@@ -84,22 +93,22 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-wrap")
   public CreateDefaultPathModal createDefaultPathModal;
 
-  @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
+  @FindBy(className = "ant-modal-wrap")
   public PathDetailsModal createdPathDetailsModal;
 
-  @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
+  @FindBy(xpath = "(//div[@class='ant-modal-wrap'])[2]")
   public EditManualPathModal createdEditPathModal;
 
-  @FindBy(xpath = "//div[contains(@class,'footer-row')]")
+  @FindBy(xpath = "//div[contains(@class,'ant-empty-description')]")
   public TextBox footerRowDiv;
 
-  @FindBy(xpath = "//th[contains(@class,'originHubName')]//input")
+  @FindBy(xpath = "//th//input[@aria-label='input-origin_hub_name']")
   public PageElement originHubField;
 
-  @FindBy(xpath = "//th[contains(@class,'destinationHubName')]//input")
+  @FindBy(xpath = "//th//input[@aria-label='input-destination_hub_name']")
   private PageElement destinationHubField;
 
-  @FindBy(xpath = "//th[contains(@class,'pathItems')]//input")
+  @FindBy(xpath = "//th//input[@aria-label='input-_pathItems']")
   private PageElement pathField;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
@@ -124,15 +133,18 @@ public class PathManagementPage extends OperatorV2SimplePage {
   }
 
   public void selectPathType(String value) {
-    pathTypeFilter.selectValueWithoutSearch(value);
+    pathTypeFilter.click();
+    sendKeysAndEnter("//input[@id='pathType']", value);
   }
 
   public void selectOriginHub(String value) {
-    originHubFilter.selectValue(value);
+    originHubFilter.click();
+    sendKeysAndEnter("//input[@id='originHubs']", value);
   }
 
   public void selectDestinationHub(String value) {
-    destinationHubFilter.selectValue(value);
+    destinationHubFilter.click();
+    sendKeysAndEnter("//input[@id='destinationHubs']", value);
   }
 
   public void verifyDataAppearInPathTable(String pathType) {
@@ -149,7 +161,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
     }
     if ("manual paths".equals(pathType)) {
       pathType = "";
-      expectedActionText += "EditRemove";
+      expectedActionText += "\nEdit\nRemove";
     }
 
     assertThat("Origin Hub not empty", originHubName, not(equalTo("")));
@@ -253,7 +265,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
   public void verifyNoResultsFound() {
     String actualMessage = footerRowDiv.getText();
-    String expectedMessage = "No Results Found";
+    String expectedMessage = "No data";
     assertThat("Message is no results found", actualMessage, equalTo(expectedMessage));
   }
 
@@ -274,8 +286,10 @@ public class PathManagementPage extends OperatorV2SimplePage {
     String expectedFirstCreateManualPathModalTitle = "Create Manual Path (1/3)";
     assertThat("Modal title is the same", actualCreateManualPathModalTitle,
         equalTo(expectedFirstCreateManualPathModalTitle));
-    createManualPathModal.originHubFilter.selectValue(originHubName);
-    createManualPathModal.destinationHubFilter.selectValue(destinationHubName);
+    createManualPathModal.originHubFilter.click();
+    sendKeysAndEnter("//input[@id='originHub']", originHubName);
+    createManualPathModal.destinationHubFilter.click();
+    sendKeysAndEnter("//input[@id='destinationHub']", destinationHubName);
   }
 
   public void createManualPathSecondStage(String transitHubName, String transitHubInfo) {
@@ -286,13 +300,16 @@ public class PathManagementPage extends OperatorV2SimplePage {
     if (transitHubName != null) {
       switch (transitHubInfo) {
         case "first":
-          createManualPathModal.firstTransitHubFilter.selectValue(transitHubName);
+          createManualPathModal.firstTransitHubFilter.click();
+          createManualPathModal.firstTransitHubInput.sendKeysAndEnterNoXpath(transitHubName);
           break;
         case "second":
-          createManualPathModal.secondTransitHubFilter.selectValue(transitHubName);
+          createManualPathModal.secondTransitHubFilter.click();
+          createManualPathModal.secondTransitHubInput.sendKeysAndEnterNoXpath(transitHubName);
           break;
         case "third":
-          createManualPathModal.thirdTransitHubFilter.selectValue(transitHubName);
+          createManualPathModal.thirdTransitHubFilter.click();
+          createManualPathModal.thirdTransitHubInput.sendKeysAndEnterNoXpath(transitHubName);
           break;
       }
     }
@@ -345,7 +362,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
       }
       if (departureTimes.size() == 0) {
         String actualEmptyDescription = createdPathDetailsModal.emptyDescription.getText();
-        String expectedEmptyDescription = "No Data";
+        String expectedEmptyDescription = "No data";
         assertThat("Empty Description is the same", actualEmptyDescription,
             equalTo(expectedEmptyDescription));
       }
@@ -359,18 +376,20 @@ public class PathManagementPage extends OperatorV2SimplePage {
     if ("no schedule(s) selected".equals(reason)) {
       Color actualBorderColor = Color
           .fromString(createManualPathModal.departureScheduleFirst.getCssValue("border-top-color"));
-      String actualErrorInfo = createManualPathModal.thirdStageErrorInfo.get(0).getText();
+      String actualErrorInfo = createManualPathModal.thirdStageErrorTypography.get(0).getText();
       Color actualErrorInfoColor = Color
-          .fromString(createManualPathModal.thirdStageErrorInfo.get(0).getCssValue("color"));
-      String expectedErrorInfo = "Cannot be blank.";
-      String expectedColor = "#f5222d";
+          .fromString(createManualPathModal.thirdStageErrorTypography.get(0).getCssValue("color"));
+      String expectedErrorInfo = "Cannot be blank";
+      String expectedBorderColor = "#f5222d";
+      String expectedTextColor = "#ff4d4f";
 
-      assertThat("Border color is correct", actualBorderColor.asHex(), equalTo(expectedColor));
+      assertThat("Border color is correct", actualBorderColor.asHex(),
+          equalTo(expectedBorderColor));
       assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
-      assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedColor));
+      assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedTextColor));
     }
     if ("no schedules between hubs".equals(reason)) {
-      List<PageElement> actualErrorInfo = createManualPathModal.thirdStageErrorInfo;
+      List<PageElement> actualErrorInfo = createManualPathModal.thirdStageErrorTypography;
       String expectedErrorInfo = f("No schedule from: %s to %s", sourceHub, targetHub);
       assertThat("Error info is contained",
           actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText())),
@@ -380,25 +399,35 @@ public class PathManagementPage extends OperatorV2SimplePage {
       assertThat("NextButton is disabled", actualNextButtonIsEnabled, equalTo(false));
     }
     if ("multiple same transit hubs".equals(reason)) {
-      createManualPathModal.secondTransitHubFilter.enterSearchTerm(sourceHub);
+      createManualPathModal.secondTransitHubFilter.click();
+      createManualPathModal.secondTransitHubInput.sendKeys(sourceHub);
       Boolean actualTransitHubExistence = isElementExist(
-          f("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]",
-              sourceHub));
-      assertThat("Cannot find a selected transit hub", actualTransitHubExistence, equalTo(false));
+          "//div[@role='listbox']//div[@class='ant-empty-description'][.='No data']");
+      assertThat("Cannot find a selected transit hub", actualTransitHubExistence, equalTo(true));
+    }
+    if ("no schedules between transit hubs".equals(reason)) {
+      List<PageElement> actualErrorInfo = createManualPathModal.thirdStageErrorAlert;
+      String expectedErrorInfo = f("No schedule from: %s to %s", sourceHub, targetHub);
+      assertThat("Error info is contained",
+          actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText())),
+          equalTo(true));
+
+      Boolean actualNextButtonIsEnabled = createManualPathModal.nextButton.isEnabled();
+      assertThat("NextButton is disabled", actualNextButtonIsEnabled, equalTo(false));
     }
     if ("no schedule(s) available".equals(reason)) {
-      String actualErrorInfo = createManualPathModal.thirdStageErrorInfo.get(0).getText();
+      String actualErrorInfo = createManualPathModal.thirdStageErrorTypography.get(0).getText();
       Color actualErrorInfoColor = Color
-          .fromString(createManualPathModal.thirdStageErrorInfo.get(0).getCssValue("color"));
-      String expectedErrorInfo = "Cannot be blank.";
-      String expectedColor = "#f5222d";
+          .fromString(createManualPathModal.thirdStageErrorTypography.get(0).getCssValue("color"));
+      String expectedErrorInfo = "Cannot be blank";
+      String expectedTextColor = "#ff4d4f";
       String actualErrorDetail = createManualPathModal.thirdStageErrorDetail.getText();
       String expectedErrorDetail = "You cannot select some schedules because they have been associated with other manual paths. Please edit or remove other paths in order to solve this issue.";
       Boolean actualScheduleButtonAvailability = createManualPathModal.departureScheduleFirst
           .isEnabled();
 
       assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
-      assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedColor));
+      assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedTextColor));
       assertThat("Error detail is correct", actualErrorDetail, equalTo(expectedErrorDetail));
       assertThat("Schedule button is disabled", actualScheduleButtonAvailability, equalTo(false));
     }
@@ -417,40 +446,47 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
   public void removeTransitHubInManualPathCreation(String transitHubInfo) {
     if ("first".equals(transitHubInfo)) {
-      createManualPathModal.removeFirstTransitHub.click();
+      createManualPathModal.removeTransitHubs.get(0).click();
     }
     if ("second".equals(transitHubInfo)) {
-      createManualPathModal.removeSecondTransitHub.click();
+      createManualPathModal.removeTransitHubs.get(1).click();
     }
     if ("third".equals(transitHubInfo)) {
-      createManualPathModal.removeThirdTransitHub.click();
+      createManualPathModal.removeTransitHubs.get(2).click();
     }
     if ("all".equals(transitHubInfo)) {
-      createManualPathModal.removeThirdTransitHub.click();
-      createManualPathModal.removeSecondTransitHub.click();
-      createManualPathModal.removeFirstTransitHub.click();
+      createManualPathModal.removeTransitHubs.get(2).click();
+      createManualPathModal.removeTransitHubs.get(1).click();
+      createManualPathModal.removeTransitHubs.get(0).click();
     }
   }
 
   public void updateTransitHubInManualPathCreation(String transitHubInfo,
       String resolvedNewTransitHub) {
-    if ("first".equals(transitHubInfo)) {
-      createManualPathModal.firstTransitHubFilter.selectValue(resolvedNewTransitHub);
-    }
-    if ("second".equals(transitHubInfo)) {
-      createManualPathModal.secondTransitHubFilter.selectValue(resolvedNewTransitHub);
-    }
-    if ("third".equals(transitHubInfo)) {
-      createManualPathModal.thirdTransitHubFilter.selectValue(resolvedNewTransitHub);
+    switch (transitHubInfo) {
+      case "first":
+        createManualPathModal.firstTransitHubFilter.click();
+        createManualPathModal.firstTransitHubInput.sendKeysAndEnterNoXpath(resolvedNewTransitHub);
+        break;
+      case "second":
+        createManualPathModal.secondTransitHubFilter.click();
+        createManualPathModal.secondTransitHubInput.sendKeysAndEnterNoXpath(resolvedNewTransitHub);
+        break;
+      case "third":
+        createManualPathModal.thirdTransitHubFilter.click();
+        createManualPathModal.thirdTransitHubInput.sendKeysAndEnterNoXpath(resolvedNewTransitHub);
+        break;
     }
   }
 
   public void createDefaultPath(String originHubName, String destinationHubName) {
     if (!"empty".equals(originHubName)) {
-      createDefaultPathModal.originHubFilter.selectValue(originHubName);
+      createDefaultPathModal.originHubFilter.click();
+      sendKeysAndEnter("//input[@id='originHub']", originHubName);
     }
     if (!"empty".equals(destinationHubName)) {
-      createDefaultPathModal.destinationHubFilter.selectValue(destinationHubName);
+      createDefaultPathModal.destinationHubFilter.click();
+      sendKeysAndEnter("//input[@id='destinationHub']", destinationHubName);
     }
     createDefaultPathModal.generateButton.click();
   }
@@ -487,8 +523,8 @@ public class PathManagementPage extends OperatorV2SimplePage {
     String actualModalTitle = editManualPathModal.title.getText();
     String expectedModalTitle = "Edit Path (1/2)";
     assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
-    for (int i = 0; i < resolvedTransitHubs.size(); i++) {
-      editManualPathModal.selectTransitHub(i, resolvedTransitHubs.get(i));
+    for (String resolvedTransitHub : resolvedTransitHubs) {
+      sendKeysAndEnter("//div[span[.='Add Transit Hub']]//input", resolvedTransitHub);
     }
     pause1s();
   }
@@ -551,14 +587,17 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[2]//td[2]")
     public PageElement secondPathDepartureDaysOfWeek;
 
-    @FindBy(xpath = "//p[@class='ant-empty-description']")
+    @FindBy(xpath = "//div[@class='ant-empty-description']")
     public TextBox emptyDescription;
   }
 
   public static class CreateManualPathModal extends AntModal {
 
-    @FindBy(xpath = "//div[contains(@class,'ant-form-explain')]")
-    public List<PageElement> thirdStageErrorInfo;
+    @FindBy(xpath = "//div//span[@class='ant-typography ant-typography-danger']")
+    public List<PageElement> thirdStageErrorTypography;
+
+    @FindBy(xpath = "//div[@role='alert']")
+    public List<PageElement> thirdStageErrorAlert;
 
     @FindBy(className = "ant-alert-info")
     public PageElement thirdStageErrorDetail;
@@ -566,23 +605,35 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-title")
     public TextBox modalTitle;
 
-    @FindBy(id = "originHub")
-    public AntSelect originHubFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-col ant-col')][.//*[.='Origin Hub']]//div[contains(@class,'ant-select ant-select')]")
+    public PageElement originHubFilter;
 
-    @FindBy(id = "destinationHub")
-    public AntSelect destinationHubFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-col ant-col')][.//*[.='Destination Hub']]//div[contains(@class,'ant-select ant-select')]")
+    public PageElement destinationHubFilter;
 
-    @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[1]")
-    public AntSelect firstTransitHubFilter;
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')])[1]")
+    public PageElement firstTransitHubFilter;
 
-    @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[2]")
-    public AntSelect secondTransitHubFilter;
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')]//input)[1]")
+    public PageElement firstTransitHubInput;
 
-    @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[3]")
-    public AntSelect thirdTransitHubFilter;
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')])[2]")
+    public PageElement secondTransitHubFilter;
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')]//input)[2]")
+    public PageElement secondTransitHubInput;
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')])[3]")
+    public PageElement thirdTransitHubFilter;
+
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')]//input)[3]")
+    public PageElement thirdTransitHubInput;
 
     @FindBy(xpath = "//div[contains(text(),'validating')]")
     public PageElement validatingInfo;
+
+    @FindBy(xpath = "//span[@aria-label='minus-circle']")
+    public List<PageElement> removeTransitHubs;
 
     @FindBy(xpath = "(//i[@class='anticon anticon-minus-circle'])[1]")
     public PageElement removeFirstTransitHub;
@@ -662,11 +713,11 @@ public class PathManagementPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(id = "originHub")
-    public AntSelect originHubFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-col ant-col')][.//*[.='Origin Hub']]//div[contains(@class,'ant-select ant-select')]")
+    public PageElement originHubFilter;
 
-    @FindBy(id = "destinationHub")
-    public AntSelect destinationHubFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-col ant-col')][.//*[.='Destination Hub']]//div[contains(@class,'ant-select ant-select')]")
+    public PageElement destinationHubFilter;
 
     @FindBy(xpath = ".//button[.='Generate']")
     public Button generateButton;
@@ -677,10 +728,10 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-body")
     public TextBox createDefaultPathInfo;
 
-    @FindBy(xpath = "//div[div[.='Origin Hub']]//div[@class='ant-form-explain']")
+    @FindBy(xpath = ".//div[div[.='Origin Hub']]//div[@role='alert']")
     public TextBox originHubErrorInfo;
 
-    @FindBy(xpath = "//div[div[.='Destination Hub']]//div[@class='ant-form-explain']")
+    @FindBy(xpath = ".//div[div[.='Destination Hub']]//div[@role='alert']")
     public TextBox destinationHubErrorInfo;
   }
 
@@ -732,17 +783,11 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(id = "destinationHub")
     public AntSelect destinationHubFilter;
 
-    @FindBy(xpath = ".//div[div[div[div[.='Add Transit Hub']]]]")
-    public List<AntSelect> transitHubFilters;
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')])[1]")
+    public PageElement firstTransitHubFilter;
 
-    @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[1]")
-    public AntSelect firstTransitHubFilter;
-
-    @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[2]")
-    public AntSelect secondTransitHubFilter;
-
-    @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[3]")
-    public AntSelect thirdTransitHubFilter;
+    @FindBy(xpath = "(.//div[contains(@class,'ant-select-selector')]//input)[1]")
+    public PageElement firstTransitHubInput;
 
     @FindBy(xpath = "//div[contains(text(),'validating')]")
     public PageElement validatingInfo;
@@ -783,15 +828,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
     }
 
     public void selectTransitHub(String resolvedTransitHub) {
-      firstTransitHubFilter.selectValue(resolvedTransitHub);
+      firstTransitHubFilter.click();
+      firstTransitHubInput.sendKeysAndEnterNoXpath(resolvedTransitHub);
     }
 
     public void selectFirstSchedule() {
       departureScheduleFirst.click();
-    }
-
-    public void selectTransitHub(int i, String s) {
-      transitHubFilters.get(i).selectValue(s);
     }
 
     public void selectSecondSchedule() {

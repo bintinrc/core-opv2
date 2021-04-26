@@ -79,10 +79,9 @@ public class PathManagementSteps extends AbstractSteps {
         NvLogger.info("Hub not found, retrying...");
         pathManagementPage.refreshPage();
         operatorMovementTripPageIsLoaded();
-        operatorClickShowHideFilters();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, 5);
   }
 
   @And("Operator clicks load selection button")
@@ -140,13 +139,13 @@ public class PathManagementSteps extends AbstractSteps {
   @When("Operator click {string} hyperlink button")
   public void operatorClickHyperlinkButton(String hyperlinkAction) {
     if ("view".equals(hyperlinkAction)) {
-      pathManagementPage.pathRowNvTable.getRow(0).viewAction.click();
+      pathManagementPage.viewActionFirstRow.click();
     }
     if ("remove".equals(hyperlinkAction)) {
-      pathManagementPage.pathRowNvTable.getRow(0).removeAction.click();
+      pathManagementPage.removeActionFirstRow.click();
     }
     if ("edit".equals(hyperlinkAction)) {
-      pathManagementPage.pathRowNvTable.getRow(0).editAction.click();
+      pathManagementPage.editActionFirstRow.click();
     }
     pause1s();
   }
@@ -448,7 +447,8 @@ public class PathManagementSteps extends AbstractSteps {
 
   @And("Operator verify no new path created")
   public void operatorVerifyNoNewPathCreated() {
-    Integer actualPathRowsSize = pathManagementPage.pathRowNvTable.rows.size();
+    Integer actualPathRowsSize = pathManagementPage
+        .getElementsCount("//tbody//tr[contains(@class,'ant-table-row')]");
     assertThat("Path rows size is one", actualPathRowsSize, equalTo(1));
   }
 
@@ -469,28 +469,28 @@ public class PathManagementSteps extends AbstractSteps {
 
   @Then("Operator verify {string} error info shown on create default path modal")
   public void operatorVerifyErrorInfoShownOnCreateDefaultPathModal(String errorField) {
-    String expectedErrorInfo = "This field is required.";
+    String expectedErrorInfoCustom = "Please enter ";
     if ("both".equals(errorField)) {
       String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo
           .getText();
       String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo
           .getText();
       assertThat("Error origin hub info is equal", actualOriginHubErrorInfo,
-          equalTo(expectedErrorInfo));
+          equalTo(expectedErrorInfoCustom + "Origin Hub"));
       assertThat("Error destination info is equal", actualDestinationHubErrorInfo,
-          equalTo(expectedErrorInfo));
+          equalTo(expectedErrorInfoCustom + "Destination Hub"));
     }
     if ("origin hub".equals(errorField)) {
       String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo
           .getText();
       assertThat("Error origin hub info is equal", actualOriginHubErrorInfo,
-          equalTo(expectedErrorInfo));
+          equalTo(expectedErrorInfoCustom + "Origin Hub"));
     }
     if ("destination hub".equals(errorField)) {
       String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo
           .getText();
       assertThat("Error destination info is equal", actualDestinationHubErrorInfo,
-          equalTo(expectedErrorInfo));
+          equalTo(expectedErrorInfoCustom + "Destination Hub"));
     }
   }
 

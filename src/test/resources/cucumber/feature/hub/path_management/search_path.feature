@@ -30,7 +30,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     And Operator clicks load selection button
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
@@ -60,7 +59,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator clicks load selection button
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
@@ -90,7 +88,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
     And Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name}" in "Origin Hub" field
@@ -121,7 +118,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator clicks load selection button
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
@@ -151,7 +147,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
@@ -182,7 +177,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
@@ -213,7 +207,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
@@ -233,7 +226,6 @@ Feature: Path Management - Search Path
     And API Operator reloads hubs cache
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     And Operator clicks load selection button
     Then Operator verify no results found message shown in path management page
@@ -263,7 +255,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator clicks load selection button
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" in "Origin Hub" filter
     And Operator clicks load selection button
@@ -294,7 +285,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     And Operator clicks load selection button
     And Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name}" in "Origin Hub" field
@@ -325,7 +315,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     And Operator clicks load selection button
     And Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name}" in "Destination Hub" field
@@ -356,7 +345,6 @@ Feature: Path Management - Search Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
     And Operator clicks load selection button
     And Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field

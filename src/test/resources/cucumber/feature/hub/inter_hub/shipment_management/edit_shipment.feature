@@ -292,29 +292,6 @@ Feature: Shipment Management - Edit Shipment
       | status | Completed |
     And Operator edits and verifies that the completed shipment cannot be edited
 
-  @DeleteShipment
-  Scenario: Force Success Shipment by Edit Shipment (uid:791006b2-6bcc-4112-9fa8-032198233e52)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {hub-name}                                                          |
-      | destHubName | {hub-name-2}                                                        |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_CREATED_SHIPMENT_ID} |
-    When Operator force complete shipment from edit shipment
-    And Operator refresh page
-    And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Completed |
-    When Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_FORCE_COMPLETED |
-      | result | Completed                |
-
   @DeleteShipments
   Scenario: Bulk Update Shipment - Update Shipment Type (uid:b7647c11-855d-4d18-bb3c-3b03e6c7cc10)
     Given Operator go to menu Shipper Support -> Blocked Dates
