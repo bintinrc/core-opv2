@@ -26,6 +26,9 @@ public class OrderParcelSizeUpdatePage extends OperatorV2SimplePage {
   @FindBy(name = "container.order-parcel-size-update.find-orders-with-csv")
   public NvIconTextButton findOrdersWithCsv;
 
+  @FindBy(name = "container.order-parcel-size-update.upload-selected")
+  public NvIconTextButton upload;
+
   @FindBy(css = "md-dialog")
   public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
 
@@ -44,6 +47,9 @@ public class OrderParcelSizeUpdatePage extends OperatorV2SimplePage {
     @FindBy(name = "commons.cancel")
     public NvIconTextButton cancel;
 
+    @FindBy(name = "commons.edit")
+    public NvIconTextButton edit;
+
     @FindBy(xpath = ".//a[text()='here']")
     public Button downloadSample;
 
@@ -54,24 +60,16 @@ public class OrderParcelSizeUpdatePage extends OperatorV2SimplePage {
     public void uploadFile(File file) {
       waitUntilVisible();
       chooseButton.setValue(file);
+      edit.waitUntilVisible();
       upload.clickAndWaitUntilDone();
     }
   }
 
-  public void uploadMultiOrderUpdateCsv(List<String> trackingId, List<String> listSize) {
-    findOrdersWithCsv.click();
-    File createOrderUpdateCsv = buildMultiCreateOrderUpdateCsv(trackingId, listSize);
-    findOrdersWithCsvDialog.uploadFile(createOrderUpdateCsv);
-  }
-
   public File buildMultiCreateOrderUpdateCsv(List<String> trackIds, List<String> listSize) {
-
     try {
       File file = TestUtils.createFileOnTempFolder(
           String.format("create-mutli-order-update_%s.csv", generateDateUniqueString()));
-
       PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-
       for (int i = 0; i < trackIds.size(); i++) {
         String orderAsSb = trimToEmpty(trackIds.get(i)) + ',' +
             '"' + trimToEmpty(listSize.get(i)) + '"';
@@ -79,10 +77,7 @@ public class OrderParcelSizeUpdatePage extends OperatorV2SimplePage {
         pw.write(System.lineSeparator());
 
       }
-      pause(2000);
-
       pw.close();
-
       return file;
     } catch (IOException ex) {
       throw new NvTestRuntimeException(ex);

@@ -23,7 +23,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
+import co.nvqa.operator_v2.selenium.elements.md.MdBooleanSwitch;
+import co.nvqa.operator_v2.selenium.elements.md.MdButtonGroup;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -70,9 +71,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   //region BASIC
   @FindBy(css = "div[model='ctrl.data.basic.status']")
-  public ContainerSwitch shipperStatus;
+  public MdButtonGroup shipperStatus;
   @FindBy(css = "md-select[ng-model='ctrl.data.basic.shipperType']")
   public MdSelect shipperType;
+  @FindBy(id = "Shipper Type")
+  public TextBox shipperTypeReadOnly;
   @FindBy(id = "shipper-name")
   public TextBox shipperName;
   @FindBy(id = "Short Name")
@@ -91,6 +94,38 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public MdSelect accountType;
   @FindBy(id = "salesperson")
   public MdSelect salesperson;
+  @FindBy(css = "[model='ctrl.data.basic.allowCod']")
+  public MdBooleanSwitch allowCod;
+  @FindBy(css = "[model='ctrl.data.basic.allowCp']")
+  public MdBooleanSwitch allowCp;
+  @FindBy(css = "[model='ctrl.data.basic.isPrePaid']")
+  public MdBooleanSwitch isPrePaid;
+  @FindBy(css = "[model='ctrl.data.basic.allowStaging']")
+  public MdBooleanSwitch allowStaging;
+  @FindBy(css = "[model='ctrl.data.basic.isMultiParcel']")
+  public MdBooleanSwitch isMultiParcel;
+  @FindBy(css = "[model='ctrl.data.basic.disableReschedule']")
+  public MdBooleanSwitch disableReschedule;
+  @FindBy(css = "[model='ctrl.data.basic.enforceParcelPickupTracking']")
+  public MdBooleanSwitch enforceParcelPickupTracking;
+  @FindBy(css = "[model='ctrl.data.basic.allowEnforceDeliveryVerification']")
+  public MdBooleanSwitch allowEnforceDeliveryVerification;
+  @FindBy(css = "[model='ctrl.data.basic.isPrinterAvailable']")
+  public MdBooleanSwitch isPrinterAvailable;
+  @FindBy(css = "[model='ctrl.data.basic.showCod']")
+  public MdBooleanSwitch showCod;
+  @FindBy(css = "[model='ctrl.data.basic.showParcelDescription']")
+  public MdBooleanSwitch showParcelDescription;
+  @FindBy(name = "trackingType")
+  public MdSelect trackingType;
+  @FindBy(id = "shipper-prefix")
+  public TextBox shipperPrefix;
+  @FindBy(xpath = "//label[@for='shipper-prefix']")
+  public PageElement labelForShipperPrefix;
+  @FindBy(xpath = "//div[text()='Prefix already used']")
+  public PageElement prefixAlreadyUsed;
+  @FindBy(css = "tab-content[aria-hidden='false'] .nv-hint p")
+  public PageElement tabHint;
 
   //endregion
 
@@ -112,7 +147,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.selectedOcServices']")
   public MdSelect ocServices;
   @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.trackingType']")
-  public MdSelect trackingType;
+  public MdSelect marketplaceTrackingType;
   //endregion
 
   //region Billing
@@ -345,7 +380,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     //Service Type
     // TO-DO: Add 'Parcel Delivery', 'Return', 'Marketplace', 'Ninja Pack', 'Bulky', 'International' and 'Marketplace International'.
-     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
+    if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
       clickToggleButtonByLabel("Marketplace", "No");
       clickToggleButtonByLabel("Marketplace International", "No");
     }
@@ -365,47 +400,43 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         /*
           ===== OPERATIONAL SETTINGS =====ctrl.data.basic.serviceType[key]
          */
-    clickToggleButton("ctrl.data.basic.allowCod",
-        convertBooleanToString(orderCreate.getAllowCodService(), "Yes", "No"));
-    clickToggleButton("ctrl.data.basic.allowCp",
-        convertBooleanToString(orderCreate.getAllowCpService(), "Yes", "No"));
-    clickToggleButton("ctrl.data.basic.isPrePaid",
-        convertBooleanToString(orderCreate.getIsPrePaid(), "Yes", "No"));
-    clickToggleButton("ctrl.data.basic.allowStaging",
-        convertBooleanToString(orderCreate.getAllowStagedOrders(), "Yes", "No"));
-    clickToggleButton("ctrl.data.basic.isMultiParcel",
-        convertBooleanToString(orderCreate.getIsMultiParcelShipper(), "Yes", "No"));
+    allowCod.selectValue(orderCreate.getAllowCodService());
+    allowCp.selectValue(orderCreate.getAllowCpService());
+    isPrePaid.selectValue(orderCreate.getIsPrePaid());
+    allowStaging.selectValue(orderCreate.getAllowStagedOrders());
+    isMultiParcel.selectValue(orderCreate.getIsMultiParcelShipper());
 
     DistributionPoint distributionPoint = shipper.getDistributionPoints();
-    clickToggleButton("ctrl.data.basic.disableReschedule",
-        convertBooleanToString(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt(), "Yes",
-            "No"));
+    disableReschedule.selectValue(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt());
+
     //To-Do: Add Enforce Pickup Scanning
 
     //Driver Delivery One-Time Pin
     // To-Do: Add 'No. of Digits in Delivery OTP' and 'No. of Validation Attempts'.
 
     // Tracking ID
-    selectValueFromMdSelect("ctrl.data.basic.trackingType", orderCreate.getTrackingType());
+    trackingType.selectValue(orderCreate.getTrackingType());
 
     if (isCreateForm) {
       retryIfRuntimeExceptionOccurred(() ->
       {
         String generatedPrefix = generateUpperCaseAlphaNumericString(5);
         orderCreate.setPrefix(generatedPrefix);
-        sendKeysById("shipper-prefix", generatedPrefix);
-        click("//label[@for='shipper-prefix']");
-        pause500ms();
-        boolean isPrefixAlreadyUsed = isElementExistWait3Seconds(
-            "//div[text()='Prefix already used']");
-
-        if (isPrefixAlreadyUsed) {
+        shipperPrefix.setValue(generatedPrefix);
+        labelForShipperPrefix.click();
+        if (prefixAlreadyUsed.waitUntilVisible(2)) {
           throw new NvTestRuntimeException("Prefix already used. Regenerate new prefix.");
         }
       });
     }
 
-    // Label Printing: Skipped on fill Basic Settings.
+    // Label Printing:
+    LabelPrinter labelPrinter = shipper.getLabelPrinter();
+    if (labelPrinter != null) {
+      isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
+      showCod.selectValue(labelPrinter.getShowCod());
+      showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
+    }
 
         /*
           ===== PRICING & BILLING =====
@@ -610,7 +641,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       // Services
       ocVersion.selectValue(md.getOrderCreateVersion());
       ocServices.selectValues(md.getOrderCreateServicesAvailable());
-      trackingType.selectValue(md.getOrderCreateTrackingType());
+      marketplaceTrackingType.selectValue(md.getOrderCreateTrackingType());
 
       clickToggleButton("ctrl.data.marketplace.allowCod",
           convertBooleanToString(md.getOrderCreateAllowCodService(), "Yes", "No"));
@@ -931,8 +962,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     LabelPrinter labelPrinter = shipper.getLabelPrinter();
     sendKeysById("Printer IP", labelPrinter.getPrinterIp());
-    clickToggleButton("ctrl.data.basic.isPrinterAvailable",
-        convertBooleanToString(labelPrinter.getShowShipperDetails(), "Yes", "No"));
+    isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
+    showCod.selectValue(labelPrinter.getShowCod());
+    showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
     saveChanges.click();
     waitUntilInvisibilityOfToast("All changes saved successfully");
   }
