@@ -30,7 +30,6 @@ Feature: Path Management - View Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "Default Path" in "Path Type" filter
     And Operator clicks load selection button
     Then Operator verify "default paths" data appear in path table
@@ -62,7 +61,6 @@ Feature: Path Management - View Path
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
-    And Operator clicks show or hide filters
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
     Then Operator verify "manual paths" data appear in path table

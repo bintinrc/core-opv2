@@ -5,6 +5,11 @@ Feature: Order Weight Update V2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  Scenario: Operator Download Sample CSV file for Order Weight Update (uid:66bc4550-7351-4d67-962c-76ea605002d6)
+    Given Operator go to menu New Features -> Order Weight Update
+    When Operator download sample CSV file for 'Find Orders with CSV' on Order Weight Update page
+    Then sample CSV file for 'Find Orders with CSV' on Order Weight Update page is downloaded successfully
+
   Scenario: Operator Update Order Weight by Upload CSV - Single Order (uid:aa549ffc-adeb-4e00-a92d-a22275c68eb1)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

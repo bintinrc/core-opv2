@@ -1230,6 +1230,10 @@ public class OperatorV2SimplePage extends SimplePage {
     if (halfCircleSpinner.isDisplayedFast()) {
       halfCircleSpinner.waitUntilInvisible();
     }
+    // temporary close /aaa error alert if exist
+    if (isElementExist("//button[.='close']")) {
+      pause7s();
+    }
   }
 
   public void waitUntilNewWindowOrTabOpened() {

@@ -461,6 +461,84 @@ Feature: Add To Shipment
     And Operator verify order event on Edit order page using data below:
       | name | ADDED TO SHIPMENT |
 
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Remove Parcel Not In Shipment (uid:412a0205-9875-4b2e-8446-bb529812fe4b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator removes the parcel from the shipment with error alert
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status      | Pending |
+      | ordersCount | 0       |
+    When Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | HUB INBOUND SCAN	 |
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Remove On Hold with Missing Type from Shipment (uid:11d2e21d-8fdb-4526-9a0a-f46657d94e59)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And API Operator refresh created order data
+    And Operator refresh page
+    Given Operator go to menu Order -> Order Tag Management
+    When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
+      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
+      | status          | On Hold                                  |
+      | granular status | On Hold                                  |
+    And Operator searches and selects orders created first row on Add Tags to Order page
+    And Operator tags order with:
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator verifies that the row of the added order is blue highlighted
+    And Operator removes the parcel from the shipment
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status      | Pending |
+      | ordersCount | 1       |
+    When Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | REMOVED FROM SHIPMENT |
+
   @KillBrowser
   Scenario: Kill Browser
     Given no-op

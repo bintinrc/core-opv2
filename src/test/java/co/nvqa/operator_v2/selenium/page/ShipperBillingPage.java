@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ShipperBillingRecord;
-import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
+import co.nvqa.operator_v2.selenium.elements.md.MdButtonGroup;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -26,7 +26,7 @@ public class ShipperBillingPage extends OperatorV2SimplePage {
   private BillingUpdatedDialog billingUpdatedDialog;
 
   @FindBy(css = "div[model='ctrl.transferMode']")
-  public ContainerSwitch transferMode;
+  public MdButtonGroup transferMode;
 
   public ShipperBillingPage(WebDriver webDriver) {
     super(webDriver);

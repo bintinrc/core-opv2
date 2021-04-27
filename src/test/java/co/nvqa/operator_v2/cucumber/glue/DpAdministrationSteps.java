@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
@@ -10,8 +11,10 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Sergey Mishanin
@@ -19,6 +22,8 @@ import java.util.Map;
 @ScenarioScoped
 public class DpAdministrationSteps extends AbstractSteps {
 
+  private static final String NINJA_POINT_URL = StandardTestConstants.API_BASE_URL
+      .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
 
   public DpAdministrationSteps() {
@@ -79,9 +84,29 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorAddNewDpForTheDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
       Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
+    File file = null;
+    if (data.get("dpPhoto") != null) {
+      file = getDpPhoto(getResourcePath(data.get("dpPhoto")));
+    }
     Dp dp = new Dp(data);
-    dpAdminPage.addDistributionPoint(dpPartner.getName(), dp);
+    dpAdminPage.addDistributionPoint(dpPartner.getName(), dp, file);
     put(KEY_DISTRIBUTION_POINT, dp);
+  }
+
+  private String getResourcePath(String status) {
+    String resourcePath;
+    if ("valid".equalsIgnoreCase(status)) {
+      resourcePath = "images/dpPhotoValidSize.png";
+    } else {
+      resourcePath = "images/dpPhotoInvalidSize.png";
+    }
+    return resourcePath;
+  }
+
+  private File getDpPhoto(String resourcePath) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
+    return file;
   }
 
   @Then("^Operator verify new DP params$")
@@ -98,6 +123,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     String currentDpName = dpParams.getName();
     dpParams.fromMap(data);
     dpAdminPage.editDistributionPoint(currentDpName, dpParams);
+    put(KEY_DISTRIBUTION_POINT, dpParams);
   }
 
   @When("^Operator get all DP params on DP Administration page$")
@@ -178,5 +204,54 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator verifies the error message for duplicate {string}")
   public void operatorVerifiesTheErrorMessageForDuplicate(String field) {
     dpAdminPage.verifyErrorMessageForDpCreation(field);
+  }
+
+  @Then("Operator verifies the image is {string}")
+  public void operatorVerifiesTheImageIs(String status) {
+    String image = get(KEY_DP_SETTING_DP_IMAGE);
+    dpAdminPage.verifyImageIsPresent(image, status);
+  }
+
+  @When("Operator deletes the dp image and {string}")
+  public void operatorDeletesTheDpImageAnd(String action) {
+    Dp dpParams = get(KEY_DISTRIBUTION_POINT);
+    String currentDpName = dpParams.getName();
+    dpAdminPage.deleteDpImageAndSaveSettings(currentDpName, action);
+  }
+
+  @When("Operator edits the dp {string} image and save settings")
+  public void operatorEditsTheDpImageAndSaveSettings(String status) {
+    Dp dpParams = get(KEY_DISTRIBUTION_POINT);
+    String currentDpName = dpParams.getName();
+    File file = getDpPhoto(getResourcePath(status));
+    dpAdminPage.editDpImageAndSaveSettings(currentDpName, file, status);
+  }
+
+  @When("Operator Reset password {string}")
+  public void operatorResetPassword(String status) {
+    DpUser dpUser = get(KEY_DP_USER);
+    String username = dpUser.getClientId();
+    String password = "password";
+    dpUser.setClientSecret(password);
+    dpAdminPage.resetUserPassword(username, password, status);
+    put(KEY_DP_USER, dpUser);
+  }
+
+  @Given("Open Ninja Point V3 Web Page")
+  public void openNinjaPointVWebPage() {
+    getWebDriver().get(NINJA_POINT_URL);
+  }
+
+  @When("User Login with username and new password")
+  public void userLoginWithUsernameAndNewPassword() {
+    DpUser dpUser = get(KEY_DP_USER);
+    String username = dpUser.getClientId();
+    String password = dpUser.getClientSecret();
+    dpAdminPage.loginNinjaPoint(username, password);
+  }
+
+  @Then("Ninja Point V3 Welcome Page displayed")
+  public void ninjaPointVWelcomePageDisplayed() {
+    dpAdminPage.welcomePageDisplayed();
   }
 }

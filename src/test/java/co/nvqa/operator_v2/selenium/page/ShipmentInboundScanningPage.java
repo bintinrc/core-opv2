@@ -116,7 +116,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   }
 
   public String grabXpathButton(String label) {
-    return "//button[span[text()='" + label + "']]";
+    return "//md-radio-button[@aria-label='" + label
+        + "']//div[@class='md-container md-ink-ripple']";
   }
 
   public List<String> grabSessionIdNotChangedScan() {

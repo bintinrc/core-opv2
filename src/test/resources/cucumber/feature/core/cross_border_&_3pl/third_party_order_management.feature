@@ -107,7 +107,8 @@ Feature: Third Party Order Management
       | granularStatus | COMPLETED                                  |
 
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - Transferred to 3PL & Completed (uid:62fd5735-c980-4043-b8d8-b0c099259218)
-    Given API Shipper create V4 order using data below:
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management
@@ -132,6 +133,12 @@ Feature: Third Party Order Management
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | status         | COMPLETED                                  |
       | granularStatus | COMPLETED                                  |
+
+  Scenario: Operator Download and Verify Third Party Shipper Orders CSV File (uid:e7286159-6709-400a-8795-d5f155f34588)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    And Operator download CSV file on Third Party Order Management page
+    Then 3pl-orders CSV file is downloaded successfully
 
   @KillBrowser
   Scenario: Kill Browser

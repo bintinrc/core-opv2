@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -112,6 +113,13 @@ public class PageElement extends SimplePage {
 
   public void sendKeys(Object value) {
     sendKeys(String.valueOf(value));
+  }
+
+  public void sendKeysAndEnterNoXpath(CharSequence... keysToSend) {
+    WebElement we = this.webElement;
+    sendKeys(we, keysToSend);
+    we.sendKeys(Keys.RETURN);
+    pause300ms();
   }
 
   public void clearAndSendKeys(CharSequence keysToSend) {

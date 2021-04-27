@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Utilities @LatLongCleanup
+@Deprecated
 Feature: Lat/Long Cleanup
 
   @LaunchBrowser @ShouldAlwaysRun
