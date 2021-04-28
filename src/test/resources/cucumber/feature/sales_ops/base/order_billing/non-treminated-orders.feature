@@ -103,7 +103,7 @@ Feature: Order Billing
     And Operator verifies the order with status 'Completed' is in dwh_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     And Operator go to menu Shipper Support -> Order Billing
-    When Operator generates success billings using data below:SDF_YYYY_MM_DD_HH_MM_SS
+    When Operator generates success billings using data below
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
       | shipper      | {shipper-sop-v4-legacy-id}                          |
