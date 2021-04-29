@@ -273,6 +273,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.clickEndShipmentInbound();
   }
 
+  @When("Operator close error shipment dialog on Shipment Inbound Scanning page")
+  public void operatorCloseErrorShipmentDialogOnShipmentInboundScanningPage() {
+    shipmentScanningPage.clickCancelInMdDialog();
+  }
+
   @Then("^Operator verify the trip Details is correct on shipment inbound scanning page using data below:$")
   public void operatorVerifyTheTripDetailsIsCorrectOnShipmentInboundScanningPageUsingDataBelow(
       Map<String, String> data) {

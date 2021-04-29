@@ -2276,6 +2276,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify small message "Destination reached. Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in Shipment Inbound Box
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "Shipment not listed. Expected drop-off hub: {KEY_LIST_OF_CREATED_HUBS[2].name}."
+    When Operator close error shipment dialog on Shipment Inbound Scanning page
     And Operator enter shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" in remove shipment
     Then Operator verifies toast with message "Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator clicks end inbound button
@@ -2292,10 +2293,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | DEL_FROM_HUB_INBOUND               |
       | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | userId | automation@ninjavan.co             |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
