@@ -388,6 +388,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       clickToggleButtonByLabel("Corporate", "No");
       clickToggleButtonByLabel("Corporate Return", "No");
       clickToggleButtonByLabel("Corporate Manual AWB", "No");
+      clickToggleButtonByLabel("Corporate Document", "No");
     }
     clickToggleButtonByLabel("Corporate Return",
         convertBooleanToString(orderCreate.getIsCorporateReturn(), "Yes", "No"));
