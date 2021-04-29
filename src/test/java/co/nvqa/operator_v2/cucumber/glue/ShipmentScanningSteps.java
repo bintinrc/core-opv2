@@ -398,7 +398,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
   @Then("Operator verifies shipment with trip with data below:")
   public void operatorVerifiesShipmentWithTripWithData(Map<String, String> data) {
     final Map<String, String> finalData = resolveKeyValues(data);
-    shipmentScanningPage.verifyShipmentWithTripData(finalData);
+    shipmentScanningPage.verifyShipmentWithTripData(finalData, "shipments to go with trip");
+  }
+
+  @Then("Operator verifies shipment to unload with data below:")
+  public void operatorVerifiesShipmentToUnloadWithData(Map<String, String> data) {
+    final Map<String, String> finalData = resolveKeyValues(data);
+    shipmentScanningPage.verifyShipmentWithTripData(finalData, "shipments to unload");
   }
 
   @Then("Operator verifies created shipments data in shipment to go with trip with data below:")
