@@ -273,6 +273,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.clickEndShipmentInbound();
   }
 
+  @When("Operator close error shipment dialog on Shipment Inbound Scanning page")
+  public void operatorCloseErrorShipmentDialogOnShipmentInboundScanningPage() {
+    shipmentScanningPage.clickCancelInMdDialog();
+  }
+
   @Then("^Operator verify the trip Details is correct on shipment inbound scanning page using data below:$")
   public void operatorVerifyTheTripDetailsIsCorrectOnShipmentInboundScanningPageUsingDataBelow(
       Map<String, String> data) {
@@ -398,7 +403,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
   @Then("Operator verifies shipment with trip with data below:")
   public void operatorVerifiesShipmentWithTripWithData(Map<String, String> data) {
     final Map<String, String> finalData = resolveKeyValues(data);
-    shipmentScanningPage.verifyShipmentWithTripData(finalData);
+    shipmentScanningPage.verifyShipmentWithTripData(finalData, "shipments to go with trip");
+  }
+
+  @Then("Operator verifies shipment to unload with data below:")
+  public void operatorVerifiesShipmentToUnloadWithData(Map<String, String> data) {
+    final Map<String, String> finalData = resolveKeyValues(data);
+    shipmentScanningPage.verifyShipmentWithTripData(finalData, "shipments to unload");
   }
 
   @Then("Operator verifies created shipments data in shipment to go with trip with data below:")
