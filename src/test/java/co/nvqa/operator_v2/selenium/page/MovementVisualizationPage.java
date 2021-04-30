@@ -107,7 +107,6 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
 
     Collections.sort(apiHubRelation);
     Collections.sort(actualHubRelationStorage);
-    System.out.println(apiHubRelation.equals(actualHubRelationStorage));
     getWebDriver().switchTo().parentFrame();
   }
 

@@ -468,9 +468,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     errorShipment.proceed.click();
   }
 
-  public void verifyShipmentWithTripData(Map<String, String> finalData) {
+  public void verifyShipmentWithTripData(Map<String, String> finalData, String expectedDialogTitle) {
     String shipmentCount = finalData.get("shipmentCount");
-    String dialogTitle = f("shipments to go with trip (%s)", shipmentCount);
+    String dialogTitle = f("%s (%s)", expectedDialogTitle, shipmentCount);
     if (finalData.get("inboundType") != null && "Into Hub".equals(finalData.get("inboundType"))) {
       dialogTitle = f("shipments to unload (%s)", shipmentCount);
     }
@@ -513,7 +513,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         finalData.put("dropOffHub", "-");
         finalData.put("comments", "-");
       }
-      verifyShipmentWithTripData(finalData);
+      verifyShipmentWithTripData(finalData, "shipments to go with trip");
     }
   }
 
