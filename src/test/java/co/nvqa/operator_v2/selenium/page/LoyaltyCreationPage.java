@@ -22,6 +22,10 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
   private static final String CSV_LOYALTY_NAME = "loyalty.csv";
   private static final String CSV_LOYALTY_HEADER = "shipper_id,email,shipper_name,onboarded_date,phone_number,parent_shipper_id";
   public static final String FILE_PATH = String.format("%s/%s", StandardTestConstants.TEMP_DIR, CSV_LOYALTY_NAME);
+  public static final String CSV_FILENAME_PATTERN = "template.csv";
+
+  @FindBy(xpath = "//button[descendant::text()='Download Template']")
+  public Button downloadTemplateButton;
 
   @FindBy(xpath = "//button[@for='csv_uploads']")
   public Button uploadButton;
@@ -139,5 +143,10 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
       waitUntilVisibilityOfElementLocated(page.uploadButton.getWebElement());
       page.uploadInput.setValue(filePath);
     });
+  }
+
+  public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {
+    verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN),
+        expectedBody);
   }
 }

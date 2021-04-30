@@ -1,4 +1,4 @@
-@MileZero @Loyalty @target
+@MileZero @Loyalty
 Feature: Shipper Billing
 
   @LaunchBrowser @ShouldAlwaysRun

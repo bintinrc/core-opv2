@@ -19,6 +19,11 @@ public class LoyaltyCreationSteps extends AbstractSteps{
     loyaltyCreationPage = new LoyaltyCreationPage(getWebDriver());
   }
 
+  @When("Operator click Download template button for loyalty creation")
+  public void downloadTemplate() {
+    loyaltyCreationPage.inFrame(page -> page.downloadTemplateButton.click());
+  }
+
   @When("Operator create csv file for loyalty creation header only")
   public void createHeaderOnlyLoyaltyCreationCsv() {
     loyaltyCreationPage.createLoyaltyCsvHeaderOnly();
@@ -77,6 +82,12 @@ public class LoyaltyCreationSteps extends AbstractSteps{
   @When("Operator upload csv file for loyalty creation")
   public void uploadLoyaltyCreationCsv() {
     loyaltyCreationPage.uploadLoyaltyShipper();
+  }
+
+  @When("Operator verifies loyalty creation csv template downloaded with data below:")
+  public void verifiesCsvTemplate(List<String> csvData) {
+    String expectedBody = String.join("\n", csvData);
+    loyaltyCreationPage.verifyCsvFileDownloadedSuccessfully(expectedBody);
   }
 
   @When("Operator loyalty creation confirmation")
