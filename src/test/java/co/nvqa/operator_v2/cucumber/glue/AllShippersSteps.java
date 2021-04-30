@@ -105,6 +105,7 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = prepareShipperData(mapOfData);
 
     allShippersPage.createNewShipper(shipper);
+    put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
@@ -290,6 +291,13 @@ public class AllShippersSteps extends AbstractSteps {
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.allShippersCreateEditPage.shipperInformation.waitUntilClickable();
     pause2s();
+  }
+
+  @And("Operator open Edit Shipper Page of created shipper")
+  public void operatorOpenEditShipperOfCreatedShipper() {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    openSpecificShipperEditPage(String.valueOf(shipper.getLegacyId()));
   }
 
   @Then("^Operator open Edit Pricing Profile dialog on Edit Shipper Page$")
