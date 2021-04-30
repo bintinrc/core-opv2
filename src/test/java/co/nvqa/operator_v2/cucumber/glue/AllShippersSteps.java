@@ -105,6 +105,7 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = prepareShipperData(mapOfData);
 
     allShippersPage.createNewShipper(shipper);
+    put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
@@ -290,6 +291,13 @@ public class AllShippersSteps extends AbstractSteps {
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.allShippersCreateEditPage.shipperInformation.waitUntilClickable();
     pause2s();
+  }
+
+  @And("Operator open Edit Shipper Page of created shipper")
+  public void operatorOpenEditShipperOfCreatedShipper() {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    openSpecificShipperEditPage(String.valueOf(shipper.getLegacyId()));
   }
 
   @Then("^Operator open Edit Pricing Profile dialog on Edit Shipper Page$")
@@ -1330,6 +1338,7 @@ public class AllShippersSteps extends AbstractSteps {
           page.addSubShipper.click();
           fillNewSubShipperData(0, resolveKeyValues(mapOfData));
           page.createSubShipperAccount.click();
+          pause1s();
         }
     );
   }
@@ -1343,7 +1352,8 @@ public class AllShippersSteps extends AbstractSteps {
     }
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.branchId.get(index).setValue(id);
-    putInList(KEY_SUB_SHIPPER_SELLER_IDS, id);
+    putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, id);
+    put(KEY_SUB_SHIPPER_SELLER_ID, id);
 
     String fixedName = data.get("name");
     if ("generated".equalsIgnoreCase(fixedName)) {
@@ -1351,7 +1361,7 @@ public class AllShippersSteps extends AbstractSteps {
     }
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.name.get(index).setValue(fixedName);
-    putInList(KEY_SUB_SHIPPER_SELLER_NAMES, fixedName);
+    putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, fixedName);
     put(KEY_SHIPPER_NAME, fixedName);
 
     String fixedEmail = data.get("email");
@@ -1381,7 +1391,7 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("Operator verifies corporate sub shipper is created")
   @When("Operator verifies corporate sub shippers are created")
   public void qaVerifySubShipperWithSellerIdIsDisplayedOnBBManagementPage() {
-    List<String> expectedSellerIds = get(KEY_SUB_SHIPPER_SELLER_IDS);
+    List<String> expectedSellerIds = get(KEY_LIST_SUB_SHIPPER_SELLER_ID);
 
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page ->
         expectedSellerIds.forEach(expectedSellerId ->
@@ -1413,7 +1423,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator click edit action button for newly created corporate sub shipper")
   public void operatorClickEditActionButtonForNewSubShipperOnBBManagementPage() {
-    List<String> expectedSellerIds = get(KEY_SUB_SHIPPER_SELLER_IDS);
+    List<String> expectedSellerIds = get(KEY_LIST_SUB_SHIPPER_SELLER_ID);
     String branchId = expectedSellerIds.get(0);
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       List<String> branchIds = page.subShipperTable.readColumn("id");

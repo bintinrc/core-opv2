@@ -56,6 +56,23 @@ Feature: B2B Management
       | hiptest-uid                              |
       | uid:ce0bf69e-92dd-4e72-9012-9a449b4b4d8f |
 
+  Scenario Outline: Create sub shipper with existing branch ID on shipper settings (<hiptest-uid>)
+    When Operator go to tab corporate sub shipper
+    And Operator create corporate sub shipper with data below:
+      | branchId | generated |
+      | name     | generated |
+      | email    | generated |
+    Then Operator verifies corporate sub shipper is created
+    And Operator create corporate sub shipper with data below:
+      | branchId | {KEY_SUB_SHIPPER_SELLER_ID} |
+      | name     | generated                   |
+      | email    | generated                   |
+    Then Operator verifies error message "Error creating this sub-shipper. Please try again." is displayed on b2b management page
+
+    Examples:
+      | hiptest-uid                              |
+      | uid:8cacbec8-868f-4298-8d02-d90b0453829e |
+
   @ShouldAlwaysRun
   Scenario Outline: Create sub shipper on shipper settings (<hiptest-uid>)
     When Operator go to tab corporate sub shipper
