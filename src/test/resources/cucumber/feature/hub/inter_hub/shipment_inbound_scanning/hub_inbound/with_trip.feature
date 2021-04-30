@@ -2296,7 +2296,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | DEL_FROM_HUB_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | userId | qa@ninjavan.co                     |
+      | userId | automation@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
