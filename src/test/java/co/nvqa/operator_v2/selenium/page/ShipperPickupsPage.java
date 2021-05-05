@@ -653,7 +653,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     @FindBy(name = "fromDateField")
     public MdDatepicker fromDateField;
 
-    @FindBy(name = "rsvnDate")
+    @FindBy(xpath = "//*[@main-title='Reservation Date']//md-datepicker[2]")
     public MdDatepicker toDateField;
 
     @FindBy(xpath = "//nv-filter-box[@main-title='Reservation Types']")
