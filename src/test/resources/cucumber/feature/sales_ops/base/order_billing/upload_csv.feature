@@ -27,7 +27,8 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                          |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-    Then Operator opens Gmail and checks received email
+      And Operator waits for 40 seconds
+      Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -44,6 +45,7 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                          |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -60,6 +62,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455               |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -83,6 +86,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                                |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -99,6 +103,7 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
 
@@ -110,6 +115,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                     |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -132,6 +138,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                                                            |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 40 seconds
     Then Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
@@ -150,6 +157,7 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                                            |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
 
@@ -161,6 +169,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                 |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -177,6 +186,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                                                                 |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -192,6 +202,7 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                                                 |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -202,6 +213,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                      |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -296,6 +308,7 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},{shipper-v4-legacy-id}   |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -311,5 +324,6 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-id-v4-legacy-id}                       |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 

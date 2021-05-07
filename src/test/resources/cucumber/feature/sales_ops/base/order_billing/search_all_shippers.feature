@@ -18,12 +18,13 @@ Feature: Order Billing
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by shipper from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
 
-    @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:59af6bea-ac85-446d-97ba-4d386577f447)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -45,6 +46,7 @@ Feature: Order Billing
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 40 seconds
     Then Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -60,6 +62,7 @@ Feature: Order Billing
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
+    And Operator waits for 40 seconds
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
@@ -75,6 +78,7 @@ Feature: Order Billing
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 40 seconds
     Then Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by script from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
