@@ -56,6 +56,9 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
+  @FindBy(name = "ctrl.marketplaceForm")
+  public SubShippersDefaultSettings subShippersDefaultSettings;
+
   @FindBy(xpath = "//div[text()='Shipper Information']")
   public PageElement shipperInformation;
 
@@ -94,6 +97,18 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public MdSelect accountType;
   @FindBy(id = "salesperson")
   public MdSelect salesperson;
+  @FindBy(xpath = "//md-input-container[./label[.='Marketplace']]/div")
+  public MdBooleanSwitch marketplace;
+  @FindBy(xpath = "//md-input-container[./label[.='Marketplace International']]/div")
+  public MdBooleanSwitch marketplaceInternational;
+  @FindBy(xpath = "//md-input-container[./label[.='Corporate']]/div")
+  public MdBooleanSwitch corporate;
+  @FindBy(xpath = "//md-input-container[./label[.='Corporate Return']]/div")
+  public MdBooleanSwitch corporateReturn;
+  @FindBy(xpath = "//md-input-container[./label[.='Corporate Manual AWB']]/div")
+  public MdBooleanSwitch corporateManualAWB;
+  @FindBy(xpath = "//md-input-container[./label[.='Corporate Document']]/div")
+  public MdBooleanSwitch corporateDocument;
   @FindBy(css = "[model='ctrl.data.basic.allowCod']")
   public MdBooleanSwitch allowCod;
   @FindBy(css = "[model='ctrl.data.basic.allowCp']")
@@ -381,26 +396,26 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     //Service Type
     // TO-DO: Add 'Parcel Delivery', 'Return', 'Marketplace', 'Ninja Pack', 'Bulky', 'International' and 'Marketplace International'.
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
-      clickToggleButtonByLabel("Marketplace", "No");
-      clickToggleButtonByLabel("Marketplace International", "No");
+      marketplace.selectValue("No");
+      marketplaceInternational.selectValue("No");
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
-      clickToggleButtonByLabel("Corporate", "No");
-      clickToggleButtonByLabel("Corporate Return", "No");
-      clickToggleButtonByLabel("Corporate Manual AWB", "No");
-      clickToggleButtonByLabel("Corporate Document", "No");
+      corporate.selectValue("No");
+      corporateReturn.selectValue("No");
+      corporateManualAWB.selectValue("No");
+      corporateDocument.selectValue("No");
     }
-    clickToggleButtonByLabel("Corporate Return",
-        convertBooleanToString(orderCreate.getIsCorporateReturn(), "Yes", "No"));
+    corporate.selectValue(orderCreate.getIsCorporate());
+    corporateReturn.selectValue(orderCreate.getIsCorporateReturn());
+    corporateManualAWB.selectValue(orderCreate.getIsCorporateManualAWB());
 
     if (isCreateForm) {
       selectMultipleValuesFromMdSelectById("container.shippers.service-level",
           orderCreate.getServicesAvailable());
     }
 
-        /*
-          ===== OPERATIONAL SETTINGS =====ctrl.data.basic.serviceType[key]
-         */
+    //===== OPERATIONAL SETTINGS =====
+
     allowCod.selectValue(orderCreate.getAllowCodService());
     allowCp.selectValue(orderCreate.getAllowCpService());
     isPrePaid.selectValue(orderCreate.getIsPrePaid());
@@ -423,7 +438,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       {
         String generatedPrefix = generateUpperCaseAlphaNumericString(5);
         orderCreate.setPrefix(generatedPrefix);
-        shipperPrefix.setValue(generatedPrefix);
+        shipperPrefix.setValue(generatedPrefix + Keys.ENTER);
         labelForShipperPrefix.click();
         if (prefixAlreadyUsed.waitUntilVisible(2)) {
           throw new NvTestRuntimeException("Prefix already used. Regenerate new prefix.");
@@ -456,6 +471,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         sendKeysById("Billing Postcode", shipper.getBillingPostcode());
 
       */
+  }
+
+  public void fillSubShippersDefaults(Shipper shipper) {
+    tabs.selectTab("Sub shippers Default Setting");
+    OrderCreate subShipperDefaults = shipper.getSubShippersDefaults();
+    subShippersDefaultSettings.corporate.selectValue(subShipperDefaults.getIsCorporate());
+    subShippersDefaultSettings.corporateReturn
+        .selectValue(subShipperDefaults.getIsCorporateReturn());
+    subShippersDefaultSettings.corporateManualAWB
+        .selectValue(subShipperDefaults.getIsCorporateManualAWB());
   }
 
   private void fillMoreSettingsForm(Shipper shipper) {
@@ -737,11 +762,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper) {
     waitUntilShipperCreateEditPageIsLoaded();
-    String actualShipperStatus = getToggleButtonValue("ctrl.data.basic.status");
+    String actualShipperStatus = shipperStatus.getValue();
     String actualShipperType;
 
-    if (StringUtils.equalsIgnoreCase(shipper.getType(), "Marketplace")) {
-      actualShipperType = getInputValueById("Shipper Type");
+    if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Marketplace", "Corporate HQ")) {
+      actualShipperType = shipperTypeReadOnly.getValue();
     } else {
       actualShipperType = getMdSelectValueTrimmed("ctrl.data.basic.shipperType");
     }
@@ -1674,4 +1699,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     assertFalse(isEnabledMdDatepickerById(LOCATOR_START_DATE));
   }
 
+  public static class SubShippersDefaultSettings extends PageElement {
+
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate']]/div")
+    public MdBooleanSwitch corporate;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Return']]/div")
+    public MdBooleanSwitch corporateReturn;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Manual AWB']]/div")
+    public MdBooleanSwitch corporateManualAWB;
+
+    public SubShippersDefaultSettings(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
 }

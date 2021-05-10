@@ -107,6 +107,9 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.createNewShipper(shipper);
     put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
+    if (shipper.getOrderCreate() != null) {
+      put(KEY_CREATED_SHIPPER_PREFIX, shipper.getOrderCreate().getPrefix());
+    }
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
 
@@ -692,6 +695,14 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperReturnsSettings(shipper);
   }
 
+  @When("^Operator update Sub Shippers Default settings:$")
+  public void operatorUpdateSubShippersDefaultSettings(Map<String, String> data) {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    setSubShipperDefaults(shipper, resolveKeyValues(data));
+    allShippersPage.allShippersCreateEditPage.fillSubShippersDefaults(shipper);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+  }
+
   @Then("^Operator verify Shipper's Returns settings is updated successfully$")
   public void operatorVerifyShipperReturnsSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -934,7 +945,11 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator edits shipper {string}")
   public void operatorEditsShipper(String shipperLegacyId) {
-    Shipper shipper = new Shipper();
+    shipperLegacyId = resolveValue(shipperLegacyId);
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    if (shipper == null) {
+      shipper = new Shipper();
+    }
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
@@ -1123,8 +1138,7 @@ public class AllShippersSteps extends AbstractSteps {
     if (servicesTemp == null || servicesTemp.isEmpty()) {
       listOfAvailableService = new ArrayList<>();
     } else {
-      listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim)
-          .collect(Collectors.toList());
+      listOfAvailableService = splitAndNormalize(servicesTemp);
     }
 
     OrderCreate orderCreate = new OrderCreate();
@@ -1136,6 +1150,9 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setIsPrePaid(isPrepaid);
     orderCreate.setAllowStagedOrders(isAllowStagedOrders);
     orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
+    orderCreate.setIsCorporate(Boolean.parseBoolean(mapOfData.get("isCorporate")));
+    orderCreate
+        .setIsCorporateManualAWB(Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
     orderCreate.setIsCorporateReturn(isCorporateReturn);
     shipper.setOrderCreate(orderCreate);
 
@@ -1164,6 +1181,14 @@ public class AllShippersSteps extends AbstractSteps {
       }
       shipper.setLabelPrinter(labelPrinter);
     }
+  }
+
+  private void setSubShipperDefaults(Shipper shipper, Map<String, String> mapOfData) {
+    OrderCreate subShipperDefaults = new OrderCreate();
+    subShipperDefaults.setIsCorporate(Boolean.parseBoolean(mapOfData.get("isCorporate")));
+    subShipperDefaults
+        .setIsCorporateManualAWB(Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
+    shipper.setSubShippersDefaults(subShipperDefaults);
   }
 
   private void setLiaisonDetails(String dateUniqueString, Shipper shipper) {
@@ -1217,7 +1242,7 @@ public class AllShippersSteps extends AbstractSteps {
   @When("Operator verifies toast {string} displayed on edit shipper page")
   public void verifiesToast(String msg) {
     String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
-    assertTrue(actualMsg.contains(msg));
+    assertThat("Error message", actualMsg, Matchers.containsString(resolveValue(msg)));
   }
 
   @And("Operator verifies the pricing profile and shipper discount details are correct")

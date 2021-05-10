@@ -66,6 +66,286 @@ Feature: Corporate Shipper
       | 12345    | generated | generated |
     Then Operator verifies error message "Branch ID already exists." is displayed on b2b management page
 
+  @DeleteShipper
+  Scenario: Create corporate shipper with corporate service type toggled on (uid:c3126c0e-bbcb-4df7-98b2-5ffcad4a1d95)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporate                  | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper contains "Corporate"
+
+  @DeleteShipper
+  Scenario: Create corporate shipper with corporate service type toggled off (uid:42b7a12d-74ed-4bf9-98be-10b06934ce53)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporate                  | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper not contains "Corporate"
+
+  Scenario: Create non corporate shipper with corporate service type toggled on (uid:42f93a75-1dbc-4cbc-a134-605acd956fca)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator fail create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporate                  | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    Then Operator verifies toast "Only corporate shippers are allowed to have Corporate as their service type" displayed on edit shipper page
+
+  @DeleteShipper
+  Scenario: Create non corporate shipper with corporate service type toggled on (uid:42f93a75-1dbc-4cbc-a134-605acd956fca)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporate                  | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper contains "Corporate"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator set service type "Corporate" to "No" on edit shipper page
+    And DB Shipper verifies available service types for created shipper not contains "Corporate"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator set service type "Corporate" to "Yes" on edit shipper page
+    And DB Shipper verifies available service types for created shipper contains "Corporate"
+
+  Scenario: Toggled on corporate service type for the existing non-corporate shipper (uid:8a8b1b97-598f-42de-bdc2-024aa6f12ff4)
+    When Operator edits shipper "{shipper-v4-prepaid-legacy-id}"
+    And Operator set service type "Corporate" to "Yes" on edit shipper page
+    Then Operator verifies toast "Only corporate shippers are allowed to have Corporate as their service type" displayed on edit shipper page
+    And DB Shipper verifies available service types for shipper id "{shipper-v4-prepaid-id}" not contains "Corporate"
+
+  @DeleteShipper
+  Scenario: Create corporate shipper with corporate awb service type toggled on (uid:49d05bf1-90ba-403d-8852-ceaa734b8441)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper contains "Corporate AWB"
+
+  @DeleteShipper
+  Scenario: Create corporate shipper with corporate awb service type toggled off (uid:dbcc7943-449f-4d7f-b92b-c37b6cfc820b)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper not contains "Corporate AWB"
+
+  Scenario: Toggled on corporate awb service type for existing non corporate shipper (uid:f6cefc84-d729-45f2-8e8e-db58b0a8afc5)
+    When Operator edits shipper "{shipper-v4-prepaid-legacy-id}"
+    And Operator set service type "Corporate Manual AWB" to "Yes" on edit shipper page
+    Then Operator verifies toast "Only corporate shippers are allowed to have Corporate Manual AWB as their service type" displayed on edit shipper page
+    And DB Shipper verifies available service types for shipper id "{shipper-v4-prepaid-id}" not contains "Corporate AWB"
+
+  Scenario: Create non corporate shipper with corporate awb service type toggled on (uid:38f9ce4b-c66a-4424-a8af-a028fc567a33)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator fail create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    Then Operator verifies toast "Only corporate shippers are allowed to have Corporate Manual AWB as their service type" displayed on edit shipper page
+
+  @DeleteShipper
+  Scenario: Modify corporate awb service type for corporate shipper (uid:c26df37e-110d-44c4-a1cb-6d755092493e)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper contains "Corporate AWB"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator set service type "Corporate Manual AWB" to "No" on edit shipper page
+    And DB Shipper verifies available service types for created shipper not contains "Corporate AWB"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator set service type "Corporate Manual AWB" to "Yes" on edit shipper page
+    And DB Shipper verifies available service types for created shipper contains "Corporate AWB"
+
+  @DeleteShipper @DeleteCorporateSubShipper
+  Scenario: Create subshippers with corporate awb toggle off in subshipper default settings (uid:c502aae4-1f29-4cc2-a2da-70735368ac10)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper contains "Corporate AWB"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator update Sub Shippers Default settings:
+      | isCorporateManualAWB | false |
+    And DB Shipper verifies available marketplace service types for created shipper not contains "Corporate AWB"
+    When Operator go to tab corporate sub shipper
+    And Operator create corporate sub shipper with data below:
+      | branchId | generated |
+      | name     | generated |
+      | email    | generated |
+    Then Operator verifies corporate sub shipper is created
+    And API Operator fetch id of the created shipper
+    When API Operator get b2b sub shippers for master shipper id "{KEY_CREATED_SHIPPER.id}"
+    Then DB Shipper verifies available service types for shipper id "{KEY_LIST_OF_B2B_SUB_SHIPPER[1].id}" not contains "Corporate AWB"
+
+  @DeleteShipper @DeleteCorporateSubShipper
+  Scenario: Create subshippers with corporate awb toggle on in subshipper default settings (uid:6f0d4090-7f61-42b8-8a06-b452ee9875dd)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper not contains "Corporate AWB"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator update Sub Shippers Default settings:
+      | isCorporateManualAWB | true |
+    And DB Shipper verifies available marketplace service types for created shipper contains "Corporate AWB"
+    When Operator go to tab corporate sub shipper
+    And Operator create corporate sub shipper with data below:
+      | branchId | generated |
+      | name     | generated |
+      | email    | generated |
+    Then Operator verifies corporate sub shipper is created
+    And API Operator fetch id of the created shipper
+    When API Operator get b2b sub shippers for master shipper id "{KEY_CREATED_SHIPPER.id}"
+    Then DB Shipper verifies available service types for shipper id "{KEY_LIST_OF_B2B_SUB_SHIPPER[1].id}" contains "Corporate AWB"
+
+  @DeleteShipper
+  Scenario: Create master shipper (uid:3867e373-e888-4d3b-a459-18e7e351cf79)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporate                  | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
