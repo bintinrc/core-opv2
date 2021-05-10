@@ -25,7 +25,6 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-    And Operator waits for 40 seconds
     Then Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
