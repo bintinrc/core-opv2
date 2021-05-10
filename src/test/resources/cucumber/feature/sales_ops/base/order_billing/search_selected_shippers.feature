@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @nadeera
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -10,7 +10,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-@DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -23,8 +23,8 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-  And Operator waits for 40 seconds
-  Then Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
+    And Operator waits for 40 seconds
+    Then Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
