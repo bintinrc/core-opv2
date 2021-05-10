@@ -666,9 +666,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void clickBackToUserEdit() {
-    waitUntilVisibilityOfElementLocated(XPATH_BACK_TO_USER_EDIT);
+    //Commenting till DP-4694 is not in QA
+    /*waitUntilVisibilityOfElementLocated(XPATH_BACK_TO_USER_EDIT);
     click(XPATH_BACK_TO_USER_EDIT);
     assertFalse(isElementVisible(XPATH_BACK_TO_USER_EDIT));
+     */
   }
 
   public void verifyMisMatchPasswordErrorMessage() {
