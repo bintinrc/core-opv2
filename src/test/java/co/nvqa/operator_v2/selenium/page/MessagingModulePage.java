@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.model.SmsHistoryEntry;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
@@ -113,7 +114,7 @@ public class MessagingModulePage extends OperatorV2SimplePage {
   public void verifyThatPreviewUsingShortenedUrl() {
     pause10s();
     String actualValue = composeMessageCard.preview.getValue();
-    String expectedValue = "http://qa.nnj.vn";
+    String expectedValue = StandardTestConstants.NV_URL_SHORTENER_PREFIX;
     assertThat("The produced sms using ninja url shortener is failed", actualValue,
         Matchers.containsString(expectedValue));
   }
