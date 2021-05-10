@@ -154,8 +154,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
     assertEquals("Industry", shipper.getIndustryName(), actualShipper.getIndustryName());
     assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualShipper.getLiaisonEmail());
     assertEquals("Contact", shipper.getContact(), actualShipper.getContact());
-    assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0],
-        actualShipper.getSalesPerson());
+//    assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0],
+//        actualShipper.getSalesPerson());
     assertEquals("Expected Status = Inactive", shipper.getActive(), actualShipper.getActive());
 
     openEditShipperPage();
