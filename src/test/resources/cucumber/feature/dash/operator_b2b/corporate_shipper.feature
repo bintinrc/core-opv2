@@ -1,7 +1,7 @@
 @MileZero @B2B
 Feature: Corporate Shipper
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug
   Scenario: Login to Operator Portal V2 go to menu all shipper
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -65,6 +65,76 @@ Feature: Corporate Shipper
       | 12345    | generated | generated |
       | 12345    | generated | generated |
     Then Operator verifies error message "Branch ID already exists." is displayed on b2b management page
+
+  @DeleteCorporateSubShipper
+  Scenario: Create bulk subshippers (uid:eb4d7527-cd0a-4683-a714-e5f14500f9d4)
+    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    And API Operator delete corporate sub shippers
+    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    When Operator go to "Corporate sub shippers" tab on Edit Shipper page
+    And Operator bulk create corporate sub shippers with data below:
+      | branchId  | name      | email     |
+      | generated | generated | generated |
+      | generated | generated | generated |
+    And API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Then Operator verifies corporate sub shippers are created
+
+  @DeleteCorporateSubShipper
+  Scenario: Create bulk subshippers with error file upload (uid:260bf624-3938-4d3c-adc4-d1bfe9309837)
+    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    And API Operator delete corporate sub shippers
+    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    When Operator go to "Corporate sub shippers" tab on Edit Shipper page
+    And Operator upload incorrect bulk create corporate sub shippers file
+    Then Operator verifies file upload error messages are displayed on b2b management page:
+      | 1. Headers in the CSV file should be "Branch ID (External Ref)", "Name", "Email", appearing in that order in the file. |
+      | 2. Only Branch ID (External Ref), Name and Email should be provided as data; there may be too much or too little data. |
+
+  @DeleteCorporateSubShipper
+  Scenario: Create bulk subshippers with existing branch ID (uid:4dabc93b-59f2-4e8f-be26-d6ca987d7f9c)
+    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    And API Operator delete corporate sub shippers
+    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    When Operator go to "Corporate sub shippers" tab on Edit Shipper page
+    And Operator create corporate sub shippers with data below:
+      | branchId  | name      | email     |
+      | generated | generated | generated |
+    Then Operator verifies corporate sub shippers are created
+    And Operator bulk create corporate sub shippers with data below:
+      | branchId                    | name      | email     |
+      | {KEY_SUB_SHIPPER_SELLER_ID} | generated | generated |
+      | generated                   | generated | generated |
+    And API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Then Operator verifies file upload warning messages are displayed on b2b management page:
+      | We've only created 1 out of the 2 sub-shipper(s) submitted. There seems to be problems with some shipper data in the file. Please download the error log, correct the data and upload the CSV file to create the remaining sub-shippers. |
+    When Operator clicks Go Back button on b2b management page
+    Then Before You Go modal is displayed with "We've detected an error log from your last upload. If you choose to navigate away, your email log and any uncreated sub-shippers will be discarded." message on b2b management page
+    When Operator clicks Cancel button on Before You Go modal on b2b management page
+    And Operator downloads error log on b2b management page
+    Then bulk shipper creation error log file contains data:
+      | branchId                            | name                                  | email                                  |
+      | {KEY_LIST_SUB_SHIPPER_SELLER_ID[2]} | {KEY_LIST_SUB_SHIPPER_SELLER_NAME[2]} | {KEY_LIST_SUB_SHIPPER_SELLER_EMAIL[2]} |
+
+  @DeleteCorporateSubShipper
+  Scenario: Create bulk subshippers using same email as master shipper (uid:42532079-ef3c-474f-96a1-926a9b6f1f10)
+    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    And API Operator delete corporate sub shippers
+    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    When Operator go to "Corporate sub shippers" tab on Edit Shipper page
+    And Operator bulk create corporate sub shippers with data below:
+      | branchId  | name      | email                               |
+      | generated | generated | {operator-b2b-master-shipper-email} |
+      | generated | generated | generated                           |
+    And API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Then Operator verifies file upload warning messages are displayed on b2b management page:
+      | We've only created 1 out of the 2 sub-shipper(s) submitted. There seems to be problems with some shipper data in the file. Please download the error log, correct the data and upload the CSV file to create the remaining sub-shippers. |
+    When Operator clicks Go Back button on b2b management page
+    Then Before You Go modal is displayed with "We've detected an error log from your last upload. If you choose to navigate away, your email log and any uncreated sub-shippers will be discarded." message on b2b management page
+    When Operator clicks Cancel button on Before You Go modal on b2b management page
+    And Operator downloads error log on b2b management page
+    Then bulk shipper creation error log file contains data:
+      | branchId                            | name                                  | email                                  |
+      | {KEY_LIST_SUB_SHIPPER_SELLER_ID[1]} | {KEY_LIST_SUB_SHIPPER_SELLER_NAME[1]} | {KEY_LIST_SUB_SHIPPER_SELLER_EMAIL[1]} |
 
   @DeleteShipper
   Scenario: Create corporate shipper with corporate service type toggled on (uid:c3126c0e-bbcb-4df7-98b2-5ffcad4a1d95)

@@ -21,9 +21,12 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -31,6 +34,9 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,6 +50,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -107,9 +114,6 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.createNewShipper(shipper);
     put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
-    if (shipper.getOrderCreate() != null) {
-      put(KEY_CREATED_SHIPPER_PREFIX, shipper.getOrderCreate().getPrefix());
-    }
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
 
@@ -1369,32 +1373,41 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private void fillNewSubShipperData(int index, Map<String, String> data) {
-    String random = String.valueOf(System.currentTimeMillis()).substring(5, 11);
-    String id = data.get("branchId");
+    data = resolveKeyValues(data);
+    generateBranchData(data);
 
-    if ("generated".equalsIgnoreCase(id)) {
-      id = random;
-    }
+    String id = data.get("branchId");
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.branchId.get(index).setValue(id);
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, id);
     put(KEY_SUB_SHIPPER_SELLER_ID, id);
 
     String fixedName = data.get("name");
-    if ("generated".equalsIgnoreCase(fixedName)) {
-      fixedName = f("sub shipper %s", random);
-    }
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.name.get(index).setValue(fixedName);
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, fixedName);
     put(KEY_SHIPPER_NAME, fixedName);
 
     String fixedEmail = data.get("email");
-    if ("generated".equalsIgnoreCase(fixedEmail)) {
-      fixedEmail = f("sub.shipper+%s@ninja.tes", random);
-    }
+    putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, fixedEmail);
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.email.get(index).setValue(fixedEmail);
+  }
+
+  private void generateBranchData(Map<String, String> data) {
+    String random = String.valueOf(System.currentTimeMillis()).substring(5, 11);
+    String id = data.get("branchId");
+    if ("generated".equalsIgnoreCase(id)) {
+      data.put("branchId", random);
+    }
+    String fixedName = data.get("name");
+    if ("generated".equalsIgnoreCase(fixedName)) {
+      data.put("name", "sub shipper " + random);
+    }
+    String fixedEmail = data.get("email");
+    if ("generated".equalsIgnoreCase(fixedEmail)) {
+      data.put("email", f("sub.shipper+%s@ninja.tes", random));
+    }
   }
 
   @When("Operator create corporate sub shippers with data below:")
@@ -1410,6 +1423,55 @@ public class AllShippersSteps extends AbstractSteps {
         }
       }
       page.createSubShipperAccount.click();
+    });
+  }
+
+  @When("Operator bulk create corporate sub shippers with data below:")
+  public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws IOException {
+    uploadFileBulkCreateCorporateSubShipper(data);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.createSubShipperAccount.click();
+    });
+  }
+
+  @When("Operator upload bulk create corporate sub shippers file with data below:")
+  public void uploadFileBulkCreateCorporateSubShipper(List<Map<String, String>> data)
+      throws IOException {
+    List<String> rows = data.stream()
+        .map(row -> {
+          row = resolveKeyValues(row);
+          pause100ms();
+          generateBranchData(row);
+          putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
+          put(KEY_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
+          putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, row.get("name"));
+          put(KEY_SHIPPER_NAME, row.get("name"));
+          putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, row.get("email"));
+          return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
+        })
+        .collect(Collectors.toList());
+    rows.add(0, "Branch ID (External Ref),Name,Email");
+    File file = TestUtils.createFileOnTempFolder(
+        String.format("create-order-update_%s.csv", generateDateUniqueString()));
+    FileUtils.writeLines(file, rows);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.addSubShipper.click();
+      page.switchToFileUpload.click();
+      page.uploadCsvFile.setValue(file);
+    });
+  }
+
+  @When("Operator upload incorrect bulk create corporate sub shippers file")
+  public void bulkCreateCorporateSubShipper() throws IOException {
+    List<String> rows = new ArrayList<>();
+    rows.add("Branch ID (External Ref),Name,Email, Some other data");
+    File file = TestUtils.createFileOnTempFolder(
+        String.format("create-order-update_%s.csv", generateDateUniqueString()));
+    FileUtils.writeLines(file, rows);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.addSubShipper.click();
+      page.switchToFileUpload.click();
+      page.uploadCsvFile.setValue(file);
     });
   }
 
@@ -1493,6 +1555,81 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       String actualErrorMsg = page.errorMessage.get(0).getText();
       assertEquals(f("Check error message : %s", errorMsg), errorMsg, actualErrorMsg);
+    });
+  }
+
+  @Then("Operator verifies file upload error messages are displayed on b2b management page:")
+  public void qaVerifyFileUploadErrorMessageIsDisplayedOnBBManagementPage(
+      List<String> errorMessages) {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<String> actualErrorMsg = page.bulkCreationErrorMessage.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      assertThat("List of bulk create error messages", actualErrorMsg,
+          Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
+    });
+  }
+
+  @Then("Operator verifies file upload warning messages are displayed on b2b management page:")
+  public void qaVerifyFileUploadWarningMessageIsDisplayedOnBBManagementPage(
+      List<String> errorMessages) {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<String> actualErrorMsg = page.bulkCreationWarningMessage.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      assertThat("List of bulk create warning messages", actualErrorMsg,
+          Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
+    });
+  }
+
+  @Then("Operator clicks Go Back button on b2b management page")
+  public void clickGoBack() {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page ->
+        page.goBack.click()
+    );
+  }
+
+  @Then("Before You Go modal is displayed with {string} message on b2b management page")
+  public void checkBeforeYouGoModal(String message) {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+          page.beforeYouGoModal.waitUntilVisible();
+          assertEquals("Modal message", resolveValue(message),
+              page.beforeYouGoModal.message.getNormalizedText());
+        }
+    );
+  }
+
+  @Then("Operator clicks Cancel button on Before You Go modal on b2b management page")
+  public void cancelBeforeYouGoModal() {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.beforeYouGoModal.cancel.click();
+      page.beforeYouGoModal.waitUntilInvisible();
+    });
+  }
+
+  @Then("Operator downloads error log on b2b management page")
+  public void downloadErrorLog() {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.downloadErrorLog.click();
+    });
+  }
+
+  @Then("bulk shipper creation error log file contains data:")
+  public void checkErrorLogFile(List<Map<String, String>> data) {
+    List<String> rows = data.stream()
+        .map(row -> {
+          row = resolveKeyValues(row);
+          return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
+        })
+        .collect(Collectors.toList());
+    rows.add(0, "Branch ID (External Ref),Name,Email");
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      File file = Paths.get(StandardTestConstants.TEMP_DIR, "template.csv").toFile();
+      try {
+        page.verifyFileDownloadedSuccessfully("template.csv", StringUtils.join(rows, "\n"));
+      } finally {
+        FileUtils.deleteQuietly(file);
+      }
     });
   }
 

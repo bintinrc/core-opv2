@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements;
 
+import java.io.File;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,6 +20,10 @@ public class FileInput extends PageElement {
 
   public void setValue(String value) {
     sendKeys(value);
+  }
+
+  public void setValue(File file) {
+    sendKeys(file.getAbsolutePath());
   }
 
   public String getValue() {
