@@ -4,8 +4,8 @@ Feature: Marketplace Shipper
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows @weam
-  Scenario: Create a new Marketplace Shipper - Create Pricing Profile
+  @CloseNewWindows
+  Scenario: Create a new Marketplace Shipper - Create Pricing Profile (uid:bc736a20-01fe-40d6-8839-dc7dcdf4c5d7)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive                     | true                  |
