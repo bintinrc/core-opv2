@@ -37,4 +37,3 @@ Feature: Marketplace Shipper
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
-    And Operator verify the new Shipper is created successfully
