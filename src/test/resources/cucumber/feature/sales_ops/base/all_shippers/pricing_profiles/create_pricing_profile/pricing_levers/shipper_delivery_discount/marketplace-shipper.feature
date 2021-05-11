@@ -30,7 +30,7 @@ Feature: Marketplace Shipper
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
       | discount          | 2.00                                            |
       | comments          | This is a test pricing script                   |
       | type              | FLAT                                            |
