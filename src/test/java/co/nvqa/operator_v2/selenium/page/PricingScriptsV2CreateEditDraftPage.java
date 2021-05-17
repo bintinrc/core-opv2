@@ -48,6 +48,14 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     saveDraft();
   }
 
+  public void createPricingScript(Script script) {
+    waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
+    setScriptInfo(script);
+    setWriteScript(script);
+    verifyDraft();
+    validateDraft();
+  }
+
   private void setScriptInfo(Script script) {
     clickTabItem("Script Info");
     sendKeysToMdInputContainerByModel("ctrl.data.script.name", script.getName());
@@ -67,8 +75,21 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
   }
 
   private void saveDraft() {
+    pause2s();
     clickNvApiTextButtonByNameAndWaitUntilDone("Save Draft");
     clickToast("Your script has been successfully created.");
+  }
+
+  private void verifyDraft() {
+    pause2s();
+    clickNvIconTextButtonByNameAndWaitUntilDone("Verify Draft");
+    clickToast("Your script has been successfully created.");
+  }
+
+  private void validateDraft() {
+    clickNvIconTextButtonByName("container.pricing-scripts.validate");
+    waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
+    clickNvIconTextButtonByNameAndWaitUntilDone("Release Script");
   }
 
   private void activateParameters(List<String> activeParameters) {
@@ -103,13 +124,21 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(
         "//p[text()='No errors found. You may proceed to verify or save the draft.']");
     clickTabItem("Check Script");
-
-    selectValueFromMdSelectById("container.pricing-scripts.description-delivery-type",
-        runCheckParams.getDeliveryType());
-    selectValueFromMdSelectById("container.pricing-scripts.description-order-type",
-        runCheckParams.getOrderType());
+    clickf("//button[@aria-label='%s']", runCheckParams.getOrderFields());
+    if (runCheckParams.getOrderFields().equals("New")) {
+      selectValueFromMdSelectById("container.pricing-scripts.description-service-level",
+          runCheckParams.getServiceLevel());
+      selectValueFromMdSelectById("container.pricing-scripts.description-service-type",
+          runCheckParams.getServiceType());
+    } else {
+      selectValueFromMdSelectById("container.pricing-scripts.description-delivery-type",
+          runCheckParams.getDeliveryType());
+      selectValueFromMdSelectById("container.pricing-scripts.description-order-type",
+          runCheckParams.getOrderType());
+    }
     selectValueFromMdSelectById("container.pricing-scripts.description-time-slot-type",
         runCheckParams.getTimeslotType());
+    clickf("//button[@aria-label='%s']", runCheckParams.getIsRts());
     click(".//md-select[starts-with(@id, \"commons.size\")]");
     pause1s();
     clickf(
@@ -133,6 +162,12 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     retryIfRuntimeExceptionOccurred(
         () -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()),
         "Select value from \"To Zone\" NvAutocomplete");
+    sendKeysByName("container.pricing-scripts.from-l1", runCheckParams.getFromL1());
+    sendKeysByName("container.pricing-scripts.to-l1", runCheckParams.getToL1());
+    sendKeysByName("container.pricing-scripts.from-l2", runCheckParams.getFromL2());
+    sendKeysByName("container.pricing-scripts.to-l2", runCheckParams.getToL2());
+    sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
+    sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
 
     clickNvApiTextButtonByNameAndWaitUntilDone(
         "container.pricing-scripts.run-check"); //Button Run Check
@@ -185,10 +220,18 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysById("start-weight", String.valueOf(verifyDraftParams.getStartWeight()));
       sendKeysById("end-weight", String.valueOf(verifyDraftParams.getEndWeight()));
     }
+    validateDraft();
+//    clickNvIconTextButtonByName("container.pricing-scripts.validate");
+//    waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
+//    clickNvIconTextButtonByNameAndWaitUntilDone("Release Script");
+  }
 
-    clickNvIconTextButtonByName("container.pricing-scripts.validate");
-    waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
-    clickNvIconTextButtonByNameAndWaitUntilDone("Release Script");
+  public void validateDraftAndReleaseScript(Script script) {
+    waitUntilPageLoaded(buildScriptUrl(script));
+    waitUntilVisibilityOfElementLocated(
+        "//p[text()='No errors found. You may proceed to verify or save the draft.']");
+    clickNvIconTextButtonByName("Verify Draft");
+    validateDraft();
   }
 
   public void cancelEditDraft() {
