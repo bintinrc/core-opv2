@@ -60,6 +60,33 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
+  @When("^Operator create new Pricing Script using data below:$")
+  public void operatorCreateNewPricingScript(Map<String, String> mapOfData) {
+    String source = mapOfData.get("source");
+    String activeParameters = mapOfData.get("activeParameters");
+    String scenarioName = getScenarioManager().getCurrentScenario().getName();
+    String dateUniqueString = generateDateUniqueString();
+
+    List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim)
+        .collect(Collectors.toList());
+
+    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String name = "Dummy Script #" + dateUniqueString;
+    String description = f(
+        "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
+        createdDate, scenarioName);
+    NvLogger.infof("Created Pricing Script Name :" + name);
+
+    Script script = new Script();
+    script.setName(name);
+    script.setDescription(description);
+    script.setSource(source);
+    script.setActiveParameters(listOfActiveParameters);
+    pricingScriptsV2Page.createPricingScript(script);
+
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
+
   @Then("^Operator verify the new Script is created successfully on Drafts$")
   public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
@@ -84,26 +111,46 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
+    String orderFields = mapOfData.get("orderFields");
     String deliveryType = mapOfData.get("deliveryType");
     String orderType = mapOfData.get("orderType");
+    String serviceLevel = mapOfData.get("serviceLevel");
+    String serviceType = mapOfData.get("serviceType");
     String timeslotType = mapOfData.get("timeslotType");
+    String isRts = mapOfData.get("isRts");
     String size = mapOfData.get("size");
     double weight = Double.parseDouble(mapOfData.get("weight"));
     double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
     String fromZone = mapOfData.get("fromZone");
     String toZone = mapOfData.get("toZone");
+    String fromL1 = mapOfData.get("fromL1");
+    String fromL2 = mapOfData.get("fromL2");
+    String fromL3 = mapOfData.get("fromL3");
+    String toL1 = mapOfData.get("toL1");
+    String toL2 = mapOfData.get("toL2");
+    String toL3 = mapOfData.get("toL3");
 
     RunCheckParams runCheckParams = new RunCheckParams();
+    runCheckParams.setOrderFields(orderFields);
     runCheckParams.setDeliveryType(deliveryType);
     runCheckParams.setOrderType(orderType);
+    runCheckParams.setServiceLevel(serviceLevel);
+    runCheckParams.setServiceType(serviceType);
     runCheckParams.setTimeslotType(timeslotType);
+    runCheckParams.setIsRts(isRts);
     runCheckParams.setSize(size);
     runCheckParams.setWeight(weight);
     runCheckParams.setInsuredValue(insuredValue);
     runCheckParams.setCodValue(codValue);
     runCheckParams.setFromZone(fromZone);
     runCheckParams.setToZone(toZone);
+    runCheckParams.setFromL1(fromL1);
+    runCheckParams.setFromL2(fromL2);
+    runCheckParams.setFromL3(fromL3);
+    runCheckParams.setToL1(toL1);
+    runCheckParams.setToL2(toL2);
+    runCheckParams.setToL3(toL3);
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
   }
 
@@ -129,6 +176,17 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyTheRunCheckResultIsCorrect(runCheckResult);
   }
 
+  @Then("Operator close page")
+  public void operatorCloseScreen(){
+    pricingScriptsV2Page.closeScreen();
+  }
+
+  @Then("Operator validate and release Draft Script")
+  public void operatorValidateAndReleaseDraft(){
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.validateDraftAndReleaseScript(script);
+  }
+
   @When("^Operator validate and release Draft Script using this data below:$")
   public void operatorValidateAndReleaseDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
@@ -147,6 +205,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
+  }
+
+  @Then("^Operator verify Draft Script data is correct$")
+  public void operatorVerifyDraftScriptDataIsCorrect(){
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.verifyDraftScriptDataIsCorrect(script);
   }
 
   @When("^Operator link Script to Shipper with ID = \"([^\"]*)\"$")
