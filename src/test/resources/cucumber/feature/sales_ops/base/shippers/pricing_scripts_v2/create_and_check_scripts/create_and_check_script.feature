@@ -189,7 +189,7 @@ Feature: Pricing Scripts V2
       | Corporate, STANDARD                | STANDARD      | Corporate                 | 19.795     | 1.295 | 18.5        | 0            | 0      | 0           | OK       |
       | Corporate Return, EXPRESS          | EXPRESS       | Corporate Return          | 25.252     | 1.652 | 23.6        | 0            | 0      | 0           | OK       |
 
-  @DeletePricingScript @weam
+  @DeletePricingScript
   Scenario Outline: Create and Check Script - Legacy Order Fields
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -235,16 +235,12 @@ Feature: Pricing Scripts V2
   @DeletePricingScript
   Scenario: Create Pricing Script, Verify and Release Script Successfully (uid:987f2b36-b724-4858-bf15-1d06473a72d9)
     Given Operator go to menu Shipper -> Pricing Scripts V2
-#    When Operator create new Draft Script using data below:
-    When Operator create new Pricing Script using data below:
+    When Operator create new Draft Script using data below:
       | source           | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else if(orderType=="CASH"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, order_type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-#    Then Operator verify the new Script is created successfully on Drafts
-#    When Operator validate and release Draft Script using this data below:
-#      | startWeight | 1.0 |
-#      | endWeight   | 2.0 |
-#    And Operator refresh page
-    Then Operator verify Draft Script is released successfully
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    And Operator verify Draft Script is released successfully
     And Operator verify Draft Script data is correct
 
   @KillBrowser @ShouldAlwaysRun
