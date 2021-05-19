@@ -37,6 +37,10 @@ public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T> {
     }
   }
 
+  /**
+   * @param rowNumber row number of the table start from 1
+   * @param actionId  name in nv-icon-button[@name='%s'] or nv-icon-text-button[@name='%s']
+   */
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
     clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonsLocators.get(actionId), ngRepeat);
