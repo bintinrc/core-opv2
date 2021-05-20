@@ -353,6 +353,9 @@ Feature: Edit Order
       | routeId | 0 |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY (uid:91bf2923-94ba-4d8c-bd1b-c000eca19ee9)
@@ -379,18 +382,32 @@ Feature: Edit Order
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator add created order to the <routeType> route on Edit Order page
     And Operator refresh page
     Then Operator verify the order is added to the <routeType> route on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE         |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verify <routeType> waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
+
     Examples:
       | Note              | hiptest-uid                              | orderType | routeType |
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
@@ -758,6 +775,7 @@ Feature: Edit Order
     And API Operator verify Pickup transaction of the created order using data below:
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And DB Operator verifies transaction route id is null
     And API Operator verify Delivery transaction of the created order using data below:
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
@@ -773,6 +791,8 @@ Feature: Edit Order
       | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
@@ -924,7 +944,7 @@ Feature: Edit Order
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    And API Operator force succeed created order
+    And API Operator force succeed created order without cod
     When API Operator cancel created order and get error:
       | statusCode | 500                          |
       | message    | Order is Returned to Sender! |
@@ -1229,6 +1249,7 @@ Feature: Edit Order
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -1239,7 +1260,15 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
-      | name | ADD TO ROUTE |
+      | name    | ADD TO ROUTE         |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
+
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:9d63adef-503f-48af-9232-c2a003c5240e | Normal    |
