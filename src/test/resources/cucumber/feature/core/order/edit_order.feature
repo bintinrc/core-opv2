@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @current
+@OperatorV2 @Core @Order @EditOrder
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1339,7 +1339,7 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
