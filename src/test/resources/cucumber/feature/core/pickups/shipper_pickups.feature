@@ -69,6 +69,9 @@ Feature: Shipper Pickups
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
     And DB Operator verify new record is created in route_waypoints table with the correct details
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
   Scenario: Operator Assign Reservation to a Driver Route with Priority Level (uid:5830302f-c452-49c4-bc59-28bb130e20ae)
@@ -531,6 +534,8 @@ Feature: Shipper Pickups
       | shipperName | {shipper-v4-name}                |
     And Operator removes reservation from route from Edit Route Details dialog
     Then Operator verify the route was removed from the created reservation
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies route_waypoint is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, Suggested Route Found (uid:3a7616b6-5402-4cdb-9e10-2440f2fe8605)
