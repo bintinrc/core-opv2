@@ -769,7 +769,7 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                        |
-      | endDate | {gradle-next-3-day-yyyy-MM-dd} |
+      | endDate | {gradle-next-3-working-day-yyyy-MM-dd} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Express (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
