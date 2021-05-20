@@ -346,7 +346,8 @@ Feature: Edit Order
     Then Operator verify Pickup transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
-      | name | PULL OUT OF ROUTE |
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Pickup transaction values are updated for the created order:
@@ -373,8 +374,9 @@ Feature: Edit Order
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verify Delivery transaction on Edit order page using data below:
       | routeId |  |
-    Then Operator verify order event on Edit order page using data below:
-      | name | PULL OUT OF ROUTE |
+    And Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Delivery transaction values are updated for the created order:

@@ -120,6 +120,7 @@ Feature: Outbound Monitoring
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
@@ -132,6 +133,16 @@ Feature: Outbound Monitoring
       | hubName  | {hub-name}  |
     When Operator pull out order from route on Outbound Monitoring page
     Then API Operator verify order is pulled out from route
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
 
 #  @DeleteOrArchiveRoute
 #  Scenario: Operator fail pull out order on Outbound Monitoring Page due to van inbounded order
