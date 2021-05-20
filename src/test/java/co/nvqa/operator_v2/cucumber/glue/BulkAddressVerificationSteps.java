@@ -89,8 +89,11 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
 
   @Then("^sample CSV file on Bulk Address Verification page is downloaded successfully$")
   public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
-    bulkAddressVerificationPage.verifyFileDownloadedSuccessfully("sample_csv.csv",
-        "\"waypoint\",\"latitude\",\"longitude\"\n"
-            + "5259518,1.32323,103.1212");
+    retryIfAssertionErrorOccurred(() -> {
+      bulkAddressVerificationPage.verifyFileDownloadedSuccessfully("sample_csv.csv",
+          "\"waypoint\",\"latitude\",\"longitude\"\n"
+              + "5259518,1.32323,103.1212");
+    }, "verify csv file downloaded successfully");
+
   }
 }

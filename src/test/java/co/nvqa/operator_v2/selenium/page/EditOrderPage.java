@@ -12,6 +12,7 @@ import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -178,6 +179,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   private DeleteOrderDialog deleteOrderDialog;
   private PickupRescheduleDialog pickupRescheduleDialog;
   private DeliveryRescheduleDialog deliveryRescheduleDialog;
+  private PodDetailsDialog podDetailsDialog;
 
   public EditOrderPage(WebDriver webDriver) {
     super(webDriver);
@@ -189,10 +191,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
     deleteOrderDialog = new DeleteOrderDialog(webDriver);
     pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
     chatWithDriverDialog = new ChatWithDriverDialog(webDriver);
+    podDetailsDialog = new PodDetailsDialog(webDriver);
   }
 
   public EventsTable eventsTable() {
     return eventsTable;
+  }
+
+  public PodDetailsDialog podDetailsDialog() {
+    return podDetailsDialog;
   }
 
   public TransactionsTable transactionsTable() {
@@ -2102,6 +2109,153 @@ public class EditOrderPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.edit.resume-order")
     public NvApiTextButton resumeOrder;
   }
+
+  /**
+   * Accessor for Delete Order dialog
+   */
+  public static class PodDetailsDialog extends OperatorV2SimplePage {
+
+    private static final String DIALOG_TITLE = "Proof of Delivery";
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Status\")]/following-sibling::p")
+    public PageElement status;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"POD Time\")]/following-sibling::p")
+    public PageElement podTime;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Start Date / Time\")]/following-sibling::p")
+    public PageElement startDateTime;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"End Date / Time\")]/following-sibling::p")
+    public PageElement endDateTime;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Waypoint ID\")]/following-sibling::p")
+    public PageElement waypointId;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Route ID\")]/following-sibling::p")
+    public PageElement routeId;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Driver\")]/following-sibling::p")
+    public PageElement driver;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Verification Method\")]/following-sibling::p")
+    public PageElement verificationMethod;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Priority Level\")]/following-sibling::p")
+    public PageElement priorityLevel;
+
+    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Location\")]/following-sibling::p")
+    public PageElement location;
+
+    @FindBy(xpath = "//*[@class=\"selected-pod-holder\"]/div[1]/div/h4")
+    public PageElement trackingId;
+
+    @FindBy(xpath = "//*[@class=\"selected-pod-holder\"]/div[2]/div/h4")
+    public PageElement transaction;
+
+    private PodDetailTable podDetailTable;
+
+    public PodDetailsDialog(WebDriver webDriver) {
+      super(webDriver);
+      podDetailTable = new PodDetailTable(webDriver);
+    }
+
+    public PodDetailsDialog waitUntilVisibility() {
+      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+      return this;
+    }
+
+    public String getTrackingId() {
+      return trackingId.getText();
+    }
+
+    public String getTransaction() {
+      // format: TRANSACTION (21403)
+      return transaction.getText();
+    }
+
+    public String getStatus() {
+      return status.getText();
+    }
+
+    public String getPodTime() {
+      // format: 2021-05-13 14:06:59
+      return podTime.getText();
+    }
+
+    public String getStartDateTime() {
+      // format: 2021-05-14 09:00:00
+      return startDateTime.getText();
+    }
+
+    public String getEndDateTime() {
+      // format: 2021-05-18 22:00:00
+      return endDateTime.getText();
+    }
+
+    public String getWaypointId() {
+      return waypointId.getText();
+    }
+
+    public String getRouteId() {
+      return routeId.getText();
+    }
+
+    public String getDriver() {
+      return driver.getText();
+    }
+
+    public String getPriorityLevel() {
+      return priorityLevel.getText();
+    }
+
+    public String getLocation() {
+      return location.getText();
+    }
+
+    public String getVerificationMethod() {
+      return verificationMethod.getText();
+    }
+
+    public PodDetailTable getPodDetailTable() {
+      return podDetailTable;
+    }
+
+    public void scrollToBottom() {
+      this.scrollIntoView(
+          "//*[@id=\"information\"]//label[contains(string(), \"Verification Method\")]/following-sibling::p");
+    }
+
+  }
+
+  public static class PodDetailTable extends NgRepeatTable<PodDetail> {
+
+    private static final String ACTION_VIEW = "View";
+
+    public PodDetailTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("podId", "id")
+          .put("waypointType", "_rsvn-or-txn")
+          .put("type", "_type")
+          .put("status", "_status")
+          .put("distance", "_distance")
+          .put("podTime", "_pod-time")
+          .put("driver", "route-driver")
+          .put("recipient", "_recipient")
+          .put("address", "_address")
+          .put("verificationMethod", "_verification-method")
+          .build());
+      setNgRepeat("pod in getTableData()");
+      setActionButtonsLocators(ImmutableMap.of(ACTION_VIEW, "commons.view"));
+      setEntityClass(PodDetail.class);
+    }
+
+    public void clickView(int rowNumber) {
+      clickActionButton(rowNumber, ACTION_VIEW);
+    }
+  }
+
 
   public static class ChatWithDriverDialog extends OperatorV2SimplePage {
 

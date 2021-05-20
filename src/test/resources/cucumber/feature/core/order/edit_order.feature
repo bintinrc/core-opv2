@@ -969,7 +969,7 @@ Feature: Edit Order
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver deliver the created parcel successfully
+    And API Driver deliver all created parcels successfully
     When API Operator cancel created order and get error:
       | statusCode | 500                                     |
       | message    | Order is Arrived at Distribution Point! |
@@ -1875,6 +1875,30 @@ Feature: Edit Order
     Then Operator verify order events on Edit order page using data below:
       | tags | name           |
       | DP   | ASSIGNED TO DP |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator View POD from Edit Order Page (uid:87f02736-7ccf-4d62-a3e3-fd81636a36ab)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver all created parcels successfully
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click View/Print -> View all PODs on Edit Order page
+    Then Operator verify delivery POD details is correct on Edit Order page using date below:
+      | driver              | {ninja-driver-name} |
+      | verification method | NO_VERIFICATION     |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

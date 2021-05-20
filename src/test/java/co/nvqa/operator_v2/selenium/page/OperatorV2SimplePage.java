@@ -636,10 +636,10 @@ public class OperatorV2SimplePage extends SimplePage {
   public void clickActionButtonOnTableWithNgRepeat(int rowNumber, String actionButtonName,
       String ngRepeat) {
     try {
-      String xpathExpression = f(
-          "//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']",
-          ngRepeat, rowNumber, actionButtonName);
-      WebElement we = findElementByXpath(xpathExpression);
+      final String xpathExpression = f(
+          "//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//*[@name='%s']", ngRepeat,
+          rowNumber, actionButtonName);
+      final WebElement we = findElementByXpath(xpathExpression);
       moveAndClick(we);
     } catch (NoSuchElementException ex) {
       throw new RuntimeException("Cannot find action button on table.", ex);
