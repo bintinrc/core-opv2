@@ -6,10 +6,12 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.text.DecimalFormat;
 import java.util.List;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -31,6 +33,12 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteDialog;
 
+  @FindBy(id = "button-pick-csv")
+  public NvButtonFilePicker importCsv;
+
+  @FindBy(xpath = "//div[@text='CSV Header contain invalid character, accept ([A-Z],[a-z],space)']")
+  public boolean errorHeader;
+
   private final DecimalFormat RUN_CHECK_RESULT_DF = new DecimalFormat("###.###");
 
   protected static final int ACTION_SAVE = 1;
@@ -48,12 +56,24 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     saveDraft();
   }
 
-  public void createPricingScript(Script script) {
+  public void createDraftUsingTemplate(Script script) {
     waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
     setScriptInfo(script);
-    setWriteScript(script);
+    setWriteScriptUsingTemplate();
     verifyDraft();
     validateDraft();
+  }
+
+  public void createDraftUsingCsvFile(Script script) {
+    waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
+    setScriptInfo(script);
+    setWriteScriptWithImportCsvFile(script);
+    importCsv.setValue(script.getFilePath());
+    boolean error = isElementVisible("//div[@text='CSV Header contain invalid character, accept ([A-Z],[a-z],space)']", 2);
+    if (!error) {
+      checkSyntax();
+      saveDraft();
+    }
   }
 
   private void setScriptInfo(Script script) {
@@ -66,12 +86,38 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     clickTabItem("Write Script");
     activateParameters(script.getActiveParameters());
     updateAceEditorValue(script.getSource());
+    checkSyntax();
+  }
+
+  private void checkSyntax() {
     clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
     String actualSyntaxInfo = getAttribute(
         "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info')]",
         "text");
     assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
         actualSyntaxInfo);
+  }
+
+  public void checkErrorHeader() {
+    String actualErrorInfo = getAttribute(
+        "//div[@text='CSV Header contain invalid character, accept ([A-Z],[a-z],space)']",
+        "text");
+    assertEquals("Syntax Info", "CSV Header contain invalid character, accept ([A-Z],[a-z],space)",
+        actualErrorInfo);
+  }
+
+  private void setWriteScriptUsingTemplate() {
+    clickTabItem("Write Script");
+    sendKeysAndEnter("//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']",
+        "Ninja Easy (SG)");
+    click("//button[@aria-label='Load']");
+    checkSyntax();
+  }
+
+  public void setWriteScriptWithImportCsvFile(Script script) {
+    clickTabItem("Write Script");
+    activateParameters(script.getActiveParameters());
+    updateAceEditorValue(script.getSource());
   }
 
   private void saveDraft() {
@@ -221,9 +267,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysById("end-weight", String.valueOf(verifyDraftParams.getEndWeight()));
     }
     validateDraft();
-//    clickNvIconTextButtonByName("container.pricing-scripts.validate");
-//    waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
-//    clickNvIconTextButtonByNameAndWaitUntilDone("Release Script");
   }
 
   public void validateDraftAndReleaseScript(Script script) {
