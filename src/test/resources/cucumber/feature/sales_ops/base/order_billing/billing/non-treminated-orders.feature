@@ -18,7 +18,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point"
+    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -39,7 +39,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point"
+    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
@@ -60,7 +60,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point"
+    And DB Operator updates the granular status of the priced order to "Arrived at Distribution Point" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -367,7 +367,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "On Vehicle for Delivery"
+    And DB Operator updates the granular status of the priced order to "On Vehicle for Delivery" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -388,7 +388,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "On Vehicle for Delivery"
+    And DB Operator updates the granular status of the priced order to "On Vehicle for Delivery" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
@@ -409,7 +409,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "On Vehicle for Delivery"
+    And DB Operator updates the granular status of the priced order to "On Vehicle for Delivery" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -430,7 +430,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Cancelled"
+    And DB Operator updates the granular status of the priced order to "Cancelled" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -451,7 +451,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Cancelled"
+    And DB Operator updates the granular status of the priced order to "Cancelled" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
@@ -472,7 +472,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Cancelled"
+    And DB Operator updates the granular status of the priced order to "Cancelled" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -493,7 +493,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "On Hold"
+    And DB Operator updates the granular status of the priced order to "On Hold" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -514,7 +514,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "On Hold"
+    And DB Operator updates the granular status of the priced order to "On Hold" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
@@ -535,7 +535,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "On Hold"
+    And DB Operator updates the granular status of the priced order to "On Hold" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -556,7 +556,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "NULL"
+    And DB Operator updates the granular status of the priced order to "NULL" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -577,7 +577,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "NULL"
+    And DB Operator updates the granular status of the priced order to "NULL" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
@@ -598,7 +598,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "NULL"
+    And DB Operator updates the granular status of the priced order to "NULL" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -619,7 +619,7 @@ Feature: Order Billing
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    And DB Operator updates the granular status of the priced order to "Pending Reschedule"
+    And DB Operator updates the granular status of the priced order to "Pending Reschedule" in Billing DB
     And Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
