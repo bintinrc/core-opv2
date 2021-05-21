@@ -10,7 +10,7 @@ import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.SalesPerson;
-import co.nvqa.commons.model.core.ShipperPickupFilterTemplate;
+import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;

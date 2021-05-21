@@ -46,6 +46,9 @@ Feature: Shipper Pickups
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
     And DB Operator verify new record is created in route_waypoints table with the correct details
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
 
   Scenario: Operator Filters Created Reservation by Master Shipper (uid:5020c570-4f72-4ba2-bc26-8de5560eca89)
     Given Operator go to menu Shipper Support -> Blocked Dates
