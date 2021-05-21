@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -1340,5 +1341,33 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator selects {string} in Events Filter menu on Edit Order page")
   public void selectEventsFilter(String option) {
     editOrderPage.eventsTableFilter.selectOption(resolveValue(option));
+  }
+
+  @Then("Operator verify delivery POD details is correct on Edit Order page using date below:")
+  public void verifyDeliveryPodDetails(Map<String, String> data) {
+    final Order order = get(KEY_CREATED_ORDER);
+    final PodDetailsDialog podDetailsDialog = editOrderPage.podDetailsDialog();
+
+    // open the pod details view
+    podDetailsDialog.getPodDetailTable().clickView(1);
+    podDetailsDialog.scrollToBottom();
+
+    final String expectedTransactionText = f("TRANSACTION (%d)",
+        order.getLastDeliveryTransaction().getId());
+    softAssert.assertEquals("tracking id string", order.getTrackingId(),
+        podDetailsDialog.getTrackingId());
+    softAssert.assertEquals("transaction string", expectedTransactionText,
+        podDetailsDialog.getTransaction());
+    softAssert.assertEquals("information - status", order.getLastDeliveryTransaction().getStatus(),
+        podDetailsDialog.getStatus());
+    softAssert
+        .assertEquals("information - driver", data.get("driver"), podDetailsDialog.getDriver());
+    softAssert.assertTrue("information - priority level",
+        StringUtils.isNotEmpty(podDetailsDialog.getPriorityLevel()));
+    softAssert.assertEquals("information - verification method", data.get("verification method"),
+        podDetailsDialog.getVerificationMethod());
+    softAssert.assertTrue("information - location",
+        podDetailsDialog.getLocation().contains(order.getLastDeliveryTransaction().getAddress1()));
+    softAssert.assertAll();
   }
 }

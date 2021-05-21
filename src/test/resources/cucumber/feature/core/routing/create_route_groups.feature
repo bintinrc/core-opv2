@@ -169,8 +169,8 @@ Feature: Create Route Groups
       | reservationStatus | Pending |
     And Operator click Load Selection on Create Route Group page
     Then Operator verifies Reservation records on Create Route Group page using data below:
-      | id                           | type        | shipper           | address                                                | status  |
-      | {KEY_CREATED_RESERVATION.id} | Reservation | {shipper-v4-name} | {KEY_CREATED_ADDRESS.to1LineAddressWithSpaceDelimiter} | Pending |
+      | id                           | type        | shipper                    | address                                                     | status  |
+      | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | PENDING |
 
   Scenario: Operator Filter Transaction on Route Group (uid:30fc5e7c-b85f-4401-8d92-dcc63c07a03a)
     Given Operator go to menu Shipper Support -> Blocked Dates
