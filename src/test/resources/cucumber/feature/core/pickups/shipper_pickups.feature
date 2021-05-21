@@ -512,9 +512,9 @@ Feature: Shipper Pickups
       | toDate            | {gradle-next-1-day-yyyy-MM-dd}   |
       | masterShipperName | {shipper-v4-marketplace-name}    |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | MRK-CORE (ABC Shop)                       |
-      | approxVolume | Less than 3 Parcels                       |
-      | comments     | Please be careful with the v-day flowers. |
+      | shipperName  | {shipper-v4-marketplace-short-name} (ABC Shop) |
+      | approxVolume | Less than 3 Parcels                            |
+      | comments     | Please be careful with the v-day flowers.      |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)

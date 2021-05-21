@@ -389,7 +389,7 @@ Feature: Edit Order
     And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -829,8 +829,8 @@ Feature: Edit Order
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And Operator verify Pickup transaction on Edit order page using data below:
-      | status  | FAIL                 |
-      | routeId | KEY_CREATED_ROUTE_ID |
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit order page using data below:
