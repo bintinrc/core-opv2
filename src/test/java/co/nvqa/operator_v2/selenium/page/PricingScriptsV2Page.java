@@ -59,9 +59,18 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
-  public void createPricingScript(Script script) {
+  public void createDraftUsingTemplate(Script script){
     clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
-    pricingScriptsV2CreateEditDraftPage.createPricingScript(script);
+    pricingScriptsV2CreateEditDraftPage.createDraftUsingTemplate(script);
+  }
+
+  public void createDraftUsingCsvFile(Script script){
+    clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
+    pricingScriptsV2CreateEditDraftPage.createDraftUsingCsvFile(script);
+  }
+
+  public void checkErrorHeader(){
+    pricingScriptsV2CreateEditDraftPage.checkErrorHeader();
   }
 
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {

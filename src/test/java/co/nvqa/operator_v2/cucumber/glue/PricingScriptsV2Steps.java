@@ -8,14 +8,18 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
+import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -24,6 +28,7 @@ import java.util.stream.Stream;
 public class PricingScriptsV2Steps extends AbstractSteps {
 
   private PricingScriptsV2Page pricingScriptsV2Page;
+  private UploadInvoicedOrdersPage uploadInvoicedOrdersPage;
 
   public PricingScriptsV2Steps() {
   }
@@ -31,6 +36,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @Override
   public void init() {
     pricingScriptsV2Page = new PricingScriptsV2Page(getWebDriver());
+    uploadInvoicedOrdersPage = new UploadInvoicedOrdersPage(getWebDriver());
   }
 
   @When("^Operator create new Draft Script using data below:$")
@@ -60,10 +66,30 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
-  @When("^Operator create new Pricing Script using data below:$")
-  public void operatorCreateNewPricingScript(Map<String, String> mapOfData) {
+  @When("Operator create new Draft Script using template")
+  public void operatorCreateDraftUsingTemplate() {
+    String scenarioName = getScenarioManager().getCurrentScenario().getName();
+    String dateUniqueString = generateDateUniqueString();
+    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String name = "Dummy Script #" + dateUniqueString;
+    String description = f(
+        "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
+        createdDate, scenarioName);
+    NvLogger.infof("Created Pricing Script Name :" + name);
+
+    Script script = new Script();
+    script.setName(name);
+    script.setDescription(description);
+    pricingScriptsV2Page.createDraftUsingTemplate(script);
+
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
+
+  @When("^Operator create new Draft Script with import a csv file using data below:$")
+  public void operatorCreateDraftUsingCsvFile(Map<String, String> mapOfData) {
     String source = mapOfData.get("source");
     String activeParameters = mapOfData.get("activeParameters");
+    String filePath = mapOfData.get("filePath");
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String dateUniqueString = generateDateUniqueString();
 
@@ -82,9 +108,16 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     script.setDescription(description);
     script.setSource(source);
     script.setActiveParameters(listOfActiveParameters);
-    pricingScriptsV2Page.createPricingScript(script);
+    script.setFilePath(filePath);
+
+    pricingScriptsV2Page.createDraftUsingCsvFile(script);
 
     put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
+
+  @Then("Operator verify error message after adding invalid csv file")
+  public void operatorVerifyErrorMessage() {
+    pricingScriptsV2Page.checkErrorHeader();
   }
 
   @Then("^Operator verify the new Script is created successfully on Drafts$")
@@ -177,12 +210,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   }
 
   @Then("Operator close page")
-  public void operatorCloseScreen(){
+  public void operatorCloseScreen() {
     pricingScriptsV2Page.closeScreen();
   }
 
   @Then("Operator validate and release Draft Script")
-  public void operatorValidateAndReleaseDraft(){
+  public void operatorValidateAndReleaseDraft() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.validateDraftAndReleaseScript(script);
   }
@@ -208,7 +241,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   }
 
   @Then("^Operator verify Draft Script data is correct$")
-  public void operatorVerifyDraftScriptDataIsCorrect(){
+  public void operatorVerifyDraftScriptDataIsCorrect() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptDataIsCorrect(script);
   }
