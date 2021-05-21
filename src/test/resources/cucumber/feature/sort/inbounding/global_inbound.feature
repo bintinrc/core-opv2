@@ -826,7 +826,7 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                        |
-      | endDate | {gradle-next-2-day-yyyy-MM-dd} |
+      | endDate | {gradle-next-2-working-day-yyyy-MM-dd} |
 
   @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:d929ec0a-629b-4ab3-beae-47ef1fafc329)
