@@ -105,9 +105,9 @@ Feature: Edit Order
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "12356" DP on Edit Order Page
+    And Operator tags order to "{dpms-id}" DP on Edit Order Page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
-    When DB Operator get DP address by ID = "12356"
+    When DB Operator get DP address by ID = "{dpms-id}"
     Then DB Operator verifies orders record using data below:
       | toAddress1 | GET_FROM_CREATED_ORDER |
       | toAddress2 | GET_FROM_CREATED_ORDER |
@@ -117,7 +117,7 @@ Feature: Edit Order
       | toState    |                        |
       | toDistrict |                        |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | 12356                  |
+      | distribution_point_id | {dpms-id}              |
       | address1              | GET_FROM_CREATED_ORDER |
       | address2              | GET_FROM_CREATED_ORDER |
       | postcode              | GET_FROM_CREATED_ORDER |
@@ -352,7 +352,7 @@ Feature: Edit Order
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "12356" DP on Edit Order Page
+    And Operator tags order to "{dpms-id}" DP on Edit Order Page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
@@ -496,12 +496,8 @@ Feature: Edit Order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update order granular status to = "Cancelled"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Cancelled |
-      | granularStatus                | Cancelled |
-      | lastPickupTransactionStatus   | Cancelled |
-      | lastDeliveryTransactionStatus | Cancelled |
     And Operator resume order on Edit Order page
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page

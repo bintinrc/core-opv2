@@ -43,7 +43,6 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
 
   @DeleteOrArchiveRoute
   Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
@@ -68,7 +67,6 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies route_monitoring_data record
@@ -97,7 +95,9 @@ Feature: Shipper Pickups
       | routeId       | GET_FROM_CREATED_ROUTE       |
       | driverName    | {ninja-driver-name}          |
       | priorityLevel | 3                            |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
 
   Scenario: Operator Find Created Reservation by Shipper Name (uid:4d2d2a71-33e0-4f6c-846e-9cca10ef4c2b)
     Given Operator go to menu Shipper Support -> Blocked Dates
