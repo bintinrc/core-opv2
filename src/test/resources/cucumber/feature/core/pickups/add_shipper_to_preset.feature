@@ -8,11 +8,11 @@ Feature: Add Shipper To Preset
   @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address (uid:c5345ae2-e212-42c7-866a-59d5f1a80e42)
     Given API Operator creates new Shipper Pickup Filter Template using data below:
-      | name                | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
-      | reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
-      | reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
-      | typeIds             | 0                                                 |
-      | waypointStatuses    | Pending,Routed                                    |
+      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
+      | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
+      | value.reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
+      | value.typeIds             | 0                                                 |
+      | value.waypointStatuses    | Pending,Routed                                    |
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -74,11 +74,11 @@ Feature: Add Shipper To Preset
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Multiple Addresses (uid:fd702085-61cd-4aab-9f18-e8a556f45544)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Shipper Pickup Filter Template using data below:
-      | name                | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
-      | reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
-      | reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
-      | typeIds             | 0                                                 |
-      | waypointStatuses    | Pending,Routed                                    |
+      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
+      | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
+      | value.reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
+      | value.typeIds             | 0                                                 |
+      | value.waypointStatuses    | Pending,Routed                                    |
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |

@@ -64,6 +64,7 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
+    And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid) (uid:9e2bccf1-a567-49a7-9983-450174817f86)
@@ -129,6 +130,7 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
+    And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Return Pickups (uid:53fb7536-821f-4047-a6ee-3b6b2012991e)
@@ -193,6 +195,7 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
+    And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Reservation Pickups (uid:9071e77a-2715-4a17-9538-b3cd77461819)
@@ -252,6 +255,7 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
+    And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Pending Return Pickups (uid:db8ca6ec-0e6f-4b52-bd17-2c100e463665)
@@ -299,6 +303,7 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
+    And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -59,6 +59,7 @@ Feature: Implanted Manifest
     And Operator verify order event on Edit order page using data below:
       | name    | DRIVER PICKUP SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
