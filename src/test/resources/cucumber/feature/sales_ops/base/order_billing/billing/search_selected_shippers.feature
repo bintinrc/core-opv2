@@ -28,7 +28,7 @@ Feature: Order Billing
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
+      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
 
 
@@ -49,25 +49,24 @@ Feature: Order Billing
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
+      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
 
-# @nadeera - run again after legacy id
-#  @DeleteOrArchiveRoute @KillBrowser
-#  Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
-#    Given Operator go to menu Shipper Support -> Order Billing
-#    When Operator generates success billings using data below:
-#      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
-#      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-#      | shipper      | {shipper-v4-legacy-id}                                                                     |
-#      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-#      | emailAddress | {order-billing-email}                                                                      |
-#    Then Operator opens Gmail and checks received email
-#    Then Operator reads the CSV attachment for "Aggregated Billing Report"
-#    Then Operator gets the orders and parcel size and weight from the database for specified shipper
-#    Then Operator verifies the header using data below:
-#      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
-#    Then Operator verifies the orders grouped by shipper and parcel size and weight
+  @DeleteOrArchiveRoute @KillBrowser
+  Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
+    Given Operator go to menu Shipper Support -> Order Billing
+    When Operator generates success billings using data below:
+      | startDate    | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
+      | endDate      | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
+      | shipper      | {shipper-v4-legacy-id}                                                                     |
+      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
+      | emailAddress | {order-billing-email}                                                                      |
+    Then Operator opens Gmail and checks received email
+    Then Operator reads the CSV attachment for "Aggregated Billing Report"
+    Then Operator gets the orders and parcel size and weight from the database for specified shipper
+    Then Operator verifies the header using data below:
+      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
+    Then Operator verifies the orders grouped by shipper and parcel size and weight
 
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -87,6 +86,6 @@ Feature: Order Billing
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
+      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
 
