@@ -263,7 +263,7 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
-    Then Operator is redirected to this page "https://operatorv2-qa.ninjavan.co/#/sg/zonal-routing/edit?ids={KEY_CREATED_ROUTE_ID}&unrouted=false&cluster=true"
+    Then Operator is redirected to this page "/sg/zonal-routing/edit?ids={KEY_CREATED_ROUTE_ID}&unrouted=false&cluster=true"
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Route by Route Id on Route Logs Page (uid:273b5063-c85e-47a1-bada-f50d3f755541)
