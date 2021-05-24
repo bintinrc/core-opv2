@@ -201,7 +201,7 @@ Feature: Global Inbound
     And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-#    When API Operator force succeed created order without cod
+    When API Operator force succeed created order
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |

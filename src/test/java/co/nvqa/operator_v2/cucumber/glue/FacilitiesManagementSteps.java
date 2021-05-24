@@ -105,12 +105,11 @@ public class FacilitiesManagementSteps extends AbstractSteps {
   public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration() {
     Hub hub = get(KEY_CREATED_HUB);
 
-    retryIfAssertionErrorOccurred(() -> {
-          navigateRefresh();
-          pause100ms();
-          facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
-        },
-        "Unable to find the hub, retrying...");
+    retryIfAssertionErrorOccurred(() ->
+    {
+      navigateRefresh();
+      facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+    }, "Unable to find the hub, retrying...");
   }
 
   @When("^Operator update Hub on page Hubs Administration using data below:$")
