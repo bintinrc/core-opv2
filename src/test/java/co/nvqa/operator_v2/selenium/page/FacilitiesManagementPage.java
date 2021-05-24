@@ -204,6 +204,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyHubIsExistAndDataIsCorrect(Hub expectedHub) {
+    super.waitUntilPageLoaded();
     Hub actualHub = searchHub(expectedHub.getName());
     expectedHub.setId(actualHub.getId());
     if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK")) {
