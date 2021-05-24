@@ -1,4 +1,4 @@
-@OperatorV2 @Driver @Fleet @DriverStrengthV2
+@OperatorV2 @Driver @Fleet @DriverStrengthV2 @CWF
 Feature: Driver Strength
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -131,7 +131,7 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
     Then Operator verify driver strength is filtered by "Yes" resigned
 
-  @DeleteDriver
+  @DeleteDriver @runthis
   Scenario: Filter Driver Account by Driver Zones, Driver Types, and Resigned - No
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new Driver using data below:
