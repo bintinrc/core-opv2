@@ -10,10 +10,11 @@ import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.SalesPerson;
-import co.nvqa.commons.model.core.ShipperPickupFilterTemplate;
+import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
+import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.driver.DriverFilter;
 import co.nvqa.commons.model.sort.nodes.Node;
 import co.nvqa.commons.model.sort.nodes.Node.NodeType;
@@ -104,6 +105,19 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         .createUser(dpPartner.getDpmsPartnerId(), dp.getDpmsId(), json);
     dpUser.setId(Long.parseLong(responseBody.get("id").toString()));
     put(KEY_DP_USER, dpUser);
+  }
+
+  @Given("API DP gets DP Partner Details for Partner ID {string}")
+  public void apiDpGetsDpPartnerDetailsForPartnerId(String partnerIdAsString) {
+    long partnerId = Long.parseLong(partnerIdAsString);
+    co.nvqa.commons.model.dp.DpPartner allDpPartners = getDpClient().getPartner();
+
+    for (Partner p : allDpPartners.getPartners()) {
+      if (p.getId() == partnerId) {
+        put(KEY_DP_PARTNER, p);
+        break;
+      }
+    }
   }
 
   @When("^API Operator create new Driver using data below:$")
