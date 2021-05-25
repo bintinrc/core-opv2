@@ -22,7 +22,7 @@ Feature: Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}               |
-      | zones   | {zone-name}({zone-name}) |
+      | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}   |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId                | {KEY_CREATED_ROUTE_ID} |
@@ -64,7 +64,7 @@ Feature: Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}               |
-      | zones   | {zone-name}({zone-name}) |
+      | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}   |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId                | {KEY_CREATED_ROUTE_ID} |
@@ -133,7 +133,7 @@ Feature: Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}               |
-      | zones   | {zone-name}({zone-name}) |
+      | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}   |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId          | {KEY_CREATED_ROUTE_ID} |
