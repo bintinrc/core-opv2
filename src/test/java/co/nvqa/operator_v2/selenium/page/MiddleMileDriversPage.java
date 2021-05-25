@@ -25,14 +25,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String DRIVERS_NOT_FOUND_TOAST_XPATH = "//div[contains(@class,'notification-notice-closable')]";
   private static final String DRIVERS_LIST_CONTAINER_XPATH = "//div[contains(@class,'MiddleMileDriverListContainer')]";
   private static final String TOTAL_DRIVER_SHOW_XPATH = "//div[contains(@class,'TableWrapper')]/div[contains(@class,'TableStats')]/span[2]";
-  private static final String SELECT_FILTER_VALUE_XPATH = "//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']";
-  private static final String CREATE_DRIVER_BUTTON_XPATH = "//button[contains(@class,'CreateDriverButton')]";
+  private static final String SELECT_FILTER_VALUE_XPATH = "//div[not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@class,'ant-select-item-option')]/div[text()= '%s']";
+  private static final String CREATE_DRIVER_BUTTON_XPATH = "//button[contains(@class,'add-driver-btn')]";
   private static final String MODAL_XPATH = "//div[contains(@id,'rcDialogTitle')]";
-  private static final String RECENT_MONTH_XPATH = "//a[contains(@class,'month-select')]";
-  private static final String NEXT_MONTH_XPATH = "//a[contains(@title,'Next month')]";
-  private static final String CALENDAR_DATE_XPATH = "//td[@title='%s']/div";
+  private static final String DATE_PICKER_MODAL_XPATH = "//div[not(contains(@class, 'ant-picker-dropdown-hidden'))]/div[@class= 'ant-picker-panel-container']";
+  private static final String NEXT_MONTH_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//button[contains(@class,'ant-picker-header-next-btn')]";
+  private static final String CALENDAR_DATE_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//td[@title='%s']/div";
   private static final String SAVE_BUTTON_XPATH = "//div[contains(@class,'footer')]/button[contains(@class,'primary')]";
-  private static final String TOAST_DRIVER_CREATED_XPATH = "//div[contains(@class,'notification-notice-description') and text()='Username: %s']";
+  private static final String TOAST_DRIVER_CREATED_XPATH = "//div[contains(@class,'ant-notification-notice-description') and text()='Username: %s']";
   private static final String NO_RESULT_TABLE_XPATH = "//div[contains(@class,'NoResult')]";
   private static final String VIEW_BUTTON_XPATH = "//td[contains(@class,'action')]/button[contains(@class,'view')]";
   private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class,'_NotComing')]";
@@ -46,6 +46,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
   private static final String DROPDOWN_CREATE_DRIVER_MODAL_XPATH = "//div[@id='%s']";
   private static final String CALENDAR_CREATE_DRIVER_MODAL_XPATH = "//span[@id='%s']";
+  private static final String NEW_TABLE_ASSERTION_XPATH = "//div[contains(@class,'ant-table-body')]//tbody/tr[2]/td[%d]";
   private static final String TABLE_ASSERTION_XPATH = "//tr[1]//td[contains(@class,'%s')]/span/%s";
   private static final String TABLE_ASSERTION_SELECTION_XPATH = "//td[contains(@class,'%s')]";
 
@@ -68,6 +69,15 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String USERNAME_TABLE_FILTER_ID = "username";
   private static final String HUB_TABLE_FILTER_ID = "hub";
   private static final String COMMENTS_TABLE_FILTER_ID = "comments";
+
+
+  private static final Integer NEW_NAME_TABLE_FILTER_ID = 2;
+  private static final Integer NEW_ID_TABLE_FILTER_ID = 3;
+  private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 4;
+  private static final Integer NEW_HUB_TABLE_FILTER_ID = 5;
+  private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 6;
+  private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
+  private static final Integer NEW_COMMENTS_TABLE_FILTER_ID = 10;
 
   private static final String EMPLOYMENT_TYPE_TABLE_FILTER_ID = "employmentType";
   private static final String LICENSE_TYPE_TABLE_FILTER_ID = "licenseType";
@@ -197,7 +207,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   }
 
   public void chooseHub(String hubName) {
-    click(f(DROPDOWN_CREATE_DRIVER_MODAL_XPATH, HUB_INPUT_CREATE_DRIVER_ID));
+    click(f(INPUT_CREATE_DRIVER_MODAL_XPATH, HUB_INPUT_CREATE_DRIVER_ID));
+    sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, HUB_INPUT_CREATE_DRIVER_ID), hubName);
     waitUntilVisibilityOfElementLocated(f(SELECT_FILTER_VALUE_XPATH, hubName));
     click(f(SELECT_FILTER_VALUE_XPATH, hubName));
   }
@@ -213,8 +224,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   }
 
   public void fillLicenseExpiryDate(String licenseExpiryDate) {
-    click(f(CALENDAR_CREATE_DRIVER_MODAL_XPATH, EXPIRY_DATE_INPUT_CREATE_DRIVER_ID));
-    waitUntilVisibilityOfElementLocated(RECENT_MONTH_XPATH);
+    click(f(INPUT_CREATE_DRIVER_MODAL_XPATH, EXPIRY_DATE_INPUT_CREATE_DRIVER_ID));
+    waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
     while (!(isElementExistFast(f(CALENDAR_DATE_XPATH, licenseExpiryDate)))) {
       click(NEXT_MONTH_XPATH);
     }
@@ -226,20 +237,21 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   }
 
   public void chooseEmploymentType(String employmentType) {
-    click(f(DROPDOWN_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_TYPE_INPUT_CREATE_DRIVER_ID));
+    click(f(INPUT_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_TYPE_INPUT_CREATE_DRIVER_ID));
+    sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_TYPE_INPUT_CREATE_DRIVER_ID), employmentType);
     waitUntilVisibilityOfElementLocated(f(SELECT_FILTER_VALUE_XPATH, employmentType));
     click(f(SELECT_FILTER_VALUE_XPATH, employmentType));
   }
 
   public void fillEmploymentStartDate(String employmentStartDate) {
-    click(f(CALENDAR_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_START_DATE_INPUT_CREATE_DRIVER_ID));
-    waitUntilVisibilityOfElementLocated(RECENT_MONTH_XPATH);
+    click(f(INPUT_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_START_DATE_INPUT_CREATE_DRIVER_ID));
+    waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
     click(f(CALENDAR_DATE_XPATH, employmentStartDate));
   }
 
   public void fillEmploymentEndDate(String employmentEndDate) {
-    click(f(CALENDAR_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_END_DATE_INPUT_CREATE_DRIVER_ID));
-    waitUntilVisibilityOfElementLocated(RECENT_MONTH_XPATH);
+    click(f(INPUT_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_END_DATE_INPUT_CREATE_DRIVER_ID));
+    waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
     while (!(isElementExistFast(f(CALENDAR_DATE_XPATH, employmentEndDate)))) {
       click(NEXT_MONTH_XPATH);
     }
@@ -279,15 +291,15 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
       case NAME_TABLE_FILTER_ID:
         nameFilter.setValue(middleMileDriver.getFirstName());
         waitUntilVisibilityOfElementLocated(
-            f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
-        actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
-        actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-        actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
+            f(NEW_TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+        actualName = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+        actualUsername = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
+        actualHub = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
         actualEmploymentType = getText(
-            f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
+            f(NEW_TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
         actualLicenseType = getText(
-            f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
-        actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
+            f(NEW_TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
+        actualComments = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
         break;
 
       case USERNAME_TABLE_FILTER_ID:

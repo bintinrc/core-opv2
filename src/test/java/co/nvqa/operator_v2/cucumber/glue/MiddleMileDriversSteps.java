@@ -130,6 +130,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         String country = get(COUNTRY);
         for (Map<String, String> data : middleMileDrivers) {
           Driver middleMileDriver = new Driver();
+//          Map<String, String> data = resolveKeyValues(driver);
           middleMileDriversPage.clickCreateDriversButton();
           middleMileDriver.setFirstName(data.get("name"));
 
@@ -158,7 +159,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           middleMileDriver
               .setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
-          middleMileDriversPage.fillLicenseExpiryDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriversPage.fillLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
 
           if (country == null) {
             middleMileDriver.setLicenseType(CLASS_5);
@@ -177,13 +178,9 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                 break;
 
               case VIETNAM:
-                middleMileDriver.setLicenseType(CLASS_E);
-                break;
-
               case MALAYSIA:
                 middleMileDriver.setLicenseType(CLASS_E);
                 break;
-
               case PHILIPPINES:
                 middleMileDriver.setLicenseType(RESTRICTION_5);
                 break;
@@ -204,8 +201,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           }
           middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
 
-          middleMileDriversPage.fillEmploymentStartDate(CAL_FORMATTER.format(TODAY));
-          middleMileDriversPage.fillEmploymentEndDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriversPage.fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
+          middleMileDriversPage.fillEmploymentEndDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
 
           middleMileDriver.setUsername(data.get("username"));
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
