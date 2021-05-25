@@ -6,7 +6,7 @@ Feature: All Shippers page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Ninja dash - create normal shipper in OPv2 - automatically create its dash account
+  Scenario: Ninja dash - create normal shipper in OPv2 - automatically create its dash account (uid:fe93cfcc-5d56-47f6-8864-94f031c35591)
     Given Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -29,7 +29,7 @@ Feature: All Shippers page
     Then account name is "{KEY_CREATED_SHIPPER.name}" on Ninja Dash page
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Ninja dash - change email login from OPv2 - username eligible
+  Scenario: Ninja dash - change email login from OPv2 - username eligible (uid:f65bb755-d3d3-4e1a-8350-a4d5ad64eb4c)
     Given Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -54,7 +54,7 @@ Feature: All Shippers page
     Then account name is "{KEY_CREATED_SHIPPER.name}" on Ninja Dash page
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Ninja dash - change email login from OPv2 - username not eligible
+  Scenario: Ninja dash - change email login from OPv2 - username not eligible (uid:3923f2d9-ae12-4d7f-9465-470cf4d0f9d6)
     Given Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -80,7 +80,7 @@ Feature: All Shippers page
     Then Operator verifies toast "Shipper Details (Basic Settings) - models: unable to update user_identities row: Error 1062: Duplicate entry 'dash.corporate+2@ninjavan.co-nv-username-password' for key 'user_identities_provider_user_id_uidx'" displayed on edit shipper page
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Ninja dash - change shipper name from OPv2
+  Scenario: Ninja dash - change shipper name from OPv2 (uid:86596a35-40bb-49c5-b481-3a508a11e053)
     Given Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |

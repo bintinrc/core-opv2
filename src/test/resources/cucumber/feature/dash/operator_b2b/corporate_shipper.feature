@@ -417,7 +417,7 @@ Feature: Corporate Shipper
     Then Operator verify the new Shipper is created successfully
 
   @DeleteShipper @DeleteCorporateSubShipper @CloseNewWindows
-  Scenario: Inherit corporate shipper setting to sub shipper
+  Scenario: Inherit corporate shipper setting to sub shipper (uid:a723c74f-acd1-49d0-8ffb-34fdc3552d48)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
