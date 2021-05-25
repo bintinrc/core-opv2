@@ -1,7 +1,7 @@
 @MileZero @B2B
 Feature: Corporate Shipper
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2 go to menu all shipper
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -415,6 +415,55 @@ Feature: Corporate Shipper
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+
+  @DeleteShipper @DeleteCorporateSubShipper @CloseNewWindows
+  Scenario: Inherit corporate shipper setting to sub shipper
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Corporate HQ          |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | isCorporateManualAWB         | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And DB Shipper verifies available service types for created shipper not contains "Corporate AWB"
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator update Sub Shippers Default settings:
+      | servicesAvailable      | 1DAY,2DAY         |
+      | availableServiceLevels | Same Day, Express |
+      | billingName            | ason              |
+      | billingContact         | 081319111110      |
+      | billingAddress         | kilang barat      |
+      | billingPostcode        | 596363            |
+      | corporateReturn        | true              |
+      | bulky                  | true              |
+    When Operator go to tab corporate sub shipper
+    And Operator create corporate sub shipper with data below:
+      | branchId | generated |
+      | name     | generated |
+      | email    | generated |
+    Then Operator verifies corporate sub shipper is created
+    And API Operator fetch id of the created shipper
+    When API Operator get b2b sub shippers for master shipper id "{KEY_CREATED_SHIPPER.id}"
+    When Operator edits shipper "{KEY_LIST_OF_B2B_SUB_SHIPPER[1].legacyId}"
+    Then Operator verifies Basic Settings on Edit Shipper page:
+      | availableServiceLevels | Same Day, Express |
+      | corporateReturn        | true              |
+      | bulky                  | true              |
+    And Operator verifies Pricing And Billing Settings on Edit Shipper page:
+      | billingName     | ason         |
+      | billingContact  | 081319111110 |
+      | billingAddress  | kilang barat |
+      | billingPostcode | 596363       |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

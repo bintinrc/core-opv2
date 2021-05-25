@@ -32,6 +32,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   @FindBy(name = "searchTerm")
   public TextBox searchTerm;
+  @FindBy(name = "container.shippers.edit-conditions")
+  public NvIconTextButton editConditions;
   @FindBy(name = "commons.search")
   public NvApiTextButton search;
   @FindBy(name = "container.shippers.create-shipper")
@@ -535,6 +537,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     public static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_EDIT = "Edit";
+    public static final String ACTION_DASH_LOGIN = "Dash login";
 
     public ShippersTable(WebDriver webDriver) {
       super(webDriver);
@@ -551,7 +554,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
       );
       setEntityClass(Shipper.class);
       setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "commons.edit"));
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT, "commons.edit",
+          ACTION_DASH_LOGIN, "container.shippers.ninja-dashboard-login-new"
+      ));
     }
   }
 }
