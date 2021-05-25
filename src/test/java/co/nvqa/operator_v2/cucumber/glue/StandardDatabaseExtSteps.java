@@ -383,22 +383,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("^DB Operator verify order_events record for the created order:$")
   public void operatorVerifyOrderEventRecordParams(Map<String, String> mapOfData) {
-    Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
-    assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
-    String value = mapOfData.get("type");
-
-    orderEvents.stream()
-        .filter(record ->
-        {
-          if (StringUtils.isNotBlank(value)) {
-            return Integer.parseInt(value) == record.getType();
-          }
-          return false;
-        })
-        .findFirst()
-        .orElseThrow(() -> new AssertionError(
-            f("Event record %s for order %d was not found", mapOfData.toString(), orderId)));
+    // order event is an async process, the order event may not created yet when accessing this step
+    retryIfAssertionErrorOccurred(() -> {
+      Long orderId = get(KEY_CREATED_ORDER_ID);
+      List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+      assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
+      String value = mapOfData.get("type");
+      orderEvents.stream()
+          .filter(record -> {
+            if (StringUtils.isNotBlank(value)) {
+              return Integer.parseInt(value) == record.getType();
+            }
+            return false;
+          })
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              f("Event record %s for order %d was not found", mapOfData.toString(), orderId)));
+      }, "Check DB for order event");
   }
 
   @Then("^DB Operator verify transaction_failure_reason record for the created order$")
