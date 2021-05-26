@@ -31,7 +31,9 @@ public class TextBox extends PageElement {
   }
 
   public void setValue(String value) {
-    clearAndSendKeys(value);
+    if (value != null) {
+      clearAndSendKeys(value);
+    }
   }
 
   public void setValue(Object value) {

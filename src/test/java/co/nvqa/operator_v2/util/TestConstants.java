@@ -10,6 +10,7 @@ import co.nvqa.commons.util.NvSystemProperties;
 public final class TestConstants extends CommonSeleniumTestConstants {
 
   public static final String OPERATOR_PORTAL_BASE_URL;
+  public static final String DASH_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_LOGIN_URL;
   public static final String OPERATOR_PORTAL_UID;
   public static final String OPERATOR_PORTAL_PWD;
@@ -41,6 +42,7 @@ public final class TestConstants extends CommonSeleniumTestConstants {
     String apiBase = NvSystemProperties
         .getString(NV_API_BASE, getString("operator-portal-base-url"));
     OPERATOR_PORTAL_BASE_URL = apiBase.replace("api", "operatorv2") + "/#";
+    DASH_PORTAL_BASE_URL = getString("dash-portal-base-url");
     OPERATOR_PORTAL_LOGIN_URL = OPERATOR_PORTAL_BASE_URL + "/login";
     OPERATOR_PORTAL_UID = getString("operator-portal-uid");
     OPERATOR_PORTAL_PWD = getString("operator-portal-pwd");
