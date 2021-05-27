@@ -1517,4 +1517,19 @@ public class AllShippersSteps extends AbstractSteps {
     assertEquals("Shipper type", resolveValue(expected),
         allShippersPage.allShippersCreateEditPage.shipperTypeReadOnly.getValue());
   }
+
+  @And("Operator verifies the pricing profile is referred to parent shipper {string}")
+  public void operatorVerifiesThePricingProfileIsReferredToParentShipper(
+      String parentShipperLegacyId) {
+    allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+    assertEquals(
+        "This is a Marketplace Seller / Corporate Branch that refers to its parent's profile(s). To see cascaded profiles,",
+        allShippersPage.getReferParentsProfileText());
+
+    String parentShipperPageURL = (f("%s/%s/shippers/%s",
+        TestConstants.OPERATOR_PORTAL_BASE_URL,
+        TestConstants.COUNTRY_CODE, parentShipperLegacyId));
+    assertEquals("Parent Shipper link mismatch", parentShipperPageURL,
+        allShippersPage.getReferParentsProfileLink());
+  }
 }

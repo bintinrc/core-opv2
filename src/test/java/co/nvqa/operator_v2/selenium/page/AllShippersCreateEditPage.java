@@ -233,7 +233,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(20);
+    shipperInformation.waitUntilClickable(30);
   }
 
   public void createNewShipper(Shipper shipper) {
