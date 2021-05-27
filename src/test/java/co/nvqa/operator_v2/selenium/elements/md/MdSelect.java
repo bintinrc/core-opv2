@@ -35,7 +35,7 @@ public class MdSelect extends PageElement {
   @FindBy(css = "md-select-value")
   public PageElement selectValueElement;
 
-  @FindBy(css = "md-select-value div")
+  @FindBy(css = "md-select-value")
   public PageElement currentValueElement;
 
   @FindBy(xpath = "//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']")
@@ -143,7 +143,7 @@ public class MdSelect extends PageElement {
   }
 
   public String getValue() {
-    return currentValueElement.getText();
+    return currentValueElement.getTextContent();
   }
 
   public String getSelectedValueAttribute() {
