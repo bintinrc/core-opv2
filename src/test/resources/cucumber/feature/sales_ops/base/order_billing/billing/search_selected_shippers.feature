@@ -1,4 +1,5 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling
+
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -56,8 +57,8 @@ Feature: Order Billing
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
-      | endDate      | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
+      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
       | shipper      | {shipper-v4-legacy-id}                                                                     |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
@@ -67,7 +68,6 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
     Then Operator verifies the orders grouped by shipper and parcel size and weight
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper (uid:1fc9c536-15b8-4157-b14c-88c595805819)

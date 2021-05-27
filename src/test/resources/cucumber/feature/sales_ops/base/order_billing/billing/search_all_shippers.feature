@@ -1,4 +1,5 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling
+
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -9,8 +10,8 @@ Feature: Order Billing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
-@nadeera
-@KillBrowser
+
+  @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
@@ -22,7 +23,6 @@ Feature: Order Billing
     Then Operator gets the count of files when orders consolidated by shipper from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:59af6bea-ac85-446d-97ba-4d386577f447)
@@ -53,7 +53,6 @@ Feature: Order Billing
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
 
-  #@nadeera
   @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
     Given Operator go to menu Shipper Support -> Order Billing
