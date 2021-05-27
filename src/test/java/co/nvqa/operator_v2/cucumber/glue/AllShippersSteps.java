@@ -13,17 +13,23 @@ import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
 import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -31,6 +37,9 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,6 +53,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -53,6 +63,7 @@ import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
+import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_DASH_LOGIN;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
 import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
 
@@ -287,10 +298,31 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorOpenEditShipperPageOfShipper(String shipperName) {
     shipperName = resolveValue(shipperName);
     allShippersPage.searchShipper(shipperName);
-    allShippersPage.openEditShipperPage();
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    allShippersPage.openEditShipperPage();
     allShippersPage.allShippersCreateEditPage.shipperInformation.waitUntilClickable();
     pause2s();
+  }
+
+  @Then("^Operator login to Ninja Dash as shipper \"(.+)\" from All Shippers page$")
+  public void loginToDash(String shipperName) {
+    shipperName = resolveValue(shipperName);
+    allShippersPage.quickSearchShipper(shipperName);
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    int i = 0;
+    boolean enabled = allShippersPage.shippersTable
+        .getActionButton("Ninja Dashboard Login (NEW)", 1).isEnabled();
+    while (i < 3 && !enabled) {
+      allShippersPage.refreshPage();
+      enabled = allShippersPage.shippersTable.getActionButton("Ninja Dashboard Login (NEW)", 1)
+          .isEnabled();
+      i++;
+    }
+    assertTrue("Ninja Dashboard Login (NEW) in row 1 is enabled", enabled);
+    allShippersPage.shippersTable.clickActionButton(1, ACTION_DASH_LOGIN);
+    allShippersPage.waitUntilNewWindowOrTabOpened();
+    allShippersPage
+        .switchToOtherWindowAndWaitWhileLoading(TestConstants.DASH_PORTAL_BASE_URL + "/home");
   }
 
   @And("Operator open Edit Shipper Page of created shipper")
@@ -303,7 +335,7 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("^Operator open Edit Pricing Profile dialog on Edit Shipper Page$")
   public void operatorOpenEditPricingProfileDialogOnEditShipperPage() {
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
-    allShippersPage.allShippersCreateEditPage.editPendingProfile.click();
+    allShippersPage.allShippersCreateEditPage.pricingAndBillingForm.editPendingProfile.click();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilVisible();
   }
 
@@ -644,6 +676,25 @@ public class AllShippersSteps extends AbstractSteps {
     put(KEY_UPDATED_SHIPPER, oldShipper);
   }
 
+  @When("Operator update basic settings of shipper {string}:")
+  public void operatorUpdateShipperBasicSettings(String shipperName, Map<String, String> data) {
+    operatorOpenEditShipperPageOfShipper(shipperName);
+    ShipperBasicSettings settings = new ShipperBasicSettings(resolveKeyValues(data));
+    allShippersPage.allShippersCreateEditPage.fillBasicSettingsForm(settings);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+    allShippersPage.allShippersCreateEditPage
+        .waitUntilInvisibilityOfToast("All changes saved successfully");
+    allShippersPage.allShippersCreateEditPage.backToShipperList();
+    pause3s();
+    getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+  }
+
+  @When("Operator fill shipper basic settings:")
+  public void operatorFillShipperBasicSettings(Map<String, String> data) {
+    ShipperBasicSettings settings = new ShipperBasicSettings(resolveKeyValues(data));
+    allShippersPage.allShippersCreateEditPage.fillBasicSettingsForm(settings);
+  }
+
   @Then("^Operator verify Shipper's basic settings is updated successfully$")
   public void operatorVerifyShipperBasicSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -690,6 +741,33 @@ public class AllShippersSteps extends AbstractSteps {
     shipper.setReturns(returnSettings);
 
     allShippersPage.updateShipperReturnsSettings(shipper);
+  }
+
+  @When("^Operator update Sub Shippers Default settings:$")
+  public void operatorUpdateSubShippersDefaultSettings(Map<String, String> data) {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    setSubShipperDefaults(shipper, resolveKeyValues(data));
+    allShippersPage.allShippersCreateEditPage.fillSubShippersDefaults(shipper);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+    allShippersPage.allShippersCreateEditPage
+        .waitUntilInvisibilityOfToast("All changes saved successfully", true);
+  }
+
+  @When("^Operator verifies Basic Settings on Edit Shipper page:$")
+  public void operatorVerifyBasicSettings(Map<String, String> data) {
+    allShippersPage.allShippersCreateEditPage.tabs.selectTab("Basic Settings");
+    ShipperBasicSettings expected = new ShipperBasicSettings(resolveKeyValues(data));
+    ShipperBasicSettings actual = allShippersPage.allShippersCreateEditPage.getBasicSettings();
+    expected.compareWithActual(actual);
+  }
+
+  @When("^Operator verifies Pricing And Billing Settings on Edit Shipper page:$")
+  public void operatorVerifyPricingAndBillingSettings(Map<String, String> data) {
+    allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+    PricingAndBillingSettings expected = new PricingAndBillingSettings(resolveKeyValues(data));
+    PricingAndBillingSettings actual = allShippersPage.allShippersCreateEditPage
+        .getPricingAndBillingSettings();
+    expected.compareWithActual(actual);
   }
 
   @Then("^Operator verify Shipper's Returns settings is updated successfully$")
@@ -934,7 +1012,11 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator edits shipper {string}")
   public void operatorEditsShipper(String shipperLegacyId) {
-    Shipper shipper = new Shipper();
+    shipperLegacyId = resolveValue(shipperLegacyId);
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    if (shipper == null) {
+      shipper = new Shipper();
+    }
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
@@ -1123,8 +1205,7 @@ public class AllShippersSteps extends AbstractSteps {
     if (servicesTemp == null || servicesTemp.isEmpty()) {
       listOfAvailableService = new ArrayList<>();
     } else {
-      listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim)
-          .collect(Collectors.toList());
+      listOfAvailableService = splitAndNormalize(servicesTemp);
     }
 
     OrderCreate orderCreate = new OrderCreate();
@@ -1136,6 +1217,9 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setIsPrePaid(isPrepaid);
     orderCreate.setAllowStagedOrders(isAllowStagedOrders);
     orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
+    orderCreate.setIsCorporate(Boolean.parseBoolean(mapOfData.get("isCorporate")));
+    orderCreate
+        .setIsCorporateManualAWB(Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
     orderCreate.setIsCorporateReturn(isCorporateReturn);
     shipper.setOrderCreate(orderCreate);
 
@@ -1166,6 +1250,11 @@ public class AllShippersSteps extends AbstractSteps {
     }
   }
 
+  private void setSubShipperDefaults(Shipper shipper, Map<String, String> mapOfData) {
+    SubShipperDefaultSettings subShipperDefaults = new SubShipperDefaultSettings(mapOfData);
+    shipper.setSubShippersDefaults(subShipperDefaults);
+  }
+
   private void setLiaisonDetails(String dateUniqueString, Shipper shipper) {
     Address liaisonAddress = generateRandomAddress();
 
@@ -1183,7 +1272,11 @@ public class AllShippersSteps extends AbstractSteps {
     shipper.setName("Dummy Shipper #" + dateUniqueString);
     shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
     shipper.setContact(generatePhoneNumber(dateUniqueString));
-    shipper.setEmail("ds." + dateUniqueString + "@automation.co");
+    if (mapOfData.containsKey("email")) {
+      shipper.setEmail(mapOfData.get("email"));
+    } else {
+      shipper.setEmail("ds." + dateUniqueString + "@automation.co");
+    }
     shipper.setShipperDashboardPassword("Ninjitsu89");
     return shipper;
   }
@@ -1214,10 +1307,15 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
   }
 
+  @When("Operator click Save Changes on edit shipper page")
+  public void clickSaveChanges() {
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+  }
+
   @When("Operator verifies toast {string} displayed on edit shipper page")
   public void verifiesToast(String msg) {
     String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
-    assertTrue(actualMsg.contains(msg));
+    assertThat("Error message", actualMsg, Matchers.containsString(resolveValue(msg)));
   }
 
   @And("Operator verifies the pricing profile and shipper discount details are correct")
@@ -1272,9 +1370,9 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("hint {string} is displayed on Edit Shipper page")
   public void verifyHint(String expected) {
     assertTrue("Hint is displayed",
-        allShippersPage.allShippersCreateEditPage.tabHint.isDisplayed());
+        allShippersPage.allShippersCreateEditPage.basicSettingsForm.tabHint.isDisplayed());
     assertEquals("Hint text", resolveValue(expected),
-        allShippersPage.allShippersCreateEditPage.tabHint.getText());
+        allShippersPage.allShippersCreateEditPage.basicSettingsForm.tabHint.getText());
   }
 
   @When("Operator verifies corporate sub shipper is correct")
@@ -1344,32 +1442,41 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private void fillNewSubShipperData(int index, Map<String, String> data) {
-    String random = String.valueOf(System.currentTimeMillis()).substring(5, 11);
-    String id = data.get("branchId");
+    data = resolveKeyValues(data);
+    generateBranchData(data);
 
-    if ("generated".equalsIgnoreCase(id)) {
-      id = random;
-    }
+    String id = data.get("branchId");
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.branchId.get(index).setValue(id);
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, id);
     put(KEY_SUB_SHIPPER_SELLER_ID, id);
 
     String fixedName = data.get("name");
-    if ("generated".equalsIgnoreCase(fixedName)) {
-      fixedName = f("sub shipper %s", random);
-    }
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.name.get(index).setValue(fixedName);
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, fixedName);
     put(KEY_SHIPPER_NAME, fixedName);
 
     String fixedEmail = data.get("email");
-    if ("generated".equalsIgnoreCase(fixedEmail)) {
-      fixedEmail = f("sub.shipper+%s@ninja.tes", random);
-    }
+    putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, fixedEmail);
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.email.get(index).setValue(fixedEmail);
+  }
+
+  private void generateBranchData(Map<String, String> data) {
+    String random = String.valueOf(System.currentTimeMillis()).substring(5, 11);
+    String id = data.get("branchId");
+    if ("generated".equalsIgnoreCase(id)) {
+      data.put("branchId", random);
+    }
+    String fixedName = data.get("name");
+    if ("generated".equalsIgnoreCase(fixedName)) {
+      data.put("name", "sub shipper " + random);
+    }
+    String fixedEmail = data.get("email");
+    if ("generated".equalsIgnoreCase(fixedEmail)) {
+      data.put("email", f("sub.shipper+%s@ninja.tes", random));
+    }
   }
 
   @When("Operator create corporate sub shippers with data below:")
@@ -1385,6 +1492,55 @@ public class AllShippersSteps extends AbstractSteps {
         }
       }
       page.createSubShipperAccount.click();
+    });
+  }
+
+  @When("Operator bulk create corporate sub shippers with data below:")
+  public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws IOException {
+    uploadFileBulkCreateCorporateSubShipper(data);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.createSubShipperAccount.click();
+    });
+  }
+
+  @When("Operator upload bulk create corporate sub shippers file with data below:")
+  public void uploadFileBulkCreateCorporateSubShipper(List<Map<String, String>> data)
+      throws IOException {
+    List<String> rows = data.stream()
+        .map(row -> {
+          row = resolveKeyValues(row);
+          pause100ms();
+          generateBranchData(row);
+          putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
+          put(KEY_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
+          putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, row.get("name"));
+          put(KEY_SHIPPER_NAME, row.get("name"));
+          putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, row.get("email"));
+          return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
+        })
+        .collect(Collectors.toList());
+    rows.add(0, "Branch ID (External Ref),Name,Email");
+    File file = TestUtils.createFileOnTempFolder(
+        String.format("create-order-update_%s.csv", generateDateUniqueString()));
+    FileUtils.writeLines(file, rows);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.addSubShipper.click();
+      page.switchToFileUpload.click();
+      page.uploadCsvFile.setValue(file);
+    });
+  }
+
+  @When("Operator upload incorrect bulk create corporate sub shippers file")
+  public void bulkCreateCorporateSubShipper() throws IOException {
+    List<String> rows = new ArrayList<>();
+    rows.add("Branch ID (External Ref),Name,Email, Some other data");
+    File file = TestUtils.createFileOnTempFolder(
+        String.format("create-order-update_%s.csv", generateDateUniqueString()));
+    FileUtils.writeLines(file, rows);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.addSubShipper.click();
+      page.switchToFileUpload.click();
+      page.uploadCsvFile.setValue(file);
     });
   }
 
@@ -1471,6 +1627,81 @@ public class AllShippersSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies file upload error messages are displayed on b2b management page:")
+  public void qaVerifyFileUploadErrorMessageIsDisplayedOnBBManagementPage(
+      List<String> errorMessages) {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<String> actualErrorMsg = page.bulkCreationErrorMessage.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      assertThat("List of bulk create error messages", actualErrorMsg,
+          Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
+    });
+  }
+
+  @Then("Operator verifies file upload warning messages are displayed on b2b management page:")
+  public void qaVerifyFileUploadWarningMessageIsDisplayedOnBBManagementPage(
+      List<String> errorMessages) {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<String> actualErrorMsg = page.bulkCreationWarningMessage.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      assertThat("List of bulk create warning messages", actualErrorMsg,
+          Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
+    });
+  }
+
+  @Then("Operator clicks Go Back button on b2b management page")
+  public void clickGoBack() {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page ->
+        page.goBack.click()
+    );
+  }
+
+  @Then("Before You Go modal is displayed with {string} message on b2b management page")
+  public void checkBeforeYouGoModal(String message) {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+          page.beforeYouGoModal.waitUntilVisible();
+          assertEquals("Modal message", resolveValue(message),
+              page.beforeYouGoModal.message.getNormalizedText());
+        }
+    );
+  }
+
+  @Then("Operator clicks Cancel button on Before You Go modal on b2b management page")
+  public void cancelBeforeYouGoModal() {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.beforeYouGoModal.cancel.click();
+      page.beforeYouGoModal.waitUntilInvisible();
+    });
+  }
+
+  @Then("Operator downloads error log on b2b management page")
+  public void downloadErrorLog() {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      page.downloadErrorLog.click();
+    });
+  }
+
+  @Then("bulk shipper creation error log file contains data:")
+  public void checkErrorLogFile(List<Map<String, String>> data) {
+    List<String> rows = data.stream()
+        .map(row -> {
+          row = resolveKeyValues(row);
+          return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
+        })
+        .collect(Collectors.toList());
+    rows.add(0, "Branch ID (External Ref),Name,Email");
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      File file = Paths.get(StandardTestConstants.TEMP_DIR, "template.csv").toFile();
+      try {
+        page.verifyFileDownloadedSuccessfully("template.csv", StringUtils.join(rows, "\n"));
+      } finally {
+        FileUtils.deleteQuietly(file);
+      }
+    });
+  }
+
   @Then("Operator verifies that Start Date is populated as today's date and is not editable")
   public void operatorVerifiesThatStartDateIsPopulatedAsTodaySDateAndIsNotEditable() {
     allShippersPage.allShippersCreateEditPage.verifyStartDateInNewPricingScript();
@@ -1515,6 +1746,6 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies shipper type is {string} on Edit Shipper page")
   public void verifyShipperType(String expected) {
     assertEquals("Shipper type", resolveValue(expected),
-        allShippersPage.allShippersCreateEditPage.shipperTypeReadOnly.getValue());
+        allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly.getValue());
   }
 }

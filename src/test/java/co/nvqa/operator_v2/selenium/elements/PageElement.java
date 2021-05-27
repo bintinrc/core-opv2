@@ -99,6 +99,10 @@ public class PageElement extends SimplePage {
     return getWebElement().getText();
   }
 
+  public String getTextContent() {
+    return executeScript("return arguments[0].textContent", getWebElement());
+  }
+
   public String getNormalizedText() {
     return StringUtils.normalizeSpace(getText());
   }
