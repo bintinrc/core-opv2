@@ -211,7 +211,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0       |
       | scannedAtShipperPOD   | No data |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD (uid:9840426a-a1f5-4864-8ecf-3747f7b55e52)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:

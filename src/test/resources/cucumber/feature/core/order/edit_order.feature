@@ -327,7 +327,7 @@ Feature: Edit Order
     And Operator print Airway Bill on Edit Order page
     Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:c6ab425f-c508-451f-b84c-09eb267c5f27)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -356,7 +356,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY (uid:91bf2923-94ba-4d8c-bd1b-c000eca19ee9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -386,7 +386,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -653,58 +653,6 @@ Feature: Edit Order
       | searchLogic | contains            |
       | searchTerm  | KEY_STAMP_ID        |
 
-  Scenario: Operator Update Order Status from Pending/Pending to Transit/Arrived at Sorting Hub on Edit Order Page (uid:1f72e16b-afdb-4911-a2d1-4b4c5783f062)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Transit                |
-      | granularStatus                | Arrived at Sorting Hub |
-      | lastPickupTransactionStatus   | Success                |
-      | lastDeliveryTransactionStatus | Pending                |
-    Then Operator verify the created order info is correct on Edit Order page
-
-  Scenario: Operator Update Order Status from Pending/Pending to Completed/Completed on Edit Order Page (uid:8f40d738-057c-4f14-a301-ed884bd6a91f)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Completed |
-      | granularStatus                | Completed |
-      | lastPickupTransactionStatus   | Success   |
-      | lastDeliveryTransactionStatus | Success   |
-    Then Operator verify the created order info is correct on Edit Order page
-    And Operator verify color of order header on Edit Order page is "GREEN"
-
-  Scenario: Operator Update Order Status from Pending/Pending to Cancelled/Cancelled on Edit Order Page (uid:3e788d22-fce5-4cf3-b22d-3985db12cfd3)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Cancelled |
-      | granularStatus                | Cancelled |
-      | lastPickupTransactionStatus   | Cancelled |
-      | lastDeliveryTransactionStatus | Cancelled |
-    Then Operator verify the created order info is correct on Edit Order page
-    And Operator verify color of order header on Edit Order page is "RED"
-
-  Scenario: Operator Update Order Status from Transit/Arrived at Sorting Hub to Pending/Pending on Edit Order Page (uid:b3a052cf-9dbf-4cff-b4ec-8d944516cc2e)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Pending        |
-      | granularStatus                | Pending Pickup |
-      | lastPickupTransactionStatus   | Pending        |
-      | lastDeliveryTransactionStatus | Pending        |
-    Then Operator verify the created order info is correct on Edit Order page
-
   Scenario: Cancel Order - On Hold (uid:0bb9bcdb-c2aa-45fe-be71-4c182ffc7a8f)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -752,7 +700,7 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Cancel Order - Van En-route to Pickup (uid:b270f6e4-2b52-4142-b4f5-a1c34153b449)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -1244,7 +1192,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
