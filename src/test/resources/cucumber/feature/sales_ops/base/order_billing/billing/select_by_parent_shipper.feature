@@ -89,8 +89,8 @@ Feature: Order Billing
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:56d32c3e-bb0f-4a7d-8c94-babe66f3e530)
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
-      | startDate     | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
-      | endDate       | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
+      | startDate     | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | endDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
       | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                                                           |
       | generateFile  | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress  | {order-billing-email}                                                                      |

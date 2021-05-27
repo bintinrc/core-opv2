@@ -140,7 +140,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | shipper      | {shipper-sop-v4-legacy-id}                                |
+      | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     And Operator opens Gmail and checks received email

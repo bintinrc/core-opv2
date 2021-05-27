@@ -266,8 +266,8 @@ Feature: Order Billing
       | startDate | {gradle-current-date-yyyy-MM-dd} |
       | endDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator tries to upload a PDF and verifies that any other file except csv is not allowed
-
-  @DeleteOrArchiveRoute @KillBrowser
+@nadeera
+@DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV with two columns (uid:f404e9e5-70f8-4407-bfa7-3057d410a97f)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
