@@ -400,20 +400,6 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  Scenario: Operator Update Order Status from Transit/Arrived at Sorting Hub to Pending/Pending on Edit Order Page (uid:f84bb35a-a1b0-403d-852c-c78a1ffd9a36)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Pending        |
-      | granularStatus                | Pending Pickup |
-      | lastPickupTransactionStatus   | Pending        |
-      | lastDeliveryTransactionStatus | Pending        |
-    Then Operator verify the created order info is correct on Edit Order page
-
   Scenario: Cancel Order - Pending Pickup (uid:0af2c2aa-51e1-4780-8b8c-0207feed6dfe)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
