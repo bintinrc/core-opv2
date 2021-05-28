@@ -42,6 +42,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public NvIconTextButton clearAllSelections;
   @FindBy(xpath = "//md-progress-circular/following-sibling::div[text()='Loading shippers...']")
   public PageElement loadingShippers;
+  @FindBy(xpath = "//div[@id='hint-text']/p")
+  public PageElement referParentsProfileText;
+  @FindBy(id = "hint-link")
+  public PageElement referParentsProfileLink;
 
   public ShippersTable shippersTable;
 
@@ -530,6 +534,14 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
     waitUntilPageLoaded();
     allShippersCreateEditPage.addPricingProfileAndVerifySaveButtonIsDisabled(shipper);
+  }
+
+  public String getReferParentsProfileText() {
+    return referParentsProfileText.getText();
+  }
+
+  public String getReferParentsProfileLink() {
+    return referParentsProfileLink.getAttribute("href");
   }
 
   public static class ShippersTable extends MdVirtualRepeatTable<Shipper> {
