@@ -5,7 +5,7 @@ Feature: Van Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID (uid:677bce9c-ca6e-4842-99e7-ccecba82f2d8)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -30,6 +30,13 @@ Feature: Van Inbound
       | routeDateFrom | {gradle-current-date-yyyy-MM-dd} |
       | routeDateTo   | {gradle-current-date-yyyy-MM-dd} |
       | hubName       | {hub-name}                       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER INBOUND SCAN  |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verifies inbound_scans record with type "4" and correct route_id
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds with Invalid Tracking ID (uid:fd5c0c47-7a31-44f7-b2dd-d07bd9a0645f)

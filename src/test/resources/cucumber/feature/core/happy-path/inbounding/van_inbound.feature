@@ -30,6 +30,13 @@ Feature: Van Inbound
       | routeDateFrom | {gradle-current-date-yyyy-MM-dd} |
       | routeDateTo   | {gradle-current-date-yyyy-MM-dd} |
       | hubName       | {hub-name}                       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER INBOUND SCAN  |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verifies inbound_scans record with type "4" and correct route_id
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
