@@ -25,15 +25,8 @@ Feature:  Create Pricing Profile - Marketplace Shippers - COD
     Then Operator verifies the pricing lever details in the database
   # Verify pricing profile is changed - sub shipper
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-cod-legacy-id}"
-    And Operator gets pricing profile values
-    And Operator verifies the pricing profile details are like below:
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
-      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
-      | type              | FLAT                                        |
-      | discount          | 20                                          |
-      | codMinFee         | 1                                           |
-      | codPercentage     | 3                                           |
-      | comments          | This is a test pricing script               |
+    And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-cod-legacy-id}"
+
 
   Scenario: Create Pricing Profile - Marketplace Shipper - with 'Int' COD Min Fee and 'Int' COD Percentage - Marketplace Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:ec81df26-a10d-42d2-b5bc-0dc17c572026)
       #Add new pricing profile and verify - sub shipper

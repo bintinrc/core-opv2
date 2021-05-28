@@ -108,12 +108,7 @@ Feature: Implanted Manifest
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get Reservation Job
-    And API Driver reject Reservation
-    And DB Operator get Booking ID of Reservation
-    And API Operator fail the reservation using data below:
+    And Operator admin manifest force fail reservation
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 7           |
       | failureReasonIndexMode | FIRST       |
@@ -132,6 +127,7 @@ Feature: Implanted Manifest
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
+      | status      | FAIL                             |
       | shipperName | {shipper-v4-name}                |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
@@ -215,7 +211,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0       |
       | scannedAtShipperPOD   | No data |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD (uid:9840426a-a1f5-4864-8ecf-3747f7b55e52)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:

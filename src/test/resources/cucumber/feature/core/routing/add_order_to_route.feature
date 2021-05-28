@@ -5,7 +5,7 @@ Feature: Add Order To Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Add Order to a Route - Pickup, Valid Tracking ID, With Prefix (uid:44589e4d-860b-45ac-a50e-add9f5aedf4a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -47,7 +47,7 @@ Feature: Add Order To Route
     Then Operator verifies that "Order TESTINVALIDTRACKINGID not found!" error toast message is displayed
     And Operator verifies the last scanned tracking id is "TESTINVALIDTRACKINGID"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Add Order to a Route - Delivery, Valid Tracking ID, No Prefix (uid:777598b1-78a7-4e36-bdc3-7345f32ab40a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

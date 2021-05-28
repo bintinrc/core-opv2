@@ -32,6 +32,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   @FindBy(name = "searchTerm")
   public TextBox searchTerm;
+  @FindBy(name = "container.shippers.edit-conditions")
+  public NvIconTextButton editConditions;
   @FindBy(name = "commons.search")
   public NvApiTextButton search;
   @FindBy(name = "container.shippers.create-shipper")
@@ -40,6 +42,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public NvIconTextButton clearAllSelections;
   @FindBy(xpath = "//md-progress-circular/following-sibling::div[text()='Loading shippers...']")
   public PageElement loadingShippers;
+  @FindBy(xpath = "//div[@id='hint-text']/p")
+  public PageElement referParentsProfileText;
+  @FindBy(id = "hint-link")
+  public PageElement referParentsProfileLink;
 
   public ShippersTable shippersTable;
 
@@ -154,7 +160,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
     assertEquals("Industry", shipper.getIndustryName(), actualShipper.getIndustryName());
     assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualShipper.getLiaisonEmail());
     assertEquals("Contact", shipper.getContact(), actualShipper.getContact());
-    assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0],
+    assertEquals("Sales Person",
+        shipper.getSalesPerson().substring(0, shipper.getSalesPerson().lastIndexOf("-")),
         actualShipper.getSalesPerson());
     assertEquals("Expected Status = Inactive", shipper.getActive(), actualShipper.getActive());
 
@@ -529,11 +536,20 @@ public class AllShippersPage extends OperatorV2SimplePage {
     allShippersCreateEditPage.addPricingProfileAndVerifySaveButtonIsDisabled(shipper);
   }
 
+  public String getReferParentsProfileText() {
+    return referParentsProfileText.getText();
+  }
+
+  public String getReferParentsProfileLink() {
+    return referParentsProfileLink.getAttribute("href");
+  }
+
   public static class ShippersTable extends MdVirtualRepeatTable<Shipper> {
 
     public static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_EDIT = "Edit";
+    public static final String ACTION_DASH_LOGIN = "Dash login";
 
     public ShippersTable(WebDriver webDriver) {
       super(webDriver);
@@ -550,7 +566,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
       );
       setEntityClass(Shipper.class);
       setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "commons.edit"));
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT, "commons.edit",
+          ACTION_DASH_LOGIN, "container.shippers.ninja-dashboard-login-new"
+      ));
     }
   }
 }
