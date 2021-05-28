@@ -54,17 +54,7 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     #Verify pricing profile is the same as parents ACTIVE pricing profile- corporate subshipper
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
-    And Operator gets pricing profile values
-      And Operator verifies the pricing profile details are like below:
-        | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
-        | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
-        | type                | FLAT                                        |
-        | discount            | 20                                          |
-        | insuranceMinFee     | 1.2                                         |
-        | insurancePercentage | 3                                           |
-        | insuranceThreshold  | 0                                           |
-        | comments            | This is a test pricing script               |
-
+    And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
 
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who has their own Pricing Profile is Exists (uid:835aa273-b9be-45ef-ac50-835cdf12fab2)
     #Add new pricing profile and verify - corporate shipper
