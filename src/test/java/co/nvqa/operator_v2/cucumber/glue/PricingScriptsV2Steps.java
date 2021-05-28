@@ -8,7 +8,6 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
-import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -28,7 +27,6 @@ import static co.nvqa.commons.util.StandardTestUtils.createFile;
 public class PricingScriptsV2Steps extends AbstractSteps {
 
   private PricingScriptsV2Page pricingScriptsV2Page;
-  private UploadInvoicedOrdersPage uploadInvoicedOrdersPage;
 
   public PricingScriptsV2Steps() {
   }
@@ -36,7 +34,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @Override
   public void init() {
     pricingScriptsV2Page = new PricingScriptsV2Page(getWebDriver());
-    uploadInvoicedOrdersPage = new UploadInvoicedOrdersPage(getWebDriver());
   }
 
   @When("^Operator create new Draft Script using data below:$")
@@ -66,30 +63,13 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
-  @When("Operator create new Draft Script using template")
-  public void operatorCreateDraftUsingTemplate() {
-    String scenarioName = getScenarioManager().getCurrentScenario().getName();
-    String dateUniqueString = generateDateUniqueString();
-    String createdDate = CREATED_DATE_SDF.format(new Date());
-    String name = "Dummy Script #" + dateUniqueString;
-    String description = f(
-        "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
-        createdDate, scenarioName);
-    NvLogger.infof("Created Pricing Script Name :" + name);
-
-    Script script = new Script();
-    script.setName(name);
-    script.setDescription(description);
-    pricingScriptsV2Page.createDraftUsingTemplate(script);
-
-    put(KEY_CREATED_PRICING_SCRIPT, script);
-  }
-
   @When("^Operator create new Draft Script with import a csv file using data below:$")
   public void operatorCreateDraftUsingCsvFile(Map<String, String> mapOfData) {
+    String hasTemplate = mapOfData.get("hasTemplate");
+    String templateName = mapOfData.get("templateName");
     String source = mapOfData.get("source");
     String activeParameters = mapOfData.get("activeParameters");
-    String filePath = mapOfData.get("filePath");
+    String fileContent = mapOfData.get("fileContent");
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String dateUniqueString = generateDateUniqueString();
 
@@ -106,10 +86,14 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     Script script = new Script();
     script.setName(name);
     script.setDescription(description);
-    script.setSource(source);
-    script.setActiveParameters(listOfActiveParameters);
-    script.setFilePath(filePath);
-
+    script.setHasTemplate(hasTemplate);
+    if (hasTemplate.equals("Yes")) {
+      script.setTemplateName(templateName);
+    } else {
+      script.setSource(source);
+      script.setActiveParameters(listOfActiveParameters);
+      script.setFileContent(fileContent);
+    }
     pricingScriptsV2Page.createDraftUsingCsvFile(script);
 
     put(KEY_CREATED_PRICING_SCRIPT, script);

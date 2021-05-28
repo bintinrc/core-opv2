@@ -59,11 +59,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
-  public void createDraftUsingTemplate(Script script){
-    clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
-    pricingScriptsV2CreateEditDraftPage.createDraftUsingTemplate(script);
-  }
-
   public void createDraftUsingCsvFile(Script script){
     clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
     pricingScriptsV2CreateEditDraftPage.createDraftUsingCsvFile(script);

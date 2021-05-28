@@ -29,19 +29,12 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public UploadNewCsvDialog uploadNewCsvDialog;
 
-  @FindBy(id = "button-pick-csv")
-  public NvButtonFilePicker importCsv;
-
   public UploadInvoicedOrdersPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void clickUploadCsvButton() {
     uploadInvoicedOrdersButton.click();
-  }
-
-  public void clickImportCsv(String filePath){
-    importCsv.setValue(filePath);
   }
 
   public void clickDownloadCsvButton() {
