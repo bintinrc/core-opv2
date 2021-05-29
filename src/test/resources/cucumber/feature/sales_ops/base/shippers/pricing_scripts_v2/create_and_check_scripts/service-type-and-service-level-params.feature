@@ -1,4 +1,4 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps @weam
+@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps
 Feature: Service Type and Service Level params
 
   Background: Login to Operator Portal V2
@@ -8,6 +8,8 @@ Feature: Service Type and Service Level params
   Scenario: Create Script - Include service_type and service_level - Added Successfully
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
+      | hasTemplate      | No                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | isCsvFile        | No                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, order_type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
     Then Operator verify the new Script is created successfully on Drafts
@@ -18,6 +20,8 @@ Feature: Service Type and Service Level params
   Scenario: Create Script - Include service_type and service_level - Incorrect service_type
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
+      | hasTemplate      | No                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | isCsvFile        | No                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "parcel") {result.delivery_fee += 3;}if (params.service_type == "MARKETPLACE") {result.delivery_fee += 5;}if (params.service_type == "return") {result.delivery_fee += 7;}if (params.service_type == "document") {result.delivery_fee += 11;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, order_type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
     Then Operator verify the new Script is created successfully on Drafts
@@ -31,14 +35,12 @@ Feature: Service Type and Service Level params
       | weight       | 1.0      |
       | insuredValue | 0.00     |
       | codValue     | 0.00     |
+      | isId         | No       |
       | fromZone     | WEST     |
       | toZone       | EAST     |
-      | fromL1       |          |
-      | toL1         |          |
-      | fromL2       |          |
-      | toL2         |          |
-      | fromL3       |          |
-      | toL3         |          |
+      | isL1Exist    | No       |
+      | isL2Exist    | No       |
+      | isL3Exist    | No       |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | 13.91 |
       | gst          | 0.91  |
@@ -55,6 +57,8 @@ Feature: Service Type and Service Level params
   Scenario: Create Script - Include service_type and service_level - Incorrect service_level
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
+      | hasTemplate      | No                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | isCsvFile        | No                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_level == "standard") {result.delivery_fee += 13;}if (params.service_level == "express") {result.delivery_fee += 17;}if (params.service_level == "Sameday") {result.delivery_fee += 19;}if (params.service_level == "NextDay") {result.delivery_fee += 23;}return result;} |
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, order_type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
     Then Operator verify the new Script is created successfully on Drafts
@@ -68,22 +72,20 @@ Feature: Service Type and Service Level params
       | weight       | 1.0      |
       | insuredValue | 0.00     |
       | codValue     | 0.00     |
+      | isId         | No       |
       | fromZone     | WEST     |
       | toZone       | EAST     |
-      | fromL1       |          |
-      | toL1         |          |
-      | fromL2       |          |
-      | toL2         |          |
-      | fromL3       |          |
-      | toL3         |          |
+      | isL1Exist    | No       |
+      | isL2Exist    | No       |
+      | isL3Exist    | No       |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | 3.21 |
-      | gst          | 0.21  |
-      | deliveryFee  | 3     |
-      | insuranceFee | 0     |
-      | codFee       | 0     |
-      | handlingFee  | 0     |
-      | comments     | OK    |
+      | gst          | 0.21 |
+      | deliveryFee  | 3    |
+      | insuranceFee | 0    |
+      | codFee       | 0    |
+      | handlingFee  | 0    |
+      | comments     | OK   |
     And Operator close page
     And Operator validate and release Draft Script
     Then Operator verify Draft Script is released successfully
