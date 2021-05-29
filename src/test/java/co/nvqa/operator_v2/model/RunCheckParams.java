@@ -32,4 +32,7 @@ public class RunCheckParams {
   private String toL1;
   private String toL2;
   private String toL3;
+  private String isL1Exist;
+  private String isL2Exist;
+  private String isL3Exist;
 }

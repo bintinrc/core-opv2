@@ -38,44 +38,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("^Operator create new Draft Script using data below:$")
   public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
-    String source = mapOfData.get("source");
-    String activeParameters = mapOfData.get("activeParameters");
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String dateUniqueString = generateDateUniqueString();
-
-    List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim)
-        .collect(Collectors.toList());
-
-    String createdDate = CREATED_DATE_SDF.format(new Date());
-    String name = "Dummy Script #" + dateUniqueString;
-    String description = f(
-        "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
-        createdDate, scenarioName);
-    NvLogger.infof("Created Pricing Script Name :" + name);
-
-    Script script = new Script();
-    script.setName(name);
-    script.setDescription(description);
-    script.setSource(source);
-    script.setActiveParameters(listOfActiveParameters);
-    pricingScriptsV2Page.createDraft(script);
-
-    put(KEY_CREATED_PRICING_SCRIPT, script);
-  }
-
-  @When("^Operator create new Draft Script with import a csv file using data below:$")
-  public void operatorCreateDraftUsingCsvFile(Map<String, String> mapOfData) {
     String hasTemplate = mapOfData.get("hasTemplate");
-    String templateName = mapOfData.get("templateName");
-    String source = mapOfData.get("source");
-    String activeParameters = mapOfData.get("activeParameters");
-    String fileContent = mapOfData.get("fileContent");
-    String scenarioName = getScenarioManager().getCurrentScenario().getName();
-    String dateUniqueString = generateDateUniqueString();
-
-    List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim)
-        .collect(Collectors.toList());
-
     String createdDate = CREATED_DATE_SDF.format(new Date());
     String name = "Dummy Script #" + dateUniqueString;
     String description = f(
@@ -87,15 +52,28 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     script.setName(name);
     script.setDescription(description);
     script.setHasTemplate(hasTemplate);
+
     if (hasTemplate.equals("Yes")) {
+      String templateName = mapOfData.get("templateName");
       script.setTemplateName(templateName);
     } else {
-      script.setSource(source);
-      script.setActiveParameters(listOfActiveParameters);
-      script.setFileContent(fileContent);
-    }
-    pricingScriptsV2Page.createDraftUsingCsvFile(script);
+      String isCSVFile = mapOfData.get("isCsvFile");
+      script.setIsCsvFile(isCSVFile);
+      if (isCSVFile.equals("No")) {
+        String source = mapOfData.get("source");
+        String activeParameters = mapOfData.get("activeParameters");
 
+        List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
+            .map(String::trim)
+            .collect(Collectors.toList());
+        script.setSource(source);
+        script.setActiveParameters(listOfActiveParameters);
+      } else {
+        String fileContent = mapOfData.get("fileContent");
+        script.setFileContent(fileContent);
+      }
+    }
+    pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
@@ -139,14 +117,19 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     double weight = Double.parseDouble(mapOfData.get("weight"));
     double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
-    String fromZone = mapOfData.get("fromZone");
-    String toZone = mapOfData.get("toZone");
-    String fromL1 = mapOfData.get("fromL1");
-    String fromL2 = mapOfData.get("fromL2");
-    String fromL3 = mapOfData.get("fromL3");
-    String toL1 = mapOfData.get("toL1");
-    String toL2 = mapOfData.get("toL2");
-    String toL3 = mapOfData.get("toL3");
+    String isId = mapOfData.get("isId");
+    String fromZone, toZone;
+    if (isId.equals("Yes")) {
+      fromZone = "";
+      toZone = "";
+    } else {
+      fromZone = mapOfData.get("fromZone");
+      toZone = mapOfData.get("toZone");
+    }
+
+    String isL1Exist = mapOfData.get("isL1Exist");
+    String isL2Exist = mapOfData.get("isL2Exist");
+    String isL3Exist = mapOfData.get("isL3Exist");
 
     RunCheckParams runCheckParams = new RunCheckParams();
     runCheckParams.setOrderFields(orderFields);
@@ -162,12 +145,26 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     runCheckParams.setCodValue(codValue);
     runCheckParams.setFromZone(fromZone);
     runCheckParams.setToZone(toZone);
-    runCheckParams.setFromL1(fromL1);
-    runCheckParams.setFromL2(fromL2);
-    runCheckParams.setFromL3(fromL3);
-    runCheckParams.setToL1(toL1);
-    runCheckParams.setToL2(toL2);
-    runCheckParams.setToL3(toL3);
+    runCheckParams.setIsL1Exist(isL1Exist);
+    runCheckParams.setIsL2Exist(isL2Exist);
+    runCheckParams.setIsL3Exist(isL3Exist);
+    if (isL1Exist.equals("Yes")) {
+      String fromL1 = mapOfData.get("fromL1");
+      String toL1 = mapOfData.get("toL1");
+      runCheckParams.setFromL1(fromL1);
+      runCheckParams.setToL1(toL1);
+    } else if (isL2Exist.equals("Yes")) {
+      String fromL2 = mapOfData.get("fromL2");
+      String toL2 = mapOfData.get("toL2");
+      runCheckParams.setFromL2(fromL2);
+      runCheckParams.setToL2(toL2);
+    } else if (isL3Exist.equals("Yes")) {
+      String fromL3 = mapOfData.get("fromL3");
+      runCheckParams.setFromL3(fromL3);
+      String toL3 = mapOfData.get("toL3");
+      runCheckParams.setToL3(toL3);
+    }
+
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
   }
 
