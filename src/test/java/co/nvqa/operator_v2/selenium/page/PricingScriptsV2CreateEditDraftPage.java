@@ -54,7 +54,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
     setScriptInfo(script);
     setWriteScript(script);
-    saveDraft();
   }
 
 
@@ -72,9 +71,32 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   private void setWriteScript(Script script) {
     clickTabItem("Write Script");
-    activateParameters(script.getActiveParameters());
-    updateAceEditorValue(script.getSource());
-    checkSyntax();
+    if (script.getHasTemplate().equals("Yes")) {
+      sendKeysAndEnter("//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']",
+          script.getTemplateName());
+      click("//button[@aria-label='Load']");
+      checkSyntax();
+      pause2s();
+      saveDraft();
+    } else {
+      if (script.getIsCsvFile().equals("Yes")) {
+        String csvFileName = "sample_upload_rates.csv";
+        File csvFile = createFile(csvFileName, script.getFileContent());
+        importCsv.setValue(csvFile);
+        boolean headerHint = isElementVisible(
+            "//div[@text='Run a syntax check before saving or verifying the draft.']");
+        if (headerHint) {
+          checkSyntax();
+          pause2s();
+          saveDraft();
+        }
+      } else {
+        activateParameters(script.getActiveParameters());
+        updateAceEditorValue(script.getSource());
+        checkSyntax();
+        saveDraft();
+      }
+    }
   }
 
   private void checkSyntax() {
@@ -207,13 +229,16 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     retryIfRuntimeExceptionOccurred(
         () -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()),
         "Select value from \"To Zone\" NvAutocomplete");
-    sendKeysByName("container.pricing-scripts.from-l1", runCheckParams.getFromL1());
-    sendKeysByName("container.pricing-scripts.to-l1", runCheckParams.getToL1());
-    sendKeysByName("container.pricing-scripts.from-l2", runCheckParams.getFromL2());
-    sendKeysByName("container.pricing-scripts.to-l2", runCheckParams.getToL2());
-    sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
-    sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
-
+    if (runCheckParams.getIsL1Exist().equals("Yes")) {
+      sendKeysByName("container.pricing-scripts.from-l1", runCheckParams.getFromL1());
+      sendKeysByName("container.pricing-scripts.to-l1", runCheckParams.getToL1());
+    } else if (runCheckParams.getIsL2Exist().equals("Yes")) {
+      sendKeysByName("container.pricing-scripts.from-l2", runCheckParams.getFromL2());
+      sendKeysByName("container.pricing-scripts.to-l2", runCheckParams.getToL2());
+    } else if (runCheckParams.getIsL3Exist().equals("Yes")) {
+      sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
+      sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
+    }
     clickNvApiTextButtonByNameAndWaitUntilDone(
         "container.pricing-scripts.run-check"); //Button Run Check
   }
