@@ -20,6 +20,7 @@ public class Dp extends DataEntity<Dp> {
   private String type;
   private Boolean canShipperLodgeIn;
   private Boolean canCustomerCollect;
+  private Boolean isAutoReservation;
   private String service;
   private String driverCollectionMode;
   private Long maxParcelStayDuration;
@@ -273,6 +274,18 @@ public class Dp extends DataEntity<Dp> {
 
   public void setCanCustomerCollect(String canCustomerCollect) {
     setCanCustomerCollect(Boolean.parseBoolean(canCustomerCollect));
+  }
+
+  public Boolean getIsAutoReservation() {
+    return  isAutoReservation;
+  }
+
+  public void setIsAutoReservation(Boolean isAutoReservation) {
+    this.isAutoReservation = isAutoReservation;
+  }
+
+  public void setIsAutoReservation(String isAutoReservation) {
+    setIsAutoReservation(Boolean.parseBoolean(isAutoReservation));
   }
 
   @Override
