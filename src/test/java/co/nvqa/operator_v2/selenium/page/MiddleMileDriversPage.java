@@ -6,7 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import org.openqa.selenium.JavascriptExecutor;
@@ -34,14 +34,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String SAVE_BUTTON_XPATH = "//div[contains(@class,'footer')]/button[contains(@class,'primary')]";
   private static final String TOAST_DRIVER_CREATED_XPATH = "//div[contains(@class,'ant-notification-notice-description') and text()='Username: %s']";
   private static final String NO_RESULT_TABLE_XPATH = "//div[contains(@class,'NoResult')]";
-  private static final String VIEW_BUTTON_XPATH = "//td[contains(@class,'action')]/button[contains(@class,'view')]";
-  private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class,'_NotComing')]";
-  private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class,'_Coming')]";
-  private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'dropdown-trigger')]";
+  private static final String VIEW_BUTTON_XPATH = "//button[contains(@class,'view-user-btn')]";
+  private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='No']";
+  private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='Yes']";
+  private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'ant-table-selection')]";
   private static final String SELECT_ALL_DROP_DOWN_SELECTION_XPATH = "//li[contains(@class,'dropdown')]//span[text()='Select All Shown']";
-  private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'GenericDropdownButton')]";
-  private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//span[text()='Set To Coming']/preceding-sibling::div";
-  private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//span[text()='Set Not To Coming']/preceding-sibling::div";
+  private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'apply-action-btn')]";
+  private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-to-coming-btn')]";
+  private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
 
   private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
   private static final String DROPDOWN_CREATE_DRIVER_MODAL_XPATH = "//div[@id='%s']";
@@ -101,22 +101,22 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[contains(@class,'ant-spin-dot-spin')]")
   public PageElement antDotSpinner;
 
-  @FindBy(id = "hubIds")
+  @FindBy(xpath ="//input[@id='hubIds']/ancestor::div[contains(@class, ' ant-select')]")
   public AntSelect hubSearchFilter;
 
-  @FindBy(id = "employmentStatus")
+  @FindBy(xpath = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]")
   public AntSelect employmentStatusSearchFilter;
 
-  @FindBy(id = "licenseStatus")
+  @FindBy(xpath = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]")
   public AntSelect licenseStatusSearchFilter;
 
   @FindBy(xpath = "//button[.='Load Drivers']")
   public Button loadDrivers;
 
-  @FindBy(xpath = "//th[div[.='Name']]//input")
+  @FindBy(xpath = "//input[@aria-label='input-name']")
   public TextBox nameFilter;
 
-  @FindBy(xpath = "//th[div[.='Id']]//input")
+  @FindBy(xpath = "//input[@aria-label='input-id']")
   public TextBox idFilter;
 
   @FindBy(xpath = "//th[div[.='Username']]//input")
@@ -146,7 +146,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-content")
   public EditDriverDialog editDriverDialog;
 
-  @FindBy(className = "btn-edit-user")
+  @FindBy(className = "edit-user-btn")
   public Button editDriver;
 
   @FindBy(xpath = "//button[.='Edit Search Filter']")
@@ -368,19 +368,19 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
   public void tableFilterById(Driver middleMileDriver, Long driverId) {
     idFilter.setValue(driverId);
-    waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, ID_TABLE_FILTER_ID, MARK_ELEMENT));
+    waitUntilVisibilityOfElementLocated(f(NEW_TABLE_ASSERTION_XPATH, NEW_ID_TABLE_FILTER_ID));
 
-    String actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-    String actualId = getText(f(TABLE_ASSERTION_XPATH, ID_TABLE_FILTER_ID, MARK_ELEMENT));
+    String actualName = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+    String actualId = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_ID_TABLE_FILTER_ID));
     String actualUsername = getText(
-        f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-    String actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
+        f(NEW_TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
+    String actualHub = getText(f(NEW_TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
     String actualEmploymentType = getText(
-        f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
+        f(NEW_TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
     String actualLicenseType = getText(
-        f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
+        f(NEW_TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
     String actualComments = getText(
-        f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
+        f(NEW_TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
 
     assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
     assertEquals("ID is not the same : ", driverId.toString(), actualId);
@@ -395,7 +395,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
   public void tableFilterByIdWithValue(Long driverId) {
     idFilter.setValue(driverId);
-    waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, ID_TABLE_FILTER_ID, MARK_ELEMENT));
+    waitUntilVisibilityOfElementLocated(f(NEW_TABLE_ASSERTION_XPATH, NEW_ID_TABLE_FILTER_ID));
   }
 
   public void tableFilterCombobox(Driver middleMileDriver, String filterBy) {
@@ -520,7 +520,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         editDriverDialog.name.sendKeys(value);
         break;
       case "contactNumber":
-        editDriverDialog.contactNumber.clear();
+        editDriverDialog.contactNumber.forceClear();
         editDriverDialog.contactNumber.sendKeys(value);
         break;
       case "hub":
@@ -531,15 +531,13 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         editDriverDialog.licenseNumber.sendKeys(value);
         break;
       case "licenseExpiryDate":
-        editDriverDialog.licenseExpiryDate.clear.click();
-        editDriverDialog.licenseExpiryDate.pickerInput.click();
         editDriverDialog.licenseExpiryDate.sendDate(value);
         break;
       case "licenseType":
         editDriverDialog.selectLicenseType(value);
         break;
       case "employmentType":
-        editDriverDialog.employmentType.selectValueWithoutSearch(value);
+        editDriverDialog.employmentType.selectValue(value);
         break;
       case "employmentStartDate":
         editDriverDialog.employmentStartDate.clear.click();
@@ -547,8 +545,6 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         editDriverDialog.employmentStartDate.sendDate(value);
         break;
       case "employmentEndDate":
-        editDriverDialog.employmentEndDate.clear.click();
-        editDriverDialog.employmentEndDate.pickerInput.click();
         editDriverDialog.employmentEndDate.sendDate(value);
         break;
     }
@@ -597,9 +593,6 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
   public void clickBulkAvailabilityMode(String mode) {
     click(DROP_DOWN_ON_TABLE_XPATH);
-    waitUntilVisibilityOfElementLocated(SELECT_ALL_DROP_DOWN_SELECTION_XPATH);
-    click(SELECT_ALL_DROP_DOWN_SELECTION_XPATH);
-    waitUntilVisibilityOfElementLocated(APPLY_ACTION_DROP_DOWN_XPATH);
     click(APPLY_ACTION_DROP_DOWN_XPATH);
 
     if (YES.equalsIgnoreCase(mode)) {
@@ -712,8 +705,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     @FindBy(id = "name")
     public TextBox name;
 
-    @FindBy(id = "hubId")
-    public AntSelect hub;
+    @FindBy(xpath = "//div[contains(@class,' ant-select')][.//input[@id='hubId']]")
+    public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect hub;
 
     @FindBy(id = "contactNumber")
     public TextBox contactNumber;
@@ -721,7 +714,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     @FindBy(id = "licenseNumber")
     public TextBox licenseNumber;
 
-    @FindBy(xpath = "//span[@id='licenseExpiryDate']//input")
+    @FindBy(xpath = "//div[contains(@class,'ant-picker')][not(contains(@class,'ant-picker-input'))][.//input[@id='licenseExpiryDate']]")
     public PageElement licenseExpiryDate;
 
     @FindBy(id = "username")
@@ -746,22 +739,22 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     @FindBy(id = "contactNumber")
     public TextBox contactNumber;
 
-    @FindBy(id = "hubId")
-    public AntSelect hub;
+    @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='hubId']]")
+    public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect hub;
 
     @FindBy(id = "licenseNumber")
     public TextBox licenseNumber;
 
-    @FindBy(xpath = "//span[@id='licenseExpiryDate']")
+    @FindBy(xpath = "//div[@class= 'ant-picker'][.//input[@id='licenseExpiryDate']]")
     public AntCalendarPicker licenseExpiryDate;
 
-    @FindBy(id = "employmentType")
-    public AntSelect employmentType;
+    @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='employmentType']]")
+    public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect employmentType;
 
     @FindBy(xpath = "//span[@id='employmentStartDate']")
     public AntCalendarPicker employmentStartDate;
 
-    @FindBy(xpath = "//span[@id='employmentEndDate']")
+    @FindBy(xpath = "//div[@class= 'ant-picker'][.//input[@id='employmentEndDate']]")
     public AntCalendarPicker employmentEndDate;
 
     @FindBy(className = "ant-btn")

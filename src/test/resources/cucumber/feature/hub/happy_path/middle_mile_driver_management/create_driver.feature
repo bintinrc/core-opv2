@@ -1,4 +1,4 @@
-@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @CreateDriver @RT @CWF
+@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @CreateDriver
 Feature: Middle Mile Driver Management - Create Driver
 
   @LaunchBrowser @ShouldAlwaysRun
