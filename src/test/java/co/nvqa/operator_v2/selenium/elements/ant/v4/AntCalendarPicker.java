@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.selenium.elements.ant;
+package co.nvqa.operator_v2.selenium.elements.ant.v4;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -17,6 +17,9 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class AntCalendarPicker extends PageElement {
 
+  private static final String CAL_ITEM_XPATH= "//div[not(contains(@class, 'ant-picker-dropdown-hidden'))][contains(@class,'ant-picker-dropdown')]//td[@title='%s']";
+  private static final String CLEAR_XPATH = ".//span[contains(@class,'ant-picker-clear')]";
+
   public AntCalendarPicker(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
     super(webDriver, searchContext, webElement);
@@ -28,19 +31,18 @@ public class AntCalendarPicker extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  @FindBy(xpath = ".//input[@class='ant-calendar-picker-input ant-input']")
+  @FindBy(xpath = ".//div[@class='ant-picker-input']/input")
   public TextBox pickerInput;
 
-  @FindBy(xpath = ".//i[contains(@class,'ant-calendar-picker-clear')]")
+  @FindBy(xpath = CLEAR_XPATH)
   public PageElement clear;
 
-  @FindBy(xpath = "//input[@class='ant-calendar-input ']")
-  public TextBox input;
-
   public void sendDate(String value) {
-    input.waitUntilVisible();
-    input.sendKeys(value);
-    input.sendKeys(Keys.ENTER);
-    input.waitUntilInvisible();
+    if (isElementExist(CLEAR_XPATH)) {
+      clear.click();
+    }
+    pickerInput.sendKeys(value);
+    pause1s();
+    clickf(CAL_ITEM_XPATH, value);
   }
 }
