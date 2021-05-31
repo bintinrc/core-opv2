@@ -130,7 +130,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         String country = get(COUNTRY);
         for (Map<String, String> data : middleMileDrivers) {
           Driver middleMileDriver = new Driver();
-//          Map<String, String> data = resolveKeyValues(driver);
           middleMileDriversPage.clickCreateDriversButton();
           middleMileDriver.setFirstName(data.get("name"));
 
