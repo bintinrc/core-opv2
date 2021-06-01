@@ -286,9 +286,9 @@ Feature: Pricing Scripts V2
   Scenario: Create Pricing Script - Import from CSV File Fails
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
-      | hasTemplate | No                                                   |
-      | isCsvFile   | Yes                                                  |
-      | fileContent | [***=] |
+      | hasTemplate | No                                          |
+      | isCsvFile   | Yes                                         |
+      | fileContent | deliveryType':'EXPRESS' \n 'parcelSize':'S' |
     Then Operator verify error message after adding invalid csv file
 
   @DeletePricingScript

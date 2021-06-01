@@ -11,14 +11,11 @@ import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 /**
  * @author Daniel Joi Partogi Hutapea

@@ -12,12 +12,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.json.Json;
 import org.openqa.selenium.support.FindBy;
-
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -54,13 +50,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
     setScriptInfo(script);
     setWriteScript(script);
-  }
-
-
-  public void createDraftUsingCsvFile(Script script) {
-    waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
-    setScriptInfo(script);
-    setWriteScriptWithImportCsvFile(script);
   }
 
   private void setScriptInfo(Script script) {
@@ -109,36 +98,9 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
   }
 
   public void checkErrorHeader() {
-    String actualErrorInfo = getAttribute(
-        "//div[@text='CSV Header contain invalid character, accept ([A-Z],[a-z],space)']",
-        "text");
-    assertEquals("Syntax Info", "CSV Header contain invalid character, accept ([A-Z],[a-z],space)",
+    String actualErrorInfo = getText("//div[contains(@class,'hint')]");
+    assertEquals("Syntax Info", "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)",
         actualErrorInfo);
-  }
-
-  public void setWriteScriptWithImportCsvFile(Script script) {
-    clickTabItem("Write Script");
-    if (script.getHasTemplate().equals("Yes")) {
-      sendKeysAndEnter("//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']",
-          script.getTemplateName());
-      click("//button[@aria-label='Load']");
-      checkSyntax();
-      pause2s();
-      saveDraft();
-    } else {
-      activateParameters(script.getActiveParameters());
-      updateAceEditorValue(script.getSource());
-      String csvFileName = "sample_upload_rates.csv";
-      File csvFile = createFile(csvFileName, "**var zonalRates = [");
-      importCsv.setValue(csvFile);
-      boolean headerHint = isElementVisible(
-          "//div[@text='Run a syntax check before saving or verifying the draft.']");
-      if (headerHint) {
-        checkSyntax();
-        pause2s();
-        saveDraft();
-      }
-    }
   }
 
   private void saveDraft() {
