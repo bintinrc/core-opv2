@@ -26,6 +26,7 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   private static final String FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL = "Choose";
   private static final String FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL = "Save Button";
   private static final String FILTER_UPLOAD_CSV_DIALOG_FILE_NAME = "//md-dialog//h4//span[contains(text(), '%s')]";
+  private static final String FILTER_AGGREGATED_INFO_MSG_XPATH = "//div[contains(text(),'%s')]";
 
   public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
   public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
@@ -119,6 +120,10 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     if (toastErrors.size() > 0) {
       fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
     }
+  }
+
+  public Boolean isAggregatedInfoMsgExist(String infoMsg) {
+    return isElementExist(f(FILTER_AGGREGATED_INFO_MSG_XPATH, infoMsg));
   }
 
 }
