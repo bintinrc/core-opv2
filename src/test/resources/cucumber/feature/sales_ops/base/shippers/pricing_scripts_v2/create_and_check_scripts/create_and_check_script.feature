@@ -288,7 +288,7 @@ Feature: Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | hasTemplate | No                                                   |
       | isCsvFile   | Yes                                                  |
-      | fileContent | 'deliveryType':'EXPRESS','parcelSize':'S','perKg':20 |
+      | fileContent | [***=] |
     Then Operator verify error message after adding invalid csv file
 
   @DeletePricingScript
