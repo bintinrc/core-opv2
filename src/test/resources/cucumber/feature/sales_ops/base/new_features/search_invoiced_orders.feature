@@ -15,13 +15,13 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    And Operator go to menu New Features -> Upload Invoiced Orders
+    And Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
     # Upload Csv
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator clicks Search Invoiced Order button
@@ -40,7 +40,7 @@ Feature: Upload Invoiced Orders
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
     # Upload Csv
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator clicks Search Invoiced Order button
@@ -48,12 +48,12 @@ Feature: Upload Invoiced Orders
 
   @KillBrowser
   Scenario: Search by Uploading Invalid File Type (uid:daf938d9-983d-477b-950b-1f9c8f3577ca)
-    Given Operator go to menu New Features -> Invoiced Orders Search
+    Given Operator go to menu Finance -> Invoiced Orders Search
     Then Operator uploads a PDF on Invoiced Orders Search Page and verifies error message "Please select only .csv files"
 
   @KillBrowser
   Scenario: Search by Uploading CSV file with invalid format template (uid:e4e8b221-0776-45fd-9924-5229f390020d)
-    Given Operator go to menu New Features -> Invoiced Orders Search
+    Given Operator go to menu Finance -> Invoiced Orders Search
     Then Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message "More than 1 column detected in csv file"
 
   @KillBrowser
@@ -66,13 +66,13 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    And Operator go to menu New Features -> Upload Invoiced Orders
+    And Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
       # Search by tracking_id
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
     And Operator clicks Search Invoiced Order button
@@ -89,7 +89,7 @@ Feature: Upload Invoiced Orders
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
       # Search by tracking_id
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
     And Operator clicks Search Invoiced Order button
@@ -97,13 +97,13 @@ Feature: Upload Invoiced Orders
 
   @KillBrowser
   Scenario: Search invoiced orders without upload file or input manually (uid:1ea16236-000e-4ac2-872a-9fde775261f0)
-    Given Operator go to menu New Features -> Invoiced Orders Search
+    Given Operator go to menu Finance -> Invoiced Orders Search
     And Operator clicks Search Invoiced Order button without any input
     Then Operator verifies error message "Please choose either Upload CSV OR Tracking Numbers!" is displayed
 
   @KillBrowser
   Scenario: Search by upload CSV and input manually at the same time (uid:97f40c6a-4560-4499-9185-04044f6b9bb6)
-    Given Operator go to menu New Features -> Invoiced Orders Search
+    Given Operator go to menu Finance -> Invoiced Orders Search
     When Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | TEST |
     Then Operator verifies the file name is displayed
@@ -122,13 +122,13 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    And Operator go to menu New Features -> Upload Invoiced Orders
+    And Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
       # Search by tracking_id
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
     And Operator clicks Search Invoiced Order button
@@ -147,13 +147,13 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    And Operator go to menu New Features -> Upload Invoiced Orders
+    And Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
       # Search by date
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
     And Operator clicks Search Invoiced Order button
@@ -172,13 +172,13 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    And Operator go to menu New Features -> Upload Invoiced Orders
+    And Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
     # Upload Csv
-    And Operator go to menu New Features -> Invoiced Orders Search
+    And Operator go to menu Finance -> Invoiced Orders Search
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator clicks Search Invoiced Order button
@@ -201,5 +201,5 @@ Feature: Upload Invoiced Orders
 
   @KillBrowser
   Scenario: Search by Uploading Empty Csv File (uid:3c8f9e4e-ae03-4054-9b4e-b1fecd83bdc5)
-    Given Operator go to menu New Features -> Invoiced Orders Search
+    Given Operator go to menu Finance -> Invoiced Orders Search
     Then Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message "Empty csv file detected"

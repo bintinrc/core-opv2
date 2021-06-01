@@ -31,7 +31,7 @@ Feature: Order Billing
 
 #  @DeleteOrArchiveRoute @KillBrowser
 #  Scenario: Generate "PARENT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:c6cf526d-2de8-4895-af53-f22f66f38207)
-#    Given Operator go to menu Shipper Support -> Order Billing
+#    Given Operator go to menu Finance -> Order Billing
 #    When Operator generates success billings using data below:
 #      | startDate     | {gradle-current-date-yyyy-MM-dd}                                  |
 #      | endDate       | {gradle-current-date-yyyy-MM-dd}                                  |
@@ -47,7 +47,7 @@ Feature: Order Billing
 #
 #  @DeleteOrArchiveRoute @KillBrowser
 #  Scenario: Generate "PARENT" Success Billing Report - Selected by Parent Shipper - Normal Shipper (uid:af87cb87-01b8-4097-9f56-72ab909893cf)
-#    Given Operator go to menu Shipper Support -> Order Billing
+#    Given Operator go to menu Finance -> Order Billing
 #    Then Operator chooses Select by Parent Shippers option and search for normal shipper ID like below:
 #      | {shipper-sop-v4-legacy-id} |
 #    Then Operator verifies that the name of normal shipper suggestion is not displayed
@@ -55,7 +55,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:9f788797-8cda-4fad-b87b-8e92009577b6)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate     | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate       | {gradle-current-date-yyyy-MM-dd}                    |
@@ -71,7 +71,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:0177a1b4-c964-43de-9e83-8f9d6d67c0a0)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate     | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate       | {gradle-current-date-yyyy-MM-dd}                          |
@@ -87,7 +87,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:56d32c3e-bb0f-4a7d-8c94-babe66f3e530)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate     | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
@@ -103,7 +103,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:398a38d3-c451-409b-8a7a-f9e015e0a0e3)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate     | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate       | {gradle-current-date-yyyy-MM-dd}                                                      |

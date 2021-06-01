@@ -12,7 +12,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:88b46747-f90d-4dbc-b176-84d06bc00619)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
@@ -39,7 +39,7 @@ Feature: Order Billing
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -54,7 +54,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:e1b70633-0b5b-4496-b81d-2f8a721f6e37)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
@@ -69,7 +69,7 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:6625cf19-d920-41ce-9435-128b5bad13ca)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |

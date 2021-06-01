@@ -11,7 +11,7 @@ Feature: Upload Invoiced Orders
 
   @KillBrowser
   Scenario: Download Template Sample (uid:73c198bf-91eb-4177-a2bb-bb4cf6b2f283)
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Download sample CSV template button on the Upload Invoiced Orders Page
     Then Operator verify Sample CSV file on Upload Invoiced Orders page downloaded successfully with below data
       | NVSAMPL00000000001 |
@@ -28,7 +28,7 @@ Feature: Upload Invoiced Orders
     And API Operator force succeed created order
     And Operator gets 'Completed' price order details from the dwh_qa_gl.priced_orders table
     And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -56,7 +56,7 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator verifies the order with status 'Completed' is not in dwh_qa_gl.priced_orders
     And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -80,7 +80,7 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -108,7 +108,7 @@ Feature: Upload Invoiced Orders
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -123,13 +123,13 @@ Feature: Upload Invoiced Orders
 
   @KillBrowser
   Scenario: Upload Invoiced Orders with invalid file type (not .csv) (uid:3ef6bcc3-2c11-477e-82ed-27c477b783e8)
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     Then Operator uploads a PDF and verifies that any other file except csv is not allowed
 
   @KillBrowser
   Scenario: Upload Invoice Orders with invalid template (e.g. two columns) (uid:38d566d5-c35a-493f-bec3-7ca283661534)
-    Given Operator go to menu New Features -> Upload Invoiced Orders
+    Given Operator go to menu Finance -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     Then Operator uploads an invalid CSV and verifies error message
 
