@@ -11,14 +11,15 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @KillBrowser
+    @nadeera
+    @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
-    Given Operator go to menu Finance -> Order Billing
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | generateFile | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress | {order-billing-email}                               |
+      Given Operator go to menu Finance Tools -> Order Billing
+      When Operator generates success billings using data below:
+        | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
+        | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
+        | generateFile | Orders consolidated by shipper (1 file per shipper) |
+        | emailAddress | {order-billing-email}                               |
     Then Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by shipper from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
@@ -40,7 +41,7 @@ Feature: Order Billing
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
-    Given Operator go to menu Finance -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -55,7 +56,7 @@ Feature: Order Billing
 
   @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
-    Given Operator go to menu Finance -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
@@ -70,7 +71,7 @@ Feature: Order Billing
 
   @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:a6967dec-0d31-46f8-98c0-efe91682bd35)
-    Given Operator go to menu Finance -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |

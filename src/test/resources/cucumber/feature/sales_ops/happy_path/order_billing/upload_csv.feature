@@ -8,7 +8,7 @@ Feature: Order Billing
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given Operator go to menu Finance -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
