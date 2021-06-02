@@ -181,8 +181,8 @@ Feature: Pricing Scripts V2
       | Corporate, STANDARD                | STANDARD      | Corporate                 | 19.795     | 1.295 | 18.5        | 0            | 0      | 0           | OK       | uid:64d99231-93cf-4aa1-a13e-ab7e4b118c5f |
       | Corporate Return, EXPRESS          | EXPRESS       | Corporate Return          | 25.252     | 1.652 | 23.6        | 0            | 0      | 0           | OK       | uid:c2651843-f068-4c89-91ff-117782f05e1d |
 
-  @DeletePricingScript
-  Scenario Outline: Create and Check Script with Send is_RTS - Use calculatePricing() (<hiptest-uid>)
+  @DeletePricingScript @weam
+  Scenario Outline: Create and Check Script with Send is_RTS - Use calculatePricing()- ID (<hiptest-uid>)
     Given Operator changes the country to "Indonesia"
     And Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
