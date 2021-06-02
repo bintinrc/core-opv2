@@ -14,9 +14,9 @@ Feature: Order Billing
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:88b46747-f90d-4dbc-b176-84d06bc00619)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | generateFile | Orders consolidated by shipper (1 file per shipper) |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
+      | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | 2 - SG Default SSB Template                         |
     Then Operator opens Gmail and checks received email
@@ -42,9 +42,9 @@ Feature: Order Billing
     Given API Driver deliver the created parcel successfully
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | generateFile | All orders (1 very big file, takes long time to generate) |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                          |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                          |
+      | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | 2 - SG Default SSB Template                               |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
@@ -58,9 +58,9 @@ Feature: Order Billing
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:e1b70633-0b5b-4496-b81d-2f8a721f6e37)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                                                      |
       | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers
@@ -74,9 +74,9 @@ Feature: Order Billing
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:6625cf19-d920-41ce-9435-128b5bad13ca)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | 2 - SG Default SSB Template                                                           |
     Then Operator opens Gmail and checks received email

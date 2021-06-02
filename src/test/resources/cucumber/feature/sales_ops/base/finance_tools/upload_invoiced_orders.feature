@@ -52,7 +52,7 @@ Feature: Upload Invoiced Orders
       | updated_at | notNull        |
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
-      | subject | Invoicing Result                               |
+      | subject | Invoicing Result                           |
       | body    | All Tracking IDs are successfully invoiced |
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -124,7 +124,7 @@ Feature: Upload Invoiced Orders
       | updated_at | notNull        |
       | deleted_at | notNull        |
     Then Operator opens Gmail and verifies email with below details
-      | subject | Invoicing Result                               |
+      | subject | Invoicing Result                           |
       | body    | All Tracking IDs are successfully invoiced |
 
 
