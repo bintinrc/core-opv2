@@ -531,6 +531,7 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
 
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - NULL Status Order Exists (uid:97578e96-9d0b-4616-9874-3e4c23cdfdfe)
     Given API Shipper create V4 order using data below:
@@ -540,11 +541,12 @@ Feature: Order Billing
     And DB Operator updates the granular status of the priced order to "NULL" in Billing DB
     And Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | shipper      | {shipper-v4-legacy-id}                                    |
-      | generateFile | All orders (1 very big file, takes long time to generate) |
-      | emailAddress | {order-billing-email}                                     |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                          |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                          |
+      | shipper         | {shipper-v4-legacy-id}                                    |
+      | generateFile    | All orders (1 very big file, takes long time to generate) |
+      | emailAddress    | {order-billing-email}                                     |
+      | csvFileTemplate | 2 - SG Default SSB Template                               |
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"

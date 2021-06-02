@@ -20,11 +20,12 @@ Feature: Order Billing
     And API Operator force succeed created order
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | shipper      | {shipper-v4-legacy-id}                              |
-      | generateFile | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress | {order-billing-email}                               |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
+      | shipper         | {shipper-v4-legacy-id}                              |
+      | generateFile    | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress    | {order-billing-email}                               |
+      | csvFileTemplate | 6 - ID Default SSB Template                         |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
