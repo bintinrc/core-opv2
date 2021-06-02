@@ -12,12 +12,13 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:88b46747-f90d-4dbc-b176-84d06bc00619)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | generateFile | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress | {order-billing-email}                               |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
+      | generateFile    | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress    | {order-billing-email}                               |
+      | csvFileTemplate | 2 - SG Default SSB Template                         |
     Then Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by shipper from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
@@ -39,12 +40,13 @@ Feature: Order Billing
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | generateFile | All orders (1 very big file, takes long time to generate) |
-      | emailAddress | {order-billing-email}                                     |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                          |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                          |
+      | generateFile    | All orders (1 very big file, takes long time to generate) |
+      | emailAddress    | {order-billing-email}                                     |
+      | csvFileTemplate | 2 - SG Default SSB Template                               |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -54,12 +56,13 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:e1b70633-0b5b-4496-b81d-2f8a721f6e37)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress | {order-billing-email}                                                                      |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
+      | emailAddress    | {order-billing-email}                                                                      |
+      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
@@ -69,12 +72,13 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:6625cf19-d920-41ce-9435-128b5bad13ca)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
-      | emailAddress | {order-billing-email}                                                                 |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
+      | emailAddress    | {order-billing-email}                                                                 |
+      | csvFileTemplate | 2 - SG Default SSB Template                                                           |
     Then Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by script from the database
     Then Operator verifies zip is attached with multiple CSV files in received email

@@ -26,6 +26,8 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   private static final String FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL = "Choose";
   private static final String FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL = "Save Button";
   private static final String FILTER_UPLOAD_CSV_DIALOG_FILE_NAME = "//md-dialog//h4//span[contains(text(), '%s')]";
+  private static final String FILTER_AGGREGATED_INFO_MSG_XPATH = "//div[contains(text(),'%s')]";
+  private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//md-select[@placeholder='No Template Selected']//div[@class='md-text']";
 
   public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
   public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
@@ -121,4 +123,11 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     }
   }
 
+  public Boolean isAggregatedInfoMsgExist(String infoMsg) {
+    return isElementExist(f(FILTER_AGGREGATED_INFO_MSG_XPATH, infoMsg));
+  }
+
+  public String getCsvFileTemplateName() {
+    return getText(FILTER_CSV_FILE_TEMPLATE_NAME_XPATH);
+  }
 }

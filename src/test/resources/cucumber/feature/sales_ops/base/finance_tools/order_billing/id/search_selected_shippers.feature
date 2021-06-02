@@ -18,13 +18,14 @@ Feature: Order Billing
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | shipper      | {shipper-v4-legacy-id}                              |
-      | generateFile | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress | {order-billing-email}                               |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
+      | shipper         | {shipper-v4-legacy-id}                              |
+      | generateFile    | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress    | {order-billing-email}                               |
+      | csvFileTemplate | 6 - ID Default SSB Template                         |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email

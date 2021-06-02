@@ -30,13 +30,14 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:8d849e00-001d-427b-9d52-ab52bd0d3ecf)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate     | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate       | {gradle-current-date-yyyy-MM-dd}                    |
-      | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                    |
-      | generateFile  | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress  | {order-billing-email}                               |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
+      | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                    |
+      | generateFile    | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress    | {order-billing-email}                               |
+      | csvFileTemplate | 2 - SG Default SSB Template                         |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -46,13 +47,14 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:312b04b5-59b6-493d-b578-6887411dd145)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate     | {gradle-current-date-yyyy-MM-dd}                          |
-      | endDate       | {gradle-current-date-yyyy-MM-dd}                          |
-      | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                          |
-      | generateFile  | All orders (1 very big file, takes long time to generate) |
-      | emailAddress  | {order-billing-email}                                     |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                          |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                          |
+      | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                          |
+      | generateFile    | All orders (1 very big file, takes long time to generate) |
+      | emailAddress    | {order-billing-email}                                     |
+      | csvFileTemplate | 2 - SG Default SSB Template                               |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -62,13 +64,14 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:f4cbf856-3952-49cb-bc20-84a90a2aaefb)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate     | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                                                           |
-      | generateFile  | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress  | {order-billing-email}                                                                      |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                                                           |
+      | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
+      | emailAddress    | {order-billing-email}                                                                      |
+      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -78,13 +81,14 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:9470be20-b69a-4309-a0e1-e72394c5f4d0)
-    Given Operator go to menu Shipper Support -> Order Billing
+    Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate     | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | endDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                                                      |
-      | generateFile  | Orders consolidated by script (1 file per script), grouped by shipper within the file |
-      | emailAddress  | {order-billing-email}                                                                 |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                                                      |
+      | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
+      | emailAddress    | {order-billing-email}                                                                 |
+      | csvFileTemplate | 2 - SG Default SSB Template                                                           |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
