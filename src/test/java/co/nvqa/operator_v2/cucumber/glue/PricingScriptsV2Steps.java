@@ -114,15 +114,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     double weight = Double.parseDouble(mapOfData.get("weight"));
     double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
-    String isId = mapOfData.get("isId");
-    String fromZone, toZone;
-    if (isId.equals("Yes")) {
-      fromZone = "";
-      toZone = "";
-    } else {
-      fromZone = mapOfData.get("fromZone");
-      toZone = mapOfData.get("toZone");
-    }
+
+    String fromZone = mapOfData.get("fromZone");
+    String toZone = mapOfData.get("toZone");
 
     String isL1Exist = mapOfData.get("isL1Exist");
     String isL2Exist = mapOfData.get("isL2Exist");

@@ -58,7 +58,6 @@ Feature: Pricing Scripts V2
       | weight       | 1.0         |
       | insuredValue | 0.00        |
       | codValue     | 0.00        |
-      | isId         | No          |
       | fromZone     | EAST        |
       | toZone       | EAST        |
       | isL1Exist    | <isL1Exist> |
@@ -106,7 +105,6 @@ Feature: Pricing Scripts V2
       | weight       | 1.0            |
       | insuredValue | 0.00           |
       | codValue     | 0.00           |
-      | isId         | No             |
       | fromZone     | EAST           |
       | toZone       | WEST           |
       | isL1Exist    | No             |
@@ -150,7 +148,6 @@ Feature: Pricing Scripts V2
       | weight       | 1.0             |
       | insuredValue | 0.00            |
       | codValue     | 0.00            |
-      | isId         | No              |
       | fromZone     | EAST            |
       | toZone       | WEST            |
       | isL1Exist    | No              |
@@ -181,46 +178,6 @@ Feature: Pricing Scripts V2
       | Corporate, STANDARD                | STANDARD      | Corporate                 | 19.795     | 1.295 | 18.5        | 0            | 0      | 0           | OK       | uid:64d99231-93cf-4aa1-a13e-ab7e4b118c5f |
       | Corporate Return, EXPRESS          | EXPRESS       | Corporate Return          | 25.252     | 1.652 | 23.6        | 0            | 0      | 0           | OK       | uid:c2651843-f068-4c89-91ff-117782f05e1d |
 
-  @DeletePricingScript @weam
-  Scenario Outline: Create and Check Script with Send is_RTS - Use calculatePricing()- ID (<hiptest-uid>)
-    Given Operator changes the country to "Indonesia"
-    And Operator go to menu Shipper -> Pricing Scripts V2
-    When Operator create new Draft Script using data below:
-      | hasTemplate      | No                                                                                                                                                                                                                                      |
-      | isCsvFile        | No                                                                                                                                                                                                                                      |
-      | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else {result.delivery_fee = 5;}}return result;} |
-      | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, cod_value, insured_value, order_type                                                                                                                                    |
-    Then Operator verify the new Script is created successfully on Drafts
-    When Operator do Run Check on specific Draft Script using this data below:
-      | orderFields  | Legacy          |
-      | deliveryType | STANDARD        |
-      | orderType    | NORMAL          |
-      | timeslotType | NONE            |
-      | isRts        | <is_RTS_toggle> |
-      | size         | S               |
-      | weight       | 1.0             |
-      | insuredValue | 0.00            |
-      | codValue     | 0.00            |
-      | isId         | Yes             |
-      | isL1Exist    | No              |
-      | isL2Exist    | No              |
-      | isL3Exist    | No              |
-    Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | <grandTotal>   |
-      | gst          | <gst>          |
-      | deliveryFee  | <deliveryFee>  |
-      | insuranceFee | <insuranceFee> |
-      | codFee       | <codFee>       |
-      | handlingFee  | <handlingFee>  |
-      | comments     | <comments>     |
-    And Operator close page
-    And Operator validate and release Draft Script
-    Then Operator verify Draft Script is released successfully
-    Examples:
-      | Note        | is_RTS_toggle | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
-      | RTS = True  | Yes           | 3.03       | 0.03 | 3           | 0            | 0      | 0           | OK       | uid:e5f7b563-c157-4152-a16a-83ea2f134d5f |
-      | RTS = False | No            | 1.01       | 0.01 | 1           | 0            | 0      | 0           | OK       | uid:c8a30f4a-fd2a-46f7-9253-c0372e821ed7 |
-
   @DeletePricingScript
   Scenario Outline: Create and Check Script - Send is_RTS - Use calculate() (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -240,7 +197,6 @@ Feature: Pricing Scripts V2
       | weight       | 1.0             |
       | insuredValue | 0.00            |
       | codValue     | 0.00            |
-      | isId         | No              |
       | fromZone     | EAST            |
       | toZone       | WEST            |
       | isL1Exist    | No              |
@@ -312,7 +268,6 @@ Feature: Pricing Scripts V2
       | weight       | <weight>       |
       | insuredValue | <insuredValue> |
       | codValue     | <codValue>     |
-      | isId         | No             |
       | fromZone     | <fromZone>     |
       | toZone       | <toZone>       |
       | isL1Exist    | No             |
@@ -354,7 +309,6 @@ Feature: Pricing Scripts V2
       | weight       | 1.0            |
       | insuredValue | 0.00           |
       | codValue     | 0.00           |
-      | isId         | No             |
       | fromZone     | EAST           |
       | toZone       | WEST           |
       | isL1Exist    | No             |
