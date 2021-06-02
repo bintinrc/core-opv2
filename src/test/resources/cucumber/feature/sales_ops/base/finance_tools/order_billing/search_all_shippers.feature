@@ -63,7 +63,6 @@ Feature: Order Billing
       | endDate         | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
       | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                                                      |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers from billing database
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
