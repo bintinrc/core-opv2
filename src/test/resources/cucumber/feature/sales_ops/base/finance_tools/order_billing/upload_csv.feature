@@ -193,9 +193,9 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | uploadCsv       | 1122334455                                                                                 |
-      | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress    | {order-billing-email}                                                                      |
+      | uploadCsv       | 1122334455                                                                            |
+      | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
+      | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
@@ -204,9 +204,9 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455                                                      |
-      | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress    | {order-billing-email}                                                                      |
+      | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455                                                 |
+      | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
+      | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
