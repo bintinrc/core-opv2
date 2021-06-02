@@ -96,7 +96,6 @@ Feature: Order Billing
       | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                                                           |
       | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                                                      |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:

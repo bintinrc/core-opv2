@@ -64,7 +64,6 @@ Feature: Order Billing
       | shipper         | {shipper-v4-legacy-id}                                                                     |
       | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                                                      |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator gets the orders and parcel size and weight from the database for specified shipper
