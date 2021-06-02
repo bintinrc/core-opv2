@@ -78,7 +78,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
   @When("^API Operator add new DP for the created DP Partner with the following attributes:$")
   public void operatorAddNewDpForTheDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
+    Partner dpPartner = get(KEY_DP_PARTNER);
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
     mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
     mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
