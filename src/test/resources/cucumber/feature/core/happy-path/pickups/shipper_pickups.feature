@@ -62,9 +62,9 @@ Feature: Shipper Pickups
       | toDate            | {gradle-next-1-day-yyyy-MM-dd}   |
       | masterShipperName | {shipper-v4-marketplace-name}    |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | MRK-CORE (ABC Shop)                       |
-      | approxVolume | Less than 3 Parcels                       |
-      | comments     | Please be careful with the v-day flowers. |
+      | shipperName  | {shipper-v4-marketplace-short-name} (ABC Shop) |
+      | approxVolume | Less than 3 Parcels                            |
+      | comments     | Please be careful with the v-day flowers.      |
 
   Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations (uid:2641d40f-f8f5-4dae-86bb-c64cd36c1ca0)
     Given Operator go to menu Shipper Support -> Blocked Dates
