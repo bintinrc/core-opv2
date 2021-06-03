@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -99,7 +100,8 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   public void checkErrorHeader() {
     String actualErrorInfo = getText("//div[contains(@class,'hint')]");
-    assertEquals("Syntax Info", "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)",
+    assertEquals("Syntax Info",
+        "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)",
         actualErrorInfo);
   }
 
@@ -184,20 +186,28 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
         String.valueOf(insuredValue));
     sendKeysByIdCustom1("container.pricing-scripts.description-cod-value",
         String.valueOf(codValue));
+    if (Objects.nonNull(runCheckParams.getFromZone()) || Objects
+        .nonNull(runCheckParams.getToZone())) {
+      retryIfRuntimeExceptionOccurred(
+          () -> selectValueFromNvAutocomplete("ctrl.view.textFromZone",
+              runCheckParams.getFromZone()),
+          "Select value from \"From Zone\" NvAutocomplete");
+      retryIfRuntimeExceptionOccurred(
+          () -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()),
+          "Select value from \"To Zone\" NvAutocomplete");
+    }
 
-    retryIfRuntimeExceptionOccurred(
-        () -> selectValueFromNvAutocomplete("ctrl.view.textFromZone", runCheckParams.getFromZone()),
-        "Select value from \"From Zone\" NvAutocomplete");
-    retryIfRuntimeExceptionOccurred(
-        () -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()),
-        "Select value from \"To Zone\" NvAutocomplete");
-    if (runCheckParams.getIsL1Exist().equals("Yes")) {
+    if (Objects.nonNull(runCheckParams.getFromL1()) || Objects.nonNull(runCheckParams.getToL1())) {
       sendKeysByName("container.pricing-scripts.from-l1", runCheckParams.getFromL1());
       sendKeysByName("container.pricing-scripts.to-l1", runCheckParams.getToL1());
-    } else if (runCheckParams.getIsL2Exist().equals("Yes")) {
+    }
+    if (Objects.nonNull(runCheckParams.getFromL2()) || Objects
+        .nonNull(runCheckParams.getToL2())) {
       sendKeysByName("container.pricing-scripts.from-l2", runCheckParams.getFromL2());
       sendKeysByName("container.pricing-scripts.to-l2", runCheckParams.getToL2());
-    } else if (runCheckParams.getIsL3Exist().equals("Yes")) {
+    }
+    if (Objects.nonNull(runCheckParams.getFromL3()) || Objects
+        .nonNull(runCheckParams.getToL3())) {
       sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
       sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
     }

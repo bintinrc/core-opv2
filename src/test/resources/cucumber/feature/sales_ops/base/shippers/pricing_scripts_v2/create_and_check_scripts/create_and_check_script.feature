@@ -49,26 +49,23 @@ Feature: Pricing Scripts V2
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, cod_value, insured_value, order_type                                                                                                                                                                                                                                                                                                                                                                                            |
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
-      | orderFields  | Legacy      |
-      | deliveryType | STANDARD    |
-      | orderType    | NORMAL      |
-      | timeslotType | NONE        |
-      | isRts        | No          |
-      | size         | S           |
-      | weight       | 1.0         |
-      | insuredValue | 0.00        |
-      | codValue     | 0.00        |
-      | fromZone     | EAST        |
-      | toZone       | EAST        |
-      | isL1Exist    | <isL1Exist> |
-      | isL2Exist    | <isL2Exist> |
-      | isL3Exist    | <isL3Exist> |
-      | fromL1       | <fromL1>    |
-      | toL1         | <toL1>      |
-      | fromL2       | <fromL2>    |
-      | toL2         | <toL2>      |
-      | fromL3       | <fromL3>    |
-      | toL3         | <toL3>      |
+      | orderFields  | Legacy   |
+      | deliveryType | STANDARD |
+      | orderType    | NORMAL   |
+      | timeslotType | NONE     |
+      | isRts        | No       |
+      | size         | S        |
+      | weight       | 1.0      |
+      | insuredValue | 0.00     |
+      | codValue     | 0.00     |
+      | fromZone     | EAST     |
+      | toZone       | EAST     |
+      | fromL1       | <fromL1> |
+      | toL1         | <toL1>   |
+      | fromL2       | <fromL2> |
+      | toL2         | <toL2>   |
+      | fromL3       | <fromL3> |
+      | toL3         | <toL3>   |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |
@@ -81,10 +78,10 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     Then Operator verify Draft Script is released successfully
     Examples:
-      | Note                     | isL1Exist | isL2Exist | isL3Exist | fromL1     | toL1          | fromL2    | toL2       | fromL3      | toL3        | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
-      | Inputs from L1 and to L1 | Yes       | No        | No        | Holland Rd | University Rd |           |            |             |             | 2.14       | 0.14 | 2.0         | 0            | 0      | 0           | OK       | uid:05331f6c-c126-4874-bdf2-7c7bf4e3c858 |
-      | Inputs From L2 and To L2 | No        | Yes       | No        |            |               | Dover Ave | Jln Bahasa |             |             | 3.21       | 0.21 | 3.0         | 0            | 0      | 0           | OK       | uid:dd39a8d8-8437-4ba1-8dd1-c5dc0ccefda9 |
-      | Inputs From L3 and To L3 | No        | No        | Yes       |            |               |           |            | North Buona | Camborne Rd | 4.28       | 0.28 | 4.0         | 0            | 0      | 0           | OK       | uid:237fffd0-27df-43c2-a12c-2e7b0adc9367 |
+      | Note                     | fromL1     | toL1          | fromL2    | toL2       | fromL3      | toL3        | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
+      | Inputs from L1 and to L1 | Holland Rd | University Rd |           |            |             |             | 2.14       | 0.14 | 2.0         | 0            | 0      | 0           | OK       | uid:05331f6c-c126-4874-bdf2-7c7bf4e3c858 |
+      | Inputs From L2 and To L2 |            |               | Dover Ave | Jln Bahasa |             |             | 3.21       | 0.21 | 3.0         | 0            | 0      | 0           | OK       | uid:dd39a8d8-8437-4ba1-8dd1-c5dc0ccefda9 |
+      | Inputs From L3 and To L3 |            |               |           |            | North Buona | Camborne Rd | 4.28       | 0.28 | 4.0         | 0            | 0      | 0           | OK       | uid:237fffd0-27df-43c2-a12c-2e7b0adc9367 |
 
   @DeletePricingScript
   Scenario Outline: Create and Check Script - Legacy Order Fields (<hiptest-uid>)
@@ -107,9 +104,6 @@ Feature: Pricing Scripts V2
       | codValue     | 0.00           |
       | fromZone     | EAST           |
       | toZone       | WEST           |
-      | isL1Exist    | No             |
-      | isL2Exist    | No             |
-      | isL3Exist    | No             |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |
@@ -150,9 +144,6 @@ Feature: Pricing Scripts V2
       | codValue     | 0.00            |
       | fromZone     | EAST            |
       | toZone       | WEST            |
-      | isL1Exist    | No              |
-      | isL2Exist    | No              |
-      | isL3Exist    | No              |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |
@@ -199,9 +190,6 @@ Feature: Pricing Scripts V2
       | codValue     | 0.00            |
       | fromZone     | EAST            |
       | toZone       | WEST            |
-      | isL1Exist    | No              |
-      | isL2Exist    | No              |
-      | isL3Exist    | No              |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |
@@ -270,9 +258,7 @@ Feature: Pricing Scripts V2
       | codValue     | <codValue>     |
       | fromZone     | <fromZone>     |
       | toZone       | <toZone>       |
-      | isL1Exist    | No             |
-      | isL2Exist    | No             |
-      | isL3Exist    | No             |
+
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |
@@ -311,9 +297,6 @@ Feature: Pricing Scripts V2
       | codValue     | 0.00           |
       | fromZone     | EAST           |
       | toZone       | WEST           |
-      | isL1Exist    | No             |
-      | isL2Exist    | No             |
-      | isL3Exist    | No             |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |

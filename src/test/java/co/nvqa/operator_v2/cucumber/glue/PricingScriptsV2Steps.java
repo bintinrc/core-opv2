@@ -14,6 +14,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -102,6 +103,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    RunCheckParams runCheckParams = new RunCheckParams();
 
     String orderFields = mapOfData.get("orderFields");
     String deliveryType = mapOfData.get("deliveryType");
@@ -114,15 +116,13 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     double weight = Double.parseDouble(mapOfData.get("weight"));
     double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
+    if (Objects.nonNull("fromZone") || Objects.nonNull("toZone")) {
+      String fromZone = mapOfData.get("fromZone");
+      String toZone = mapOfData.get("toZone");
+      runCheckParams.setFromZone(fromZone);
+      runCheckParams.setToZone(toZone);
+    }
 
-    String fromZone = mapOfData.get("fromZone");
-    String toZone = mapOfData.get("toZone");
-
-    String isL1Exist = mapOfData.get("isL1Exist");
-    String isL2Exist = mapOfData.get("isL2Exist");
-    String isL3Exist = mapOfData.get("isL3Exist");
-
-    RunCheckParams runCheckParams = new RunCheckParams();
     runCheckParams.setOrderFields(orderFields);
     runCheckParams.setDeliveryType(deliveryType);
     runCheckParams.setOrderType(orderType);
@@ -134,25 +134,20 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     runCheckParams.setWeight(weight);
     runCheckParams.setInsuredValue(insuredValue);
     runCheckParams.setCodValue(codValue);
-    runCheckParams.setFromZone(fromZone);
-    runCheckParams.setToZone(toZone);
-    runCheckParams.setIsL1Exist(isL1Exist);
-    runCheckParams.setIsL2Exist(isL2Exist);
-    runCheckParams.setIsL3Exist(isL3Exist);
-    if (isL1Exist.equals("Yes")) {
+
+    if (Objects.nonNull("fromL1") || Objects.nonNull("toL1") || Objects.nonNull("fromL2") || Objects
+        .nonNull("toL2") || Objects.nonNull("fromL3") || Objects.nonNull("toL3")) {
       String fromL1 = mapOfData.get("fromL1");
       String toL1 = mapOfData.get("toL1");
-      runCheckParams.setFromL1(fromL1);
-      runCheckParams.setToL1(toL1);
-    } else if (isL2Exist.equals("Yes")) {
       String fromL2 = mapOfData.get("fromL2");
       String toL2 = mapOfData.get("toL2");
+      String fromL3 = mapOfData.get("fromL3");
+      String toL3 = mapOfData.get("toL3");
+      runCheckParams.setFromL1(fromL1);
+      runCheckParams.setToL1(toL1);
       runCheckParams.setFromL2(fromL2);
       runCheckParams.setToL2(toL2);
-    } else if (isL3Exist.equals("Yes")) {
-      String fromL3 = mapOfData.get("fromL3");
       runCheckParams.setFromL3(fromL3);
-      String toL3 = mapOfData.get("toL3");
       runCheckParams.setToL3(toL3);
     }
 

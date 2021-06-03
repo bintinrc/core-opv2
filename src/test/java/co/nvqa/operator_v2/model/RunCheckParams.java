@@ -24,9 +24,6 @@ public class RunCheckParams {
   private String toL1;
   private String toL2;
   private String toL3;
-  private String isL1Exist;
-  private String isL2Exist;
-  private String isL3Exist;
 
   public String getOrderFields() {
     return orderFields;
@@ -178,29 +175,5 @@ public class RunCheckParams {
 
   public void setToL3(String toL3) {
     this.toL3 = toL3;
-  }
-
-  public String getIsL1Exist() {
-    return isL1Exist;
-  }
-
-  public void setIsL1Exist(String isL1Exist) {
-    this.isL1Exist = isL1Exist;
-  }
-
-  public String getIsL2Exist() {
-    return isL2Exist;
-  }
-
-  public void setIsL2Exist(String isL2Exist) {
-    this.isL2Exist = isL2Exist;
-  }
-
-  public String getIsL3Exist() {
-    return isL3Exist;
-  }
-
-  public void setIsL3Exist(String isL3Exist) {
-    this.isL3Exist = isL3Exist;
   }
 }
