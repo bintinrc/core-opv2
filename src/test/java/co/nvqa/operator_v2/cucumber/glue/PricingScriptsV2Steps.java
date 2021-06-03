@@ -14,6 +14,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,14 +36,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("^Operator create new Draft Script using data below:$")
   public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
-    String source = mapOfData.get("source");
-    String activeParameters = mapOfData.get("activeParameters");
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String dateUniqueString = generateDateUniqueString();
-
-    List<String> listOfActiveParameters = Stream.of(activeParameters.split(",")).map(String::trim)
-        .collect(Collectors.toList());
-
+    String hasTemplate = mapOfData.get("hasTemplate");
     String createdDate = CREATED_DATE_SDF.format(new Date());
     String name = "Dummy Script #" + dateUniqueString;
     String description = f(
@@ -53,11 +49,35 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     Script script = new Script();
     script.setName(name);
     script.setDescription(description);
-    script.setSource(source);
-    script.setActiveParameters(listOfActiveParameters);
-    pricingScriptsV2Page.createDraft(script);
+    script.setHasTemplate(hasTemplate);
 
+    if (hasTemplate.equals("Yes")) {
+      String templateName = mapOfData.get("templateName");
+      script.setTemplateName(templateName);
+    } else {
+      String isCSVFile = mapOfData.get("isCsvFile");
+      script.setIsCsvFile(isCSVFile);
+      if (isCSVFile.equals("No")) {
+        String source = mapOfData.get("source");
+        String activeParameters = mapOfData.get("activeParameters");
+
+        List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
+            .map(String::trim)
+            .collect(Collectors.toList());
+        script.setSource(source);
+        script.setActiveParameters(listOfActiveParameters);
+      } else {
+        String fileContent = mapOfData.get("fileContent");
+        script.setFileContent(fileContent);
+      }
+    }
+    pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
+
+  @Then("Operator verify error message after adding invalid csv file")
+  public void operatorVerifyErrorMessage() {
+    pricingScriptsV2Page.checkErrorHeader();
   }
 
   @Then("^Operator verify the new Script is created successfully on Drafts$")
@@ -83,27 +103,54 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    RunCheckParams runCheckParams = new RunCheckParams();
 
+    String orderFields = mapOfData.get("orderFields");
     String deliveryType = mapOfData.get("deliveryType");
     String orderType = mapOfData.get("orderType");
+    String serviceLevel = mapOfData.get("serviceLevel");
+    String serviceType = mapOfData.get("serviceType");
     String timeslotType = mapOfData.get("timeslotType");
+    String isRts = mapOfData.get("isRts");
     String size = mapOfData.get("size");
     double weight = Double.parseDouble(mapOfData.get("weight"));
     double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
-    String fromZone = mapOfData.get("fromZone");
-    String toZone = mapOfData.get("toZone");
+    if (Objects.nonNull("fromZone") || Objects.nonNull("toZone")) {
+      String fromZone = mapOfData.get("fromZone");
+      String toZone = mapOfData.get("toZone");
+      runCheckParams.setFromZone(fromZone);
+      runCheckParams.setToZone(toZone);
+    }
 
-    RunCheckParams runCheckParams = new RunCheckParams();
+    runCheckParams.setOrderFields(orderFields);
     runCheckParams.setDeliveryType(deliveryType);
     runCheckParams.setOrderType(orderType);
+    runCheckParams.setServiceLevel(serviceLevel);
+    runCheckParams.setServiceType(serviceType);
     runCheckParams.setTimeslotType(timeslotType);
+    runCheckParams.setIsRts(isRts);
     runCheckParams.setSize(size);
     runCheckParams.setWeight(weight);
     runCheckParams.setInsuredValue(insuredValue);
     runCheckParams.setCodValue(codValue);
-    runCheckParams.setFromZone(fromZone);
-    runCheckParams.setToZone(toZone);
+
+    if (Objects.nonNull("fromL1") || Objects.nonNull("toL1") || Objects.nonNull("fromL2") || Objects
+        .nonNull("toL2") || Objects.nonNull("fromL3") || Objects.nonNull("toL3")) {
+      String fromL1 = mapOfData.get("fromL1");
+      String toL1 = mapOfData.get("toL1");
+      String fromL2 = mapOfData.get("fromL2");
+      String toL2 = mapOfData.get("toL2");
+      String fromL3 = mapOfData.get("fromL3");
+      String toL3 = mapOfData.get("toL3");
+      runCheckParams.setFromL1(fromL1);
+      runCheckParams.setToL1(toL1);
+      runCheckParams.setFromL2(fromL2);
+      runCheckParams.setToL2(toL2);
+      runCheckParams.setFromL3(fromL3);
+      runCheckParams.setToL3(toL3);
+    }
+
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
   }
 
@@ -129,6 +176,17 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyTheRunCheckResultIsCorrect(runCheckResult);
   }
 
+  @Then("Operator close page")
+  public void operatorCloseScreen() {
+    pricingScriptsV2Page.closeScreen();
+  }
+
+  @Then("Operator validate and release Draft Script")
+  public void operatorValidateAndReleaseDraft() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.validateDraftAndReleaseScript(script);
+  }
+
   @When("^Operator validate and release Draft Script using this data below:$")
   public void operatorValidateAndReleaseDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
@@ -147,6 +205,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
+  }
+
+  @Then("^Operator verify Draft Script data is correct$")
+  public void operatorVerifyDraftScriptDataIsCorrect() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.verifyDraftScriptDataIsCorrect(script);
   }
 
   @When("^Operator link Script to Shipper with ID = \"([^\"]*)\"$")
