@@ -61,31 +61,31 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   private void setWriteScript(Script script) {
     clickTabItem("Write Script");
-    if (script.getHasTemplate().equals("Yes")) {
+    if (Objects.nonNull(script.getHasTemplate())) {
       sendKeysAndEnter("//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']",
           script.getTemplateName());
       click("//button[@aria-label='Load']");
       checkSyntax();
       pause2s();
       saveDraft();
-    } else {
-      if (script.getIsCsvFile().equals("Yes")) {
-        String csvFileName = "sample_upload_rates.csv";
-        File csvFile = createFile(csvFileName, script.getFileContent());
-        importCsv.setValue(csvFile);
-        boolean headerHint = isElementVisible(
-            "//div[@text='Run a syntax check before saving or verifying the draft.']");
-        if (headerHint) {
-          checkSyntax();
-          pause2s();
-          saveDraft();
-        }
-      } else {
-        activateParameters(script.getActiveParameters());
-        updateAceEditorValue(script.getSource());
+    }
+    if (Objects.nonNull(script.getIsCsvFile())) {
+      String csvFileName = "sample_upload_rates.csv";
+      File csvFile = createFile(csvFileName, script.getFileContent());
+      importCsv.setValue(csvFile);
+      boolean headerHint = isElementVisible(
+          "//div[@text='Run a syntax check before saving or verifying the draft.']");
+      if (headerHint) {
         checkSyntax();
+        pause2s();
         saveDraft();
       }
+    }
+    if (Objects.nonNull(script.getSource()) && Objects.nonNull(script.getActiveParameters())) {
+      activateParameters(script.getActiveParameters());
+      updateAceEditorValue(script.getSource());
+      checkSyntax();
+      saveDraft();
     }
   }
 
