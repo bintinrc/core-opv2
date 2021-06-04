@@ -129,6 +129,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public DiscardChangesDialog discardChangesDialog;
   @FindBy(css = "md-dialog")
   public ErrorSaveDialog errorSaveDialog;
+  @FindBy(css = "md-dialog")
+  public WarningDialog warningDialog;
+  @FindBy(xpath = "//md-dialog/md-toolbar")
+  public PageElement dialogHeader;
 
   private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";
 
@@ -1277,7 +1281,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
     tabs.selectTab("Pricing and Billing");
     pricingAndBillingForm.addNewProfile.click();
-    newPricingProfileDialog.waitUntilVisible();
+    dialogHeader.waitUntilVisible();
+
+    if (dialogHeader.getAttribute("title").equalsIgnoreCase("Warning")) {
+      warningDialog.proceed.waitUntilVisible();
+      warningDialog.proceed.click();
+      newPricingProfileDialog.waitUntilClickable();
+    }
 
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
@@ -1614,6 +1624,22 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public Button close;
 
     public ErrorSaveDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class WarningDialog extends MdDialog {
+
+    @FindBy(css = ".md-dialog-content")
+    public PageElement message;
+
+    @FindBy(css = "[aria-label='Proceed']")
+    public Button proceed;
+
+    @FindBy(css = "[aria-label='Abort']")
+    public Button abort;
+
+    public WarningDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

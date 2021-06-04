@@ -55,6 +55,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String XPATH_DIRECTIONS = "//input[@id='directions']";
   private static final String XPATH_ACTIVE_CHECKBOX = "//input[@id='isActive']";
   private static final String XPATH_PUBLIC_CHECKBOX = "//input[@id='isPublic']";
+  private static final String XPATH_AUTO_RESERVATION_ENABLED = "//input[@id='autoReservationEnabled']";
   private static final String XPATH_SEND_CHECKBOX = "//input[@id='isSend']";
   private static final String XPATH_RETAIL_POINT_NETWORK = "//input[@value='RETAIL_POINT_NETWORK']";
   private static final String XPATH_COLLECT_CHECKBOX = "//input[@id='isCollect']";
@@ -242,6 +243,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     click(XPATH_PUBLIC_CHECKBOX);
   }
 
+  public void clickIsAutoReservation() {
+    moveToElementWithXpath(XPATH_AUTO_RESERVATION_ENABLED);
+    click(XPATH_AUTO_RESERVATION_ENABLED);
+  }
+
   public void canShipperLodgeInCreateDpForm(Boolean canShipperLodgeIn) {
     if (canShipperLodgeIn) {
       click(XPATH_SEND_CHECKBOX);
@@ -331,6 +337,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     }
     isActiveCreateDpForm();
     isPublicCreateDpForm();
+    if (dpParams.getIsAutoReservation() != null) {
+      if (dpParams.getIsAutoReservation() == true) {
+        clickIsAutoReservation();
+      }
+    }
     setCapacityAndParcelStayCreateDpForm(dpParams.getMaxCap(), dpParams.getCapBuffer(),
         dpParams.getMaxParcelStayDuration());
     if (dpParams.getCutOffTime() != null) {
@@ -407,6 +418,12 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     setTypeCreateDpForm(dpParams.getType());
     setDirectionsCreateDpForm(dpParams.getDirections());
     canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
+    if (dpParams.getIsAutoReservation() != null) {
+      Boolean value = Boolean.parseBoolean(getValue(XPATH_AUTO_RESERVATION_ENABLED));
+      if (dpParams.getIsAutoReservation() && !value) {
+        clickIsAutoReservation();
+      }
+    }
     //assert PUDO Type is disabled while Editing
     assertFalse("PUDO Type is disabled", isElementEnabled(XPATH_RETAIL_POINT_NETWORK));
     if (dpParams.getCutOffTime() != null) {

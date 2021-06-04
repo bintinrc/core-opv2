@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.platform.commons.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -137,8 +137,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
         getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
     assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(),
         getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
-    assertEquals("Third Party Order 3PL Provider", expectedOrderMapping.getShipperName(),
-        getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME));
+    assertEquals("Third Party Order 3PL Provider", StringUtils.trim(expectedOrderMapping.getShipperName()),
+        StringUtils.trim(getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME)));
   }
 
   public void verifyOrderMappingRecords(List<ThirdPartyOrderMapping> expectedOrderMappings) {

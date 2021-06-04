@@ -59,6 +59,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
+  public void checkErrorHeader() {
+    pricingScriptsV2CreateEditDraftPage.checkErrorHeader();
+  }
+
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
     retryIfAssertionErrorOccurred(() ->
@@ -103,9 +107,19 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.verifyTheRunCheckResultIsCorrect(runCheckResult);
   }
 
+  public void closeScreen() {
+    pricingScriptsV2CreateEditDraftPage.cancelEditDraft();
+  }
+
   public void validateDraftAndReleaseScript(Script script, VerifyDraftParams verifyDraftParams) {
     goToEditDraftScript(script);
     pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script, verifyDraftParams);
+    waitUntilInvisibilityOfToast("Your script has been successfully released.");
+  }
+
+  public void validateDraftAndReleaseScript(Script script) {
+    goToEditDraftScript(script);
+    pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script);
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
   }
 
@@ -128,8 +142,11 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Data still not loaded");
       }
     }, String.format("Active script found "));
+  }
 
+  public void verifyDraftScriptDataIsCorrect(Script script) {
     String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
+    script.setId(Long.parseLong(actualId));
     String actualScriptName = getTextOnTableActiveScripts(1,
         COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
     String actualDescription = getTextOnTableActiveScripts(1,
