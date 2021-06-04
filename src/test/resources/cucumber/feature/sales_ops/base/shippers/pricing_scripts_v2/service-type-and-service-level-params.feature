@@ -11,8 +11,29 @@ Feature: Service Type and Service Level params
       | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, order_type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
     Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | New      |
+      | serviceLevel | STANDARD |
+      | serviceType  | Parcel   |
+      | timeslotType | NONE     |
+      | isRts        | No       |
+      | size         | S        |
+      | weight       | 1.0      |
+      | insuredValue | 0.00     |
+      | codValue     | 0.00     |
+      | fromZone     | WEST     |
+      | toZone       | EAST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 17.12 |
+      | gst          | 1.12  |
+      | deliveryFee  | 16    |
+      | insuranceFee | 0     |
+      | codFee       | 0     |
+      | handlingFee  | 0     |
+      | comments     | OK    |
+    And Operator close page
     And Operator validate and release Draft Script
-    And Operator verify Draft Script is released successfully
+    Then Operator verify Draft Script is released successfully
 
   @DeletePricingScript
   Scenario: Create Script - Include service_type and service_level - Incorrect service_type (uid:454f1a82-3194-4112-9f47-56cc087e6a64)
@@ -45,7 +66,7 @@ Feature: Service Type and Service Level params
     And Operator validate and release Draft Script
     Then Operator verify Draft Script is released successfully
 
-  @DeletePricingScript @weam
+  @DeletePricingScript
   Scenario: Create Script - Include service_type and service_level - Incorrect service_level (uid:aa172bd5-4655-4239-9e65-e48ffff429b8)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
