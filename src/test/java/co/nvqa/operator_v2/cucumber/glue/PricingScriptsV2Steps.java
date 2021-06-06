@@ -126,7 +126,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     double weight = Double.parseDouble(mapOfData.get("weight"));
     double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
-    if (Objects.nonNull("fromZone") || Objects.nonNull("toZone")) {
+    if (Objects.nonNull(mapOfData.get("fromZone")) || Objects.nonNull(mapOfData.get("toZone"))) {
       String fromZone = mapOfData.get("fromZone");
       String toZone = mapOfData.get("toZone");
       runCheckParams.setFromZone(fromZone);
@@ -145,8 +145,10 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     runCheckParams.setInsuredValue(insuredValue);
     runCheckParams.setCodValue(codValue);
 
-    if (Objects.nonNull("fromL1") || Objects.nonNull("toL1") || Objects.nonNull("fromL2") || Objects
-        .nonNull("toL2") || Objects.nonNull("fromL3") || Objects.nonNull("toL3")) {
+    if (Objects.nonNull(mapOfData.get("fromL1")) || Objects.nonNull(mapOfData.get("toL1"))
+        || Objects.nonNull(mapOfData.get("fromL2")) || Objects
+        .nonNull(mapOfData.get("toL2")) || Objects.nonNull(mapOfData.get("fromL3")) || Objects
+        .nonNull(mapOfData.get("toL3"))) {
       String fromL1 = mapOfData.get("fromL1");
       String toL1 = mapOfData.get("toL1");
       String fromL2 = mapOfData.get("fromL2");
@@ -160,11 +162,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       runCheckParams.setFromL3(fromL3);
       runCheckParams.setToL3(toL3);
     }
-    if (Objects.nonNull("isActiveScript")) {
+    if (Objects.nonNull(mapOfData.get("isActiveScript"))) {
       String isActiveScript = mapOfData.get("isActiveScript");
       runCheckParams.setIsActiveScript(isActiveScript);
     }
-    if (Objects.nonNull("originPricingScript") || Objects.nonNull("destinationPricingScript")) {
+    if (Objects.nonNull(mapOfData.get("originPricingScript")) || Objects
+        .nonNull(mapOfData.get("destinationPricingScript"))) {
       String originPricingScript = mapOfData.get("originPricingScript");
       String destinationPricingScript = mapOfData.get("destinationPricingScript");
       runCheckParams.setOriginPricingScript(originPricingScript);

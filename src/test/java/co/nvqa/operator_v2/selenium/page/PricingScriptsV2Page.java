@@ -99,7 +99,8 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void runCheckDraftScript(Script script, RunCheckParams runCheckParams) {
-    if (!runCheckParams.getIsActiveScript().equals("Yes")) {
+    if (runCheckParams.getIsActiveScript() == null || !runCheckParams.getIsActiveScript()
+        .equals("Yes")) {
       goToEditDraftScript(script);
     }
     pricingScriptsV2CreateEditDraftPage.runCheck(script, runCheckParams);
