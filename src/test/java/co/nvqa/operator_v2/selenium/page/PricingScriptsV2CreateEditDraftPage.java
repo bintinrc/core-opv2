@@ -12,7 +12,9 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -211,8 +213,27 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
       sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
     }
+    if (Objects.nonNull(runCheckParams.getOriginPricingScript()) || Objects
+        .nonNull(runCheckParams.getDestinationPricingScript())) {
+      sendKeysByName("container.pricing-scripts.origin-pz",
+          runCheckParams.getOriginPricingScript());
+      sendKeysByName("container.pricing-scripts.dest-pz",
+          runCheckParams.getDestinationPricingScript());
+    }
     clickNvApiTextButtonByNameAndWaitUntilDone(
         "container.pricing-scripts.run-check"); //Button Run Check
+  }
+
+  public void verifyErrorMessage(String errorMessage, String status) {
+    Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
+
+    if (StringUtils.isNotBlank(status)) {
+      assertThat("Error toast status", toastData.get("status"), equalToIgnoringCase(status));
+    }
+    if (StringUtils.isNotBlank(errorMessage)) {
+      assertThat("Error toast status", toastData.get("errorMessage"),
+          equalToIgnoringCase(errorMessage));
+    }
   }
 
   public void verifyTheRunCheckResultIsCorrect(RunCheckResult runCheckResult) {

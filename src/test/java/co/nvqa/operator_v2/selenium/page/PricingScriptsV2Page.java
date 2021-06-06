@@ -99,8 +99,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void runCheckDraftScript(Script script, RunCheckParams runCheckParams) {
-    goToEditDraftScript(script);
+    if (!runCheckParams.getIsActiveScript().equals("Yes")) {
+      goToEditDraftScript(script);
+    }
     pricingScriptsV2CreateEditDraftPage.runCheck(script, runCheckParams);
+  }
+
+  public void verifyErrorMessage(String message, String response) {
+    pricingScriptsV2CreateEditDraftPage.verifyErrorMessage(message, response);
   }
 
   public void verifyTheRunCheckResultIsCorrect(RunCheckResult runCheckResult) {
@@ -142,6 +148,21 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Data still not loaded");
       }
     }, String.format("Active script found "));
+  }
+
+  public void searchAccordingScriptId(Script script) {
+    clickTabItem(TAB_ACTIVE_SCRIPTS);
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableActiveScriptsByScriptId(script.getId() + "");
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Active script found "));
+    wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
+        "Drafts Table is empty. Cannot delete script.");
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
   }
 
   public void verifyDraftScriptDataIsCorrect(Script script) {
@@ -344,6 +365,12 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     sendKeys(
         "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input",
         scriptName);
+  }
+
+  public void searchTableActiveScriptsByScriptId(String scriptId) {
+    sendKeys(
+        "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, 'id')]/nv-search-input-filter/md-input-container/div/input",
+        scriptId);
   }
 
   public String getTextOnTableActiveScripts(int rowNumber, String columnDataClass) {

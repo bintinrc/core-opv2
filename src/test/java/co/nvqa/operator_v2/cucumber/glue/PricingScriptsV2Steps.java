@@ -101,6 +101,14 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyDraftScriptIsDeleted(script);
   }
 
+  @When("Operator search custom script id {string}")
+  public void operatorSearchAccordingScriptId(String scriptId) {
+    Script script = new Script();
+    script.setId(Long.parseLong(scriptId));
+    pricingScriptsV2Page.searchAccordingScriptId(script);
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
+
   @When("^Operator do Run Check on specific Draft Script using this data below:$")
   public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
@@ -152,8 +160,25 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       runCheckParams.setFromL3(fromL3);
       runCheckParams.setToL3(toL3);
     }
+    if (Objects.nonNull("isActiveScript")) {
+      String isActiveScript = mapOfData.get("isActiveScript");
+      runCheckParams.setIsActiveScript(isActiveScript);
+    }
+    if (Objects.nonNull("originPricingScript") || Objects.nonNull("destinationPricingScript")) {
+      String originPricingScript = mapOfData.get("originPricingScript");
+      String destinationPricingScript = mapOfData.get("destinationPricingScript");
+      runCheckParams.setOriginPricingScript(originPricingScript);
+      runCheckParams.setDestinationPricingScript(destinationPricingScript);
+    }
 
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
+  }
+
+  @Then("Operator verify error message")
+  public void verifyErrorMessage(Map<String, String> mapOfData) {
+    String message = mapOfData.get("message");
+    String response = mapOfData.get("response");
+    pricingScriptsV2Page.verifyErrorMessage(message, response);
   }
 
   @Then("^Operator verify the Run Check Result is correct using data below:$")
