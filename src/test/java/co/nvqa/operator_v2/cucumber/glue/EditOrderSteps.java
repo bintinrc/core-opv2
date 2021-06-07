@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -35,7 +34,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
@@ -358,30 +356,16 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.removeOrderStamp();
   }
 
-  @When("^Operator update status of the created order on Edit order page using data below:$")
+  @When("Operator update order status on Edit order page using data below:")
   public void operatorUpdateStatusOnEditOrderPage(Map<String, String> mapOfData) {
-    Order order = get(KEY_CREATED_ORDER);
-    String value = mapOfData.get("status");
-    if (StringUtils.isNotBlank(value)) {
-      order.setStatus(value);
-    }
-    value = mapOfData.get("granularStatus");
-    if (StringUtils.isNotBlank(value)) {
-      order.setGranularStatus(value);
-    }
-    value = mapOfData.get("lastPickupTransactionStatus");
-    if (StringUtils.isNotBlank(value)) {
-      Transaction transaction = order.getLastPickupTransaction();
-      Assertions.assertNotNull(transaction, "Last Pickup Transaction");
-      transaction.setStatus(value.toUpperCase());
-    }
-    value = mapOfData.get("lastDeliveryTransactionStatus");
-    if (StringUtils.isNotBlank(value)) {
-      Transaction transaction = order.getLastDeliveryTransaction();
-      Assertions.assertNotNull(transaction, "Last Delivery Transaction");
-      transaction.setStatus(value.toUpperCase());
-    }
-    editOrderPage.updateOrderStatus(order);
+    editOrderPage.clickMenu("Order Settings", "Update Status");
+    editOrderPage.updateStatusDialog.waitUntilVisible();
+
+    String value = mapOfData.get("granularStatus");
+    editOrderPage.updateStatusDialog.granularStatus.searchAndSelectValue(value);
+    value = mapOfData.get("changeReason");
+    editOrderPage.updateStatusDialog.changeReason.setValue(value);
+    editOrderPage.updateStatusDialog.saveChanges.clickAndWaitUntilDone();
   }
 
   @Then("^Operator verify the created order info is correct on Edit Order page$")

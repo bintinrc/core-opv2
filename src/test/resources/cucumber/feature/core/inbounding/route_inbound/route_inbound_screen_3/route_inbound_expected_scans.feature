@@ -5,7 +5,7 @@ Feature: Route Inbound Expected Scans
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Pending Deliveries (uid:55f86f84-52a9-4db0-809b-cc8e57474396)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -66,7 +66,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid) (uid:bb40e733-b68f-4fe3-85d3-17e98888b270)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -134,7 +134,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid) (uid:399467aa-4bf3-474f-ba8a-1b1857f1b571)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -200,7 +200,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Return Pickups (uid:992ba47a-545f-41ed-9044-7bb4ca39b785)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -265,7 +265,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Pending Return Pickups (uid:18423e35-086c-46e8-8e46-b67f46dc2264)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -313,7 +313,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Reservation Pickups (uid:c6dd80a8-6a15-4283-b9a4-850aa645d7e7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -373,7 +373,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders (uid:6788f2c6-d062-44f5-a415-51028bea9eac)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

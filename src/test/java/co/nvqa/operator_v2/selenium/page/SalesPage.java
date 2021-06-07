@@ -29,6 +29,9 @@ public class SalesPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public EditSalesPersonDialog editSalesPersonDialog;
 
+  @FindBy(css = "md-dialog")
+  public DeleteSalesPersonDialog deleteSalesPersonDialog;
+
   public SalesPersonsTable salesPersonsTable;
 
   private static final String SAMPLE_CSV_FILENAME = "sample-data-sales-person-upload.csv";
@@ -106,11 +109,22 @@ public class SalesPage extends OperatorV2SimplePage {
     public NvApiTextButton save;
   }
 
+  public static class DeleteSalesPersonDialog extends MdDialog {
+
+    public DeleteSalesPersonDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(name = "commons.delete")
+    public NvApiTextButton delete;
+  }
+
   public static class SalesPersonsTable extends MdVirtualRepeatTable<SalesPerson> {
 
     public static final String COLUMN_CODE = "code";
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_EDIT = "edit";
+    public static final String ACTION_DELETE = "delete";
 
     public SalesPersonsTable(WebDriver webDriver) {
       super(webDriver);
@@ -120,8 +134,10 @@ public class SalesPage extends OperatorV2SimplePage {
           .build()
       );
       setEntityClass(SalesPerson.class);
-      setActionButtonsLocators(
-          ImmutableMap.of(ACTION_EDIT, "container.sales-person.edit-sales-person"));
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT, "container.sales-person.edit-sales-person",
+          ACTION_DELETE, "container.sales-person.delete-sales-person"
+      ));
     }
   }
 }

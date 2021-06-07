@@ -8,6 +8,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -59,13 +60,23 @@ public class OrderBillingSteps extends AbstractSteps {
     }
     String generateFile = mapOfData.get("generateFile");
     if (Objects.nonNull(generateFile)) {
+      orderBillingPage.tickGenerateTheseFilesOption(generateFile);
       if (generateFile.contains("Orders consolidated by shipper")) {
         put(KEY_ORDER_BILLING_REPORT_TYPE, "SHIPPER");
+      } else if (generateFile.contains("All orders grouped by shipper")) {
+        assertTrue(orderBillingPage.isAggregatedInfoMsgExist(
+            "Customized Template is not supported for aggregated report type."));
       }
-      orderBillingPage.tickGenerateTheseFilesOption(generateFile);
     }
     if (Objects.nonNull(mapOfData.get("emailAddress"))) {
       orderBillingPage.setEmailAddress(mapOfData.get("emailAddress"));
+    }
+    String csvFileTemplate = mapOfData.get("csvFileTemplate");
+    if (Objects.nonNull(csvFileTemplate)) {
+      if (StringUtils.containsIgnoreCase(csvFileTemplate, "Default")) {
+        assertEquals("Default Template is not selected", csvFileTemplate,
+            orderBillingPage.getCsvFileTemplateName());
+      }
     }
 
     orderBillingPage.clickGenerateSuccessBillingsButton();
