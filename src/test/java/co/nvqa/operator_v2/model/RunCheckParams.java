@@ -24,9 +24,8 @@ public class RunCheckParams {
   private String toL1;
   private String toL2;
   private String toL3;
-  private String isActiveScript;
-  private String originPricingScript;
-  private String destinationPricingScript;
+  private String originPricingZone;
+  private String destinationPricingZone;
 
   public String getOrderFields() {
     return orderFields;
@@ -180,27 +179,19 @@ public class RunCheckParams {
     this.toL3 = toL3;
   }
 
-  public String getIsActiveScript() {
-    return isActiveScript;
+  public String getOriginPricingZone() {
+    return originPricingZone;
   }
 
-  public void setIsActiveScript(String isActiveScript) {
-    this.isActiveScript = isActiveScript;
+  public void setOriginPricingZone(String originPricingZone) {
+    this.originPricingZone = originPricingZone;
   }
 
-  public String getOriginPricingScript() {
-    return originPricingScript;
+  public String getDestinationPricingZone() {
+    return destinationPricingZone;
   }
 
-  public void setOriginPricingScript(String originPricingScript) {
-    this.originPricingScript = originPricingScript;
-  }
-
-  public String getDestinationPricingScript() {
-    return destinationPricingScript;
-  }
-
-  public void setDestinationPricingScript(String destinationPricingScript) {
-    this.destinationPricingScript = destinationPricingScript;
+  public void setDestinationPricingZone(String destinationPricingZone) {
+    this.destinationPricingZone = destinationPricingZone;
   }
 }

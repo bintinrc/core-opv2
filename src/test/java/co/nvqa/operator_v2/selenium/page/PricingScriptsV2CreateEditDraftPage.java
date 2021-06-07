@@ -113,12 +113,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     clickToast("Your script has been successfully created.");
   }
 
-  private void verifyDraft() {
-    pause2s();
-    clickNvIconTextButtonByNameAndWaitUntilDone("Verify Draft");
-    clickToast("Your script has been successfully created.");
-  }
-
   private void validateDraft() {
     clickNvIconTextButtonByName("container.pricing-scripts.validate");
     waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
@@ -213,15 +207,19 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
       sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
     }
-    if (Objects.nonNull(runCheckParams.getOriginPricingScript()) || Objects
-        .nonNull(runCheckParams.getDestinationPricingScript())) {
+
+    sendKeysByName("container.pricing-scripts.origin-pz", "");
+    sendKeysByName("container.pricing-scripts.dest-pz", "");
+
+    if (Objects.nonNull(runCheckParams.getOriginPricingZone()) || Objects
+        .nonNull(runCheckParams.getDestinationPricingZone())) {
       sendKeysByName("container.pricing-scripts.origin-pz",
-          runCheckParams.getOriginPricingScript());
+          runCheckParams.getOriginPricingZone());
       sendKeysByName("container.pricing-scripts.dest-pz",
-          runCheckParams.getDestinationPricingScript());
+          runCheckParams.getDestinationPricingZone());
+      clickNvApiTextButtonByNameAndWaitUntilDone(
+          "container.pricing-scripts.run-check"); //Button Run Check
     }
-    clickNvApiTextButtonByNameAndWaitUntilDone(
-        "container.pricing-scripts.run-check"); //Button Run Check
   }
 
   public void verifyErrorMessage(String errorMessage, String status) {
