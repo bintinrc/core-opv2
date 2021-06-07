@@ -12,7 +12,7 @@ Feature: Order Billing
     And operator marks gmail messages as read
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - ID (uid:b62d1ba9-3e88-47ba-b5a4-2103cb27b15a)
+  Scenario: Generate "ALL" Success Billing Report - Selected Shipper - TH (uid:5518868f-0065-49b1-9478-fca4ff50105c)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-normal-noDiscount-country-default-3-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
       | shipperClientSecret | {shipper-sop-normal-noDiscount-country-default-3-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -23,7 +23,7 @@ Feature: Order Billing
       | startDate       | {gradle-current-date-yyyy-MM-dd}                            |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                            |
       | shipper         | {shipper-sop-normal-noDiscount-country-default-3-legacy-id} |
-      | generateFile    | Orders consolidated by shipper (1 file per shipper)         |
+      | generateFile    | All orders (1 very big file, takes long time to generate)   |
       | emailAddress    | {order-billing-email}                                       |
       | csvFileTemplate | 5 - TH Default SSB Template                                 |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
