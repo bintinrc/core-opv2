@@ -1,22 +1,18 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOpsID @OrderBillingID
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
-  "ALL": All orders (1 very big file, takes long time to generate)
-  "SCRIPT": Orders consolidated by script (1 file per script), grouped by shipper within the file
-  "AGGREGATED": All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
-
-
+  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - ID (uid:b62d1ba9-3e88-47ba-b5a4-2103cb27b15a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": 40,"insured_value": 85,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
