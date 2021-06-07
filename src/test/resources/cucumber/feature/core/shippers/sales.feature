@@ -54,6 +54,19 @@ Feature: Sales
       | name | {KEY_LIST_OF_SALES_PERSON[1].name}EDITED |
     Then Operator verifies all sales persons parameters on Sales page
 
+  @DeleteSalesPerson
+  Scenario: Operator Delete an Exist Sales Person (uid:3a01d8f0-9275-4193-be30-f05d08e05fb7)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create sales person:
+      | code | DSP-{uniqueString}   |
+      | name | Dummy-{uniqueString} |
+    When Operator go to menu Shipper -> Sales
+    And Operator deletes "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page
+    Then Operator verifies that success toast displayed:
+      | top                | Deleted salesperson {KEY_LIST_OF_SALES_PERSON[1].name} ({KEY_LIST_OF_SALES_PERSON[1].code}) |
+      | waitUntilInvisible | true                                                                                        |
+    And Operator verifies "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person was deleted on Sales page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
