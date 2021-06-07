@@ -30,6 +30,9 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
   @FindBy(id = "scan_barcode_input")
   public TextBox scanBarcodeInput;
 
+  @FindBy(name = "container.implanted-manifest.add-prefix")
+  public NvIconTextButton addPrefix;
+
   @FindBy(id = "hub")
   public MdSelect hubSelect;
 
@@ -38,6 +41,9 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public CreateManifestDialog createManifestDialog;
+
+  @FindBy(css = "md-dialog")
+  public SetPrefixDialog setPrefixDialog;
 
   private ImplantedManifestOrderTable implantedManifestOrderTable;
 
@@ -196,6 +202,19 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
     public NvIconTextButton createManifestButton;
 
     public CreateManifestDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class SetPrefixDialog extends MdDialog {
+
+    @FindBy(id = "container.global-inbound.prefix")
+    public TextBox prefix;
+
+    @FindBy(id = "saveButtonPrefix")
+    public NvIconTextButton save;
+
+    public SetPrefixDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
