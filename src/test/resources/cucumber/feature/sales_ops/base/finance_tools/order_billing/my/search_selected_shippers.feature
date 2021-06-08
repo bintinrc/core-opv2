@@ -32,10 +32,3 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
-
-##billing
-#  https://storage.googleapis.com/storage-qa.ninjavan.co/job/billing-java-job/ssb/AUTOMATION-EDITED-2021-06-07-2021-06-07-my-1623031819601.zip
-#"127403","QA-SO-Normal-NoDiscount-COD-DEF-INS-DEF-71444","QA-SO-Normal-NoDiscount-COD-DEF-INS-DEF-71444","NVMYA16610KPLZ7D0V","KPLZ7D0V","Completed","QA-SO-Test-To","DELIVERY_THREE_DAYS_ANYTIME","2","Parcel","STANDARD","SMALL","0.4","2021-06-07 10:09:21","2021-06-07","","WMSIA","-","","","","8, Lorong Ang Seng 2, Brickfields  MY 50470","50470","WMSIA","-",              "3","40.00","0.4","85.00","1.7","0.4","0.357","6.307","71444","3","2021-06-07"
-#  #dwh
-#  https://cdn-qa.ninjavan.co/my/billings/AUTOMATION-EDITED-2021-06-07-2021-06-07-my-1623031896789.zip
-#"127403","QA-SO-Normal-NoDiscount-COD-DEF-INS-DEF-71444","QA-SO-Normal-NoDiscount-COD-DEF-INS-DEF-71444","NVMYA16610KPLZ7D0V","KPLZ7D0V","Completed","QA-SO-Test-To","DELIVERY_THREE_DAYS_ANYTIME","2",                    "SMALL","0.4","2021-06-07 10:09:21","2021-06-07","","WMSIA","-","Kuala Lumpur","","","8, Lorong Ang Seng 2, Brickfields  MY 50470","50470","WMSIA","-","3.00","40.00","0.40","85.00","1.70","0.85","0.36","6.31","71444","3","2021-06-07"

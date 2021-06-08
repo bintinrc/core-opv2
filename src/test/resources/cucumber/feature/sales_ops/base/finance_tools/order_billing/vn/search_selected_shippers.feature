@@ -7,7 +7,8 @@ Feature: Order Billing
     And Operator changes the country to "Vietnam"
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
-  @nadeera
+
+
   @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - VN (uid:ba9acffd-d7b3-4bf1-99e7-a1479b7ef8c4)
     Given API Shipper create V4 order using data below:
