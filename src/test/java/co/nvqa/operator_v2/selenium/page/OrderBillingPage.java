@@ -31,7 +31,7 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   private static final String FILTER_AGGREGATED_INFO_MSG_XPATH = "//div[contains(text(),'%s')]";
   private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//md-select[@placeholder='No Template Selected']//div[@class='md-text']";
 
-  @FindBy(xpath = "  //md-select[@md-container-class=\"nv-input-select-container\"]")
+  @FindBy(xpath = "  //md-select[@md-container-class='nv-input-select-container']")
   public MdSelect csvFileTemplate;
 
   public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
