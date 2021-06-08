@@ -1,6 +1,6 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOpsPH @OrderBillingPH
 Feature: Order Billing
-  "SHIPPER": Orders consolidated by shipper (1 file per shipper)
+  "ALL": All orders (1 very big file, takes long time to generate)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -9,7 +9,7 @@ Feature: Order Billing
     And operator marks gmail messages as read
 
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - Selected Shipper - PH (uid:36f50aa0-9b63-4c6b-a12d-6fab2589b706)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-normal-noDiscount-country-default-3-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
