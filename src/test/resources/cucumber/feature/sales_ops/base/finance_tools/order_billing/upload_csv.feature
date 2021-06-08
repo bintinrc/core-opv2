@@ -15,10 +15,9 @@ Feature: Order Billing
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-      | csvFileTemplate     | 2 - SG Default SSB Template                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | csvFileTemplate     | {csv-template}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
     And API Operator force succeed created order
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     When Operator generates success billings using data below:
@@ -44,16 +43,15 @@ Feature: Order Billing
       | uploadCsv       | 1122334455                                          |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SHIPPER" Report (uid:d3e4c175-1eec-415d-a1fe-74ea2a94bc4e)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
@@ -61,7 +59,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455               |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -74,9 +72,8 @@ Feature: Order Billing
   Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:94211053-c20d-499b-9742-54baa208182a)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     When Operator generates success billings using data below:
@@ -85,7 +82,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id}                                |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
-      | csvFileTemplate | 2 - SG Default SSB Template                               |
+      | csvFileTemplate | {csv-template}                                            |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -102,7 +99,7 @@ Feature: Order Billing
       | uploadCsv       | 1122334455                                                |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
-      | csvFileTemplate | 2 - SG Default SSB Template                               |
+      | csvFileTemplate | {csv-template}                                            |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -125,9 +122,8 @@ Feature: Order Billing
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "AGGREGATED" Report (uid:6e4e54e5-fb92-4ecc-a61a-1301799d969c)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
@@ -141,7 +137,6 @@ Feature: Order Billing
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
-    Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
@@ -154,7 +149,6 @@ Feature: Order Billing
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "AGGREGATED" Report (uid:62ae496e-0fab-4708-bf9f-da781eb068b0)
@@ -180,7 +174,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id}                                                            |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                           |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -196,7 +190,7 @@ Feature: Order Billing
       | uploadCsv       | 1122334455                                                                            |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -207,7 +201,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455                                                 |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -278,9 +272,8 @@ Feature: Order Billing
   Scenario: Search Shipper by Upload CSV with two columns (uid:f404e9e5-70f8-4407-bfa7-3057d410a97f)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -302,7 +295,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id},{shipper-v4-legacy-id}   |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -319,6 +312,6 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-id-v4-legacy-id}                       |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
