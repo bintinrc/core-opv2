@@ -547,7 +547,7 @@ Feature: Order Billing
       | shipper         | {shipper-v4-legacy-id}                                    |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
-      | csvFileTemplate | 2 - SG Default SSB Template                               |
+      | csvFileTemplate | {csv-template}                                            |
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"

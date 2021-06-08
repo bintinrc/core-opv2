@@ -17,13 +17,14 @@ Feature: Order Billing
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-From","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "15, Jalan Raja Laut","country": "MY","postcode": "50530"}},"to": {"name": "QA-SO-Test-To","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "8, Lorong Ang Seng 2, Brickfields","country": "MY","postcode": "50470"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     Given Operator go to menu Finance Tools -> Order Billing
+    Then Operator verifies "{default-csv-template}" is selected in Customized CSV File Template
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                            |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                            |
       | shipper         | {shipper-sop-normal-noDiscount-country-default-3-legacy-id} |
       | generateFile    | Orders consolidated by shipper (1 file per shipper)         |
       | emailAddress    | {order-billing-email}                                       |
-      | csvFileTemplate | 3 - MY Default SSB Template                                 |
+      | csvFileTemplate | {csv-template}                                              |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email

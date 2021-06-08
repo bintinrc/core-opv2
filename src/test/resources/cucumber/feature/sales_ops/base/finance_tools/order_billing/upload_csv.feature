@@ -18,7 +18,7 @@ Feature: Order Billing
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-      | csvFileTemplate     | 2 - SG Default SSB Template                                                                                                                                                                                                                                                                                                      |
+      | csvFileTemplate     | {csv-template}                                                                                                                                                                                                                                                                                                                   |
     And API Operator force succeed created order
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     When Operator generates success billings using data below:
@@ -44,7 +44,7 @@ Feature: Order Billing
       | uploadCsv       | 1122334455                                          |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -61,7 +61,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455               |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -85,7 +85,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id}                                |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
-      | csvFileTemplate | 2 - SG Default SSB Template                               |
+      | csvFileTemplate | {csv-template}                                            |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -102,7 +102,7 @@ Feature: Order Billing
       | uploadCsv       | 1122334455                                                |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
-      | csvFileTemplate | 2 - SG Default SSB Template                               |
+      | csvFileTemplate | {csv-template}                                            |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -179,7 +179,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id}                                                            |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                           |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -195,7 +195,7 @@ Feature: Order Billing
       | uploadCsv       | 1122334455                                                                            |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -206,7 +206,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455                                                 |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                                |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -301,7 +301,7 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-v4-legacy-id},{shipper-v4-legacy-id}   |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -318,6 +318,6 @@ Feature: Order Billing
       | uploadCsv       | {shipper-sop-id-v4-legacy-id}                       |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
