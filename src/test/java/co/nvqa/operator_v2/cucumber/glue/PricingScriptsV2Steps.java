@@ -38,7 +38,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String dateUniqueString = generateDateUniqueString();
-    String hasTemplate = mapOfData.get("hasTemplate");
+
     String createdDate = CREATED_DATE_SDF.format(new Date());
     String name = "Dummy Script #" + dateUniqueString;
     String description = f(
@@ -49,28 +49,30 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     Script script = new Script();
     script.setName(name);
     script.setDescription(description);
-    script.setHasTemplate(hasTemplate);
-
-    if (hasTemplate.equals("Yes")) {
+    if (Objects.nonNull(mapOfData.get("hasTemplate"))) {
+      String hasTemplate = mapOfData.get("hasTemplate");
       String templateName = mapOfData.get("templateName");
+      script.setHasTemplate(hasTemplate);
       script.setTemplateName(templateName);
-    } else {
-      String isCSVFile = mapOfData.get("isCsvFile");
-      script.setIsCsvFile(isCSVFile);
-      if (isCSVFile.equals("No")) {
-        String source = mapOfData.get("source");
-        String activeParameters = mapOfData.get("activeParameters");
-
-        List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
-            .map(String::trim)
-            .collect(Collectors.toList());
-        script.setSource(source);
-        script.setActiveParameters(listOfActiveParameters);
-      } else {
-        String fileContent = mapOfData.get("fileContent");
-        script.setFileContent(fileContent);
-      }
     }
+    if (Objects.nonNull(mapOfData.get("isCsvFile"))) {
+      String isCSVFile = mapOfData.get("isCsvFile");
+      String fileContent = mapOfData.get("fileContent");
+      script.setIsCsvFile(isCSVFile);
+      script.setFileContent(fileContent);
+    }
+    if (Objects.nonNull(mapOfData.get("source")) && Objects
+        .nonNull(mapOfData.get("activeParameters"))) {
+      String source = mapOfData.get("source");
+      String activeParameters = mapOfData.get("activeParameters");
+
+      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
+          .map(String::trim)
+          .collect(Collectors.toList());
+      script.setSource(source);
+      script.setActiveParameters(listOfActiveParameters);
+    }
+
     pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }

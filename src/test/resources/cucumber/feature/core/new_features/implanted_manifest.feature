@@ -267,6 +267,32 @@ Feature: Implanted Manifest
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID (uid:027dfab6-19b3-4157-af2e-7e924ed45660)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Using Prefix - Multiple TID (uid:8ef03b8e-c48f-458a-8755-84a9dafc4ae7)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator saves created orders Tracking IDs without prefix
+    And Operator adds country prefix on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[2]}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
