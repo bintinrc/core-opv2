@@ -344,8 +344,8 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
-    And DB Operator verify order_events record for the created order:
-      | type | 33 |
+#    And DB Operator verify order_events record for the created order:
+#      | type | 33 |
     Then DB Operator verify next Pickup transaction values are updated for the created order:
       | routeId | 0 |
     And DB Operator verify Pickup waypoint of the created order using data below:
@@ -373,8 +373,8 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
-    And DB Operator verify order_events record for the created order:
-      | type | 33 |
+#    And DB Operator verify order_events record for the created order:
+#      | type | 33 |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
       | routeId | 0 |
     And DB Operator verify Delivery waypoint of the created order using data below:
