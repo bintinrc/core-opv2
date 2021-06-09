@@ -974,7 +974,7 @@ Feature: Edit Order
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
-
+@wip
   Scenario: Operator Force Success Order on Edit Order Page - End State = Completed (uid:11fd9e1a-9caf-4b2e-9da9-6f240649c79d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -997,7 +997,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Force Success Order on Edit Order Page - End State = Returned to Sender (uid:5f5c3de3-50a7-483f-ac1e-2775204c3f91)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -1028,7 +1028,7 @@ Feature: Edit Order
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
-
+@wip
   Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Collect COD (uid:2c0df634-56da-4771-8989-fd9e746870bd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -1056,7 +1056,7 @@ Feature: Edit Order
       | transactionMode   | DELIVERY                      |
       | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Collect COD (uid:c763009d-b2b4-4746-9794-272317d96cd6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -1088,7 +1088,7 @@ Feature: Edit Order
       | transactionMode   | DELIVERY                      |
       | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
       | driverId          | {ninja-driver-id}             |
-
+@wip
   Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Do not Collect COD (uid:6d6c623c-1f06-4d4e-a39d-0ef3226c3547)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -1116,7 +1116,7 @@ Feature: Edit Order
       | transactionMode   | DELIVERY |
       | expectedCodAmount | 0        |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Do not Collect COD (uid:5d1aadd6-394d-4cbd-ad20-7858a8bae9c5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
