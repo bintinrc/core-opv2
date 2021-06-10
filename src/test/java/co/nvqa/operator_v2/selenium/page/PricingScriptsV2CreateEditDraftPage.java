@@ -207,19 +207,22 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
       sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
     }
-
-    sendKeysByName("container.pricing-scripts.origin-pz", "");
-    sendKeysByName("container.pricing-scripts.dest-pz", "");
-
+    if (Objects.isNull(runCheckParams.getOriginPricingZone()) || Objects
+        .isNull(runCheckParams.getDestinationPricingZone())) {
+      sendKeysByName("container.pricing-scripts.origin-pz",
+          "");
+      sendKeysByName("container.pricing-scripts.dest-pz",
+          "");
+    }
     if (Objects.nonNull(runCheckParams.getOriginPricingZone()) || Objects
         .nonNull(runCheckParams.getDestinationPricingZone())) {
       sendKeysByName("container.pricing-scripts.origin-pz",
           runCheckParams.getOriginPricingZone());
       sendKeysByName("container.pricing-scripts.dest-pz",
           runCheckParams.getDestinationPricingZone());
-      clickNvApiTextButtonByNameAndWaitUntilDone(
-          "container.pricing-scripts.run-check"); //Button Run Check
     }
+    clickNvApiTextButtonByNameAndWaitUntilDone(
+        "container.pricing-scripts.run-check"); //Button Run Check
   }
 
   public void verifyErrorMessage(String errorMessage, String status) {

@@ -178,7 +178,7 @@ public class OperatorV2SimplePage extends SimplePage {
 
   public void sendKeysToMdInputContainerByModel(String mdInputContainerModel,
       CharSequence... keysToSend) {
-    sendKeys(f("//md-input-container[@model='%s']/input", mdInputContainerModel), keysToSend);
+    sendKeys(f("//md-input-container[@model='%s']//input", mdInputContainerModel), keysToSend);
   }
 
   public void setMdDatepicker(String mdDatepickerNgModel, Date date) {
