@@ -74,8 +74,6 @@ public class SortCodePage extends OperatorV2SimplePage {
 
   public void verifiesDownloadedCsvDetailsAreRight(SortCode sortCode) {
     verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN),
-        sortCode.getPostcode());
-    verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN),
-        sortCode.getSortCode());
+        sortCode.getPostcode() + "," + sortCode.getSortCode());
   }
 }
