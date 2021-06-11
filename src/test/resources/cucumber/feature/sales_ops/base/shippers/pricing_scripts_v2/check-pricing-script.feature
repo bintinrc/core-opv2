@@ -25,17 +25,19 @@ Feature: Check Pricing Script
     Given Operator go to menu Shipper -> Pricing Scripts V2
     And Operator search custom script id "{pricing-script-id-3}"
     And Operator do Run Check on specific Active Script using this data below:
-      | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
-      | isRts        | No       |
-      | size         | S        |
-      | weight       | 1.0      |
-      | insuredValue | 0.00     |
-      | codValue     | 0.00     |
-      | fromZone     | WEST     |
-      | toZone       | EAST     |
+      | orderFields            | Legacy   |
+      | deliveryType           | STANDARD |
+      | orderType              | NORMAL   |
+      | timeslotType           | NONE     |
+      | isRts                  | No       |
+      | size                   | S        |
+      | weight                 | 1.0      |
+      | insuredValue           | 0.00     |
+      | codValue               | 0.00     |
+      | fromZone               | WEST     |
+      | toZone                 | EAST     |
+      | originPricingZone      | empty    |
+      | destinationPricingZone | empty    |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | 11.235 |
       | gst          | 0.735  |

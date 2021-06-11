@@ -57,8 +57,8 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   private void setScriptInfo(Script script) {
     clickTabItem("Script Info");
-    sendKeysToMdInputContainerByModel("ctrl.data.script.name", script.getName());
-    sendKeysToMdInputContainerByModel("ctrl.data.script.description", script.getDescription());
+    sendKeysToMdInputContainerByModelOPV2("ctrl.data.script.name", script.getName());
+    sendKeysToMdInputContainerByModelOPV2("ctrl.data.script.description", script.getDescription());
   }
 
   private void setWriteScript(Script script) {
@@ -182,8 +182,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
         String.valueOf(insuredValue));
     sendKeysByIdCustom1("container.pricing-scripts.description-cod-value",
         String.valueOf(codValue));
-    if (Objects.nonNull(runCheckParams.getFromZone()) || Objects
-        .nonNull(runCheckParams.getToZone())) {
+    if (Objects.nonNull(runCheckParams.getFromZone())) {
       retryIfRuntimeExceptionOccurred(
           () -> selectValueFromNvAutocomplete("ctrl.view.textFromZone",
               runCheckParams.getFromZone()),
@@ -192,34 +191,29 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
           () -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()),
           "Select value from \"To Zone\" NvAutocomplete");
     }
-
-    if (Objects.nonNull(runCheckParams.getFromL1()) || Objects.nonNull(runCheckParams.getToL1())) {
+    if (Objects.nonNull(runCheckParams.getFromL1())) {
       sendKeysByName("container.pricing-scripts.from-l1", runCheckParams.getFromL1());
       sendKeysByName("container.pricing-scripts.to-l1", runCheckParams.getToL1());
     }
-    if (Objects.nonNull(runCheckParams.getFromL2()) || Objects
-        .nonNull(runCheckParams.getToL2())) {
+    if (Objects.nonNull(runCheckParams.getFromL2())) {
       sendKeysByName("container.pricing-scripts.from-l2", runCheckParams.getFromL2());
       sendKeysByName("container.pricing-scripts.to-l2", runCheckParams.getToL2());
     }
-    if (Objects.nonNull(runCheckParams.getFromL3()) || Objects
-        .nonNull(runCheckParams.getToL3())) {
+    if (Objects.nonNull(runCheckParams.getFromL3())) {
       sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
       sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
     }
-    if (Objects.isNull(runCheckParams.getOriginPricingZone()) || Objects
-        .isNull(runCheckParams.getDestinationPricingZone())) {
-      sendKeysByName("container.pricing-scripts.origin-pz",
-          "");
-      sendKeysByName("container.pricing-scripts.dest-pz",
-          "");
-    }
-    if (Objects.nonNull(runCheckParams.getOriginPricingZone()) || Objects
-        .nonNull(runCheckParams.getDestinationPricingZone())) {
-      sendKeysByName("container.pricing-scripts.origin-pz",
-          runCheckParams.getOriginPricingZone());
-      sendKeysByName("container.pricing-scripts.dest-pz",
-          runCheckParams.getDestinationPricingZone());
+    if (Objects.nonNull(runCheckParams.getOriginPricingZone())) {
+      if (runCheckParams.getDestinationPricingZone().equals("empty") && runCheckParams
+          .getOriginPricingZone().equals("empty")) {
+        sendKeysByName("container.pricing-scripts.origin-pz", "");
+        sendKeysByName("container.pricing-scripts.dest-pz", "");
+      } else {
+        sendKeysByName("container.pricing-scripts.origin-pz",
+            runCheckParams.getOriginPricingZone());
+        sendKeysByName("container.pricing-scripts.dest-pz",
+            runCheckParams.getDestinationPricingZone());
+      }
     }
     clickNvApiTextButtonByNameAndWaitUntilDone(
         "container.pricing-scripts.run-check"); //Button Run Check
