@@ -16,12 +16,12 @@ Feature: Import Script ByParam Function
       | orderFields  | Legacy   |
       | deliveryType | STANDARD |
       | orderType    | NORMAL   |
-      | timeslotType           | NONE         |
-      | isRts                  | No           |
-      | size                   | S            |
-      | weight                 | 1.0          |
-      | insuredValue           | 0.00         |
-      | codValue               | 0.00         |
+      | timeslotType | NONE     |
+      | isRts        | No       |
+      | size         | S        |
+      | weight       | 1.0      |
+      | insuredValue | 0.00     |
+      | codValue     | 0.00     |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | 9595 |
       | gst          | 95   |
