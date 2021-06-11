@@ -22,8 +22,6 @@ Feature: Pricing Scripts V2
       | weight                 | 1.0             |
       | insuredValue           | 0.00            |
       | codValue               | 0.00            |
-      | originPricingZone      | ID_A00007_01    |
-      | destinationPricingZone | ID_B00064_01    |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |
