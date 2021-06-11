@@ -53,6 +53,13 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
     setScriptInfo(script);
     setWriteScript(script);
+    boolean headerHint = isElementVisible(
+        "//div[@text='Run a syntax check before saving or verifying the draft.']");
+    if (headerHint) {
+      checkSyntax();
+      pause2s();
+      saveDraft();
+    }
   }
 
   private void setScriptInfo(Script script) {
@@ -67,27 +74,15 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysAndEnter("//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']",
           script.getTemplateName());
       click("//button[@aria-label='Load']");
-      checkSyntax();
-      pause2s();
-      saveDraft();
     }
     if (Objects.nonNull(script.getIsCsvFile())) {
       String csvFileName = "sample_upload_rates.csv";
       File csvFile = createFile(csvFileName, script.getFileContent());
       importCsv.setValue(csvFile);
-      boolean headerHint = isElementVisible(
-          "//div[@text='Run a syntax check before saving or verifying the draft.']");
-      if (headerHint) {
-        checkSyntax();
-        pause2s();
-        saveDraft();
-      }
     }
     if (Objects.nonNull(script.getSource()) && Objects.nonNull(script.getActiveParameters())) {
       activateParameters(script.getActiveParameters());
       updateAceEditorValue(script.getSource());
-      checkSyntax();
-      saveDraft();
     }
   }
 
@@ -105,6 +100,13 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     assertEquals("Syntax Info",
         "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)",
         actualErrorInfo);
+  }
+
+  public void editDraft(Script script) {
+    waitUntilPageLoaded(buildScriptUrl(script));
+    setWriteScript(script);
+    checkSyntax();
+    validateDraftAndReleaseScript(script);
   }
 
   private void saveDraft() {

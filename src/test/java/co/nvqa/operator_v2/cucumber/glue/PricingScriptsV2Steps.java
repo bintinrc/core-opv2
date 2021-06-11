@@ -89,6 +89,23 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
   }
 
+  @Then("^Operator edit the created Draft Script using data below:$")
+  public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    if (Objects.nonNull(mapOfData.get("source")) && Objects
+        .nonNull(mapOfData.get("activeParameters"))) {
+      String source = mapOfData.get("source");
+      String activeParameters = mapOfData.get("activeParameters");
+
+      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
+          .map(String::trim)
+          .collect(Collectors.toList());
+      script.setSource(source);
+      script.setActiveParameters(listOfActiveParameters);
+    }
+    pricingScriptsV2Page.editCreatedDraft(script);
+  }
+
   @When("^Operator delete Draft Script$")
   public void operatorDeleteDraftScript() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);

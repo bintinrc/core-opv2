@@ -64,6 +64,11 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.checkErrorHeader();
   }
 
+  public void editCreatedDraft(Script script) {
+    goToEditDraftScript(script);
+    pricingScriptsV2CreateEditDraftPage.editDraft(script);
+  }
+
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
     retryIfAssertionErrorOccurred(() ->
