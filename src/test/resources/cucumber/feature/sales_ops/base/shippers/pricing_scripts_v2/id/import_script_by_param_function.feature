@@ -5,7 +5,7 @@ Feature: Import Script ByParam Function
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
 
-  @DeletePricingScript @weam
+  @DeletePricingScript
   Scenario: Create Script with importScriptByParams (uid:0487bb08-5069-44f3-9c81-88728f3d6d26)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
