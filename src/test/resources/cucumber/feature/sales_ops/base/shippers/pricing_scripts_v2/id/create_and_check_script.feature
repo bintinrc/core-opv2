@@ -13,17 +13,15 @@ Feature: Pricing Scripts V2
       | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, cod_value, insured_value, order_type                                                                                                                                    |
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
-      | orderFields            | Legacy          |
-      | deliveryType           | STANDARD        |
-      | orderType              | NORMAL          |
-      | timeslotType           | NONE            |
-      | isRts                  | <is_RTS_toggle> |
-      | size                   | S               |
-      | weight                 | 1.0             |
-      | insuredValue           | 0.00            |
-      | codValue               | 0.00            |
-      | originPricingZone      | ID_A00007_01    |
-      | destinationPricingZone | ID_B00064_01    |
+      | orderFields  | Legacy          |
+      | deliveryType | STANDARD        |
+      | orderType    | NORMAL          |
+      | timeslotType | NONE            |
+      | isRts        | <is_RTS_toggle> |
+      | size         | S               |
+      | weight       | 1.0             |
+      | insuredValue | 0.00            |
+      | codValue     | 0.00            |
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | <grandTotal>   |
       | gst          | <gst>          |

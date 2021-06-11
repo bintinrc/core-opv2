@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -184,66 +183,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     assertEquals("Script ID", String.valueOf(script.getId()), actualId);
     assertEquals("Script Name", script.getName(), actualScriptName);
     assertEquals("Script Description", script.getDescription(), actualDescription);
-  }
-
-  public RunCheckParams runCheckScriptDraftAndActive(Map<String, String> mapOfData) {
-    RunCheckParams runCheckParams = new RunCheckParams();
-
-    String orderFields = mapOfData.get("orderFields");
-    String deliveryType = mapOfData.get("deliveryType");
-    String orderType = mapOfData.get("orderType");
-    String serviceLevel = mapOfData.get("serviceLevel");
-    String serviceType = mapOfData.get("serviceType");
-    String timeslotType = mapOfData.get("timeslotType");
-    String isRts = mapOfData.get("isRts");
-    String size = mapOfData.get("size");
-    double weight = Double.parseDouble(mapOfData.get("weight"));
-    double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
-    double codValue = Double.parseDouble(mapOfData.get("codValue"));
-    String fromZone = mapOfData.get("fromZone");
-    String toZone = mapOfData.get("toZone");
-    if (Objects.nonNull("fromZone") || Objects.nonNull("toZone")) {
-      runCheckParams.setFromZone(fromZone);
-      runCheckParams.setToZone(toZone);
-    }
-
-    runCheckParams.setOrderFields(orderFields);
-    runCheckParams.setDeliveryType(deliveryType);
-    runCheckParams.setOrderType(orderType);
-    runCheckParams.setServiceLevel(serviceLevel);
-    runCheckParams.setServiceType(serviceType);
-    runCheckParams.setTimeslotType(timeslotType);
-    runCheckParams.setIsRts(isRts);
-    runCheckParams.setSize(size);
-    runCheckParams.setWeight(weight);
-    runCheckParams.setInsuredValue(insuredValue);
-    runCheckParams.setCodValue(codValue);
-
-    if (Objects.nonNull(mapOfData.get("fromL1")) || Objects.nonNull(mapOfData.get("toL1"))
-        || Objects.nonNull(mapOfData.get("fromL2")) || Objects
-        .nonNull(mapOfData.get("toL2")) || Objects.nonNull(mapOfData.get("fromL3")) || Objects
-        .nonNull(mapOfData.get("toL3"))) {
-      String fromL1 = mapOfData.get("fromL1");
-      String toL1 = mapOfData.get("toL1");
-      String fromL2 = mapOfData.get("fromL2");
-      String toL2 = mapOfData.get("toL2");
-      String fromL3 = mapOfData.get("fromL3");
-      String toL3 = mapOfData.get("toL3");
-      runCheckParams.setFromL1(fromL1);
-      runCheckParams.setToL1(toL1);
-      runCheckParams.setFromL2(fromL2);
-      runCheckParams.setToL2(toL2);
-      runCheckParams.setFromL3(fromL3);
-      runCheckParams.setToL3(toL3);
-    }
-    if (Objects.nonNull(mapOfData.get("originPricingZone")) || Objects
-        .nonNull(mapOfData.get("destinationPricingZone"))) {
-      String originPricingZone = mapOfData.get("originPricingZone");
-      String destinationPricingZone = mapOfData.get("destinationPricingZone");
-      runCheckParams.setOriginPricingZone(originPricingZone);
-      runCheckParams.setDestinationPricingZone(destinationPricingZone);
-    }
-    return runCheckParams;
   }
 
   public void linkShippers(Script script, Shipper shipper) {
