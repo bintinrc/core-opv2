@@ -324,10 +324,14 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     double codValue = Double.parseDouble(mapOfData.get("codValue"));
     String fromZone = mapOfData.get("fromZone");
     String toZone = mapOfData.get("toZone");
-    if (Objects.nonNull("fromZone")) {
-      runCheckParams.setFromZone(fromZone);
-      runCheckParams.setToZone(toZone);
-    }
+    String originPricingZone = mapOfData.get("originPricingZone");
+    String destinationPricingZone = mapOfData.get("destinationPricingZone");
+    String fromL1 = mapOfData.get("fromL1");
+    String toL1 = mapOfData.get("toL1");
+    String fromL2 = mapOfData.get("fromL2");
+    String toL2 = mapOfData.get("toL2");
+    String fromL3 = mapOfData.get("fromL3");
+    String toL3 = mapOfData.get("toL3");
 
     runCheckParams.setOrderFields(orderFields);
     runCheckParams.setDeliveryType(deliveryType);
@@ -340,26 +344,34 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     runCheckParams.setWeight(weight);
     runCheckParams.setInsuredValue(insuredValue);
     runCheckParams.setCodValue(codValue);
-
-    if (Objects.nonNull(mapOfData.get("fromL1"))
-        || Objects.nonNull(mapOfData.get("fromL2")) || Objects.nonNull(mapOfData.get("fromL3"))) {
-      String fromL1 = mapOfData.get("fromL1");
-      String toL1 = mapOfData.get("toL1");
-      String fromL2 = mapOfData.get("fromL2");
-      String toL2 = mapOfData.get("toL2");
-      String fromL3 = mapOfData.get("fromL3");
-      String toL3 = mapOfData.get("toL3");
+    if (Objects.nonNull("fromZone")) {
+      runCheckParams.setFromZone(fromZone);
+    }
+    if (Objects.nonNull("toZone")) {
+      runCheckParams.setToZone(toZone);
+    }
+    if (Objects.nonNull("fromL1")) {
       runCheckParams.setFromL1(fromL1);
-      runCheckParams.setToL1(toL1);
+    }
+    if (Objects.nonNull("fromL2")) {
       runCheckParams.setFromL2(fromL2);
-      runCheckParams.setToL2(toL2);
+    }
+    if (Objects.nonNull("fromL3")) {
       runCheckParams.setFromL3(fromL3);
+    }
+    if (Objects.nonNull("toL1")) {
+      runCheckParams.setToL1(toL1);
+    }
+    if (Objects.nonNull("toL2")) {
+      runCheckParams.setToL2(toL2);
+    }
+    if (Objects.nonNull("toL3")) {
       runCheckParams.setToL3(toL3);
     }
-    if (Objects.nonNull(mapOfData.get("originPricingZone"))) {
-      String originPricingZone = mapOfData.get("originPricingZone");
-      String destinationPricingZone = mapOfData.get("destinationPricingZone");
+    if (Objects.nonNull("originPricingZone")) {
       runCheckParams.setOriginPricingZone(originPricingZone);
+    }
+    if (Objects.nonNull("destinationPricingZone")) {
       runCheckParams.setDestinationPricingZone(destinationPricingZone);
     }
     return runCheckParams;

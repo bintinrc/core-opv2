@@ -176,11 +176,6 @@ public class OperatorV2SimplePage extends SimplePage {
     sendKeysAndEnter(f("//*[@aria-label='%s']", ariaLabel), keysToSend);
   }
 
-  public void sendKeysToMdInputContainerByModelOPV2(String mdInputContainerModel,
-      CharSequence... keysToSend) {
-    sendKeys(f("//md-input-container[@model='%s']//input", mdInputContainerModel), keysToSend);
-  }
-
   public void sendKeysToMdInputContainerByModel(String mdInputContainerModel,
       CharSequence... keysToSend) {
     sendKeys(f("//md-input-container[@model='%s']/input", mdInputContainerModel), keysToSend);
