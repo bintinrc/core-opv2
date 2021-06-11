@@ -4,6 +4,7 @@ import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import java.io.File;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -31,6 +32,8 @@ public class SortCodePage extends OperatorV2SimplePage {
   private static final String SORT_CODE_RESULT_XPATH = "//td[@class='sort_code']//span";
   private static final String POSTCODE_RESULT_MARK_XPATH = "//td[@class='postcode']//mark";
   private static final String SORT_CODE_RESULT_MARK_XPATH = "//td[@class='sort_code']//mark";
+  private static final String INPUT_FILE_TO_UPLOAD_CSV_XPATH = "//input[@accept='.csv']";
+  private static final String SORT_CODE_IS_NOT_FOUND_XPATH = "//div[contains(@class,'footer-row') and text()='No Results Found']";
 
   private static final String CSV_FILENAME_PATTERN = "sort-codes.csv";
 
@@ -75,5 +78,13 @@ public class SortCodePage extends OperatorV2SimplePage {
   public void verifiesDownloadedCsvDetailsAreRight(SortCode sortCode) {
     verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN),
         sortCode.getPostcode() + "," + sortCode.getSortCode());
+  }
+
+  public void uploadFile(File file) {
+    findElementByXpath(INPUT_FILE_TO_UPLOAD_CSV_XPATH).sendKeys(file.getAbsolutePath());
+  }
+
+  public void verifiiesSortCodeIsNotFound() {
+    assertTrue("Sort Code is Not Found", isElementExist(SORT_CODE_IS_NOT_FOUND_XPATH));
   }
 }
