@@ -8,7 +8,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -68,17 +67,14 @@ public class OrderBillingSteps extends AbstractSteps {
             "Customized Template is not supported for aggregated report type."));
       }
     }
-    if (Objects.nonNull(mapOfData.get("emailAddress"))) {
-      orderBillingPage.setEmailAddress(mapOfData.get("emailAddress"));
-    }
     String csvFileTemplate = mapOfData.get("csvFileTemplate");
     if (Objects.nonNull(csvFileTemplate)) {
-      if (StringUtils.containsIgnoreCase(csvFileTemplate, "Default")) {
-        assertEquals("Default Template is not selected", csvFileTemplate,
-            orderBillingPage.getCsvFileTemplateName());
-      }
+      orderBillingPage.setCsvFileTemplateName(csvFileTemplate);
     }
-
+    String emailAddress = mapOfData.get("emailAddress");
+    if (Objects.nonNull(emailAddress)) {
+      orderBillingPage.setEmailAddress(emailAddress);
+    }
     orderBillingPage.clickGenerateSuccessBillingsButton();
     orderBillingPage.verifyNoErrorsAvailable();
   }
@@ -100,4 +96,9 @@ public class OrderBillingSteps extends AbstractSteps {
         orderBillingPage.getNoParentErrorMsg(), containsString("No Parent Shipper matching"));
   }
 
+  @Then("Operator verifies {string} is selected in Customized CSV File Template")
+  public void operatorVerifiesIsSelectedInCustomizedCSVFileTemplate(String value) {
+    assertEquals("Default Template is not selected", value,
+        orderBillingPage.getCsvFileTemplateName());
+  }
 }

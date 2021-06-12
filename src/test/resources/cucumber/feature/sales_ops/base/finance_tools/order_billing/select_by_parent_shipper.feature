@@ -15,18 +15,16 @@ Feature: Order Billing
   Scenario: Test Data: Generate order for MarketPlace shipper
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                 |
-      | shipperClientSecret | {shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                             |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientSecret | {shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
 
   @DeleteOrArchiveRoute
   Scenario: Test Data: Generate order for sub shipper
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                             |
-      | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                         |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
 
 #  @DeleteOrArchiveRoute @KillBrowser
@@ -62,7 +60,7 @@ Feature: Order Billing
       | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                    |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 2 - SG Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -79,7 +77,7 @@ Feature: Order Billing
       | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                          |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
-      | csvFileTemplate | 2 - SG Default SSB Template                               |
+      | csvFileTemplate | {csv-template}                                            |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -112,7 +110,7 @@ Feature: Order Billing
       | parentShipper   | {shipper-sop-mktpl-v4-legacy-id}                                                      |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
-      | csvFileTemplate | 2 - SG Default SSB Template                                                           |
+      | csvFileTemplate | {csv-template}                                                                        |
     Then Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
