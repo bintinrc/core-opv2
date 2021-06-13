@@ -56,9 +56,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     boolean headerHint = isElementVisible(
         "//div[@text='Run a syntax check before saving or verifying the draft.']");
     if (headerHint) {
-      checkSyntax();
-      pause2s();
-      saveDraft();
+      checkSyntax(script);
     }
   }
 
@@ -88,27 +86,31 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     }
   }
 
-  private void checkSyntax() {
+  private void checkSyntax(Script script) {
     clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
-    String actualSyntaxInfo = getAttribute(
-        "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info')]",
-        "text");
-    assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
-        actualSyntaxInfo);
+    String headerHintXpath = "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info') and contains(@text, 'No errors found')]";
+    boolean headerHint = isElementVisible(headerHintXpath);
+    if (headerHint) {
+      String actualSyntaxInfo = getAttribute(headerHintXpath, "text");
+      assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
+          actualSyntaxInfo);
+      if (isElementVisible("//nv-api-text-button[@name='Save Draft']")) {
+        saveDraft();
+      } else {
+        validateDraftAndReleaseScript(script);
+      }
+    }
   }
 
-  public void checkErrorHeader() {
+  public void checkErrorHeader(String message) {
     String actualErrorInfo = getText("//div[contains(@class,'hint')]");
-    assertEquals("Syntax Info",
-        "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)",
-        actualErrorInfo);
+    assertTrue(actualErrorInfo.contains(message));
   }
 
-  public void editDraft(Script script) {
+  public void editScript(Script script) {
     waitUntilPageLoaded(buildScriptUrl(script));
     setWriteScript(script);
-    checkSyntax();
-    validateDraftAndReleaseScript(script);
+    checkSyntax(script);
   }
 
   private void saveDraft() {

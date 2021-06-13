@@ -219,7 +219,7 @@ Feature: Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | isCsvFile   | Yes                                         |
       | fileContent | deliveryType':'EXPRESS' \n 'parcelSize':'S' |
-    Then Operator verify error message after adding invalid csv file
+    Then Operator verify error message in header with "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)"
 
   @DeletePricingScript
   Scenario Outline: Create and Check Script (<hiptest-uid>)

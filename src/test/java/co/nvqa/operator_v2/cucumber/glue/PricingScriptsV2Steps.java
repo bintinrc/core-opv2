@@ -77,33 +77,33 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
-  @Then("Operator verify error message after adding invalid csv file")
-  public void operatorVerifyErrorMessage() {
-    pricingScriptsV2Page.checkErrorHeader();
+  @Then("Operator verify error message in header with {string}")
+  public void operatorVerifyErrorMessage(String message) {
+    pricingScriptsV2Page.checkErrorHeader(message);
   }
 
   @Then("^Operator verify the new Script is created successfully on Drafts$")
   public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
-
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
   }
 
   @Then("^Operator edit the created Draft Script using data below:$")
   public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
-    Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    if (Objects.nonNull(mapOfData.get("source")) && Objects
-        .nonNull(mapOfData.get("activeParameters"))) {
-      String source = mapOfData.get("source");
-      String activeParameters = mapOfData.get("activeParameters");
-
-      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
-          .map(String::trim)
-          .collect(Collectors.toList());
-      script.setSource(source);
-      script.setActiveParameters(listOfActiveParameters);
-    }
+    Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
+  }
+
+  @Then("^Operator edit the created Active Script using data below:$")
+  public void operatorEditCreatedActiveScript(Map<String, String> mapOfData) {
+    Script script = editCreatedDraftOrActiveScript(mapOfData);
+    pricingScriptsV2Page.editCreatedActive(script);
+  }
+
+  @When("Operator search according Active Script name")
+  public void operatorSearchActiveScriptName() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.searchActiveScriptName(script);
   }
 
   @When("^Operator delete Draft Script$")
@@ -392,5 +392,21 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       runCheckParams.setDestinationPricingZone(destinationPricingZone);
     }
     return runCheckParams;
+  }
+
+  public Script editCreatedDraftOrActiveScript(Map<String, String> mapOfData) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    if (Objects.nonNull(mapOfData.get("source")) && Objects
+        .nonNull(mapOfData.get("activeParameters"))) {
+      String source = mapOfData.get("source");
+      String activeParameters = mapOfData.get("activeParameters");
+
+      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
+          .map(String::trim)
+          .collect(Collectors.toList());
+      script.setSource(source);
+      script.setActiveParameters(listOfActiveParameters);
+    }
+    return script;
   }
 }
