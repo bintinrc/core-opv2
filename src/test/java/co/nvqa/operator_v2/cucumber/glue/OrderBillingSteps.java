@@ -101,4 +101,20 @@ public class OrderBillingSteps extends AbstractSteps {
     assertEquals("Default Template is not selected", value,
         orderBillingPage.getCsvFileTemplateName());
   }
+
+  @Then("Operator verifies that error toast displayed on Order Billing page:")
+  public void operatorVerifiesThatErrorToastDisplayedOnOrderBillingPage(
+      Map<String, String> mapOfData) {
+
+    String errorTitle = mapOfData.get("top");
+    if (Objects.nonNull(errorTitle)) {
+      softAssert.assertEquals("Error message title is not expected", errorTitle,
+          orderBillingPage.toastErrors.get(0).toastTop.getText());
+    }
+    String errorMessage = mapOfData.get("bottom");
+    if (Objects.nonNull(errorMessage)) {
+      softAssert.assertContains("Error message description is not expected", errorMessage,
+          orderBillingPage.toastErrors.get(0).toastBottom.getText());
+    }
+  }
 }
