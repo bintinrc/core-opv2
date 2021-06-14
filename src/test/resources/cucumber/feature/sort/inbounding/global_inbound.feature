@@ -175,6 +175,7 @@ Feature: Global Inbound
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
+    When Operator refresh page
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -201,7 +202,7 @@ Feature: Global Inbound
     And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When API Operator force succeed created order
+    When API Operator force succeed created order without cod
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
@@ -261,6 +262,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force created order status to Cancelled
     When Operator go to menu Inbounding -> Global Inbound
+    When Operator refresh page
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -694,6 +696,7 @@ Feature: Global Inbound
     Then API Operator verify order info after Global Inbound
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator removes all ticket status filters
+    And Operator enters the Tracking Id
     Then Operator chooses the ticket status as "RESOLVED"
     And Operator enters the tracking id and verifies that is exists
     Then API Operator make sure "TICKET_RESOLVED" event is exist
@@ -744,13 +747,17 @@ Feature: Global Inbound
       | destinationHub | ON HOLD - SHIPPER ISSUE |
       | rackInfo       | sync_problem RECOVERY   |
       | color          | #e86161                 |
-    Then API Operator verify order Recovery ticket info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator removes all ticket status filters
+    And Operator enters the Tracking Id
+    Then Operator chooses the ticket status as "PENDING"
+    And Operator enters the tracking id and verifies that is exists
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Standard (uid:c43a34d0-b8ba-4e6f-9304-51320543b9ee)
@@ -1101,6 +1108,7 @@ Feature: Global Inbound
     And API Driver deliver the created parcel successfully
     When API Operator refresh created order data
     And Operator go to menu Inbounding -> Global Inbound
+    And Operator refresh page
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -1150,8 +1158,8 @@ Feature: Global Inbound
       | OPV2AUTO1 |
       | OPV2AUTO2 |
       | OPV2AUTO3 |
-    And DB Operator verify order_events record for the created order:
-      | type | 48 |
+#    And DB Operator verify order_events record for the created order:
+#      | type | 48 |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
