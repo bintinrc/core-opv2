@@ -108,7 +108,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         refreshPage();
         fail("Data still not loaded");
       }
-    }, String.format("Draft script found "));
+    }, String.format("Active script found "));
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
   }
 
