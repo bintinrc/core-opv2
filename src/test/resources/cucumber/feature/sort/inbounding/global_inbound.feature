@@ -1158,8 +1158,8 @@ Feature: Global Inbound
       | OPV2AUTO1 |
       | OPV2AUTO2 |
       | OPV2AUTO3 |
-#    And DB Operator verify order_events record for the created order:
-#      | type | 48 |
+    And DB Operator verify order_events record for the created order:
+      | type | 48 |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
