@@ -1,9 +1,6 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOpsID @OrderBillingID
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
-  "ALL": All orders (1 very big file, takes long time to generate)
-  "SCRIPT": Orders consolidated by script (1 file per script), grouped by shipper within the file
-  "AGGREGATED": All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -11,21 +8,20 @@ Feature: Order Billing
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - ID (uid:b62d1ba9-3e88-47ba-b5a4-2103cb27b15a)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100000,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     Given Operator go to menu Finance Tools -> Order Billing
+    Then Operator verifies "{default-csv-template}" is selected in Customized CSV File Template
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
       | shipper         | {shipper-v4-legacy-id}                              |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | 6 - ID Default SSB Template                         |
+      | csvFileTemplate | {csv-template}                                      |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
+import static co.nvqa.operator_v2.selenium.page.SalesPage.SalesPersonsTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.SalesPage.SalesPersonsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.SalesPage.SalesPersonsTable.COLUMN_CODE;
 import static co.nvqa.operator_v2.selenium.page.SalesPage.SalesPersonsTable.COLUMN_NAME;
@@ -144,5 +145,22 @@ public class SalesSteps extends AbstractSteps {
     }
     salesPage.editSalesPersonDialog.save.clickAndWaitUntilDone();
     salesPage.editSalesPersonDialog.waitUntilInvisible();
+  }
+
+  @Then("Operator deletes {string} sales person on Sales page")
+  public void deleteSalesPerson(String code) {
+    String oldCode = resolveValue(code);
+    salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, oldCode);
+    salesPage.salesPersonsTable.clickActionButton(1, ACTION_DELETE);
+    salesPage.deleteSalesPersonDialog.waitUntilVisible();
+    salesPage.deleteSalesPersonDialog.delete.clickAndWaitUntilDone();
+    salesPage.deleteSalesPersonDialog.waitUntilInvisible();
+  }
+
+  @Then("Operator verifies {string} sales person was deleted on Sales page")
+  public void verifyDeletedSalesPerson(String code) {
+    String oldCode = resolveValue(code);
+    salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, oldCode);
+    assertTrue(code + " sales person is not displayed", salesPage.salesPersonsTable.isEmpty());
   }
 }

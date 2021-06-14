@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.support.OrderHelper;
 import co.nvqa.operator_v2.selenium.page.ImplantedManifestPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -10,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.openqa.selenium.Keys;
 
 /**
@@ -142,6 +145,16 @@ public class ImplantedManifestSteps extends AbstractSteps {
     pause1s();
   }
 
+  @When("^Operator saves created orders Tracking IDs without prefix$")
+  public void removeTrackingIdsPrefix() {
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    String prefix = OrderHelper.getCountryPrefix(TestConstants.COUNTRY_CODE);
+    List<String> prefixlessTrackingIds = trackingIds.stream()
+        .map(s -> s.replaceFirst(prefix, ""))
+        .collect(Collectors.toList());
+    put(KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID, prefixlessTrackingIds);
+  }
+
   @When("^Operator creates manifest for \"(.+)\" reservation on Implanted Manifest page$")
   public void operatorCreatesManifestForReservationOnImplantedManifestPage(String reservationId) {
     reservationId = resolveValue(reservationId);
@@ -150,6 +163,16 @@ public class ImplantedManifestSteps extends AbstractSteps {
     implantedManifestPage.createManifestDialog.reservationId.setValue(reservationId);
     implantedManifestPage.createManifestDialog.createManifestButton.click();
     pause1s();
+  }
+
+  @When("^Operator adds country prefix on Implanted Manifest page$")
+  public void operatorAddsPrefixOnImplantedManifestPage() {
+    implantedManifestPage.addPrefix.click();
+    implantedManifestPage.setPrefixDialog.waitUntilVisible();
+    implantedManifestPage.setPrefixDialog.prefix
+        .setValue(OrderHelper.getCountryPrefix(TestConstants.COUNTRY_CODE));
+    implantedManifestPage.setPrefixDialog.save.click();
+    implantedManifestPage.setPrefixDialog.waitUntilInvisible();
   }
 
   @When("^Operator closes Create Manifest dialog on Implanted Manifest page$")
