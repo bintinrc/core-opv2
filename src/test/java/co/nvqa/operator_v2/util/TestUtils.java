@@ -3,7 +3,11 @@ package co.nvqa.operator_v2.util;
 import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
@@ -132,5 +136,26 @@ public class TestUtils extends CommonSeleniumTestUtils {
   @SuppressWarnings("unused")
   public static void resetImplicitTimeout(WebDriver webDriver) {
     setImplicitTimeout(webDriver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_IN_SECONDS);
+  }
+
+  public static String readFromFile(File file) {
+    StringBuilder fileText = new StringBuilder();
+
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+      String input;
+
+      while ((input = br.readLine()) != null) {
+        if (fileText.length() > 0) {
+          fileText.append(System.lineSeparator());
+        }
+
+        fileText.append(input);
+      }
+    } catch (IOException ex) {
+      NvLogger.warnf("File '%s' failed to read. Cause: %s....", file.getAbsolutePath(),
+          ex.getMessage());
+    }
+
+    return fileText.toString();
   }
 }

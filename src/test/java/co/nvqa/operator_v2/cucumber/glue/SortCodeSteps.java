@@ -1,10 +1,18 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.sort.sort_code.SortCode;
+import co.nvqa.commons.support.RandomUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.SortCodePage;
+import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class SortCodeSteps extends AbstractSteps {
 
@@ -58,5 +66,83 @@ public class SortCodeSteps extends AbstractSteps {
   public void operatorVerifiesThatTheDetailsInTheDownloadedCsvAreRight() {
     SortCode sortCode = get(KEY_CREATED_SORT_CODE);
     sortCodePage.verifiesDownloadedCsvDetailsAreRight(sortCode);
+  }
+
+  @When("Operator uploads the CSV file with name {string}")
+  public void operatorUploadsTheCSVFileWithName(String resourcePath) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = getCreateOrderCSVFile(resourcePath, classLoader);
+    sortCodePage.uploadFile(file);
+  }
+
+  @Then("Operator verifies that there will be success toast shown")
+  public void operatorVerifiesThatThereWillBeSuccessToastShown() {
+    sortCodePage.waitUntilVisibilityOfToastSortCode("Uploaded CSV successfully");
+    sortCodePage.waitUntilVisibilityOfToastSortCode("Uploaded CSV successfully");
+  }
+
+  @Then("Operator verifies that there will be an error toast {string} shown")
+  public void operatorVerifiesThatThereWillBeAnErrorToastShown(String errorMessage) {
+    final String INVALID_POSTCODE = "invalid_postcode";
+    final String INVALID_FORMAT = "invalid_format";
+
+    if (INVALID_POSTCODE.equalsIgnoreCase(errorMessage)) {
+      sortCodePage.waitUntilVisibilityOfToastSortCode("Postal code is not valid for this country");
+      sortCodePage.waitUntilVisibilityOfToastSortCode("Postal code is not valid for this country");
+    } else if (INVALID_FORMAT.equalsIgnoreCase(errorMessage)) {
+      sortCodePage.waitUntilVisibilityOfToastSortCode("Unable to auto-detect delimiting character");
+      sortCodePage.waitUntilVisibilityOfToastSortCode("Unable to auto-detect delimiting character");
+    }
+  }
+
+  @Then("Operator verifies that the sort code is not found")
+  public void operatorVerifiesThatTheSortCodeIsNotFound() {
+    sortCodePage.verifiiesSortCodeIsNotFound();
+  }
+
+  private File getCreateOrderCSVFile(String resourcePath, ClassLoader classLoader) {
+    File file = new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
+    String content = TestUtils.readFromFile(file);
+    String postcodeValue;
+    String sortCodeValue;
+    SortCode sortCode = get(KEY_CREATED_SORT_CODE);
+    NvLogger.infof("content of original file for upload : \n%s", content);
+
+    //Replacing existed postcode
+    if (content.contains("existed-postcode")) {
+      postcodeValue = sortCode.getPostcode();
+      content = content.replaceAll("existed-postcode", postcodeValue);
+      NvLogger.info(postcodeValue);
+    }
+
+    //Replacing existed sort code
+    if (content.contains("existed-sort-code")) {
+      sortCodeValue = sortCode.getSortCode();
+      content = content.replaceAll("existed-sort-code", sortCodeValue);
+      NvLogger.info(sortCodeValue);
+    }
+
+    //Replacing new postcode
+    if (content.contains("new-postcode")) {
+      postcodeValue = AddressFactory.getRandomAddress().getPostcode();
+      content = content.replaceAll("new-postcode", postcodeValue);
+      NvLogger.info(postcodeValue);
+      sortCode.setPostcode(postcodeValue);
+    }
+
+    //Replacing new sort code
+    if (content.contains("new-sort-code")) {
+      sortCodeValue = "SA" + randomInt(0, 999) + RandomUtil.randomString(5);
+      content = content.replaceAll("new-sort-code", sortCodeValue);
+      NvLogger.info(sortCodeValue);
+      sortCode.setSortCode(sortCodeValue);
+    }
+
+    NvLogger.infof("content of generated file for upload : \n%s", content);
+
+    String fileName = file.getName();
+    file = TestUtils.createFile(fileName, content);
+    put(KEY_CREATED_SORT_CODE, sortCode);
+    return file;
   }
 }
