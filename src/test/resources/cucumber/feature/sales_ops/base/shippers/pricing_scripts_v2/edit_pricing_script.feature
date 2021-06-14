@@ -4,7 +4,7 @@ Feature: Edit Pricing Script
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePricingScript @weam
+  @DeletePricingScript
   Scenario: Edit and Check Script - Legacy Order Fields (uid:f0be1f72-282c-4b41-9286-a4fd4100d449)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
