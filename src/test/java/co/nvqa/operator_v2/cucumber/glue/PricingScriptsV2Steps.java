@@ -101,59 +101,35 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyDraftScriptIsDeleted(script);
   }
 
+  @When("Operator search custom script id {string}")
+  public void operatorSearchAccordingScriptId(String scriptId) {
+    Script script = new Script();
+    script.setId(Long.parseLong(scriptId));
+    pricingScriptsV2Page.searchAccordingScriptId(script);
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+  }
+
   @When("^Operator do Run Check on specific Draft Script using this data below:$")
   public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    RunCheckParams runCheckParams = new RunCheckParams();
-
-    String orderFields = mapOfData.get("orderFields");
-    String deliveryType = mapOfData.get("deliveryType");
-    String orderType = mapOfData.get("orderType");
-    String serviceLevel = mapOfData.get("serviceLevel");
-    String serviceType = mapOfData.get("serviceType");
-    String timeslotType = mapOfData.get("timeslotType");
-    String isRts = mapOfData.get("isRts");
-    String size = mapOfData.get("size");
-    double weight = Double.parseDouble(mapOfData.get("weight"));
-    double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
-    double codValue = Double.parseDouble(mapOfData.get("codValue"));
-    if (Objects.nonNull("fromZone") || Objects.nonNull("toZone")) {
-      String fromZone = mapOfData.get("fromZone");
-      String toZone = mapOfData.get("toZone");
-      runCheckParams.setFromZone(fromZone);
-      runCheckParams.setToZone(toZone);
-    }
-
-    runCheckParams.setOrderFields(orderFields);
-    runCheckParams.setDeliveryType(deliveryType);
-    runCheckParams.setOrderType(orderType);
-    runCheckParams.setServiceLevel(serviceLevel);
-    runCheckParams.setServiceType(serviceType);
-    runCheckParams.setTimeslotType(timeslotType);
-    runCheckParams.setIsRts(isRts);
-    runCheckParams.setSize(size);
-    runCheckParams.setWeight(weight);
-    runCheckParams.setInsuredValue(insuredValue);
-    runCheckParams.setCodValue(codValue);
-
-    if (Objects.nonNull("fromL1") || Objects.nonNull("toL1") || Objects.nonNull("fromL2") || Objects
-        .nonNull("toL2") || Objects.nonNull("fromL3") || Objects.nonNull("toL3")) {
-      String fromL1 = mapOfData.get("fromL1");
-      String toL1 = mapOfData.get("toL1");
-      String fromL2 = mapOfData.get("fromL2");
-      String toL2 = mapOfData.get("toL2");
-      String fromL3 = mapOfData.get("fromL3");
-      String toL3 = mapOfData.get("toL3");
-      runCheckParams.setFromL1(fromL1);
-      runCheckParams.setToL1(toL1);
-      runCheckParams.setFromL2(fromL2);
-      runCheckParams.setToL2(toL2);
-      runCheckParams.setFromL3(fromL3);
-      runCheckParams.setToL3(toL3);
-    }
-
+    RunCheckParams runCheckParams = runCheckScriptDraftAndActive(mapOfData);
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
+  }
+
+  @When("^Operator do Run Check on specific Active Script using this data below:$")
+  public void operatorDoRunCheckOnSpecificActiveScriptUsingThisDataBelow(
+      Map<String, String> mapOfData) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    RunCheckParams runCheckParams = runCheckScriptDraftAndActive(mapOfData);
+    pricingScriptsV2Page.runCheckActiveScript(script, runCheckParams);
+  }
+
+  @Then("Operator verify error message")
+  public void verifyErrorMessage(Map<String, String> mapOfData) {
+    String message = mapOfData.get("message");
+    String response = mapOfData.get("response");
+    pricingScriptsV2Page.verifyErrorMessage(message, response);
   }
 
   @Then("^Operator verify the Run Check Result is correct using data below:$")
@@ -330,5 +306,74 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
     Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
     pricingScriptsV2Page.verifyTimeBoundedScriptIsDeleted(parentScript, script);
+  }
+
+  public RunCheckParams runCheckScriptDraftAndActive(Map<String, String> mapOfData) {
+    RunCheckParams runCheckParams = new RunCheckParams();
+
+    String orderFields = mapOfData.get("orderFields");
+    String deliveryType = mapOfData.get("deliveryType");
+    String orderType = mapOfData.get("orderType");
+    String serviceLevel = mapOfData.get("serviceLevel");
+    String serviceType = mapOfData.get("serviceType");
+    String timeslotType = mapOfData.get("timeslotType");
+    String isRts = mapOfData.get("isRts");
+    String size = mapOfData.get("size");
+    double weight = Double.parseDouble(mapOfData.get("weight"));
+    double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
+    double codValue = Double.parseDouble(mapOfData.get("codValue"));
+    String fromZone = mapOfData.get("fromZone");
+    String toZone = mapOfData.get("toZone");
+    String originPricingZone = mapOfData.get("originPricingZone");
+    String destinationPricingZone = mapOfData.get("destinationPricingZone");
+    String fromL1 = mapOfData.get("fromL1");
+    String toL1 = mapOfData.get("toL1");
+    String fromL2 = mapOfData.get("fromL2");
+    String toL2 = mapOfData.get("toL2");
+    String fromL3 = mapOfData.get("fromL3");
+    String toL3 = mapOfData.get("toL3");
+
+    runCheckParams.setOrderFields(orderFields);
+    runCheckParams.setDeliveryType(deliveryType);
+    runCheckParams.setOrderType(orderType);
+    runCheckParams.setServiceLevel(serviceLevel);
+    runCheckParams.setServiceType(serviceType);
+    runCheckParams.setTimeslotType(timeslotType);
+    runCheckParams.setIsRts(isRts);
+    runCheckParams.setSize(size);
+    runCheckParams.setWeight(weight);
+    runCheckParams.setInsuredValue(insuredValue);
+    runCheckParams.setCodValue(codValue);
+    if (Objects.nonNull("fromZone")) {
+      runCheckParams.setFromZone(fromZone);
+    }
+    if (Objects.nonNull("toZone")) {
+      runCheckParams.setToZone(toZone);
+    }
+    if (Objects.nonNull("fromL1")) {
+      runCheckParams.setFromL1(fromL1);
+    }
+    if (Objects.nonNull("fromL2")) {
+      runCheckParams.setFromL2(fromL2);
+    }
+    if (Objects.nonNull("fromL3")) {
+      runCheckParams.setFromL3(fromL3);
+    }
+    if (Objects.nonNull("toL1")) {
+      runCheckParams.setToL1(toL1);
+    }
+    if (Objects.nonNull("toL2")) {
+      runCheckParams.setToL2(toL2);
+    }
+    if (Objects.nonNull("toL3")) {
+      runCheckParams.setToL3(toL3);
+    }
+    if (Objects.nonNull("originPricingZone")) {
+      runCheckParams.setOriginPricingZone(originPricingZone);
+    }
+    if (Objects.nonNull("destinationPricingZone")) {
+      runCheckParams.setDestinationPricingZone(destinationPricingZone);
+    }
+    return runCheckParams;
   }
 }
