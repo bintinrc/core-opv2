@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.Map;
@@ -28,20 +29,7 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Given("^Operator generates success billings using data below:$")
   public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData) {
-    try {
-      if (Objects.nonNull(mapOfData.get("startDate"))) {
-        String startDate = mapOfData.get("startDate");
-        put(KEY_ORDER_BILLING_START_DATE, startDate);
-        orderBillingPage.selectStartDate(YYYY_MM_DD_SDF.parse(startDate));
-      }
-      if (Objects.nonNull(mapOfData.get("endDate"))) {
-        String endDate = mapOfData.get("endDate");
-        put(KEY_ORDER_BILLING_END_DATE, endDate);
-        orderBillingPage.selectEndDate(YYYY_MM_DD_SDF.parse(endDate));
-      }
-    } catch (ParseException e) {
-      throw new NvTestRuntimeException("Failed to parse date.", e);
-    }
+    setOrderBillingDateRange(mapOfData);
     if (Objects.nonNull(mapOfData.get("shipper"))) {
       String shipper = mapOfData.get("shipper");
       orderBillingPage.setSpecificShipper(shipper);
@@ -77,6 +65,23 @@ public class OrderBillingSteps extends AbstractSteps {
     }
     orderBillingPage.clickGenerateSuccessBillingsButton();
     orderBillingPage.verifyNoErrorsAvailable();
+  }
+
+  private void setOrderBillingDateRange(Map<String, String> mapOfData) {
+    try {
+      if (Objects.nonNull(mapOfData.get("startDate"))) {
+        String startDate = mapOfData.get("startDate");
+        put(KEY_ORDER_BILLING_START_DATE, startDate);
+        orderBillingPage.selectStartDate(YYYY_MM_DD_SDF.parse(startDate));
+      }
+      if (Objects.nonNull(mapOfData.get("endDate"))) {
+        String endDate = mapOfData.get("endDate");
+        put(KEY_ORDER_BILLING_END_DATE, endDate);
+        orderBillingPage.selectEndDate(YYYY_MM_DD_SDF.parse(endDate));
+      }
+    } catch (ParseException e) {
+      throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
   }
 
   @Then("Operator tries to upload a PDF and verifies that any other file except csv is not allowed")
@@ -116,5 +121,16 @@ public class OrderBillingSteps extends AbstractSteps {
       softAssert.assertContains("Error message description is not expected", errorMessage,
           orderBillingPage.toastErrors.get(0).toastBottom.getText());
     }
+  }
+
+  @When("Operator selects start date and end date as below")
+  public void operatorSelectsStartDateAndEndDateAsBelow(Map<String, String> mapOfData) {
+    setOrderBillingDateRange(mapOfData);
+  }
+
+  @Then("Operator verifies {string} is not available in template selector drop down menu")
+  public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String value) {
+    assertTrue(f("%s value is available in the template selector drop down menu", value),
+        !orderBillingPage.csvFileTemplate.isValueExist(value));
   }
 }
