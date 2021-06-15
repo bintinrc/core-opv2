@@ -1,5 +1,7 @@
-@OperatorV2 @Utilities @NinjaPackTrackingIdGenerator
+@Deprecated
 Feature: Ninja Pack Tracking ID Generator
+
+  #STEPS DOESN'T MATCH TO CURRENT PAGE FUNCTIONALITY
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

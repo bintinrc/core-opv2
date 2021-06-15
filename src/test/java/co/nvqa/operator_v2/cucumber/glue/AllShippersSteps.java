@@ -64,6 +64,9 @@ import org.openqa.selenium.Keys;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_DASH_LOGIN;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.ACTION_NINJA_DASH_LOGIN;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.CULUMN_BRANCH_ID;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
 import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
 
@@ -1441,6 +1444,14 @@ public class AllShippersSteps extends AbstractSteps {
     );
   }
 
+  @When("Operator verifies success notification {string} is displayed on Corporate sub shippers tab")
+  public void checkSuccessNotification(String expected) {
+    allShippersPage.allShippersCreateEditPage
+        .b2bManagementPage.inFrame(page ->
+        page.waitUntilInvisibilityOfNotification(resolveValue(expected), true)
+    );
+  }
+
   private void fillNewSubShipperData(int index, Map<String, String> data) {
     data = resolveKeyValues(data);
     generateBranchData(data);
@@ -1582,16 +1593,32 @@ public class AllShippersSteps extends AbstractSteps {
     List<String> expectedSellerIds = get(KEY_LIST_SUB_SHIPPER_SELLER_ID);
     String branchId = expectedSellerIds.get(0);
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
-      List<String> branchIds = page.subShipperTable.readColumn("id");
+      List<String> branchIds = page.subShipperTable.readColumn(CULUMN_BRANCH_ID);
       for (int i = 0; i < branchIds.size(); i++) {
         if (branchId.equals(branchIds.get(i))) {
-          page.subShipperTable.clickActionButton(i + 1, "Edit");
-          break;
+          page.subShipperTable.clickActionButton(i + 1, ACTION_EDIT);
+          return;
         }
       }
-      throw new AssertionError("Subshipper with brack id [" + branchId + "] was not found");
+      throw new AssertionError("Subshipper with branch id [" + branchId + "] was not found");
     });
   }
+
+  @When("Operator click Ninja Dash Login button for {string} corporate sub shipper")
+  public void operatorClickNinjaDashLogin(String value) {
+    String branchId = resolveValue(value);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<String> branchIds = page.subShipperTable.readColumn(CULUMN_BRANCH_ID);
+      for (int i = 0; i < branchIds.size(); i++) {
+        if (branchId.equals(branchIds.get(i))) {
+          page.subShipperTable.clickActionButton(i + 1, ACTION_NINJA_DASH_LOGIN);
+          return;
+        }
+      }
+      throw new AssertionError("Subshipper with branch id [" + branchId + "] was not found");
+    });
+  }
+
 
   @When("Operator set shipper on this page as newly created shipper")
   public void setShipperAsNewlyCreatedShipper() {
