@@ -95,7 +95,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @When("Operator search according Active Script name")
   public void operatorSearchActiveScriptName() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    pricingScriptsV2Page.searchActiveScriptName(script);
+    pricingScriptsV2Page.searchActiveScriptName(script.getName());
   }
 
   @When("^Operator delete Draft Script$")

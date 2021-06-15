@@ -100,10 +100,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.deleteScript(script);
   }
 
-  public void searchActiveScriptName(Script script) {
+  public void searchActiveScriptName(String scriptName) {
     retryIfAssertionErrorOccurred(() ->
     {
-      searchTableActiveScriptsByScriptName(script.getName());
+      searchTableActiveScriptsByScriptName(scriptName);
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
         fail("Data still not loaded");
