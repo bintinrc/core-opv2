@@ -27,8 +27,8 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     uploadInvoicedOrdersPage.verifyUploadInvoicedOrdersDialogIsDisplayed();
   }
 
-  @And("Operator upload a CSV file with below order ids")
-  public void operatorUploadACSVFileWithBelowOrderIds(List<String> trackingIds) {
+  @And("Operator upload a CSV file with below order ids and verify success message")
+  public void operatorUploadACSVFileWithBelowOrderIdsVerify(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
     File csvFile = createFile("upload.csv", String.join("\n", trackingIds));
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
@@ -36,6 +36,14 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
     uploadInvoicedOrdersPage.verifySuccessUploadNewFileIsDisplayed();
     pause3s();
+  }
+
+  @And("Operator upload a CSV file with below order ids")
+  public void operatorUploadACSVFileWithBelowOrderIds(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
+    File csvFile = createFile("upload.csv", String.join("\n", trackingIds));
+    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
   }
 
   @And("Operator clicks on Upload New File Button")

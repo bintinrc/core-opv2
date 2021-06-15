@@ -16,7 +16,7 @@ Feature: Upload Invoiced Orders
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
     And Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
-    And Operator upload a CSV file with below order ids
+    And Operator upload a CSV file with below order ids and verify success message
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
     # Upload Csv
@@ -65,7 +65,7 @@ Feature: Upload Invoiced Orders
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
     And Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
-    And Operator upload a CSV file with below order ids
+    And Operator upload a CSV file with below order ids and verify success message
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
       # Search by tracking_id
@@ -119,7 +119,7 @@ Feature: Upload Invoiced Orders
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
     And Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
-    And Operator upload a CSV file with below order ids
+    And Operator upload a CSV file with below order ids and verify success message
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
       # Search by tracking_id
@@ -143,7 +143,7 @@ Feature: Upload Invoiced Orders
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
     And Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
-    And Operator upload a CSV file with below order ids
+    And Operator upload a CSV file with below order ids and verify success message
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
       # Search by date
@@ -167,7 +167,7 @@ Feature: Upload Invoiced Orders
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
     And Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
-    And Operator upload a CSV file with below order ids
+    And Operator upload a CSV file with below order ids and verify success message
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
     # Upload Csv
