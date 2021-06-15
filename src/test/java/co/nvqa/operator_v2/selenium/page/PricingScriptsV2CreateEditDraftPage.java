@@ -80,8 +80,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       File csvFile = createFile(csvFileName, script.getFileContent());
       importCsv.setValue(csvFile);
     }
-    if (Objects.nonNull(script.getSource()) && Objects.nonNull(script.getActiveParameters())) {
-      activateParameters(script.getActiveParameters());
+    if (Objects.nonNull(script.getSource())) {
       updateAceEditorValue(script.getSource());
     }
   }

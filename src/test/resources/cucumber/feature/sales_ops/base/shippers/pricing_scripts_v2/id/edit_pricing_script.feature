@@ -10,11 +10,9 @@ Feature: Edit Pricing Script
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 5 * params.weight;}}return result;} |
-      | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, cod_value, insured_value, order_type                                                                                                                                                                                                                                           |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator edit the created Draft Script using data below:
-      | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 5 * params.weight;}}return result; } |
-      | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, cod_value, insured_value, order_type                                                                                                                                                                                                                                            |
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 10 * params.weight;}}return result; } |
     When Operator search according Active Script name
     When Operator do Run Check on specific Active Script using this data below:
       | orderFields  | Legacy   |
@@ -35,7 +33,7 @@ Feature: Edit Pricing Script
       | handlingFee  | 0             |
       | comments     | OK            |
     And Operator close page
-    Then Operator verify Draft Script is released successfully
+    Then Operator verify the script is saved successfully
     Examples:
       | Condition   | is_RTS | grandTotal | gst  | deliveryFee | hiptest-uid                              |
       | RTS = True  | Yes    | 3.03       | 0.03 | 3           | uid:9a0afb0c-5805-44d0-bb48-332e592cb640 |

@@ -10,7 +10,6 @@ Feature: Pricing Scripts V2
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else {result.delivery_fee = 5;}}return result;} |
-      | activeParameters | delivery_type, timeslot_type, size, weight, from_zone, to_zone, cod_value, insured_value, order_type                                                                                                                                    |
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | Legacy          |
@@ -32,7 +31,7 @@ Feature: Pricing Scripts V2
       | comments     | <comments>     |
     And Operator close page
     And Operator validate and release Draft Script
-    Then Operator verify Draft Script is released successfully
+    Then Operator verify the script is saved successfully
     Examples:
       | Note        | is_RTS_toggle | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
       | RTS = True  | Yes           | 3.03       | 0.03 | 3           | 0            | 0      | 0           | OK       | uid:e5f7b563-c157-4152-a16a-83ea2f134d5f |

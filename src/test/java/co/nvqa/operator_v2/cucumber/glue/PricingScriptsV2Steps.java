@@ -61,18 +61,10 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       script.setIsCsvFile(isCSVFile);
       script.setFileContent(fileContent);
     }
-    if (Objects.nonNull(mapOfData.get("source")) && Objects
-        .nonNull(mapOfData.get("activeParameters"))) {
+    if (Objects.nonNull(mapOfData.get("source"))) {
       String source = mapOfData.get("source");
-      String activeParameters = mapOfData.get("activeParameters");
-
-      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
-          .map(String::trim)
-          .collect(Collectors.toList());
       script.setSource(source);
-      script.setActiveParameters(listOfActiveParameters);
     }
-
     pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
@@ -196,7 +188,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.validateDraftAndReleaseScript(script, verifyDraftParams);
   }
 
-  @Then("^Operator verify Draft Script is released successfully$")
+  @Then("^Operator verify the script is saved successfully$")
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
