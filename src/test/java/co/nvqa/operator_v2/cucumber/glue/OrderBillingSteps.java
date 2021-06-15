@@ -9,6 +9,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -110,20 +111,34 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator verifies that error toast displayed on Order Billing page:")
   public void operatorVerifiesThatErrorToastDisplayedOnOrderBillingPage(
       Map<String, String> mapOfData) {
-
     String errorTitle = mapOfData.get("top");
-    if (Objects.nonNull(errorTitle)) {
-      softAssert.assertEquals("Error message title is not expected", errorTitle,
-          orderBillingPage.toastErrors.get(0).toastTop.getText());
-    }
     String errorMessage = mapOfData.get("bottom");
-    if (Objects.nonNull(errorMessage)) {
-      softAssert.assertContains("Error message description is not expected", errorMessage,
-          orderBillingPage.toastErrors.get(0).toastBottom.getText());
-    }
-  }
 
-  @When("Operator selects start date and end date as below")
+    boolean found;
+
+    found = orderBillingPage.toastErrors.stream().anyMatch(toast -> {
+      if (StringUtils.isNotBlank(errorTitle)) {
+        if (!StringUtils.equalsIgnoreCase(errorTitle, toast.toastTop.getNormalizedText())) {
+          return false;
+        }
+      }
+      if (StringUtils.isNotBlank(errorMessage)) {
+        if (!StringUtils.equalsIgnoreCase(errorTitle, toast.toastBottom.getNormalizedText())) {
+          return false;
+        }
+      })
+
+      if (Objects.nonNull(errorTitle)) {
+        softAssert.assertEquals("Error message title is not expected", errorTitle,
+            orderBillingPage.toastErrors.get(0).toastTop.getText());
+      }
+      if (Objects.nonNull(errorMessage)) {
+        softAssert.assertContains("Error message description is not expected", errorMessage,
+            orderBillingPage.toastErrors.get(0).toastBottom.getText());
+      }
+    }
+
+    @When("Operator selects start date and end date as below")
   public void operatorSelectsStartDateAndEndDateAsBelow(Map<String, String> mapOfData) {
     setOrderBillingDateRange(mapOfData);
   }

@@ -35,7 +35,7 @@ Feature: All test cases related to insufficient permission for Finance related p
       | top    | Network Request Error                                                                                                                              |
       | bottom | Error Message: Access token verification failed: insufficient permissions (required scopes: INTERNAL_SERVICE, ALL_ACCESS, SCRIPT_ADMIN, SCRIPT_GET |
 
-  @nadeera
+  #@nadeera
   @KillBrowser
   Scenario: Edit Pricing Script - Insufficient Permissions
     Given Operator go to menu Finance Tools -> Order Billing
@@ -57,9 +57,14 @@ Feature: All test cases related to insufficient permission for Finance related p
       | top    | Network Request Error                                                                                                                                  |
       | bottom | Error Message: Access denied. Insufficient Permissions. Required any one of the scopes : SHIPPER_ADMIN,SHIPPER_GET_SHIPPER,ALL_ACCESS,INTERNAL_SERVICE |
 
+  @nadeera
   @KillBrowser
-  Scenario: Upload Invoiced Orders - Insufficient Permissions
+  Scenario: Upload Invoiced Orders - Insufficient Permissions (uid:7868e75b-9772-4b82-a046-228327a80b0a)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
+    Then Operator waits for 2 seconds
+    And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
+    And Operator upload a CSV file with below order ids
+      | TEST |
     Then Operator verifies that error toast displayed on Order Billing page:
       | top    | Network Request Error                                                                                                                                  |
       | bottom | Error Message: Access denied. Insufficient Permissions. Required any one of the scopes : SHIPPER_ADMIN,SHIPPER_GET_SHIPPER,ALL_ACCESS,INTERNAL_SERVICE |
