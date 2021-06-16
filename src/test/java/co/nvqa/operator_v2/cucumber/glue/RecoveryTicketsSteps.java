@@ -283,6 +283,12 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicketsPage.searchTableByTrackingId(trackingId);
   }
 
+  @When("Operator enters the Tracking Id")
+  public void entersTrackingId() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    recoveryTicketsPage.searchTableByTrackingIdWithoutLoads(trackingId);
+  }
+
   @Then("No Results should be displayed")
   public void noResultsShouldDisplayed() {
     String expectedResult = "No Results Found";
