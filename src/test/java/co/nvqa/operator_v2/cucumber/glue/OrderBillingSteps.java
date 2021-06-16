@@ -2,13 +2,11 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
-import co.nvqa.operator_v2.selenium.page.ToastError;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
@@ -115,12 +113,6 @@ public class OrderBillingSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     String errorTitle = mapOfData.get("top");
     String errorMessage = mapOfData.get("bottom");
-
-    List<ToastError> listOfErrors = orderBillingPage.toastErrors;
-    for (ToastError a : listOfErrors) {
-      System.out.println("NADEERA " + a.toastTop.getText());
-      System.out.println("NADEERA " + a.toastBottom.getText());
-    }
 
     boolean isErrorFound = orderBillingPage.toastErrors.stream().anyMatch(toastError ->
         StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle)
