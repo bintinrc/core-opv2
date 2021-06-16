@@ -65,6 +65,13 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       String source = mapOfData.get("source");
       script.setSource(source);
     }
+    if (Objects.nonNull(mapOfData.get("activeParameters"))) {
+      String activeParameters = mapOfData.get("activeParameters");
+      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
+          .map(String::trim)
+          .collect(Collectors.toList());
+      script.setActiveParameters(listOfActiveParameters);
+    }
     pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
@@ -188,6 +195,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.validateDraftAndReleaseScript(script, verifyDraftParams);
   }
 
+  @When("^Operator verify Draft Script is released successfully$")
   @Then("^Operator verify the script is saved successfully$")
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
@@ -388,15 +396,15 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   public Script editCreatedDraftOrActiveScript(Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    if (Objects.nonNull(mapOfData.get("source")) && Objects
-        .nonNull(mapOfData.get("activeParameters"))) {
+    if (Objects.nonNull(mapOfData.get("source"))) {
       String source = mapOfData.get("source");
+      script.setSource(source);
+    }
+    if (Objects.nonNull(mapOfData.get("activeParameters"))) {
       String activeParameters = mapOfData.get("activeParameters");
-
       List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
           .map(String::trim)
           .collect(Collectors.toList());
-      script.setSource(source);
       script.setActiveParameters(listOfActiveParameters);
     }
     return script;

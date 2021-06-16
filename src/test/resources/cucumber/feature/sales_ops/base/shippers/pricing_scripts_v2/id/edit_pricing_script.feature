@@ -9,7 +9,7 @@ Feature: Edit Pricing Script
   Scenario Outline: Edit and Check Script - Send is_RTS - Use calculatePricing() (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
-      | source           | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 5 * params.weight;}}return result;} |
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 5 * params.weight;}}return result;} |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator edit the created Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 10 * params.weight;}}return result; } |

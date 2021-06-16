@@ -83,6 +83,9 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     if (Objects.nonNull(script.getSource())) {
       updateAceEditorValue(script.getSource());
     }
+    if (Objects.nonNull(script.getActiveParameters())) {
+      activateParameters(script.getActiveParameters());
+    }
   }
 
   private void checkSyntax(Script script) {
