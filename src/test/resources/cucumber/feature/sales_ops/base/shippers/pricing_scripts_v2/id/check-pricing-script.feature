@@ -1,4 +1,4 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2ID @SalesOpsID
+@OperatorV2 @LaunchBrowser @PricingScriptsV2ID @SalesOpsID
 Feature: Check Pricing Script
 
   Background: Login to Operator Portal V2

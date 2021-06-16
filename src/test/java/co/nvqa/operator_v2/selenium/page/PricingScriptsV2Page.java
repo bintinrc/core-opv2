@@ -59,8 +59,17 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
-  public void checkErrorHeader() {
-    pricingScriptsV2CreateEditDraftPage.checkErrorHeader();
+  public void checkErrorHeader(String message) {
+    pricingScriptsV2CreateEditDraftPage.checkErrorHeader(message);
+  }
+
+  public void editCreatedDraft(Script script) {
+    goToEditDraftScript(script);
+    pricingScriptsV2CreateEditDraftPage.editScript(script);
+  }
+
+  public void editCreatedActive(Script script) {
+    pricingScriptsV2CreateEditDraftPage.editScript(script);
   }
 
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
@@ -89,6 +98,18 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void deleteDraftScript(Script script) {
     goToEditDraftScript(script);
     pricingScriptsV2CreateEditDraftPage.deleteScript(script);
+  }
+
+  public void searchActiveScriptName(String scriptName) {
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableActiveScriptsByScriptName(scriptName);
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Active script found "));
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
   }
 
   public void verifyDraftScriptIsDeleted(Script script) {
