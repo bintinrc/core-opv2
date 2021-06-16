@@ -61,32 +61,48 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       script.setIsCsvFile(isCSVFile);
       script.setFileContent(fileContent);
     }
-    if (Objects.nonNull(mapOfData.get("source")) && Objects
-        .nonNull(mapOfData.get("activeParameters"))) {
+    if (Objects.nonNull(mapOfData.get("source"))) {
       String source = mapOfData.get("source");
+      script.setSource(source);
+    }
+    if (Objects.nonNull(mapOfData.get("activeParameters"))) {
       String activeParameters = mapOfData.get("activeParameters");
-
       List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
           .map(String::trim)
           .collect(Collectors.toList());
-      script.setSource(source);
       script.setActiveParameters(listOfActiveParameters);
     }
-
     pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
-  @Then("Operator verify error message after adding invalid csv file")
-  public void operatorVerifyErrorMessage() {
-    pricingScriptsV2Page.checkErrorHeader();
+  @Then("Operator verify error message in header with {string}")
+  public void operatorVerifyErrorMessage(String message) {
+    pricingScriptsV2Page.checkErrorHeader(message);
   }
 
   @Then("^Operator verify the new Script is created successfully on Drafts$")
   public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
-
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
+  }
+
+  @Then("^Operator edit the created Draft Script using data below:$")
+  public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
+    Script script = editCreatedDraftOrActiveScript(mapOfData);
+    pricingScriptsV2Page.editCreatedDraft(script);
+  }
+
+  @Then("^Operator edit the created Active Script using data below:$")
+  public void operatorEditCreatedActiveScript(Map<String, String> mapOfData) {
+    Script script = editCreatedDraftOrActiveScript(mapOfData);
+    pricingScriptsV2Page.editCreatedActive(script);
+  }
+
+  @When("Operator search according Active Script name")
+  public void operatorSearchActiveScriptName() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.searchActiveScriptName(script.getName());
   }
 
   @When("^Operator delete Draft Script$")
@@ -179,7 +195,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.validateDraftAndReleaseScript(script, verifyDraftParams);
   }
 
-  @Then("^Operator verify Draft Script is released successfully$")
+  @When("^Operator verify Draft Script is released successfully$")
+  @Then("^Operator verify the script is saved successfully$")
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
@@ -375,5 +392,14 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       runCheckParams.setDestinationPricingZone(destinationPricingZone);
     }
     return runCheckParams;
+  }
+
+  public Script editCreatedDraftOrActiveScript(Map<String, String> mapOfData) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    if (Objects.nonNull(mapOfData.get("source"))) {
+      String source = mapOfData.get("source");
+      script.setSource(source);
+    }
+    return script;
   }
 }
