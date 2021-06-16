@@ -30,6 +30,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -2308,5 +2309,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
         super(webDriver, webElement);
       }
     }
+  }
+
+  public void verifyTheSortCodeIsCorrect(String sortCode, File orderAirwayBillPdfAsByteArray) {
+    String actualSortCode = PdfUtils.getSortCode(orderAirwayBillPdfAsByteArray);
+    assertTrue("Sort Code", sortCode.equalsIgnoreCase(actualSortCode));
   }
 }
