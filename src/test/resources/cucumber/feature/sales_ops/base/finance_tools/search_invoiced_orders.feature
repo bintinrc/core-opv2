@@ -23,7 +23,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies the order count is correctly displayed as 1
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -41,7 +41,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies No Results Found is displayed
 
   @KillBrowser
@@ -72,7 +72,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
@@ -88,7 +88,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies No Results Found is displayed
 
   @KillBrowser
@@ -126,7 +126,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator search "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id in Tracking Number Search field
@@ -150,7 +150,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator search "{gradle-current-date-yyyy-MM-dd}" in Creation Time Search field
@@ -174,7 +174,7 @@ Feature: Upload Invoiced Orders
     And Operator go to menu Finance Tools -> Invoiced Orders Search
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies the order count is correctly displayed as 1
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -185,7 +185,7 @@ Feature: Upload Invoiced Orders
      # Search by tracking_id
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
-    And Operator clicks Search Invoiced Order button
+    And Operator clicks Search Invoiced Order button and wait till CSV is uploaded
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator clicks Refresh button
