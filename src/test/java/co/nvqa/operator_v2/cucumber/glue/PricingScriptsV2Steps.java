@@ -400,13 +400,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       String source = mapOfData.get("source");
       script.setSource(source);
     }
-    if (Objects.nonNull(mapOfData.get("activeParameters"))) {
-      String activeParameters = mapOfData.get("activeParameters");
-      List<String> listOfActiveParameters = Stream.of(activeParameters.split(","))
-          .map(String::trim)
-          .collect(Collectors.toList());
-      script.setActiveParameters(listOfActiveParameters);
-    }
     return script;
   }
 }
