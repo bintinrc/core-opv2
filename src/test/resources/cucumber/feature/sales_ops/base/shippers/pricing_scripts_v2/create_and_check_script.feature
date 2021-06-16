@@ -1,4 +1,4 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps
+@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps
 Feature: Pricing Scripts V2
 
   Background: Login to Operator Portal V2
