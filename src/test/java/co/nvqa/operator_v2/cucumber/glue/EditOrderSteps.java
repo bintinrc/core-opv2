@@ -1348,8 +1348,8 @@ public class EditOrderSteps extends AbstractSteps {
         podDetailsDialog.getTrackingId());
     softAssert.assertEquals("transaction string", expectedTransactionText,
         podDetailsDialog.getTransaction());
-    softAssert.assertEquals("information - status", order.getLastDeliveryTransaction().getStatus(),
-        podDetailsDialog.getStatus());
+    softAssert.assertEquals("information - status", StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
+        StringUtils.lowerCase(podDetailsDialog.getStatus()));
     softAssert
         .assertEquals("information - driver", data.get("driver"), podDetailsDialog.getDriver());
     softAssert.assertTrue("information - priority level",
