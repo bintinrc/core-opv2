@@ -1,4 +1,4 @@
-@OperatorV2 @Order @Orders @AllOrders
+@Sort @AllOrdersSort
 Feature: All Orders
 
   @LaunchBrowser @DeleteCreatedSortCode
