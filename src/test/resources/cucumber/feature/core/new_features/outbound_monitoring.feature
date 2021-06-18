@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoring @current
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
