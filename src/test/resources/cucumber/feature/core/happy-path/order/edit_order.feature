@@ -177,6 +177,7 @@ Feature: Edit Order
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -210,6 +211,8 @@ Feature: Edit Order
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
@@ -397,6 +400,8 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
     And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
@@ -461,6 +466,7 @@ Feature: Edit Order
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
     Examples:
