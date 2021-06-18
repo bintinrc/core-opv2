@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @AddOrderToRoute
+@OperatorV2 @Core @Routing @AddOrderToRoute @current
 Feature: Add Order To Route
 
   @LaunchBrowser @ShouldAlwaysRun
