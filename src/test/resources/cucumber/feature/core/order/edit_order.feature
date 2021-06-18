@@ -655,16 +655,27 @@ Feature: Edit Order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    And API Operator update order granular status to = "On Hold"
-    When API Operator cancel created order and get error:
-      | statusCode | 500               |
-      | message    | Order is On Hold! |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | DAMAGED            |
+      | ticketSubType           | IMPROPER PACKAGING |
+      | parcelLocation          | DAMAGED RACK       |
+      | liability               | NV DRIVER          |
+      | damageDescription       | GENERATED          |
+      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
+    When API Operator cancel created order and get error:
+      | statusCode | 500               |
+      | message    | Order is On Hold! |
 
   Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
     Given API Shipper create V4 order using data below:
@@ -1757,8 +1768,7 @@ Feature: Edit Order
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "{dpms-id}" DP on Edit Order Page
+    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
     And Operator change Cash on Delivery toggle to yes
     And Operator change the COD value to "100"

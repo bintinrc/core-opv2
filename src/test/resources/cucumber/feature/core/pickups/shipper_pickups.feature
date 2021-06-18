@@ -536,6 +536,7 @@ Feature: Shipper Pickups
     Then Operator verify the route was removed from the created reservation
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, Suggested Route Found (uid:3a7616b6-5402-4cdb-9e10-2440f2fe8605)
