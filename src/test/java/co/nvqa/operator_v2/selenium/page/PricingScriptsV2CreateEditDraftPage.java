@@ -12,7 +12,9 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -51,12 +53,19 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
     setScriptInfo(script);
     setWriteScript(script);
+    boolean headerHint = isElementVisible(
+        "//div[@text='Run a syntax check before saving or verifying the draft.']");
+    if (headerHint) {
+      checkSyntax(script);
+    }
   }
 
   private void setScriptInfo(Script script) {
     clickTabItem("Script Info");
-    sendKeysToMdInputContainerByModel("ctrl.data.script.name", script.getName());
-    sendKeysToMdInputContainerByModel("ctrl.data.script.description", script.getDescription());
+    sendKeys(f("//md-input-container[@model='%s']//input", "ctrl.data.script.name"),
+        script.getName());
+    sendKeys(f("//md-input-container[@model='%s']//input", "ctrl.data.script.description"),
+        script.getDescription());
   }
 
   private void setWriteScript(Script script) {
@@ -65,55 +74,50 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
       sendKeysAndEnter("//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']",
           script.getTemplateName());
       click("//button[@aria-label='Load']");
-      checkSyntax();
-      pause2s();
-      saveDraft();
     }
     if (Objects.nonNull(script.getIsCsvFile())) {
       String csvFileName = "sample_upload_rates.csv";
       File csvFile = createFile(csvFileName, script.getFileContent());
       importCsv.setValue(csvFile);
-      boolean headerHint = isElementVisible(
-          "//div[@text='Run a syntax check before saving or verifying the draft.']");
-      if (headerHint) {
-        checkSyntax();
-        pause2s();
+    }
+    if (Objects.nonNull(script.getSource())) {
+      updateAceEditorValue(script.getSource());
+    }
+    if (Objects.nonNull(script.getActiveParameters())) {
+      activateParameters(script.getActiveParameters());
+    }
+  }
+
+  private void checkSyntax(Script script) {
+    clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
+    String headerHintXpath = "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info') and contains(@text, 'No errors found')]";
+    boolean headerHint = isElementVisible(headerHintXpath);
+    if (headerHint) {
+      String actualSyntaxInfo = getAttribute(headerHintXpath, "text");
+      assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
+          actualSyntaxInfo);
+      if (isElementVisible("//nv-api-text-button[@name='Save Draft']")) {
         saveDraft();
+      } else {
+        validateDraftAndReleaseScript(script);
       }
     }
-    if (Objects.nonNull(script.getSource()) && Objects.nonNull(script.getActiveParameters())) {
-      activateParameters(script.getActiveParameters());
-      updateAceEditorValue(script.getSource());
-      checkSyntax();
-      saveDraft();
-    }
   }
 
-  private void checkSyntax() {
-    clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
-    String actualSyntaxInfo = getAttribute(
-        "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info')]",
-        "text");
-    assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
-        actualSyntaxInfo);
-  }
-
-  public void checkErrorHeader() {
+  public void checkErrorHeader(String message) {
     String actualErrorInfo = getText("//div[contains(@class,'hint')]");
-    assertEquals("Syntax Info",
-        "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)",
-        actualErrorInfo);
+    assertTrue(actualErrorInfo.contains(message));
+  }
+
+  public void editScript(Script script) {
+    waitUntilPageLoaded(buildScriptUrl(script));
+    setWriteScript(script);
+    checkSyntax(script);
   }
 
   private void saveDraft() {
     pause2s();
     clickNvApiTextButtonByNameAndWaitUntilDone("Save Draft");
-    clickToast("Your script has been successfully created.");
-  }
-
-  private void verifyDraft() {
-    pause2s();
-    clickNvIconTextButtonByNameAndWaitUntilDone("Verify Draft");
     clickToast("Your script has been successfully created.");
   }
 
@@ -186,33 +190,66 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
         String.valueOf(insuredValue));
     sendKeysByIdCustom1("container.pricing-scripts.description-cod-value",
         String.valueOf(codValue));
-    if (Objects.nonNull(runCheckParams.getFromZone()) || Objects
-        .nonNull(runCheckParams.getToZone())) {
+    if (Objects.nonNull(runCheckParams.getFromZone())) {
       retryIfRuntimeExceptionOccurred(
           () -> selectValueFromNvAutocomplete("ctrl.view.textFromZone",
               runCheckParams.getFromZone()),
           "Select value from \"From Zone\" NvAutocomplete");
+    }
+    if (Objects.nonNull(runCheckParams.getToZone())) {
       retryIfRuntimeExceptionOccurred(
-          () -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()),
+          () -> selectValueFromNvAutocomplete("ctrl.view.textToZone",
+              runCheckParams.getToZone()),
           "Select value from \"To Zone\" NvAutocomplete");
     }
-
-    if (Objects.nonNull(runCheckParams.getFromL1()) || Objects.nonNull(runCheckParams.getToL1())) {
+    if (Objects.nonNull(runCheckParams.getFromL1())) {
       sendKeysByName("container.pricing-scripts.from-l1", runCheckParams.getFromL1());
+    }
+    if (Objects.nonNull(runCheckParams.getToL1())) {
       sendKeysByName("container.pricing-scripts.to-l1", runCheckParams.getToL1());
     }
-    if (Objects.nonNull(runCheckParams.getFromL2()) || Objects
-        .nonNull(runCheckParams.getToL2())) {
+    if (Objects.nonNull(runCheckParams.getFromL2())) {
       sendKeysByName("container.pricing-scripts.from-l2", runCheckParams.getFromL2());
+    }
+    if (Objects.nonNull(runCheckParams.getToL2())) {
       sendKeysByName("container.pricing-scripts.to-l2", runCheckParams.getToL2());
     }
-    if (Objects.nonNull(runCheckParams.getFromL3()) || Objects
-        .nonNull(runCheckParams.getToL3())) {
+    if (Objects.nonNull(runCheckParams.getFromL3())) {
       sendKeysByName("container.pricing-scripts.from-l3", runCheckParams.getFromL3());
+    }
+    if (Objects.nonNull(runCheckParams.getToL3())) {
       sendKeysByName("container.pricing-scripts.to-l3", runCheckParams.getToL3());
+    }
+    if (Objects.nonNull(runCheckParams.getOriginPricingZone())) {
+      if (runCheckParams.getOriginPricingZone().equalsIgnoreCase("empty")) {
+        sendKeysByName("container.pricing-scripts.origin-pz", "");
+      } else {
+        sendKeysByName("container.pricing-scripts.origin-pz",
+            runCheckParams.getOriginPricingZone());
+      }
+    }
+    if (Objects.nonNull(runCheckParams.getDestinationPricingZone())) {
+      if (runCheckParams.getDestinationPricingZone().equalsIgnoreCase("empty")) {
+        sendKeysByName("container.pricing-scripts.dest-pz", "");
+      } else {
+        sendKeysByName("container.pricing-scripts.dest-pz",
+            runCheckParams.getDestinationPricingZone());
+      }
     }
     clickNvApiTextButtonByNameAndWaitUntilDone(
         "container.pricing-scripts.run-check"); //Button Run Check
+  }
+
+  public void verifyErrorMessage(String errorMessage, String status) {
+    Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
+
+    if (StringUtils.isNotBlank(status)) {
+      assertThat("Error toast status", toastData.get("status"), equalToIgnoringCase(status));
+    }
+    if (StringUtils.isNotBlank(errorMessage)) {
+      assertThat("Error toast status", toastData.get("errorMessage"),
+          equalToIgnoringCase(errorMessage));
+    }
   }
 
   public void verifyTheRunCheckResultIsCorrect(RunCheckResult runCheckResult) {

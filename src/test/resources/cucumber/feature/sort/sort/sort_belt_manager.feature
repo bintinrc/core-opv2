@@ -19,7 +19,6 @@ Feature: Sort Belt Manager
       | secondFilter | Order Tags       |
     When Operator input Configuration name and description
       | configName  | AUTO {gradle-current-date-yyyyMMddHHmmsss} |
-      | description | Created for test automation purposes       |
     And Operator click Confirm button on Create Configuration page
     Then Operator verifies that "Incomplete Form Submission" error notification is displayed
     When Operator refresh page
@@ -811,8 +810,6 @@ Feature: Sort Belt Manager
       | destinationHubs | {hub-name} |
       | orderTags       | OPV2AUTO1  |
     And Operator select combination value for "Arm 2"
-      | status | Disabled |
-    And Operator select combination value for "Arm 3"
       | status | Disabled |
     And Operator select combination value for "Arm 3"
       | status | Disabled |

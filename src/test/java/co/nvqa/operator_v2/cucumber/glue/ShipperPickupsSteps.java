@@ -205,7 +205,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
         return route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
       case "GET_FROM_SUGGESTED_ROUTE":
         route = get(KEY_SUGGESTED_ROUTE);
-        return route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
+        return route.getDriverName();
       default:
         return driverNameParam;
     }

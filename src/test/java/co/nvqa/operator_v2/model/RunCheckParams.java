@@ -24,6 +24,8 @@ public class RunCheckParams {
   private String toL1;
   private String toL2;
   private String toL3;
+  private String originPricingZone;
+  private String destinationPricingZone;
 
   public String getOrderFields() {
     return orderFields;
@@ -175,5 +177,21 @@ public class RunCheckParams {
 
   public void setToL3(String toL3) {
     this.toL3 = toL3;
+  }
+
+  public String getOriginPricingZone() {
+    return originPricingZone;
+  }
+
+  public void setOriginPricingZone(String originPricingZone) {
+    this.originPricingZone = originPricingZone;
+  }
+
+  public String getDestinationPricingZone() {
+    return destinationPricingZone;
+  }
+
+  public void setDestinationPricingZone(String destinationPricingZone) {
+    this.destinationPricingZone = destinationPricingZone;
   }
 }
