@@ -28,6 +28,7 @@ Feature: Route Logs
       | driverTypeName | {default-driver-type-name}       |
       | comments       | {KEY_CREATED_ROUTE.comments}     |
       | tags           | {route-tag-name}                 |
+    And DB Operator verifies created dummy waypoints
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
