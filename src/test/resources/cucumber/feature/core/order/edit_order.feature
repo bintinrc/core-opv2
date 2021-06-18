@@ -655,16 +655,27 @@ Feature: Edit Order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    And API Operator update order granular status to = "On Hold"
-    When API Operator cancel created order and get error:
-      | statusCode | 500               |
-      | message    | Order is On Hold! |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | DAMAGED            |
+      | ticketSubType           | IMPROPER PACKAGING |
+      | parcelLocation          | DAMAGED RACK       |
+      | liability               | NV DRIVER          |
+      | damageDescription       | GENERATED          |
+      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
+    When API Operator cancel created order and get error:
+      | statusCode | 500               |
+      | message    | Order is On Hold! |
 
   Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
     Given API Shipper create V4 order using data below:
@@ -1265,7 +1276,7 @@ Feature: Edit Order
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verify order event on Edit order page using data below:
+    Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
       | UPDATE ADDRESS             |
@@ -1717,14 +1728,11 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
 
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Added to Reservation (uid:d32ee708-564b-47b2-85ba-7494090e48c0)
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
     Given API Shipper create V4 order using data below:
-      | generateFrom   | KEY_CREATED_ADDRESS                                                                                                                                                                                                                                                                                                                    |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator find automatically created reservation on shipper with Legacy ID = "{shipper-v4-legacy-id}"
+    Then Operator can find created reservation mapped to created order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
       | name        | ADDED TO RESERVATION                         |
@@ -1740,7 +1748,7 @@ Feature: Edit Order
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     Given API Shipper create V4 order using data below:
-      | generateFrom   | KEY_CREATED_ADDRESS                                                                                                                                                                                                                                                                                                                    |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add reservation pick-up to the route
@@ -1760,11 +1768,20 @@ Feature: Edit Order
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "{dpms-id}" DP on Edit Order Page
+    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
     And Operator change Cash on Delivery toggle to yes
     And Operator change the COD value to "100"
+    And Operator update order status on Edit order page using data below:
+      | granularStatus | Pending Pickup                      |
+      | changeReason   | Status updated for testing purposes |
+    Then Operator verifies that success toast displayed:
+      | top                | Status Updated |
+      | waitUntilInvisible | true           |
+    And Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    And Operator click Delivery -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Delivery on Edit Order page
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
     When Operator selects "All Events" in Events Filter menu on Edit Order page

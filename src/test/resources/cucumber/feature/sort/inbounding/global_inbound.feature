@@ -989,7 +989,7 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "0" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-    And Operator save wight limit settings on Global Settings page
+    And Operator save Weight limit settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name-3}                               |
@@ -1012,7 +1012,7 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "100" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-    And Operator save wight limit settings on Global Settings page
+    And Operator save Weight limit settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name-3}                               |
@@ -1036,7 +1036,7 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "100" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-    And Operator save wight limit settings on Global Settings page
+    And Operator save Weight limit settings on Global Settings page
     And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
@@ -1256,6 +1256,32 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     Then Operator verify "HUB INBOUND SCAN" order event description on Edit order page
+
+  @CloseNewWindows
+  Scenario: Inbound parcel with changes in dimensions (with volumetric weight)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName           | {KEY_CREATED_ORDER.destinationHub}         |
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | overrideDimHeight | {dimension-height}                         |
+      | overrideDimWidth  | {dimension-width}                          |
+      | overrideDimLength | {dimension-length}                         |
+    Then Operator verify info on Global Inbound page using data below:
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #55a1e8                            |
+    Then API Operator verify order info after Global Inbound
+    When API Operator get order details by saved Order ID
+    And Operator switch to edit order page using direct URL
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify "HUB INBOUND SCAN" order event description on Edit order page
+    And Operator verifies order weight is overridden based on the volumetric weight
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

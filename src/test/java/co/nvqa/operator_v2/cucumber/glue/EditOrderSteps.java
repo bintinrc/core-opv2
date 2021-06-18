@@ -2,8 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
@@ -19,6 +21,10 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -1342,8 +1348,8 @@ public class EditOrderSteps extends AbstractSteps {
         podDetailsDialog.getTrackingId());
     softAssert.assertEquals("transaction string", expectedTransactionText,
         podDetailsDialog.getTransaction());
-    softAssert.assertEquals("information - status", order.getLastDeliveryTransaction().getStatus(),
-        podDetailsDialog.getStatus());
+    softAssert.assertEquals("information - status", StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
+        StringUtils.lowerCase(podDetailsDialog.getStatus()));
     softAssert
         .assertEquals("information - driver", data.get("driver"), podDetailsDialog.getDriver());
     softAssert.assertTrue("information - priority level",
@@ -1353,5 +1359,46 @@ public class EditOrderSteps extends AbstractSteps {
     softAssert.assertTrue("information - location",
         podDetailsDialog.getLocation().contains(order.getLastDeliveryTransaction().getAddress1()));
     softAssert.assertAll();
+  }
+
+  @Then("Operator verifies that there will be a toast of successfully downloaded airway bill")
+  public void operatorVerifiesThatThereWillBeAToastOfSuccessfullyDownloadedAirwayBill() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    editOrderPage.waitUntilVisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+    editOrderPage.waitUntilInvisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+  }
+
+  @When("Operator opens and verifies the downloaded airway bill pdf")
+  public void operatorOpensTheDownloadedAirwayBillPdf() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String fileName = f("awb_%s.pdf", trackingId);
+    String actualSortCode;
+
+    if (get(KEY_CREATED_SORT_CODE) != null) {
+      SortCode sortCode = get(KEY_CREATED_SORT_CODE);
+      actualSortCode = sortCode.getSortCode();
+    } else {
+      actualSortCode = "X";
+    }
+
+    // verifies the file is existed
+    editOrderPage.verifyFileDownloadedSuccessfully(fileName);
+
+    String pathname = StandardTestConstants.TEMP_DIR + fileName;
+    try {
+      // get path
+      Path path = Paths.get(pathname).toRealPath();
+      // convert downloaded pdf to byte
+      File pdf = new File(String.valueOf(path));
+      // convert to url
+      String url = String.valueOf(path.toUri());
+      //go to url
+      getWebDriver().get(url);
+
+      // verifies the sort code
+      editOrderPage.verifyTheSortCodeIsCorrect(actualSortCode, pdf);
+    } catch (IOException e) {
+      throw new NvTestRuntimeException("Could not get file path " + pathname, e);
+    }
   }
 }
