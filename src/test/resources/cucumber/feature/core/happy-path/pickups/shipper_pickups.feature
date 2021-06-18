@@ -48,6 +48,7 @@ Feature: Shipper Pickups
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
   Scenario: Operator Filters Created Reservation by Master Shipper (uid:5020c570-4f72-4ba2-bc26-8de5560eca89)

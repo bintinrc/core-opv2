@@ -8,7 +8,7 @@ Feature: Add Order To Route
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Add Order to a Route - Pickup, Valid Tracking ID, With Prefix (uid:44589e4d-860b-45ac-a50e-add9f5aedf4a)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator get order details
     And API Operator create new route using data below:
@@ -33,6 +33,7 @@ Feature: Add Order To Route
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
@@ -76,6 +77,7 @@ Feature: Add Order To Route
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
