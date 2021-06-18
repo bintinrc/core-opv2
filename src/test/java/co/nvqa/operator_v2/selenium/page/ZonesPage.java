@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -43,6 +44,12 @@ public class ZonesPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteDialog;
+
+  @FindBy(xpath = "//md-switch[@aria-label='commons.rts']//div[contains(@class,'ink-ripple')]")
+  public PageElement rtsToggle;
+
+  @FindBy(xpath = "//td[@class='zone-type']")
+  public PageElement rtsValue;
 
   public ZonesTable zonesTable;
 
@@ -133,6 +140,7 @@ public class ZonesPage extends OperatorV2SimplePage {
     public static final String COLUMN_HUB_NAME = "hubName";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
+    public static final String COLUMN_DESCRIPTION = "description";
 
     public static final String ACTION_EDIT_POLYGON = "Edit Polygon";
     public static final String ACTION_EDIT = "Edit";
@@ -147,7 +155,7 @@ public class ZonesPage extends OperatorV2SimplePage {
           .put(COLUMN_HUB_NAME, "hub-name")
           .put(COLUMN_LATITUDE, "lat-lng")
           .put(COLUMN_LONGITUDE, "lat-lng")
-          .put("description", "description")
+          .put(COLUMN_DESCRIPTION, "description")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of(
