@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Address;
+import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -65,23 +65,23 @@ public class UpdateDeliveryAddressWithCsvPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class AddressesTable extends NgRepeatTable<Address> {
+  public static class AddressesTable extends NgRepeatTable<UpdateDeliveryAddressRecord> {
 
     public static final String NG_REPEAT = "row in ctrl.ordersTableData";
     public static final String COLUMN_VALIDATION = "validation";
     public static final String COLUMN_TRACKING_ID = "trackingId";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_EMAIL = "email";
-    public static final String COLUMN_CONTACT = "contact";
-    public static final String COLUMN_ADDRESS1 = "address1";
-    public static final String COLUMN_ADDRESS2 = "address2";
-    public static final String COLUMN_POSTCODE = "postcode";
-    public static final String COLUMN_CITY = "city";
-    public static final String COLUMN_COUNTRY = "country";
-    public static final String COLUMN_STATE = "state";
-    public static final String COLUMN_DISTRICT = "district";
-    public static final String COLUMN_LATITUDE = "latitude";
-    public static final String COLUMN_LONGITUDE = "longitude";
+    public static final String COLUMN_NAME = "toName";
+    public static final String COLUMN_EMAIL = "toEmail";
+    public static final String COLUMN_CONTACT = "toPhoneNumber";
+    public static final String COLUMN_ADDRESS1 = "toAddressAddress1";
+    public static final String COLUMN_ADDRESS2 = "toAddressAddress2";
+    public static final String COLUMN_POSTCODE = "toAddressPostcode";
+    public static final String COLUMN_CITY = "toAddressCity";
+    public static final String COLUMN_COUNTRY = "toAddressCountry";
+    public static final String COLUMN_STATE = "toAddressState";
+    public static final String COLUMN_DISTRICT = "toAddressDistrict";
+    public static final String COLUMN_LATITUDE = "toAddressLatitude";
+    public static final String COLUMN_LONGITUDE = "toAddressLongitude";
 
     public AddressesTable(WebDriver webDriver) {
       super(webDriver);
@@ -103,7 +103,7 @@ public class UpdateDeliveryAddressWithCsvPage extends OperatorV2SimplePage {
           .put(COLUMN_LONGITUDE, "longitude")
 
           .build());
-      setEntityClass(Address.class);
+      setEntityClass(UpdateDeliveryAddressRecord.class);
     }
   }
 

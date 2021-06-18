@@ -136,17 +136,21 @@ public class B2bManagementPage extends OperatorV2SimplePage {
 
   public static class B2bShipperTable extends AntTable<Shipper> {
 
+    public static final String CULUMN_BRANCH_ID = "externalRef";
+    public static final String ACTION_NINJA_DASH_LOGIN = "Ninja Dashboard Login";
+    public static final String ACTION_EDIT = "Edit";
+
     public B2bShipperTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("externalRef", "id")
+          .put(CULUMN_BRANCH_ID, "id")
           .put("name", "name")
           .put("email", "email")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of(
-          "Ninja Dashboard Login", "//tr[%d]/td[contains(@class,'action')]//button[1]",
-          "Edit", "//tr[%d]/td[contains(@class,'action')]//button[2]"));
+          ACTION_NINJA_DASH_LOGIN, "//tr[%d]/td[contains(@class,'action')]//button[1]",
+          ACTION_EDIT, "//tr[%d]/td[contains(@class,'action')]//button[2]"));
       setEntityClass(Shipper.class);
     }
   }
