@@ -115,7 +115,7 @@ Feature: Outbound Monitoring
     Then Operator verifies the comment table on the chosen route ID is changed
 
   @CloseNewWindows
-#  @DeleteOrArchiveRoute 
+#  @DeleteOrArchiveRoute
   @routing-refactor
   Scenario: Operator Pull Out Order from a Route on Outbound Monitoring Page (uid:ff2d5814-a7fa-4386-aa98-5fe41c2a2032)
     Given Operator go to menu Shipper Support -> Blocked Dates
