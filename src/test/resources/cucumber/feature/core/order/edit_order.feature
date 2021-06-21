@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @current
+@OperatorV2 @Core @Order @EditOrder @current2
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -325,7 +325,8 @@ Feature: Edit Order
     And Operator print Airway Bill on Edit Order page
     Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
-  @DeleteOrArchiveRoute @routing-refactor
+#  @DeleteOrArchiveRoute
+  @routing-refactor
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:c6ab425f-c508-451f-b84c-09eb267c5f27)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -356,7 +357,8 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute @routing-refactor
+#  @DeleteOrArchiveRoute
+  @routing-refactor
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY (uid:91bf2923-94ba-4d8c-bd1b-c000eca19ee9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -388,7 +390,8 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute @routing-refactor
+#  @DeleteOrArchiveRoute
+  @routing-refactor
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -715,7 +718,8 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute @routing-refactor
+#  @DeleteOrArchiveRoute
+  @routing-refactor
   Scenario: Cancel Order - Van En-route to Pickup (uid:b270f6e4-2b52-4142-b4f5-a1c34153b449)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -1207,7 +1211,8 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
 
-  @DeleteOrArchiveRoute @routing-refactor
+#  @DeleteOrArchiveRoute
+  @routing-refactor
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
