@@ -395,12 +395,12 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
     Examples:
       | note                                            | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2         | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
-      | Same address, Email & Phone Number              | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | binti@test.co   | +65189189      | +65189189      | true               | uid:05fc0970-5666-4b38-a0c2-5625fd481688 |
-      | Same address, Email & Phone Number              | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co   | +65189189      | +65189189      | false              | uid:43d402e0-3439-4076-8c7a-ff2f79b4e6a3 |
-      | Same Address & Email But Different Phone Number | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | binti@test.co   | +65189189      | +65189100      | true               | uid:1293cc94-0be1-4dfa-8a0c-ee049a008eb4 |
-      | Same Address & Email But Different Phone Number | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co   | +65189189      | +65189100      | false              | uid:de3a73fa-5deb-4390-b5bf-7344473f59ec |
-      | Same Address & Phone Number But Different Email | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | another@test.co | +65189189      | +65189189      | true               | uid:22d6a084-2967-4f1b-949f-9f7ee8d19d99 |
-      | Same Address & Phone Number But Different Email | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | another@test.co | +65189189      | +65189189      | false              | uid:c1d930e3-2a56-4a33-b065-6db26a8396fb |
+      | Same address, Email & Phone Number              | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | binti@test.co   | +6595557073    | +6595557073    | true               | uid:05fc0970-5666-4b38-a0c2-5625fd481688 |
+      | Same address, Email & Phone Number              | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co   | +6595557073    | +6595557073    | false              | uid:43d402e0-3439-4076-8c7a-ff2f79b4e6a3 |
+      | Same Address & Email But Different Phone Number | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | binti@test.co   | +6595557073    | +6595557074    | true               | uid:1293cc94-0be1-4dfa-8a0c-ee049a008eb4 |
+      | Same Address & Email But Different Phone Number | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co   | +6595557073    | +6595557074    | false              | uid:de3a73fa-5deb-4390-b5bf-7344473f59ec |
+      | Same Address & Phone Number But Different Email | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | another@test.co | +6595557073    | +6595557073    | true               | uid:22d6a084-2967-4f1b-949f-9f7ee8d19d99 |
+      | Same Address & Phone Number But Different Email | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | another@test.co | +6595557073    | +6595557073    | false              | uid:c1d930e3-2a56-4a33-b065-6db26a8396fb |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions - Same address, Email & Phone Number (uid:9d3895d6-7837-4ca0-9d7a-41a4d2789337)
