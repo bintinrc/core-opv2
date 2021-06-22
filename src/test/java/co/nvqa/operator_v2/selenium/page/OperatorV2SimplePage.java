@@ -210,7 +210,7 @@ public class OperatorV2SimplePage extends SimplePage {
         f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
   }
 
-  public void waitUntilVisibilityOfToastSortCode(String containsMessage) {
+  public void waitUntilVisibilityOfToastReact(String containsMessage) {
     waitUntilVisibilityOfElementLocated(
         f("//div[contains(@class,'notification-notice')]//div[contains(text(),'%s')]", containsMessage));
   }
