@@ -718,8 +718,7 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Van En-route to Pickup (uid:b270f6e4-2b52-4142-b4f5-a1c34153b449)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
