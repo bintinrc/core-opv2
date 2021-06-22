@@ -147,7 +147,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     noErrorsMessage.waitUntilClickable();
     selectAction(ACTION_DELETE);
     confirmDeleteDialog.confirmDelete();
-    waitUntilInvisibilityOfToast(script.getName() + " has been successfully deleted.", true);
   }
 
   private String buildScriptUrl(Script script) {

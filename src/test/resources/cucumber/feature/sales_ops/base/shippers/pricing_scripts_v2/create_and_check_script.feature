@@ -67,9 +67,9 @@ Feature: Pricing Scripts V2
     Then Operator verify the script is saved successfully
     Examples:
       | Note                     | fromL1     | toL1          | fromL2    | toL2       | fromL3      | toL3        | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
-      | Inputs from L1 and to L1 | Holland Rd | University Rd |           |            |             |             | 2.14       | 0.14 | 2.0         | 0            | 0      | 0           | OK       | uid:05331f6c-c126-4874-bdf2-7c7bf4e3c858 |
-      | Inputs From L2 and To L2 |            |               | Dover Ave | Jln Bahasa |             |             | 3.21       | 0.21 | 3.0         | 0            | 0      | 0           | OK       | uid:dd39a8d8-8437-4ba1-8dd1-c5dc0ccefda9 |
-      | Inputs From L3 and To L3 |            |               |           |            | North Buona | Camborne Rd | 4.28       | 0.28 | 4.0         | 0            | 0      | 0           | OK       | uid:237fffd0-27df-43c2-a12c-2e7b0adc9367 |
+      | Inputs from L1 and to L1 | Holland Rd | University Rd |           |            |             |             | 2.14       | 0.14 | 2.0         | 0            | 0      | 0           | OK       | uid:74636785-935a-4027-9bc9-596722b3a06f |
+      | Inputs From L2 and To L2 |            |               | Dover Ave | Jln Bahasa |             |             | 3.21       | 0.21 | 3.0         | 0            | 0      | 0           | OK       | uid:340d16f4-dae8-45e3-98d2-ccc74ea4f540 |
+      | Inputs From L3 and To L3 |            |               |           |            | North Buona | Camborne Rd | 4.28       | 0.28 | 4.0         | 0            | 0      | 0           | OK       | uid:82c4e670-586c-449d-889a-3e7b205ee314 |
 
   @DeletePricingScript
   Scenario Outline: Create and Check Script - Legacy Order Fields (<hiptest-uid>)
@@ -152,6 +152,36 @@ Feature: Pricing Scripts V2
       | Corporate Return, EXPRESS          | EXPRESS       | Corporate Return          | 25.252     | 1.652 | 23.6        | 0            | 0      | 0           | OK       | uid:c2651843-f068-4c89-91ff-117782f05e1d |
 
   @DeletePricingScript
+  Scenario: Check Script without is_RTS, is_RTS = TRUE (uid:408e1b2d-d99c-4e66-ad89-ab9b59ae4750)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculate(delivery_type,timeslot_type,order_type,size,weight) {var result = {};result.delivery_fee = 1;return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator edit the created Draft Script using data below:
+      | source | function calculate(delivery_type,timeslot_type,order_type,size,weight,is_rts) {var result = {};result.delivery_fee = 1;return result;} |
+    When Operator search according Active Script name
+    When Operator do Run Check on specific Active Script using this data below:
+      | orderFields  | New      |
+      | serviceLevel | SAMEDAY  |
+      | serviceType  | Document |
+      | timeslotType | NONE     |
+      | isRts        | Yes      |
+      | size         | XS       |
+      | weight       | 1.0      |
+      | insuredValue | 0.00     |
+      | codValue     | 0.00     |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 1.07 |
+      | gst          | 0.07 |
+      | deliveryFee  | 1    |
+      | insuranceFee | 0    |
+      | codFee       | 0    |
+      | handlingFee  | 0    |
+      | comments     | OK   |
+
+  @DeletePricingScript
   Scenario Outline: Create and Check Script - Send is_RTS - Use calculate() (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -212,7 +242,7 @@ Feature: Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | isCsvFile   | Yes                                         |
       | fileContent | deliveryType':'EXPRESS' \n 'parcelSize':'S' |
-    Then Operator verify error message in header with "info\nCSV Header contain invalid character, accept ([A-Z],[a-z],space)"
+    Then Operator verify error message in header with "CSV Header contain invalid character, accept ([A-Z],[a-z],space)"
 
   @DeletePricingScript
   Scenario Outline: Create and Check Script (<hiptest-uid>)
