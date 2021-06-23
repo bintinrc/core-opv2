@@ -35,10 +35,15 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     invoicedOrdersSearchPage.uploadFile(absolutePath);
   }
 
+  @And("Operator clicks Search Invoiced Order button and wait till CSV is uploaded")
+  public void operatorClicksSearchInvoicedOrderButtonAndWait() {
+    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
+    invoicedOrdersSearchPage.goBackToFilterBtn.waitUntilVisible();
+  }
+
   @And("Operator clicks Search Invoiced Order button")
   public void operatorClicksSearchInvoicedOrderButton() {
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-    invoicedOrdersSearchPage.goBackToFilterBtn.waitUntilVisible();
   }
 
   @And("Operator verifies below tracking ID\\(s) and creation time is displayed")
@@ -65,11 +70,9 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     String pdfFileName = "invalid-upload.pdf";
     File pdfFile = createFile(pdfFileName, "TEST");
     invoicedOrdersSearchPage.uploadFile(pdfFile.getAbsolutePath());
-    String actualNotifText = invoicedOrdersSearchPage.getNotificationMessageText();
-    softAssert.assertEquals("Actual Notification Text is not expected", expectedErrorMsg,
-        actualNotifText);
+    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
+    verifyErrorMessage(expectedErrorMsg);
   }
-
 
   @Then("Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message {string}")
   public void operatorUploadsAnInvalidOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
@@ -78,10 +81,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     File csvFile = createFile(csvFileName, "TEST1 , TEST2");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
-    softAssert
-        .assertEquals("Actual Notification Description is not expected", expectedErrorMsg,
-            actualNotifDescription);
+    verifyErrorMessage(expectedErrorMsg);
   }
 
   @Then("Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message {string}")
@@ -91,12 +91,15 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     File csvFile = createFile(csvFileName, "");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
+    verifyErrorMessage(expectedErrorMsg);
+  }
+
+  private void verifyErrorMessage(String expectedErrorMsg) {
     String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
     softAssert
         .assertEquals("Actual Notification Description is not expected", expectedErrorMsg,
             actualNotifDescription);
   }
-
 
   @When("Operator clicks in Enter Tracking ID\\(s) tab")
   public void operatorClicksInEnterTrackingIDSTab() {
@@ -186,4 +189,8 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.waitUntilClickable();
   }
 
+  @Then("Operator verifies that error toast is displayed on Invoiced Orders Search page:")
+  public void operatorVerifiesThatErrorToastIsDisplayedOnInvoicedOrdersSearchPage(String value) {
+    verifyErrorMessage(value);
+  }
 }

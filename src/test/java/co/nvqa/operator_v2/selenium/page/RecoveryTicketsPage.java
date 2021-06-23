@@ -290,6 +290,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     loadSelection.clickAndWaitUntilDone();
   }
 
+  public void searchTableByTrackingIdWithoutLoads(String trackingId) {
+    trackingIdFilter.setValue(trackingId);
+    pause1s();
+  }
+
   public void waitUntilPageLoaded() {
     super.waitUntilPageLoaded();
     waitUntilInvisibilityOfElementLocated(

@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -406,7 +407,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @Then("Operator is redirected to this page {string}")
   public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl) {
-    redirectUrl = resolveValue(redirectUrl);
+    redirectUrl = resolveValue(TestConstants.OPERATOR_PORTAL_BASE_URL + redirectUrl);
 
     String primaryWindowHandle = getWebDriver().getWindowHandle();
     Set<String> windowHandles = getWebDriver().getWindowHandles();
@@ -577,10 +578,11 @@ public class RouteLogsSteps extends AbstractSteps {
         }
         value = finalData.get("bottom");
         if (StringUtils.isNotBlank(value)) {
+          String actual = toast.toastBottom.getNormalizedText();
           if (value.startsWith("^")) {
-            return value.matches(value);
+            return actual.matches(value);
           } else {
-            return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+            return StringUtils.equalsIgnoreCase(value, actual);
           }
         }
         return true;

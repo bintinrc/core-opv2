@@ -10,12 +10,15 @@ import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
 import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -24,7 +27,6 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdBooleanSwitch;
-import co.nvqa.operator_v2.selenium.elements.md.MdButtonGroup;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -56,6 +58,15 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
+  @FindBy(name = "ctrl.basicForm")
+  public BasicSettingsForm basicSettingsForm;
+
+  @FindBy(name = "ctrl.marketplaceForm")
+  public SubShippersDefaultSettingsForm subShippersDefaultSettingsForm;
+
+  @FindBy(xpath = "//md-content[./form[@name='ctrl.billingForm']]")
+  public PricingAndBillingForm pricingAndBillingForm;
+
   @FindBy(xpath = "//div[text()='Shipper Information']")
   public PageElement shipperInformation;
 
@@ -68,66 +79,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public NvIconTextButton createShipper;
   @FindBy(name = "Save Changes")
   public NvIconTextButton saveChanges;
-
-  //region BASIC
-  @FindBy(css = "div[model='ctrl.data.basic.status']")
-  public MdButtonGroup shipperStatus;
-  @FindBy(css = "md-select[ng-model='ctrl.data.basic.shipperType']")
-  public MdSelect shipperType;
-  @FindBy(id = "Shipper Type")
-  public TextBox shipperTypeReadOnly;
-  @FindBy(id = "shipper-name")
-  public TextBox shipperName;
-  @FindBy(id = "Short Name")
-  public TextBox shortName;
-  @FindBy(id = "shipper-phone-number")
-  public TextBox shipperPhoneNumber;
-  @FindBy(id = "shipper-email")
-  public TextBox shipperEmail;
-  @FindBy(css = "[id*='shipper-dashboard-password']")
-  public TextBox shipperDashboardPassword;
-  @FindBy(name = "shipper-classification")
-  public MdSelect channel;
-  @FindBy(name = "industry")
-  public MdSelect industry;
-  @FindBy(name = "account-type")
-  public MdSelect accountType;
-  @FindBy(id = "salesperson")
-  public MdSelect salesperson;
-  @FindBy(css = "[model='ctrl.data.basic.allowCod']")
-  public MdBooleanSwitch allowCod;
-  @FindBy(css = "[model='ctrl.data.basic.allowCp']")
-  public MdBooleanSwitch allowCp;
-  @FindBy(css = "[model='ctrl.data.basic.isPrePaid']")
-  public MdBooleanSwitch isPrePaid;
-  @FindBy(css = "[model='ctrl.data.basic.allowStaging']")
-  public MdBooleanSwitch allowStaging;
-  @FindBy(css = "[model='ctrl.data.basic.isMultiParcel']")
-  public MdBooleanSwitch isMultiParcel;
-  @FindBy(css = "[model='ctrl.data.basic.disableReschedule']")
-  public MdBooleanSwitch disableReschedule;
-  @FindBy(css = "[model='ctrl.data.basic.enforceParcelPickupTracking']")
-  public MdBooleanSwitch enforceParcelPickupTracking;
-  @FindBy(css = "[model='ctrl.data.basic.allowEnforceDeliveryVerification']")
-  public MdBooleanSwitch allowEnforceDeliveryVerification;
-  @FindBy(css = "[model='ctrl.data.basic.isPrinterAvailable']")
-  public MdBooleanSwitch isPrinterAvailable;
-  @FindBy(css = "[model='ctrl.data.basic.showCod']")
-  public MdBooleanSwitch showCod;
-  @FindBy(css = "[model='ctrl.data.basic.showParcelDescription']")
-  public MdBooleanSwitch showParcelDescription;
-  @FindBy(name = "trackingType")
-  public MdSelect trackingType;
-  @FindBy(id = "shipper-prefix")
-  public TextBox shipperPrefix;
-  @FindBy(xpath = "//label[@for='shipper-prefix']")
-  public PageElement labelForShipperPrefix;
-  @FindBy(xpath = "//div[text()='Prefix already used']")
-  public PageElement prefixAlreadyUsed;
-  @FindBy(css = "tab-content[aria-hidden='false'] .nv-hint p")
-  public PageElement tabHint;
-
-  //endregion
 
   //region MORE SETTINGS
 
@@ -170,19 +121,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   //endregion
 
-  @FindBy(name = "container.shippers.pricing-billing-add-new-profile")
-  public NvIconTextButton addNewProfile;
-  @FindBy(name = "container.shippers.pricing-billing-edit-pending-profile")
-  public NvIconTextButton editPendingProfile;
-  @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Name']")
-  public TextBox billingName;
-  @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Contact']")
-  public TextBox billingContact;
-  @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Address']")
-  public TextBox billingAddress;
-  @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Postcode']")
-  public TextBox billingPostcode;
-
   @FindBy(css = "md-dialog")
   public NewPricingProfileDialog newPricingProfileDialog;
   @FindBy(css = "md-dialog")
@@ -191,17 +129,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public DiscardChangesDialog discardChangesDialog;
   @FindBy(css = "md-dialog")
   public ErrorSaveDialog errorSaveDialog;
+  @FindBy(css = "md-dialog")
+  public WarningDialog warningDialog;
+  @FindBy(xpath = "//md-dialog/md-toolbar")
+  public PageElement dialogHeader;
 
   private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";
 
   public static final String ACTION_BUTTON_SET_AS_DEFAULT = "Set as Default";
   public static final String LOCATOR_FIELD_OC_VERSION = "ctrl.data.basic.ocVersion";
-  public static final String LOCATOR_FIELD_PRICING_SCRIPT = "container.shippers.pricing-billing-pricing-scripts";
-  public static final String XPATH_FIELD_PASSWORD = "//*[self::input or self::textarea][contains(@id, 'shipper-dashboard-password')]";
   public static final String LOCATOR_FIELD_INDUSTRY = "ctrl.data.basic.industry";
   public static final String LOCATOR_FIELD_SALES_PERSON = "salesperson";
-  public static final String LOCATOR_FIELD_CHANNEL = "ctrl.data.basic.shipperClassification";
-  public static final String LOCATOR_FIELD_ACCOUNT_TYPE = "ctrl.data.basic.accountType";
   public static final String XPATH_SAVE_CHANGES_PRICING_SCRIPT = "//form//button[@aria-label='Save Changes']";
   public static final String XPATH_DISCOUNT_VALUE = "//input[@id='discount-value']";
   public static final String ARIA_LABEL_COMMENTS = "Comments";
@@ -223,7 +161,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
-  public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
 
   public final B2bManagementPage b2bManagementPage;
 
@@ -233,7 +170,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(20);
+    shipperInformation.waitUntilClickable(60);
   }
 
   public void createNewShipper(Shipper shipper) {
@@ -337,95 +274,85 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     String shipperStatusAriaLabel = convertBooleanToString(shipper.getActive(), "Active",
         "Disabled");
-    shipperStatus.selectValue(shipperStatusAriaLabel);
-    shipperType.selectValue(shipper.getType());
+    basicSettingsForm.shipperStatus.selectValue(shipperStatusAriaLabel);
+    basicSettingsForm.shipperType.selectValue(shipper.getType());
 
-        /*
-          ===== SHIPPER INFORMATION =====
-         */
-    shipperName.setValue(shipper.getName());
-    shortName.setValue(shipper.getShortName());
-    shipperPhoneNumber.setValue(shipper.getContact());
+    // ===== SHIPPER INFORMATION =====
+
+    basicSettingsForm.shipperName.setValue(shipper.getName());
+    basicSettingsForm.shortName.setValue(shipper.getShortName());
+    basicSettingsForm.shipperPhoneNumber.setValue(shipper.getContact());
 
     if (isCreateForm) {
-      shipperEmail.setValue(shipper.getEmail());
-      shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
+      basicSettingsForm.shipperEmail.setValue(shipper.getEmail());
+      basicSettingsForm.shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
     }
 
-    channel.selectValue("B2C Marketplace");
-    industry.selectValue(shipper.getIndustryName());
+    basicSettingsForm.channel.selectValue("B2C Marketplace");
+    basicSettingsForm.industry.selectValue(shipper.getIndustryName());
     String accountTypeId =
         shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
-    accountType.selectByValue(accountTypeId);
+    basicSettingsForm.accountType.selectByValue(accountTypeId);
     if (isCreateForm) {
-      salesperson.searchAndSelectValue(shipper.getSalesPerson());
+      basicSettingsForm.salesperson.searchAndSelectValue(shipper.getSalesPerson());
     }
 
-        /*
-          ===== CONTACT DETAILS =====
-         */
-    sendKeysById("Liaison Name", shipper.getLiaisonName());
-    sendKeysById("Liaison Contact", shipper.getLiaisonContact());
-    sendKeysById("Liaison Email", shipper.getLiaisonEmail());
-    sendKeysById("liaison-address", shipper.getLiaisonAddress());
-    sendKeysById("Liaison Postcode", shipper.getLiaisonPostcode());
+    // ===== CONTACT DETAILS =====
 
-        /*
-          ===== SERVICE OFFERINGS =====
-         */
+    basicSettingsForm.liaisonName.setValue(shipper.getLiaisonName());
+    basicSettingsForm.liaisonContact.setValue(shipper.getLiaisonContact());
+    basicSettingsForm.liaisonEmail.setValue(shipper.getLiaisonEmail());
+    basicSettingsForm.liaisonAddress.setValue(shipper.getLiaisonAddress());
+    basicSettingsForm.liaisonPostcode.setValue(shipper.getLiaisonPostcode());
+
+    // ===== SERVICE OFFERINGS =====
+
     OrderCreate orderCreate = shipper.getOrderCreate();
 
     selectValueFromMdSelectOrCheckCurrentIfDisabled("OC Version", LOCATOR_FIELD_OC_VERSION,
         orderCreate.getVersion());
 
-    //Service Type
-    // TO-DO: Add 'Parcel Delivery', 'Return', 'Marketplace', 'Ninja Pack', 'Bulky', 'International' and 'Marketplace International'.
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
-      clickToggleButtonByLabel("Marketplace", "No");
-      clickToggleButtonByLabel("Marketplace International", "No");
+      basicSettingsForm.marketplace.selectValue("No");
+      basicSettingsForm.marketplaceInternational.selectValue("No");
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
-      clickToggleButtonByLabel("Corporate", "No");
-      clickToggleButtonByLabel("Corporate Return", "No");
-      clickToggleButtonByLabel("Corporate Manual AWB", "No");
-      clickToggleButtonByLabel("Corporate Document", "No");
+      basicSettingsForm.corporate.selectValue("No");
+      basicSettingsForm.corporateReturn.selectValue("No");
+      basicSettingsForm.corporateManualAWB.selectValue("No");
+      basicSettingsForm.corporateDocument.selectValue("No");
     }
-    clickToggleButtonByLabel("Corporate Return",
-        convertBooleanToString(orderCreate.getIsCorporateReturn(), "Yes", "No"));
+    basicSettingsForm.corporate.selectValue(orderCreate.getIsCorporate());
+    basicSettingsForm.corporateReturn.selectValue(orderCreate.getIsCorporateReturn());
+    basicSettingsForm.corporateManualAWB.selectValue(orderCreate.getIsCorporateManualAWB());
 
     if (isCreateForm) {
       selectMultipleValuesFromMdSelectById("container.shippers.service-level",
           orderCreate.getServicesAvailable());
     }
 
-        /*
-          ===== OPERATIONAL SETTINGS =====ctrl.data.basic.serviceType[key]
-         */
-    allowCod.selectValue(orderCreate.getAllowCodService());
-    allowCp.selectValue(orderCreate.getAllowCpService());
-    isPrePaid.selectValue(orderCreate.getIsPrePaid());
-    allowStaging.selectValue(orderCreate.getAllowStagedOrders());
-    isMultiParcel.selectValue(orderCreate.getIsMultiParcelShipper());
+    //===== OPERATIONAL SETTINGS =====
+
+    basicSettingsForm.allowCod.selectValue(orderCreate.getAllowCodService());
+    basicSettingsForm.allowCp.selectValue(orderCreate.getAllowCpService());
+    basicSettingsForm.isPrePaid.selectValue(orderCreate.getIsPrePaid());
+    basicSettingsForm.allowStaging.selectValue(orderCreate.getAllowStagedOrders());
+    basicSettingsForm.isMultiParcel.selectValue(orderCreate.getIsMultiParcelShipper());
 
     DistributionPoint distributionPoint = shipper.getDistributionPoints();
-    disableReschedule.selectValue(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt());
+    basicSettingsForm.disableReschedule
+        .selectValue(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt());
 
-    //To-Do: Add Enforce Pickup Scanning
-
-    //Driver Delivery One-Time Pin
-    // To-Do: Add 'No. of Digits in Delivery OTP' and 'No. of Validation Attempts'.
-
-    // Tracking ID
-    trackingType.selectValue(orderCreate.getTrackingType());
+    basicSettingsForm.trackingType.selectValue(orderCreate.getTrackingType());
 
     if (isCreateForm) {
       retryIfRuntimeExceptionOccurred(() ->
       {
         String generatedPrefix = generateUpperCaseAlphaNumericString(5);
         orderCreate.setPrefix(generatedPrefix);
-        shipperPrefix.setValue(generatedPrefix);
-        labelForShipperPrefix.click();
-        if (prefixAlreadyUsed.waitUntilVisible(2)) {
+        basicSettingsForm.shipperPrefix.setValue(generatedPrefix + Keys.ENTER);
+        basicSettingsForm.labelForShipperPrefix.click();
+        if (basicSettingsForm.prefixAlreadyUsed.waitUntilVisible(2)) {
           throw new NvTestRuntimeException("Prefix already used. Regenerate new prefix.");
         }
       });
@@ -434,28 +361,65 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     // Label Printing:
     LabelPrinter labelPrinter = shipper.getLabelPrinter();
     if (labelPrinter != null) {
-      isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
-      showCod.selectValue(labelPrinter.getShowCod());
-      showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
+      basicSettingsForm.isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
+      basicSettingsForm.showCod.selectValue(labelPrinter.getShowCod());
+      basicSettingsForm.showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
     }
+  }
 
-        /*
-          ===== PRICING & BILLING =====
-         */
-     /*   Pricing pricing = shipper.getPricing();
+  public void fillBasicSettingsForm(ShipperBasicSettings settings) {
+    boolean isCreateForm = getCurrentUrl().endsWith("shippers/create");
 
-        if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
-        {
-            selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
-        }
+    // ===== SHIPPER INFORMATION =====
 
-        // Billing
-        sendKeysById("Billing Name", shipper.getBillingName());
-        sendKeysById("Billing Contact", shipper.getBillingContact());
-        sendKeysById("Billing Address", shipper.getBillingAddress());
-        sendKeysById("Billing Postcode", shipper.getBillingPostcode());
+    basicSettingsForm.shipperName.setValue(settings.getShipperName());
+    basicSettingsForm.shortName.setValue(settings.getShortName());
+    basicSettingsForm.shipperPhoneNumber.setValue(settings.getShipperPhoneNumber());
 
-      */
+    basicSettingsForm.shipperEmail.setValue(settings.getShipperEmail());
+
+    if (isCreateForm) {
+      basicSettingsForm.shipperDashboardPassword.setValue(settings.getShipperDashboardPassword());
+    } else {
+      basicSettingsForm.dashUsername.setValue(settings.getDashUsername());
+    }
+  }
+
+  public void fillSubShippersDefaults(Shipper shipper) {
+    tabs.selectTab("Sub shippers Default Setting");
+    SubShipperDefaultSettings subShipperDefaults = shipper.getSubShippersDefaults();
+    if (StringUtils.isNotBlank(subShipperDefaults.getVersion())) {
+      subShippersDefaultSettingsForm.ocVersion.selectValue(subShipperDefaults.getVersion());
+    }
+    if (CollectionUtils.isNotEmpty(subShipperDefaults.getAvailableServiceTypes())) {
+      subShippersDefaultSettingsForm.services
+          .selectValues(subShipperDefaults.getAvailableServiceTypes());
+    }
+    subShippersDefaultSettingsForm.bulky.selectValue(subShipperDefaults.getBulky());
+    subShippersDefaultSettingsForm.corporate.selectValue(subShipperDefaults.getCorporate());
+    subShippersDefaultSettingsForm.corporateReturn
+        .selectValue(subShipperDefaults.getCorporateReturn());
+    subShippersDefaultSettingsForm.corporateManualAWB
+        .selectValue(subShipperDefaults.getCorporateManualAWB());
+    if (CollectionUtils.isNotEmpty(subShipperDefaults.getAvailableServiceLevels())) {
+      subShippersDefaultSettingsForm.serviceLevel
+          .selectValues(subShipperDefaults.getAvailableServiceLevels());
+    }
+    if (StringUtils.isNotBlank(subShipperDefaults.getBillingName())) {
+      subShippersDefaultSettingsForm.billingName.setValue(subShipperDefaults.getBillingName());
+    }
+    if (StringUtils.isNotBlank(subShipperDefaults.getBillingContact())) {
+      subShippersDefaultSettingsForm.billingContact
+          .setValue(subShipperDefaults.getBillingContact());
+    }
+    if (StringUtils.isNotBlank(subShipperDefaults.getBillingAddress())) {
+      subShippersDefaultSettingsForm.billingAddress
+          .setValue(subShipperDefaults.getBillingAddress());
+    }
+    if (StringUtils.isNotBlank(subShipperDefaults.getBillingPostcode())) {
+      subShippersDefaultSettingsForm.billingPostcode
+          .setValue(subShipperDefaults.getBillingPostcode());
+    }
   }
 
   private void fillMoreSettingsForm(Shipper shipper) {
@@ -507,17 +471,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   private void fillBillingInformation(Shipper shipper) {
     tabs.selectTab("Pricing and Billing");
-    billingName.setValue(shipper.getBillingName());
-    billingContact.setValue(shipper.getBillingContact());
-    billingAddress.setValue(shipper.getBillingAddress());
-    billingPostcode.setValue(shipper.getBillingPostcode());
+    pricingAndBillingForm.billingName.setValue(shipper.getBillingName());
+    pricingAndBillingForm.billingContact.setValue(shipper.getBillingContact());
+    pricingAndBillingForm.billingAddress.setValue(shipper.getBillingAddress());
+    pricingAndBillingForm.billingPostcode.setValue(shipper.getBillingPostcode());
   }
 
   private void fillPricingProfile(Shipper shipper) {
     Pricing pricing = shipper.getPricing();
     tabs.selectTab("Pricing and Billing");
     if (Objects.nonNull(pricing) && StringUtils.isNotBlank(pricing.getScriptName())) {
-      addNewProfile.click();
+      pricingAndBillingForm.addNewProfile.click();
       newPricingProfileDialog.waitUntilVisible();
       newPricingProfileDialog.pricingScript.searchAndSelectValue(pricing.getScriptName());
       newPricingProfileDialog.codCountryDefaultCheckbox.check();
@@ -713,6 +677,26 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     backToShipperList();
   }
 
+  public ShipperBasicSettings getBasicSettings() {
+    ShipperBasicSettings settings = new ShipperBasicSettings();
+    settings.setVersion(basicSettingsForm.ocVersion.getValue());
+    settings.setBulky(basicSettingsForm.bulky.isOn());
+    settings.setCorporate(basicSettingsForm.corporate.isOn());
+    settings.setCorporateReturn(basicSettingsForm.corporateReturn.isOn());
+    settings.setCorporateManualAWB(basicSettingsForm.corporateManualAWB.isOn());
+    settings.setAvailableServiceLevels(basicSettingsForm.serviceLevel.getValue());
+    return settings;
+  }
+
+  public PricingAndBillingSettings getPricingAndBillingSettings() {
+    PricingAndBillingSettings settings = new PricingAndBillingSettings();
+    settings.setBillingName(pricingAndBillingForm.billingName.getValue());
+    settings.setBillingContact(pricingAndBillingForm.billingContact.getValue());
+    settings.setBillingAddress(pricingAndBillingForm.billingAddress.getValue());
+    settings.setBillingPostcode(pricingAndBillingForm.billingPostcode.getValue());
+    return settings;
+  }
+
   public void setPickupAddressesAsMilkrun(Shipper shipper) {
     waitUntilShipperCreateEditPageIsLoaded();
     clickTabItem("More Settings");
@@ -737,11 +721,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper) {
     waitUntilShipperCreateEditPageIsLoaded();
-    String actualShipperStatus = getToggleButtonValue("ctrl.data.basic.status");
+    String actualShipperStatus = basicSettingsForm.shipperStatus.getValue();
     String actualShipperType;
 
-    if (StringUtils.equalsIgnoreCase(shipper.getType(), "Marketplace")) {
-      actualShipperType = getInputValueById("Shipper Type");
+    if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Marketplace", "Corporate HQ")) {
+      actualShipperType = basicSettingsForm.shipperTypeReadOnly.getValue();
     } else {
       actualShipperType = getMdSelectValueTrimmed("ctrl.data.basic.shipperType");
     }
@@ -838,15 +822,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     // Pricing
     tabs.selectTab("Pricing and Billing");
-//        Pricing pricing = shipper.getPricing();
-//        String actualPricingScript = getMdSelectValueById(LOCATOR_FIELD_PRICING_SCRIPT);
-//        assertThat("Pricing Script", actualPricingScript, endsWith(pricing.getScriptName()));
 
     // Billing
-    String actualBillingName = billingName.getValue();
-    String actualBillingContact = billingContact.getValue();
-    String actualBillingAddress = billingAddress.getValue();
-    String actualBillingPostcode = billingPostcode.getValue();
+    String actualBillingName = pricingAndBillingForm.billingName.getValue();
+    String actualBillingContact = pricingAndBillingForm.billingContact.getValue();
+    String actualBillingAddress = pricingAndBillingForm.billingAddress.getValue();
+    String actualBillingPostcode = pricingAndBillingForm.billingPostcode.getValue();
 
     assertEquals("Billing Name", shipper.getBillingName(), actualBillingName);
     assertEquals("Billing Contact", shipper.getBillingContact(), actualBillingContact);
@@ -963,9 +944,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     LabelPrinter labelPrinter = shipper.getLabelPrinter();
     sendKeysById("Printer IP", labelPrinter.getPrinterIp());
-    isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
-    showCod.selectValue(labelPrinter.getShowCod());
-    showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
+    basicSettingsForm.isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
+    basicSettingsForm.showCod.selectValue(labelPrinter.getShowCod());
+    basicSettingsForm.showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
     saveChanges.click();
     waitUntilInvisibilityOfToast("All changes saved successfully");
   }
@@ -1270,21 +1251,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
   }
 
-    /*  public void waitUntilPageLoaded(String expectedUrlEndsWith)
-      {
-          super.waitUntilPageLoaded();
-
-          waitUntil(() ->
-          {
-              String currentUrl = getCurrentUrl();
-              NvLogger.infof("AllShippersCreateEditPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);
-              return currentUrl.endsWith(expectedUrlEndsWith);
-          }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, f("Current URL does not contain '%s'.", expectedUrlEndsWith));
-
-          waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
-      }
-  */
-
   public void goToTabCorporateSubShipper() {
     tabs.selectTab("Corporate sub shippers");
     b2bManagementPage.onDisplay();
@@ -1314,8 +1280,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   private void addNewPricingProfile(Shipper shipper) {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
     tabs.selectTab("Pricing and Billing");
-    addNewProfile.click();
-    newPricingProfileDialog.waitUntilVisible();
+    pricingAndBillingForm.addNewProfile.click();
+    dialogHeader.waitUntilVisible();
+
+    if (dialogHeader.getAttribute("title").equalsIgnoreCase("Warning")) {
+      warningDialog.proceed.waitUntilVisible();
+      warningDialog.proceed.click();
+      newPricingProfileDialog.waitUntilClickable();
+    }
 
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
@@ -1480,7 +1452,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       tabs.selectTab("Pricing and Billing");
-      addNewProfile.click();
+      pricingAndBillingForm.addNewProfile.click();
       newPricingProfileDialog.waitUntilVisible();
       fillPricingProfileDetails(pricing);
       assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
@@ -1498,7 +1470,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
-      addNewProfile.click();
+      pricingAndBillingForm.addNewProfile.click();
       newPricingProfileDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(pricing.getScriptName())) {
         fillPricingProfileDetails(pricing);
@@ -1656,6 +1628,22 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
   }
 
+  public static class WarningDialog extends MdDialog {
+
+    @FindBy(css = ".md-dialog-content")
+    public PageElement message;
+
+    @FindBy(css = "[aria-label='Proceed']")
+    public Button proceed;
+
+    @FindBy(css = "[aria-label='Abort']")
+    public Button abort;
+
+    public WarningDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
 
   public void addNewPricingProfile() {
     waitUntilPageLoaded();
@@ -1663,7 +1651,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     switchToNewWindow();
     waitUntilShipperCreateEditPageIsLoaded();
     tabs.selectTab("Pricing and Billing");
-    addNewProfile.click();
+    pricingAndBillingForm.addNewProfile.click();
     newPricingProfileDialog.waitUntilVisible();
   }
 
@@ -1674,4 +1662,162 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     assertFalse(isEnabledMdDatepickerById(LOCATOR_START_DATE));
   }
 
+  public static class SubShippersDefaultSettingsForm extends PageElement {
+
+    @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.ocVersion']")
+    public MdSelect ocVersion;
+    @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.selectedOcServices']")
+    public MdSelect services;
+    @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.trackingType']")
+    public MdSelect trackingType;
+    @FindBy(xpath = ".//md-input-container[./label[.='Bulky']]/div")
+    public MdBooleanSwitch bulky;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate']]/div")
+    public MdBooleanSwitch corporate;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Return']]/div")
+    public MdBooleanSwitch corporateReturn;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Manual AWB']]/div")
+    public MdBooleanSwitch corporateManualAWB;
+    @FindBy(id = "container.shippers.service-level")
+    public MdSelect serviceLevel;
+    @FindBy(id = "Billing Name")
+    public TextBox billingName;
+    @FindBy(id = "Billing Contact")
+    public TextBox billingContact;
+    @FindBy(id = "Billing Address")
+    public TextBox billingAddress;
+    @FindBy(id = "Billing Postcode")
+    public TextBox billingPostcode;
+
+    public SubShippersDefaultSettingsForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class BasicSettingsForm extends PageElement {
+
+    @FindBy(css = "tab-content[aria-hidden='false'] .nv-hint p")
+    public PageElement tabHint;
+
+    //region Shipper Information
+    @FindBy(css = "div[model='ctrl.data.basic.status']")
+    public MdBooleanSwitch shipperStatus;
+    @FindBy(css = "md-select[ng-model='ctrl.data.basic.shipperType']")
+    public MdSelect shipperType;
+    @FindBy(id = "Shipper Type")
+    public TextBox shipperTypeReadOnly;
+    @FindBy(id = "shipper-name")
+    public TextBox shipperName;
+    @FindBy(id = "Short Name")
+    public TextBox shortName;
+    @FindBy(id = "shipper-phone-number")
+    public TextBox shipperPhoneNumber;
+    @FindBy(id = "shipper-email")
+    public TextBox shipperEmail;
+    @FindBy(id = "dashUsername")
+    public TextBox dashUsername;
+    @FindBy(css = "[id*='shipper-dashboard-password']")
+    public TextBox shipperDashboardPassword;
+    @FindBy(name = "shipper-classification")
+    public MdSelect channel;
+    @FindBy(name = "industry")
+    public MdSelect industry;
+    @FindBy(name = "account-type")
+    public MdSelect accountType;
+    @FindBy(id = "salesperson")
+    public MdSelect salesperson;
+    //endregion
+
+    //region Contact Details
+    @FindBy(id = "Liaison Name")
+    public TextBox liaisonName;
+    @FindBy(id = "Liaison Contact")
+    public TextBox liaisonContact;
+    @FindBy(id = "Liaison Email")
+    public TextBox liaisonEmail;
+    @FindBy(id = "liaison-address")
+    public TextBox liaisonAddress;
+    @FindBy(id = "Liaison Postcode")
+    public TextBox liaisonPostcode;
+    //endregion
+
+    //region Service Offerings
+    @FindBy(css = "md-select[ng-model='ctrl.data.basic.ocVersion']")
+    public MdSelect ocVersion;
+    @FindBy(xpath = ".//md-input-container[./label[.='Bulky']]/div")
+    public MdBooleanSwitch bulky;
+    @FindBy(xpath = ".//md-input-container[./label[.='Marketplace']]/div")
+    public MdBooleanSwitch marketplace;
+    @FindBy(xpath = ".//md-input-container[./label[.='Marketplace International']]/div")
+    public MdBooleanSwitch marketplaceInternational;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate']]/div")
+    public MdBooleanSwitch corporate;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Return']]/div")
+    public MdBooleanSwitch corporateReturn;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Manual AWB']]/div")
+    public MdBooleanSwitch corporateManualAWB;
+    @FindBy(xpath = ".//md-input-container[./label[.='Corporate Document']]/div")
+    public MdBooleanSwitch corporateDocument;
+    @FindBy(id = "container.shippers.service-level")
+    public MdSelect serviceLevel;
+
+    //endregion
+
+    //region Operational Settings
+    @FindBy(css = "[model='ctrl.data.basic.allowCod']")
+    public MdBooleanSwitch allowCod;
+    @FindBy(css = "[model='ctrl.data.basic.allowCp']")
+    public MdBooleanSwitch allowCp;
+    @FindBy(css = "[model='ctrl.data.basic.isPrePaid']")
+    public MdBooleanSwitch isPrePaid;
+    @FindBy(css = "[model='ctrl.data.basic.allowStaging']")
+    public MdBooleanSwitch allowStaging;
+    @FindBy(css = "[model='ctrl.data.basic.isMultiParcel']")
+    public MdBooleanSwitch isMultiParcel;
+    @FindBy(css = "[model='ctrl.data.basic.disableReschedule']")
+    public MdBooleanSwitch disableReschedule;
+    @FindBy(css = "[model='ctrl.data.basic.enforceParcelPickupTracking']")
+    public MdBooleanSwitch enforceParcelPickupTracking;
+    @FindBy(css = "[model='ctrl.data.basic.allowEnforceDeliveryVerification']")
+    public MdBooleanSwitch allowEnforceDeliveryVerification;
+    @FindBy(css = "[model='ctrl.data.basic.isPrinterAvailable']")
+    public MdBooleanSwitch isPrinterAvailable;
+    @FindBy(css = "[model='ctrl.data.basic.showCod']")
+    public MdBooleanSwitch showCod;
+    @FindBy(css = "[model='ctrl.data.basic.showParcelDescription']")
+    public MdBooleanSwitch showParcelDescription;
+    @FindBy(name = "trackingType")
+    public MdSelect trackingType;
+    @FindBy(id = "shipper-prefix")
+    public TextBox shipperPrefix;
+    @FindBy(xpath = ".//label[@for='shipper-prefix']")
+    public PageElement labelForShipperPrefix;
+    @FindBy(xpath = ".//div[text()='Prefix already used']")
+    public PageElement prefixAlreadyUsed;
+    //endregion
+
+    public BasicSettingsForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class PricingAndBillingForm extends PageElement {
+
+    @FindBy(name = "container.shippers.pricing-billing-add-new-profile")
+    public NvIconTextButton addNewProfile;
+    @FindBy(name = "container.shippers.pricing-billing-edit-pending-profile")
+    public NvIconTextButton editPendingProfile;
+    @FindBy(id = "Billing Name")
+    public TextBox billingName;
+    @FindBy(id = "Billing Contact")
+    public TextBox billingContact;
+    @FindBy(id = "Billing Address")
+    public TextBox billingAddress;
+    @FindBy(id = "Billing Postcode")
+    public TextBox billingPostcode;
+
+    public PricingAndBillingForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
 }

@@ -210,6 +210,11 @@ public class OperatorV2SimplePage extends SimplePage {
         f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
   }
 
+  public void waitUntilVisibilityOfToastSortCode(String containsMessage) {
+    waitUntilVisibilityOfElementLocated(
+        f("//div[contains(@class,'notification-notice')]//div[contains(text(),'%s')]", containsMessage));
+  }
+
   public Map<String, String> waitUntilVisibilityAndGetErrorToastData() {
     Map<String, String> toastData = new HashMap<>();
     String xpath = "//div[@class='toast-message']";
@@ -271,7 +276,7 @@ public class OperatorV2SimplePage extends SimplePage {
     if (waitUntilElementVisibleFirst) {
       waitUntilVisibilityOfElementLocated(xpathExpression);
     }
-
+    click("//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
     waitUntilInvisibilityOfElementLocated(xpathExpression);
   }
 
@@ -636,10 +641,10 @@ public class OperatorV2SimplePage extends SimplePage {
   public void clickActionButtonOnTableWithNgRepeat(int rowNumber, String actionButtonName,
       String ngRepeat) {
     try {
-      String xpathExpression = f(
-          "//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']",
-          ngRepeat, rowNumber, actionButtonName);
-      WebElement we = findElementByXpath(xpathExpression);
+      final String xpathExpression = f(
+          "//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//*[@name='%s']", ngRepeat,
+          rowNumber, actionButtonName);
+      final WebElement we = findElementByXpath(xpathExpression);
       moveAndClick(we);
     } catch (NoSuchElementException ex) {
       throw new RuntimeException("Cannot find action button on table.", ex);

@@ -2,9 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
@@ -12,6 +13,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -19,6 +21,10 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -34,7 +40,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
@@ -357,30 +362,16 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.removeOrderStamp();
   }
 
-  @When("^Operator update status of the created order on Edit order page using data below:$")
+  @When("Operator update order status on Edit order page using data below:")
   public void operatorUpdateStatusOnEditOrderPage(Map<String, String> mapOfData) {
-    Order order = get(KEY_CREATED_ORDER);
-    String value = mapOfData.get("status");
-    if (StringUtils.isNotBlank(value)) {
-      order.setStatus(value);
-    }
-    value = mapOfData.get("granularStatus");
-    if (StringUtils.isNotBlank(value)) {
-      order.setGranularStatus(value);
-    }
-    value = mapOfData.get("lastPickupTransactionStatus");
-    if (StringUtils.isNotBlank(value)) {
-      Transaction transaction = order.getLastPickupTransaction();
-      Assertions.assertNotNull(transaction, "Last Pickup Transaction");
-      transaction.setStatus(value.toUpperCase());
-    }
-    value = mapOfData.get("lastDeliveryTransactionStatus");
-    if (StringUtils.isNotBlank(value)) {
-      Transaction transaction = order.getLastDeliveryTransaction();
-      Assertions.assertNotNull(transaction, "Last Delivery Transaction");
-      transaction.setStatus(value.toUpperCase());
-    }
-    editOrderPage.updateOrderStatus(order);
+    editOrderPage.clickMenu("Order Settings", "Update Status");
+    editOrderPage.updateStatusDialog.waitUntilVisible();
+
+    String value = mapOfData.get("granularStatus");
+    editOrderPage.updateStatusDialog.granularStatus.searchAndSelectValue(value);
+    value = mapOfData.get("changeReason");
+    editOrderPage.updateStatusDialog.changeReason.setValue(value);
+    editOrderPage.updateStatusDialog.saveChanges.clickAndWaitUntilDone();
   }
 
   @Then("^Operator verify the created order info is correct on Edit Order page$")
@@ -1340,5 +1331,74 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator selects {string} in Events Filter menu on Edit Order page")
   public void selectEventsFilter(String option) {
     editOrderPage.eventsTableFilter.selectOption(resolveValue(option));
+  }
+
+  @Then("Operator verify delivery POD details is correct on Edit Order page using date below:")
+  public void verifyDeliveryPodDetails(Map<String, String> data) {
+    final Order order = get(KEY_CREATED_ORDER);
+    final PodDetailsDialog podDetailsDialog = editOrderPage.podDetailsDialog();
+
+    // open the pod details view
+    podDetailsDialog.getPodDetailTable().clickView(1);
+    podDetailsDialog.scrollToBottom();
+
+    final String expectedTransactionText = f("TRANSACTION (%d)",
+        order.getLastDeliveryTransaction().getId());
+    softAssert.assertEquals("tracking id string", order.getTrackingId(),
+        podDetailsDialog.getTrackingId());
+    softAssert.assertEquals("transaction string", expectedTransactionText,
+        podDetailsDialog.getTransaction());
+    softAssert.assertEquals("information - status", StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
+        StringUtils.lowerCase(podDetailsDialog.getStatus()));
+    softAssert
+        .assertEquals("information - driver", data.get("driver"), podDetailsDialog.getDriver());
+    softAssert.assertTrue("information - priority level",
+        StringUtils.isNotEmpty(podDetailsDialog.getPriorityLevel()));
+    softAssert.assertEquals("information - verification method", data.get("verification method"),
+        podDetailsDialog.getVerificationMethod());
+    softAssert.assertTrue("information - location",
+        podDetailsDialog.getLocation().contains(order.getLastDeliveryTransaction().getAddress1()));
+    softAssert.assertAll();
+  }
+
+  @Then("Operator verifies that there will be a toast of successfully downloaded airway bill")
+  public void operatorVerifiesThatThereWillBeAToastOfSuccessfullyDownloadedAirwayBill() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    editOrderPage.waitUntilVisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+    editOrderPage.waitUntilInvisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+  }
+
+  @When("Operator opens and verifies the downloaded airway bill pdf")
+  public void operatorOpensTheDownloadedAirwayBillPdf() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String fileName = f("awb_%s.pdf", trackingId);
+    String actualSortCode;
+
+    if (get(KEY_CREATED_SORT_CODE) != null) {
+      SortCode sortCode = get(KEY_CREATED_SORT_CODE);
+      actualSortCode = sortCode.getSortCode();
+    } else {
+      actualSortCode = "X";
+    }
+
+    // verifies the file is existed
+    editOrderPage.verifyFileDownloadedSuccessfully(fileName);
+
+    String pathname = StandardTestConstants.TEMP_DIR + fileName;
+    try {
+      // get path
+      Path path = Paths.get(pathname).toRealPath();
+      // convert downloaded pdf to byte
+      File pdf = new File(String.valueOf(path));
+      // convert to url
+      String url = String.valueOf(path.toUri());
+      //go to url
+      getWebDriver().get(url);
+
+      // verifies the sort code
+      editOrderPage.verifyTheSortCodeIsCorrect(actualSortCode, pdf);
+    } catch (IOException e) {
+      throw new NvTestRuntimeException("Could not get file path " + pathname, e);
+    }
   }
 }

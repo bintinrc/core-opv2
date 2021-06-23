@@ -43,9 +43,8 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -68,7 +67,9 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
   Scenario: Operator Assign Reservation to a Driver Route with Priority Level (uid:5830302f-c452-49c4-bc59-28bb130e20ae)
@@ -94,7 +95,9 @@ Feature: Shipper Pickups
       | routeId       | GET_FROM_CREATED_ROUTE       |
       | driverName    | {ninja-driver-name}          |
       | priorityLevel | 3                            |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
 
   Scenario: Operator Find Created Reservation by Shipper Name (uid:4d2d2a71-33e0-4f6c-846e-9cca10ef4c2b)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -509,11 +512,11 @@ Feature: Shipper Pickups
       | toDate            | {gradle-next-1-day-yyyy-MM-dd}   |
       | masterShipperName | {shipper-v4-marketplace-name}    |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | MRK-CORE (ABC Shop)                       |
-      | approxVolume | Less than 3 Parcels                       |
-      | comments     | Please be careful with the v-day flowers. |
+      | shipperName  | {shipper-v4-marketplace-short-name} (ABC Shop) |
+      | approxVolume | Less than 3 Parcels                            |
+      | comments     | Please be careful with the v-day flowers.      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -531,6 +534,9 @@ Feature: Shipper Pickups
       | shipperName | {shipper-v4-name}                |
     And Operator removes reservation from route from Edit Route Details dialog
     Then Operator verify the route was removed from the created reservation
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, Suggested Route Found (uid:3a7616b6-5402-4cdb-9e10-2440f2fe8605)

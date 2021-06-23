@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -93,6 +94,20 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(KEY_DISTRIBUTION_POINT, dp);
   }
 
+  @When("Operator add new DP for the DP Partner on DP Administration page using existed partner with the following attributes:")
+  public void operatorAddNewDpForTheDpPartnerOnDpAdministrationPageUsingExistedPartnerWithTheFollowingAttributes(
+      Map<String, String> data) {
+    Partner dpPartner = get(KEY_DP_PARTNER);
+    File file = null;
+    if (data.get("dpPhoto") != null) {
+      file = getDpPhoto(getResourcePath(data.get("dpPhoto")));
+    }
+    Dp dp = new Dp(data);
+    dpAdminPage.addDistributionPoint(dpPartner.getName(), dp, file);
+    put(KEY_DISTRIBUTION_POINT, dp);
+    put(KEY_NEWLY_CREATED_DP_ID, dp.getId());
+  }
+
   private String getResourcePath(String status) {
     String resourcePath;
     if ("valid".equalsIgnoreCase(status)) {
@@ -178,7 +193,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @And("^Operator select View DPs action for created DP partner on DP Administration page$")
   public void operatorSelectViewDpsForCreatedDpPartnerOnDpAdministrationPage() {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
+    Partner dpPartner = get(KEY_DP_PARTNER);
     dpAdminPage.openViewDpsScreen(dpPartner.getName());
   }
 
@@ -253,5 +268,20 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Ninja Point V3 Welcome Page displayed")
   public void ninjaPointVWelcomePageDisplayed() {
     dpAdminPage.welcomePageDisplayed();
+  }
+
+  @Given("Operator convert the Partner to DP Partner Modal")
+  public void operatorConvertThePartnerToDPPartnerModal() {
+    Partner partner = get(KEY_DP_PARTNER);
+    DpPartner dpPartner = new DpPartner();
+    dpPartner.setId(partner.getId());
+    dpPartner.setDpmsPartnerId(partner.getDpmsPartnerId());
+    dpPartner.setName(partner.getName());
+    dpPartner.setPocEmail(partner.getPocEmail());
+    dpPartner.setPocName(partner.getPocName());
+    dpPartner.setPocTel(partner.getPocTel());
+    dpPartner.setRestrictions(partner.getRestrictions());
+
+    put(KEY_DP_PARTNER, dpPartner);
   }
 }
