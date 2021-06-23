@@ -18,7 +18,6 @@ Feature: Pricing Scripts V2
     And Operator refresh page
     And Operator verify the script is saved successfully
 
-  @DeletePricingScript
   Scenario: Link Script to Shipper - Script is Already Linked To Shipper (uid:736caea8-5b80-401c-a1ae-3d9400fd4569)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
