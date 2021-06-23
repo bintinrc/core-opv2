@@ -27,6 +27,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@data-testid='add-filter-button']")
   public PageElement filterButton;
 
+  @FindBy(xpath = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]")
+  public PageElement filterDropDown;
+
   @FindBy(xpath = "//div[@label='Verified']")
   public PageElement verifiedOption;
 
@@ -55,7 +58,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String DROP_DOWN_PRESET_XPATH = "//ul[contains(@class,'dropdown-menu-root')]";
   private static final String DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
   private static final String PRESET_SELECTION_XPATH = "//li[contains(@data-testid,'%s')]";
-  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]";
   private static final String RANDOM_CLICK_XPATH = "//div[contains(@class,'select-filters-holder')]/div[@class='section-header']";
   private static final String PRESET_TO_BE_SELECTED_XPATH = "//div[@title='%s']";
   private static final String PRESET_NOT_FOUND_XPATH = "//*[local-name()='svg' and contains(@class,'empty-img')]";
@@ -88,6 +90,45 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(DIALOG_XPATH);
   }
 
+  public void selectPresetFilter(AddressDownloadFilteringType addressDownloadFilteringType) {
+    switch (addressDownloadFilteringType) {
+      case ADDRESS_STATUS_VERIFIED :
+        click(f(PRESET_SELECTION_XPATH, ADDRESS_STATUS_DATA_TESTID));
+        break;
+
+      case ADDRESS_STATUS_UNVERIFIED :
+        click(f(PRESET_SELECTION_XPATH, ADDRESS_STATUS_DATA_TESTID));
+        break;
+
+      case SHIPPER_IDS :
+        click(f(PRESET_SELECTION_XPATH, SHIPPER_IDS_DATA_TESTID));
+        break;
+
+      case MARKETPLACE_IDS :
+        click(f(PRESET_SELECTION_XPATH, MARKETPLACE_IDS_DATA_TESTID));
+        break;
+
+      case ZONE_IDS :
+        click(f(PRESET_SELECTION_XPATH, ZONE_IDS_DATA_TESTID));
+        break;
+
+      case HUB_IDS :
+        click(f(PRESET_SELECTION_XPATH, HUB_IDS_DATA_TESTID));
+        break;
+
+      case RTS_NO :
+        click(f(PRESET_SELECTION_XPATH, RTS_DATA_TESTID));
+        break;
+
+      case RTS_YES :
+        click(f(PRESET_SELECTION_XPATH, RTS_DATA_TESTID));
+        break;
+
+      default :
+        NvLogger.warn("Invalid Address Download Filter Type");
+    }
+  }
+
   public void setPresetFilter(AddressDownloadFilteringType addressDownloadFilteringType) {
     String shipperName = TestConstants.SHIPPER_V4_NAME;
     final String marketplaceName = "Niko Ninja fixed marketplace";
@@ -96,66 +137,50 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     switch (addressDownloadFilteringType) {
       case ADDRESS_STATUS_VERIFIED :
-        click(f(PRESET_SELECTION_XPATH, ADDRESS_STATUS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         verifiedOption.click();
         break;
 
       case ADDRESS_STATUS_UNVERIFIED :
-        click(f(PRESET_SELECTION_XPATH, ADDRESS_STATUS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         unverifiedOption.click();
         break;
 
       case SHIPPER_IDS :
-        click(f(PRESET_SELECTION_XPATH, SHIPPER_IDS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         filterInput.sendKeys(shipperName);
         waitUntilVisibilityOfElementLocated(f(FILTERING_RESULT_XPATH, shipperName));
         click(f(FILTERING_RESULT_XPATH, shipperName));
         break;
 
       case MARKETPLACE_IDS :
-        click(f(PRESET_SELECTION_XPATH, MARKETPLACE_IDS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         filterInput.sendKeys(marketplaceName);
         waitUntilVisibilityOfElementLocated(f(FILTERING_RESULT_XPATH, marketplaceName));
         click(f(FILTERING_RESULT_XPATH, marketplaceName));
         break;
 
       case ZONE_IDS :
-        click(f(PRESET_SELECTION_XPATH, ZONE_IDS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         filterInput.sendKeys(zoneName);
         waitUntilVisibilityOfElementLocated(f(FILTERING_RESULT_XPATH, zoneName));
         click(f(FILTERING_RESULT_XPATH, zoneName));
         break;
 
       case HUB_IDS :
-        click(f(PRESET_SELECTION_XPATH, HUB_IDS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         filterInput.sendKeys(hubName);
         waitUntilVisibilityOfElementLocated(f(FILTERING_RESULT_XPATH, hubName));
         click(f(FILTERING_RESULT_XPATH, hubName));
         break;
 
       case RTS_NO :
-        click(f(PRESET_SELECTION_XPATH, RTS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         yesRtsOption.click();
         break;
 
       case RTS_YES :
-        click(f(PRESET_SELECTION_XPATH, RTS_DATA_TESTID));
-        waitUntilVisibilityOfElementLocated(FILTER_SHOWN_XPATH);
-        click(FILTER_SHOWN_XPATH);
+        filterDropDown.click();
         noRtsOption.click();
         break;
 

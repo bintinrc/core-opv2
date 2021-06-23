@@ -13,6 +13,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   private AddressingDownloadPage addressingDownloadPage;
 
+  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]";
+
   public AddressingDownloadSteps() {
   }
 
@@ -54,7 +56,15 @@ public class AddressingDownloadSteps extends AbstractSteps {
             .randomString(7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
-    addressingDownloadPage.filterButton.click();
+
+    retryIfAssertionErrorOccurred(() -> {
+          addressingDownloadPage.filterButton.click();
+          pause1s();
+          addressingDownloadPage.selectPresetFilter(filterType);
+          assertTrue(addressingDownloadPage.isElementExistFast(FILTER_SHOWN_XPATH));
+        },
+        "Clicking Filter for Preset");
+
     addressingDownloadPage.setPresetFilter(filterType);
     addressingDownloadPage.mainPresetButtonInModal.click();
     put(KEY_CREATED_ADDRESS_PRESET_NAME, presetName);
