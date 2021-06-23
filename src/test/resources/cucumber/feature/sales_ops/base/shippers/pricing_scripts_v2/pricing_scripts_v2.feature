@@ -28,11 +28,10 @@ Feature: Pricing Scripts V2
     And Operator refresh page
     Then Operator verify the Script is linked successfully
     And Operator refresh page
+    And Operator verify the script is saved successfully
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-pricing-profile-ins-legacy-id}-{shipper-v4-dummy-pricing-profile-ins-name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
-    And Operator refresh page
-    And Operator verify the script is saved successfully
 
   Scenario: Delete Script - Draft Script (uid:04af506e-da79-41f9-aa68-055d19a27921)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -49,7 +48,7 @@ Feature: Pricing Scripts V2
       | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else if(orderType=="CASH"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
-    And Operator search according to "name"
+    And Operator search according to "name" and verify the new script saved
 
   @DeletePricingScript
   Scenario: Search Active Scripts - Search by Last Modified (uid:92c88ad5-102e-440e-a130-d52dd3e9d20f)
@@ -59,7 +58,7 @@ Feature: Pricing Scripts V2
       | setUpdatedAt | true                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
-    And Operator search according to "last-modified"
+    And Operator search according to "last-modified" and verify the new script saved
 
   @DeletePricingScript
   Scenario: Search Active Scripts - Search by Description (uid:4019ff18-50e3-46d2-b76b-f48ddd95a4dd)
@@ -68,7 +67,7 @@ Feature: Pricing Scripts V2
       | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else if(orderType=="CASH"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
-    And Operator search according to "description"
+    And Operator search according to "description" and verify the new script saved
 
   @DeletePricingScript
   Scenario: Search Active Scripts - Search by ID (uid:2f5578ff-eb9e-452c-8eb4-a4e82224a7f2)
@@ -77,7 +76,7 @@ Feature: Pricing Scripts V2
       | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else if(orderType=="CASH"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
-    And Operator search according to "id"
+    And Operator search according to "id" and verify the new script saved
 
   Scenario: Delete Script - Active Script, None Linked Shippers (uid:b2873694-a110-498d-a37d-1bca146267e2)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -95,11 +94,11 @@ Feature: Pricing Scripts V2
       | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else if(orderType=="CASH"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
+    And Operator verify the script is saved successfully
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
     And Operator refresh page
-    And Operator verify the script is saved successfully
     When Operator delete Active Script
     Then Operator verify error message
       | message  | You cannot delete a script with assigned shippers. |

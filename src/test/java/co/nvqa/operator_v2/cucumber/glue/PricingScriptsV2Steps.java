@@ -205,7 +205,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
   }
 
-  @Then("Operator search according to {string}")
+  @Then("Operator search according to {string} and verify the new script saved")
   public void operatorSearch(String searchType) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script, searchType);
