@@ -10,8 +10,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class SortCodeSteps extends AbstractSteps {
@@ -77,8 +75,7 @@ public class SortCodeSteps extends AbstractSteps {
 
   @Then("Operator verifies that there will be success toast shown")
   public void operatorVerifiesThatThereWillBeSuccessToastShown() {
-    sortCodePage.waitUntilVisibilityOfToastSortCode("Uploaded CSV successfully");
-    sortCodePage.waitUntilVisibilityOfToastSortCode("Uploaded CSV successfully");
+    sortCodePage.waitUntilVisibilityOfToastReact("Uploaded CSV successfully");
   }
 
   @Then("Operator verifies that there will be an error toast {string} shown")
@@ -87,11 +84,9 @@ public class SortCodeSteps extends AbstractSteps {
     final String INVALID_FORMAT = "invalid_format";
 
     if (INVALID_POSTCODE.equalsIgnoreCase(errorMessage)) {
-      sortCodePage.waitUntilVisibilityOfToastSortCode("Postal code is not valid for this country");
-      sortCodePage.waitUntilVisibilityOfToastSortCode("Postal code is not valid for this country");
+      sortCodePage.waitUntilVisibilityOfToastReact("Postal code is not valid for this country");
     } else if (INVALID_FORMAT.equalsIgnoreCase(errorMessage)) {
-      sortCodePage.waitUntilVisibilityOfToastSortCode("Unable to auto-detect delimiting character");
-      sortCodePage.waitUntilVisibilityOfToastSortCode("Unable to auto-detect delimiting character");
+      sortCodePage.waitUntilVisibilityOfToastReact("Unable to auto-detect delimiting character");
     }
   }
 
