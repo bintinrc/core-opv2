@@ -315,6 +315,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
       basicSettingsForm.marketplace.selectValue("No");
       basicSettingsForm.marketplaceInternational.selectValue("No");
+      basicSettingsForm.marketplaceSort.selectValue("No");
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       basicSettingsForm.corporate.selectValue("No");
@@ -1750,6 +1751,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public MdBooleanSwitch marketplace;
     @FindBy(xpath = ".//md-input-container[./label[.='Marketplace International']]/div")
     public MdBooleanSwitch marketplaceInternational;
+    @FindBy(xpath = ".//md-input-container[./label[.='Marketplace Sort']]/div")
+    public MdBooleanSwitch marketplaceSort;
     @FindBy(xpath = ".//md-input-container[./label[.='Corporate']]/div")
     public MdBooleanSwitch corporate;
     @FindBy(xpath = ".//md-input-container[./label[.='Corporate Return']]/div")
