@@ -148,6 +148,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -196,6 +199,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -396,6 +402,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
