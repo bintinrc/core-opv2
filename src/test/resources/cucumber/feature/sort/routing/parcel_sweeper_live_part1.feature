@@ -241,6 +241,7 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator refresh page
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
@@ -370,6 +371,7 @@ Feature: Parcel Sweeper Live
     And API Operator refresh created order data
     When Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator refresh page
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
