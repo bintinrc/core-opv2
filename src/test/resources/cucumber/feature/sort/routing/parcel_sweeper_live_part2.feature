@@ -199,11 +199,11 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
-    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | FROM CREATED ORDER |
     When DB Operator Get Next Sorting Task
       | zone      | FROM CREATED ORDER   |
       | source    | {hub-name}           |
+    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
+      | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | GLOBAL INBOUND |
       | color   | #e8e8e8        |
@@ -402,14 +402,11 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
-    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | FROM CREATED ORDER |
     When DB Operator Get Next Sorting Task
       | zone      | FROM CREATED ORDER   |
       | source    | {hub-name}           |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | {hub-name} |
-      | color   | #e8e8e8    |
+    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
+      | nextSortingHub | FROM CREATED ORDER |
     Then Operator verify Prior tag on Parcel Sweeper Live page
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
