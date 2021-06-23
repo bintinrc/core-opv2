@@ -72,6 +72,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
           .collect(Collectors.toList());
       script.setActiveParameters(listOfActiveParameters);
     }
+    if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
+      script.setUpdatedAt(MYSQL_24_SDF.format(new Date()));
+    }
     pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
@@ -200,6 +203,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
+  }
+
+  @Then("Operator search according to {string} and verify search result")
+  public void operatorSearch(String searchType) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.verifyDraftScriptIsReleased(script, searchType);
   }
 
   @Then("^Operator verify Draft Script data is correct$")
