@@ -66,7 +66,6 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | PICKUP |
     And API Operator start the route
-    Then API Operator verify order info after Return PP transaction added to route
     When Operator go to menu Routing -> Parcel Sweeper Live
     And Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
@@ -113,6 +112,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -155,6 +157,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -202,6 +207,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -233,6 +241,7 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator refresh page
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
@@ -323,6 +332,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -359,6 +371,7 @@ Feature: Parcel Sweeper Live
     And API Operator refresh created order data
     When Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator refresh page
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
@@ -370,6 +383,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -468,6 +484,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -596,6 +615,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
