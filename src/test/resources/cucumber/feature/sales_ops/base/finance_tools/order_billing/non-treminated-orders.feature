@@ -88,7 +88,7 @@ Feature: Order Billing
     And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
-    And API Operator recalculate the priced order
+    And API Operator runs the RecalculatePricedOrders endpoint
     And Operator verifies the order with status 'Completed' is in billing_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Operator go to menu Finance Tools -> Order Billing
@@ -129,7 +129,7 @@ Feature: Order Billing
     And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
-    And API Operator recalculate the priced order
+    And API Operator runs the RecalculatePricedOrders endpoint
     And Operator verifies the order with status 'Completed' is in billing_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Operator go to menu Finance Tools -> Order Billing
@@ -169,7 +169,7 @@ Feature: Order Billing
     And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
-    And API Operator recalculate the priced order
+    And API Operator runs the RecalculatePricedOrders endpoint
     And Operator verifies the order with status 'Completed' is in billing_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Operator go to menu Finance Tools -> Order Billing
