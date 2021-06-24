@@ -26,7 +26,8 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id}                          |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -60,7 +61,8 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -83,7 +85,8 @@ Feature: Order Billing
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
@@ -110,7 +113,8 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                     |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -132,7 +136,8 @@ Feature: Order Billing
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -158,7 +163,8 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                      |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -175,7 +181,8 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
@@ -196,13 +203,14 @@ Feature: Order Billing
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SCRIPT" Report (uid:c023accf-e4c0-4c46-9dfb-227a144fbf6e)
     When Operator generates success billings using data below:
-      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                      |
       | uploadCsv       | {shipper-sop-v4-legacy-id},1122334455                                                 |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
@@ -223,7 +231,8 @@ Feature: Order Billing
 #      | uploadCsv    | {sub-shipper-sop-mktpl-v4-legacy-id}                              |
 #      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
 #      | emailAddress | {order-billing-email}                                             |
-#    Then Operator opens Gmail and checks received email
+#    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
 #    Then Operator reads the CSV attachment for "Shipper Billing Report"
 #    Then Operator verifies the header using data below:
 #| "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
@@ -254,7 +263,8 @@ Feature: Order Billing
 #      | uploadCsv    | {sub-shipper-sop-mktpl-v4-legacy-id},1122334455                   |
 #      | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
 #      | emailAddress | {order-billing-email}                                             |
-#    Then Operator opens Gmail and checks received email
+#    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
 #    Then Operator reads the CSV attachment for "Shipper Billing Report"
 #    Then Operator verifies the header using data below:
 #| "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
@@ -296,7 +306,8 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 5 seconds
+    And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
