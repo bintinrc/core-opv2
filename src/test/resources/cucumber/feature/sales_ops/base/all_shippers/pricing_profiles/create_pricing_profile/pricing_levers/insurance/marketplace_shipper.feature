@@ -28,7 +28,7 @@ Feature:  Create Pricing Profile - Marketplace Shippers - Insurance
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-ins-legacy-id}"
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-ins-legacy-id}"
 
-
+@nadeera
   Scenario: Create Pricing Profile - Marketplace Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Marketplace Sub Shipper who has their own Pricing Profile is Exists (uid:fcff8a4f-a805-4cdf-ad99-8b1bad56f105)
       #Add new pricing profile and verify - sub shipper
     Given Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-ins-legacy-id}"

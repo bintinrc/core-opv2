@@ -146,8 +146,8 @@ Feature: Order Billing
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
-
-  @DeleteOrArchiveRoute @KillBrowser
+@nadeera
+@DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "AGGREGATED" Report (uid:e9d47d53-e032-4666-b18f-638a99474cf5)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
@@ -204,6 +204,7 @@ Feature: Order Billing
     And Operator waits for 5 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
+  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SCRIPT" Report (uid:c023accf-e4c0-4c46-9dfb-227a144fbf6e)
     When Operator generates success billings using data below:
@@ -318,7 +319,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} | {shipper-v4-legacy-id} |
 
-
+  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Shipper ID from Different Operating Country (uid:d7760ca6-1f92-4f61-b9f3-a96240a5d57b)
     When Operator generates success billings using data below:
