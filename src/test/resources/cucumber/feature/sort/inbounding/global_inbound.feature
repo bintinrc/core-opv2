@@ -989,7 +989,7 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "0" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-    And Operator save Weight limit settings on Global Settings page
+    And Operator save Weight Limit settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name-3}                               |
@@ -1012,7 +1012,7 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "100" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-    And Operator save Weight limit settings on Global Settings page
+    And Operator save Weight Limit settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name-3}                               |
@@ -1036,7 +1036,8 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "100" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-    And Operator save Weight limit settings on Global Settings page
+
+
     And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
