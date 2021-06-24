@@ -420,7 +420,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
     if (dpParams.getIsAutoReservation() != null) {
       Boolean value = Boolean.parseBoolean(getValue(XPATH_AUTO_RESERVATION_ENABLED));
-      if (dpParams.getIsAutoReservation() && !value) {
+      if (!dpParams.getIsAutoReservation() && value) {
         clickIsAutoReservation();
       }
     }
