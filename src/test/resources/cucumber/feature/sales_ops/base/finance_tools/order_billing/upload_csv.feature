@@ -45,6 +45,7 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
+    And Operator waits for 5 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -103,6 +104,7 @@ Feature: Order Billing
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
+    And Operator waits for 5 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -153,6 +155,7 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                                                 |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
+    And Operator waits for 5 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -192,12 +195,13 @@ Feature: Order Billing
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SCRIPT" Report (uid:73e3dce4-6ae4-4790-a8d5-79dc008bbd78)
     When Operator generates success billings using data below:
-      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                           |
+      | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
+      | endDate         | {gradle-current-date-yyyy-MM-dd}                                                      |
       | uploadCsv       | 1122334455                                                                            |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
+    And Operator waits for 5 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -324,5 +328,6 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
+    And Operator waits for 5 seconds
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
