@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps
+@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps @ServiceTypeLevel
 Feature: Service Type and Service Level params
 
   Background: Login to Operator Portal V2
