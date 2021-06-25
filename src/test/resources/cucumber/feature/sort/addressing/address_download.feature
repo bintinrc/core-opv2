@@ -112,7 +112,7 @@ Feature: Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
-    And Operator creates a preset using "address_status" filter
+    And Operator creates a preset using "address_status_verified" filter
     Then Operator verifies that there will be success preset creation toast shown
     And Operator verifies that the created preset is existed
     When Operator deletes the created preset
@@ -124,7 +124,7 @@ Feature: Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
-    And Operator creates a preset using "address_status" filter
+    And Operator creates a preset using "address_status_verified" filter
     Then Operator verifies that there will be success preset creation toast shown
     And Operator verifies that the created preset is existed
     When Operator clicks on the ellipses
@@ -140,7 +140,7 @@ Feature: Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
-    And Operator creates a preset using "address_status" filter
+    And Operator creates a preset using "address_status_verified" filter
     Then Operator verifies that there will be success preset creation toast shown
     And Operator verifies that the created preset is existed
     When Operator deletes the created preset
