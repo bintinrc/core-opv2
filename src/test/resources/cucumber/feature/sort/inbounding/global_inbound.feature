@@ -1036,8 +1036,7 @@ Feature: Global Inbound
     And Operator set Weight Tolerance value to "100" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator set Weight Limit value to "25" on Global Settings page
-
-
+    And Operator save Weight Limit settings on Global Settings page
     And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
