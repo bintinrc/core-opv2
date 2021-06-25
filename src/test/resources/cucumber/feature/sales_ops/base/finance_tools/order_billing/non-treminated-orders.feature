@@ -24,6 +24,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -42,6 +43,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -60,6 +62,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -88,7 +91,7 @@ Feature: Order Billing
     And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
-    And API Operator recalculate the priced order
+    And API Operator runs the RecalculatePricedOrders endpoint
     And Operator verifies the order with status 'Completed' is in billing_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Operator go to menu Finance Tools -> Order Billing
@@ -98,6 +101,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -129,7 +133,7 @@ Feature: Order Billing
     And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
-    And API Operator recalculate the priced order
+    And API Operator runs the RecalculatePricedOrders endpoint
     And Operator verifies the order with status 'Completed' is in billing_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Operator go to menu Finance Tools -> Order Billing
@@ -139,6 +143,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -169,7 +174,7 @@ Feature: Order Billing
     And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
-    And API Operator recalculate the priced order
+    And API Operator runs the RecalculatePricedOrders endpoint
     And Operator verifies the order with status 'Completed' is in billing_qa_gl.priced_orders
     And Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Operator go to menu Finance Tools -> Order Billing
@@ -179,6 +184,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -229,6 +235,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -279,6 +286,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -327,6 +335,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -346,6 +355,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -364,6 +374,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -382,6 +393,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -400,6 +412,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -418,6 +431,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -436,6 +450,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -454,6 +469,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -472,6 +488,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -490,6 +507,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -508,6 +526,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -528,6 +547,7 @@ Feature: Order Billing
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -546,6 +566,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
@@ -564,6 +585,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"

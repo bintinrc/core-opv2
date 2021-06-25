@@ -43,6 +43,7 @@ Feature: Upload Invoiced Orders
       | updated_at          | null                             |
       | deleted_at          | null                             |
     And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
+    Then Operator waits for 20 seconds
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing result                               |
       | body    | All tracking numbers are successfully invoiced |
@@ -62,6 +63,7 @@ Feature: Upload Invoiced Orders
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is not in dwh_qa_gl.invoiced_orders table
     And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
+    Then Operator waits for 20 seconds
     Then Operator opens Gmail and verifies email with below details
       | subject            | Invoicing result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |
@@ -95,6 +97,7 @@ Feature: Upload Invoiced Orders
     And DB Operator verifies there is\are 1 order(s) in dwh_qa_gl.invoiced_orders table
     And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
     And DB Operator verifies the order is not in dwh_qa_gl.invoicing_jobs table
+    Then Operator waits for 20 seconds
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing result                               |
       | body    | All tracking numbers are successfully invoiced |
@@ -113,6 +116,7 @@ Feature: Upload Invoiced Orders
     And Operator upload a CSV file with below order ids and verify success message
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    Then Operator waits for 20 seconds
     Then Operator opens Gmail and verifies email with below details
       | subject            | Invoicing result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |

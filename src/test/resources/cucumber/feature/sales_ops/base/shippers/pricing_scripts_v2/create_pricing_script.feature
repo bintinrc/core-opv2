@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps
+@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps @CreatePricingScript
 Feature: Pricing Scripts V2
 
   Background: Login to Operator Portal V2

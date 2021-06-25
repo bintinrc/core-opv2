@@ -22,7 +22,8 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 20 seconds
+    And Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by shipper from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
@@ -51,7 +52,8 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 20 seconds
+    And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Service Type" | "Service Level" | "Parcel Size ID" | "NV Measured Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
@@ -61,12 +63,13 @@ Feature: Order Billing
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
-      | startDate       | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
-      | endDate         | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
-      | generateFile    | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress    | {order-billing-email}                                                                      |
+      | startDate    | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
+      | endDate      | {gradle-previous-1-day-yyyy-MM-dd}                                                         |
+      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
+      | emailAddress | {order-billing-email}                                                                      |
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers from billing database
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 20 seconds
+    And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
       | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
@@ -81,7 +84,8 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    Then Operator opens Gmail and checks received email
+    And Operator waits for 20 seconds
+    And Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by script from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
