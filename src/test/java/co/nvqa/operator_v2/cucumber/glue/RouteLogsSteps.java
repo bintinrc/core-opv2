@@ -578,10 +578,11 @@ public class RouteLogsSteps extends AbstractSteps {
         }
         value = finalData.get("bottom");
         if (StringUtils.isNotBlank(value)) {
+          String actual = toast.toastBottom.getNormalizedText();
           if (value.startsWith("^")) {
-            return value.matches(value);
+            return actual.matches(value);
           } else {
-            return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+            return StringUtils.equalsIgnoreCase(value, actual);
           }
         }
         return true;
