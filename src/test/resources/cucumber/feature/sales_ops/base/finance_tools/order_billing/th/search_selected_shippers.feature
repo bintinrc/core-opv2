@@ -26,7 +26,7 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                                       |
       | csvFileTemplate | {csv-template}                                              |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    And Operator waits for 5 seconds
+    And Operator waits for 20 seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
