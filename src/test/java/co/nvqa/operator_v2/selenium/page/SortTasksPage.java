@@ -59,7 +59,7 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//input[@placeholder='Find...'])[1]")
   public PageElement find;
 
-  @FindBy(css = "input[placeholder='Search Hub / Middle Tier / Zone']")
+  @FindBy(css = "input[placeholder='Search Hub / Middle Tier / Zone/ RTS Zone']")
   public TextBox searchHubMiddleZone;
 
   @FindBy(xpath = "//span/mark[@class='highlight ']")
