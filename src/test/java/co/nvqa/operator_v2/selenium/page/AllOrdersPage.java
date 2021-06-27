@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -77,6 +78,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public ManuallyCompleteOrderDialog manuallyCompleteOrderDialog;
+
+  @FindBy(xpath = "//md-dialog[.//div[@class='error-box']]")
+  public ErrorsDialog errorsDialog;
 
   @FindBy(css = "md-dialog")
   public PullSelectedFromRouteDialog pullSelectedFromRouteDialog;
@@ -709,7 +713,32 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.edit.complete-order")
     public NvApiTextButton completeOrder;
 
+    @FindBy(name = "commons.mark-all")
+    public NvIconTextButton markAll;
+
+    @FindBy(name = "commons.unmark-all")
+    public NvIconTextButton unmarkAll;
+
+    @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.ordersWithCod']/td[1]")
+    public List<PageElement> trackingIds;
+
+    @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.ordersWithCod']/td[2]//md-checkbox")
+    public List<MdCheckbox> codCheckboxes;
+
     public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ErrorsDialog extends MdDialog {
+
+    @FindBy(name = "Close")
+    public NvIconTextButton close;
+
+    @FindBy(xpath = ".//div[@ng-repeat='error in ctrl.payload.errors track by $index']")
+    public List<PageElement> errorMessage;
+
+    public ErrorsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

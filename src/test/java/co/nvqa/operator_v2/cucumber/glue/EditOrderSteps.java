@@ -150,6 +150,14 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.confirmCompleteOrder();
   }
 
+  @When("^Operator verify 'COD Collected' checkbox is disabled on Edit Order page$")
+  public void verifyCodCollectedIsDisabled() {
+    editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    assertFalse("COD Collected checkbox is enabled",
+        editOrderPage.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled());
+
+  }
+
   @When("^Operator confirm manually complete order with COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
@@ -1348,7 +1356,8 @@ public class EditOrderSteps extends AbstractSteps {
         podDetailsDialog.getTrackingId());
     softAssert.assertEquals("transaction string", expectedTransactionText,
         podDetailsDialog.getTransaction());
-    softAssert.assertEquals("information - status", StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
+    softAssert.assertEquals("information - status",
+        StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
         StringUtils.lowerCase(podDetailsDialog.getStatus()));
     softAssert
         .assertEquals("information - driver", data.get("driver"), podDetailsDialog.getDriver());
