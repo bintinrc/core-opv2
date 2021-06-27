@@ -2096,6 +2096,91 @@ Feature: Edit Order
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
 
+  Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Collect COD (uid:eca7d659-1475-4913-8459-c063e9fe306a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    Then Operator verify 'COD Collected' checkbox is disabled on Edit Order page
+
+  Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Do not Collect COD (uid:8f47b188-2f88-45e3-8c6c-599c173b872b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    Then Operator verify 'COD Collected' checkbox is disabled on Edit Order page
+    When Operator confirm manually complete order on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+
+  Scenario: Disable Update Cash Button if Order State is Completed (uid:24a943e1-adbd-49ef-89a8-7ef1de370441)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator force succeed created order with cod
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit order page
+
+  Scenario: Disable Update Cash Button if Order State is Returned to Sender (uid:a8496456-76ca-41eb-9f9b-583e92627f58)
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Operator force succeed created order without cod
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit order page
+
+  @DeleteOrArchiveRoute
+  Scenario: Disable Update Cash Button if Order State is On Vehicle for Delivery (uid:d1b2a183-0932-4c41-a920-18f7bc08cb5a)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit order page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
