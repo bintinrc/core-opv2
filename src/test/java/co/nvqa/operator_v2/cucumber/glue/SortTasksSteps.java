@@ -133,11 +133,14 @@ public class SortTasksSteps extends AbstractSteps {
 
   @When("Operator verifies graph contains exactly following Middle Tier nodes:")
   public void operatorVerifyExactlyMiddleTierNodes(List<String> expectedNodes) {
-    expectedNodes = resolveValues(expectedNodes);
-    viewSortStructurePage.adjustCanvasScale();
-    List<String> actualNodes = viewSortStructurePage.getNodeLabelsByType(NodeType.MIDDLE_TIER);
-    assertThat("List of Middle Tier nodes", actualNodes,
-        Matchers.containsInAnyOrder(expectedNodes.toArray(new String[0])));
+    final List<String> resolvedExpectedNodes = resolveValues(expectedNodes);
+    retryIfAssertionErrorOccurred(() -> {
+      viewSortStructurePage.refreshDiagram.clickAndWaitUntilDone();
+      viewSortStructurePage.adjustCanvasScale();
+      List<String> actualNodes = viewSortStructurePage.getNodeLabelsByType(NodeType.MIDDLE_TIER);
+      assertThat("List of Middle Tier nodes", actualNodes,
+          Matchers.containsInAnyOrder(resolvedExpectedNodes.toArray(new String[0])));
+    }, "Failed to find the expectedNodes", 5000, 10);
   }
 
   @When("Operator verifies graph contains following Zone nodes:")
@@ -287,7 +290,11 @@ public class SortTasksSteps extends AbstractSteps {
   @Then("^Operator verify added outputs appears on tree list$")
   public void operatorVerifyAddedOutputsSAppearsOnTreeList() {
     String sortName = get(KEY_CREATED_MIDDLE_TIER_NAME);
-    sortTasksPage.verifyOutput(sortName);
+
+    retryIfAssertionErrorOccurred(() -> {
+      operatorRefreshTable();
+      sortTasksPage.verifyOutput(sortName);
+    }, "Cannot find the sort task node");
   }
 
   @Then("^Operator verify removed outputs removed on tree list$")

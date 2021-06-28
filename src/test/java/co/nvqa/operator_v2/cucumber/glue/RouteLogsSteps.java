@@ -4,7 +4,8 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
-import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
+import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteReactDialog;
+import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteReactDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -68,38 +69,42 @@ public class RouteLogsSteps extends AbstractSteps {
     RouteLogsParams newParams = new RouteLogsParams(mapOfData);
     newParams.setComments(comments);
 
-    routeLogsPage.createRoute.click();
-    routeLogsPage.createRouteDialog.waitUntilVisible();
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded();
+      routeLogsPage.createRouteReact.click();
+      routeLogsPage.createRouteReactDialog.waitUntilVisible();
 
-    RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(0);
+      CreateRouteReactDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteReactDialog.routeDetailsForms
+          .get(0);
 
-    if (StringUtils.isNotBlank(newParams.getDate())) {
-      routeDetailsForm.routeDate.simpleSetValue(newParams.getDate());
-    }
-    if (CollectionUtils.isNotEmpty(newParams.getTags())) {
-      routeDetailsForm.routeTags.selectValues(newParams.getTags());
-    }
-    if (StringUtils.isNotBlank(newParams.getZone())) {
-      routeDetailsForm.zone.selectValue(newParams.getZone());
-    }
-    if (StringUtils.isNotBlank(newParams.getHub())) {
-      routeDetailsForm.hub.selectValue(newParams.getHub());
-    }
-    if (StringUtils.isNotBlank(newParams.getDriverName())) {
-      routeDetailsForm.assignedDriver.selectValue(newParams.getDriverName());
-    }
-    if (StringUtils.isNotBlank(newParams.getVehicle())) {
-      routeDetailsForm.vehicle.selectValue(newParams.getVehicle());
-    }
-    if (StringUtils.isNotBlank(newParams.getComments())) {
-      routeDetailsForm.comments.setValue(newParams.getComments());
-    }
+      if (StringUtils.isNotBlank(newParams.getDate())) {
+        routeDetailsForm.routeDate.setValue(newParams.getDate());
+      }
+      if (CollectionUtils.isNotEmpty(newParams.getTags())) {
+        routeDetailsForm.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeDetailsForm.zone.selectValue(newParams.getZone());
+      }
+      if (StringUtils.isNotBlank(newParams.getHub())) {
+        routeDetailsForm.hub.selectValue(newParams.getHub());
+      }
+      if (StringUtils.isNotBlank(newParams.getDriverName())) {
+        routeDetailsForm.assignedDriver.selectValue(newParams.getDriverName());
+      }
+      if (StringUtils.isNotBlank(newParams.getVehicle())) {
+        routeDetailsForm.vehicle.selectValue(newParams.getVehicle());
+      }
+      if (StringUtils.isNotBlank(newParams.getComments())) {
+        routeDetailsForm.comments.setValue(newParams.getComments());
+      }
 
-    routeLogsPage.createRouteDialog.createRoutes.clickAndWaitUntilDone();
-    routeLogsPage.waitUntilVisibilityOfToast("1 Route(s) Created");
-    String toastBottom = routeLogsPage.toastSuccess.get(0).toastBottom.getText();
+      routeLogsPage.createRouteReactDialog.createRoutes.click();
+      routeLogsPage.waitUntilVisibilityOfNotification("1 Route(s) created");
+      String toastBottom = routeLogsPage.noticeNotifications.get(0).description.getText();
+      newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
+    });
 
-    newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
     Route createdRoute = new Route();
     createdRoute.setId(Long.valueOf(newParams.getId()));
     createdRoute.setComments(newParams.getComments());
@@ -133,63 +138,68 @@ public class RouteLogsSteps extends AbstractSteps {
       routeParamsList.add(routeLogsParams);
     }
 
-    routeLogsPage.createRoute.click();
-    routeLogsPage.createRouteDialog.waitUntilVisible();
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded();
+      routeLogsPage.createRouteReact.click();
+      routeLogsPage.createRouteReactDialog.waitUntilVisible();
 
-    RouteLogsParams newParams = routeParamsList.get(0);
-    RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(0);
+      RouteLogsParams newParams = routeParamsList.get(0);
+      RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteReactDialog.routeDetailsForms
+          .get(0);
 
-    if (StringUtils.isNotBlank(newParams.getDate())) {
-      routeDetailsForm.routeDate.simpleSetValue(newParams.getDate());
-    }
-    if (CollectionUtils.isNotEmpty(newParams.getTags())) {
-      routeDetailsForm.routeTags.selectValues(newParams.getTags());
-    }
-    if (StringUtils.isNotBlank(newParams.getZone())) {
-      routeDetailsForm.zone.selectValue(newParams.getZone());
-    }
-    if (StringUtils.isNotBlank(newParams.getHub())) {
-      routeDetailsForm.hub.selectValue(newParams.getHub());
-    }
-    if (StringUtils.isNotBlank(newParams.getDriverName())) {
-      routeDetailsForm.assignedDriver.selectValue(newParams.getDriverName());
-    }
-    if (StringUtils.isNotBlank(newParams.getVehicle())) {
-      routeDetailsForm.vehicle.selectValue(newParams.getVehicle());
-    }
-    if (StringUtils.isNotBlank(newParams.getComments())) {
-      routeDetailsForm.comments.setValue(newParams.getComments());
-    }
-
-    for (int i = 1; i < routeParamsList.size(); i++) {
-      routeLogsPage.createRouteDialog.duplicateAbove.click();
-      String comments = routeParamsList.get(i).getComments();
-      if (StringUtils.isNotBlank(comments)) {
-        routeLogsPage.createRouteDialog.routeDetailsForms.get(i).comments.setValue(comments);
+      if (StringUtils.isNotBlank(newParams.getDate())) {
+        routeDetailsForm.routeDate.setValue(newParams.getDate());
       }
-    }
+      if (CollectionUtils.isNotEmpty(newParams.getTags())) {
+        routeDetailsForm.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeDetailsForm.zone.selectValue(newParams.getZone());
+      }
+      if (StringUtils.isNotBlank(newParams.getHub())) {
+        routeDetailsForm.hub.selectValue(newParams.getHub());
+      }
+      if (StringUtils.isNotBlank(newParams.getDriverName())) {
+        routeDetailsForm.assignedDriver.selectValue(newParams.getDriverName());
+      }
+      if (StringUtils.isNotBlank(newParams.getVehicle())) {
+        routeDetailsForm.vehicle.selectValue(newParams.getVehicle());
+      }
+      if (StringUtils.isNotBlank(newParams.getComments())) {
+        routeDetailsForm.comments.setValue(newParams.getComments());
+      }
 
-    routeLogsPage.createRouteDialog.createRoutes.clickAndWaitUntilDone();
-    routeLogsPage.waitUntilVisibilityOfToast(routeParamsList.size() + " Route(s) Created");
-    String toastBottom = routeLogsPage.toastSuccess.get(0).toastBottom.getText();
-    String[] routeIds = toastBottom.split("\n");
+      for (int i = 1; i < routeParamsList.size(); i++) {
+        routeLogsPage.createRouteReactDialog.duplicateAbove.click();
+        String comments = routeParamsList.get(i).getComments();
+        if (StringUtils.isNotBlank(comments)) {
+          routeLogsPage.createRouteReactDialog.routeDetailsForms.get(i).comments.setValue(comments);
+        }
+      }
 
-    for (int i = 0; i < routeParamsList.size(); i++) {
-      RouteLogsParams createRouteParams = routeParamsList.get(i);
-      createRouteParams.setId(routeIds[i].replaceAll("\\d+.+Route", "").trim());
-      Route createdRoute = new Route();
-      createdRoute.setId(Long.valueOf(createRouteParams.getId()));
-      createdRoute.setComments(createRouteParams.getComments());
-      Long createdRouteId = createdRoute.getId();
+      routeLogsPage.createRouteReactDialog.createRoutes.click();
+      routeLogsPage.waitUntilVisibilityOfNotification(routeParamsList.size() + " Route(s) Created");
+      String toastBottom = routeLogsPage.noticeNotifications.get(0).description.getText();
+      newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
+      String[] routeIds = toastBottom.split("\n");
 
-      put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
-      put(KEY_CREATED_ROUTE, createdRoute);
-      put(KEY_CREATED_ROUTE_ID, createdRouteId);
-      putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
-      putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
-      putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
-      writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
-    }
+      for (int i = 0; i < routeParamsList.size(); i++) {
+        RouteLogsParams createRouteParams = routeParamsList.get(i);
+        createRouteParams.setId(routeIds[i].replaceAll("\\d+.+Route", "").trim());
+        Route createdRoute = new Route();
+        createdRoute.setId(Long.valueOf(createRouteParams.getId()));
+        createdRoute.setComments(createRouteParams.getComments());
+        Long createdRouteId = createdRoute.getId();
+
+        put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
+        put(KEY_CREATED_ROUTE, createdRoute);
+        put(KEY_CREATED_ROUTE_ID, createdRouteId);
+        putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
+        putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
+        putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
+        writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
+      }
+    });
   }
 
   @When("^Operator bulk edits details of created routes using data below:$")
@@ -388,12 +398,8 @@ public class RouteLogsSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
     Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
-    routeLogsPage.routeDateFilter.selectDates(routeDateFrom, routeDateTo);
     String hubName = mapOfData.get("hubName");
-    if (StringUtils.isNotBlank(hubName)) {
-      routeLogsPage.hubFilter.selectFilter(hubName);
-    }
-    routeLogsPage.loadSelection.clickAndWaitUntilDone();
+    routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
   }
 
   @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
@@ -490,9 +496,11 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator filters route by {string} Route ID on Route Logs page")
   public void operatorFilterByRouteId(String routeId) {
-    routeId = resolveValue(routeId);
-    routeLogsPage.routeIdInput.setValue(routeId);
-    routeLogsPage.search.clickAndWaitUntilDone();
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded();
+      routeLogsPage.routeIdInput.setValue(resolveValue(routeId));
+      routeLogsPage.search.click();
+    });
   }
 
   @And("Operator verify route details on Route Logs page using data below:")

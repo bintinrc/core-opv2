@@ -6,15 +6,18 @@ import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -30,22 +33,25 @@ import org.openqa.selenium.support.FindBy;
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class RouteLogsPage extends OperatorV2SimplePage {
+public class RouteLogsPage extends SimpleReactPage {
 
   @FindBy(name = "Create Route")
   public NvIconTextButton createRoute;
 
-  @FindBy(xpath = "//nv-filter-date-box[.//p[.='Route Date']]")
-  public NvFilterDateBox routeDateFilter;
+  @FindBy(css = "[data-testid='create-route-button']")
+  public Button createRouteReact;
 
-  @FindBy(xpath = "//nv-filter-box[@main-title='Hub']")
-  public NvFilterBox hubFilter;
+  @FindBy(xpath = "//button[.='Clear All Filters']")
+  public Button clearAllFilters;
 
-  @FindBy(name = "commons.load-selection")
-  public NvApiTextButton loadSelection;
+  @FindBy(xpath = "//div[@class='ant-modal-content'][.//div[contains(.,'Create Route')]]")
+  public CreateRouteReactDialog createRouteReactDialog;
 
-  @FindBy(name = "container.route-logs.search")
-  public NvApiTextButton search;
+  @FindBy(css = ".load-selection button")
+  public AntButton loadSelection;
+
+  @FindBy(xpath = "//button[.='Search']")
+  public Button search;
 
   @FindBy(css = "md-dialog")
   public EditRoutesDialog editRoutesDialog;
@@ -74,7 +80,7 @@ public class RouteLogsPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public SelectionErrorDialog selectionErrorDialog;
 
-  @FindBy(css = "input[ng-model='ctrl.routeId']")
+  @FindBy(css = "input[placeholder='Search for route ID']")
   public TextBox routeIdInput;
 
   @FindBy(css = "div.view-container md-menu")
@@ -82,6 +88,15 @@ public class RouteLogsPage extends OperatorV2SimplePage {
 
   @FindBy(css = "[id^='container.route-logs.select-tag']")
   public MdSelect selectTag;
+
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[contains(.,'Route Date')]]")
+  public AntIntervalCalendarPicker routeDateFilter;
+
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[contains(.,'Hub')]]//div[contains(@class,'ant-select')]")
+  public AntSelect2 hubFilter;
+
+  @FindBy(id = "crossdock_hub")
+  public AntSelect crossdockHub;
 
   public RoutesTable routesTable;
 
@@ -97,12 +112,6 @@ public class RouteLogsPage extends OperatorV2SimplePage {
   public RouteLogsPage(WebDriver webDriver) {
     super(webDriver);
     routesTable = new RoutesTable(webDriver);
-  }
-
-  public void waitUntilPageLoaded() {
-    super.waitUntilPageLoaded();
-    waitUntilInvisibilityOfElementLocated(
-        "//md-progress-circular/following-sibling::div[text()='Loading data...']");
   }
 
   public void verifyMultipleRoutesIsOptimisedSuccessfully(
@@ -157,11 +166,20 @@ public class RouteLogsPage extends OperatorV2SimplePage {
   }
 
   public void setFilterAndLoadSelection(Date routeDateFrom, Date routeDateTo, String hubName) {
-    routeDateFilter.selectDates(routeDateFrom, routeDateTo);
-    if (StringUtils.isNotBlank(hubName)) {
-      hubFilter.selectFilter(hubName);
-    }
-    loadSelection.clickAndWaitUntilDone();
+    inFrame(page -> {
+      waitUntilLoaded();
+      routeDateFilter.setInterval(routeDateFrom, routeDateTo);
+      if (StringUtils.isNotBlank(hubName)) {
+        hubFilter.selectValue(hubName);
+      }
+      loadSelection.clickAndWaitUntilDone();
+    });
+  }
+
+  @Override
+  public void waitUntilLoaded() {
+    super.waitUntilLoaded();
+    clearAllFilters.waitUntilClickable();
   }
 
   public static class EditRoutesDialog extends MdDialog {
@@ -341,6 +359,51 @@ public class RouteLogsPage extends OperatorV2SimplePage {
       public MdAutocomplete vehicle;
 
       @FindBy(id = "comments")
+      public TextBox comments;
+
+      public RouteDetailsForm(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
+    }
+  }
+
+  public static class CreateRouteReactDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='duplicate']")
+    public Button duplicateAbove;
+
+    @FindBy(css = "[data-testid='create-button']")
+    public Button createRoutes;
+
+    @FindBy(css = ".ant-card-body")
+    public List<RouteDetailsForm> routeDetailsForms;
+
+    public CreateRouteReactDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public static class RouteDetailsForm extends PageElement {
+
+      @FindBy(css = ".ant-calendar-picker")
+      public AntCalendarPicker routeDate;
+
+      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Tags']]//div[contains(@class,'ant-select')]")
+      public AntSelect2 routeTags;
+
+      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Zone']]//div[contains(@class,'ant-select')]")
+      public AntSelect2 zone;
+
+      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Hub']]//div[contains(@class,'ant-select')]")
+      public AntSelect2 hub;
+
+      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
+      public AntSelect2 assignedDriver;
+
+      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][4]//div[contains(@class,'ant-select')]")
+      public AntSelect2 vehicle;
+
+      @FindBy(css = "[placeholder='Comments']")
       public TextBox comments;
 
       public RouteDetailsForm(WebDriver webDriver, SearchContext searchContext,
