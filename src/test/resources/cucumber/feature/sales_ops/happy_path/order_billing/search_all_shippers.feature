@@ -19,7 +19,7 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | 2 - SG Default SSB Template                         |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by shipper from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
@@ -49,7 +49,7 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | 2 - SG Default SSB Template                               |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -65,7 +65,7 @@ Feature: Order Billing
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -81,7 +81,7 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | 2 - SG Default SSB Template                                                           |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets the count of files when orders consolidated by script from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
