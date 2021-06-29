@@ -70,8 +70,8 @@ Feature: Shipper Pickups
       | driverName   | {ninja-driver-name}          |
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
-    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+#    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+#    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
@@ -539,7 +539,7 @@ Feature: Shipper Pickups
     And Operator removes reservation from route from Edit Route Details dialog
     Then Operator verify the route was removed from the created reservation
     And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
+#    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
 #    And DB Operator verifies route_monitoring_data is hard-deleted
 
