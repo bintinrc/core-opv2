@@ -25,7 +25,7 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -48,7 +48,7 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -64,7 +64,7 @@ Feature: Order Billing
       | shipper      | {shipper-v4-legacy-id}                                                                     |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator gets the orders and parcel size and weight from the database for specified shipper
@@ -85,7 +85,7 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     Then Operator reads the CSV attachment for "Shipper Billing Report"

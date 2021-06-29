@@ -36,7 +36,7 @@ Feature: Order Billing
 #      | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                                  |
 #      | generateFile  | Orders consolidated by parent shipper (1 file per parent shipper) |
 #      | emailAddress  | {order-billing-email}                                             |
-#    And Operator waits for 20 seconds
+#    And Finance Operator waits for "{order-billing-wait-time}" seconds
 #    And Operator opens Gmail and checks received email
 #    Then Operator reads the CSV attachment for "Shipper Billing Report"
 #    Then Operator verifies the header using data below:
@@ -62,7 +62,7 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -80,7 +80,7 @@ Feature: Order Billing
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
@@ -97,7 +97,7 @@ Feature: Order Billing
       | parentShipper | {shipper-sop-mktpl-v4-legacy-id}                                                           |
       | generateFile  | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress  | {order-billing-email}                                                                      |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator verifies the header using data below:
@@ -115,7 +115,7 @@ Feature: Order Billing
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    And Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
