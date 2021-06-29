@@ -66,7 +66,7 @@ Feature: Marketplace Shipper
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
       | type              | FLAT                                            |
-      | discount          | blank                                           |
+      | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
@@ -116,7 +116,7 @@ Feature: Marketplace Shipper
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
       | type              | FLAT                                            |
-      | discount          | blank                                           |
+      | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
@@ -137,7 +137,7 @@ Feature: Marketplace Shipper
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
       | type              | FLAT                                            |
-      | discount          | blank                                           |
+      | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
@@ -145,7 +145,7 @@ Feature: Marketplace Shipper
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
       | type              | FLAT                                            |
-      | discount          | blank                                           |
+      | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
