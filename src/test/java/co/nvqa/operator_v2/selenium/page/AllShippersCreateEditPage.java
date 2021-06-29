@@ -315,7 +315,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
       basicSettingsForm.marketplace.selectValue("No");
       basicSettingsForm.marketplaceInternational.selectValue("No");
-      basicSettingsForm.marketplaceSort.selectValue("No");
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       basicSettingsForm.corporate.selectValue("No");
@@ -1322,7 +1321,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
     String discount = pricing.getDiscount();
     if (Objects.nonNull(discount)) {
-      if (discount.equalsIgnoreCase("blank")) {
+      if (discount.equalsIgnoreCase("empty")) {
         newPricingProfileDialog.discountValue.sendKeys("");
       } else {
         newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());

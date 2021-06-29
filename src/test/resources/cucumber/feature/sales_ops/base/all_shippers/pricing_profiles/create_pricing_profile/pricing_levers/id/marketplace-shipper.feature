@@ -15,7 +15,7 @@ Feature: Marketplace Shipper
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
       | type              | PERCENTAGE                                  |
-      | discount          | blank                                       |
+      | discount          | empty                                       |
       | comments          | This is a test pricing script               |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
