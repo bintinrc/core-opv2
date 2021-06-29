@@ -1754,8 +1754,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public MdBooleanSwitch marketplace;
     @FindBy(xpath = ".//md-input-container[./label[.='Marketplace International']]/div")
     public MdBooleanSwitch marketplaceInternational;
-    @FindBy(xpath = ".//md-input-container[./label[.='Marketplace Sort']]/div")
-    public MdBooleanSwitch marketplaceSort;
     @FindBy(xpath = ".//md-input-container[./label[.='Corporate']]/div")
     public MdBooleanSwitch corporate;
     @FindBy(xpath = ".//md-input-container[./label[.='Corporate Return']]/div")
