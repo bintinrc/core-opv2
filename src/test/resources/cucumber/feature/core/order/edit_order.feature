@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @current
+@OperatorV2 @Core @Order @EditOrder @current2
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -353,7 +353,7 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
-#    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
@@ -386,7 +386,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
-#    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
@@ -411,8 +411,8 @@ Feature: Edit Order
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
-#    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-#    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -420,7 +420,8 @@ Feature: Edit Order
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
       | Return - Pickup   | uid:0c1c44ce-9fce-46e7-9016-f73613eef833 | Return    | Pickup    |
 
-  @DeleteOrArchiveRoute
+#  @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator Reschedule Fail Pickup (uid:c1962397-8060-4485-9221-47cb46803ddf)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -450,8 +451,15 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
+    And DB Operator verifies transactions after reschedule pickup
+      | old_pickup_status | Fail    |
+      | new_pickup_status | Pending |
+      | new_pickup_type   | PP      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+#  @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator Reschedule Fail Delivery (uid:af4f96cb-5ed1-4035-8a29-650ac5013aae)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -484,8 +492,16 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+#  @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -546,8 +562,16 @@ Feature: Edit Order
     And Operator verify Delivery transaction on Edit order page using data below:
       | status  | FAIL                   |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+#  @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan (uid:066c5598-129c-4fe0-bd9a-0af449703f33)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -605,6 +629,14 @@ Feature: Edit Order
     And Operator verify Delivery transaction on Edit order page using data below:
       | status  | FAIL                   |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID (uid:ce1f0e4d-435e-4467-ab58-76019c30f8a4)
@@ -1235,8 +1267,8 @@ Feature: Edit Order
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
-#    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-#    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -1272,6 +1304,7 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
+  @routing-refactor2
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1306,8 +1339,14 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn   | 2       |
+      | delivery_status | Pending |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+#   @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1347,8 +1386,16 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+#  @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1402,8 +1449,16 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+#  @DeleteOrArchiveRoute
+  @routing-refactor2
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan (uid:5bae8c76-b67d-4cfd-9d7e-2af0d0fe0db9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1460,6 +1515,13 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
   @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Suggest Route on Edit Order Page - Delivery, Suggested Route Found (uid:9df8ffd8-1adb-4752-9769-14d3d03393ff)
