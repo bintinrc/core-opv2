@@ -15,7 +15,7 @@ Feature: Update Delivery Address with CSV
     When Operator confirm addresses update on Update Delivery Address with CSV page
     Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
     And API Operator get order details
-    And Operator verify orders info after address update
+    And Operator verify created orders info after address update
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

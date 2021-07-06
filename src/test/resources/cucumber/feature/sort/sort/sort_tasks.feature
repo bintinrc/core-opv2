@@ -69,7 +69,6 @@ Feature: Sort Task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-    And Operator refresh table on Sort Tasks page
     Then Operator verify added outputs appears on tree list
     When Operator open the sidebar menu on Sort Tasks page
     And Operator remove selection of a sort task
@@ -138,19 +137,19 @@ Feature: Sort Task
   Scenario: Refresh Diagram - Add new nodes (uid:0ac79364-da2a-4a10-b310-0cfed70b1642)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create Middle Tier sort node:
-      | hub_id | {hub-id-4}                                           |
+      | hub_id | {hub-id-5}                                           |
       | name   | MIDTIERDONOTUSE{gradle-current-date-yyyyMMddHHmmsss} |
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
+      | hubName | {hub-name-5} |
     And Operator click View Sort Structure on Sort Tasks page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
       | {mid-tier-name} |
     When Operator switch to Sort Tasks window
     And Operator open the sidebar menu on Sort Tasks page
     And Operator select a sort task
-    Then Operator verifies that "{hub-name-4} modified" success notification is displayed
+    Then Operator verifies that "{hub-name-5} modified" success notification is displayed
     When Operator switch to View Sort Structure window
     And Operator refresh diagram on View Sort Structure page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
@@ -190,14 +189,14 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
-      | hubId   | {hub-id-4}   |
+      | hubName | {hub-name-5} |
+      | hubId   | {hub-id-5}   |
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIER{gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that "New Middle Tier Created" success notification is displayed
     And Operator select a sort task
-    Then Operator verifies that "{hub-name-4} modified" success notification is displayed
+    Then Operator verifies that "{hub-name-5} modified" success notification is displayed
     And Operator click View Sort Structure on Sort Tasks page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
       | {mid-tier-name}                |
@@ -207,7 +206,6 @@ Feature: Sort Task
     When Operator delete the middle tier
     Then Operator verifies that "Middle Tier Deleted" success notification is displayed
     When Operator switch to View Sort Structure window
-    And Operator refresh diagram on View Sort Structure page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
       | {mid-tier-name} |
 
@@ -251,8 +249,8 @@ Feature: Sort Task
     And Operator search for "{mid-tier-name}" node on Sort Tasks page
     Then Operator verify displayed nodes on Sort Tasks page:
       | {hub-name-4}    |
+      | MIDTIERDONOTUSE |
       | {mid-tier-name} |
-      | SORT-1          |
     And Operator verify following nodes are highlighted on Sort Tasks page:
       | {mid-tier-name} |
 

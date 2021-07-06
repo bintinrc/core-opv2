@@ -50,7 +50,7 @@ Feature: Parcel Sweeper Live
     And API Operator refresh created order data
     When API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When API Operator force succeed created order
+    When API Operator force succeed created order without cod
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
@@ -127,14 +127,11 @@ Feature: Parcel Sweeper Live
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator open Route Manifest of created route from Route Logs page
-    When Operator fail delivery waypoint from Route Manifest page
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
     When API Operator refresh created order data
     And Operator refresh page
     Given Operator go to menu Routing -> Parcel Sweeper Live
@@ -148,6 +145,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -196,6 +196,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -396,6 +399,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone      | FROM CREATED ORDER   |
+      | source    | {hub-name}           |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:

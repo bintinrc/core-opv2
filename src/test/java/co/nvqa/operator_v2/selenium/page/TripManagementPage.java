@@ -11,8 +11,8 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,24 +34,22 @@ import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
 
 public class TripManagementPage extends OperatorV2SimplePage {
 
-  private static final String IFRAME_TRIP_MANAGEMENT_XPATH = "//iframe[contains(@src,'movement-trips')]";
   private static final String TRIP_MANAGEMENT_CONTAINER_XPATH = "//div[contains(@class,'TripContainer')]";
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
   private static final String FIELD_REQUIRED_ERROR_MESSAGE_XPATH = "//button[contains(@class,'ant-btn-primary')]";
   private static final String FILTER_OPTION_XPATH = "//div[div[div[input[@id='%s']]]]";
   private static final String TEXT_OPTION_XPATH = "//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']";
-  private static final String DESTINATION_HUB_XPATH = "//td[contains(@class,'destinationHubName')]";
-  private static final String ORIGIN_HUB_XPATH = "//td[contains(@class,'originHubName')]";
+  private static final String DESTINATION_HUB_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[1]";
+  private static final String ORIGIN_HUB_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[1]";
   private static final String NO_RESULT_XPATH = "//div[contains(@class,'NoResult')]";
   private static final String DEPARTURE_CALENDAR_XPATH = "//span[@id='departureDate']";
   private static final String ARRIVAL_CALENDAR_XPATH = "//span[@id='arrivalDate']";
   private static final String CALENDAR_SELECTED_XPATH = "//td[@title='%s']";
   private static final String NEXT_MONTH_BUTTON_XPATH = "//a[contains(@class,'next-month')]";
   private static final String PREV_MONTH_BUTTON_XPATH = "//a[contains(@class,'prev-month')]";
-  private static final String TAB_XPATH = "//span[span[starts-with(text(),'%s')]]";
+  private static final String TAB_XPATH = "//span[.='%s']/preceding-sibling::span";
   private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
   private static final String IN_TABLE_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]//span[contains(@class,'input-prefix')]/following-sibling::input";
-  private static final String BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]/div/button";
   private static final String CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH = "//span[text()='%s']/preceding-sibling::label//input";
   private static final String FIRST_ROW_INPUT_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span/mark";
   private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]";
@@ -59,11 +57,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[1]";
   private static final String FIRST_ROW_STATUS = "//tr[1]//td[contains(@class,'status')]";
   private static final String OK_BUTTON_OPTION_TABLE_XPATH = "//button[contains(@class,'btn-primary')]";
-  private static final String TRIP_ID_FIRST_ROW_XPATH = "//tr[1]//td[contains(@class,'id')]/span/span";
-  private static final String ACTION_COLUMN_XPATH = "//tr[1]//td[contains(@class,'action')]";
-  private static final String ACTION_ICON_XPATH = "//tr[1]//td[contains(@class,'action')]/div/i[%d]";
-  private static final String VIEW_ICON_ARRIVAL_ARCHIVE_XPATH = "//tr[1]//td[contains(@class,'action')]/div/a[1]";
-  private static final String TRIP_ID_IN_TRIP_DETAILS_XPATH = "//*[contains(text(),'Trip ID')]";
+  private static final String TRIP_ID_FIRST_ROW_XPATH = "//tr[contains(@class,'ant-table-row')][1]//td[2]";
+  private static final String ACTION_COLUMN_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[contains(@class, 'ant-table-cell-fix-right')][last()]";
+  private static final String ACTION_ICON_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[contains(@class, 'ant-table-cell-fix-right')][last()]//div[@class='ant-space-item'][%d]";
+  private static final String VIEW_ICON_ARRIVAL_ARCHIVE_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[contains(@class, 'ant-table-cell-fix-right')]//a";
 
   private static final String ID_CLASS = "id";
   private static final String ORIGIN_HUB_CLASS = "originHub";
@@ -119,7 +116,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = LOAD_BUTTON_XPATH)
   public Button loadButton;
 
-  @FindBy(xpath = "//button[.='Force trip completion']")
+  @FindBy(xpath = "//button[.='Force Completion']")
   public Button forceTripCompletion;
 
   @FindBy(xpath = "//button[.='Depart']")
@@ -130,6 +127,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[.='Complete']")
   public Button completeTripButton;
+
+  @FindBy(xpath = "//div[label[.='Origin Hub']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
+  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect originHubFilter;
+
+  @FindBy(xpath = "//div[label[.='Destination Hub']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
+  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect destinationHubFilter;
+
+  @FindBy(xpath = "//div[label[.='Movement Type']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
+  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect movementTypeFilterPage;
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -177,8 +183,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
-    click(f(FILTER_OPTION_XPATH, filterName));
-    click(f(TEXT_OPTION_XPATH, filterValue));
+    if (filterName.equalsIgnoreCase("originhub")) {
+      originHubFilter.selectValue(filterValue);
+    } else if (filterName.equalsIgnoreCase("movementtype")) {
+      movementTypeFilterPage.selectValue(filterValue);
+    } else if (filterName.equalsIgnoreCase("destinationhub")) {
+      destinationHubFilter.selectValue(filterValue);
+    }
   }
 
   public void verifiesSumOfTripManagement(MovementTripType tabName, Long tripManagementCount) {
@@ -400,6 +411,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
       TripManagementDetailsData tripManagementDetailsData) {
     tableFiltering(tripManagementFilteringType, tripManagementDetailsData, null);
+  }
+
+  public String getTripIdFromTable() {
+    return getText(TRIP_ID_FIRST_ROW_XPATH);
   }
 
   public void verifyResult(TripManagementFilteringType tripManagementFilteringType,
@@ -656,7 +671,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
     tripDepartureArrivalModal.waitUntilVisible();
     tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
     tripDepartureArrivalModal.submitTripDeparture.click();
-    tripDepartureArrivalModal.waitUntilInvisible();
   }
 
   public void arriveTrip() {
@@ -1076,10 +1090,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "(//div[contains(@id,'driver')])[1]")
+    @FindBy(xpath = "//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]][1]")
     public AntSelect assignPrimaryDriverInput;
 
-    @FindBy(xpath = "(//div[contains(@id,'driver')])[2]")
+    @FindBy(xpath = "//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]][2]")
     public AntSelect assignAdditionalDriverInput;
 
     @FindBy(xpath = "//button[.='Add Another Driver']")

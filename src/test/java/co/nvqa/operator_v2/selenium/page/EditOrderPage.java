@@ -27,6 +27,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ManuallyCompleteOrderDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -1935,22 +1936,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
-  }
-
-  public static class ManuallyCompleteOrderDialog extends MdDialog {
-
-    public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-
-    @FindBy(name = "container.order.edit.complete-order")
-    public NvApiTextButton completeOrder;
-
-    @FindBy(name = "commons.mark-all")
-    public NvIconTextButton markAll;
-
-    @FindBy(name = "commons.unmark-all")
-    public NvIconTextButton unmarkAll;
   }
 
   public static class EditOrderStampDialog extends MdDialog {

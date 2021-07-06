@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -162,6 +163,43 @@ public class AllOrdersSteps extends AbstractSteps {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
     allOrdersPage.forceSuccessOrders();
+  }
+
+  @When("^Operator Force Success orders with COD collection on All Orders page:$")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
+      List<Map<String, String>> data) {
+    Map<String, Boolean> resolvedData = data.stream()
+        .collect(Collectors.toMap(
+            row -> resolveValue(row.get("trackingId")).toString(),
+            row -> Boolean.valueOf(row.get("collected"))
+        ));
+    allOrdersPage.findOrdersWithCsv(new ArrayList<>(resolvedData.keySet()));
+    allOrdersPage.clearFilterTableOrderByTrackingId();
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
+    allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    assertEquals("Number of orders with COD", data.size(),
+        allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size());
+    for (int i = 0; i < allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size(); i++) {
+      String trackingId = allOrdersPage.manuallyCompleteOrderDialog.trackingIds.get(i)
+          .getNormalizedText();
+      Boolean checked = resolvedData.get(trackingId);
+      if (checked != null) {
+        allOrdersPage.manuallyCompleteOrderDialog.codCheckboxes.get(i).setValue(checked);
+      }
+    }
+    allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+  }
+
+  @When("^Operator verifies error messages in dialog on All Orders page:$")
+  public void operatorVerifyErrorMessagesDialog(List<String> data) {
+    data = resolveValues(data);
+    assertTrue("Errors dialog is displayed", allOrdersPage.errorsDialog.waitUntilVisible(5));
+    List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
+        .map(element -> StringUtils.normalizeSpace(element.getNormalizedText()))
+        .collect(Collectors.toList());
+    assertThat("List of error messages", actual, Matchers.contains(data.toArray(new String[0])));
+    allOrdersPage.errorsDialog.close.click();
   }
 
   @When("Operator Force Success multiple orders on All Orders page")
