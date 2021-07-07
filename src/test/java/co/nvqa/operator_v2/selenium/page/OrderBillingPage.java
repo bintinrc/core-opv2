@@ -78,7 +78,6 @@ public class OrderBillingPage extends OperatorV2SimplePage {
 
   public void uploadCsvShippersAndVerifySuccessMsg(String shipperIds, File csvFile) {
     int countOfShipperIds = shipperIds.split(",").length;
-    ;
     uploadCsvShippers(csvFile);
     assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
         getToastTopText());
