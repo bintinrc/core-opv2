@@ -1,15 +1,21 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.StringUtils;
+
+import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 
 /**
@@ -35,6 +41,12 @@ public class OrderBillingSteps extends AbstractSteps {
     orderBillingPage.verifyNoErrorsAvailable();
   }
 
+  @Given("^Operator generates success billings with more than 1000 shippers using data below:$")
+  public void operatorGeneratesSuccessBillingsFor1000ShippersData(Map<String, String> mapOfData) {
+    setOrderBillingData(mapOfData);
+  }
+
+
   private void setOrderBillingData(Map<String, String> mapOfData) {
     try {
       if (Objects.nonNull(mapOfData.get("startDate"))) {
@@ -55,7 +67,13 @@ public class OrderBillingSteps extends AbstractSteps {
       }
       if (Objects.nonNull(mapOfData.get("uploadCsv"))) {
         String shipperIds = mapOfData.get("uploadCsv");
-        orderBillingPage.uploadCsvShippers(shipperIds);
+        if (shipperIds.equalsIgnoreCase("generatedCsv")) {
+          orderBillingPage.uploadCsvShippers(get(KEY_ORDER_BILLING_UPLOAD_CSV_FILE));
+        } else {
+          File csvFile = createFile("shipper-id-upload.csv", shipperIds);
+          NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+          orderBillingPage.uploadCsvShippersAndVerifySuccessMsg(shipperIds, csvFile);
+        }
       }
       if (Objects.nonNull(mapOfData.get("parentShipper"))) {
         String parentShipper = mapOfData.get("parentShipper");
@@ -113,11 +131,17 @@ public class OrderBillingSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     String errorTitle = mapOfData.get("top");
     String errorMessage = mapOfData.get("bottom");
+    boolean isErrorFound = false;
+    if (Objects.nonNull(errorTitle) && Objects.nonNull(errorMessage)) {
+      isErrorFound = orderBillingPage.toastErrors.stream().anyMatch(toastError ->
+          StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle)
+              && StringUtils
+              .containsIgnoreCase(toastError.toastBottom.getText(), errorMessage));
+    } else if (Objects.nonNull(errorTitle)) {
+      isErrorFound = orderBillingPage.toastErrors.stream().anyMatch(toastError ->
+          StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle));
+    }
 
-    boolean isErrorFound = orderBillingPage.toastErrors.stream().anyMatch(toastError ->
-        StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle)
-            && StringUtils
-            .containsIgnoreCase(toastError.toastBottom.getText(), errorMessage));
     assertTrue("Error message was not found", isErrorFound);
   }
 
@@ -126,14 +150,24 @@ public class OrderBillingSteps extends AbstractSteps {
     setOrderBillingData(mapOfData);
   }
 
-  @Then("Operator verifies {string} is not available in template selector drop down menu")
-  public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String value) {
-    assertTrue(f("%s value is available in the template selector drop down menu", value),
-        !orderBillingPage.csvFileTemplate.isValueExist(value));
-  }
-
   @Then("Operator clicks Generate Success Billing Button")
   public void operatorClicksGenerateSuccessBillingButton() {
     orderBillingPage.clickGenerateSuccessBillingsButton();
+  }
+
+  @Then("Operator verifies Generate Success Billings button is disabled")
+  public void operatorVerifiesGenerateSuccessBillingsButtonIsDisabled() {
+    assertFalse("Generate Success Billings button is enabled",
+        orderBillingPage.isGenerateSuccessBillingsButtonEnabled());
+  }
+
+  @When("Operator generates CSV file with {int} shippers")
+  public void operatorGeneratesCSVFileWithShippers(int shipperCount) {
+    String shipperIds = IntStream.range(1, shipperCount + 1).mapToObj(Integer::toString)
+        .collect(Collectors.joining(","));
+
+    File csvFile = createFile("shipper-id-upload.csv", shipperIds);
+    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    put(KEY_ORDER_BILLING_UPLOAD_CSV_FILE, csvFile);
   }
 }
