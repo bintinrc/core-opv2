@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @current2
+@OperatorV2 @Core @Order @EditOrder @current
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -421,7 +421,7 @@ Feature: Edit Order
       | Return - Pickup   | uid:0c1c44ce-9fce-46e7-9016-f73613eef833 | Return    | Pickup    |
 
 #  @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator Reschedule Fail Pickup (uid:c1962397-8060-4485-9221-47cb46803ddf)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -459,7 +459,7 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
 #  @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator Reschedule Fail Delivery (uid:af4f96cb-5ed1-4035-8a29-650ac5013aae)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -501,7 +501,7 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
 #  @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -571,7 +571,7 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
 #  @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan (uid:066c5598-129c-4fe0-bd9a-0af449703f33)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -750,7 +750,7 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Cancel Order - Van En-route to Pickup (uid:b270f6e4-2b52-4142-b4f5-a1c34153b449)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -790,6 +790,9 @@ Feature: Edit Order
       | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
     And DB Operator verify Delivery waypoint of the created order using data below:
@@ -1304,7 +1307,7 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1346,7 +1349,7 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
 #   @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1395,7 +1398,7 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
 #  @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1458,7 +1461,7 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
 #  @DeleteOrArchiveRoute
-  @routing-refactor2
+  @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan (uid:5bae8c76-b67d-4cfd-9d7e-2af0d0fe0db9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1619,10 +1622,11 @@ Feature: Edit Order
       | bottom | No waypoints to suggest after filtering! |
     And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
 
+  @routing-refactor
   Scenario: Operator Resume a Cancelled Order on Edit Order page (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator update order granular status to = "Cancelled"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator resume order on Edit Order page
@@ -1636,6 +1640,15 @@ Feature: Edit Order
       | status | PENDING |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | PENDING |
+    When API Operator get order details
+    Then DB Operator verify Pickup waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
