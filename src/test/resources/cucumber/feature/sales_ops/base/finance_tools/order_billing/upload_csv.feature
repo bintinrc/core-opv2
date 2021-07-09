@@ -278,24 +278,20 @@ Feature: Order Billing
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - More than 1000 shippers - Generate "SHIPPER" Report (uid:d3e4c175-1eec-415d-a1fe-74ea2a94bc4e)
-    Given API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator force succeed created order
-    When Operator generates CSV file with 1001 shippers
+  Scenario: Search Shipper by Upload CSV - More than 1000 shippers - Generate "SHIPPER" Report (uid:39996a68-c65f-4b6e-a70e-d899eae896f8)
+    Given Operator selects Order Billing data as below
+      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
+      | generateFile | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress | {order-billing-email}                               |
+    And Operator generates CSV file with 1001 shippers
     When Operator selects Order Billing data as below
       | uploadCsv | generatedCsv |
     Then Operator verifies that error toast is displayed on Order Billing page:
       | top | Your selected file has > 1000 shippers - please re-upload in smaller batches. |
     Then Operator verifies Generate Success Billings button is disabled
+    Then Finance Operator waits for '3' seconds
     When Operator generates CSV file with 1000 shippers
     When Operator generates success billings using data below:
-      | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
-      | uploadCsv       | generatedCsv                                        |
-      | generateFile    | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress    | {order-billing-email}                               |
-      | csvFileTemplate | {csv-template}                                      |
+      | uploadCsv | generatedCsv |
 

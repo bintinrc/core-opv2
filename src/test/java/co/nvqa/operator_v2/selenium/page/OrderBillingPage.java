@@ -72,6 +72,15 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     sendKeys(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX, shipper);
   }
 
+  public void setEmptyParentShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(
+        FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+  }
+
+  public void setEmptySelectedShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL);
+  }
+
   public String getNoParentErrorMsg() {
     return getText(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG);
   }

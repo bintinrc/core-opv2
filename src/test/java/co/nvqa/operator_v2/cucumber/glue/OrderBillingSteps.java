@@ -170,4 +170,15 @@ public class OrderBillingSteps extends AbstractSteps {
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
     put(KEY_ORDER_BILLING_UPLOAD_CSV_FILE, csvFile);
   }
+
+  @Then("Operator chooses {string} option and does not input a shipper ID")
+  public void operatorChoosesSelectByParentShippersOptionAndDoesNotInputAShipperID(String option) {
+    if (option.equalsIgnoreCase("Select by Parent Shipper")) {
+      orderBillingPage.setEmptyParentShipper();
+    } else {
+      orderBillingPage.setEmptySelectedShipper();
+    }
+  }
+
+
 }
