@@ -133,6 +133,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on Load Tracking IDs Button")
   public void operatorClicksOnLoadTrackingIDsButton() {
+    pause5s();
     addressingDownloadPage.loadTrackingIds.click();
     addressingDownloadPage.verifiesModalIsShown();
   }
