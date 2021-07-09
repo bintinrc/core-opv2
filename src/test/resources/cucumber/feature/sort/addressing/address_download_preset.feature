@@ -108,6 +108,7 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Search Filter Preset (uid:b00356ed-c52a-4279-9850-00a4c779c0da)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
@@ -120,6 +121,7 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Update Filter Successfully (uid:e6828599-7d51-4702-9994-488275d2047f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
@@ -136,6 +138,7 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Delete Filter Successfully (uid:12a4de1c-9954-4d13-afcf-194405309dd8)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
