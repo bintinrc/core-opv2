@@ -171,9 +171,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
             addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + "\n");
           }
         }
-      }
-      else {
-          NvLogger.warn("Separation is not found!");
+      } else {
+        NvLogger.warn("Separation is not found!");
       }
     } else if (HALF.equalsIgnoreCase(trackingIdType)) {
       final String invalidTrackingId = "AUTOTEST" + RandomUtil.randomString(5);
@@ -193,6 +192,19 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @Then("Operator verifies that the Address Download Table Result is shown up")
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
+
+    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
+      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+      for (Order order : orders) {
+        addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
+        addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
+      }
+    } else {
+      List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+      for (String trackingId : trackingIds) {
+        addressingDownloadPage.trackingIdUiChecking(trackingId);
+      }
+    }
   }
 
   @Then("Operator verifies that the Address Download Table Result for bulk tracking ids is shown up")

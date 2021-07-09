@@ -91,6 +91,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String PRESET_TO_BE_SELECTED_XPATH = "//div[@title='%s']";
   private static final String PRESET_NOT_FOUND_XPATH = "//*[local-name()='svg' and contains(@class,'empty-img')]";
   private static final String FILTERING_RESULT_XPATH = "//div[contains(text(),'%s')]";
+  private static final String TRACKING_ID_COLUMN_XPATH = "//td[@class='tracking_number']";
+  private static final String TO_ADDRESS_1_COLUMN_XPATH = "//td[@class='address_one']";
+  private static final String TO_ADDRESS_2_COLUMN_XPATH = "//td[@class='address_two']";
   private static final String IS_RTS_COLUMN_XPATH = "//td[@class='is_rts']";
 
   private static final String ADDRESS_STATUS_DATA_TESTID = "av_statuses";
@@ -100,7 +103,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String HUB_IDS_DATA_TESTID = "hub_ids";
   private static final String RTS_DATA_TESTID = "rts";
 
-  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
+      .ofPattern("yyyy-MM-dd_HH-mm");
   // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
   // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
   private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
@@ -259,6 +263,46 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       verifyFileDownloadedSuccessfully(csvFileName, orders.get(i).getToAddress1());
       verifyFileDownloadedSuccessfully(csvFileName, orders.get(i).getToAddress2());
     }
+  }
+
+  public void trackingIdUiChecking(String trackingId) {
+    List<WebElement> trackingIdsElement;
+    boolean isTrackingIdFound = false;
+    trackingIdsElement = webDriver.findElements(By.xpath(TRACKING_ID_COLUMN_XPATH));
+
+    for (WebElement we : trackingIdsElement) {
+      if (trackingId.equalsIgnoreCase(we.getText())) {
+        isTrackingIdFound = true;
+        break;
+      }
+    }
+    assertTrue(f("Tracking ID %s is found", trackingId), isTrackingIdFound);
+  }
+
+  public void addressUiChecking(String address1, String address2) {
+    List<WebElement> address1Element;
+    List<WebElement> address2Element;
+    boolean isAddress1Found = false;
+    boolean isAddress2Found = false;
+    address1Element = webDriver.findElements(By.xpath(TO_ADDRESS_1_COLUMN_XPATH));
+    address2Element = webDriver.findElements(By.xpath(TO_ADDRESS_2_COLUMN_XPATH));
+
+    for (WebElement weAdd1 : address1Element) {
+      if (address1.equalsIgnoreCase(weAdd1.getText())) {
+        isAddress1Found = true;
+        break;
+      }
+    }
+
+    for (WebElement weAdd2 : address2Element) {
+      if (address2.equalsIgnoreCase(weAdd2.getText())) {
+        isAddress2Found = true;
+        break;
+      }
+    }
+
+    assertTrue(f("Address 1 %s is found", address1), isAddress1Found);
+    assertTrue(f("Address 2 %s is found", address2), isAddress2Found);
   }
 
   public void rtsOrderIsIdentified() {
