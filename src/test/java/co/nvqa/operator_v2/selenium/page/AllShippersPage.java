@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
@@ -351,8 +352,24 @@ public class AllShippersPage extends OperatorV2SimplePage {
     loadingShippers.waitUntilInvisible();
   }
 
+  public void searchSubShipper(String keyword) {
+    getWebDriver().navigate()
+        .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
+            TestConstants.COUNTRY_CODE, keyword));
+    sendKeys(
+        "//nv-table[@param='ctrl.tableParam']//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input",
+        keyword);
+  }
+
   public void editShipper(Shipper shipper) {
     quickSearchShipper(getSearchKeyword(shipper));
+    shippersTable.clickActionButton(1, ACTION_EDIT);
+    allShippersCreateEditPage.switchToNewWindow();
+    allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+  }
+
+  public void editShipper(Marketplace marketplace) {
+    searchSubShipper(getSearchKeyword(marketplace));
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
@@ -371,6 +388,20 @@ public class AllShippersPage extends OperatorV2SimplePage {
       searchValue = shipperName;
     } else {
       searchValue = shipperLegacyId.concat("-").concat(shipperName);
+    }
+    return searchValue;
+  }
+
+  private String getSearchKeyword(Marketplace marketplace) {
+    String marketplaceSellerId = marketplace.getSellerId();
+    String marketplaceSellerCompanyName = marketplace.getSellerCompanyName();
+    NvLogger.infof("Created seller id : %s ", marketplaceSellerId);
+    String searchValue;
+    if (Objects.isNull(marketplaceSellerId) && Objects.isNull(marketplaceSellerCompanyName)) {
+      throw new NvTestRuntimeException(
+          "marketplace shipper marketplaceSellerId and/or marketplaceSellerCompanyName not saved");
+    } else {
+      searchValue = marketplaceSellerId;
     }
     return searchValue;
   }
