@@ -208,6 +208,10 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
         throw e;
       } catch (StaleElementReferenceException ex) {
         FieldUtils.writeDeclaredField(locator, "cachedElement", null, true);
+        Object searchContext = FieldUtils.readField(locator, "searchContext", true);
+        if (searchContext instanceof WebElement) {
+          FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
+        }
         element = locator.findElement();
       }
 

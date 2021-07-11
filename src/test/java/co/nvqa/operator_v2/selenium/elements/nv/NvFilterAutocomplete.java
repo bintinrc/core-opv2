@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,6 +18,9 @@ public class NvFilterAutocomplete extends AbstractFilterBox {
 
   @FindBy(name = "commons.clear-all")
   public PageElement clearAll;
+
+  @FindBy(css = "nv-icon-text-button[ng-repeat]")
+  public List<NvIconTextButton> selectedItems;
 
   public void clearAll() {
     if (clearAll.isDisplayedFast()) {
@@ -36,10 +38,8 @@ public class NvFilterAutocomplete extends AbstractFilterBox {
   }
 
   public List<String> getSelectedValues() {
-    return getWebElement()
-        .findElements(By.cssSelector("div[ng-if*='state.showSelected']  nv-icon-text-button"))
-        .stream()
-        .map(item -> item.getAttribute("name"))
+    return selectedItems.stream()
+        .map(element -> element.getAttribute("aria-label"))
         .collect(Collectors.toList());
   }
 }

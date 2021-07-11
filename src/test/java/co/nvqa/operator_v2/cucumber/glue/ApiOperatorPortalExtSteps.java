@@ -10,8 +10,8 @@ import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.SalesPerson;
-import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
+import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.dp.Partner;
@@ -321,17 +321,40 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     data = resolveKeyValues(data);
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
     shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
-        .createFilerTemplate(shipperPickupFilterTemplate);
+        .createShipperPickupFilerTemplate(shipperPickupFilterTemplate);
     put(KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE, shipperPickupFilterTemplate);
   }
 
-  @After("@DeleteShipperPickupFilterTemplate")
+  @Given("^API Operator creates new Orders Filter Template using data below:$")
+  public void apiOperatorCreatesOrdersFilterTemplate(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
+    shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
+        .createOrdersFilerTemplate(shipperPickupFilterTemplate);
+    put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
+    put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
+  }
+
+  @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
   public void deleteShipperPickupFilterTemplate() {
-    ShipperPickupFilterTemplate shipperPickupFilterTemplate = get(
-        KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE);
-    if (shipperPickupFilterTemplate != null && shipperPickupFilterTemplate.getId() != null) {
-      getShipperPickupFilterTemplatesClient()
-          .deleteFilerTemplate(shipperPickupFilterTemplate.getId());
+    try {
+      ShipperPickupFilterTemplate shipperPickupFilterTemplate = get(
+          KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE);
+      if (shipperPickupFilterTemplate != null && shipperPickupFilterTemplate.getId() != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteShipperPickupsFilerTemplate(shipperPickupFilterTemplate.getId());
+      }
+    } catch (Throwable ex) {
+      NvLogger.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_ALL_ORDERS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteOrdersFilterTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      NvLogger.warn("Could not delete Filter Preset", ex);
     }
   }
 

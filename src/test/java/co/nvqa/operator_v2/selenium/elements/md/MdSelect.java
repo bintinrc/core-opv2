@@ -59,12 +59,14 @@ public class MdSelect extends PageElement {
   }
 
   public void searchAndSelectValue(String value) {
-    enterSearchTerm(value);
-    value = escapeValue(value);
-    try {
-      click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
-    } catch (NoSuchElementException ex) {
-      throw new NvTestRuntimeException(f("Could not select option [%s] in md-select", value), ex);
+    if (!StringUtils.equals(value, StringUtils.trim(getValue()))) {
+      enterSearchTerm(value);
+      value = escapeValue(value);
+      try {
+        click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
+      } catch (NoSuchElementException ex) {
+        throw new NvTestRuntimeException(f("Could not select option [%s] in md-select", value), ex);
+      }
     }
   }
 
