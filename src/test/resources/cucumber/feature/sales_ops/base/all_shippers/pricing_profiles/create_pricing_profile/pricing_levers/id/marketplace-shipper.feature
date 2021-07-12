@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @PricingScriptsV2ID @SalesOpsID
+@OperatorV2 @LaunchBrowser @PricingScriptsV2ID @SalesOpsID @MarketplaceID
 Feature: Marketplace Shipper
 
   Background: Login to Operator Portal V2

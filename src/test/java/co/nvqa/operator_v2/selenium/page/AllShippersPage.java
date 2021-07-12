@@ -352,7 +352,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     loadingShippers.waitUntilInvisible();
   }
 
-  public void searchSubShipper(String keyword) {
+  public void searchShipperByName(String keyword) {
     getWebDriver().navigate()
         .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
             TestConstants.COUNTRY_CODE, keyword));
@@ -369,7 +369,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   }
 
   public void editShipper(Marketplace marketplace) {
-    searchSubShipper(getSearchKeyword(marketplace));
+    searchShipperByName(getSearchKeyword(marketplace));
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
