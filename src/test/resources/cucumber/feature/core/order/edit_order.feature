@@ -2286,8 +2286,6 @@ Feature: Edit Order
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "{dpms-id}" DP on Edit Order Page
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
@@ -2313,8 +2311,6 @@ Feature: Edit Order
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "{dpms-id}" DP on Edit Order Page
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
@@ -2333,13 +2329,12 @@ Feature: Edit Order
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And Operator get multiple "DELIVERY" transactions with status "PENDING"
     And Operator merge transactions on Zonal Routing
     Then API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "{dpms-id}" DP on Edit Order Page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
