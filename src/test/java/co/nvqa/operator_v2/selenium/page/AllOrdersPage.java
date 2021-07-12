@@ -897,6 +897,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='container.route-logs.preset-name']")
     public TextBox presetName;
 
+    @FindBy(css = "div.help-text")
+    public PageElement helpText;
+
     @FindBy(css = "i.input-confirmed")
     public PageElement confirmedIcon;
 
@@ -905,6 +908,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.save")
     public NvIconTextButton save;
+
+    @FindBy(name = "commons.update")
+    public NvIconTextButton update;
 
     public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

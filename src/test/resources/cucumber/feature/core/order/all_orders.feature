@@ -790,6 +790,66 @@ Feature: All Orders
       | bottom | ID: {KEY_ALL_ORDERS_FILTERS_PRESET_ID} |
     And DB Operator verifies "{KEY_ALL_ORDERS_FILTERS_PRESET_ID}" filter preset is deleted
 
+  @DeleteFilterTemplate
+  Scenario: Operator Update Existing Preset on All Orders Page - via Save Current As Preset Button (uid:5f5aa695-09a3-4e14-8271-13bdff312ab1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And  API Operator creates new Orders Filter Template using data below:
+      | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
+      | value.statusIds  | 2                                            |
+      | value.shipperIds | {shipper-v4-legacy-id}                       |
+      | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
+    When Operator go to menu Order -> All Orders
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    And Operator updates filters on All Orders page:
+      | status         | Transit, Cancelled |
+      | granularStatus | Cancelled          |
+    And Operator selects "Save Current as Preset" preset action on All Orders page
+    Then Operator verifies Save Preset dialog on All Orders page contains filters:
+      | Status: Cancelled, Transit                                                       |
+      | Granular Status: Cancelled                                                       |
+      | Shipper: {shipper-v4-legacy-id}-{shipper-v4-name}                                |
+      | Master Shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+    When Operator enters "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Preset Name in Save Preset dialog on All Orders page
+    Then Operator verifies help text "This name is already taken. Do you want to update this preset?" is displayed in Save Preset dialog on All Orders page
+    When Operator clicks Update button in Save Preset dialog on All Orders page
+    Then Operator verifies that success toast displayed:
+      | top                | 1 filter preset updated                    |
+      | bottom             | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
+      | waitUntilInvisible | true                                       |
+    When Operator refresh page
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    Then Operator verifies selected filters on All Orders page:
+      | status            | Transit, Cancelled                                               |
+      | granularStatus    | Cancelled                                                        |
+      | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
+      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+
+  @DeleteFilterTemplate
+  Scenario: Operator Update Existing Preset on All Orders Page - via Update Preset Button (uid:4b08b54f-c866-4434-811f-d559d5e0b99e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And  API Operator creates new Orders Filter Template using data below:
+      | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
+      | value.statusIds  | 2                                            |
+      | value.shipperIds | {shipper-v4-legacy-id}                       |
+      | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
+    When Operator go to menu Order -> All Orders
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    And Operator updates filters on All Orders page:
+      | status         | Transit, Cancelled |
+      | granularStatus | Cancelled          |
+    And Operator selects "Update Preset" preset action on All Orders page
+    Then Operator verifies that success toast displayed:
+      | top                | 1 filter preset updated                    |
+      | bottom             | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
+      | waitUntilInvisible | true                                       |
+    When Operator refresh page
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    Then Operator verifies selected filters on All Orders page:
+      | status            | Transit, Cancelled                                               |
+      | granularStatus    | Cancelled                                                        |
+      | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
+      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -509,6 +509,64 @@ public class AllOrdersSteps extends AbstractSteps {
     }
   }
 
+  @When("^Operator updates filters on All Orders page:$")
+  public void operatorUpdatesFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    allOrdersPage.waitUntilPageLoaded();
+
+    if (data.containsKey("status")) {
+      if (!allOrdersPage.statusFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Status");
+      }
+      allOrdersPage.statusFilter.clearAll();
+      allOrdersPage.statusFilter.selectFilter(splitAndNormalize(data.get("status")));
+    }
+
+    if (data.containsKey("granularStatus")) {
+      if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Granular Status");
+      }
+      allOrdersPage.granularStatusFilter.clearAll();
+      allOrdersPage.granularStatusFilter
+          .selectFilter(splitAndNormalize(data.get("granularStatus")));
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
+      allOrdersPage.creationTimeFilter.selectFromHours("04");
+      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+    }
+
+    if (data.containsKey("creationTimeTo")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectToDate(data.get("creationTimeTo"));
+      allOrdersPage.creationTimeFilter.selectToHours("04");
+      allOrdersPage.creationTimeFilter.selectToMinutes("00");
+    }
+
+    if (data.containsKey("shipperName")) {
+      if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Shipper");
+      }
+      allOrdersPage.shipperFilter.clearAll();
+      allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
+    }
+
+    if (data.containsKey("masterShipperName")) {
+      if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Master Shipper");
+      }
+      allOrdersPage.masterShipperFilter.clearAll();
+      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
+    }
+  }
+
   @When("^Operator verifies selected filters on All Orders page:$")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -533,7 +591,7 @@ public class AllOrdersSteps extends AbstractSteps {
       } else {
         assertions.assertThat(allOrdersPage.granularStatusFilter.getSelectedValues())
             .as("Granular Status items")
-            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("status")));
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("granularStatus")));
       }
     }
 
@@ -596,7 +654,7 @@ public class AllOrdersSteps extends AbstractSteps {
         .collect(Collectors.toList());
     Assertions.assertThat(actual)
         .as("List of selected filters")
-        .containsExactlyElementsOf(expected);
+        .containsExactlyInAnyOrderElementsOf(expected);
   }
 
   @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page is required")
@@ -605,6 +663,14 @@ public class AllOrdersSteps extends AbstractSteps {
     Assertions.assertThat(allOrdersPage.savePresetDialog.presetName.getAttribute("ng-required"))
         .as("Preset Name field ng-required attribute")
         .isEqualTo("required");
+  }
+
+  @When("Operator verifies help text {string} is displayed in Save Preset dialog on All Orders page")
+  public void verifyHelpTextInSavePreset(String expected) {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.savePresetDialog.helpText.getNormalizedText())
+        .as("Help Text")
+        .isEqualTo(resolveValue(expected));
   }
 
   @When("Operator verifies Cancel button in Save Preset dialog on All Orders page is enabled")
@@ -626,6 +692,11 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("Operator clicks Save button in Save Preset dialog on All Orders page")
   public void clickSaveInSavePresetDialog() {
     allOrdersPage.savePresetDialog.save.click();
+  }
+
+  @When("Operator clicks Update button in Save Preset dialog on All Orders page")
+  public void clickUpdateInSavePresetDialog() {
+    allOrdersPage.savePresetDialog.update.click();
   }
 
   @When("Operator verifies Save button in Save Preset dialog on All Orders page is disabled")
@@ -714,8 +785,9 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("Operator selects {string} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
     allOrdersPage.filterPreset.searchAndSelectValue(resolveValue(value));
-    if (allOrdersPage.halfCircleSpinner.waitUntilVisible(2)) {
+    if (allOrdersPage.halfCircleSpinner.waitUntilVisible(3)) {
       allOrdersPage.halfCircleSpinner.waitUntilInvisible();
     }
+    pause1s();
   }
 }
