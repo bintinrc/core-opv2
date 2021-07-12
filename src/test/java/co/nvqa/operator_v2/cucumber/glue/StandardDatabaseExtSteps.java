@@ -399,7 +399,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .findFirst()
           .orElseThrow(() -> new AssertionError(
               f("Event record %s for order %d was not found", mapOfData.toString(), orderId)));
-      }, "Check DB for order event");
+    }, "Check DB for order event");
   }
 
   @Then("^DB Operator verify transaction_failure_reason record for the created order$")
@@ -1774,5 +1774,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @When("DB Operator sets flags of driver with id {string} to {int}")
   public void setDriverFlags(String driverId, int flags) {
     getDriverJdbc().setDriverFlags(Long.parseLong(resolveValue(driverId)), flags);
+  }
+
+  @When("DB Operator searched {string} Orders with {string} Status and {string} Granular Status")
+  public void dbOperatorSearchedOrdersWithStatusAndGranularStatus(String orderNumberAsString,
+      String orderStatus, String orderGranularStatus) {
+    Integer orderNumber = Integer.parseInt(orderNumberAsString);
+    List<String> trackingIds = getCoreJdbc()
+        .getTrackingIdByStatusAndGranularStatus(orderNumber, orderStatus, orderGranularStatus);
+    put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, trackingIds);
   }
 }
