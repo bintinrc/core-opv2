@@ -19,7 +19,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   public MdDatepicker toDate;
 
   public void selectFromDate(String value) {
-    fromDate.setValue(value);
+    fromDate.simpleSetValue(value);
   }
 
   public void selectFromDate(Date value) {
@@ -27,7 +27,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   }
 
   public void selectToDate(String value) {
-    toDate.setValue(value);
+    toDate.simpleSetValue(value);
   }
 
   public void selectToDate(Date value) {

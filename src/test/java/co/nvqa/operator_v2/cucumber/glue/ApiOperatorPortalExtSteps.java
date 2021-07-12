@@ -323,6 +323,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
         .createShipperPickupFilerTemplate(shipperPickupFilterTemplate);
     put(KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE, shipperPickupFilterTemplate);
+    put(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
+    put(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
   @Given("^API Operator creates new Orders Filter Template using data below:$")
@@ -352,6 +354,15 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       if (presetId != null) {
         getShipperPickupFilterTemplatesClient()
             .deleteOrdersFilterTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      NvLogger.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteShipperPickupsFilerTemplate(presetId);
       }
     } catch (Throwable ex) {
       NvLogger.warn("Could not delete Filter Preset", ex);
