@@ -487,6 +487,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       newPricingProfileDialog.pricingScript.searchAndSelectValue(pricing.getScriptName());
       newPricingProfileDialog.codCountryDefaultCheckbox.check();
       newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
+      newPricingProfileDialog.rtsCountryDefaultCheckbox.check();
 
       newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
       newPricingProfileDialog.waitUntilInvisible();
@@ -1366,6 +1367,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.codPercent.sendKeys(shipperCodPercentage);
       }
     }
+    newPricingProfileDialog.rtsCountryDefaultCheckbox.check();
   }
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
@@ -1528,6 +1530,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     @FindBy(id = "insurance-threshold")
     public TextBox insuranceThreshold;
+
+    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-container")
+    public CheckBox rtsCountryDefaultCheckbox;
 
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
