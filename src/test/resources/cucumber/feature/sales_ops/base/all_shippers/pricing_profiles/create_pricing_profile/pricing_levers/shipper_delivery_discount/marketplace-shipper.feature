@@ -159,6 +159,7 @@ Feature: Marketplace Shipper
 
   @CloseNewWindows
   Scenario: Create Pricing Profile - Marketplace Sub Shipper - with Int Flat Discount (uid:120c85d0-0ef0-460f-9fa8-eb932b43c9c8)
+    # Add pricing profile for marketplace shipper
     Given Operator edits shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
@@ -167,6 +168,7 @@ Feature: Marketplace Shipper
       | discount          | 2.00                                            |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    # Add pricing profile for sub-shipper to get the caution message
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
