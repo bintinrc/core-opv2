@@ -25,7 +25,7 @@ Feature: Marketplace Shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
 
   @CloseNewWindows
-  Scenario: Create Pricing Profile - Marketplace Shipper - with Int Percentage Discount - Marketplace Sub Shipper has Reference Parent's Pricing Profile is Exists - ID
+  Scenario: Create Pricing Profile - Marketplace Shipper - with Int Percentage Discount - Marketplace Sub Shipper has Reference Parent's Pricing Profile is Exists - ID  (uid:b09328cb-fc4a-4574-a237-b5d1d8da0305)
     Given Operator edits shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
