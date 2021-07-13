@@ -292,7 +292,8 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} | {shipper-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+    @nadeera
+    @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Shipper ID from Different Operating Country (uid:d7760ca6-1f92-4f61-b9f3-a96240a5d57b)
     Given Operator selects Order Billing data as below
       | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
