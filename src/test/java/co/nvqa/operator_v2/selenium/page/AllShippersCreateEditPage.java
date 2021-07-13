@@ -1321,7 +1321,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
     String discount = pricing.getDiscount();
     if (Objects.nonNull(discount)) {
-      newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());
+      if (discount.equalsIgnoreCase("empty")) {
+        newPricingProfileDialog.discountValue.sendKeys("");
+      } else {
+        newPricingProfileDialog.discountValue.sendKeys(pricing.getDiscount());
+      }
     }
     String shipperInsMin = pricing.getInsMin();
     String shipperInsPercentage = pricing.getInsPercentage();
