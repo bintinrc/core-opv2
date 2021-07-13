@@ -65,9 +65,10 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
     And Operator clicks Generate Success Billing Button
+    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
-      | top    | Network Request Error                                               |
-      | bottom | 1 legacy shipper IDs not found. Generating report for 1 shipper IDs |
+      | top    | Network Request Error                                                                               |
+      | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
@@ -124,9 +125,10 @@ Feature: Order Billing
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     And Operator clicks Generate Success Billing Button
+    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
-      | top    | Network Request Error                                               |
-      | bottom | 1 legacy shipper IDs not found. Generating report for 1 shipper IDs |
+      | top    | Network Request Error                                                                               |
+      | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
@@ -181,9 +183,10 @@ Feature: Order Billing
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     And Operator clicks Generate Success Billing Button
+    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
-      | top    | Network Request Error                                               |
-      | bottom | 1 legacy shipper IDs not found. Generating report for 1 shipper IDs |
+      | top    | Network Request Error                                                                               |
+      | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
@@ -234,9 +237,10 @@ Feature: Order Billing
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
     And Operator clicks Generate Success Billing Button
+    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
-      | top    | Network Request Error                                               |
-      | bottom | 1 legacy shipper IDs not found. Generating report for 1 shipper IDs |
+      | top    | Network Request Error                                                                               |
+      | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"

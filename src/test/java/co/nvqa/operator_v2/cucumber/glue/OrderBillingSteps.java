@@ -145,6 +145,12 @@ public class OrderBillingSteps extends AbstractSteps {
     assertTrue("Error message was not found", isErrorFound);
   }
 
+  @Then("Operator verifies that info pop up is displayed with message {string}")
+  public void operatorVerifiesThatInfoPopUpIsDisplayedWithMessage(String expectedInfoMsg) {
+    String actualInfoMsg = orderBillingPage.infoMessage.getText();
+    assertEquals("Actual and expected info message", expectedInfoMsg, actualInfoMsg);
+  }
+
   @When("Operator selects Order Billing data as below")
   public void operatorSelectsStartDateAndEndDateAsBelow(Map<String, String> mapOfData) {
     setOrderBillingData(mapOfData);
