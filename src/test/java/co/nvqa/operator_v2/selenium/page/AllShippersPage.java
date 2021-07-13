@@ -63,7 +63,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
   public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
   public static final String XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN = "//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[contains(text(),'%s')]";
-  public static final String XPATH_SEARCH_BY_NAME = "//nv-search-input-filter[@search-text='filter.name']//input";
+  public static final String XPATH_SEARCH_SHIPPER_BY_NAME_LIST_PAGE = "//nv-search-input-filter[@search-text='filter.name']//input";
 
   private static final DecimalFormat NO_TRAILING_ZERO_DF = new DecimalFormat("###.##");
 
@@ -357,7 +357,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     getWebDriver().navigate()
         .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
             TestConstants.COUNTRY_CODE, keyword));
-    sendKeys(XPATH_SEARCH_BY_NAME, keyword);
+    sendKeys(XPATH_SEARCH_SHIPPER_BY_NAME_LIST_PAGE, keyword);
   }
 
   public void editShipper(Shipper shipper) {
