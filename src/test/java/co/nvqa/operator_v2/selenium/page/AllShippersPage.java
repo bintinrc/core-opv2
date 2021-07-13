@@ -353,12 +353,11 @@ public class AllShippersPage extends OperatorV2SimplePage {
   }
 
   public void searchShipperByName(String keyword) {
+    String xpath = "//nv-search-input-filter[@search-text='filter.name']//input";
     getWebDriver().navigate()
         .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
             TestConstants.COUNTRY_CODE, keyword));
-    sendKeys(
-        "//nv-table[@param='ctrl.tableParam']//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input",
-        keyword);
+    sendKeys(xpath, keyword);
   }
 
   public void editShipper(Shipper shipper) {
