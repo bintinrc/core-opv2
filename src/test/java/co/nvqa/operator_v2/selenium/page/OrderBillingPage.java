@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import java.io.File;
 import java.util.Date;
@@ -36,6 +37,9 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   @FindBy(xpath = ".//button[@aria-label='Generate Success Billings']")
   public MdSelect generateSuccessBillingsButton;
 
+  @FindBy(css = ".md-dialog-content-body")
+  public PageElement infoMessage;
+
   public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
   public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
   public static final String AGGREGATED_BILLING_REPORT = "Aggregated Billing Report";
@@ -70,6 +74,15 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     clickButtonByAriaLabelAndWaitUntilDone(
         FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
     sendKeys(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX, shipper);
+  }
+
+  public void setEmptyParentShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(
+        FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+  }
+
+  public void setEmptySelectedShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL);
   }
 
   public String getNoParentErrorMsg() {

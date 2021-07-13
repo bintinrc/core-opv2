@@ -145,6 +145,12 @@ public class OrderBillingSteps extends AbstractSteps {
     assertTrue("Error message was not found", isErrorFound);
   }
 
+  @Then("Operator verifies that info pop up is displayed with message {string}")
+  public void operatorVerifiesThatInfoPopUpIsDisplayedWithMessage(String expectedInfoMsg) {
+    String actualInfoMsg = orderBillingPage.infoMessage.getText();
+    assertEquals("Actual and expected info message", expectedInfoMsg, actualInfoMsg);
+  }
+
   @When("Operator selects Order Billing data as below")
   public void operatorSelectsStartDateAndEndDateAsBelow(Map<String, String> mapOfData) {
     setOrderBillingData(mapOfData);
@@ -170,4 +176,15 @@ public class OrderBillingSteps extends AbstractSteps {
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
     put(KEY_ORDER_BILLING_UPLOAD_CSV_FILE, csvFile);
   }
+
+  @Then("Operator chooses {string} option and does not input a shipper ID")
+  public void operatorChoosesSelectByParentShippersOptionAndDoesNotInputAShipperID(String option) {
+    if (option.equalsIgnoreCase("Select by Parent Shipper")) {
+      orderBillingPage.setEmptyParentShipper();
+    } else {
+      orderBillingPage.setEmptySelectedShipper();
+    }
+  }
+
+
 }
