@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import java.io.File;
 import java.util.Date;
@@ -33,6 +33,12 @@ public class OrderBillingPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//md-select[@md-container-class='nv-input-select-container']")
   public MdSelect csvFileTemplate;
+
+  @FindBy(xpath = ".//button[@aria-label='Generate Success Billings']")
+  public MdSelect generateSuccessBillingsButton;
+
+  @FindBy(css = ".md-dialog-content-body")
+  public PageElement infoMessage;
 
   public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
   public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
@@ -70,16 +76,27 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     sendKeys(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX, shipper);
   }
 
+  public void setEmptyParentShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(
+        FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+  }
+
+  public void setEmptySelectedShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL);
+  }
+
   public String getNoParentErrorMsg() {
     return getText(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG);
   }
 
-  public void uploadCsvShippers(String shipperIds) {
-
+  public void uploadCsvShippersAndVerifySuccessMsg(String shipperIds, File csvFile) {
     int countOfShipperIds = shipperIds.split(",").length;
-    File csvFile = createFile("shipper-id-upload.csv", shipperIds);
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    uploadCsvShippers(csvFile);
+    assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
+        getToastTopText());
+  }
 
+  public void uploadCsvShippers(File csvFile) {
     clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
     clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
 
@@ -89,9 +106,6 @@ public class OrderBillingPage extends OperatorV2SimplePage {
         csvFile.getAbsolutePath());
     waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
     clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
-
-    assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
-        getToastTopText());
   }
 
   public void uploadPDFShippersAndVerifyErrorMsg() {
@@ -120,6 +134,10 @@ public class OrderBillingPage extends OperatorV2SimplePage {
 
   public void clickGenerateSuccessBillingsButton() {
     clickButtonByAriaLabelAndWaitUntilDone("Generate Success Billings");
+  }
+
+  public boolean isGenerateSuccessBillingsButtonEnabled() {
+    return generateSuccessBillingsButton.isEnabled();
   }
 
   public void verifyNoErrorsAvailable() {
