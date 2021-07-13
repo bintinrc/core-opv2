@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.MilkrunSettings;
+import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.commons.model.pricing.PricingLevers;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
@@ -1011,6 +1012,14 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.editShipper(shipper);
+  }
+
+  @When("Operator edits the created marketplace sub-shipper")
+  public void operatorEditsCreatedMarketplaceSubshipper() {
+    Marketplace marketplaceSellerId = get(KEY_MARKETPLACE_SUB_SHIPPER);
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    pause1s();
+    allShippersPage.editShipper(marketplaceSellerId);
   }
 
   @And("Operator edits shipper {string}")
