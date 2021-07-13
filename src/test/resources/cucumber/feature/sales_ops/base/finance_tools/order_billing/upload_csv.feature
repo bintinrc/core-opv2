@@ -294,15 +294,17 @@ Feature: Order Billing
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Shipper ID from Different Operating Country (uid:d7760ca6-1f92-4f61-b9f3-a96240a5d57b)
-    When Operator generates success billings using data below:
+    Given Operator selects Order Billing data as below
       | startDate       | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                    |
       | uploadCsv       | {shipper-sop-id-v4-legacy-id}                       |
       | generateFile    | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
-    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+    And Operator clicks Generate Success Billing Button
+    Then Operator verifies that error toast is displayed on Order Billing page:
+      | top    | Network Request Error                                                                              |
+      | bottom | the request can't be processed: No orders found for the report request ; no file will be generated |
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - More than 1000 shippers - Generate "SHIPPER" Report (uid:39996a68-c65f-4b6e-a70e-d899eae896f8)
