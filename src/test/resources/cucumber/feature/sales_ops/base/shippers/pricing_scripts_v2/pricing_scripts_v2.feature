@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps
+@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps @BasicPricingScript
 
 Feature: Pricing Scripts V2
 
