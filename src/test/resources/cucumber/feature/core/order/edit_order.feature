@@ -2322,7 +2322,7 @@ Feature: Edit Order
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies all route_monitoring_data records
 
-  @routing-refactor
+  @routing-refactor @wip
   Scenario: Untag DP Order that is merged and not routed (uid:cea0056a-d4e8-4d54-8b7d-28fc786ee3db)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
