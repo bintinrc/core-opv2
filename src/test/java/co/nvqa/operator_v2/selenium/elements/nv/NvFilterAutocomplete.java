@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,11 @@ public class NvFilterAutocomplete extends AbstractFilterBox {
 
   public NvFilterAutocomplete(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
+  }
+
+  public NvFilterAutocomplete(WebDriver webDriver, SearchContext searchContext,
+      WebElement webElement) {
+    super(webDriver, searchContext, webElement);
   }
 
   @FindBy(tagName = "nv-autocomplete")

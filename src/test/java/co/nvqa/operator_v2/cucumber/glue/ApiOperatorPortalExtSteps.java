@@ -334,7 +334,27 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
         .createOrdersFilerTemplate(shipperPickupFilterTemplate);
     put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
-    put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
+    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
+  }
+
+  @Given("^API Operator creates new Route Groups Filter Template using data below:$")
+  public void apiOperatorCreatesRouteGroupsFilterTemplate(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
+    shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
+        .createRouteGroupsFilerTemplate(shipperPickupFilterTemplate);
+    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
+    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
+  }
+
+  @Given("^API Operator creates new Shipments Filter Template using data below:$")
+  public void apiOperatorCreatesShipmentsFilterTemplate(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
+    shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
+        .createShipmentsFilerTemplate(shipperPickupFilterTemplate);
+    put(KEY_SHIPMENTS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
+    put(KEY_SHIPMENTS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
   @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
@@ -363,6 +383,24 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       if (presetId != null) {
         getShipperPickupFilterTemplatesClient()
             .deleteShipperPickupsFilerTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      NvLogger.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteRouteGroupsFilerTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      NvLogger.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_SHIPMENTS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteShipmentsFilerTemplate(presetId);
       }
     } catch (Throwable ex) {
       NvLogger.warn("Could not delete Filter Preset", ex);

@@ -755,7 +755,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     presetName = resolveValue(presetName);
     allOrdersPage.savePresetDialog.presetName.setValue(presetName);
-    put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, presetName);
+    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, presetName);
   }
 
   @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it")
