@@ -1090,10 +1090,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]][1]")
+    @FindBy(xpath = "(//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]])[1]")
     public AntSelect assignPrimaryDriverInput;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]][2]")
+    @FindBy(xpath = "(//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]])[2]")
     public AntSelect assignAdditionalDriverInput;
 
     @FindBy(xpath = "//button[.='Add Another Driver']")
@@ -1103,6 +1103,61 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public Button addDriver;
 
     @FindBy(xpath= "//div[contains(@class, 'remove-link')]")
+    public Button removeDriver;
+
+    @FindBy(xpath = "//button[.='Unassign All']")
+    public Button unassignAllDrivers;
+
+    public void assignDriver(String driverName) {
+      assignPrimaryDriverInput.selectValue(driverName);
+    }
+
+    public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
+      assignPrimaryDriverInput.selectValue(primaryDriver);
+      pause1s();
+      addDriver.waitUntilClickable();
+      addDriver.click();
+      pause1s();
+      assignAdditionalDriverInput.selectValue(additionalDriver);
+    }
+
+    public void clearAssignedDriver() {
+      addDriver.click();
+      pause500ms();
+      unassignAllDrivers.click();
+    }
+  }
+
+
+  public static class AssignTripModalOld extends AntModal {
+
+    public AssignTripModalOld(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//button[.='Save']")
+    public Button saveButton;
+
+    @FindBy(xpath = "//button[.='Save Driver']")
+    public Button saveDriver;
+
+    @FindBy(xpath = "//button[.='Cancel']")
+    public Button cancel;
+
+    @FindBy(xpath = "(//div[contains(@id,'driver')])[1]")
+    public co.nvqa.operator_v2.selenium.elements.ant.AntSelect assignPrimaryDriverInput;
+
+    @FindBy(xpath = "(//div[contains(@id,'driver')])[2]")
+    public co.nvqa.operator_v2.selenium.elements.ant.AntSelect assignAdditionalDriverInput;
+
+    @FindBy(xpath = "//button[.='Add Another Driver']")
+    public Button addAnotherDriver;
+
+    @FindBy(xpath = "//button[.='Add Driver']")
+    public Button addDriver;
+
+    @FindBy(xpath = "//div[contains(@class, 'remove-link')]")
     public Button removeDriver;
 
     @FindBy(xpath = "//button[.='Unassign All']")

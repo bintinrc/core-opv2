@@ -126,7 +126,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   public PageElement assignDriverButton;
 
   @FindBy(className = "ant-modal-wrap")
-  public TripManagementPage.AssignTripModal assignDriverModal;
+  public TripManagementPage.AssignTripModalOld assignDriverModal;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
   public PageElement successCreateRelation;
