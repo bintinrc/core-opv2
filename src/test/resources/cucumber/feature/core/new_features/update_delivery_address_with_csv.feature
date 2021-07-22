@@ -147,7 +147,7 @@ Feature: Update Delivery Address with CSV
     And Operator verify created orders info after address update
 
 #  @DeleteOrArchiveRoute 
-  @routing-refactor
+  @routing-refactor @wip
   Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery (uid:c6c4b64a-2171-4c36-bb19-b119ab6a2dce)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
