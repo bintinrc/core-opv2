@@ -36,7 +36,7 @@ Feature: Movement Trip - Cancel Trip
     And Operator searches for Movement Trip based on status "pending"
     When Operator clicks on "cancel" icon on the action column
     And Operator clicks "Cancel Trip" button on cancel trip dialog
-    And Operator verifies that there will be a movement trip cancelled toast shown
+    And Operator verifies that there will be a movement trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" cancelled toast shown
     And Operator searches for Movement Trip based on status "cancelled"
     Then Operator verifies movement trip shown has status value "cancelled"
     And DB Operator verifies movement trip has event with status cancelled
@@ -76,7 +76,7 @@ Feature: Movement Trip - Cancel Trip
     And Operator searches for Movement Trip based on status "transit"
     When Operator clicks on "cancel" icon on the action column
     And Operator clicks "Cancel Trip" button on cancel trip dialog
-    And Operator verifies that there will be a movement trip cancelled toast shown
+    And Operator verifies that there will be a movement trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" cancelled toast shown
     And Operator searches for Movement Trip based on status "cancelled"
     Then Operator verifies movement trip shown has status value "cancelled"
     And DB Operator verifies movement trip has event with status cancelled
@@ -182,7 +182,7 @@ Feature: Movement Trip - Cancel Trip
     And Operator searches for Movement Trip based on status "pending"
     When Operator clicks on "cancel" icon on the action column
     And Operator clicks "Cancel Trip" button on cancel trip dialog
-    And Operator verifies that there will be a movement trip cancelled toast shown
+    And Operator verifies that there will be a movement trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" cancelled toast shown
     And Operator searches for Movement Trip based on status "cancelled"
     Then Operator verifies "cancel" button disabled
 
