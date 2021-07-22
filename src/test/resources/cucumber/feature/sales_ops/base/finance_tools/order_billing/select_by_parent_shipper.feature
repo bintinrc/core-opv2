@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @nadeera
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling
 
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
