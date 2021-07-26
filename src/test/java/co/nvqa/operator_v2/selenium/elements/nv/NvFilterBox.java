@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,6 +24,9 @@ public class NvFilterBox extends AbstractFilterBox {
   @FindBy(name = "commons.clear-all")
   public NvIconButton clearAll;
 
+  @FindBy(css = "nv-icon-text-button[ng-repeat]")
+  public List<NvIconTextButton> selectedItems;
+
   public void clearAll() {
     if (clearAll.isDisplayedFast()) {
       clearAll.click();
@@ -41,4 +46,9 @@ public class NvFilterBox extends AbstractFilterBox {
     values.forEach(this::selectFilter);
   }
 
+  public List<String> getSelectedValues() {
+    return selectedItems.stream()
+        .map(element -> element.getAttribute("aria-label"))
+        .collect(Collectors.toList());
+  }
 }

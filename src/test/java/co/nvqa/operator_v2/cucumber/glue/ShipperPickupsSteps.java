@@ -24,8 +24,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
@@ -668,5 +672,415 @@ public class ShipperPickupsSteps extends AbstractSteps {
       shipperPickupsPage.editRouteDialog.longitude.setValue(newAddress.getLongitude());
     }
     shipperPickupsPage.editRouteDialog.submitForm();
+  }
+
+  @When("^Operator selects filters on Shipper Pickups page:$")
+  public void operatorSelectsFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    shipperPickupsPage.waitUntilPageLoaded();
+
+    if (data.containsKey("reservationDateFrom")) {
+      if (!shipperPickupsPage.reservationDateFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Date");
+      }
+      shipperPickupsPage.reservationDateFilter.selectFromDate(data.get("reservationDateFrom"));
+    } else {
+      if (shipperPickupsPage.reservationDateFilter.isDisplayedFast()) {
+        shipperPickupsPage.reservationDateFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
+      }
+    }
+
+    if (data.containsKey("reservationDateTo")) {
+      if (!shipperPickupsPage.reservationDateFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Date");
+      }
+      shipperPickupsPage.reservationDateFilter.selectToDate(data.get("reservationDateTo"));
+    } else {
+      if (shipperPickupsPage.reservationDateFilter.isDisplayedFast()) {
+        shipperPickupsPage.reservationDateFilter.selectToDate(DateUtil.getTodayDate_YYYY_MM_DD());
+      }
+    }
+
+    if (shipperPickupsPage.reservationTypesFilter.isDisplayedFast()) {
+      shipperPickupsPage.reservationTypesFilter.clearAll();
+    }
+    if (data.containsKey("reservationTypes")) {
+      if (!shipperPickupsPage.reservationTypesFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Types");
+      }
+      shipperPickupsPage.reservationTypesFilter
+          .selectFilter(splitAndNormalize(data.get("reservationTypes")));
+    }
+
+    if (shipperPickupsPage.waypointStatusFilter.isDisplayedFast()) {
+      shipperPickupsPage.waypointStatusFilter.clearAll();
+    }
+    if (data.containsKey("waypointStatus")) {
+      if (!shipperPickupsPage.waypointStatusFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Types");
+      }
+      shipperPickupsPage.waypointStatusFilter
+          .selectFilter(splitAndNormalize(data.get("waypointStatus")));
+    }
+
+    if (shipperPickupsPage.hubsFilter.isDisplayedFast()) {
+      shipperPickupsPage.hubsFilter.clearAll();
+    }
+    if (data.containsKey("hubs")) {
+      if (!shipperPickupsPage.hubsFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Hubs");
+      }
+      shipperPickupsPage.hubsFilter.selectFilter(data.get("hubsFilter"));
+    }
+
+    if (shipperPickupsPage.shipperFilter.isDisplayedFast()) {
+      shipperPickupsPage.shipperFilter.clearAll();
+    }
+    if (data.containsKey("shipper")) {
+      if (!shipperPickupsPage.shipperFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Shipper");
+      }
+      shipperPickupsPage.shipperFilter.selectFilter(data.get("shipper"));
+    }
+
+    if (shipperPickupsPage.masterShipperFilter.isDisplayedFast()) {
+      shipperPickupsPage.masterShipperFilter.clearAll();
+    }
+    if (data.containsKey("masterShipper")) {
+      if (!shipperPickupsPage.masterShipperFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Master Shipper");
+      }
+      shipperPickupsPage.masterShipperFilter.selectFilter(data.get("masterShipper"));
+    }
+
+    if (shipperPickupsPage.zonesFilter.isDisplayedFast()) {
+      shipperPickupsPage.zonesFilter.clearAll();
+    }
+    if (data.containsKey("zones")) {
+      if (!shipperPickupsPage.zonesFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Zones");
+      }
+      shipperPickupsPage.zonesFilter.selectFilter(data.get("zones"));
+    }
+  }
+
+  @When("^Operator updates filters on Shipper Pickups page:$")
+  public void operatorUpdatesFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    shipperPickupsPage.waitUntilPageLoaded();
+
+    if (data.containsKey("reservationDateFrom")) {
+      if (!shipperPickupsPage.reservationDateFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Date");
+      }
+      shipperPickupsPage.reservationDateFilter.selectFromDate(data.get("reservationDateFrom"));
+    }
+
+    if (data.containsKey("reservationDateTo")) {
+      if (!shipperPickupsPage.reservationDateFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Date");
+      }
+      shipperPickupsPage.reservationDateFilter.selectToDate(data.get("reservationDateTo"));
+    }
+
+    if (data.containsKey("reservationTypes")) {
+      if (!shipperPickupsPage.reservationTypesFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Types");
+      }
+      shipperPickupsPage.reservationTypesFilter.clearAll();
+      shipperPickupsPage.reservationTypesFilter
+          .selectFilter(splitAndNormalize(data.get("reservationTypes")));
+    }
+
+    if (data.containsKey("waypointStatus")) {
+      if (!shipperPickupsPage.waypointStatusFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Reservation Types");
+      }
+      shipperPickupsPage.waypointStatusFilter.clearAll();
+      shipperPickupsPage.waypointStatusFilter
+          .selectFilter(splitAndNormalize(data.get("waypointStatus")));
+    }
+
+    if (data.containsKey("hubs")) {
+      if (!shipperPickupsPage.hubsFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Hubs");
+      }
+      shipperPickupsPage.hubsFilter.clearAll();
+      shipperPickupsPage.hubsFilter.selectFilter(data.get("hubs"));
+    }
+
+    if (data.containsKey("shipper")) {
+      if (!shipperPickupsPage.shipperFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Shipper");
+      }
+      shipperPickupsPage.shipperFilter.clearAll();
+      shipperPickupsPage.shipperFilter.selectFilter(data.get("shipper"));
+    }
+
+    if (data.containsKey("masterShipper")) {
+      if (!shipperPickupsPage.masterShipperFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Master Shipper");
+      }
+      shipperPickupsPage.masterShipperFilter.clearAll();
+      shipperPickupsPage.masterShipperFilter.selectFilter(data.get("masterShipper"));
+    }
+
+    if (data.containsKey("zones")) {
+      if (!shipperPickupsPage.zonesFilter.isDisplayedFast()) {
+        shipperPickupsPage.addFilter("Zones");
+      }
+      shipperPickupsPage.zonesFilter.clearAll();
+      shipperPickupsPage.zonesFilter.selectFilter(data.get("zones"));
+    }
+  }
+
+  @When("Operator selects {string} preset action on Shipper Pickups page")
+  public void selectPresetAction(String action) {
+    shipperPickupsPage.presetActions.selectOption(resolveValue(action));
+  }
+
+  @When("Operator verifies Save Preset dialog on Shipper Pickups page contains filters:")
+  public void verifySelectedFiltersForPreset(List<String> expected) {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    List<String> actual = shipperPickupsPage.savePresetDialog.selectedFilters.stream()
+        .map(PageElement::getNormalizedText)
+        .collect(Collectors.toList());
+    Assertions.assertThat(actual)
+        .as("List of selected filters")
+        .containsExactlyInAnyOrderElementsOf(expected);
+  }
+
+  @When("Operator verifies Preset Name field in Save Preset dialog on Shipper Pickups page is required")
+  public void verifyPresetNameIsRequired() {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    Assertions
+        .assertThat(shipperPickupsPage.savePresetDialog.presetName.getAttribute("ng-required"))
+        .as("Preset Name field ng-required attribute")
+        .isEqualTo("required");
+  }
+
+  @When("Operator verifies help text {string} is displayed in Save Preset dialog on Shipper Pickups page")
+  public void verifyHelpTextInSavePreset(String expected) {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.savePresetDialog.helpText.getNormalizedText())
+        .as("Help Text")
+        .isEqualTo(resolveValue(expected));
+  }
+
+  @When("Operator verifies Cancel button in Save Preset dialog on Shipper Pickups page is enabled")
+  public void verifyCancelIsEnabled() {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.savePresetDialog.cancel.isEnabled())
+        .as("Cancel button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator verifies Save button in Save Preset dialog on Shipper Pickups page is enabled")
+  public void verifySaveIsEnabled() {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.savePresetDialog.save.isEnabled())
+        .as("Save button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator clicks Save button in Save Preset dialog on Shipper Pickups page")
+  public void clickSaveInSavePresetDialog() {
+    shipperPickupsPage.savePresetDialog.save.click();
+  }
+
+  @When("Operator clicks Update button in Save Preset dialog on Shipper Pickups page")
+  public void clickUpdateInSavePresetDialog() {
+    shipperPickupsPage.savePresetDialog.update.click();
+  }
+
+  @When("Operator verifies Save button in Save Preset dialog on Shipper Pickups page is disabled")
+  public void verifySaveIsDisabled() {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.savePresetDialog.save.isEnabled())
+        .as("Save button is enabled")
+        .isFalse();
+  }
+
+  @When("Operator verifies selected Filter Preset name is {string} on Shipper Pickups page")
+  public void verifySelectedPresetName(String expected) {
+    expected = resolveValue(expected);
+    String actual = StringUtils.trim(shipperPickupsPage.filterPreset.getValue());
+    Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
+    Matcher m = p.matcher(actual);
+    Assertions.assertThat(m.matches())
+        .as("Selected Filter Preset value matches to pattern")
+        .isTrue();
+    Long presetId = Long.valueOf(m.group(1));
+    String presetName = m.group(2);
+    Assertions.assertThat(presetName)
+        .as("Preset Name")
+        .isEqualTo(expected);
+    put(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID, presetId);
+  }
+
+  @When("Operator selects {string} Filter Preset on Shipper Pickups page")
+  public void selectPresetName(String value) {
+    shipperPickupsPage.filterPreset.searchAndSelectValue(resolveValue(value));
+    if (shipperPickupsPage.halfCircleSpinner.waitUntilVisible(3)) {
+      shipperPickupsPage.halfCircleSpinner.waitUntilInvisible();
+    }
+    pause1s();
+  }
+
+  @When("Operator enters {string} Preset Name in Save Preset dialog on Shipper Pickups page")
+  public void enterPresetNameIsRequired(String presetName) {
+    shipperPickupsPage.savePresetDialog.waitUntilVisible();
+    presetName = resolveValue(presetName);
+    shipperPickupsPage.savePresetDialog.presetName.setValue(presetName);
+    put(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME, presetName);
+  }
+
+  @When("Operator verifies Preset Name field in Save Preset dialog on Shipper Pickups page has green checkmark on it")
+  public void verifyPresetNameIsValidated() {
+    Assertions.assertThat(shipperPickupsPage.savePresetDialog.confirmedIcon.isDisplayed())
+        .as("Preset Name checkmark")
+        .isTrue();
+  }
+
+  @When("^Operator verifies selected filters on Shipper Pickups page:$")
+  public void operatorVerifiesSelectedFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    SoftAssertions assertions = new SoftAssertions();
+
+    if (data.containsKey("reservationDateFrom")) {
+      boolean isDisplayed = shipperPickupsPage.reservationDateFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Reservation Date is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.reservationDateFilter.fromDate.getValue())
+            .as("Reservation Date from")
+            .isEqualTo(data.get("reservationDateFrom"));
+      }
+    }
+
+    if (data.containsKey("reservationDateTo")) {
+      boolean isDisplayed = shipperPickupsPage.reservationDateFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Reservation Date is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.reservationDateFilter.toDate.getValue())
+            .as("Reservation Date to")
+            .isEqualTo(data.get("reservationDateTo"));
+      }
+    }
+
+    if (data.containsKey("reservationTypes")) {
+      boolean isDisplayed = shipperPickupsPage.reservationTypesFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Reservation Types filter is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.reservationTypesFilter.getSelectedValues())
+            .as("Reservation types items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("reservationTypes")));
+      }
+    }
+
+    if (data.containsKey("waypointStatus")) {
+      boolean isDisplayed = shipperPickupsPage.waypointStatusFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Waypoint Status filter is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.waypointStatusFilter.getSelectedValues())
+            .as("Waypoint Status items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("waypointStatus")));
+      }
+    }
+
+    if (data.containsKey("hubs")) {
+      boolean isDisplayed = shipperPickupsPage.hubsFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Hubs filter is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.hubsFilter.getSelectedValues())
+            .as("Hubs items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hubs")));
+      }
+    }
+
+    if (data.containsKey("shipper")) {
+      boolean isDisplayed = shipperPickupsPage.shipperFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Shipper filter is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.shipperFilter.getSelectedValues())
+            .as("Shipper items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipper")));
+      }
+    }
+
+    if (data.containsKey("masterShipper")) {
+      boolean isDisplayed = shipperPickupsPage.masterShipperFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Master Shipper filter is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.masterShipperFilter.getSelectedValues())
+            .as("Master Shipper items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("masterShipper")));
+      }
+    }
+
+    if (data.containsKey("zones")) {
+      boolean isDisplayed = shipperPickupsPage.zonesFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Zones filter is not displayed");
+      } else {
+        assertions.assertThat(shipperPickupsPage.zonesFilter.getSelectedValues())
+            .as("Zones items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("zones")));
+      }
+    }
+
+    assertions.assertAll();
+  }
+
+  @When("Operator verifies Cancel button in Delete Preset dialog on Shipper Pickups page is enabled")
+  public void verifyCancelIsEnabledInDeletePreset() {
+    shipperPickupsPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.deletePresetDialog.cancel.isEnabled())
+        .as("Cancel button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator verifies Delete button in Delete Preset dialog on Shipper Pickups page is enabled")
+  public void verifyDeleteIsEnabled() {
+    shipperPickupsPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.deletePresetDialog.delete.isEnabled())
+        .as("Delete button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator selects {string} preset in Delete Preset dialog on Shipper Pickups page")
+  public void selectPresetInDeletePresets(String value) {
+    shipperPickupsPage.deletePresetDialog.waitUntilVisible();
+    shipperPickupsPage.deletePresetDialog.preset.searchAndSelectValue(resolveValue(value));
+  }
+
+  @When("Operator clicks Delete button in Delete Preset dialog on Shipper Pickups page")
+  public void clickDeleteInDeletePresetDialog() {
+    shipperPickupsPage.deletePresetDialog.delete.click();
+  }
+
+  @When("Operator verifies Delete button in Delete Preset dialog on Shipper Pickups page is disabled")
+  public void verifyDeleteIsDisabled() {
+    shipperPickupsPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.deletePresetDialog.delete.isEnabled())
+        .as("Delete button is enabled")
+        .isFalse();
+  }
+
+  @When("Operator verifies {string} message is displayed in Delete Preset dialog on Shipper Pickups page")
+  public void verifyMessageInDeletePreset(String expected) {
+    shipperPickupsPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(shipperPickupsPage.deletePresetDialog.message.getNormalizedText())
+        .as("Delete Preset message")
+        .isEqualTo(resolveValue(expected));
   }
 }

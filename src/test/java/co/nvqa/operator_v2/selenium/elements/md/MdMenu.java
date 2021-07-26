@@ -18,20 +18,22 @@ public class MdMenu extends PageElement {
     super(webDriver, searchContext, webElement);
   }
 
-  @FindBy(css = "button[ng-click*='$mdOpenMenu($event)'] i")
+  @FindBy(css = "button[ng-click*='$mdOpenMenu($event)']")
   public Button selectionButton;
 
-  private static final String MD_MENU_ITEM_LOCATOR = "div.md-open-menu-container md-menu-item button[aria-label='%s']";
+  private static final String MD_MENU_ITEM_LOCATOR = "div#%s md-menu-item button[aria-label='%s']";
 
   public void selectOption(String option) {
     openMenu();
     option = escapeValue(option);
-    String selector = f(MD_MENU_ITEM_LOCATOR, option);
+    String menuId = selectionButton.getAttribute("aria-owns");
+    String selector = f(MD_MENU_ITEM_LOCATOR, menuId, option);
     new Button(getWebDriver(), getWebDriver().findElement(By.cssSelector(selector))).click();
     pause100ms();
   }
 
   private void openMenu() {
+    selectionButton.scrollIntoView();
     selectionButton.click();
     pause100ms();
   }
