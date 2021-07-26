@@ -395,7 +395,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[0]} departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Complete (uid:b6d4ffd1-5960-48c6-bd09-4b311909f9e7)
@@ -458,7 +458,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on "assign_driver" icon on the action column
     And Operator assign driver "({KEY_LIST_OF_CREATED_DRIVERS[1].username})" to created movement trip
     And Operator depart trip
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[0]} departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Multiple Different Trips (uid:d7dbab63-4e63-4f98-b1f2-5b9c18e5a39c)
@@ -506,9 +506,9 @@ Feature: Movement Trip - Update Trip
       | Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[3].name} to {hub-relation-destination-hub-name} |
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver  
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Same Trip (uid:4203b43a-1aec-43dd-b791-84e4a071f791)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -545,7 +545,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

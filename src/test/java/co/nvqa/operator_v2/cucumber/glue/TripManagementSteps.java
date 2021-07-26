@@ -310,9 +310,10 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.clickButtonOnCancelDialog(buttonValue);
   }
 
-  @And("Operator verifies that there will be a movement trip cancelled toast shown")
-  public void operatorVerifiesMovementTripCancelledToastShown() {
-    tripManagementPage.verifiesSuccessCancelTripToastShown();
+  @And("Operator verifies that there will be a movement trip {string} cancelled toast shown")
+  public void operatorVerifiesMovementTripCancelledToastShown(String tripIdAsString) {
+    Long resolvedTripId = Long.valueOf(resolveValue(tripIdAsString));
+    tripManagementPage.verifiesSuccessCancelTripToastShown(resolvedTripId);
   }
 
   @And("Operator searches for Movement Trip based on status {string}")
