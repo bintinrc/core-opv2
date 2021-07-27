@@ -30,5 +30,7 @@ public class SsbTemplateSteps extends AbstractSteps {
   @And("SSB Report Template Editor page is loaded")
   public void ssbReportTemplateEditorPageIsLoaded() {
     ssbTemplatePage.switchTo();
+    ssbTemplatePage.waitUntilLoaded();
+    ssbTemplatePage.createTemplateHeader.isDisplayed();
   }
 }

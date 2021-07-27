@@ -17,7 +17,7 @@ public class SsbTemplatePage extends OperatorV2SimplePage {
   private PageElement pageFrame;
 
   @FindBy(xpath = "//h1[text()='SSB Report Template Editor']")
-  private PageElement createTemplateHeader;
+  public PageElement createTemplateHeader;
 
   public SsbTemplatePage(WebDriver webDriver) {
     super(webDriver);
@@ -32,5 +32,6 @@ public class SsbTemplatePage extends OperatorV2SimplePage {
       spinner.waitUntilInvisible();
     }
   }
+
 
 }
