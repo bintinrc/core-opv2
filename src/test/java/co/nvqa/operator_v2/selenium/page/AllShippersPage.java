@@ -349,8 +349,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
 
     searchTerm.setValue(keyword);
-    clickAndWaitUntilDone(f(XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN, keyword));
-    loadingShippers.waitUntilInvisible();
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
+    });
   }
 
   public void searchShipperByNameOnShipperListPage(String keyword) {
@@ -362,6 +364,11 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   public void editShipper(Shipper shipper) {
     quickSearchShipper(getSearchKeyword(shipper));
+    if (getWebDriver().getCurrentUrl()
+        .equals(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
+            TestConstants.COUNTRY_CODE, getSearchKeyword(shipper)))) {
+      searchShipperByNameOnShipperListPage(getSearchKeyword(shipper));
+    }
     shippersTable.clickActionButton(1, ACTION_EDIT);
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
