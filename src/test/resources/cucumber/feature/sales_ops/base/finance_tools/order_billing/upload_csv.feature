@@ -257,7 +257,7 @@ Feature: Order Billing
       | endDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator tries to upload a PDF and verifies that any other file except csv is not allowed
 
-  @nadeera
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV with two columns (uid:f404e9e5-70f8-4407-bfa7-3057d410a97f)
     Given API Shipper create V4 order using data below:
@@ -309,7 +309,7 @@ Feature: Order Billing
       | top    | Network Request Error                                                                              |
       | bottom | the request can't be processed: No orders found for the report request ; no file will be generated |
 
-  @nadeera
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - More than 1000 shippers - Generate "SHIPPER" Report (uid:39996a68-c65f-4b6e-a70e-d899eae896f8)
     Given Operator selects Order Billing data as below
