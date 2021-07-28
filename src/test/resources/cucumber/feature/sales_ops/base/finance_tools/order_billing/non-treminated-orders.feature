@@ -10,7 +10,6 @@ Feature: Order Billing
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` Order Exists (uid:e7eee954-af8d-471c-8c60-42df489fe56a)
     Given API Shipper create V4 order using data below:
@@ -192,7 +191,6 @@ Feature: Order Billing
     Then Operator verifies the order with status 'Completed' is displayed on billing report
     Then Operator verifies the priced order details in the body
 
-
   @DeleteOrArchiveRoute @KillBrowser @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:2700aa48-d75b-49da-8493-6b8f6ea4dd77)
     Given API Shipper create V4 order using data below:
@@ -244,7 +242,6 @@ Feature: Order Billing
     Then Operator verifies the order with status 'Returned To Sender' is displayed on billing report
     Then Operator verifies the priced order details in the body
     Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
-
 
   @DeleteOrArchiveRoute @KillBrowser @e2e
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:ddcd007e-92f6-4ab9-acdf-09e970a0cd83)
@@ -402,7 +399,6 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Cancelled ` Order Exists (uid:2b4a671e-f7e7-40a3-86ce-c7e9d74a6e3e)
     Given API Shipper create V4 order using data below:
@@ -440,7 +436,6 @@ Feature: Order Billing
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'Cancelled' is not displayed on billing report
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SCRIPT" Success Billing Report - `Cancelled` Order Exists (uid:fe78275d-b4b9-4bd3-881e-6d6dd5f8d6dc)
@@ -536,7 +531,6 @@ Feature: Order Billing
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - NULL Status Order Exists (uid:97578e96-9d0b-4616-9874-3e4c23cdfdfe)
