@@ -10,8 +10,8 @@ Feature: Order Billing
     Given Operator go to menu Finance Tools -> Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
-
-  @DeleteOrArchiveRoute @KillBrowser
+@nadeera
+@DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -50,6 +50,7 @@ Feature: Order Billing
       | top    | Network Request Error                                                                              |
       | bottom | the request can't be processed: No orders found for the report request ; no file will be generated |
 
+  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SHIPPER" Report (uid:d3e4c175-1eec-415d-a1fe-74ea2a94bc4e)
     Given API Shipper create V4 order using data below:
@@ -307,6 +308,7 @@ Feature: Order Billing
       | top    | Network Request Error                                                                              |
       | bottom | the request can't be processed: No orders found for the report request ; no file will be generated |
 
+  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - More than 1000 shippers - Generate "SHIPPER" Report (uid:39996a68-c65f-4b6e-a70e-d899eae896f8)
     Given Operator selects Order Billing data as below
