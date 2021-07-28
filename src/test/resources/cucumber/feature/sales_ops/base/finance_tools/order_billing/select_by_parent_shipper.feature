@@ -26,8 +26,8 @@ Feature: Order Billing
       | shipperClientSecret | {sub-shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-
-    @DeleteOrArchiveRoute @KillBrowser
+@nadeera
+@DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:9f788797-8cda-4fad-b87b-8e92009577b6)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -80,8 +80,8 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-    @nadeera
-    @DeleteOrArchiveRoute @KillBrowser
+
+  @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:398a38d3-c451-409b-8a7a-f9e015e0a0e3)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:

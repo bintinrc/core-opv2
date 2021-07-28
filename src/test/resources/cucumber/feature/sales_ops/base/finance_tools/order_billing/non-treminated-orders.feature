@@ -192,8 +192,8 @@ Feature: Order Billing
     Then Operator verifies the order with status 'Completed' is displayed on billing report
     Then Operator verifies the priced order details in the body
 
-    @nadeera
-    @DeleteOrArchiveRoute @KillBrowser @e2e
+@nadeera
+@DeleteOrArchiveRoute @KillBrowser @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:2700aa48-d75b-49da-8493-6b8f6ea4dd77)
     Given API Shipper create V4 order using data below:
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -245,7 +245,7 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
     Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
 
-  @nadeera
+
   @DeleteOrArchiveRoute @KillBrowser @e2e
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:ddcd007e-92f6-4ab9-acdf-09e970a0cd83)
     Given API Shipper create V4 order using data below:
@@ -363,7 +363,7 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
-  @nadeera
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `On Vehicle for Delivery` Order Exists (uid:a6142b06-fa81-45cf-b206-c73e43c58915)
     Given API Shipper create V4 order using data below:
@@ -402,7 +402,7 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
-  @nadeera
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Cancelled ` Order Exists (uid:2b4a671e-f7e7-40a3-86ce-c7e9d74a6e3e)
     Given API Shipper create V4 order using data below:
@@ -441,7 +441,7 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'Cancelled' is not displayed on billing report
 
-  @nadeera
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SCRIPT" Success Billing Report - `Cancelled` Order Exists (uid:fe78275d-b4b9-4bd3-881e-6d6dd5f8d6dc)
     Given API Shipper create V4 order using data below:
