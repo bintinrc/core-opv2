@@ -197,13 +197,12 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | type              | FLAT                                            |
-      | discount          | 2.0                                             |
+      | discount          | 3.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     When Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
-    And DB Operator fetches shipper id
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
@@ -226,7 +225,6 @@ Feature:  Corporate Shipper
   Scenario: Create Pricing Profile for Corporate Shipper, new Profile become Active, the old one become Expired - Corporate Sub Shipper who has Reference Parent's Pricing Profile is Exists (uid:3b8b774a-737b-4c98-939a-c25583a393cb)
     # Corporate shipper has an active pricing profile
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
-    And DB Operator fetches shipper id
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -251,8 +249,11 @@ Feature:  Corporate Shipper
     # update effective date from db
     And Operator updates effective date to "{gradle-next-0-day-yyyy-MM-dd}" date
     And API Script Engine clear the shipper's cache
-    Then DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details in the database
+    Then DB Operator gets the shippers active pricing script ID
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details are correct
+    And DB Operator fetches pricing lever details
+    And Operator verifies the pricing lever details in the database
 
   @CloseNewWindows
   Scenario: Create a new Corporate Sub Shipper - Reference Pricing Profile from Corporate (Parent) Shipper who has Active Pricing Profile (uid:5a94b7c1-6242-48a4-8768-9296ac8667e9)
@@ -275,7 +276,7 @@ Feature:  Corporate Shipper
       | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
       | email    | test@ninjavan.com                                                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And Operator edits the created sub-shipper
+    And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
 
   @CloseNewWindows
@@ -307,7 +308,7 @@ Feature:  Corporate Shipper
       | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
       | email    | test@ninjavan.com                                                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And Operator edits the created sub-shipper
+    And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
 
   @CloseNewWindows
@@ -319,7 +320,7 @@ Feature:  Corporate Shipper
       | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
       | email    | test@ninjavan.com                                                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And Operator edits the created sub-shipper
+    And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-active-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
 
   @CloseNewWindows
@@ -331,5 +332,5 @@ Feature:  Corporate Shipper
       | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
       | email    | test@ninjavan.com                                                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And Operator edits the created sub-shipper
+    And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"

@@ -1021,6 +1021,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.editShipper(shipper);
   }
 
+  @When("Operator edits the created corporate sub-shipper")
+  public void editCreatedCorporateSubshipper() {
+    String corporateSubShipperName = get(KEY_SHIPPER_NAME);
+    allShippersPage.searchShipperByNameOnShipperListPage(corporateSubShipperName);
+    allShippersPage.editShipperOnShipperListPage();
+  }
+
   @When("Operator edits the created marketplace sub-shipper")
   public void operatorEditsCreatedMarketplaceSubshipper() {
     Marketplace marketplaceSellerId = get(KEY_MARKETPLACE_SUB_SHIPPER);
@@ -1038,6 +1045,7 @@ public class AllShippersSteps extends AbstractSteps {
     }
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
+    put(KEY_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     openSpecificShipperEditPage(shipperLegacyId);
   }
