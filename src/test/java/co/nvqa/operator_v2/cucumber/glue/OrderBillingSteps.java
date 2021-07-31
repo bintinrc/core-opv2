@@ -186,5 +186,8 @@ public class OrderBillingSteps extends AbstractSteps {
     }
   }
 
-
+  @Then("Operator verifies {string} is not available in template selector drop down menu")
+  public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String template) {
+    assertFalse(orderBillingPage.csvFileTemplate.isValueExist(template));
+  }
 }

@@ -10,7 +10,6 @@ Feature: Order Billing
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` Order Exists (uid:e7eee954-af8d-471c-8c60-42df489fe56a)
     Given API Shipper create V4 order using data below:
@@ -361,6 +360,7 @@ Feature: Order Billing
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `On Vehicle for Delivery` Order Exists (uid:a6142b06-fa81-45cf-b206-c73e43c58915)
     Given API Shipper create V4 order using data below:
@@ -531,7 +531,6 @@ Feature: Order Billing
     Then Operator verifies zip is attached with one CSV file in received email
     And Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - NULL Status Order Exists (uid:97578e96-9d0b-4616-9874-3e4c23cdfdfe)
