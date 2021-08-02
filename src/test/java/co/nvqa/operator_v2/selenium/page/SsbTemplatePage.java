@@ -9,12 +9,6 @@ import org.openqa.selenium.support.FindBy;
 
 public class SsbTemplatePage extends SimpleReactPage {
 
-  private static String XPATH_HEADER_COLUMN = "//div[text()='%s']";
-  private static String XPATH_HEADER_COLUMN_DROP_AREA = "//div[@data-testid='selected-drop-area']";
-
-  @FindBy(tagName = "iframe")
-  private PageElement pageFrame;
-
   @FindBy(xpath = "//h1[text()='SSB Report Template Editor']")
   public PageElement createTemplateHeader;
 
@@ -32,15 +26,19 @@ public class SsbTemplatePage extends SimpleReactPage {
 
   @FindBy(xpath = "//button[@data-testid='submit-btn']")
   private Button submitBtn;
+
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement antNotificationMessage;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement antNotificationMessageDescription;
+
   @FindBy(xpath = "//button[@label='Create New Template']")
   private Button createNewTemplateBtn;
-  @FindBy(css = ".ant-spin-dot")
-  private PageElement spinner;
+
+  private static String XPATH_HEADER_COLUMN = "//div[text()='%s']";
+  private static String XPATH_HEADER_COLUMN_DROP_AREA = "//div[@data-testid='selected-drop-area']";
+
 
   public SsbTemplatePage(WebDriver webDriver) {
     super(webDriver);
