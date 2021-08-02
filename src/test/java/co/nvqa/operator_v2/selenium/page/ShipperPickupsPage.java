@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
@@ -15,6 +16,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
@@ -58,6 +60,18 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   public static final String ITEM_SUGGEST_ROUTE = "Suggest Route";
   public static final String ITEM_EDIT_PRIORITY_LEVEL = "Edit Priority Level";
 
+  @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
+  public MdAutocomplete addFilter;
+
+  @FindBy(css = "[id^='commons.preset.load-filter-preset']")
+  public MdSelect filterPreset;
+
+  @FindBy(css = "md-dialog")
+  public AllOrdersPage.SavePresetDialog savePresetDialog;
+
+  @FindBy(css = "md-dialog")
+  public AllOrdersPage.DeletePresetDialog deletePresetDialog;
+
   @FindBy(css = "md-dialog")
   public ReservationDetailsDialog reservationDetailsDialog;
 
@@ -79,8 +93,29 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public RemoveRouteFromReservationsDialog removeRouteFromReservationsDialog;
 
+  @FindBy(css = "nv-filter-date-box")
+  public NvFilterDateBox reservationDateFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Reservation Types']")
+  public NvFilterBox reservationTypesFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Waypoint Status']")
+  public NvFilterBox waypointStatusFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Hubs']")
+  public NvFilterBox hubsFilter;
+
   @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
   public NvFilterAutocomplete shipperFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Master Shipper']")
+  public NvFilterBox masterShipperFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Zones']")
+  public NvFilterBox zonesFilter;
+
+  @FindBy(xpath = "//md-menu[contains(.,'Preset Actions')]")
+  public MdMenu presetActions;
 
   @FindBy(name = "commons.edit-fiters")
   public NvIconTextButton editFilters;
@@ -100,6 +135,18 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     bulkPriorityEditDialog = new BulkPriorityEditDialog(webDriver);
     reservationsTable = new ReservationsTable(webDriver);
     filtersForm = new FiltersForm(webDriver);
+  }
+
+  public void addFilter(String value) {
+    addFilter.selectValue(value);
+    addFilter.closeSuggestions();
+  }
+
+  public void waitUntilPageLoaded() {
+    super.waitUntilPageLoaded();
+    if (halfCircleSpinner.waitUntilVisible(2)) {
+      halfCircleSpinner.waitUntilInvisible(60);
+    }
   }
 
   public BulkRouteAssignmentDialog bulkRouteAssignmentDialog() {
@@ -886,6 +933,53 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     public PageElement status;
 
     public PodDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class SavePresetDialog extends MdDialog {
+
+    @FindBy(css = "div[ng-repeat='filter in selectedFilters']")
+    public List<PageElement> selectedFilters;
+
+    @FindBy(css = "[id^='container.route-logs.preset-name']")
+    public TextBox presetName;
+
+    @FindBy(css = "div.help-text")
+    public PageElement helpText;
+
+    @FindBy(css = "i.input-confirmed")
+    public PageElement confirmedIcon;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.save")
+    public NvIconTextButton save;
+
+    @FindBy(name = "commons.update")
+    public NvIconTextButton update;
+
+    public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class DeletePresetDialog extends MdDialog {
+
+    @FindBy(css = "[id^='container.route-logs.select-preset']")
+    public MdSelect preset;
+
+    @FindBy(css = "[translate='commons.preset.confirm-delete-x']")
+    public PageElement message;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.delete")
+    public NvIconTextButton delete;
+
+    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

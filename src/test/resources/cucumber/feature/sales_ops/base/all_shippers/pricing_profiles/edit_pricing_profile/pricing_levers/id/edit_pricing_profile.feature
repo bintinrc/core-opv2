@@ -25,13 +25,13 @@ Feature: Edit Pricing Profiles - ID
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName       | {KEY_CREATED_SHIPPER.name}     |
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
       | type              | Percentage                                  |
@@ -61,20 +61,20 @@ Feature: Edit Pricing Profiles - ID
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
       | discount          | 10                                          |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName       | {KEY_CREATED_SHIPPER.name}     |
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
       | type              | Percentage                                  |
-      | discount          | 10                             |
+      | discount          | 10                                          |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | none                                            |
@@ -83,12 +83,12 @@ Feature: Edit Pricing Profiles - ID
     And Operator edits the created shipper
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName       | {KEY_CREATED_SHIPPER.name}     |
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipperName       | {KEY_CREATED_SHIPPER.name}                      |
+      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | type              | Percentage                                      |
-      | discount          | none                           |
+      | discount          | none                                            |
 
 
   Scenario: Update Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:9f2e8e1f-de51-4475-806a-c63e021f729d)
@@ -111,46 +111,46 @@ Feature: Edit Pricing Profiles - ID
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | discount            | 10                                          |
-      | insuranceMinFee     | 0                              |
-      | insurancePercentage | 0                              |
-      | insuranceThreshold  | 0                              |
+      | insuranceMinFee     | 0                                           |
+      | insurancePercentage | 0                                           |
+      | insuranceThreshold  | 0                                           |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName         | {KEY_CREATED_SHIPPER.name}     |
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipperName         | {KEY_CREATED_SHIPPER.name}                  |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
       | type                | Percentage                                  |
-      | discount            | 10                             |
-      | insuranceMinFee     | 0                              |
-      | insurancePercentage | 0                              |
-      | insuranceThreshold  | 0                              |
+      | discount            | 10                                          |
+      | insuranceMinFee     | 0                                           |
+      | insurancePercentage | 0                                           |
+      | insuranceThreshold  | 0                                           |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate             | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount            | none                                            |
-      | insuranceMinFee     | 23                             |
-      | insurancePercentage | 35                             |
-      | insuranceThreshold  | 0                              |
+      | insuranceMinFee     | 23                                              |
+      | insurancePercentage | 35                                              |
+      | insuranceThreshold  | 0                                               |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName         | {KEY_CREATED_SHIPPER.name}     |
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipperName         | {KEY_CREATED_SHIPPER.name}                      |
+      | startDate           | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate             | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
       | type                | Percentage                                      |
-      | discount            | none                           |
-      | insuranceMinFee     | 23                             |
-      | insurancePercentage | 35                             |
-      | insuranceThreshold  | 0                              |
+      | discount            | none                                            |
+      | insuranceMinFee     | 23                                              |
+      | insurancePercentage | 35                                              |
+      | insuranceThreshold  | 0                                               |
 
 
   @KillBrowser @ShouldAlwaysRun

@@ -599,6 +599,34 @@ public class RouteLogsSteps extends AbstractSteps {
     assertTrue("Toast " + finalData.toString() + " is displayed", found);
   }
 
+  @And("Operator verifies that warning toast displayed:")
+  public void operatorVerifyWarningToast(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    long start = new Date().getTime();
+    boolean found;
+    do {
+      found = routeLogsPage.toastWarnings.stream().anyMatch(toast -> {
+        String value = finalData.get("top");
+        if (StringUtils.isNotBlank(value)) {
+          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+            return false;
+          }
+        }
+        value = finalData.get("bottom");
+        if (StringUtils.isNotBlank(value)) {
+          String actual = toast.toastBottom.getNormalizedText();
+          if (value.startsWith("^")) {
+            return actual.matches(value);
+          } else {
+            return StringUtils.equalsIgnoreCase(value, actual);
+          }
+        }
+        return true;
+      });
+    } while (!found && new Date().getTime() - start < 20000);
+    assertTrue("Toast " + finalData.toString() + " is displayed", found);
+  }
+
   @Then("^Operator verify the route is started after van inbounding using data below:$")
   public void verifyRouteIsStarted(Map<String, String> mapOfData) throws ParseException {
     long routeId = get(KEY_CREATED_ROUTE_ID);

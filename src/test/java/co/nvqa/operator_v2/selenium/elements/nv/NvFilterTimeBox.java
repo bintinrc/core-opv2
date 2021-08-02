@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import java.util.Date;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,11 @@ public class NvFilterTimeBox extends AbstractFilterBox {
 
   public NvFilterTimeBox(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
+  }
+
+  public NvFilterTimeBox(WebDriver webDriver, SearchContext searchContext,
+      WebElement webElement) {
+    super(webDriver, searchContext, webElement);
   }
 
   @FindBy(xpath = "(.//md-datepicker)[1]")

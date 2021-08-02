@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.AbstractFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
@@ -15,6 +16,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -46,6 +48,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   private final Map<String, Consumer<String>> filterSetters;
   public TxnRsvnTable txnRsvnTable;
 
+  //region General Filters
   @FindBy(xpath = "//nv-filter-date-box[.//p[.='Start Datetime']]")
   public NvFilterDateBox startDateTimeFilter;
 
@@ -67,6 +70,10 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   @FindBy(css = "nv-filter-boolean-box[main-title='Routed']")
   public NvFilterBooleanBox routedFilter;
 
+  @FindBy(css = "nv-filter-box[item-types='Master Shipper']")
+  public NvFilterBox masterShipperFilter;
+  //endregion
+
   @FindBy(css = "[id^='route-group']")
   public MdSelect routeGroup;
 
@@ -85,14 +92,56 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
   public NvAutocomplete addFilter;
 
-  @FindBy(css = "div[possible-filters='ctrl.possibleRxnFilters']")
-  public ReservationFiltersForm reservationFiltersForm;
+  @FindBy(xpath = "//button[.='Include Transactions']")
+  public Button includeTransactions;
+
+  @FindBy(xpath = "//button[.='Hide Transactions']")
+  public Button hideTransactions;
 
   @FindBy(css = "div[possible-filters='ctrl.possibleTxnFilters']")
   public TransactionsFiltersForm transactionsFiltersForm;
 
+  @FindBy(xpath = "//button[.='Include Reservations']")
+  public Button includeReservations;
+
+  @FindBy(xpath = "//button[.='Hide Reservations']")
+  public Button hideReservations;
+
+  @FindBy(css = "div[possible-filters='ctrl.possibleRxnFilters']")
+  public ReservationFiltersForm reservationFiltersForm;
+
+  @FindBy(xpath = "//button[.='Include Shipments']")
+  public Button includeShipments;
+
+  @FindBy(xpath = "//button[.='Hide Shipments']")
+  public Button hideShipments;
+
+  @FindBy(css = "div.filter-box-container[possible-filters='ctrl.possibleShipmentFilters']")
+  public ShipmentFiltersForm shipmentFiltersForm;
+
+  @FindBy(css = "div[possible-filters='ctrl.possibleGeneralFilters']")
+  public GeneralFiltersForm generalFiltersForm;
+
   @FindBy(name = "Download CSV File")
   public NvApiIconButton downloadCsvFile;
+
+  @FindBy(xpath = "(//md-menu[contains(.,'Preset Actions')])[1]")
+  public MdMenu presetActions;
+
+  @FindBy(xpath = "(//md-menu[contains(.,'Preset Actions')])[2]")
+  public MdMenu shippersPresetActions;
+
+  @FindBy(css = "md-dialog")
+  public AllOrdersPage.SavePresetDialog savePresetDialog;
+
+  @FindBy(css = "md-dialog")
+  public AllOrdersPage.DeletePresetDialog deletePresetDialog;
+
+  @FindBy(css = "[id^='commons.preset.load-filter-preset']")
+  public MdSelect filterPreset;
+
+  @FindBy(xpath = "(//*[contains(@id,'commons.preset.load-filter-preset')])[2]")
+  public MdSelect shippersFilterPreset;
 
   public Map<String, AbstractFilterBox> filters;
 
@@ -121,6 +170,13 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   public void waitUntilRouteGroupPageIsLoaded() {
     waitUntilInvisibilityOfElementLocated(
         "//div[contains(@class,'message') and text()='Loading...']");
+  }
+
+  public void waitUntilPageLoaded() {
+    super.waitUntilPageLoaded();
+    if (halfCircleSpinner.waitUntilVisible(1)) {
+      halfCircleSpinner.waitUntilInvisible(60);
+    }
   }
 
   public void setCreationTimeFilter() {
@@ -280,6 +336,9 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
     @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
     public NvAutocomplete addFilter;
 
+    @FindBy(css = "nv-filter-box[item-types='Pick Up Size']")
+    public NvFilterBox pickUpSizeFilter;
+
     @FindBy(css = "nv-filter-box[item-types='Reservation Type']")
     public NvFilterBox reservationTypeFilter;
 
@@ -296,13 +355,164 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
     @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
     public NvAutocomplete addFilter;
 
-    @FindBy(css = "nv-filter-boolean-box[main-title='RTS']")
-    public NvFilterBooleanBox rtsFilter;
+    @FindBy(css = "nv-filter-box[item-types='Granular Order Status']")
+    public NvFilterBox granularOrderStatusFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Order Service Type']")
+    public NvFilterBox orderServiceTypeFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Zone']")
+    public NvFilterBox zoneFilter;
 
     @FindBy(css = "nv-filter-box[item-types='Order Type']")
     public NvFilterBox orderTypeFilter;
 
+    @FindBy(css = "nv-filter-box[item-types='PP/DD Leg']")
+    public NvFilterBox ppDdLegFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Transaction Status']")
+    public NvFilterBox transactionStatusFilter;
+
+    @FindBy(css = "nv-filter-boolean-box[main-title='RTS']")
+    public NvFilterBooleanBox rtsFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Parcel Size']")
+    public NvFilterBox parcelSizeFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Timeslots']")
+    public NvFilterBox timeslotsFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Delivery Type']")
+    public NvFilterBox deliveryTypeFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='DNR Group']")
+    public NvFilterBox dnrGroupFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Bulky Types']")
+    public NvFilterBox bulkyTypesFilter;
+
     public TransactionsFiltersForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ShipmentFiltersForm extends PageElement {
+
+    @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
+    public NvAutocomplete addFilter;
+
+    @FindBy(css = "nv-filter-time-box[main-title='Shipment Date']")
+    public NvFilterTimeBox shipmentDateFilter;
+
+    @FindBy(css = "nv-filter-time-box[main-title='ETA (Date Time)']")
+    public NvFilterTimeBox etaDateTimeFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='End Hub']")
+    public NvFilterBox endHubFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Last Inbound Hub']")
+    public NvFilterBox lastInboundHubFilter;
+
+    @FindBy(css = "nv-filter-free-text-box[main-title='MAWB']")
+    public NvFilterFreeTextBox mawbFilter;
+
+    @FindBy(css = "nv-filter-time-box[main-title='Shipment Completion Date Time']")
+    public NvFilterTimeBox shipmentCompletionDateTimeFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Shipment Status']")
+    public NvFilterBox shipmentStatusFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Shipment Type']")
+    public NvFilterBox shipmentTypeFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Start Hub']")
+    public NvFilterBox startHubFilter;
+
+    @FindBy(css = "nv-filter-time-box[main-title='Transit Date Time']")
+    public NvFilterTimeBox transitDateTimeFilter;
+
+    public ShipmentFiltersForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class GeneralFiltersForm extends PageElement {
+
+    @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
+    public NvAutocomplete addFilter;
+
+    @FindBy(xpath = "//nv-filter-date-box[.//p[.='Start Datetime']]")
+    public NvFilterDateBox startDateTimeFilter;
+
+    @FindBy(xpath = "//nv-filter-date-box[.//p[.='End Datetime']]")
+    public NvFilterDateBox endDateTimeFilter;
+
+    @FindBy(css = "nv-filter-time-box[main-title='Creation Time']")
+    public NvFilterTimeBox creationTimeFilter;
+
+    @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
+    public NvFilterAutocomplete shipperFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='DP Order']")
+    public NvFilterBox dpOrderFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Route Grouping']")
+    public NvFilterBox routeGroupingFilter;
+
+    @FindBy(css = "nv-filter-boolean-box[main-title='Routed']")
+    public NvFilterBooleanBox routedFilter;
+
+    @FindBy(css = "nv-filter-box[item-types='Master Shipper']")
+    public NvFilterBox masterShipperFilter;
+
+    public GeneralFiltersForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class SavePresetDialog extends MdDialog {
+
+    @FindBy(css = "div[ng-repeat='filter in selectedFilters']")
+    public List<PageElement> selectedFilters;
+
+    @FindBy(css = "[id^='container.route-logs.preset-name']")
+    public TextBox presetName;
+
+    @FindBy(css = "div.help-text")
+    public PageElement helpText;
+
+    @FindBy(css = "i.input-confirmed")
+    public PageElement confirmedIcon;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.save")
+    public NvIconTextButton save;
+
+    @FindBy(name = "commons.update")
+    public NvIconTextButton update;
+
+    public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class DeletePresetDialog extends MdDialog {
+
+    @FindBy(css = "[id^='container.route-logs.select-preset']")
+    public MdSelect preset;
+
+    @FindBy(css = "[translate='commons.preset.confirm-delete-x']")
+    public PageElement message;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.delete")
+    public NvIconTextButton delete;
+
+    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
