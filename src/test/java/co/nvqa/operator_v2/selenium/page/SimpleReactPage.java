@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -37,10 +39,14 @@ public class SimpleReactPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilVisibilityOfNotification(String message) {
+    waitUntilVisibilityOfNotification(message, 20000);
+  }
+
+  public void waitUntilVisibilityOfNotification(String message, int timeoutInMillis) {
     waitUntil(() ->
             noticeNotifications.stream().anyMatch(notification ->
                 StringUtils.equalsIgnoreCase(notification.message.getText(), message))
-        , 20000);
+        , timeoutInMillis);
   }
 
   public void inFrame(Consumer<SimpleReactPage> consumer) {
@@ -64,4 +70,17 @@ public class SimpleReactPage extends OperatorV2SimplePage {
       getWebDriver().switchTo().defaultContent();
     }
   }
+
+  public void dragAndDrop(WebElement from, WebElement to) {
+    Actions actions = new Actions(getWebDriver());
+    actions
+        .clickAndHold(from)
+        .moveByOffset(-10,
+            0) //need a slight movement to trigger a drag event before you try to move to your actual destination
+        .moveToElement(to)
+        .release()
+        .perform();
+    pause100ms();
+  }
+
 }
