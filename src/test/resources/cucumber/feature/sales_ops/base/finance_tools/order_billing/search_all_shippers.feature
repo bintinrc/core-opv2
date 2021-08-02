@@ -28,7 +28,6 @@ Feature: Order Billing
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:59af6bea-ac85-446d-97ba-4d386577f447)
     Given API Shipper create V4 order using data below:
@@ -70,8 +69,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
-    Then Operator verifies the header using data below:
-      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
+    Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 
   @KillBrowser

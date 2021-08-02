@@ -66,8 +66,7 @@ Feature: Order Billing
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
     Then Operator gets the orders and parcel size and weight from the database for specified shipper
-    Then Operator verifies the header using data below:
-      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
+    Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 
   @DeleteOrArchiveRoute @KillBrowser

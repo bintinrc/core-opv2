@@ -155,8 +155,7 @@ Feature: Order Billing
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
-    Then Operator verifies the header using data below:
-      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
+    Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
@@ -190,8 +189,7 @@ Feature: Order Billing
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
-    Then Operator verifies the header using data below:
-      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
+    Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 

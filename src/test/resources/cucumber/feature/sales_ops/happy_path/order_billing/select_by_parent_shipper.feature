@@ -76,8 +76,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator reads the CSV attachment for "Aggregated Billing Report"
-    Then Operator verifies the header using data below:
-      | "Legacy Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "NV Measured Weight" | "Count" | "Cost" |
+    Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
