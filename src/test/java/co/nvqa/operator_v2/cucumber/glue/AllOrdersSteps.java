@@ -195,6 +195,7 @@ public class AllOrdersSteps extends AbstractSteps {
       }
     }
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    pause2s();
   }
 
   @When("^Operator verifies error messages in dialog on All Orders page:$")
