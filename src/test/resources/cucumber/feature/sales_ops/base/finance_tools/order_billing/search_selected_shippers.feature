@@ -142,7 +142,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                          |
-      | uploadCsv       | {shipper-sop-v4-rts-discount-30-legacy-id}                |
+      | shipper         | {shipper-sop-v4-rts-discount-30-legacy-id}                |
       | generateFile    | All orders (1 very big file, takes long time to generate) |
       | emailAddress    | {order-billing-email}                                     |
       | csvFileTemplate | {csv-template}                                            |
@@ -167,7 +167,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate         | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | uploadCsv       | {shipper-sop-v4-rts-surcharge-30-legacy-id}                                           |
+      | shipper         | {shipper-sop-v4-rts-surcharge-30-legacy-id}                                           |
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
