@@ -1334,6 +1334,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     String shipperInsThreshold = pricing.getInsThreshold();
     if (Objects.isNull(shipperInsMin) && Objects.isNull(shipperInsPercentage) && Objects
         .isNull(shipperInsThreshold)) {
+      newPricingProfileDialog.insuranceCountryDefaultCheckbox.scrollIntoView();
       newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
     } else {
       if (Objects.nonNull(shipperInsMin) && shipperInsMin.equalsIgnoreCase("none")) {
