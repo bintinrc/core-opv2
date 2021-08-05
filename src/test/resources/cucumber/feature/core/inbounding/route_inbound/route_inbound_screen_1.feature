@@ -6,7 +6,7 @@ Feature: Route Inbound Screen 1
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator get route details by - <Title> (<hiptest-uid>)
+  Scenario Outline: Operator get route details by - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -38,7 +38,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     Examples:
-      | Title       | hiptest-uid                              | fetchBy              | fetchByValue                    |
+      | Note        | hiptest-uid                              | fetchBy              | fetchByValue                    |
       | Route ID    | uid:a5f5fc7f-ee43-423a-a0f8-9e1193285952 | FETCH_BY_ROUTE_ID    | {KEY_CREATED_ROUTE_ID}          |
       | Tracking ID | uid:dbbf61d7-deec-4e8e-8277-f2a73ac05768 | FETCH_BY_TRACKING_ID | {KEY_CREATED_ORDER_TRACKING_ID} |
       | Driver      | uid:97852b05-c887-40a7-88b7-2a6cba64e6a1 | FETCH_BY_DRIVER      | {ninja-driver-name}             |
