@@ -75,6 +75,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
       script.setUpdatedAt(MYSQL_24_SDF.format(new Date()));
     }
+    takesScreenshot();
     pricingScriptsV2Page.createDraft(script);
     takesScreenshot();
     put(KEY_CREATED_PRICING_SCRIPT, script);
