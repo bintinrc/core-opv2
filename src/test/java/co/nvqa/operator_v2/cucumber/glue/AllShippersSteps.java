@@ -1047,12 +1047,14 @@ public class AllShippersSteps extends AbstractSteps {
     String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
         TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, shipperLegacyId));
+    takesScreenshot();
 
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
     getWebDriver().get(editSpecificShipperPageURL);
+    takesScreenshot();
     allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
