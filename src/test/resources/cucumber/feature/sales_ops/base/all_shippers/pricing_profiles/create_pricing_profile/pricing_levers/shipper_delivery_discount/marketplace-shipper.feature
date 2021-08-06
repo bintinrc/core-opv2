@@ -183,3 +183,7 @@ Feature: Marketplace Shipper
     Then Operator verifies the pricing lever details in the database
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     And Operator verifies that Edit Pending Profile is displayed
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

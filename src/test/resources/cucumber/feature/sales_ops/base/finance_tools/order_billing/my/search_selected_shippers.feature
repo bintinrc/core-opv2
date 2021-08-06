@@ -9,7 +9,7 @@ Feature: Order Billing
     And operator marks gmail messages as read
 
 
-  @KillBrowser
+
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - MY (uid:0691e4cc-60f6-4568-b6ab-102a9f88f17b)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-normal-noDiscount-country-default-3-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -32,3 +32,7 @@ Feature: Order Billing
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

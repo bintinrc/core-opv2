@@ -147,3 +147,7 @@ Feature: Edit Pricing Script
     And Operator edit the created Draft Script using data below:
       | source | function calculatePricing(params) {var price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
     Then Operator verify error message in header with "SyntaxError"
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
