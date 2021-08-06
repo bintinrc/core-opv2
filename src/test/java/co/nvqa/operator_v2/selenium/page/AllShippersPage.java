@@ -525,7 +525,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
     String codPercentage = pricingProfile.getCodPercentage();
     if (Objects.nonNull(codPercentage)) {
-      assertEquals("COD percentage is not the same: ", codPercentage,
+      assertEquals("COD percentage is not the same: ", codPercentage + "%",
           pricingProfileFromOPV2.getCodPercentage());
     }
     String insMin = pricingProfile.getInsMin();
@@ -535,7 +535,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
     String insPercentage = pricingProfile.getInsPercentage();
     if (Objects.nonNull(insPercentage)) {
-      assertEquals("INS min percentage is not the same: ", insPercentage,
+      assertEquals("INS min percentage is not the same: ", insPercentage + "%",
           pricingProfileFromOPV2.getInsPercentage());
     }
     String insThreshold = pricingProfile.getInsThreshold();
