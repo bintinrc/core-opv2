@@ -101,7 +101,8 @@ Feature: Create Pricing Profile
     When Operator adds new pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable
 
-  @CloseNewWindows
+    @nadeera
+    @CloseNewWindows
   Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
