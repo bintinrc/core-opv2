@@ -5,7 +5,7 @@ Feature: Edit Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Change Delivery Verification Method from Edit Order (<hiptest-uid>)
+  Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -154,7 +154,7 @@ Feature: Edit Order
     Then Operator Edit Order Details on Edit Order page successfully
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -442,7 +442,7 @@ Feature: Edit Order
     Then Operator verify the order completed successfully on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

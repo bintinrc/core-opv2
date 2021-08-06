@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import javax.inject.Singleton;
@@ -78,5 +79,17 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
     } catch (Throwable th) {
       NvLogger.warn("Failed to 'Close new windows'.", th);
     }
+  }
+
+  @After
+  public void afterScenario(Scenario scenario) {
+    final String DOMAIN = "SUMMARY";
+    testCaseService.pushExecutionResultViaApi(scenario);
+
+    if (scenario.isFailed() && NvLogger.isInMemoryEnabled()) {
+      NvLogger.error(DOMAIN, "scenario: " + scenario.getName() + " error");
+      NvLogger.info(NvLogger.getLogStash());
+    }
+    NvLogger.reset();
   }
 }
