@@ -78,6 +78,7 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     And Operator search according to "id" and verify search result
 
+    @nadeera
   Scenario: Delete Script - Active Script, None Linked Shippers (uid:b2873694-a110-498d-a37d-1bca146267e2)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

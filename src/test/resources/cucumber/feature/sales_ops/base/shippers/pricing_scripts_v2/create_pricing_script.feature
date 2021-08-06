@@ -236,7 +236,8 @@ Feature: Pricing Scripts V2
     And Operator verify the script is saved successfully
     And Operator verify Draft Script data is correct
 
-  @DeletePricingScript
+    @nadeera
+    @DeletePricingScript
   Scenario: Create Pricing Script - Import from CSV File Fails (uid:4b0b4ba7-1a1f-46e1-af20-adf2307f3950)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
