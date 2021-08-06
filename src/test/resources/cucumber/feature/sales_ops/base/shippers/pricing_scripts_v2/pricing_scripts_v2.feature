@@ -69,6 +69,7 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     And Operator search according to "description" and verify search result
 
+  @nadeera
   @DeletePricingScript
   Scenario: Search Active Scripts - Search by ID (uid:2f5578ff-eb9e-452c-8eb4-a4e82224a7f2)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -89,6 +90,7 @@ Feature: Pricing Scripts V2
     When Operator delete Active Script
     Then Operator verify the Active Script is deleted successfully
 
+  @nadeera
   Scenario: Delete Script - Active Script, Linked Shippers is Exists (uid:d46959d1-3bae-4658-b9ba-92a3424b5222)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
