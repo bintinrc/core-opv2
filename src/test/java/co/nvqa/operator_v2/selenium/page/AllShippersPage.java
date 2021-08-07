@@ -469,7 +469,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("COD percentage is - ", "-",
           pricingProfileFromOPV2.getCodPercentage());
     } else {
-      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
+      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage() + "%",
           pricingProfileFromOPV2.getCodPercentage());
     }
     if (Objects.isNull(pricingProfile.getInsMin())) {
@@ -483,7 +483,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS percentage is - ", "-",
           pricingProfileFromOPV2.getInsPercentage());
     } else {
-      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage(),
+      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage() + "%",
           pricingProfileFromOPV2.getInsPercentage());
     }
     if (Objects.isNull(pricingProfile.getInsThreshold())) {
