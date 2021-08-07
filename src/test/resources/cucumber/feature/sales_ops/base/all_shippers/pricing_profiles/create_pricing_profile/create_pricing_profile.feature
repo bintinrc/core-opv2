@@ -24,7 +24,7 @@ Feature: Create Pricing Profile
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
-@nadeera
+#@nadeera
   Scenario: Create a new Shipper - Create Pricing Profile and Update it before Created (uid:15c1b8b1-546f-4f30-95f4-492b86e7bd7c)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and updates pricing script using data below:
