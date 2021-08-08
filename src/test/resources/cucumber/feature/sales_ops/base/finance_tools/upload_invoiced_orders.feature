@@ -127,7 +127,6 @@ Feature: Upload Invoiced Orders
       | subject | Invoicing Result                           |
       | body    | All Tracking IDs are successfully invoiced |
 
-
   @DeleteOrArchiveRoute
   Scenario: Upload Invoice Orders CSV - Some Orders are non-invoiced, Some Orders are non-priced neither non-invoiced (uid:531d9dea-0866-48e5-9fb8-522d029e696d)
     Given API Shipper create multiple V4 orders using data below:
@@ -150,12 +149,10 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking id(s) is\are available in the CSV file
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
-
   Scenario: Upload Invoiced Orders with invalid file type (not .csv) (uid:3ef6bcc3-2c11-477e-82ed-27c477b783e8)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     Then Operator uploads a PDF and verifies that any other file except csv is not allowed
-
 
   Scenario: Upload Invoice Orders with invalid template (e.g. two columns) (uid:38d566d5-c35a-493f-bec3-7ca283661534)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders

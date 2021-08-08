@@ -8,7 +8,6 @@ Feature: Order Billing
     And API Operator whitelist email "{order-billing-email}"
     And operator marks gmail messages as read
 
-
   Scenario: Generate "ALL" Success Billing Report - Selected Shipper - TH (uid:5518868f-0065-49b1-9478-fca4ff50105c)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-normal-noDiscount-country-default-3-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |

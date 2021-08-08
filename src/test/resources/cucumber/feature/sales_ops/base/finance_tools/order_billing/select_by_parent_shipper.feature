@@ -94,7 +94,6 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-
   Scenario: Generate Success Billing Report - Selected By Parent Shipper - Empty Shipper ID (uid:afe1b878-a02c-4df7-808d-58f3c02fe348)
     Given Operator go to menu Finance Tools -> Order Billing
     Given Operator selects Order Billing data as below
