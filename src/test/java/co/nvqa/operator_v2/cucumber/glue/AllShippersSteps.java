@@ -1051,7 +1051,6 @@ public class AllShippersSteps extends AbstractSteps {
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
     getWebDriver().get(editSpecificShipperPageURL);
-    takesScreenshot();
     allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
