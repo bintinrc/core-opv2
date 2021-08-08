@@ -370,6 +370,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public void editShipper(Marketplace marketplace) {
     searchShipperByNameOnShipperListPage(getSearchKeyword(marketplace));
     shippersTable.clickActionButton(1, ACTION_EDIT);
+    pause10ms();
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }

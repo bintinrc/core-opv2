@@ -5,7 +5,7 @@ Feature: Create Pricing Profile - Normal Shippers - COD
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-cod-global-id}" shipper's pricing profiles
-@nadeera
+#@nadeera
   Scenario: Create Pricing Profile - with 'Int' COD Min Fee and 'Int' COD Percentage (uid:7b127104-0aa7-4ddc-a639-b9224fa81b7f)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-cod-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
