@@ -41,3 +41,7 @@ Feature: Marketplace Shipper
     # Verify pricing profile is changed - sub shipper
     And Operator edits shipper "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

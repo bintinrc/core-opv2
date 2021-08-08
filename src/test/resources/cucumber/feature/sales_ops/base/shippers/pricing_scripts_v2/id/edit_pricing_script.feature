@@ -38,3 +38,7 @@ Feature: Edit Pricing Script
       | Condition   | is_RTS | grandTotal | gst  | deliveryFee | hiptest-uid                              |
       | RTS = True  | Yes    | 3.03       | 0.03 | 3           | uid:9a0afb0c-5805-44d0-bb48-332e592cb640 |
       | RTS = False | No     | 1.01       | 0.01 | 1           | uid:5a604892-ac0d-4d2c-a5b8-27f55ee0e1e6 |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

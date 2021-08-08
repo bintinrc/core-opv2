@@ -37,6 +37,12 @@ public class NvButtonSave extends PageElement {
     spinner.waitUntilInvisible();
   }
 
+  public void clickAndWaitUntilDone(int timeoutInSeconds) {
+    click();
+    pause100ms();
+    spinner.waitUntilInvisible(timeoutInSeconds);
+  }
+
   @Override
   public boolean isEnabled() {
     return button.isEnabled();

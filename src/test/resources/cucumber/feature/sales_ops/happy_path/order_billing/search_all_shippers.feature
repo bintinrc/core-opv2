@@ -10,7 +10,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:88b46747-f90d-4dbc-b176-84d06bc00619)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -25,7 +25,7 @@ Feature: Order Billing
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:91b6665d-7f7d-4415-bcc8-f84bd5bf1301)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -55,7 +55,7 @@ Feature: Order Billing
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:e1b70633-0b5b-4496-b81d-2f8a721f6e37)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -70,7 +70,7 @@ Feature: Order Billing
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:6625cf19-d920-41ce-9435-128b5bad13ca)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -84,3 +84,7 @@ Feature: Order Billing
     Then Operator gets the count of files when orders consolidated by script from the database
     Then Operator verifies zip is attached with multiple CSV files in received email
     Then Operator verifies the count of files in zip
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
