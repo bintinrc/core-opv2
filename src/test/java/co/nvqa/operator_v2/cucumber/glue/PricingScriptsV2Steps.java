@@ -75,11 +75,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
       script.setUpdatedAt(MYSQL_24_SDF.format(new Date()));
     }
-    takesScreenshot();
     pricingScriptsV2Page.createDraft(script);
-    takesScreenshot();
     put(KEY_CREATED_PRICING_SCRIPT, script);
-    takesScreenshot();
   }
 
   @Then("Operator verify error message in header with {string}")
@@ -91,7 +88,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
-    takesScreenshot();
   }
 
   @Then("^Operator edit the created Draft Script using data below:$")

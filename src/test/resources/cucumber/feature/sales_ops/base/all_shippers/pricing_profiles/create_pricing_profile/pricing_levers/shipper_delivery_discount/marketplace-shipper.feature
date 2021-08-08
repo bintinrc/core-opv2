@@ -127,7 +127,7 @@ Feature: Marketplace Shipper
     When Operator edits the created marketplace sub-shipper
     Then Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
 
-    #TODO
+
   @CloseNewWindows
   Scenario: Create a new Marketplace Sub Shipper - Reference Pricing Profile from Marketplace (Parent) Shipper who has Active and Expired Pricing Profile (uid:fd312c5f-362c-45c4-99f2-e69e126409a4)
     When API Shipper create V4 order using data below:

@@ -4,7 +4,7 @@ Feature: Create Pricing Profile
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
+  @CloseNewWindows
   Scenario: Create a new Shipper - Create Pricing Profile (uid:78dadc9d-16ea-429f-88ff-eb472bad435f)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -24,7 +24,8 @@ Feature: Create Pricing Profile
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
-#@nadeera
+
+  @CloseNewWindows
   Scenario: Create a new Shipper - Create Pricing Profile and Update it before Created (uid:15c1b8b1-546f-4f30-95f4-492b86e7bd7c)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and updates pricing script using data below:
@@ -45,6 +46,7 @@ Feature: Create Pricing Profile
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
 
+  @CloseNewWindows
   Scenario: Create a new Shipper - Not Creating Pricing Profile (uid:5f2fdf58-bc27-4a5f-9961-9f2b0b06f820)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and without Pricing profile using data below:
@@ -62,6 +64,7 @@ Feature: Create Pricing Profile
       | industryName                 | {industry-name} |
       | salesPerson                  | {sales-person}  |
 
+  @CloseNewWindows
   Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -92,11 +95,13 @@ Feature: Create Pricing Profile
     And Operator edits the created shipper
     And Operator verifies that Edit Pending Profile is displayed
 
+  @CloseNewWindows
   Scenario: Add New Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable
 
+  @CloseNewWindows
   Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -130,6 +135,7 @@ Feature: Create Pricing Profile
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
+  @CloseNewWindows
   Scenario: Create Pricing Profile with Use Country Level COD and Insurance (uid:0bee7a3c-9c6c-4260-bd68-21d110d4c40e)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

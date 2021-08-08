@@ -120,7 +120,6 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = prepareShipperData(mapOfData);
 
     allShippersPage.createNewShipper(shipper);
-    takesScreenshot();
     put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
@@ -561,7 +560,6 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
   public void operatorSaveChangesPricingProfileOnEditShipperPage() {
-    takesScreenshot();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges
         .clickAndWaitUntilDone();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
