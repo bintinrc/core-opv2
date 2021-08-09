@@ -211,15 +211,13 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String type = data.getOrDefault("type", "Delivery");
-    String trackingId = editOrderPage.trackingId.getText();
+    String menu = data.getOrDefault("menu", type);
     String routeId = data.get("routeId");
-    editOrderPage.clickMenu(type, "Add To Route");
+    editOrderPage.clickMenu(menu, "Add To Route");
     editOrderPage.addToRouteDialog.waitUntilVisible();
     editOrderPage.addToRouteDialog.route.setValue(routeId);
     editOrderPage.addToRouteDialog.type.selectValue(type);
     editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
-    editOrderPage.waitUntilInvisibilityOfToast(
-        f("%s has been added to route %s successfully", trackingId, routeId), true);
   }
 
   @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
@@ -531,7 +529,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
       Assert.assertThat("Delivery Details - Start Date / Time",
@@ -540,7 +538,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
@@ -550,7 +548,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
       Assert.assertThat("Delivery Details - End Date / Time",
@@ -559,7 +557,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
@@ -579,7 +577,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
       Assert.assertThat("Pickup Details - Start Date / Time",
@@ -588,7 +586,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
@@ -598,7 +596,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
       Assert.assertThat("Pickup Details - End Date / Time",
@@ -607,7 +605,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
@@ -617,7 +615,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("lastServiceEndDate")) {
       String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("lastServiceEndDate"));
       Assert.assertThat("Pickup Details - Last Service End",
@@ -626,7 +624,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("lastServiceEndDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("lastServiceEndDateTime"));
@@ -1168,8 +1166,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorCancelRtsOnEditOrderPage() {
     editOrderPage.clickMenu("Return to Sender", "Cancel RTS");
     editOrderPage.cancelRtsDialog.waitUntilVisible();
-    editOrderPage.cancelRtsDialog.cancelRts.clickAndWaitUntilDone();
-    editOrderPage.waitUntilInvisibilityOfToast("The RTS has been cancelled", true);
+    editOrderPage.cancelRtsDialog.cancelRts.click();
   }
 
   @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order page$")

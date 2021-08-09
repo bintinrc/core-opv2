@@ -299,6 +299,9 @@ Feature: Edit Order
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator cancel RTS on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | The RTS has been cancelled |
+      | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
     And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:

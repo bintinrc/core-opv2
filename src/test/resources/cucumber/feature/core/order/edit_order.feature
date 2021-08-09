@@ -1216,6 +1216,8 @@ Feature: Edit Order
     And Operator add created order route on Edit Order page using data below:
       | type    | Delivery               |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verifies that info toast displayed:
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
     Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE         |
@@ -1253,6 +1255,9 @@ Feature: Edit Order
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator cancel RTS on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | The RTS has been cancelled |
+      | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
     And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -2180,6 +2185,161 @@ Feature: Edit Order
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit order page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 1
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator add created order route on Edit Order page using data below:
+      | menu    | Return to Sender       |
+      | type    | Delivery               |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verifies that info toast displayed:
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+    And API Operator get order details
+    Then Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE           |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | PENDING                |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 0
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator get order details
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator add created order route on Edit Order page using data below:
+      | type    | Delivery               |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                          |
+      | bottom | ^.*Error Code: 103093.*Error Message: Marketplace Sort order is not allowed!.* |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | PENDING |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies transaction route id is null
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Cancel RTS For Routed Marketplace Sort Order via Edit Order Page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator cancel RTS on Edit Order page
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                             |
+      | bottom | ^.*Error Message: Marketplace Sort Order not allowed to revert RTS while routed.* |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | PENDING                |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
+
+  Scenario: Operator Cancel RTS For Unrouted Marketplace Sort Order via Edit Order Page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator cancel RTS on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | The RTS has been cancelled |
+      | waitUntilInvisible | true                       |
+    Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
+    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | REVERT RTS |
+    And DB Operator verifies orders record using data below:
+      | rts | 0 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Do not Allow Cancel RTS for Marketplace Sort Order
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator cancel RTS on Edit Order page
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                             |
+      | bottom | ^.*Error Message: Marketplace Sort Order not allowed to revert RTS while routed.* |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Return to Sender -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Delivery on Edit Order page
+    And Operator cancel RTS on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | The RTS has been cancelled |
+      | waitUntilInvisible | true                       |
+    Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
+    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | REVERT RTS |
+    And DB Operator verifies orders record using data below:
+      | rts | 0 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
