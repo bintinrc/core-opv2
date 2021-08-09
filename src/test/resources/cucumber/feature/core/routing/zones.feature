@@ -55,10 +55,10 @@ Feature: Zones
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Routing -> Zones
     And Operator click View Selected Polygons for zone id "{zone-id}"
-    And Operator remove zone "{zone-name-2}" if it is added on View Selected Polygons page
+    And Operator remove all selected zones on View Selected Polygons page
     And Operator add new "{zone-name-2}" zone on View Selected Polygons page
     Then Operator verify zone "{zone-name-2}" is selected on View Selected Polygons page
-    And Operator verify count of selected zones is 2 on View Selected Polygons page
+    And Operator verify count of selected zones is 1 on View Selected Polygons page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

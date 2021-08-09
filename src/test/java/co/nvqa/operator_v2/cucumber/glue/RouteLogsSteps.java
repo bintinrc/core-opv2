@@ -520,24 +520,32 @@ public class RouteLogsSteps extends AbstractSteps {
   @And("Operator verifies that info toast displayed:")
   public void operatorVerifyInfoToast(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
+    boolean waitUntilInvisible = Boolean
+        .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
-    boolean found;
+    ToastInfo toastInfo;
     do {
-      found = routeLogsPage.toastInfo.stream().anyMatch(toast -> {
-        String value = finalData.get("top");
-        if (StringUtils.isNotBlank(value)) {
-          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-            return false;
-          }
-        }
-        value = finalData.get("bottom");
-        if (StringUtils.isNotBlank(value)) {
-          return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
-        }
-        return true;
-      });
-    } while (!found && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", found);
+      toastInfo = routeLogsPage.toastInfo.stream()
+          .filter(toast -> {
+            String value = finalData.get("top");
+            if (StringUtils.isNotBlank(value)) {
+              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+                return false;
+              }
+            }
+            value = finalData.get("bottom");
+            if (StringUtils.isNotBlank(value)) {
+              return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+            }
+            return true;
+          })
+          .findFirst()
+          .orElse(null);
+    } while (toastInfo == null && new Date().getTime() - start < 20000);
+    assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
+    if (waitUntilInvisible) {
+      toastInfo.waitUntilInvisible();
+    }
   }
 
   @And("Operator verifies that success toast displayed:")

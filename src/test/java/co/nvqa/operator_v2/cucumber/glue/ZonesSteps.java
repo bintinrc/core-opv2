@@ -9,6 +9,7 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
@@ -193,26 +194,43 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
     zonesPage.zonesTable.selectRow(1);
     zonesPage.viewSelectedPolygons.click();
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
   }
 
   @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
   public void operatorAddNewZoneOnViewSelectedPolygonsPage(String zoneName) {
-    zonesSelectedPolygonsPage.addZone(zoneName);
+    zonesSelectedPolygonsPage.inFrame(() -> {
+      zonesSelectedPolygonsPage.findZonesInput.setValue(zoneName);
+      zonesSelectedPolygonsPage.zoneSelectionRows.stream()
+          .filter(row -> StringUtils.equals(row.name.getText(), zoneName))
+          .findFirst()
+          .ifPresent(row -> row.checkbox.check());
+    });
   }
 
-  @And("^Operator remove zone \"([^\"]*)\" if it is added on View Selected Polygons page$")
-  public void operatorRemoveZoneIfItIsAddedOnViewSelectedPolygonsPage(String zoneName) {
-    zonesSelectedPolygonsPage.removeZoneIfAdded(zoneName);
+  @And("^Operator remove all selected zones on View Selected Polygons page$")
+  public void operatorRemoveAllSelectedZonesOnViewSelectedPolygonsPage() {
+    zonesSelectedPolygonsPage.inFrame(() -> zonesSelectedPolygonsPage.zonesPanel.clearAll.click());
   }
 
   @Then("^Operator verify zone \"([^\"]*)\" is selected on View Selected Polygons page$")
   public void operatorVerifyZoneIsSelectedOnViewSelectedPolygonsPage(String zoneName) {
-    zonesSelectedPolygonsPage.verifySelectedZone(zoneName);
+    String finalZoneName = resolveValue(zoneName);
+    zonesSelectedPolygonsPage.inFrame(() ->
+        zonesSelectedPolygonsPage.zonesPanel.zones.stream()
+            .filter(zone -> StringUtils.equals(zone.name.getText(), finalZoneName))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError(
+                "Zone " + finalZoneName + " was not found in selected zones"))
+    );
   }
 
   @Then("^Operator verify count of selected zones is (\\d+) on View Selected Polygons page$")
   public void operatorVerifyCountOfSelectedZonesIsOnViewSelectedPolygonsPage(int countOfZones) {
-    zonesSelectedPolygonsPage.verifyCountOfSelectedZones(countOfZones);
+    zonesSelectedPolygonsPage.inFrame(() ->
+        assertEquals("Count of selected zones",
+            countOfZones, zonesSelectedPolygonsPage.zonesPanel.zones.size())
+    );
   }
 
   private void operatorCreateNewZone(String hubName, boolean isRts) {
