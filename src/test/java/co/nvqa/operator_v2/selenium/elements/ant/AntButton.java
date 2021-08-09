@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,5 +34,10 @@ public class AntButton extends PageElement {
     if (spinner.waitUntilVisible(1)) {
       spinner.waitUntilInvisible();
     }
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return !StringUtils.containsIgnoreCase(getAttribute("class"), "disabled");
   }
 }

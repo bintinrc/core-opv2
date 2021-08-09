@@ -30,7 +30,7 @@ public class ZonesSelectedPolygonsPage extends SimpleReactPage {
 
   public void waitUntilPageLoaded() {
     super.waitUntilPageLoaded();
-    inFrame(this::waitUntilLoaded);
+    inFrame((Runnable) this::waitUntilLoaded);
   }
 
   public static class ZonesPanel extends PageElement {

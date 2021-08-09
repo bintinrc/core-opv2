@@ -3,6 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.RouteLogsParams;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteReactDialog;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteReactDialog.RouteDetailsForm;
@@ -20,9 +22,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -402,6 +408,358 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
   }
 
+  @When("^Operator set filters on Route Logs page:")
+  public void setFilters(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded();
+      if (finalData.containsKey("routeDateFrom")) {
+        routeLogsPage.routeDateFilter.setFrom(finalData.get("routeDateFrom"));
+      }
+      if (finalData.containsKey("routeDateTo")) {
+        routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
+      }
+      if (finalData.containsKey("hub")) {
+        routeLogsPage.hubFilter.clearAll();
+        routeLogsPage.hubFilter.selectFilter(splitAndNormalize(finalData.get("hub")));
+      }
+      if (finalData.containsKey("driver")) {
+        if (!routeLogsPage.driverFilter.isDisplayedFast()) {
+          routeLogsPage.addFilter("Driver");
+        }
+        routeLogsPage.driverFilter.clearAll();
+        routeLogsPage.driverFilter.selectFilter(splitAndNormalize(finalData.get("driver")));
+      } else {
+        if (routeLogsPage.driverFilter.isDisplayedFast()) {
+          routeLogsPage.driverFilter.removeFilter();
+        }
+      }
+      if (finalData.containsKey("zone")) {
+        if (!routeLogsPage.zoneFilter.isDisplayedFast()) {
+          routeLogsPage.addFilter("Zone");
+        }
+        routeLogsPage.zoneFilter.clearAll();
+        routeLogsPage.zoneFilter.selectFilter(splitAndNormalize(finalData.get("zone")));
+      } else {
+        if (routeLogsPage.zoneFilter.isDisplayedFast()) {
+          routeLogsPage.zoneFilter.removeFilter();
+        }
+      }
+      if (finalData.containsKey("zone")) {
+        if (!routeLogsPage.zoneFilter.isDisplayedFast()) {
+          routeLogsPage.addFilter("Zone");
+        }
+        routeLogsPage.zoneFilter.clearAll();
+        routeLogsPage.zoneFilter.selectFilter(splitAndNormalize(finalData.get("zone")));
+      } else {
+        if (routeLogsPage.zoneFilter.isDisplayedFast()) {
+          routeLogsPage.zoneFilter.removeFilter();
+        }
+      }
+      if (finalData.containsKey("archivedRoutes")) {
+        if (!routeLogsPage.archivedRoutesFilter.isDisplayedFast()) {
+          routeLogsPage.addFilter("Archived Routes");
+        }
+        routeLogsPage.archivedRoutesFilter.selectFilter(finalData.get("archivedRoutes"));
+      } else {
+        if (routeLogsPage.archivedRoutesFilter.isDisplayedFast()) {
+          routeLogsPage.archivedRoutesFilter.deleteFilter();
+        }
+      }
+    });
+  }
+
+  @When("Operator selects {string} preset action on Route Logs page")
+  public void selectPresetAction(String action) {
+    routeLogsPage.inFrame(() -> routeLogsPage.presetActions.selectOption(resolveValue(action)));
+  }
+
+  @When("Operator verifies Save Preset dialog on Route Logs page contains filters:")
+  public void verifySelectedFiltersForPreset(List<String> expected) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      List<String> actual = routeLogsPage.savePresetDialog.selectedFilters.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of selected filters")
+          .containsExactlyInAnyOrderElementsOf(expected);
+    });
+  }
+
+  @When("Operator verifies Preset Name field in Save Preset dialog on Route Logs page is required")
+  public void verifyPresetNameIsRequired() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.savePresetDialog.helpText.getText())
+          .as("Preset Name error text")
+          .isEqualTo("This field is required");
+    });
+  }
+
+  @When("Operator verifies Cancel button in Save Preset dialog on Route Logs page is enabled")
+  public void verifyCancelIsEnabled() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.savePresetDialog.cancel.isEnabled())
+          .as("Cancel button is enabled")
+          .isTrue();
+    });
+  }
+
+  @When("Operator verifies Save button in Save Preset dialog on Route Logs page is enabled")
+  public void verifySaveIsEnabled() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.savePresetDialog.save.isEnabled())
+          .as("Save button is enabled")
+          .isTrue();
+    });
+  }
+
+  @When("Operator clicks Save button in Save Preset dialog on Route Logs page")
+  public void clickSaveInSavePresetDialog() {
+    routeLogsPage.inFrame(() -> routeLogsPage.savePresetDialog.save.click());
+  }
+
+  @When("Operator verifies Cancel button in Delete Preset dialog on Route Logs page is enabled")
+  public void verifyCancelIsEnabledInDeletePreset() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.deletePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.deletePresetDialog.cancel.isEnabled())
+          .as("Cancel button is enabled")
+          .isTrue();
+    });
+  }
+
+  @When("Operator verifies Delete button in Delete Preset dialog on Route Logs page is enabled")
+  public void verifyDeleteIsEnabled() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.deletePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.deletePresetDialog.delete.isEnabled())
+          .as("Delete button is enabled")
+          .isTrue();
+    });
+  }
+
+  @When("Operator selects {string} preset in Delete Preset dialog on Route Logs page")
+  public void selectPresetInDeletePresets(String value) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.deletePresetDialog.waitUntilVisible();
+      routeLogsPage.deletePresetDialog.preset.selectValue(resolveValue(value));
+    });
+  }
+
+  @When("Operator verifies {string} preset is selected in Delete Preset dialog on Route Logs page")
+  public void verifySelectedPresetInDeletePresets(String value) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.deletePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.deletePresetDialog.preset.getValue())
+          .as("Selected preset")
+          .isEqualTo(resolveValue(value));
+    });
+  }
+
+  @When("Operator clicks Delete button in Delete Preset dialog on Route Logs page")
+  public void clickDeleteInDeletePresetDialog() {
+    routeLogsPage.inFrame(() -> routeLogsPage.deletePresetDialog.delete.click());
+  }
+
+  @When("Operator verifies Delete button in Delete Preset dialog on Route Logs page is disabled")
+  public void verifyDeleteIsDisabled() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.deletePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.deletePresetDialog.delete.isEnabled())
+          .as("Delete button is enabled")
+          .isFalse();
+    });
+  }
+
+  @When("Operator verifies {string} message is displayed in Delete Preset dialog on Route Logs page")
+  public void verifyMessageInDeletePreset(String expected) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.deletePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.deletePresetDialog.message.getNormalizedText())
+          .as("Delete Preset message")
+          .isEqualTo(resolveValue(expected));
+    });
+  }
+
+  @And("Operator verifies that success toast displayed:")
+  public void operatorVerifySuccessToast(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    boolean waitUntilInvisible = Boolean
+        .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
+    long start = new Date().getTime();
+    ToastInfo toastInfo;
+    do {
+      toastInfo = routeLogsPage.toastSuccess.stream()
+          .filter(toast -> {
+            String value = finalData.get("top");
+            if (StringUtils.isNotBlank(value)) {
+              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+                return false;
+              }
+            }
+            value = finalData.get("bottom");
+            if (StringUtils.isNotBlank(value)) {
+              return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+            }
+            return true;
+          })
+          .findFirst()
+          .orElse(null);
+    } while (toastInfo == null && new Date().getTime() - start < 20000);
+    assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
+    if (waitUntilInvisible) {
+      toastInfo.waitUntilInvisible();
+    }
+  }
+
+  @When("Operator verifies selected Filter Preset name is {string} on Route Logs page")
+  public void verifySelectedPresetName(String expected) {
+    String finalExpected = resolveValue(expected);
+    routeLogsPage.inFrame(() -> {
+      String actual = StringUtils.trim(routeLogsPage.filterPreset.getValue());
+      Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
+      Matcher m = p.matcher(actual);
+      Assertions.assertThat(m.matches())
+          .as("Selected Filter Preset value matches to pattern")
+          .isTrue();
+      Long presetId = Long.valueOf(m.group(1));
+      String presetName = m.group(2);
+      Assertions.assertThat(presetName)
+          .as("Preset Name")
+          .isEqualTo(finalExpected);
+      put(KEY_ROUTES_FILTERS_PRESET_ID, presetId);
+    });
+  }
+
+  @When("Operator selects {string} Filter Preset on Route Logs page")
+  public void selectPresetName(String value) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded(2);
+      routeLogsPage.filterPreset.selectValue(resolveValue(value));
+      routeLogsPage.waitUntilLoaded(2);
+    });
+  }
+
+  @When("^Operator verifies selected filters on Route Logs page:$")
+  public void operatorVerifiesSelectedFilters(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+
+    SoftAssertions assertions = new SoftAssertions();
+
+    routeLogsPage.inFrame(() -> {
+      if (finalData.containsKey("routeDateFrom")) {
+        boolean isDisplayed = routeLogsPage.routeDateFilter.isDisplayedFast();
+        if (!isDisplayed) {
+          assertions.fail("Route Date filter is not displayed");
+        } else {
+          assertions.assertThat(routeLogsPage.routeDateFilter.getValueFrom())
+              .as("Route Date from")
+              .isEqualTo(data.get("routeDateFrom"));
+        }
+      }
+      if (finalData.containsKey("routeDateTo")) {
+        boolean isDisplayed = routeLogsPage.routeDateFilter.isDisplayedFast();
+        if (!isDisplayed) {
+          assertions.fail("Route Date filter is not displayed");
+        } else {
+          assertions.assertThat(routeLogsPage.routeDateFilter.getValueTo())
+              .as("Route Date to")
+              .isEqualTo(data.get("routeDateTo"));
+        }
+      }
+      if (finalData.containsKey("hub")) {
+        boolean isDisplayed = routeLogsPage.hubFilter.isDisplayedFast();
+        if (!isDisplayed) {
+          assertions.fail("Hub filter is not displayed");
+        } else {
+          assertions.assertThat(routeLogsPage.hubFilter.getSelectedValues())
+              .as("Hub items")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hub")));
+        }
+      }
+      if (finalData.containsKey("driver")) {
+        boolean isDisplayed = routeLogsPage.driverFilter.isDisplayedFast();
+        if (!isDisplayed) {
+          assertions.fail("Driver filter is not displayed");
+        } else {
+          assertions.assertThat(routeLogsPage.driverFilter.getSelectedValues())
+              .as("Driver items")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("driver")));
+        }
+      }
+      if (finalData.containsKey("zone")) {
+        boolean isDisplayed = routeLogsPage.zoneFilter.isDisplayedFast();
+        if (!isDisplayed) {
+          assertions.fail("Driver filter is not displayed");
+        } else {
+          assertions.assertThat(routeLogsPage.zoneFilter.getSelectedValues())
+              .as("Zone items")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("zone")));
+        }
+      }
+      if (finalData.containsKey("archivedRoutes")) {
+        boolean isDisplayed = routeLogsPage.archivedRoutesFilter.isDisplayedFast();
+        if (!isDisplayed) {
+          assertions.fail("Driver filter is not displayed");
+        } else {
+          assertions.assertThat(routeLogsPage.archivedRoutesFilter.getSelectedValue())
+              .as("Zone items")
+              .isEqualTo(Boolean.parseBoolean(data.get("archivedRoutes")));
+        }
+      }
+    });
+    assertions.assertAll();
+  }
+
+  @When("Operator verifies Save button in Save Preset dialog on Route Logs page is disabled")
+  public void verifySaveIsDisabled() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.savePresetDialog.save.isEnabled())
+          .as("Save button is enabled")
+          .isFalse();
+    });
+  }
+
+  @When("Operator enters {string} Preset Name in Save Preset dialog on Route Logs page")
+  public void enterPresetNameIsRequired(String presetName) {
+    String finalPresetName = resolveValue(presetName);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      routeLogsPage.savePresetDialog.presetName.setValue(finalPresetName);
+      put(KEY_ROUTES_FILTERS_PRESET_NAME, finalPresetName);
+    });
+  }
+
+  @When("Operator verifies Preset Name field in Save Preset dialog on Route Logs page has green checkmark on it")
+  public void verifyPresetNameIsValidated() {
+    routeLogsPage.inFrame(() ->
+        Assertions.assertThat(routeLogsPage.savePresetDialog.confirmedIcon.isDisplayed())
+            .as("Preset Name checkmark")
+            .isTrue()
+    );
+  }
+
+  @When("Operator verifies help text {string} is displayed in Save Preset dialog on Route Logs page")
+  public void verifyHelpTextInSavePreset(String expected) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.savePresetDialog.waitUntilVisible();
+      Assertions.assertThat(routeLogsPage.savePresetDialog.helpText.getNormalizedText())
+          .as("Help Text")
+          .isEqualTo(resolveValue(expected));
+    });
+  }
+
+  @When("Operator clicks Update button in Save Preset dialog on Rout Logs page")
+  public void clickUpdateInSavePresetDialog() {
+    routeLogsPage.inFrame(() -> routeLogsPage.savePresetDialog.update.click());
+  }
+
   @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
   public void loadWaypointsOfSelectedRoute() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
@@ -548,35 +906,37 @@ public class RouteLogsSteps extends AbstractSteps {
     }
   }
 
-  @And("Operator verifies that success toast displayed:")
-  public void operatorVerifySuccessToast(Map<String, String> data) {
-    Map<String, String> finalData = resolveKeyValues(data);
-    boolean waitUntilInvisible = Boolean
-        .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
-    long start = new Date().getTime();
-    ToastInfo toastInfo;
-    do {
-      toastInfo = routeLogsPage.toastSuccess.stream()
-          .filter(toast -> {
-            String value = finalData.get("top");
-            if (StringUtils.isNotBlank(value)) {
-              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-                return false;
+  @And("Operator verifies that success react notification displayed:")
+  public void operatorVerifySuccessReactToast(Map<String, String> data) {
+    routeLogsPage.inFrame(() -> {
+      Map<String, String> finalData = resolveKeyValues(data);
+      boolean waitUntilInvisible = Boolean
+          .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
+      long start = new Date().getTime();
+      AntNotification toastInfo;
+      do {
+        toastInfo = routeLogsPage.noticeNotifications.stream()
+            .filter(toast -> {
+              String value = finalData.get("top");
+              if (StringUtils.isNotBlank(value)) {
+                if (!StringUtils.equalsIgnoreCase(value, toast.message.getNormalizedText())) {
+                  return false;
+                }
               }
-            }
-            value = finalData.get("bottom");
-            if (StringUtils.isNotBlank(value)) {
-              return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
-            }
-            return true;
-          })
-          .findFirst()
-          .orElse(null);
-    } while (toastInfo == null && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
-    if (waitUntilInvisible) {
-      toastInfo.waitUntilInvisible();
-    }
+              value = finalData.get("bottom");
+              if (StringUtils.isNotBlank(value)) {
+                return StringUtils.equalsIgnoreCase(value, toast.description.getNormalizedText());
+              }
+              return true;
+            })
+            .findFirst()
+            .orElse(null);
+      } while (toastInfo == null && new Date().getTime() - start < 20000);
+      assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
+      if (waitUntilInvisible) {
+        toastInfo.waitUntilInvisible();
+      }
+    });
   }
 
   @And("Operator verifies that error toast displayed:")
