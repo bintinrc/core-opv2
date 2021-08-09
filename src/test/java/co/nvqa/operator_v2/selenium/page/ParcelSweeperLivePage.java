@@ -136,10 +136,10 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
       click(SORT_TASK_DROPDOWN_XPATH);
       if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
         waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
-        sendKeys(SORT_TASK_INPUT_XPATH, task);
+        sendKeys(SORT_TASK_INPUT_XPATH, task.replaceAll("\\s+", "").toUpperCase());
         waitUntilVisibilityOfElementLocated(
-            f(CHOSEN_VALUE_TASK_XPATH, task));
-        click(f(CHOSEN_VALUE_TASK_XPATH, task));
+            f(CHOSEN_VALUE_TASK_XPATH, task.replaceAll("\\s+", "").toUpperCase()));
+        click(f(CHOSEN_VALUE_TASK_XPATH, task.replaceAll("\\s+", "").toUpperCase()));
       }
     }
 
