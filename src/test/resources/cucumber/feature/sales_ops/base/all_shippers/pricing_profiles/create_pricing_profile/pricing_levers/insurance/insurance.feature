@@ -243,3 +243,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

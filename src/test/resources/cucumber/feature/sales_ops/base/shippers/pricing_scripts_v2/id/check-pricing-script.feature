@@ -85,3 +85,7 @@ Feature: Check Pricing Script
     Then Operator verify error message
       | message  | Pricing Script and Billing Zones are present, but there's no existing OD pair |
       | response | 404 Unknown                                                                   |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

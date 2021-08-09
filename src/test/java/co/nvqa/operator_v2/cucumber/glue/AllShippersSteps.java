@@ -560,7 +560,6 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
   public void operatorSaveChangesPricingProfileOnEditShipperPage() {
-    takesScreenshot();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges
         .clickAndWaitUntilDone();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
@@ -1046,7 +1045,7 @@ public class AllShippersSteps extends AbstractSteps {
     String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
         TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, shipperLegacyId));
-
+    pause10ms();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());

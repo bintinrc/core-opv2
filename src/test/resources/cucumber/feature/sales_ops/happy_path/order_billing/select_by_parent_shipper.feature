@@ -28,7 +28,7 @@ Feature: Order Billing
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "SHIPPER" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:8d849e00-001d-427b-9d52-ab52bd0d3ecf)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -45,7 +45,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "ALL" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:312b04b5-59b6-493d-b578-6887411dd145)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -62,7 +62,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:f4cbf856-3952-49cb-bc20-84a90a2aaefb)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -78,7 +78,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Generate "SCRIPT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:9470be20-b69a-4309-a0e1-e72394c5f4d0)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -94,3 +94,7 @@ Feature: Order Billing
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

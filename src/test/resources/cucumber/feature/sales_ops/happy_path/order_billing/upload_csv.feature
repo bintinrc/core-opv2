@@ -12,7 +12,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:dab7512d-2eb3-434f-9275-07165ea21f98)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -35,9 +35,9 @@ Feature: Order Billing
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains valid shipper IDs like below:
-      | {shipper-sop-v4-legacy-id}
+      | {shipper-sop-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:2973eb67-3164-4808-8cf6-55ee4b48d282)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -59,9 +59,9 @@ Feature: Order Billing
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains valid shipper IDs like below:
-      | {shipper-sop-v4-legacy-id}
+      | {shipper-sop-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "AGGREGATED" Report (uid:286402c8-3ef7-40cb-b97a-d0c4a23709ea)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -83,9 +83,9 @@ Feature: Order Billing
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains valid shipper IDs like below:
-      | {shipper-sop-v4-legacy-id}
+      | {shipper-sop-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SCRIPT" Report (uid:da5c9eb3-2769-4d6a-a836-99cfeffa5239)
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -99,4 +99,9 @@ Feature: Order Billing
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
-      | {shipper-sop-v4-legacy-id}
+      | {shipper-sop-v4-legacy-id} |
+
+
+  @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

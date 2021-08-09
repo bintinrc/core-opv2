@@ -433,3 +433,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | isDefaultIns | true |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

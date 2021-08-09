@@ -59,3 +59,7 @@ Feature: Import Script ByParam Function
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
