@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.time.LocalDateTime;
 import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -51,7 +52,7 @@ public class AntIntervalCalendarPicker extends PageElement {
   public void setFrom(String from) {
     valueFrom.click();
     inputFrom.waitUntilVisible();
-    inputFrom.sendKeys(from + Keys.ENTER);
+    inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
     inputFrom.waitUntilInvisible();
   }
 
@@ -62,7 +63,8 @@ public class AntIntervalCalendarPicker extends PageElement {
   public void setTo(String to) {
     valueFrom.click();
     inputTo.waitUntilVisible();
-    inputTo.sendKeys(to + Keys.ENTER);
+    inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+    inputFrom.sendKeys(Keys.ENTER);
     inputTo.waitUntilInvisible();
   }
 

@@ -33,7 +33,11 @@ public class SimpleReactPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilLoaded() {
-    if (spinner.waitUntilVisible(10)) {
+    waitUntilLoaded(10);
+  }
+
+  public void waitUntilLoaded(int timeoutInSeconds) {
+    if (spinner.waitUntilVisible(timeoutInSeconds)) {
       spinner.waitUntilInvisible();
     }
   }

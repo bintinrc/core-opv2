@@ -1,7 +1,7 @@
 @OperatorV2 @Core @Fleet @RouteCashInbound
 Feature: Route Cash Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

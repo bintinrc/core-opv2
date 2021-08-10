@@ -8,7 +8,10 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
@@ -92,11 +95,35 @@ public class RouteLogsPage extends SimpleReactPage {
   @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[contains(.,'Route Date')]]")
   public AntIntervalCalendarPicker routeDateFilter;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[contains(.,'Hub')]]//div[contains(@class,'ant-select')]")
-  public AntSelect2 hubFilter;
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Hub']]")
+  public AntFilterSelect hubFilter;
+
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Driver']]")
+  public AntFilterSelect driverFilter;
+
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Zone']]")
+  public AntFilterSelect zoneFilter;
+
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Archived Routes']]")
+  public AntFilterSwitch archivedRoutesFilter;
 
   @FindBy(id = "crossdock_hub")
   public AntSelect crossdockHub;
+
+  @FindBy(xpath = "//div[text()='Add Filter']//div[@role='combobox']")
+  public AntSelect2 addFilter;
+
+  @FindBy(css = "div.preset-select div[role='combobox']")
+  public AntSelect2 filterPreset;
+
+  @FindBy(xpath = "//button[normalize-space(.)='Preset Actions']")
+  public AntMenu presetActions;
+
+  @FindBy(css = "div.ant-modal-content")
+  public SavePresetDialog savePresetDialog;
+
+  @FindBy(css = "div.ant-modal-content")
+  public DeletePresetDialog deletePresetDialog;
 
   public RoutesTable routesTable;
 
@@ -160,6 +187,10 @@ public class RouteLogsPage extends SimpleReactPage {
     }
   }
 
+  public void addFilter(String name) {
+    addFilter.selectValue(name);
+  }
+
   public void verifyMultipleRoutesIsPrintedSuccessfully() {
     String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("route_printout");
     verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
@@ -170,7 +201,7 @@ public class RouteLogsPage extends SimpleReactPage {
       waitUntilLoaded();
       routeDateFilter.setInterval(routeDateFrom, routeDateTo);
       if (StringUtils.isNotBlank(hubName)) {
-        hubFilter.selectValue(hubName);
+        hubFilter.selectFilter(hubName);
       }
       loadSelection.clickAndWaitUntilDone();
     });
@@ -178,7 +209,7 @@ public class RouteLogsPage extends SimpleReactPage {
 
   @Override
   public void waitUntilLoaded() {
-    super.waitUntilLoaded();
+    super.waitUntilLoaded(3);
     clearAllFilters.waitUntilClickable();
   }
 
@@ -438,6 +469,53 @@ public class RouteLogsPage extends SimpleReactPage {
     public NvIconTextButton continueBtn;
 
     public SelectionErrorDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class SavePresetDialog extends AntModal {
+
+    @FindBy(css = "div.description-row")
+    public List<PageElement> selectedFilters;
+
+    @FindBy(css = "input.ant-input")
+    public TextBox presetName;
+
+    @FindBy(css = "div.nv-input-field-wrapper > span[class*='FieldWrapper']")
+    public PageElement helpText;
+
+    @FindBy(css = "svg[data-icon='check-circle']")
+    public PageElement confirmedIcon;
+
+    @FindBy(xpath = ".//button[.='Cancel']")
+    public Button cancel;
+
+    @FindBy(xpath = ".//button[.='Save']")
+    public AntButton save;
+
+    @FindBy(xpath = "//button[.='Update']")
+    public Button update;
+
+    public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class DeletePresetDialog extends AntModal {
+
+    @FindBy(css = "div.ant-select")
+    public AntSelect preset;
+
+    @FindBy(css = "div.ant-typography")
+    public PageElement message;
+
+    @FindBy(xpath = ".//button[.='Cancel']")
+    public Button cancel;
+
+    @FindBy(xpath = ".//button[.='Delete']")
+    public Button delete;
+
+    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
