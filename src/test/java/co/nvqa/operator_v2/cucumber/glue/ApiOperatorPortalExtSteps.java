@@ -124,6 +124,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String dateUniqueString = TestUtils.generateDateUniqueString();
+    String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
     mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-" + dateUniqueString);
@@ -133,6 +134,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         .put("RANDOM_LATITUDE", String.valueOf(HubFactory.getRandomHub().getLatitude()));
     mapOfDynamicVariable
         .put("RANDOM_LONGITUDE", String.valueOf(HubFactory.getRandomHub().getLongitude()));
+
+    setPhoneNumber(mapOfDynamicVariable, country);
 
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     String driverCreateRequestTemplate = resolvedMapOfData.get("driverCreateRequest");
@@ -151,6 +154,31 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_DRIVER_USERNAME, driverInfo.getUsername());
     put(KEY_CREATED_DRIVER_ID, driverInfo.getId());
     put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
+  }
+
+  private void setPhoneNumber(Map<String, String> mapOfDynamicVariable, String country) {
+    switch (country) {
+      case "SG":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6531594329");
+        break;
+      case "ID":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6282188881593");
+        break;
+      case "MY":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6066567878");
+        break;
+      case "PH":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+639285554697");
+        break;
+      case "TH":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+66955573510");
+        break;
+      case "VN":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+0812345678");
+        break;
+      default:
+        break;
+    }
   }
 
   @And("API Operator refresh drivers data")
