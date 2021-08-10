@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
@@ -32,6 +33,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   @FindBy(name = "searchTerm")
   public TextBox searchTerm;
+  @FindBy(name = "container.shippers.edit-conditions")
+  public NvIconTextButton editConditions;
   @FindBy(name = "commons.search")
   public NvApiTextButton search;
   @FindBy(name = "container.shippers.create-shipper")
@@ -40,6 +43,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public NvIconTextButton clearAllSelections;
   @FindBy(xpath = "//md-progress-circular/following-sibling::div[text()='Loading shippers...']")
   public PageElement loadingShippers;
+  @FindBy(xpath = "//div[@id='hint-text']/p")
+  public PageElement referParentsProfileText;
+  @FindBy(id = "hint-link")
+  public PageElement referParentsProfileLink;
 
   public ShippersTable shippersTable;
 
@@ -56,6 +63,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
   public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
   public static final String XPATH_SEARCH_SHIPPER_BY_KEYWORD_DROPDOWN = "//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[contains(text(),'%s')]";
+  public static final String XPATH_SEARCH_SHIPPER_BY_NAME_LIST_PAGE = "//nv-search-input-filter[@search-text='filter.name']//input";
 
   private static final DecimalFormat NO_TRAILING_ZERO_DF = new DecimalFormat("###.##");
 
@@ -154,7 +162,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
     assertEquals("Industry", shipper.getIndustryName(), actualShipper.getIndustryName());
     assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualShipper.getLiaisonEmail());
     assertEquals("Contact", shipper.getContact(), actualShipper.getContact());
-    assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0],
+    assertEquals("Sales Person",
+        shipper.getSalesPerson().substring(0, shipper.getSalesPerson().lastIndexOf("-")),
         actualShipper.getSalesPerson());
     assertEquals("Expected Status = Inactive", shipper.getActive(), actualShipper.getActive());
 
@@ -344,9 +353,24 @@ public class AllShippersPage extends OperatorV2SimplePage {
     loadingShippers.waitUntilInvisible();
   }
 
+  public void searchShipperByNameOnShipperListPage(String keyword) {
+    getWebDriver().navigate()
+        .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
+            TestConstants.COUNTRY_CODE, keyword));
+    sendKeys(XPATH_SEARCH_SHIPPER_BY_NAME_LIST_PAGE, keyword);
+  }
+
   public void editShipper(Shipper shipper) {
     quickSearchShipper(getSearchKeyword(shipper));
     shippersTable.clickActionButton(1, ACTION_EDIT);
+    allShippersCreateEditPage.switchToNewWindow();
+    allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+  }
+
+  public void editShipper(Marketplace marketplace) {
+    searchShipperByNameOnShipperListPage(getSearchKeyword(marketplace));
+    shippersTable.clickActionButton(1, ACTION_EDIT);
+    pause10ms();
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
@@ -364,6 +388,20 @@ public class AllShippersPage extends OperatorV2SimplePage {
       searchValue = shipperName;
     } else {
       searchValue = shipperLegacyId.concat("-").concat(shipperName);
+    }
+    return searchValue;
+  }
+
+  private String getSearchKeyword(Marketplace marketplace) {
+    String marketplaceSellerId = marketplace.getSellerId();
+    String marketplaceSellerCompanyName = marketplace.getSellerCompanyName();
+    NvLogger.infof("Created seller id : %s ", marketplaceSellerId);
+    String searchValue;
+    if (Objects.isNull(marketplaceSellerId) && Objects.isNull(marketplaceSellerCompanyName)) {
+      throw new NvTestRuntimeException(
+          "marketplace shipper marketplaceSellerId and/or marketplaceSellerCompanyName not saved");
+    } else {
+      searchValue = marketplaceSellerId;
     }
     return searchValue;
   }
@@ -432,7 +470,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("COD percentage is - ", "-",
           pricingProfileFromOPV2.getCodPercentage());
     } else {
-      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
+      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage() + "%",
           pricingProfileFromOPV2.getCodPercentage());
     }
     if (Objects.isNull(pricingProfile.getInsMin())) {
@@ -446,7 +484,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
       assertEquals("INS percentage is - ", "-",
           pricingProfileFromOPV2.getInsPercentage());
     } else {
-      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage(),
+      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage() + "%",
           pricingProfileFromOPV2.getInsPercentage());
     }
     if (Objects.isNull(pricingProfile.getInsThreshold())) {
@@ -488,7 +526,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
     String codPercentage = pricingProfile.getCodPercentage();
     if (Objects.nonNull(codPercentage)) {
-      assertEquals("COD percentage is not the same: ", codPercentage,
+      assertEquals("COD percentage is not the same: ", codPercentage + "%",
           pricingProfileFromOPV2.getCodPercentage());
     }
     String insMin = pricingProfile.getInsMin();
@@ -498,7 +536,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     }
     String insPercentage = pricingProfile.getInsPercentage();
     if (Objects.nonNull(insPercentage)) {
-      assertEquals("INS min percentage is not the same: ", insPercentage,
+      assertEquals("INS min percentage is not the same: ", insPercentage + "%",
           pricingProfileFromOPV2.getInsPercentage());
     }
     String insThreshold = pricingProfile.getInsThreshold();
@@ -529,11 +567,20 @@ public class AllShippersPage extends OperatorV2SimplePage {
     allShippersCreateEditPage.addPricingProfileAndVerifySaveButtonIsDisabled(shipper);
   }
 
+  public String getReferParentsProfileText() {
+    return referParentsProfileText.getText();
+  }
+
+  public String getReferParentsProfileLink() {
+    return referParentsProfileLink.getAttribute("href");
+  }
+
   public static class ShippersTable extends MdVirtualRepeatTable<Shipper> {
 
     public static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_EDIT = "Edit";
+    public static final String ACTION_DASH_LOGIN = "Dash login";
 
     public ShippersTable(WebDriver webDriver) {
       super(webDriver);
@@ -550,7 +597,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
       );
       setEntityClass(Shipper.class);
       setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "commons.edit"));
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT, "commons.edit",
+          ACTION_DASH_LOGIN, "container.shippers.ninja-dashboard-login-new"
+      ));
     }
   }
 }

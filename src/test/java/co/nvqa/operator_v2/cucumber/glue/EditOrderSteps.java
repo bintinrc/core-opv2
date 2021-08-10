@@ -2,9 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
@@ -20,6 +21,10 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -35,7 +40,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
@@ -146,6 +150,14 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.confirmCompleteOrder();
   }
 
+  @When("^Operator verify 'COD Collected' checkbox is disabled on Edit Order page$")
+  public void verifyCodCollectedIsDisabled() {
+    editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    assertFalse("COD Collected checkbox is enabled",
+        editOrderPage.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled());
+
+  }
+
   @When("^Operator confirm manually complete order with COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
@@ -199,15 +211,13 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String type = data.getOrDefault("type", "Delivery");
-    String trackingId = editOrderPage.trackingId.getText();
+    String menu = data.getOrDefault("menu", type);
     String routeId = data.get("routeId");
-    editOrderPage.clickMenu(type, "Add To Route");
+    editOrderPage.clickMenu(menu, "Add To Route");
     editOrderPage.addToRouteDialog.waitUntilVisible();
     editOrderPage.addToRouteDialog.route.setValue(routeId);
     editOrderPage.addToRouteDialog.type.selectValue(type);
     editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
-    editOrderPage.waitUntilInvisibilityOfToast(
-        f("%s has been added to route %s successfully", trackingId, routeId), true);
   }
 
   @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
@@ -358,30 +368,16 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.removeOrderStamp();
   }
 
-  @When("^Operator update status of the created order on Edit order page using data below:$")
+  @When("Operator update order status on Edit order page using data below:")
   public void operatorUpdateStatusOnEditOrderPage(Map<String, String> mapOfData) {
-    Order order = get(KEY_CREATED_ORDER);
-    String value = mapOfData.get("status");
-    if (StringUtils.isNotBlank(value)) {
-      order.setStatus(value);
-    }
-    value = mapOfData.get("granularStatus");
-    if (StringUtils.isNotBlank(value)) {
-      order.setGranularStatus(value);
-    }
-    value = mapOfData.get("lastPickupTransactionStatus");
-    if (StringUtils.isNotBlank(value)) {
-      Transaction transaction = order.getLastPickupTransaction();
-      Assertions.assertNotNull(transaction, "Last Pickup Transaction");
-      transaction.setStatus(value.toUpperCase());
-    }
-    value = mapOfData.get("lastDeliveryTransactionStatus");
-    if (StringUtils.isNotBlank(value)) {
-      Transaction transaction = order.getLastDeliveryTransaction();
-      Assertions.assertNotNull(transaction, "Last Delivery Transaction");
-      transaction.setStatus(value.toUpperCase());
-    }
-    editOrderPage.updateOrderStatus(order);
+    editOrderPage.clickMenu("Order Settings", "Update Status");
+    editOrderPage.updateStatusDialog.waitUntilVisible();
+
+    String value = mapOfData.get("granularStatus");
+    editOrderPage.updateStatusDialog.granularStatus.searchAndSelectValue(value);
+    value = mapOfData.get("changeReason");
+    editOrderPage.updateStatusDialog.changeReason.setValue(value);
+    editOrderPage.updateStatusDialog.saveChanges.clickAndWaitUntilDone();
   }
 
   @Then("^Operator verify the created order info is correct on Edit Order page$")
@@ -533,7 +529,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
       Assert.assertThat("Delivery Details - Start Date / Time",
@@ -542,7 +538,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
@@ -552,7 +548,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
       Assert.assertThat("Delivery Details - End Date / Time",
@@ -561,7 +557,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
@@ -581,7 +577,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
       Assert.assertThat("Pickup Details - Start Date / Time",
@@ -590,7 +586,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
@@ -600,7 +596,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
       Assert.assertThat("Pickup Details - End Date / Time",
@@ -609,7 +605,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
@@ -619,7 +615,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("lastServiceEndDate")) {
       String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("lastServiceEndDate"));
       Assert.assertThat("Pickup Details - Last Service End",
@@ -628,7 +624,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("lastServiceEndDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("lastServiceEndDateTime"));
@@ -1170,8 +1166,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorCancelRtsOnEditOrderPage() {
     editOrderPage.clickMenu("Return to Sender", "Cancel RTS");
     editOrderPage.cancelRtsDialog.waitUntilVisible();
-    editOrderPage.cancelRtsDialog.cancelRts.clickAndWaitUntilDone();
-    editOrderPage.waitUntilInvisibilityOfToast("The RTS has been cancelled", true);
+    editOrderPage.cancelRtsDialog.cancelRts.click();
   }
 
   @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order page$")
@@ -1358,8 +1353,9 @@ public class EditOrderSteps extends AbstractSteps {
         podDetailsDialog.getTrackingId());
     softAssert.assertEquals("transaction string", expectedTransactionText,
         podDetailsDialog.getTransaction());
-    softAssert.assertEquals("information - status", order.getLastDeliveryTransaction().getStatus(),
-        podDetailsDialog.getStatus());
+    softAssert.assertEquals("information - status",
+        StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
+        StringUtils.lowerCase(podDetailsDialog.getStatus()));
     softAssert
         .assertEquals("information - driver", data.get("driver"), podDetailsDialog.getDriver());
     softAssert.assertTrue("information - priority level",
@@ -1369,5 +1365,46 @@ public class EditOrderSteps extends AbstractSteps {
     softAssert.assertTrue("information - location",
         podDetailsDialog.getLocation().contains(order.getLastDeliveryTransaction().getAddress1()));
     softAssert.assertAll();
+  }
+
+  @Then("Operator verifies that there will be a toast of successfully downloaded airway bill")
+  public void operatorVerifiesThatThereWillBeAToastOfSuccessfullyDownloadedAirwayBill() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    editOrderPage.waitUntilVisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+    editOrderPage.waitUntilInvisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+  }
+
+  @When("Operator opens and verifies the downloaded airway bill pdf")
+  public void operatorOpensTheDownloadedAirwayBillPdf() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String fileName = f("awb_%s.pdf", trackingId);
+    String actualSortCode;
+
+    if (get(KEY_CREATED_SORT_CODE) != null) {
+      SortCode sortCode = get(KEY_CREATED_SORT_CODE);
+      actualSortCode = sortCode.getSortCode();
+    } else {
+      actualSortCode = "X";
+    }
+
+    // verifies the file is existed
+    editOrderPage.verifyFileDownloadedSuccessfully(fileName);
+
+    String pathname = StandardTestConstants.TEMP_DIR + fileName;
+    try {
+      // get path
+      Path path = Paths.get(pathname).toRealPath();
+      // convert downloaded pdf to byte
+      File pdf = new File(String.valueOf(path));
+      // convert to url
+      String url = String.valueOf(path.toUri());
+      //go to url
+      getWebDriver().get(url);
+
+      // verifies the sort code
+      editOrderPage.verifyTheSortCodeIsCorrect(actualSortCode, pdf);
+    } catch (IOException e) {
+      throw new NvTestRuntimeException("Could not get file path " + pathname, e);
+    }
   }
 }

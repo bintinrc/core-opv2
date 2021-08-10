@@ -5,7 +5,7 @@ Feature: Edit Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Change Delivery Verification Method from Edit Order (<hiptest-uid>)
+  Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -105,9 +105,9 @@ Feature: Edit Order
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "12356" DP on Edit Order Page
+    And Operator tags order to "{dpms-id}" DP on Edit Order Page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
-    When DB Operator get DP address by ID = "12356"
+    When DB Operator get DP address by ID = "{dpms-id}"
     Then DB Operator verifies orders record using data below:
       | toAddress1 | GET_FROM_CREATED_ORDER |
       | toAddress2 | GET_FROM_CREATED_ORDER |
@@ -117,7 +117,7 @@ Feature: Edit Order
       | toState    |                        |
       | toDistrict |                        |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | 12356                  |
+      | distribution_point_id | {dpms-id}              |
       | address1              | GET_FROM_CREATED_ORDER |
       | address2              | GET_FROM_CREATED_ORDER |
       | postcode              | GET_FROM_CREATED_ORDER |
@@ -154,11 +154,12 @@ Feature: Edit Order
     Then Operator Edit Order Details on Edit Order page successfully
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -169,7 +170,15 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
-      | name | ADD TO ROUTE |
+      | name    | ADD TO ROUTE         |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
+
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:e0323f71-ba8c-435f-afa0-c16747c32e6f | Normal    |
@@ -192,13 +201,17 @@ Feature: Edit Order
     Then Operator verify Pickup transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
-      | name | PULL OUT OF ROUTE |
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Pickup transaction values are updated for the created order:
       | routeId | 0 |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Reschedule Fail Pickup (uid:791d7d9a-0fc3-4c7a-97f5-46ae351b9064)
@@ -286,6 +299,9 @@ Feature: Edit Order
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator cancel RTS on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | The RTS has been cancelled |
+      | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
     And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -339,7 +355,7 @@ Feature: Edit Order
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
-    And Operator tags order to "12356" DP on Edit Order Page
+    And Operator tags order to "{dpms-id}" DP on Edit Order Page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
@@ -374,7 +390,8 @@ Feature: Edit Order
     Then Operator verify Delivery transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
-      | name | PULL OUT OF ROUTE |
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
@@ -382,20 +399,9 @@ Feature: Edit Order
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
-
-  Scenario: Operator Update Order Status from Transit/Arrived at Sorting Hub to Pending/Pending on Edit Order Page (uid:f84bb35a-a1b0-403d-852c-c78a1ffd9a36)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Pending        |
-      | granularStatus                | Pending Pickup |
-      | lastPickupTransactionStatus   | Pending        |
-      | lastDeliveryTransactionStatus | Pending        |
-    Then Operator verify the created order info is correct on Edit Order page
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   Scenario: Cancel Order - Pending Pickup (uid:0af2c2aa-51e1-4780-8b8c-0207feed6dfe)
     Given API Shipper create V4 order using data below:
@@ -439,16 +445,27 @@ Feature: Edit Order
     Then Operator verify the order completed successfully on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator add created order to the <routeType> route on Edit Order page
     And Operator refresh page
     Then Operator verify the order is added to the <routeType> route on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE         |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verify <routeType> waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
+
     Examples:
       | Note              | hiptest-uid                              | orderType | routeType |
       | Return - Delivery | uid:75691bdc-712b-4b5a-a19a-8bd10ff8bba7 | Return    | Delivery  |
@@ -468,12 +485,8 @@ Feature: Edit Order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update order granular status to = "Cancelled"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update status of the created order on Edit order page using data below:
-      | status                        | Cancelled |
-      | granularStatus                | Cancelled |
-      | lastPickupTransactionStatus   | Cancelled |
-      | lastDeliveryTransactionStatus | Cancelled |
     And Operator resume order on Edit Order page
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page

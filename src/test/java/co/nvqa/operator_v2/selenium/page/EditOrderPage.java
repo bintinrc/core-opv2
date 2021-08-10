@@ -27,9 +27,11 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ManuallyCompleteOrderDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -41,7 +43,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -288,30 +289,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     click("//button[contains(@id,'button-api-text') and contains(@aria-label,'Complete Order')]");
     waitUntilVisibilityOfToast("The order has been completed");
     waitUntilInvisibilityOfToast("The order has been completed");
-  }
-
-  public void updateOrderStatus(Order order) {
-    clickMenu("Order Settings", "Update Status");
-    updateStatusDialog.waitUntilVisible();
-
-    if (StringUtils.isNotBlank(order.getStatus())) {
-      updateStatusDialog.status.selectValue(order.getStatus());
-    }
-    if (StringUtils.isNotBlank(order.getGranularStatus())) {
-      updateStatusDialog.granularStatus.selectValue(order.getGranularStatus());
-    }
-    Transaction transaction = order.getLastPickupTransaction();
-    if (transaction != null && StringUtils.isNotBlank(transaction.getStatus())) {
-      updateStatusDialog.lastPickupTransactionStatus
-          .selectValue(WordUtils.capitalizeFully(transaction.getStatus()));
-    }
-    transaction = order.getLastDeliveryTransaction();
-    if (transaction != null && StringUtils.isNotBlank(transaction.getStatus())) {
-      updateStatusDialog.lastDeliveryTransactionStatus
-          .selectValue(WordUtils.capitalizeFully(transaction.getStatus()));
-    }
-    updateStatusDialog.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Status Updated", true);
   }
 
   public void addToRoute(long routeId, String type) {
@@ -1961,22 +1938,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public NvApiTextButton saveChanges;
   }
 
-  public static class ManuallyCompleteOrderDialog extends MdDialog {
-
-    public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-
-    @FindBy(name = "container.order.edit.complete-order")
-    public NvApiTextButton completeOrder;
-
-    @FindBy(name = "commons.mark-all")
-    public NvIconTextButton markAll;
-
-    @FindBy(name = "commons.unmark-all")
-    public NvIconTextButton unmarkAll;
-  }
-
   public static class EditOrderStampDialog extends MdDialog {
 
     public EditOrderStampDialog(WebDriver webDriver, WebElement webElement) {
@@ -1999,17 +1960,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='commons.status']")
-    public MdSelect status;
-
     @FindBy(css = "[id^='commons.model.granular-status']")
     public MdSelect granularStatus;
 
-    @FindBy(css = "[id^='container.order.edit.last-pickup-transaction-status']")
-    public MdSelect lastPickupTransactionStatus;
-
-    @FindBy(css = "[id^='container.order.edit.last-delivery-transaction-status']")
-    public MdSelect lastDeliveryTransactionStatus;
+    @FindBy(css = "[id^='container.order.edit.input-reason-for-change']")
+    public TextBox changeReason;
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
@@ -2339,5 +2294,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
         super(webDriver, webElement);
       }
     }
+  }
+
+  public void verifyTheSortCodeIsCorrect(String sortCode, File orderAirwayBillPdfAsByteArray) {
+    String actualSortCode = PdfUtils.getSortCode(orderAirwayBillPdfAsByteArray);
+    assertTrue("Sort Code", sortCode.equalsIgnoreCase(actualSortCode));
   }
 }

@@ -5,6 +5,7 @@ import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
 import cucumber.api.java.en.And;
@@ -224,5 +225,46 @@ public class GlobalInboundSteps extends AbstractSteps {
   @When("^Operator verifies prior tag is displayed$")
   public void operatorVerifiesPriorTagIsDisplayed() {
     globalInboundPage.verifiesPriorTag();
+  }
+
+  @And("Operator verifies order weight is overridden based on the volumetric weight")
+  public void operatorVerifiesOrderWeightIsOverriddenBasedOnTheVolumetricWeight() {
+    String countryCode = StandardTestConstants.COUNTRY_CODE;
+    Order order = get(KEY_CREATED_ORDER);
+    double orderWeight;
+    double height = order.getDimensions().getHeight();
+    double width = order.getDimensions().getWidth();
+    double length = order.getDimensions().getLength();
+
+    switch (countryCode) {
+      case "ID":
+        orderWeight = (length + width + height) / 6000;
+        break;
+
+      case "MY":
+        orderWeight = (length + width + height) / 3500;
+        break;
+
+      case "PH":
+        orderWeight = (length + width + height) / 6000;
+        break;
+
+      case "SG":
+        orderWeight = order.getWeight();
+        break;
+
+      case "VN":
+        orderWeight = (length + width + height) / 6000;
+        break;
+
+      default:
+        orderWeight = order.getWeight();
+    }
+
+    String orderWeightAsString = String.valueOf(orderWeight);
+    String actualOrderWeightAsString = String.valueOf(order.getWeight());
+
+    assertTrue("Order weight is overridden",
+        orderWeightAsString.contains(actualOrderWeightAsString));
   }
 }

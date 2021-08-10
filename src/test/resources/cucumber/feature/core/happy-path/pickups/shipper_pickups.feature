@@ -45,7 +45,9 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    And DB Operator verify new record is created in route_waypoints table with the correct details
+    And DB Operator verifies route_waypoint record exist
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies route_monitoring_data record
 
   Scenario: Operator Filters Created Reservation by Master Shipper (uid:5020c570-4f72-4ba2-bc26-8de5560eca89)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -60,9 +62,9 @@ Feature: Shipper Pickups
       | toDate            | {gradle-next-1-day-yyyy-MM-dd}   |
       | masterShipperName | {shipper-v4-marketplace-name}    |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | MRK-CORE (ABC Shop)                       |
-      | approxVolume | Less than 3 Parcels                       |
-      | comments     | Please be careful with the v-day flowers. |
+      | shipperName  | {shipper-v4-marketplace-short-name} (ABC Shop) |
+      | approxVolume | Less than 3 Parcels                            |
+      | comments     | Please be careful with the v-day flowers.      |
 
   Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations (uid:2641d40f-f8f5-4dae-86bb-c64cd36c1ca0)
     Given Operator go to menu Shipper Support -> Blocked Dates

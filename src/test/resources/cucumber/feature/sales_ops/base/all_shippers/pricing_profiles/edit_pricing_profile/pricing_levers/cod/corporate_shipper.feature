@@ -50,15 +50,7 @@ Feature: Edit Pricing Profiles - Corporate Shippers - COD
     #Verify pricing profile is the same as parents ACTIVE pricing profile- corporate subshipper
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-cod-legacy-id}"
-    And Operator gets pricing profile values
-    And Operator verifies the pricing profile details are like below:
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
-      | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
-      | type              | FLAT                                        |
-      | discount          | 20                                          |
-      | codMinFee         | 1.2                                         |
-      | codPercentage     | 3                                           |
-      | comments          | This is a test pricing script               |
+    And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-cod-legacy-id}"
 
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' COD Min Fee and 'Int' COD Percentage - Corporate Sub Shipper who has their own Pricing Profile is Exists (uid:7cb8c1c8-7ca4-4a57-8931-29a58b9c8f9f)
     #Add new pricing profile and verify - corporate shipper
@@ -119,3 +111,6 @@ Feature: Edit Pricing Profiles - Corporate Shippers - COD
       | codPercentage     | 30                                          |
       | comments          | This is a test pricing script               |
 
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

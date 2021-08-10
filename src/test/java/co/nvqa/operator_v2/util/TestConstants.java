@@ -10,6 +10,7 @@ import co.nvqa.commons.util.NvSystemProperties;
 public final class TestConstants extends CommonSeleniumTestConstants {
 
   public static final String OPERATOR_PORTAL_BASE_URL;
+  public static final String DASH_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_LOGIN_URL;
   public static final String OPERATOR_PORTAL_UID;
   public static final String OPERATOR_PORTAL_PWD;
@@ -35,12 +36,16 @@ public final class TestConstants extends CommonSeleniumTestConstants {
   public static final String NINJA_DRIVER_USERNAME;
   public static final String NINJA_DRIVER_PASSWORD;
 
+  public static final long HUB_ID;
+  public static final String HUB_NAME;
+
   public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
   static {
     String apiBase = NvSystemProperties
         .getString(NV_API_BASE, getString("operator-portal-base-url"));
     OPERATOR_PORTAL_BASE_URL = apiBase.replace("api", "operatorv2") + "/#";
+    DASH_PORTAL_BASE_URL = getString("dash-portal-base-url");
     OPERATOR_PORTAL_LOGIN_URL = OPERATOR_PORTAL_BASE_URL + "/login";
     OPERATOR_PORTAL_UID = getString("operator-portal-uid");
     OPERATOR_PORTAL_PWD = getString("operator-portal-pwd");
@@ -67,6 +72,9 @@ public final class TestConstants extends CommonSeleniumTestConstants {
     NINJA_DRIVER_NAME = getString("ninja-driver-name");
     NINJA_DRIVER_USERNAME = getString("ninja-driver-username");
     NINJA_DRIVER_PASSWORD = getString("ninja-driver-password");
+
+    HUB_ID = getLong("hub-id");
+    HUB_NAME = getString("hub-name");
   }
 
   private TestConstants() {

@@ -59,6 +59,19 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
+  public void checkErrorHeader(String message) {
+    pricingScriptsV2CreateEditDraftPage.checkErrorHeader(message);
+  }
+
+  public void editCreatedDraft(Script script) {
+    goToEditDraftScript(script);
+    pricingScriptsV2CreateEditDraftPage.editScript(script);
+  }
+
+  public void editCreatedActive(Script script) {
+    pricingScriptsV2CreateEditDraftPage.editScript(script);
+  }
+
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
     retryIfAssertionErrorOccurred(() ->
@@ -87,11 +100,30 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.deleteScript(script);
   }
 
+  public void searchActiveScriptName(String scriptName) {
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableActiveScriptsByScriptName(scriptName);
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Active script found "));
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
+  }
+
   public void verifyDraftScriptIsDeleted(Script script) {
+    waitUntilInvisibilityOfToast(script.getName() + " has been successfully deleted.", true);
     clickTabItem(TAB_DRAFTS);
-    searchTableDraftsByScriptName(script.getName());
-    assertTrue("Drafts Table is not empty. The Draft Script is not deleted successfully.",
-        isTableEmpty(ACTIVE_TAB_XPATH));
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableDraftsByScriptName(script.getName());
+      if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Draft script found");
+      }
+    }, String.format("Data still not loaded"));
+    assertTrue("No Results Found", isTableEmpty(ACTIVE_TAB_XPATH));
   }
 
   public void runCheckDraftScript(Script script, RunCheckParams runCheckParams) {
@@ -99,13 +131,31 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.runCheck(script, runCheckParams);
   }
 
+  public void runCheckActiveScript(Script script, RunCheckParams runCheckParams) {
+    pricingScriptsV2CreateEditDraftPage.runCheck(script, runCheckParams);
+  }
+
+  public void verifyErrorMessage(String message, String response) {
+    pricingScriptsV2CreateEditDraftPage.verifyErrorMessage(message, response);
+  }
+
   public void verifyTheRunCheckResultIsCorrect(RunCheckResult runCheckResult) {
     pricingScriptsV2CreateEditDraftPage.verifyTheRunCheckResultIsCorrect(runCheckResult);
+  }
+
+  public void closeScreen() {
+    pricingScriptsV2CreateEditDraftPage.cancelEditDraft();
   }
 
   public void validateDraftAndReleaseScript(Script script, VerifyDraftParams verifyDraftParams) {
     goToEditDraftScript(script);
     pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script, verifyDraftParams);
+    waitUntilInvisibilityOfToast("Your script has been successfully released.");
+  }
+
+  public void validateDraftAndReleaseScript(Script script) {
+    goToEditDraftScript(script);
+    pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script);
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
   }
 
@@ -128,8 +178,54 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Data still not loaded");
       }
     }, String.format("Active script found "));
+  }
 
+  public void verifyDraftScriptIsReleased(Script script, String searchWay) {
+    clickTabItem(TAB_ACTIVE_SCRIPTS);
+
+    retryIfAssertionErrorOccurred(() ->
+    {
+      switch (searchWay) {
+        case "name":
+          searchTableActiveScripts(searchWay, script.getName());
+          break;
+        case "description":
+          searchTableActiveScripts(searchWay, script.getDescription());
+          searchTableActiveScripts("id", (script.getId() + ""));
+          break;
+        case "last-modified":
+          searchTableActiveScripts(searchWay, script.getUpdatedAt());
+          searchTableActiveScripts("id", (script.getId() + ""));
+          break;
+        case "id":
+          searchTableActiveScripts(searchWay, (script.getId() + ""));
+          break;
+      }
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Active script found "));
+  }
+
+  public void searchAccordingScriptId(Script script) {
+    clickTabItem(TAB_ACTIVE_SCRIPTS);
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableActiveScripts("id", (script.getId() + ""));
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Active script found "));
+    wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
+        "Drafts Table is empty. Cannot find script.");
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
+  }
+
+  public void verifyDraftScriptDataIsCorrect(Script script) {
     String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
+    script.setId(Long.parseLong(actualId));
     String actualScriptName = getTextOnTableActiveScripts(1,
         COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
     String actualDescription = getTextOnTableActiveScripts(1,
@@ -162,7 +258,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     String name = shipper.getName();
 
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-    searchTableActiveScriptsByScriptName(scriptName);
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableActiveScriptsByScriptName(scriptName);
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Active script found "));
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Active Scripts table is empty. Script not found.");
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
@@ -245,10 +348,17 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void verifyActiveScriptIsDeleted(Script script) {
+    waitUntilInvisibilityOfToast(script.getName() + " has been successfully deleted.", true);
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-    searchTableActiveScriptsByScriptName(script.getName());
-    assertTrue("Active Scripts Table is not empty. The Active Script is not deleted successfully.",
-        isTableEmpty(ACTIVE_TAB_XPATH));
+    retryIfAssertionErrorOccurred(() ->
+    {
+      searchTableActiveScriptsByScriptName(script.getName());
+      if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Draft script found");
+      }
+    }, String.format("Data still not loaded"));
+    assertTrue("No Results Found", isTableEmpty(ACTIVE_TAB_XPATH));
   }
 
   public void goToEditActiveScript(Script script) {
@@ -326,6 +436,13 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void searchTableActiveScriptsByScriptName(String scriptName) {
     sendKeys(
         "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input",
+        scriptName);
+  }
+
+  public void searchTableActiveScripts(String searchBy, String scriptName) {
+    sendKeys(f(
+        "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
+        searchBy),
         scriptName);
   }
 

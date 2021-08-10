@@ -26,16 +26,7 @@ Feature:  Create Pricing Profile - Corporate Shippers - Insurance
     Then Operator verifies the pricing lever details in the database
       # Verify pricing profile is changed - sub shipper
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
-    And Operator gets pricing profile values
-    And Operator verifies the pricing profile details are like below:
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
-      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
-      | type                | FLAT                                        |
-      | discount            | 20                                          |
-      | insuranceMinFee     | 1.2                                         |
-      | insurancePercentage | 3                                           |
-      | insuranceThreshold  | 0                                           |
-      | comments            | This is a test pricing script               |
+    And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
 
 
   Scenario: Create Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who has their own Pricing Profile is Exists (uid:41f890c1-214c-4f0d-9e9f-055e3558d0d6)
@@ -80,3 +71,6 @@ Feature:  Create Pricing Profile - Corporate Shippers - Insurance
       | insuranceThreshold  | 0                                           |
       | comments            | This is a test pricing script               |
 
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

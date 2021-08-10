@@ -10,8 +10,10 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsElement;
@@ -204,6 +206,13 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
           return "Proxy element for: " + locator.toString();
         }
         throw e;
+      } catch (StaleElementReferenceException ex) {
+        FieldUtils.writeDeclaredField(locator, "cachedElement", null, true);
+        Object searchContext = FieldUtils.readField(locator, "searchContext", true);
+        if (searchContext instanceof WebElement) {
+          FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
+        }
+        element = locator.findElement();
       }
 
       if ("getWrappedElement".equals(method.getName())) {
@@ -213,8 +222,16 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
       try {
         return method.invoke(element, objects);
       } catch (InvocationTargetException e) {
-        // Unwrap the underlying exception
-        throw e.getCause();
+        if (e.getCause() instanceof StaleElementReferenceException) {
+          FieldUtils.writeDeclaredField(locator, "cachedElement", null, true);
+          try {
+            return method.invoke(locator.findElement(), objects);
+          } catch (InvocationTargetException ex) {
+            throw ex.getCause();
+          }
+        } else {
+          throw e.getCause();
+        }
       }
     }
   }

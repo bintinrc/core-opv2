@@ -10,6 +10,7 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
@@ -91,7 +92,10 @@ public class SortBeltManagerSteps extends AbstractSteps {
     String description = data.get("description");
 
     sortBeltManagerPage.nameInput.setValue(name);
-    sortBeltManagerPage.descriptionInput.setValue(description);
+    Optional.ofNullable(description).ifPresent(value -> {
+      sortBeltManagerPage.descriptionInput.setValue(value);
+    });
+
     put(KEY_CREATED_SORT_BELT_CONFIG, name);
     putInList(KEY_LIST_OF_CREATED_SORT_BELT_CONFIGS, name);
   }
@@ -119,7 +123,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
       container.getFilterSelect("Order Tag", 1).selectValue(orderTags);
     }
     if (StringUtils.isNotBlank(sameAs)) {
-      container.sameAs.selectValues(splitAndNormalize(sameAs));
+      container.sameAs.selectValues(splitAndNormalize(sameAs.replaceAll("Arm ", "")));
     }
   }
 

@@ -193,7 +193,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @And("^Operator select View DPs action for created DP partner on DP Administration page$")
   public void operatorSelectViewDpsForCreatedDpPartnerOnDpAdministrationPage() {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
+    Partner dpPartner = get(KEY_DP_PARTNER);
     dpAdminPage.openViewDpsScreen(dpPartner.getName());
   }
 

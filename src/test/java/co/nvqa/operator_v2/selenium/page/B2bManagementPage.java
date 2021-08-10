@@ -2,13 +2,18 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.function.Consumer;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Lanang Jati
@@ -22,6 +27,9 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   public static final String NAME_COLUMN_LOCATOR_KEY = "name";
   public static final String XPATH_SUB_SHIPPER_BACK = "//*[@class='ant-page-header-back-icon']";
 
+  @FindBy(css = "[aria-label='icon: arrow-left']")
+  public Button goBack;
+
   @FindBy(xpath = "//button[.='Add Sub-shipper']")
   public Button addSubShipper;
 
@@ -30,6 +38,18 @@ public class B2bManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[.='Create Sub-shipper Account(s)']")
   public Button createSubShipperAccount;
+
+  @FindBy(xpath = "//button[.='Switch to File Upload']")
+  public Button switchToFileUpload;
+
+  @FindBy(xpath = "//button[.='Download Template']")
+  public Button downloadTemplate;
+
+  @FindBy(xpath = "//button[.='Download Error log']")
+  public Button downloadErrorLog;
+
+  @FindBy(id = "csv_uploads")
+  public FileInput uploadCsvFile;
 
   @FindBy(css = "li.ant-pagination-prev")
   public Button prevPage;
@@ -49,8 +69,17 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-form-explain")
   public List<PageElement> errorMessage;
 
+  @FindBy(css = "div[class*='BulkCreation__ListItem']")
+  public List<PageElement> bulkCreationErrorMessage;
+
+  @FindBy(xpath = "//div[./i[@aria-label='icon: exclamation-circle']]")
+  public List<PageElement> bulkCreationWarningMessage;
+
   @FindBy(xpath = "//iframe[contains(@src,'b2b-management')]")
-  public Button iframe;
+  public PageElement iframe;
+
+  @FindBy(css = ".ant-modal")
+  public BeforeYouGoModal beforeYouGoModal;
 
   public void inFrame(Consumer<B2bManagementPage> consumer) {
     getWebDriver().switchTo().defaultContent();
@@ -105,28 +134,42 @@ public class B2bManagementPage extends OperatorV2SimplePage {
     assertEquals("Check corporate sub shipper", shipperName, actualShipperName);
   }
 
-  public String getErrorMessage() {
-    getWebDriver().switchTo().parentFrame();
-    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-    String errorMsg = findElementByXpath(ERROR_MSG_CREATE_SUB_SHIPPER_XPATH).getText();
-    getWebDriver().switchTo().parentFrame();
-    return errorMsg;
-  }
-
   public static class B2bShipperTable extends AntTable<Shipper> {
+
+    public static final String CULUMN_BRANCH_ID = "externalRef";
+    public static final String ACTION_NINJA_DASH_LOGIN = "Ninja Dashboard Login";
+    public static final String ACTION_EDIT = "Edit";
 
     public B2bShipperTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("externalRef", "id")
+          .put(CULUMN_BRANCH_ID, "id")
           .put("name", "name")
           .put("email", "email")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of(
-          "Ninja Dashboard Login", "//tr[%d]/td[contains(@class,'action')]//button[1]",
-          "Edit", "//tr[%d]/td[contains(@class,'action')]//button[2]"));
+          ACTION_NINJA_DASH_LOGIN, "//tr[%d]/td[contains(@class,'action')]//button[1]",
+          ACTION_EDIT, "//tr[%d]/td[contains(@class,'action')]//button[2]"));
       setEntityClass(Shipper.class);
     }
+  }
+
+  public static class BeforeYouGoModal extends AntModal {
+
+    public BeforeYouGoModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(css = ".ant-typography")
+    public PageElement message;
+
+    @FindBy(xpath = ".//button[.='Cancel']")
+    public Button cancel;
+
+    @FindBy(xpath = ".//button[.='OK']")
+    public Button ok;
+
   }
 }

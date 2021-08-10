@@ -36,4 +36,12 @@ public class MdCheckbox extends PageElement {
       click();
     }
   }
+
+  public void setValue(boolean checked) {
+    if (checked) {
+      check();
+    } else {
+      uncheck();
+    }
+  }
 }

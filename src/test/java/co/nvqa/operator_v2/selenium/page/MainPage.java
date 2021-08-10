@@ -54,6 +54,8 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Update Delivery Address with CSV", "order-delivery-update");
     MAP_OF_END_URL.put("Route Monitoring V2", "route-monitoring-paged");
     MAP_OF_END_URL.put("Invoiced Orders Search", "invoiced-orders");
+    MAP_OF_END_URL.put("Corporate Manual AWB TID Generator", "corporate-manual-awb-tid");
+    MAP_OF_END_URL.put("SSB Template", "order-billing-template");
   }
 
   public MainPage(WebDriver webDriver) {

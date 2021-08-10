@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.VirtualSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -22,11 +23,13 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class SortBeltManagerPage extends OperatorV2SimplePage {
 
+  public static final String ARM_LIST_XPATH = "//div[contains(@class,'arm-combination-unit-content')][.//div[contains(@class,'arm-output')][.//.='%d']]";
+
   @FindBy(xpath = "(//div[contains(@class,'ant-select-enabled')])[1]")
-  public AntSelect selectHub;
+  public VirtualSelect selectHub;
 
   @FindBy(xpath = "(//div[contains(@class,'ant-select-enabled')])[2]")
-  public AntSelect selectDeviceId;
+  public VirtualSelect selectDeviceId;
 
   @FindBy(xpath = "//button[.//span[contains(., 'Proceed')]]")
   public AntButton proceed;
@@ -52,7 +55,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(css = "a[class*='EditButton']")
   public Button editUnassignedParcelsArm;
 
-  @FindBy(xpath = "//button/span[contains(text(), 'Confirm')]")
+  @FindBy(xpath = "//button[.//span[.='Confirm']]")
   public Button confirm;
 
   @FindBy(xpath = "(//input[@class='ant-input'])[1]")
@@ -118,12 +121,10 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   }
 
   public ArmCombinationContainer getArmCombinationContainer(String armName) {
-    int index = Integer.parseInt(armName.replaceAll(".*Arm\\s*", "")) - 1;
-    return armCombinationContainers.get(index);
+    int index = Integer.parseInt(armName.replaceAll(".*Arm\\s*", ""));
+    WebElement we = findElementByXpath(f(ARM_LIST_XPATH, index));
+    return new ArmCombinationContainer(webDriver, we);
   }
-
-  @FindBy(css = "div.arm-combination-unit-content")
-  public List<ArmCombinationContainer> armCombinationContainers;
 
   public static class ArmCombinationContainer extends PageElement {
 
@@ -134,14 +135,15 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     public MdSwitch enable;
 
     @FindBy(css = "div.ant-select")
-    public AntSelect sameAs;
+    public VirtualSelect sameAs;
 
     public ArmCombinationContainer(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
     public void removeSameAs(String armName) {
-      String xpath = f(".//div[contains(@class,'ant-tag')][span[.='%s']]//i", armName);
+      String xpath = f(".//li[contains(@class,'ant-select-selection__choice')][.//div[.='%s']]//i",
+          armName.replaceAll("Arm ", ""));
       new Button(getWebDriver(), getWebElement(), xpath).click();
     }
 
@@ -154,11 +156,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       return new Button(getWebDriver(), getWebElement(), xpath);
     }
 
-    public AntSelect getFilterSelect(String filterName, int index) {
+    public VirtualSelect getFilterSelect(String filterName, int index) {
       String xpath = f(
           "(.//div[contains(@class,'MultipleSelectFilterContainer')][.//span[.='%s']])[%d]",
           filterName, index);
-      return new AntSelect(getWebDriver(), getWebElement(), xpath);
+      return new VirtualSelect(getWebDriver(), getWebElement(), xpath, true);
     }
   }
 
@@ -199,16 +201,16 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     }
 
     @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[1]")
-    public AntSelect firstFilter;
+    public VirtualSelect firstFilter;
 
     @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[2]")
-    public AntSelect secondFilter;
+    public VirtualSelect secondFilter;
 
     @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[3]")
-    public AntSelect thirdFilter;
+    public VirtualSelect thirdFilter;
 
     @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[4]")
-    public AntSelect unassignedParcelArm;
+    public VirtualSelect unassignedParcelArm;
 
     @FindBy(xpath = ".//button[.//span[contains(., 'Confirm')]]")
     public AntButton confirm;
@@ -221,7 +223,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     }
 
     @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[1]")
-    public AntSelect unassignedParcelArm;
+    public VirtualSelect unassignedParcelArm;
 
     @FindBy(xpath = ".//button[.//span[contains(., 'Confirm')]]")
     public AntButton confirm;
@@ -241,7 +243,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     }
 
     @FindBy(xpath = "(.//div[contains(@class,'ant-select-enabled')])[1]")
-    public AntSelect configuration;
+    public VirtualSelect configuration;
 
     @FindBy(xpath = ".//button[.//span[contains(., 'Confirm')]]")
     public AntButton confirm;

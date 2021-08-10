@@ -9,6 +9,7 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
@@ -27,6 +28,9 @@ public class ZonesSteps extends AbstractSteps {
   private ZonesPage zonesPage;
   private ZonesSelectedPolygonsPage zonesSelectedPolygonsPage;
 
+  private static final String RTS = "RTS";
+  private static final String NORMAL = "normal";
+
   public ZonesSteps() {
   }
 
@@ -38,33 +42,16 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("^Operator create new Zone using Hub \"([^\"]*)\"$")
   public void operatorCreateZone(String hubName) {
-    String uniqueCode = generateDateUniqueString();
-    long uniqueCoordinate = System.currentTimeMillis();
+    operatorCreateNewZone(hubName, false);
+  }
 
-    Zone zone = new Zone();
-    zone.setName("ZONE-" + uniqueCode);
-    zone.setShortName("Z-" + uniqueCode);
-    zone.setHubName(hubName);
-    zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
-    zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
-    zone.setDescription(
-        f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.",
-            new Date()));
-
-    zonesPage.waitUntilPageLoaded();
-    zonesPage.addZone.click();
-    zonesPage.addZoneDialog.waitUntilVisible();
-    zonesPage.addZoneDialog.name.setValue(zone.getName());
-    zonesPage.addZoneDialog.shortName.setValue(zone.getShortName());
-    zonesPage.addZoneDialog.hub.searchAndSelectValue(zone.getHubName());
-    zonesPage.addZoneDialog.latitude.setValue(zone.getLatitude());
-    zonesPage.addZoneDialog.longitude.setValue(zone.getLongitude());
-    zonesPage.addZoneDialog.description.setValue(zone.getDescription());
-    zonesPage.addZoneDialog.submit.clickAndWaitUntilDone();
-    zonesPage.addZoneDialog.waitUntilInvisible();
-    zonesPage.waitUntilInvisibilityOfToast("Zone created successfully", true);
-
-    put(KEY_CREATED_ZONE, zone);
+  @When("Operator creates {string} zone using {string} hub")
+  public void operatorCreatesZoneUsingHub(String zoneType, String hubName) {
+    if (RTS.equalsIgnoreCase(zoneType)) {
+      operatorCreateNewZone(hubName, true);
+    } else if (NORMAL.equalsIgnoreCase(zoneType)) {
+      operatorCreateNewZone(hubName, false);
+    }
   }
 
   @Then("^Operator verify the new Zone is created successfully$")
@@ -75,6 +62,17 @@ public class ZonesSteps extends AbstractSteps {
     expected.compareWithActual(actual);
     put(KEY_CREATED_ZONE_ID, actual.getId());
     putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+  }
+
+  @Then("Operator verifies that the newly created {string} zone's details are right")
+  public void operatorVerifiesThatTheNewlyCreatedZoneSDetailsAreRight(String zoneType) {
+    operatorVerifyTheNewZoneIsCreatedSuccessfully();
+    String actualRtsValue = zonesPage.rtsValue.getText();
+    if (RTS.equalsIgnoreCase(zoneType)) {
+      assertEquals("Zone Type is right", RTS, actualRtsValue);
+    } else if (NORMAL.equalsIgnoreCase(zoneType)) {
+      assertEquals("Zone Type is right", "-", actualRtsValue);
+    }
   }
 
   @When("^Operator update the new Zone$")
@@ -103,6 +101,34 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.editZoneDialog.description.setValue(zoneEdited.getDescription());
     zonesPage.editZoneDialog.update.clickAndWaitUntilDone();
     zonesPage.editZoneDialog.waitUntilInvisible();
+  }
+
+  @When("Operator changes the newly created Zone to be {string} zone")
+  public void operatorChangesTheNewlyCreatedZoneToBeZone(String zoneType) {
+    Zone zone = get(KEY_CREATED_ZONE);
+
+    Zone zoneEdited = new Zone();
+    zoneEdited.setLatitude(zone.getLatitude());
+    zoneEdited.setLongitude(zone.getLongitude());
+    zoneEdited.setHubName(zone.getHubName());
+    zoneEdited.setDescription(zone.getDescription());
+
+    zonesPage.waitUntilPageLoaded();
+    zonesPage.findZone(zone);
+    zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
+    zonesPage.editZoneDialog.waitUntilVisible();
+    zonesPage.rtsToggle.click();
+    zonesPage.editZoneDialog.update.clickAndWaitUntilDone();
+    zonesPage.editZoneDialog.waitUntilInvisible();
+
+    if (RTS.equalsIgnoreCase(zoneType)) {
+      zoneEdited.setName("RTS-" + zone.getName());
+      zoneEdited.setShortName("RTS-" + zone.getShortName());
+    } else if (NORMAL.equalsIgnoreCase(zoneType)) {
+      zoneEdited.setName(zone.getName().substring(4));
+      zoneEdited.setShortName(zone.getShortName().substring(4));
+    }
+    put(KEY_CREATED_ZONE, zoneEdited);
   }
 
   @Then("^Operator verify the new Zone is updated successfully$")
@@ -168,25 +194,79 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
     zonesPage.zonesTable.selectRow(1);
     zonesPage.viewSelectedPolygons.click();
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
   }
 
   @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
   public void operatorAddNewZoneOnViewSelectedPolygonsPage(String zoneName) {
-    zonesSelectedPolygonsPage.addZone(zoneName);
+    zonesSelectedPolygonsPage.inFrame(() -> {
+      zonesSelectedPolygonsPage.findZonesInput.setValue(zoneName);
+      zonesSelectedPolygonsPage.zoneSelectionRows.stream()
+          .filter(row -> StringUtils.equals(row.name.getText(), zoneName))
+          .findFirst()
+          .ifPresent(row -> row.checkbox.check());
+    });
   }
 
-  @And("^Operator remove zone \"([^\"]*)\" if it is added on View Selected Polygons page$")
-  public void operatorRemoveZoneIfItIsAddedOnViewSelectedPolygonsPage(String zoneName) {
-    zonesSelectedPolygonsPage.removeZoneIfAdded(zoneName);
+  @And("^Operator remove all selected zones on View Selected Polygons page$")
+  public void operatorRemoveAllSelectedZonesOnViewSelectedPolygonsPage() {
+    zonesSelectedPolygonsPage.inFrame(() -> zonesSelectedPolygonsPage.zonesPanel.clearAll.click());
   }
 
   @Then("^Operator verify zone \"([^\"]*)\" is selected on View Selected Polygons page$")
   public void operatorVerifyZoneIsSelectedOnViewSelectedPolygonsPage(String zoneName) {
-    zonesSelectedPolygonsPage.verifySelectedZone(zoneName);
+    String finalZoneName = resolveValue(zoneName);
+    zonesSelectedPolygonsPage.inFrame(() ->
+        zonesSelectedPolygonsPage.zonesPanel.zones.stream()
+            .filter(zone -> StringUtils.equals(zone.name.getText(), finalZoneName))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError(
+                "Zone " + finalZoneName + " was not found in selected zones"))
+    );
   }
 
   @Then("^Operator verify count of selected zones is (\\d+) on View Selected Polygons page$")
   public void operatorVerifyCountOfSelectedZonesIsOnViewSelectedPolygonsPage(int countOfZones) {
-    zonesSelectedPolygonsPage.verifyCountOfSelectedZones(countOfZones);
+    zonesSelectedPolygonsPage.inFrame(() ->
+        assertEquals("Count of selected zones",
+            countOfZones, zonesSelectedPolygonsPage.zonesPanel.zones.size())
+    );
+  }
+
+  private void operatorCreateNewZone(String hubName, boolean isRts) {
+    String uniqueCode = generateDateUniqueString();
+    long uniqueCoordinate = System.currentTimeMillis();
+
+    Zone zone = new Zone();
+    zone.setName("ZONE-" + uniqueCode);
+    zone.setShortName("Z-" + uniqueCode);
+    zone.setHubName(hubName);
+    zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
+    zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
+    zone.setDescription(
+        f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.",
+            new Date()));
+
+    zonesPage.waitUntilPageLoaded();
+    zonesPage.addZone.click();
+    zonesPage.addZoneDialog.waitUntilVisible();
+    zonesPage.addZoneDialog.name.setValue(zone.getName());
+    zonesPage.addZoneDialog.shortName.setValue(zone.getShortName());
+    zonesPage.addZoneDialog.hub.searchAndSelectValue(zone.getHubName());
+    zonesPage.addZoneDialog.latitude.setValue(zone.getLatitude());
+    zonesPage.addZoneDialog.longitude.setValue(zone.getLongitude());
+    zonesPage.addZoneDialog.description.setValue(zone.getDescription());
+
+    if (isRts) {
+      zonesPage.rtsToggle.click();
+      zone.setName("RTS-" + zone.getName());
+      zone.setShortName("RTS-" + zone.getShortName());
+    }
+
+    zonesPage.addZoneDialog.submit.clickAndWaitUntilDone();
+    zonesPage.addZoneDialog.waitUntilInvisible();
+    zonesPage.waitUntilInvisibilityOfToast("Zone created successfully", true);
+
+    put(KEY_CREATED_ZONE, zone);
   }
 }

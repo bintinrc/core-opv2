@@ -42,7 +42,7 @@ public class ViewSortStructurePage extends OperatorV2SimplePage {
   @FindBy(css = "svg > g")
   public PageElement canvas;
 
-  @FindBy(css = "input[placeholder='Search Hub / Middle Tier / Zone']")
+  @FindBy(css = "input[placeholder='Search Hub / Middle Tier / Zone / RTS Zone']")
   public TextBox search;
 
   public ViewSortStructurePage(WebDriver webDriver) {

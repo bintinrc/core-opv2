@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import java.io.File;
 import java.util.Date;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Kateryna Skakunova
@@ -26,6 +28,17 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   private static final String FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL = "Choose";
   private static final String FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL = "Save Button";
   private static final String FILTER_UPLOAD_CSV_DIALOG_FILE_NAME = "//md-dialog//h4//span[contains(text(), '%s')]";
+  private static final String FILTER_AGGREGATED_INFO_MSG_XPATH = "//div[contains(text(),'%s')]";
+  private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//md-select[@placeholder='No Template Selected']//div[@class='md-text']";
+
+  @FindBy(xpath = "//md-select[@md-container-class='nv-input-select-container']")
+  public MdSelect csvFileTemplate;
+
+  @FindBy(xpath = ".//button[@aria-label='Generate Success Billings']")
+  public MdSelect generateSuccessBillingsButton;
+
+  @FindBy(css = ".md-dialog-content-body")
+  public PageElement infoMessage;
 
   public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
   public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
@@ -63,16 +76,27 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     sendKeys(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX, shipper);
   }
 
+  public void setEmptyParentShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(
+        FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+  }
+
+  public void setEmptySelectedShipper() {
+    clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL);
+  }
+
   public String getNoParentErrorMsg() {
     return getText(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG);
   }
 
-  public void uploadCsvShippers(String shipperIds) {
-
+  public void uploadCsvShippersAndVerifySuccessMsg(String shipperIds, File csvFile) {
     int countOfShipperIds = shipperIds.split(",").length;
-    File csvFile = createFile("shipper-id-upload.csv", shipperIds);
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    uploadCsvShippers(csvFile);
+    assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
+        getToastTopText());
+  }
 
+  public void uploadCsvShippers(File csvFile) {
     clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
     clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
 
@@ -82,9 +106,6 @@ public class OrderBillingPage extends OperatorV2SimplePage {
         csvFile.getAbsolutePath());
     waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
     clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
-
-    assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
-        getToastTopText());
   }
 
   public void uploadPDFShippersAndVerifyErrorMsg() {
@@ -115,10 +136,25 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     clickButtonByAriaLabelAndWaitUntilDone("Generate Success Billings");
   }
 
+  public boolean isGenerateSuccessBillingsButtonEnabled() {
+    return generateSuccessBillingsButton.isEnabled();
+  }
+
   public void verifyNoErrorsAvailable() {
     if (toastErrors.size() > 0) {
       fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
     }
   }
 
+  public Boolean isAggregatedInfoMsgExist(String infoMsg) {
+    return isElementExist(f(FILTER_AGGREGATED_INFO_MSG_XPATH, infoMsg));
+  }
+
+  public String getCsvFileTemplateName() {
+    return getText(FILTER_CSV_FILE_TEMPLATE_NAME_XPATH);
+  }
+
+  public void setCsvFileTemplateName(String value) {
+    csvFileTemplate.selectValue(value);
+  }
 }

@@ -195,6 +195,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       Transaction transaction = transactionOptional.get();
       Long waypointId = transaction.getWaypointId();
       Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+      put(KEY_WAYPOINT_ID, waypointId);
+      put(KEY_TRANSACTION_ID, transaction.getId());
 
       Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
 
@@ -381,22 +383,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("^DB Operator verify order_events record for the created order:$")
   public void operatorVerifyOrderEventRecordParams(Map<String, String> mapOfData) {
-    Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
-    assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
-    String value = mapOfData.get("type");
-
-    orderEvents.stream()
-        .filter(record ->
-        {
-          if (StringUtils.isNotBlank(value)) {
-            return Integer.parseInt(value) == record.getType();
-          }
-          return false;
-        })
-        .findFirst()
-        .orElseThrow(() -> new AssertionError(
-            f("Event record %s for order %d was not found", mapOfData.toString(), orderId)));
+    // order event is an async process, the order event may not created yet when accessing this step
+    retryIfAssertionErrorOccurred(() -> {
+      Long orderId = get(KEY_CREATED_ORDER_ID);
+      List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+      assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
+      String value = mapOfData.get("type");
+      orderEvents.stream()
+          .filter(record -> {
+            if (StringUtils.isNotBlank(value)) {
+              return Integer.parseInt(value) == record.getType();
+            }
+            return false;
+          })
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              f("Event record %s for order %d was not found", mapOfData.toString(), orderId)));
+    }, "Check DB for order event");
   }
 
   @Then("^DB Operator verify transaction_failure_reason record for the created order$")
@@ -504,6 +507,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
     put(KEY_WAYPOINT_ID, entity.getWaypointId());
+    put(KEY_TRANSACTION_ID, entity.getId());
     String distributionPointId = mapOfData.get("distribution_point_id");
     String address1 =
         Objects.equals(mapOfData.get("address1"), "GET_FROM_CREATED_ORDER") ? order.getToAddress1()
@@ -580,6 +584,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
     put(KEY_WAYPOINT_ID, entity.getWaypointId());
+    put(KEY_TRANSACTION_ID, entity.getId());
 
     String routeId = mapOfData.get("routeId");
     String priorityLevel = mapOfData.get("priorityLevel");
@@ -1732,21 +1737,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
         Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
   }
+
   @Then("DB Operator verify loyalty point for completed order is {string}")
   public void checkLoyaltyPoint(String pointAdded) {
     if (containsKey(KEY_LOYALTY_POINT) && get(KEY_LOYALTY_POINT) == null) {
-      retryIfAssertionErrorOccurred(()-> {
+      retryIfAssertionErrorOccurred(() -> {
             String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
             Double point = getLoyaltyJdbc().getLoyaltyPoint(trackingId);
             assertNotNull(point);
             put(KEY_LOYALTY_POINT, point);
-          },"DB loyalty check loyalty point"
+          }, "DB loyalty check loyalty point"
       );
     }
     Double actualLoyaltyPoint = get(KEY_LOYALTY_POINT);
     Double expectedLoyaltyPoint = Double.valueOf(pointAdded);
 
-    assertEquals("Check added loyalty point", expectedLoyaltyPoint,  actualLoyaltyPoint);
+    assertEquals("Check added loyalty point", expectedLoyaltyPoint, actualLoyaltyPoint);
   }
 
   @Then("DB Operator verify unscanned shipment with following data:")
@@ -1768,5 +1774,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @When("DB Operator sets flags of driver with id {string} to {int}")
   public void setDriverFlags(String driverId, int flags) {
     getDriverJdbc().setDriverFlags(Long.parseLong(resolveValue(driverId)), flags);
+  }
+
+  @When("DB Operator searched {string} Orders with {string} Status and {string} Granular Status")
+  public void dbOperatorSearchedOrdersWithStatusAndGranularStatus(String orderNumberAsString,
+      String orderStatus, String orderGranularStatus) {
+    Integer orderNumber = Integer.parseInt(orderNumberAsString);
+    List<String> trackingIds = getCoreJdbc()
+        .getTrackingIdByStatusAndGranularStatus(orderNumber, orderStatus, orderGranularStatus);
+    put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, trackingIds);
   }
 }

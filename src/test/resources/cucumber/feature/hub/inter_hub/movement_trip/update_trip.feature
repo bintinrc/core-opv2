@@ -28,7 +28,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Register Trip Departure without Driver (uid:9af1c868-e9f5-4cf2-9b92-3c70c59d264c)
@@ -50,7 +50,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Trip must have assigned drivers" is shown on movement page
+    Then Operator verifies toast with message "Request failed with status code 400" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Main Driver Employment Status is Inactive (uid:aaee95f2-c6ee-4054-aa56-132d0757a5cf)
@@ -290,7 +290,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on movement page
     Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver  
   Scenario: Register Trip Departure With Invalid Driver Employment and License Status - Main and Additional Driver Employment Status and License Status are Inactive (uid:48ea8cc1-01f0-4d20-87ba-56fa8ee16862)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -362,7 +362,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator arrive trip
-    Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} arrived" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with single Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
@@ -395,7 +395,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Complete (uid:b6d4ffd1-5960-48c6-bd09-4b311909f9e7)
@@ -425,9 +425,9 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator arrive trip
-    Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} arrived" is shown on movement page
     When Operator complete trip
-    Then Operator verifies toast with message "Movement trip completed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
     Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
@@ -458,7 +458,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on "assign_driver" icon on the action column
     And Operator assign driver "({KEY_LIST_OF_CREATED_DRIVERS[1].username})" to created movement trip
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Multiple Different Trips (uid:d7dbab63-4e63-4f98-b1f2-5b9c18e5a39c)
@@ -506,7 +506,7 @@ Feature: Movement Trip - Update Trip
       | Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[3].name} to {hub-relation-destination-hub-name} |
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Same Trip (uid:4203b43a-1aec-43dd-b791-84e4a071f791)
@@ -545,7 +545,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

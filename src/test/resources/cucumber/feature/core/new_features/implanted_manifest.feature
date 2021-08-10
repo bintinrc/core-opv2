@@ -108,12 +108,7 @@ Feature: Implanted Manifest
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get Reservation Job
-    And API Driver reject Reservation
-    And DB Operator get Booking ID of Reservation
-    And API Operator fail the reservation using data below:
+    And Operator admin manifest force fail reservation
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 7           |
       | failureReasonIndexMode | FIRST       |
@@ -132,6 +127,7 @@ Feature: Implanted Manifest
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
+      | status      | FAIL                             |
       | shipperName | {shipper-v4-name}                |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
@@ -215,7 +211,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0       |
       | scannedAtShipperPOD   | No data |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD (uid:9840426a-a1f5-4864-8ecf-3747f7b55e52)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -270,6 +266,32 @@ Feature: Implanted Manifest
       | name    | DRIVER PICKUP SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
+
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID (uid:027dfab6-19b3-4157-af2e-7e924ed45660)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Using Prefix - Multiple TID (uid:8ef03b8e-c48f-458a-8755-84a9dafc4ae7)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator saves created orders Tracking IDs without prefix
+    And Operator adds country prefix on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[2]}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

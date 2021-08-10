@@ -35,7 +35,7 @@ public class MdSelect extends PageElement {
   @FindBy(css = "md-select-value")
   public PageElement selectValueElement;
 
-  @FindBy(css = "md-select-value div")
+  @FindBy(css = "md-select-value")
   public PageElement currentValueElement;
 
   @FindBy(xpath = "//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']")
@@ -59,12 +59,14 @@ public class MdSelect extends PageElement {
   }
 
   public void searchAndSelectValue(String value) {
-    enterSearchTerm(value);
-    value = escapeValue(value);
-    try {
-      click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
-    } catch (NoSuchElementException ex) {
-      throw new NvTestRuntimeException(f("Could not select option [%s] in md-select", value), ex);
+    if (!StringUtils.equals(value, StringUtils.trim(getValue()))) {
+      enterSearchTerm(value);
+      value = escapeValue(value);
+      try {
+        click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
+      } catch (NoSuchElementException ex) {
+        throw new NvTestRuntimeException(f("Could not select option [%s] in md-select", value), ex);
+      }
     }
   }
 
@@ -143,7 +145,7 @@ public class MdSelect extends PageElement {
   }
 
   public String getValue() {
-    return currentValueElement.getText();
+    return currentValueElement.getTextContent();
   }
 
   public String getSelectedValueAttribute() {
