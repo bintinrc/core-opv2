@@ -626,6 +626,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     deleteDpImage();
     if ("Save Settings".equalsIgnoreCase(action)) {
       clickSaveSettingsCreateDpForm();
+      pause3s();
     } else {
       clickReturnToList();
     }
