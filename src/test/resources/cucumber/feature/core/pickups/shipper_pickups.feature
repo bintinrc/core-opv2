@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ShipperPickups @current
+@OperatorV2 @Core @PickUps @ShipperPickups
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -44,8 +44,7 @@ Feature: Shipper Pickups
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -519,8 +518,7 @@ Feature: Shipper Pickups
       | approxVolume | Less than 3 Parcels                            |
       | comments     | Please be careful with the v-day flowers.      |
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -539,9 +537,9 @@ Feature: Shipper Pickups
     And Operator removes reservation from route from Edit Route Details dialog
     Then Operator verify the route was removed from the created reservation
     And DB Operator verifies waypoint status is "PENDING"
-#    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
-#    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, Suggested Route Found (uid:3a7616b6-5402-4cdb-9e10-2440f2fe8605)

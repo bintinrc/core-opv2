@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV @current
+@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV
 Feature: Update Delivery Address with CSV
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -146,8 +146,7 @@ Feature: Update Delivery Address with CSV
     And API Operator get order details
     And Operator verify created orders info after address update
 
-#  @DeleteOrArchiveRoute 
-  @routing-refactor @wip
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery (uid:c6c4b64a-2171-4c36-bb19-b119ab6a2dce)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

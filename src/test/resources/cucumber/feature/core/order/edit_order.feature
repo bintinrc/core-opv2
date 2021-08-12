@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @current
+@OperatorV2 @Core @Order @EditOrder
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -325,8 +325,7 @@ Feature: Edit Order
     And Operator print Airway Bill on Edit Order page
     Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:c6ab425f-c508-451f-b84c-09eb267c5f27)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -357,8 +356,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY (uid:91bf2923-94ba-4d8c-bd1b-c000eca19ee9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -390,8 +388,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -420,8 +417,7 @@ Feature: Edit Order
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
       | Return - Pickup   | uid:0c1c44ce-9fce-46e7-9016-f73613eef833 | Return    | Pickup    |
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Pickup (uid:c1962397-8060-4485-9221-47cb46803ddf)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -458,8 +454,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery (uid:af4f96cb-5ed1-4035-8a29-650ac5013aae)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -500,8 +495,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -570,8 +564,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan (uid:066c5598-129c-4fe0-bd9a-0af449703f33)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1245,8 +1238,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1348,8 +1340,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-#   @DeleteOrArchiveRoute
-  @routing-refactor
+   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1397,8 +1388,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1460,8 +1450,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan (uid:5bae8c76-b67d-4cfd-9d7e-2af0d0fe0db9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -2268,8 +2257,7 @@ Feature: Edit Order
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit order page
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Untag DP Order that is merged and routed (uid:77fec425-2a5b-4667-b82f-b6394caec5d5)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2297,8 +2285,7 @@ Feature: Edit Order
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies all route_monitoring_data records
 
-#  @DeleteOrArchiveRoute
-  @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Untag DP Order that is not merged and routed (uid:2c86a0e4-480f-4361-90e5-0be6628c90cb)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2322,7 +2309,7 @@ Feature: Edit Order
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies all route_monitoring_data records
 
-  @routing-refactor @wip
+  @routing-refactor
   Scenario: Untag DP Order that is merged and not routed (uid:cea0056a-d4e8-4d54-8b7d-28fc786ee3db)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |

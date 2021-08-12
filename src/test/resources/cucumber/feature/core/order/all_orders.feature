@@ -603,8 +603,8 @@ Feature: All Orders
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
 
-  @DeleteOrArchiveRoute @Debug
-  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - <note> (<uid>)
+  @DeleteOrArchiveRoute
+  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD (<uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -640,9 +640,46 @@ Feature: All Orders
     Examples:
       | note               | cod_amount | collected_amount | collected | uid                                      |
       | Collect COD        | 23.57      | 23.57            | true      | uid:ae5c6bab-1d1b-48bf-a32e-779983df9087 |
+
+  @DeleteOrArchiveRoute
+  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD (<uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Order -> All Orders
+    And Operator Force Success orders with COD collection on All Orders page:
+      | trackingId                      | collected   |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY           |
+      | expectedCodAmount | <collected_amount> |
+      | driverId          | {ninja-driver-id}  |
+    Examples:
+      | note               | cod_amount | collected_amount | collected | uid                                      |
       | Do not Collect COD | 23.57      | 0                | false     | uid:a5fbe7f1-650d-48d8-a2cc-29e963ca09d7 |
 
-  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - <note> (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD (<uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
@@ -675,6 +712,40 @@ Feature: All Orders
     Examples:
       | note               | cod_amount | collected_amount | collected | uid                                      |
       | Collect COD        | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
+
+  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD (<uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator Force Success orders with COD collection on All Orders page:
+      | trackingId                      | collected   |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
+    Then Operator verifies that info toast displayed:
+      | top    | 1 order(s) updated |
+      | bottom | Complete Order     |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY           |
+      | expectedCodAmount | <collected_amount> |
+
+    Examples:
+      | note               | cod_amount | collected_amount | collected | uid                                      |
       | Do not Collect COD | 23.57      | 0                | false     | uid:850b6b66-82aa-45d8-bb7e-f3b602e27f8a |
 
   @KillBrowser @ShouldAlwaysRun
