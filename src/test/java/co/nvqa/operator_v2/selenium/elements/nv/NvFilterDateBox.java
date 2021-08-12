@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import java.util.Date;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,6 +13,10 @@ public class NvFilterDateBox extends AbstractFilterBox {
     super(webDriver, webElement);
   }
 
+  public NvFilterDateBox(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+    super(webDriver, searchContext, webElement);
+  }
+
   @FindBy(xpath = ".//md-datepicker[1]")
   public MdDatepicker fromDate;
 
@@ -19,7 +24,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   public MdDatepicker toDate;
 
   public void selectFromDate(String value) {
-    fromDate.setValue(value);
+    fromDate.simpleSetValue(value);
   }
 
   public void selectFromDate(Date value) {
@@ -27,7 +32,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   }
 
   public void selectToDate(String value) {
-    toDate.setValue(value);
+    toDate.simpleSetValue(value);
   }
 
   public void selectToDate(Date value) {

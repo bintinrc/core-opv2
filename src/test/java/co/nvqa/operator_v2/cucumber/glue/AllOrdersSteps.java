@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableList;
@@ -13,9 +15,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 
 /**
@@ -189,6 +195,7 @@ public class AllOrdersSteps extends AbstractSteps {
       }
     }
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    pause2s();
   }
 
   @When("^Operator verifies error messages in dialog on All Orders page:$")
@@ -416,5 +423,372 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifiesLatestEventIs(String latestEvent) {
     Order createdOrder = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyLatestEvent(createdOrder, latestEvent);
+  }
+
+  @When("^Operator selects filters on All Orders page:$")
+  public void operatorSelectsFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    allOrdersPage.waitUntilPageLoaded();
+
+    if (data.containsKey("status")) {
+      if (!allOrdersPage.statusFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Status");
+      }
+      allOrdersPage.statusFilter.clearAll();
+      allOrdersPage.statusFilter.selectFilter(data.get("status"));
+    } else {
+      if (allOrdersPage.statusFilter.isDisplayedFast()) {
+        allOrdersPage.statusFilter.clearAll();
+      }
+    }
+
+    if (data.containsKey("granularStatus")) {
+      if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Granular Status");
+      }
+      allOrdersPage.granularStatusFilter.clearAll();
+      allOrdersPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
+    } else {
+      if (allOrdersPage.granularStatusFilter.isDisplayedFast()) {
+        allOrdersPage.granularStatusFilter.clearAll();
+      }
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
+      allOrdersPage.creationTimeFilter.selectFromHours("04");
+      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+    } else {
+      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
+        allOrdersPage.creationTimeFilter.selectFromHours("04");
+        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+      }
+    }
+
+    if (data.containsKey("creationTimeTo")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectToDate(data.get("creationTimeTo"));
+      allOrdersPage.creationTimeFilter.selectToHours("04");
+      allOrdersPage.creationTimeFilter.selectToMinutes("00");
+    } else {
+      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.creationTimeFilter.selectToDate(DateUtil.getTodayDate_YYYY_MM_DD());
+        allOrdersPage.creationTimeFilter.selectToHours("04");
+        allOrdersPage.creationTimeFilter.selectToMinutes("00");
+      }
+    }
+
+    if (data.containsKey("shipperName")) {
+      if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Shipper");
+      }
+      allOrdersPage.shipperFilter.clearAll();
+      allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
+    } else {
+      if (allOrdersPage.shipperFilter.isDisplayedFast()) {
+        allOrdersPage.shipperFilter.clearAll();
+      }
+    }
+
+    if (data.containsKey("masterShipperName")) {
+      if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Master Shipper");
+      }
+      allOrdersPage.masterShipperFilter.clearAll();
+      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
+    } else {
+      if (allOrdersPage.masterShipperFilter.isDisplayedFast()) {
+        allOrdersPage.masterShipperFilter.clearAll();
+      }
+    }
+  }
+
+  @When("^Operator updates filters on All Orders page:$")
+  public void operatorUpdatesFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    allOrdersPage.waitUntilPageLoaded();
+
+    if (data.containsKey("status")) {
+      if (!allOrdersPage.statusFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Status");
+      }
+      allOrdersPage.statusFilter.clearAll();
+      allOrdersPage.statusFilter.selectFilter(splitAndNormalize(data.get("status")));
+    }
+
+    if (data.containsKey("granularStatus")) {
+      if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Granular Status");
+      }
+      allOrdersPage.granularStatusFilter.clearAll();
+      allOrdersPage.granularStatusFilter
+          .selectFilter(splitAndNormalize(data.get("granularStatus")));
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
+      allOrdersPage.creationTimeFilter.selectFromHours("04");
+      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+    }
+
+    if (data.containsKey("creationTimeTo")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectToDate(data.get("creationTimeTo"));
+      allOrdersPage.creationTimeFilter.selectToHours("04");
+      allOrdersPage.creationTimeFilter.selectToMinutes("00");
+    }
+
+    if (data.containsKey("shipperName")) {
+      if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Shipper");
+      }
+      allOrdersPage.shipperFilter.clearAll();
+      allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
+    }
+
+    if (data.containsKey("masterShipperName")) {
+      if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Master Shipper");
+      }
+      allOrdersPage.masterShipperFilter.clearAll();
+      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
+    }
+  }
+
+  @When("^Operator verifies selected filters on All Orders page:$")
+  public void operatorVerifiesSelectedFilters(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    SoftAssertions assertions = new SoftAssertions();
+
+    if (data.containsKey("status")) {
+      boolean isDisplayed = allOrdersPage.statusFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Status filter is not displayed");
+      } else {
+        assertions.assertThat(allOrdersPage.statusFilter.getSelectedValues())
+            .as("Status items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("status")));
+      }
+    }
+
+    if (data.containsKey("granularStatus")) {
+      boolean isDisplayed = allOrdersPage.granularStatusFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Granular Status filter is not displayed");
+      } else {
+        assertions.assertThat(allOrdersPage.granularStatusFilter.getSelectedValues())
+            .as("Granular Status items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("granularStatus")));
+      }
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      boolean isDisplayed = allOrdersPage.creationTimeFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Creation Time filter is not displayed");
+      } else {
+        assertions.assertThat(allOrdersPage.creationTimeFilter.fromDate.getValue())
+            .as("Creation Time From Date")
+            .isEqualTo(data.get("creationTimeFrom"));
+      }
+    }
+
+    if (data.containsKey("creationTimeTo")) {
+      boolean isDisplayed = allOrdersPage.creationTimeFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Creation Time filter is not displayed");
+      } else {
+        assertions.assertThat(allOrdersPage.creationTimeFilter.toDate.getValue())
+            .as("Creation Time To Date")
+            .isEqualTo(data.get("creationTimeTo"));
+      }
+    }
+
+    if (data.containsKey("shipperName")) {
+      boolean isDisplayed = allOrdersPage.shipperFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Shipper filter is not displayed");
+      } else {
+        assertions.assertThat(allOrdersPage.shipperFilter.getSelectedValues())
+            .as("Shipper items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipperName")));
+      }
+    }
+
+    if (data.containsKey("masterShipperName")) {
+      boolean isDisplayed = allOrdersPage.masterShipperFilter.isDisplayedFast();
+      if (!isDisplayed) {
+        assertions.fail("Master Shipper filter is not displayed");
+      } else {
+        assertions.assertThat(allOrdersPage.masterShipperFilter.getSelectedValues())
+            .as("Master Shipper items")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("masterShipperName")));
+      }
+    }
+    assertions.assertAll();
+  }
+
+  @When("Operator selects {string} preset action on All Orders page")
+  public void selectPresetAction(String action) {
+    allOrdersPage.presetActions.selectOption(resolveValue(action));
+  }
+
+  @When("Operator verifies Save Preset dialog on All Orders page contains filters:")
+  public void verifySelectedFiltersForPreset(List<String> expected) {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    List<String> actual = allOrdersPage.savePresetDialog.selectedFilters.stream()
+        .map(PageElement::getNormalizedText)
+        .collect(Collectors.toList());
+    Assertions.assertThat(actual)
+        .as("List of selected filters")
+        .containsExactlyInAnyOrderElementsOf(expected);
+  }
+
+  @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page is required")
+  public void verifyPresetNameIsRequired() {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.savePresetDialog.presetName.getAttribute("ng-required"))
+        .as("Preset Name field ng-required attribute")
+        .isEqualTo("required");
+  }
+
+  @When("Operator verifies help text {string} is displayed in Save Preset dialog on All Orders page")
+  public void verifyHelpTextInSavePreset(String expected) {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.savePresetDialog.helpText.getNormalizedText())
+        .as("Help Text")
+        .isEqualTo(resolveValue(expected));
+  }
+
+  @When("Operator verifies Cancel button in Save Preset dialog on All Orders page is enabled")
+  public void verifyCancelIsEnabled() {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.savePresetDialog.cancel.isEnabled())
+        .as("Cancel button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator verifies Save button in Save Preset dialog on All Orders page is enabled")
+  public void verifySaveIsEnabled() {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
+        .as("Save button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator clicks Save button in Save Preset dialog on All Orders page")
+  public void clickSaveInSavePresetDialog() {
+    allOrdersPage.savePresetDialog.save.click();
+  }
+
+  @When("Operator clicks Update button in Save Preset dialog on All Orders page")
+  public void clickUpdateInSavePresetDialog() {
+    allOrdersPage.savePresetDialog.update.click();
+  }
+
+  @When("Operator verifies Save button in Save Preset dialog on All Orders page is disabled")
+  public void verifySaveIsDisabled() {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
+        .as("Save button is enabled")
+        .isFalse();
+  }
+
+  @When("Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled")
+  public void verifyCancelIsEnabledInDeletePreset() {
+    allOrdersPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.deletePresetDialog.cancel.isEnabled())
+        .as("Cancel button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator verifies Delete button in Delete Preset dialog on All Orders page is enabled")
+  public void verifyDeleteIsEnabled() {
+    allOrdersPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.deletePresetDialog.delete.isEnabled())
+        .as("Delete button is enabled")
+        .isTrue();
+  }
+
+  @When("Operator selects {string} preset in Delete Preset dialog on All Orders page")
+  public void selectPresetInDeletePresets(String value) {
+    allOrdersPage.deletePresetDialog.waitUntilVisible();
+    allOrdersPage.deletePresetDialog.preset.searchAndSelectValue(resolveValue(value));
+  }
+
+  @When("Operator clicks Delete button in Delete Preset dialog on All Orders page")
+  public void clickDeleteInDeletePresetDialog() {
+    allOrdersPage.deletePresetDialog.delete.click();
+  }
+
+  @When("Operator verifies Delete button in Delete Preset dialog on All Orders page is disabled")
+  public void verifyDeleteIsDisabled() {
+    allOrdersPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.deletePresetDialog.delete.isEnabled())
+        .as("Delete button is enabled")
+        .isFalse();
+  }
+
+  @When("Operator verifies {string} message is displayed in Delete Preset dialog on All Orders page")
+  public void verifyMessageInDeletePreset(String expected) {
+    allOrdersPage.deletePresetDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.deletePresetDialog.message.getNormalizedText())
+        .as("Delete Preset message")
+        .isEqualTo(resolveValue(expected));
+  }
+
+  @When("Operator enters {string} Preset Name in Save Preset dialog on All Orders page")
+  public void enterPresetNameIsRequired(String presetName) {
+    allOrdersPage.savePresetDialog.waitUntilVisible();
+    presetName = resolveValue(presetName);
+    allOrdersPage.savePresetDialog.presetName.setValue(presetName);
+    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, presetName);
+  }
+
+  @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it")
+  public void verifyPresetNameIsValidated() {
+    Assertions.assertThat(allOrdersPage.savePresetDialog.confirmedIcon.isDisplayed())
+        .as("Preset Name checkmark")
+        .isTrue();
+  }
+
+  @When("Operator verifies selected Filter Preset name is {string} on All Orders page")
+  public void verifySelectedPresetName(String expected) {
+    expected = resolveValue(expected);
+    String actual = StringUtils.trim(allOrdersPage.filterPreset.getValue());
+    Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
+    Matcher m = p.matcher(actual);
+    Assertions.assertThat(m.matches())
+        .as("Selected Filter Preset value matches to pattern")
+        .isTrue();
+    Long presetId = Long.valueOf(m.group(1));
+    String presetName = m.group(2);
+    Assertions.assertThat(presetName)
+        .as("Preset Name")
+        .isEqualTo(expected);
+    put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, presetId);
+  }
+
+  @When("Operator selects {string} Filter Preset on All Orders page")
+  public void selectPresetName(String value) {
+    allOrdersPage.filterPreset.searchAndSelectValue(resolveValue(value));
+    if (allOrdersPage.halfCircleSpinner.waitUntilVisible(3)) {
+      allOrdersPage.halfCircleSpinner.waitUntilInvisible();
+    }
+    pause1s();
   }
 }

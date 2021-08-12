@@ -5,7 +5,7 @@ Feature: Edit Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Change Delivery Verification Method from Edit Order (<hiptest-uid>)
+  Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -154,7 +154,7 @@ Feature: Edit Order
     Then Operator Edit Order Details on Edit Order page successfully
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -303,6 +303,9 @@ Feature: Edit Order
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator cancel RTS on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | The RTS has been cancelled |
+      | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
     And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -448,7 +451,7 @@ Feature: Edit Order
     Then Operator verify the order completed successfully on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page (<hiptest-uid>)
+  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

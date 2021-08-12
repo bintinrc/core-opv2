@@ -37,6 +37,8 @@ public class OperatorV2SimplePage extends SimplePage {
 
   @FindBy(css = "div.toast-error")
   public List<ToastError> toastErrors;
+  @FindBy(css = "div.toast-warning")
+  public List<ToastError> toastWarnings;
   @FindBy(css = "div.toast-info")
   public List<ToastInfo> toastInfo;
   @FindBy(css = "div.toast-success")

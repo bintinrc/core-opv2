@@ -33,7 +33,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
   }
 
   @When("^Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:$")
-  public void operatorSelectsFilterAndclicksLoadSelectionOnAddTagsToOrderPageUsingDataBelow(
+  public void operatorSelectsFilterAndClicksLoadSelectionOnAddTagsToOrderPageUsingDataBelow(
       Map<String, String> data) {
     data = resolveKeyValues(data);
 

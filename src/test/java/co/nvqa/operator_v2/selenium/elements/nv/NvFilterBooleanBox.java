@@ -24,7 +24,7 @@ public class NvFilterBooleanBox extends AbstractFilterBox {
   @FindBy(xpath = ".//button[@ng-click='::onClick(1)']")
   public PageElement no;
 
-  @FindBy(css = "nv-filter-boolean-box[main-title='RTS'] button.raised span")
+  @FindBy(css = "button.raised span")
   public PageElement selectedValue;
 
   @Override

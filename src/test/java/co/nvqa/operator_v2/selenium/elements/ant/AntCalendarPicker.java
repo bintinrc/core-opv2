@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -40,5 +42,9 @@ public class AntCalendarPicker extends PageElement {
     panelInput.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
     panelInput.setValue(value);
     input.jsClick();
+  }
+
+  public void setValue(Date value) {
+    setValue(DateUtil.SDF_YYYY_MM_DD.format(value));
   }
 }

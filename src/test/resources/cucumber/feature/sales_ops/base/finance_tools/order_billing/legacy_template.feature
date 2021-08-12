@@ -6,10 +6,14 @@ Feature: Order Billing
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
+  @DeleteOrArchiveRoute
+  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator selects Order Billing data as below
       | startDate | {gradle-current-date-yyyy-MM-dd} |
       | endDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies "1 - Legacy SSB Template" is not available in template selector drop down menu
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

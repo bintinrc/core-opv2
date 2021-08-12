@@ -138,3 +138,7 @@ Feature: Create Pricing Profile - Normal Shippers - COD
     Then Operator adds pricing script with invalid pricing_lever and verifies the error message
       | codPercentage | abcd                             |
       | errorMessage  | Special character is not allowed |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

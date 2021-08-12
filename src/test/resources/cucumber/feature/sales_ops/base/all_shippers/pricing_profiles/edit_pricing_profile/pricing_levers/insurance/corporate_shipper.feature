@@ -46,11 +46,11 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
       | insuranceMinFee     | 10 |
       | insurancePercentage | 10 |
       | insuranceThreshold  | 10 |
-      And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-      And DB Operator fetches pricing profile and shipper discount details
-      Then  Operator verifies the pricing profile and shipper discount details are correct
-      And DB Operator fetches pricing lever details
-      Then Operator verifies the pricing lever details in the database
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing profile and shipper discount details
+    Then  Operator verifies the pricing profile and shipper discount details are correct
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
     #Verify pricing profile is the same as parents ACTIVE pricing profile- corporate subshipper
     And Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
@@ -120,3 +120,6 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
       | insuranceThreshold  | 30                                          |
       | comments            | This is a test pricing script               |
 
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

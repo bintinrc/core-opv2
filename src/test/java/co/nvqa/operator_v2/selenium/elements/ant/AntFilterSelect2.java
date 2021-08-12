@@ -27,6 +27,8 @@ public class AntFilterSelect2 extends PageElement {
 
   @FindBy(css = "[data-testid='filterMultipleSelect.clearAll']")
   public Button clearAll;
+  @FindBy(xpath = ".//button[./i[contains(@class,'anticon-close')]]")
+  public Button delete;
 
   @FindBy(css = "span[data-testid='filterMultipleSelect.tag']")
   public List<PageElement> selectedValues;
@@ -39,6 +41,14 @@ public class AntFilterSelect2 extends PageElement {
 
   public void selectFilter(String value) {
     searchOrSelect.selectValue(value);
+  }
+
+  public void selectFilter(Iterable<String> values) {
+    values.forEach(this::selectFilter);
+  }
+
+  public void deleteFilter() {
+    delete.click();
   }
 
   public List<String> getSelectedValues() {

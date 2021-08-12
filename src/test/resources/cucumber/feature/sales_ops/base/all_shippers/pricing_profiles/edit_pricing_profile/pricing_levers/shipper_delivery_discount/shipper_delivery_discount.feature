@@ -272,7 +272,7 @@ Feature: Edit Pricing Profile - Normal Shippers - Shipper Delivery Discount
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discount | 30                         |
-      | comments      | Edited test pricing script |
+      | comments | Edited test pricing script |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

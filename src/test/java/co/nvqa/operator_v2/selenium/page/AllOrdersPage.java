@@ -13,6 +13,9 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -55,6 +58,21 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
+  @FindBy(css = "nv-filter-box[item-types='Status']")
+  public NvFilterBox statusFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Granular Status']")
+  public NvFilterBox granularStatusFilter;
+
+  @FindBy(css = "nv-filter-time-box")
+  public NvFilterTimeBox creationTimeFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Master Shipper']")
+  public NvFilterBox masterShipperFilter;
+
+  @FindBy(xpath = "//nv-filter-autocomplete[@item-types='Shipper']")
+  public NvFilterAutocomplete shipperFilter;
+
   @FindBy(css = "md-autocomplete[md-input-name='searchTerm']")
   public MdAutocomplete searchTerm;
 
@@ -63,6 +81,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "th.column-checkbox md-menu")
   public MdMenu selectionMenu;
+
+  @FindBy(xpath = "//md-menu[contains(.,'Preset Actions')]")
+  public MdMenu presetActions;
 
   @FindBy(name = "container.order.list.find-orders-with-csv")
   public NvIconTextButton findOrdersWithCsv;
@@ -94,8 +115,25 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public AddToRouteDialog addToRouteDialog;
 
+  @FindBy(css = "md-dialog")
+  public SavePresetDialog savePresetDialog;
+
+  @FindBy(css = "md-dialog")
+  public DeletePresetDialog deletePresetDialog;
+
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
+
+  @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
+  public MdAutocomplete addFilter;
+
+  @FindBy(css = "[id^='commons.preset.load-filter-preset']")
+  public MdSelect filterPreset;
+
+  public void addFilter(String value) {
+    addFilter.selectValue(value);
+    addFilter.closeSuggestions();
+  }
 
   public enum Category {
     TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
@@ -168,8 +206,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void waitUntilPageLoaded() {
     super.waitUntilPageLoaded();
-    waitUntilInvisibilityOfElementLocated(
-        "//md-progress-circular/following-sibling::div[text()='Loading...']");
+    if (halfCircleSpinner.waitUntilVisible(2)) {
+      halfCircleSpinner.waitUntilInvisible(60);
+    }
   }
 
   public void verifyItsCurrentPage() {
@@ -391,12 +430,11 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void pullOutFromRouteWithExpectedSelectionError(List<String> listOfExpectedTrackingId) {
     applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
     pullSelectedFromRouteDialog.waitUntilVisible();
-    selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
+    selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId);
     pullSelectedFromRouteDialog.pullOrdersFromRoutes.clickAndWaitUntilDone();
   }
 
-  public void selectTypeFromPullSelectedFromRouteDialog(List<String> listOfExpectedTrackingId,
-      String type) {
+  public void selectTypeFromPullSelectedFromRouteDialog(List<String> listOfExpectedTrackingId) {
     List<WebElement> listOfWe = findElementsByXpath(
         "//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
@@ -527,18 +565,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     editOrderPage.verifyAirwayBillContentsIsCorrect(order);
   }
 
-  private String concatDateWithTime(String date, String time) {
-    if (time == null) {
-      time = "";
-    }
-
-    return (date + " " + time).trim();
-  }
-
-  public void searchTrackingId(String trackingId) {
-    specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
-  }
-
   public void verifiesTrackingIdIsCorrect(String trackingId) {
     String actualTrackingId = getText(
         "//div[@id='header']//label[text()='Tracking ID']/following-sibling::h3");
@@ -617,30 +643,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void switchToEditOrderWindow(Long orderId) {
     switchToOtherWindow("order/" + orderId);
     editOrderPage.waitUntilInvisibilityOfLoadingOrder();
-  }
-
-  public void switchToNewOpenedWindow(String mainWindowHandle) {
-    Set<String> windowHandles = retryIfRuntimeExceptionOccurred(() ->
-    {
-      pause100ms();
-      Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
-
-      if (windowHandlesTemp.size() <= 1) {
-        throw new RuntimeException("WebDriver only contains 1 Window.");
-      }
-
-      return windowHandlesTemp;
-    });
-
-    String newOpenedWindowHandle = null;
-
-    for (String windowHandle : windowHandles) {
-      if (!windowHandle.equals(mainWindowHandle)) {
-        newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
-      }
-    }
-
-    getWebDriver().switchTo().window(newOpenedWindowHandle);
   }
 
   public String getTextOnTableOrder(int rowNumber, String columnDataClass) {
@@ -851,5 +853,52 @@ public class AllOrdersPage extends OperatorV2SimplePage {
       throw new AssertionError(f("Tracking Id [%s] was not found", trackingId));
     }
 
+  }
+
+  public static class SavePresetDialog extends MdDialog {
+
+    @FindBy(css = "div[ng-repeat='filter in selectedFilters']")
+    public List<PageElement> selectedFilters;
+
+    @FindBy(css = "[id^='container.route-logs.preset-name']")
+    public TextBox presetName;
+
+    @FindBy(css = "div.help-text")
+    public PageElement helpText;
+
+    @FindBy(css = "i.input-confirmed")
+    public PageElement confirmedIcon;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.save")
+    public NvIconTextButton save;
+
+    @FindBy(name = "commons.update")
+    public NvIconTextButton update;
+
+    public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class DeletePresetDialog extends MdDialog {
+
+    @FindBy(css = "[id^='container.route-logs.select-preset']")
+    public MdSelect preset;
+
+    @FindBy(css = "[translate='commons.preset.confirm-delete-x']")
+    public PageElement message;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconTextButton cancel;
+
+    @FindBy(name = "commons.delete")
+    public NvIconTextButton delete;
+
+    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

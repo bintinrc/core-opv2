@@ -76,7 +76,7 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
     public void uploadFile(File file) {
       waitUntilVisible();
       chooseButton.setValue(file);
-      submit.clickAndWaitUntilDone();
+      submit.clickAndWaitUntilDone(120);
     }
   }
 

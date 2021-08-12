@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ReservationRejection
+@OperatorV2Deprecated
 Feature: Reservation Rejection
 
   @LaunchBrowser @ShouldAlwaysRun

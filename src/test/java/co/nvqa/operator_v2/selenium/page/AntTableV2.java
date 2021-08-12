@@ -15,6 +15,8 @@ import org.openqa.selenium.support.PageFactory;
 public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private static final String CELL_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
+  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='actions']//button[.//*[@data-icon='%s']]";
+  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//input";
 
   @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
   public PageElement noResultsFound;
@@ -35,7 +37,12 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    String xpath = f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber,
+        getActionButtonsLocators().get(actionId));
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    click(xpath);
   }
 
   @Override
@@ -66,11 +73,12 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = f("//div[@role='gridcell'][@data-key='%s']//input", columnId);
+    String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnId);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
     String currentValue = getValue(xpath);
+    click(xpath);
     if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < currentValue.length(); i++) {
