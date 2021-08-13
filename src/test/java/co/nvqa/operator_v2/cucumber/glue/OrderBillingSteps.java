@@ -92,7 +92,8 @@ public class OrderBillingSteps extends AbstractSteps {
       }
       String csvFileTemplate = mapOfData.get("csvFileTemplate");
       if (Objects.nonNull(csvFileTemplate)) {
-        orderBillingPage.setCsvFileTemplateName(csvFileTemplate);
+        retryIfRuntimeExceptionOccurred(
+            () -> orderBillingPage.setCsvFileTemplateName(csvFileTemplate), 40);
       }
       String emailAddress = mapOfData.get("emailAddress");
       if (Objects.nonNull(emailAddress)) {

@@ -11,7 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
     Given API Shipper create V4 order using data below:
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -28,12 +28,12 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
 
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "ALL" Success Billing Report - Selected Shipper (uid:6f415334-b2d5-48b0-b39d-57e89bd9d1eb)
     Given API Shipper create V4 order using data below:
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -49,11 +49,11 @@ Feature: Order Billing
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -64,7 +64,7 @@ Feature: Order Billing
       | emailAddress | {order-billing-email}                                                                      |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator gets the orders and parcel size and weight from the database for specified shipper
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the orders grouped by shipper and parcel size and weight
@@ -85,7 +85,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -123,7 +123,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Returned to Sender' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -149,10 +149,11 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Returned to Sender' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
+  @nadeera
   Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper - RTS Order Exist and RTS Fee in Surcharge (uid:d05170c7-85ce-4367-be64-740c730350d1)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-rts-surcharge-30-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -174,7 +175,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Returned to Sender' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 

@@ -11,7 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Test Data: Generate order for MarketPlace shipper
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -19,7 +19,7 @@ Feature: Order Billing
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Test Data: Generate order for sub shipper
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -27,7 +27,8 @@ Feature: Order Billing
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
 
-  @DeleteOrArchiveRoute
+
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "SHIPPER" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:9f788797-8cda-4fad-b87b-8e92009577b6)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -39,12 +40,12 @@ Feature: Order Billing
       | csvFileTemplate | {csv-template}                                      |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "ALL" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:0177a1b4-c964-43de-9e83-8f9d6d67c0a0)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -56,12 +57,13 @@ Feature: Order Billing
       | csvFileTemplate | {csv-template}                                            |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute
+  @nadeera
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:56d32c3e-bb0f-4a7d-8c94-babe66f3e530)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -72,12 +74,12 @@ Feature: Order Billing
       | emailAddress  | {order-billing-email}                                                                      |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "SCRIPT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:398a38d3-c451-409b-8a7a-f9e015e0a0e3)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
@@ -89,7 +91,7 @@ Feature: Order Billing
       | csvFileTemplate | {csv-template}                                                                        |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
