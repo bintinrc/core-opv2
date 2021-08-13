@@ -55,7 +55,7 @@ Feature: Path Invalidation - Without Trip
     And DB Operator verify created hub relation schedules is not deleted
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipments @DeletePaths
-  Scenario Outline: Create Schedule - Van Inbound w/o Trip - <type> - (<hiptest-uid>)
+  Scenario Outline: Create Schedule - Van Inbound w/o Trip - <dataset_name> (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator reloads hubs cache
     Given API Operator creates paths for "<type>" movement
@@ -73,16 +73,16 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verifies number of path for "<type>" movement existence after van inbound
     And DB Operator verify created hub relation schedules is not deleted
     Examples:
-      | type                    | hiptest-uid                              |
-      | CD->its ST              | uid:b1dc9df8-c0cd-4055-964b-45ae2eb4d08b |
-      | CD->ST under another CD | uid:97f8988a-3e15-4c8a-8d3c-fdc3c8ce9393 |
-      | ST->ST under same CD    | uid:c3a36fb3-4b0f-485e-bec8-598e29f394df |
-      | ST->ST under diff CD    | uid:807955fd-7f34-4410-9a36-ea798d915ba4 |
-      | ST->its CD              | uid:3b64b309-0e5b-43c5-9ef4-0359678bb10e |
-      | ST->another CD          | uid:1396e561-1368-4a21-9233-939b8eebe6cf |
+      | type                    | hiptest-uid                              | dataset_name            |
+      | CD->its ST              | uid:b1dc9df8-c0cd-4055-964b-45ae2eb4d08b | CD->its ST              |
+      | CD->ST under another CD | uid:97f8988a-3e15-4c8a-8d3c-fdc3c8ce9393 | CD->ST under another CD |
+      | ST->ST under same CD    | uid:c3a36fb3-4b0f-485e-bec8-598e29f394df | ST->ST under same CD    |
+      | ST->ST under diff CD    | uid:807955fd-7f34-4410-9a36-ea798d915ba4 | ST->ST under diff CD    |
+      | ST->its CD              | uid:3b64b309-0e5b-43c5-9ef4-0359678bb10e | ST->its CD              |
+      | ST->another CD          | uid:1396e561-1368-4a21-9233-939b8eebe6cf | ST->another CD          |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipments @DeletePaths
-  Scenario Outline: Delete Schedules - Van Inbound w/o Trip - <type> - (<hiptest-uid>)
+  Scenario Outline: Delete Schedules - Van Inbound w/o Trip - <dataset_name> (<hiptest-uid>)
     Given API Operator creates hubs for "<type>" movement
     And API Operator creates paths for "<type>" movement
     Then DB Operator verifies number of path for "<type>" movement existence
@@ -102,14 +102,14 @@ Feature: Path Invalidation - Without Trip
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
     Examples:
-      | type                    | hiptest-uid                              |
-      | CD->CD                  | uid:725c5210-eb76-4497-b5a1-fc77690af7da |
-      | CD->its ST              | uid:269ccd78-f9ac-47b7-a688-fe7828fe32df |
-      | CD->ST under another CD | uid:055eacf5-c275-4cbf-a243-6f2f89e56376 |
-      | ST->ST under same CD    | uid:a0a66a3a-2655-4f48-850f-64723394b784 |
-      | ST->ST under diff CD    | uid:b9982c8d-c4ca-409b-a976-e3016993c2b4 |
-      | ST->its CD              | uid:f9c9b675-cd90-46c4-b049-487f333c00f4 |
-      | ST->another CD          | uid:d69b831a-8078-44e3-a9c6-c4e9b55e7b05 |
+      | type                    | hiptest-uid                              | dataset_name            |
+      | CD->CD                  | uid:725c5210-eb76-4497-b5a1-fc77690af7da | CD->CD                  |
+      | CD->its ST              | uid:269ccd78-f9ac-47b7-a688-fe7828fe32df | CD->its ST              |
+      | CD->ST under another CD | uid:055eacf5-c275-4cbf-a243-6f2f89e56376 | CD->ST under another CD |
+      | ST->ST under same CD    | uid:a0a66a3a-2655-4f48-850f-64723394b784 | ST->ST under same CD    |
+      | ST->ST under diff CD    | uid:b9982c8d-c4ca-409b-a976-e3016993c2b4 | ST->ST under diff CD    |
+      | ST->its CD              | uid:f9c9b675-cd90-46c4-b049-487f333c00f4 | ST->its CD              |
+      | ST->another CD          | uid:d69b831a-8078-44e3-a9c6-c4e9b55e7b05 | ST->another CD          |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipments @DeletePaths
   Scenario: Create Hub - Van Inbound w/o Trip (uid:1ae0c8db-f594-49ee-a3d5-64c170f0bf74)
@@ -271,7 +271,7 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 3 in movement_path table
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipments @DeletePaths
-  Scenario Outline: Update Schedule - Van Inbound w/o Trip - <type> - (<hiptest-uid>)
+  Scenario Outline: Update Schedule - Van Inbound w/o Trip - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates hubs for "<type>" movement
     And API Operator reloads hubs cache
@@ -293,14 +293,14 @@ Feature: Path Invalidation - Without Trip
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is deleted in hub_relation_schedules
     And DB Operator verifies old path is deleted in path_schedule from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     Examples:
-      | type                    | hiptest-uid                              |
-      | CD->CD                  | uid:4758c7c0-3b64-448d-a610-799c67d17797 |
-      | CD->its ST              | uid:dbb0a98d-079b-4d55-a54e-8cd266bc98c9 |
-      | CD->ST under another CD | uid:5584f5a7-5353-4a72-b211-d82590a72e6b |
-      | ST->ST under same CD    | uid:207792a9-1240-401e-afc8-0f82fc814fa4 |
-      | ST->ST under diff CD    | uid:3acc101e-488b-4a3a-af93-f0f18dbe9f9d |
-      | ST->its CD              | uid:ac329f12-8492-4e4a-b88c-ce799a2b0960 |
-      | ST->another CD          | uid:1c16e9d7-ecd5-4d9e-8a0a-41528699980e |
+      | type                    | hiptest-uid                              | dataset_name             |
+      | CD->CD                  | uid:4758c7c0-3b64-448d-a610-799c67d17797 | CD->CD                   |
+      | CD->its ST              | uid:dbb0a98d-079b-4d55-a54e-8cd266bc98c9 | CD->its ST               |
+      | CD->ST under another CD | uid:5584f5a7-5353-4a72-b211-d82590a72e6b | CD->ST under another CD  |
+      | ST->ST under same CD    | uid:207792a9-1240-401e-afc8-0f82fc814fa4 | ST->ST under same CD     |
+      | ST->ST under diff CD    | uid:3acc101e-488b-4a3a-af93-f0f18dbe9f9d | ST->ST under diff CD     |
+      | ST->its CD              | uid:ac329f12-8492-4e4a-b88c-ce799a2b0960 | ST->its CD               |
+      | ST->another CD          | uid:1c16e9d7-ecd5-4d9e-8a0a-41528699980e | ST->another CD           |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipments @DeletePaths
   Scenario: Update Hub Crossdock - Van Inbound w/o Trip (uid:93382a6c-21b9-4af0-840f-57adbe0b6312)
