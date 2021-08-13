@@ -39,7 +39,7 @@ Feature: Address Verification
       | Return Pickup Waypoint   | uid:360840cc-2d74-4945-9bfb-03d291df5cf3 | Return    | true             | Pickup          | buildShortFromAddressWithCountryString |
 
   @DeleteRouteGroups
-  Scenario: Operator Archive Address on Address Verification Page (uid:92b022ea-5a46-4380-83e9-f56f01d02c35)
+  Scenario: Operator Archive Address By Route Groups on Address Verification Page (uid:92b022ea-5a46-4380-83e9-f56f01d02c35)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

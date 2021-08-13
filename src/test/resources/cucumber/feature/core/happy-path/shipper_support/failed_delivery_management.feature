@@ -175,7 +175,7 @@ Feature: Failed Delivery Management
       | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator RTS Failed Delivery Order on Next Day (<hiptest-uid>)
+  Scenario Outline: Operator RTS Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |

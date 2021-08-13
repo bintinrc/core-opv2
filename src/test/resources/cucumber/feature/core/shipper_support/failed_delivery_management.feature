@@ -76,7 +76,7 @@ Feature: Failed Delivery Management
     And API Operator verify order info after failed delivery order RTS-ed on next day
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day (<hiptest-uid>)
+  Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |

@@ -16,6 +16,11 @@ Feature: Update Delivery Address with CSV
     Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
     And API Operator get order details
     And Operator verify created orders info after address update
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
 
   Scenario: Bulk Update Order Delivery Address with CSV - Empty File (uid:612068d5-7668-4c0c-a86d-9914477885a1)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -140,6 +145,34 @@ Feature: Update Delivery Address with CSV
     Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
     And API Operator get order details
     And Operator verify created orders info after address update
+
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery (uid:c6c4b64a-2171-4c36-bb19-b119ab6a2dce)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
+    When Operator update delivery address of created orders on Update Delivery Address with CSV page
+    Then Operator verify updated addresses on Update Delivery Address with CSV page
+    When Operator confirm addresses update on Update Delivery Address with CSV page
+    Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
+    And API Operator get order details
+    And Operator verify created orders info after address update
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    When API Operator get order details
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | Routed |
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
