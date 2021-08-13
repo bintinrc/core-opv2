@@ -351,6 +351,8 @@ Feature: Edit Order
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
@@ -381,6 +383,8 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
     And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
@@ -404,6 +408,8 @@ Feature: Edit Order
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -411,7 +417,7 @@ Feature: Edit Order
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
       | Return - Pickup   | uid:0c1c44ce-9fce-46e7-9016-f73613eef833 | Return    | Pickup    |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Pickup (uid:c1962397-8060-4485-9221-47cb46803ddf)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -441,8 +447,14 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
+    And DB Operator verifies transactions after reschedule pickup
+      | old_pickup_status | Fail    |
+      | new_pickup_status | Pending |
+      | new_pickup_type   | PP      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery (uid:af4f96cb-5ed1-4035-8a29-650ac5013aae)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -475,8 +487,15 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -537,8 +556,15 @@ Feature: Edit Order
     And Operator verify Delivery transaction on Edit order page using data below:
       | status  | FAIL                   |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan (uid:066c5598-129c-4fe0-bd9a-0af449703f33)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -596,6 +622,14 @@ Feature: Edit Order
     And Operator verify Delivery transaction on Edit order page using data below:
       | status  | FAIL                   |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID (uid:ce1f0e4d-435e-4467-ab58-76019c30f8a4)
@@ -749,6 +783,9 @@ Feature: Edit Order
       | routeId | KEY_CREATED_ROUTE_ID |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
     And DB Operator verify Delivery waypoint of the created order using data below:
@@ -1227,6 +1264,8 @@ Feature: Edit Order
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -1265,6 +1304,7 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
+  @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1299,8 +1339,13 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn   | 2       |
+      | delivery_status | Pending |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1340,8 +1385,15 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1395,8 +1447,15 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan (uid:5bae8c76-b67d-4cfd-9d7e-2af0d0fe0db9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1453,6 +1512,13 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
 
   @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Suggest Route on Edit Order Page - Delivery, Suggested Route Found (uid:9df8ffd8-1adb-4752-9769-14d3d03393ff)
@@ -1550,10 +1616,11 @@ Feature: Edit Order
       | bottom | No waypoints to suggest after filtering! |
     And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
 
+  @routing-refactor
   Scenario: Operator Resume a Cancelled Order on Edit Order page (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator update order granular status to = "Cancelled"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator resume order on Edit Order page
@@ -1567,6 +1634,15 @@ Feature: Edit Order
       | status | PENDING |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | PENDING |
+    When API Operator get order details
+    Then DB Operator verify Pickup waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
@@ -2185,6 +2261,80 @@ Feature: Edit Order
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit order page
+
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Untag DP Order that is merged and routed (uid:77fec425-2a5b-4667-b82f-b6394caec5d5)
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator merge route transactions
+    Then API Operator verifies Delivery transactions of following orders have same waypoint id:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator untags order from DP on Edit Order Page
+    Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
+    And Operator verify order event on Edit order page using data below:
+      | name | UNASSIGNED FROM DP |
+    When Operator get multiple "DELIVERY" transactions with status "PENDING"
+    Then DB Operator verifies all route_waypoint records
+    And DB Operator verifies all waypoints status is "ROUTED"
+    And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies all route_monitoring_data records
+
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Untag DP Order that is not merged and routed (uid:2c86a0e4-480f-4361-90e5-0be6628c90cb)
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator untags order from DP on Edit Order Page
+    Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
+    And Operator verify order event on Edit order page using data below:
+      | name | UNASSIGNED FROM DP |
+    When Operator get multiple "DELIVERY" transactions with status "PENDING"
+    Then DB Operator verifies all route_waypoint records
+    And DB Operator verifies all waypoints status is "ROUTED"
+    And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies all route_monitoring_data records
+
+  @routing-refactor
+  Scenario: Untag DP Order that is merged and not routed (uid:cea0056a-d4e8-4d54-8b7d-28fc786ee3db)
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And Operator get multiple "DELIVERY" transactions with status "PENDING"
+    And Operator merge transactions on Zonal Routing
+    Then API Operator verifies Delivery transactions of following orders have same waypoint id:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator untags order from DP on Edit Order Page
+    Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
+    And Operator verify order event on Edit order page using data below:
+      | name | UNASSIGNED FROM DP |
+    When Operator get multiple "DELIVERY" transactions with status "PENDING"
+    Then DB Operator verifies all waypoints status is "PENDING"
+    And DB Operator verifies all waypoints.route_id & seq_no is NULL
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 1

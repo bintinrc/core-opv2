@@ -24,6 +24,10 @@ public class RouteCashInboundCod extends DataEntity<RouteCashInboundCod> {
     fromMap(data);
   }
 
+  public RouteCashInboundCod(RouteCashInboundCod other) {
+    super(other);
+  }
+
   public Long getRouteId() {
     return routeId;
   }
@@ -50,6 +54,10 @@ public class RouteCashInboundCod extends DataEntity<RouteCashInboundCod> {
 
   public String getAmountCollected() {
     return amountCollected;
+  }
+
+  public Double getDoubleAmountCollected() {
+    return Double.parseDouble(amountCollected.substring(amountCollected.lastIndexOf("$") + 1));
   }
 
   public void setAmountCollected(String amountCollected) {

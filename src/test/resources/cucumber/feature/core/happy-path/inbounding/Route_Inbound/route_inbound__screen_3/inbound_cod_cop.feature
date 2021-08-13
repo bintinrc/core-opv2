@@ -6,7 +6,7 @@ Feature: Inbound COD & COP
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Inbound Cash for COD (<hiptest-uid>)
+  Scenario Outline: Inbound Cash for COD - <Title> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                |

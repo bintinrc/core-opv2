@@ -1,111 +1,55 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.COLUMN_RECEIPT_NUMBER;
 
 /**
- * @author Daniel Joi Partogi Hutapea
+ * @author Sergey Mishanin
  */
-@SuppressWarnings("WeakerAccess")
-public class RouteCashInboundPage extends OperatorV2SimplePage {
+public class RouteCashInboundPage extends SimpleReactPage {
 
   private static final String CSV_FILENAME = "cods.csv";
-  private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
 
-  @FindBy(name = "fromDateField")
-  public MdDatepicker fromDateFilter;
+  @FindBy(css = ".date-picker-container:nth-of-type(1)")
+  public AntCalendarPicker fromDateFilter;
 
-  @FindBy(name = "toDateField")
-  public MdDatepicker toDateFilter;
+  @FindBy(css = ".date-picker-container:nth-of-type(2)")
+  public AntCalendarPicker toDateFilter;
 
-  @FindBy(name = "container.cod-list.cod-get")
-  public NvApiTextButton fetchCod;
+  @FindBy(xpath = "//button[.='Fetch COD']")
+  public Button fetchCod;
 
-  @FindBy(name = "Add COD")
-  public NvIconTextButton addCod;
+  @FindBy(css = "div.cod-top-button-row > button")
+  public Button addCod;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//button[.='Download CSV']")
+  public Button downloadCsv;
+
+  @FindBy(css = ".ant-modal")
   public AddCodDialog addCodDialog;
 
-  @FindBy(css = "md-dialog")
-  public ConfirmDeleteDialog confirmDeleteDialog;
+  @FindBy(css = ".ant-modal")
+  public EditCodDialog editCodDialog;
+
+  @FindBy(css = ".ant-modal")
+  public DeleteCodDialog confirmDeleteDialog;
 
   public RouteCashInboundTable routeCashInboundTable;
 
   public RouteCashInboundPage(WebDriver webDriver) {
     super(webDriver);
     routeCashInboundTable = new RouteCashInboundTable(webDriver);
-  }
-
-  public void addCod(RouteCashInboundCod routeCashInboundCod) {
-    addCod.click();
-    addCodDialog.waitUntilVisible();
-    addCodDialog.routeId.setValue(routeCashInboundCod.getRouteId());
-    addCodDialog.amountCollected.setValue(routeCashInboundCod.getAmountCollected());
-    addCodDialog.receiptNumber.setValue(routeCashInboundCod.getReceiptNumber());
-    addCodDialog.submit.clickAndWaitUntilDone();
-    waitUntilToastErrorDisappear();
-  }
-
-  public void editCod(RouteCashInboundCod routeCashInboundCodOld,
-      RouteCashInboundCod routeCashInboundCodEdited) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
-      searchAndVerifyTableIsNotEmpty(routeCashInboundCodOld);
-      routeCashInboundTable.clickActionButton(1, ACTION_EDIT);
-      waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-edit')]");
-      fillTheFormAndSubmit(routeCashInboundCodEdited);
-
-      try {
-        WebElement toastErrorMessageWe = waitUntilVisibilityOfElementLocated(
-            XPATH_OF_TOAST_ERROR_MESSAGE, FAST_WAIT_IN_SECONDS);
-        String toastErrorMessage = toastErrorMessageWe.getText();
-        NvLogger.warnf("Error when submitting COD on Route Cash Inbound page. Cause: %s",
-            toastErrorMessage);
-        waitUntilToastErrorDisappear();
-        closeModal();
-
-                /*
-                  If toast error message found, that's means updated the zone is failed.
-                  Throw runtime exception so the code will retry again until success or max retry is reached.
-                 */
-        throw new NvTestRuntimeException(toastErrorMessage);
-      } catch (TimeoutException ex) {
-                /*
-                  If TimeoutException occurred that means the toast error message is not found
-                  and that means zone is updated successfully.
-                 */
-        NvLogger.infof("Expected exception occurred. Cause: %s", ex.getMessage());
-      }
-    });
-  }
-
-  public void fillTheFormAndSubmit(RouteCashInboundCod routeCashInboundCod) {
-    sendKeysById("route-id", String.valueOf(routeCashInboundCod.getRouteId()));
-    sendKeysById("amount-collected", String.valueOf(routeCashInboundCod.getAmountCollected()));
-    sendKeysById("receipt-number", routeCashInboundCod.getReceiptNumber());
-    clickNvButtonSaveByNameAndWaitUntilDone("Submit");
-  }
-
-  public void verifyNewCodIsCreatedSuccessfully(RouteCashInboundCod routeCashInboundCod) {
-    searchAndVerifyTableIsNotEmpty(routeCashInboundCod);
-    verifyCodInfoIsCorrect(routeCashInboundCod);
   }
 
   public void verifyFilterWorkFine(RouteCashInboundCod routeCashInboundCod) {
@@ -126,16 +70,16 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
   public void deleteCod(RouteCashInboundCod routeCashInboundCod) {
     searchAndVerifyTableIsNotEmpty(routeCashInboundCod);
     routeCashInboundTable.clickActionButton(1, RouteCashInboundTable.ACTION_DELETE);
-    confirmDeleteDialog.confirmDelete();
+    confirmDeleteDialog.delete.click();
   }
 
   public void verifyCodIsDeletedSuccessfully(RouteCashInboundCod routeCashInboundCod) {
-    fetchCod.clickAndWaitUntilDone();
+    fetchCod.click();
 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
          */
-    boolean isTableEmpty = routeCashInboundTable.isTableEmpty();
+    boolean isTableEmpty = routeCashInboundTable.isEmpty();
 
     if (!isTableEmpty) {
             /*
@@ -144,28 +88,21 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
              */
       routeCashInboundTable
           .filterByColumn(COLUMN_RECEIPT_NUMBER, routeCashInboundCod.getReceiptNumber());
-      isTableEmpty = routeCashInboundTable.isTableEmpty();
+      isTableEmpty = routeCashInboundTable.isEmpty();
     }
 
     assertTrue("Table should be empty.", isTableEmpty);
-  }
-
-  public void downloadCsvFile() {
-    clickNvApiTextButtonByName("Download CSV File");
   }
 
   public void verifyCsvFileDownloadedSuccessfully(RouteCashInboundCod routeCashInboundCod) {
     verifyFileDownloadedSuccessfully(CSV_FILENAME, routeCashInboundCod.getReceiptNumber());
   }
 
-  public void clickButtonFetchCod() {
-    clickNvApiTextButtonByNameAndWaitUntilDone("container.cod-list.cod-get");
-  }
-
   public void searchAndVerifyTableIsNotEmpty(RouteCashInboundCod routeCashInboundCod) {
-    fromDateFilter.setDate(TestUtils.getNextDate(0));
-    toDateFilter.setDate(TestUtils.getNextDate(1));
-    fetchCod.clickAndWaitUntilDone();
+    fromDateFilter.setValue(TestUtils.getNextDate(0));
+    toDateFilter.setValue(TestUtils.getNextDate(1));
+    fetchCod.click();
+    waitUntilLoaded(2);
 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
@@ -181,11 +118,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
     assertFalse("Table should not be empty.", routeCashInboundTable.isTableEmpty());
   }
 
-  public void waitUntilToastErrorDisappear() {
-    waitUntilInvisibilityOfToast("Cannot read property", false);
-  }
-
-  public static class RouteCashInboundTable extends MdVirtualRepeatTable<RouteCashInboundCod> {
+  public static class RouteCashInboundTable extends AntTableV2<RouteCashInboundCod> {
 
     public static final String COLUMN_ROUTE_ID = "routeId";
     public static final String COLUMN_TOTAL_COLLECTED = "totalCollected";
@@ -196,33 +129,61 @@ public class RouteCashInboundPage extends OperatorV2SimplePage {
 
     public RouteCashInboundTable(WebDriver webDriver) {
       super(webDriver);
-      setMdVirtualRepeat("cod in getTableData()");
       setColumnLocators(ImmutableMap.of(
-          COLUMN_ROUTE_ID, "route_id",
-          COLUMN_TOTAL_COLLECTED, "total_collected",
-          COLUMN_AMOUNT_COLLECTED, "amount_collected",
-          COLUMN_RECEIPT_NUMBER, "receipt_no"
+          COLUMN_ROUTE_ID, "routeID",
+          COLUMN_TOTAL_COLLECTED, "totalCollected",
+          COLUMN_AMOUNT_COLLECTED, "amountCollected",
+          COLUMN_RECEIPT_NUMBER, "receiptNumber"
       ));
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit", ACTION_DELETE, "Delete"));
+      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "edit", ACTION_DELETE, "delete"));
       setEntityClass(RouteCashInboundCod.class);
     }
   }
 
-  public static class AddCodDialog extends MdDialog {
+  public static class AddCodDialog extends AntModal {
 
-    @FindBy(css = "[id^='route-id']")
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Route ID']]//input")
     public TextBox routeId;
 
-    @FindBy(css = "[id^='amount-collected']")
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Amount Collected']]//input")
     public TextBox amountCollected;
 
-    @FindBy(css = "[id^='receipt-number']")
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Receipt Number']]//input")
     public TextBox receiptNumber;
 
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
+    @FindBy(xpath = ".//button[.='Submit']")
+    public AntButton submit;
 
     public AddCodDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class EditCodDialog extends AntModal {
+
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Route ID']]//input")
+    public TextBox routeId;
+
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Amount Collected']]//input")
+    public TextBox amountCollected;
+
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Receipt Number']]//input")
+    public TextBox receiptNumber;
+
+    @FindBy(xpath = ".//button[.='Submit']")
+    public AntButton submit;
+
+    public EditCodDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class DeleteCodDialog extends AntModal {
+
+    @FindBy(xpath = ".//button[.='Delete']")
+    public AntButton delete;
+
+    public DeleteCodDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
