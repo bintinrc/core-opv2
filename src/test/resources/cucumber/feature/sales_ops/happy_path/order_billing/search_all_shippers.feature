@@ -51,7 +51,7 @@ Feature: Order Billing
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -66,7 +66,7 @@ Feature: Order Billing
     Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 

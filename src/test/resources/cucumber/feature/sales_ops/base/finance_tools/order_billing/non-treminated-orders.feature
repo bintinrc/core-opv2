@@ -26,7 +26,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -45,7 +45,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -64,8 +64,9 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
+
 
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:79e44d8c-6b4a-4ce7-86d4-b5a1525c36fb)
@@ -103,11 +104,13 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Completed' is displayed on billing report
+    Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
     Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
+
 
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:4f65e234-4a9f-4f5a-9949-71350459be2b)
@@ -145,10 +148,12 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Completed' is displayed on billing report
+    Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
+
 
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "SCRIPT" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:6abadb91-53e6-4f39-b7c3-52859d0061c7)
@@ -186,10 +191,12 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Completed' is displayed on billing report
+    Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
+
 
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:2700aa48-d75b-49da-8493-6b8f6ea4dd77)
@@ -237,9 +244,10 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Returned To Sender' is displayed on billing report
+    Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
     Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
 
@@ -288,7 +296,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Returned To Sender' is displayed on billing report
 
@@ -337,7 +345,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
     Then Operator verifies the order with status 'Returned To Sender' is displayed on billing report
 
@@ -357,7 +365,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
 
@@ -377,7 +385,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -396,7 +404,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'On Vehicle for Delivery' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -415,7 +423,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Cancelled' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -434,7 +442,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Cancelled' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -453,7 +461,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Cancelled' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -472,7 +480,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'On Hold' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -491,7 +499,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'On Hold' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -510,7 +518,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'On Hold' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -529,7 +537,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -549,7 +557,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -568,7 +576,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'NULL' is not displayed on billing report
 
   @DeleteOrArchiveRoute
@@ -587,7 +595,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    And Operator reads the CSV attachment for "Shipper Billing Report"
+    And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Pending Reschedule' is not displayed on billing report
 
   @KillBrowser @ShouldAlwaysRun
