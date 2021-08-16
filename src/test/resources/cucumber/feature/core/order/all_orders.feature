@@ -253,7 +253,7 @@ Feature: All Orders
     Then Operator verify Selection Error dialog for invalid Pull From Order action
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS Failed Delivery Order on Next Day on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
+  Scenario: Operator RTS Failed Delivery Order on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
