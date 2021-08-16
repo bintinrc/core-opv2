@@ -123,7 +123,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   @When("^API Operator create new Driver using data below:$")
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
-    String dateUniqueString = TestUtils.generateDateUniqueString();
+    String rawDateUniqueString = TestUtils.generateDateUniqueString();
+    String dateUniqueString = StringUtils.substring(rawDateUniqueString, 2, rawDateUniqueString.length() - 2);
     String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();

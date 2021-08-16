@@ -1,4 +1,4 @@
-@OperatorV2 @Driver @StationManagementTool @DriverPerformance @CWF
+@OperatorV2 @Driver @StationManagementTool @DriverPerformance
 Feature: Driver Performance
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -88,7 +88,7 @@ Feature: Driver Performance
     And Operator enters "{KEY_CREATED_DRIVER_PERFORMANCE_PRESET.name}" name in Save As Preset modal
     Then Operator verifies "Name already exist. Choose another name." error message is displayed in Save As Preset modal
     And Operator verifies Save button is disabled in Save As Preset modal
-  @RT
+
   Scenario: Update Preset (uid:921dcaa6-2c61-43b9-b14f-e9eb77785499)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Station Management Tool -> Driver Performance
@@ -111,7 +111,7 @@ Feature: Driver Performance
       | hubs        | {hub-name}          |
       | driverNames | {ninja-driver-name} |
       | driverTypes | {driver-type-name}  |
-  @RT
+
   Scenario: Delete Preset (uid:5679e590-3596-4fe3-b0bf-e6c1a0ab1785)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Station Management Tool -> Driver Performance

@@ -6,7 +6,7 @@ Feature: Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Inbound Parcel In Shipment with Original Size - <Note> - (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment with Original Size - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -38,12 +38,12 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
-      | Note         | hiptest-uid                              |
-      | Normal Order | uid:0726feb3-3ca4-444c-8dbf-9863a7f47d74 |
-      | Return Order | uid:a0bb7b22-2016-4291-8ffa-eb597e74335a |
+      | Note         | hiptest-uid                              | dataset_name |
+      | Normal Order | uid:0726feb3-3ca4-444c-8dbf-9863a7f47d74 | Normal Order |
+      | Return Order | uid:a0bb7b22-2016-4291-8ffa-eb597e74335a | Return Order |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Operator shouldn't be able to scan <Note> Order in Shipment Global Inbound Page (<hiptest-uid>)
+  Scenario Outline: Operator shouldn't be able to scan <Note> Order in Shipment Global Inbound Page - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -65,9 +65,9 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
-      | Note      | hiptest-uid                              | status    | message   |
-      | Completed | uid:9ba2d3f4-c559-44d0-b052-a55eca91f579 | Completed | COMPLETED |
-      | Cancelled | uid:9a8c7c5f-38e2-472d-8d1a-db9f1c3ff47c | Cancelled | CANCELLED |
+      | Note      | hiptest-uid                              | status    | message   | dataset_name   |
+      | Completed | uid:9ba2d3f4-c559-44d0-b052-a55eca91f579 | Completed | COMPLETED | Completed      |
+      | Cancelled | uid:9a8c7c5f-38e2-472d-8d1a-db9f1c3ff47c | Cancelled | CANCELLED | Cancelled      |
 
   @DeleteShipment
   Scenario: Operator shouldn't be able to scan Invalid Order in Shipment Global Inbound Page (uid:ad39bc1d-0ef6-4cc1-8ef0-4003b6bef546)
@@ -118,7 +118,7 @@ Feature: Global Inbound
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Inbound Parcel In Shipment and Update The Size - <Note> - (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Size - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -151,12 +151,12 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
-      | Note         | orderType | hiptest-uid                              |
-      | Normal Order | Normal    | uid:bc3f08ee-09fe-4702-8868-a8afdb4bb79e |
-      | Return Order | Return    | uid:6b0c148d-1ba8-4a40-9a80-928f90df8bbf |
+      | Note         | orderType | hiptest-uid                              | dataset_name  |
+      | Normal Order | Normal    | uid:bc3f08ee-09fe-4702-8868-a8afdb4bb79e | Normal Order  |
+      | Return Order | Return    | uid:6b0c148d-1ba8-4a40-9a80-928f90df8bbf | Return Order  |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Inbound Parcel In Shipment and Update The Weight - <Note> - (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Weight - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -198,12 +198,12 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order for RTS:
       | type | 1 |
     Examples:
-      | Note         | orderType | hiptest-uid                              |
-      | Normal Order | Normal    | uid:d8739fde-c84c-4ce4-b9d5-81d610150781 |
-      | Return Order | Return    | uid:659feeaa-5040-44ae-a0ac-ebe54c339023 |
+      | Note         | orderType | hiptest-uid                              | dataset_name  |
+      | Normal Order | Normal    | uid:d8739fde-c84c-4ce4-b9d5-81d610150781 | Normal Order  |
+      | Return Order | Return    | uid:659feeaa-5040-44ae-a0ac-ebe54c339023 | Return Order  |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Inbound Parcel In Shipment and Update The Dimension - <Note> - (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Dimension - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -238,13 +238,13 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
-      | Note         | orderType | hiptest-uid                              |
-      | Normal Order | Normal    | uid:9c9ae45f-9d00-4e43-9377-4c29e930d51a |
-      | Return Order | Return    | uid:d9a9fb22-e758-4c40-beda-126a2d2cfdaa |
+      | Note         | orderType | hiptest-uid                              | dataset_name    |
+      | Normal Order | Normal    | uid:9c9ae45f-9d00-4e43-9377-4c29e930d51a | Normal Order    |
+      | Return Order | Return    | uid:d9a9fb22-e758-4c40-beda-126a2d2cfdaa | Return Order    |
 
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Inbound Parcel In Shipment and Update The Size, Weight, and Dimension - <Note> - (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Size, Weight, and Dimension - <dataset_name> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -280,12 +280,12 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order for RTS:
       | type | 26 |
     Examples:
-      | Note         | orderType | hiptest-uid                              |
-      | Normal Order | Normal    | uid:6b24f5b1-5006-4c5c-b61a-383fdb3734db |
-      | Return Order | Return    | uid:12ec733f-6592-4ac5-94ec-2a8738099bfa |
+      | Note         | orderType | hiptest-uid                              | dataset_name |
+      | Normal Order | Normal    | uid:6b24f5b1-5006-4c5c-b61a-383fdb3734db | Normal Order |
+      | Return Order | Return    | uid:12ec733f-6592-4ac5-94ec-2a8738099bfa | Return Order |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario Outline: Inbound Parcel In Shipment with Priority Level - <scenarioName> (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment with Priority Level - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -313,10 +313,10 @@ Feature: Global Inbound
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
-      | Title  | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | 1      | uid:3b0b1e13-6d04-42d3-b2df-d922e870f05a | 1             | #f8cf5c                 |
-      | 2 - 90 | uid:85ae2e8e-670b-477f-bda2-d4c8e417000c | 50            | #e29d4a                 |
-      | > 90   | uid:6639ab15-e238-4451-8611-6616fbe3d49a | 100           | #c65d44                 |
+      | Title  | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex | dataset-name  |
+      | 1      | uid:3b0b1e13-6d04-42d3-b2df-d922e870f05a | 1             | #f8cf5c                 | 1             |
+      | 2 - 90 | uid:85ae2e8e-670b-477f-bda2-d4c8e417000c | 50            | #e29d4a                 | 2 - 90        |
+      | > 90   | uid:6639ab15-e238-4451-8611-6616fbe3d49a | 100           | #c65d44                 | > 90          |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Inbound RTS Unrouted Parcel In Shipment (uid:86c65fd5-fa71-47ac-aced-510c828c41b9)
