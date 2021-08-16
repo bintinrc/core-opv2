@@ -1,16 +1,26 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.openqa.selenium.Keys;
 
 public class AddressingDownloadSteps extends AbstractSteps {
@@ -245,5 +255,109 @@ public class AddressingDownloadSteps extends AbstractSteps {
     addressingDownloadPage.trackingIdtextArea.sendKeys("," + trackingId);
     String trackingIdsListed = addressingDownloadPage.trackingIdtextArea.getText();
     assertTrue(!(trackingIdsListed.contains("," + trackingId)));
+  }
+
+  @When("Operator clicks on Load Address button")
+  public void operatorClicksOnLoadAddressButton() {
+    addressingDownloadPage.loadAddresses.click();
+  }
+
+  @When("Operator selects preset {string}")
+  public void operatorSelectsPresetName(String preset) {
+    String presetName = preset.equals("DEFAULT") ? TestConstants.ADDRESSING_PRESET_NAME : preset;
+    String presetNameFieldValue = addressingDownloadPage.selectPresetLoadAddresses.getValue();
+
+    if (presetNameFieldValue.equals("")) {
+      addressingDownloadPage.selectPresetLoadAddresses.click();
+      addressingDownloadPage.selectPresetLoadAddresses.sendKeys(presetName);
+    }
+
+    addressingDownloadPage.selectPresetLoadAddresses.sendKeys(Keys.ENTER);
+    put(KEY_SELECTED_PRESET_NAME, presetName);
+  }
+
+  @And("Operator input the created order's creation time")
+  public void operatorInputTheCreatedOrderSCreationTime() {
+    Order createdOrder = get(KEY_ORDER_DETAILS);
+
+    if (createdOrder == null) {
+      assertTrue(f("Order hasn't been created"), true);
+      return;
+    }
+
+    NvLogger.infof("Order tracking ID is: %s", createdOrder.getTrackingId());
+
+    LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+    NvLogger.infof("Order creation time is: %s", orderCreationTimestamp);
+
+    addressingDownloadPage.setCreationTimeDatepicker(generateDateTimeRange(orderCreationTimestamp));
+  }
+
+  private Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
+    /*
+     * Returns:
+     * - The same value for start date and end date
+     * - Floored value of start time by 30 minutes
+     * - End time = start time + 30 minutes
+     * */
+
+    // Creation time input: DATEPICKER
+    DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
+    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM");
+
+    int currentYear = orderCreationLocalDateTime.getYear();
+    int currentDecadeStart = currentYear - (currentYear % 10);
+    int currentDecadeEnd = currentDecadeStart + 9;
+
+    // Creation time input: TIMEPICKER
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH");
+    DateTimeFormatter minuteFormatter = DateTimeFormatter.ofPattern("mm");
+
+    int currentMinute = orderCreationLocalDateTime.getMinute();
+    int currentHour = (orderCreationLocalDateTime.minus(Duration.of(1, ChronoUnit.HOURS))).getHour();
+
+    int currentMinuteFloored = ((int) Math.floor((float) currentMinute / 30)) * 30; // Return 00 or 30
+    String currentMinuteFlooredAsString = currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
+    String currentHourAsString = currentHour < 10 ? f("0%d", currentHour) : f("%d", currentHour);
+
+    LocalTime startTime = LocalTime.parse(f("%s:%s", currentHourAsString, currentMinuteFlooredAsString), timeFormatter);
+    LocalTime endTime = startTime.plus(Duration.of(30, ChronoUnit.MINUTES));
+
+    Map<String, String> dateTimeRange = new HashMap<>();
+
+    dateTimeRange.put("start_decade", f("%d-%d", currentDecadeStart, currentDecadeEnd));
+    dateTimeRange.put("start_year", String.valueOf(currentYear));
+    dateTimeRange.put("start_month", monthFormatter.format(orderCreationLocalDateTime));
+    dateTimeRange.put("start_day", dayFormatter.format(orderCreationLocalDateTime));
+
+    dateTimeRange.put("start_hour", hourFormatter.format(startTime));
+    dateTimeRange.put("start_minute", minuteFormatter.format(startTime));
+
+    dateTimeRange.put("end_hour", hourFormatter.format(endTime));
+    dateTimeRange.put("end_minute", minuteFormatter.format(endTime));
+
+    NvLogger.infof("Set time range to creation time filter to %s:%s - %s:%s", dateTimeRange.get("start_hour"), dateTimeRange.get("start_minute"), dateTimeRange.get("end_hour"), dateTimeRange.get("end_minute"));
+
+    return dateTimeRange;
+  }
+
+  @Then("Operator verifies that the Address Download Table Result contains all basic data")
+  public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
+    addressingDownloadPage.addressDownloadTableResult.isDisplayed();
+
+    Order createdOrder = get(KEY_ORDER_DETAILS);
+    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+
+    addressingDownloadPage.basicOrderDataUIChecking(createdOrder, waypoint);
+  }
+
+  @Then("Operator verifies that the downloaded csv file contains all correct data")
+  public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
+    Order order = get(KEY_ORDER_DETAILS);
+    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+
+    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint);
   }
 }
