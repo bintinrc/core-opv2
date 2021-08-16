@@ -25,9 +25,9 @@ Feature: Order Billing
       | emailAddress | {order-billing-email}                               |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-  Then Operator verifies zip is attached with one CSV file in received email
-  And Operator gets the success billing report entries
-  Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
+    Then Operator verifies zip is attached with one CSV file in received email
+    And Operator gets the success billing report entries
+    Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
 
   @DeleteOrArchiveRoute
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` Order Exists (uid:81a5fe1a-caaa-4c35-a42c-302b0f8c8209)
