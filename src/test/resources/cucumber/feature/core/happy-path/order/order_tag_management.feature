@@ -43,7 +43,7 @@ Feature: Order Tag Management
     Then Operator verify the tags shown on Edit Order page
       | {order-tag-name-3} |
 
-  Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule (uid:ea0ac24e-247b-4674-bbb3-43b4eaa39243)
+  Scenario: View Tagged Orders on the Order Tag Management Page - Delivery Attempted, Pending Reschedule (uid:ea0ac24e-247b-4674-bbb3-43b4eaa39243)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
