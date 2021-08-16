@@ -1044,7 +1044,6 @@ public class AllShippersSteps extends AbstractSteps {
     }
     shipper.setLegacyId(Long.valueOf(shipperLegacyId));
     put(KEY_CREATED_SHIPPER, shipper);
-    put(KEY_SHIPPER, shipper);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     openSpecificShipperEditPage(shipperLegacyId);
   }
