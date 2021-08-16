@@ -67,7 +67,7 @@ Feature: Order Billing
     And Operator gets the success billing report entries
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on billing report
 
-  @nadeera
+
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:79e44d8c-6b4a-4ce7-86d4-b5a1525c36fb)
     Given API Shipper create V4 order using data below:
@@ -111,7 +111,7 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
     Then DB Operator verifies completed date of the priced order is the same as core.transactions.service_end_time
 
-  @nadeera
+
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "ALL" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:4f65e234-4a9f-4f5a-9949-71350459be2b)
     Given API Shipper create V4 order using data below:
@@ -154,7 +154,7 @@ Feature: Order Billing
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
-  @nadeera
+
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "SCRIPT" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:6abadb91-53e6-4f39-b7c3-52859d0061c7)
     Given API Shipper create V4 order using data below:
@@ -197,7 +197,7 @@ Feature: Order Billing
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
-  @nadeera
+
   @DeleteOrArchiveRoute @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Returned to Sender` Order (uid:2700aa48-d75b-49da-8493-6b8f6ea4dd77)
     Given API Shipper create V4 order using data below:
