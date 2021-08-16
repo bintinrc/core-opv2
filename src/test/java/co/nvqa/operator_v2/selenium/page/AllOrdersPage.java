@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.xml.soap.Text;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -431,12 +430,11 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void pullOutFromRouteWithExpectedSelectionError(List<String> listOfExpectedTrackingId) {
     applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
     pullSelectedFromRouteDialog.waitUntilVisible();
-    selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
+    selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId);
     pullSelectedFromRouteDialog.pullOrdersFromRoutes.clickAndWaitUntilDone();
   }
 
-  public void selectTypeFromPullSelectedFromRouteDialog(List<String> listOfExpectedTrackingId,
-      String type) {
+  public void selectTypeFromPullSelectedFromRouteDialog(List<String> listOfExpectedTrackingId) {
     List<WebElement> listOfWe = findElementsByXpath(
         "//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
@@ -567,14 +565,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     editOrderPage.verifyAirwayBillContentsIsCorrect(order);
   }
 
-  private String concatDateWithTime(String date, String time) {
-    if (time == null) {
-      time = "";
-    }
-
-    return (date + " " + time).trim();
-  }
-
   public void verifiesTrackingIdIsCorrect(String trackingId) {
     String actualTrackingId = getText(
         "//div[@id='header']//label[text()='Tracking ID']/following-sibling::h3");
@@ -653,30 +643,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void switchToEditOrderWindow(Long orderId) {
     switchToOtherWindow("order/" + orderId);
     editOrderPage.waitUntilInvisibilityOfLoadingOrder();
-  }
-
-  public void switchToNewOpenedWindow(String mainWindowHandle) {
-    Set<String> windowHandles = retryIfRuntimeExceptionOccurred(() ->
-    {
-      pause100ms();
-      Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
-
-      if (windowHandlesTemp.size() <= 1) {
-        throw new RuntimeException("WebDriver only contains 1 Window.");
-      }
-
-      return windowHandlesTemp;
-    });
-
-    String newOpenedWindowHandle = null;
-
-    for (String windowHandle : windowHandles) {
-      if (!windowHandle.equals(mainWindowHandle)) {
-        newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
-      }
-    }
-
-    getWebDriver().switchTo().window(newOpenedWindowHandle);
   }
 
   public String getTextOnTableOrder(int rowNumber, String columnDataClass) {

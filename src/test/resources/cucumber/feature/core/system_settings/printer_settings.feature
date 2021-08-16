@@ -30,7 +30,7 @@ Feature: Printer Settings
     Then Operator verify Printer Settings is deleted successfully
 
   @DeletePrinter
-  Scenario Outline: Operator Edit Printer Setting (<hiptest-uid>)
+  Scenario Outline: Operator Edit Printer Setting - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator adds new printer using data below:
       | name      | <printerSettingsName> |

@@ -6,7 +6,7 @@ Feature: Failed Delivery Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator RTS a Single Parcel with Various Reason (<hiptest-uid>)
+  Scenario Outline: Operator RTS a Single Parcel with Various Reason - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -39,14 +39,14 @@ Feature: Failed Delivery Management
       | startTime | <startTime>   |
       | endTime   | <endTime>     |
     Examples:
-      | hiptest-uid                              | reason                   | timeslot   | status  | granularStatus          | deliveryTitle    | deliveryStatus | startTime                          | endTime                            |
-      | uid:90f3d6dd-6fc9-4930-b51d-c14e3009ee02 | Unable to find address   | 9AM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
-      | uid:5f49d9c1-02b4-40a5-86a2-043ea4ddb6b9 | Item refused at doorstep | 9AM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
-      | uid:f6743880-4ef9-4a68-a4db-21fc7f48cb77 | Refused to pay COD       | 9AM - 12PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 12:00:00 |
-      | uid:1af1d2ef-53ec-44b1-8357-a16be8621c39 | Customer delayed beyond  | 12PM - 3PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 12:00:00 | {{next-1-day-yyyy-MM-dd}} 15:00:00 |
-      | uid:666cd095-d643-43ba-8124-dbc1aa07a5b6 | Cancelled by shipper     | 3PM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 15:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
-      | uid:21f334f7-8db0-4da4-afd1-be7b81ecd998 | Nobody at address        | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
-      | uid:6e74cf3d-c3fb-45d9-8c85-429b52ace114 | Other Reason             | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
+      | Note                                 | hiptest-uid                              | reason                   | timeslot   | status  | granularStatus          | deliveryTitle    | deliveryStatus | startTime                          | endTime                            |
+      | Unable to find address, 9AM - 6PM    | uid:90f3d6dd-6fc9-4930-b51d-c14e3009ee02 | Unable to find address   | 9AM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
+      | Item refused at doorstep, 9AM - 10PM | uid:5f49d9c1-02b4-40a5-86a2-043ea4ddb6b9 | Item refused at doorstep | 9AM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
+      | Refused to pay COD, 9AM - 12PM       | uid:f6743880-4ef9-4a68-a4db-21fc7f48cb77 | Refused to pay COD       | 9AM - 12PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 12:00:00 |
+      | Customer delayed beyond, 12PM - 3PM  | uid:1af1d2ef-53ec-44b1-8357-a16be8621c39 | Customer delayed beyond  | 12PM - 3PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 12:00:00 | {{next-1-day-yyyy-MM-dd}} 15:00:00 |
+      | Cancelled by shipper, 3PM - 6PM      | uid:666cd095-d643-43ba-8124-dbc1aa07a5b6 | Cancelled by shipper     | 3PM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 15:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
+      | Nobody at address, 6PM - 10PM        | uid:21f334f7-8db0-4da4-afd1-be7b81ecd998 | Nobody at address        | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
+      | Other Reason, 6PM - 10PM             | uid:6e74cf3d-c3fb-45d9-8c85-429b52ace114 | Other Reason             | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS a Single Parcel and Change to New Address - Add New Address (uid:6bb33ad4-07fe-4a7d-8575-688895ef809d)
@@ -76,7 +76,7 @@ Feature: Failed Delivery Management
     And API Operator verify order info after failed delivery order RTS-ed on next day
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day (<hiptest-uid>)
+  Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -102,7 +102,7 @@ Feature: Failed Delivery Management
       | Return | uid:01b82249-78bb-411e-9e20-1a785b343321 | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Reschedule Failed Delivery Order on Specific Date (<hiptest-uid>)
+  Scenario Outline: Operator Reschedule Failed Delivery Order on Specific Date - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -128,7 +128,7 @@ Feature: Failed Delivery Management
       | Return | uid:b68e589b-05ca-421d-9be5-dcc02d6a421b | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator RTS Selected Failed Delivery Order on Next Day (<hiptest-uid>)
+  Scenario Outline: Operator RTS Selected Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -154,7 +154,7 @@ Feature: Failed Delivery Management
       | Return | uid:a4a37f22-cac7-48b7-aa86-9f124d582d2a | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator RTS Failed Delivery Order on Next Day (<hiptest-uid>)
+  Scenario Outline: Operator RTS Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -180,7 +180,7 @@ Feature: Failed Delivery Management
       | Return | uid:1c006699-4722-451d-ac6e-f010ec736e90 | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Download and Verify CSV File of Failed Delivery Order on Failed Delivery Management Page (<hiptest-uid>)
+  Scenario Outline: Operator Download and Verify CSV File of Failed Delivery Order on Failed Delivery Management Page - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |

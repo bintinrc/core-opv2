@@ -101,16 +101,16 @@ public class DriverPerformanceSteps extends AbstractSteps {
   @Then("Operator select following filters on Driver Performance page:")
   public void selectFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String value = data.get("routeDateFrom");
+    String fromDate = data.get("routeDateFrom");
     String toDate = data.get("routeDateTo");
-    if (StringUtils.isNotBlank(value) && StringUtils.isNotBlank(toDate)) {
-      driverPerformancePage.filtersForm.routeDate.setDateRange(value, toDate);
-    } else if (StringUtils.isNotBlank(value)) {
-      driverPerformancePage.filtersForm.routeDate.setFromDate(value);
+    if (StringUtils.isNotBlank(fromDate) && StringUtils.isNotBlank(toDate)) {
+      driverPerformancePage.filtersForm.routeDate.setDateRange(fromDate, toDate);
+    } else if (StringUtils.isNotBlank(fromDate)) {
+      driverPerformancePage.filtersForm.routeDate.setFromDate(fromDate);
     } else if (StringUtils.isNotBlank(toDate)) {
       driverPerformancePage.filtersForm.routeDate.setToDate(toDate);
     }
-    value = data.get("displayIndividualRows");
+    String value = data.get("displayIndividualRows");
     if (StringUtils.isNotBlank(value)) {
       driverPerformancePage.filtersForm.displayIndividualRows.setValue(value);
     }

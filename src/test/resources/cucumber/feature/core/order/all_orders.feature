@@ -253,7 +253,7 @@ Feature: All Orders
     Then Operator verify Selection Error dialog for invalid Pull From Order action
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS Failed Delivery Order on Next Day on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
+  Scenario: Operator RTS Failed Delivery Order on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -576,6 +576,35 @@ Feature: All Orders
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
+  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD (uid:c61d23ee-53ef-4c59-8bba-b4f16b46a96a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator go to menu Order -> All Orders
+    And Operator Force Success orders with COD collection on All Orders page:
+      | trackingId                      | collected |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | false     |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+
   Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender (uid:1ea0141f-e3ef-495c-b9cb-b014cfc7ff73)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -604,7 +633,7 @@ Feature: All Orders
       | name | FORCED SUCCESS |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - <note> (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD (<uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -640,9 +669,46 @@ Feature: All Orders
     Examples:
       | note               | cod_amount | collected_amount | collected | uid                                      |
       | Collect COD        | 23.57      | 23.57            | true      | uid:ae5c6bab-1d1b-48bf-a32e-779983df9087 |
+
+  @DeleteOrArchiveRoute
+  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD (<uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Order -> All Orders
+    And Operator Force Success orders with COD collection on All Orders page:
+      | trackingId                      | collected   |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY           |
+      | expectedCodAmount | <collected_amount> |
+      | driverId          | {ninja-driver-id}  |
+    Examples:
+      | note               | cod_amount | collected_amount | collected | uid                                      |
       | Do not Collect COD | 23.57      | 0                | false     | uid:a5fbe7f1-650d-48d8-a2cc-29e963ca09d7 |
 
-  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - <note> (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD (<uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
@@ -675,44 +741,119 @@ Feature: All Orders
     Examples:
       | note               | cod_amount | collected_amount | collected | uid                                      |
       | Collect COD        | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
+
+  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD (<uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator Force Success orders with COD collection on All Orders page:
+      | trackingId                      | collected   |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
+    Then Operator verifies that info toast displayed:
+      | top    | 1 order(s) updated |
+      | bottom | Complete Order     |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY           |
+      | expectedCodAmount | <collected_amount> |
+
+    Examples:
+      | note               | cod_amount | collected_amount | collected | uid                                      |
       | Do not Collect COD | 23.57      | 0                | false     | uid:850b6b66-82aa-45d8-bb7e-f3b602e27f8a |
 
-#  Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    And API Shipper create multiple V4 orders using data below:
-#      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                                         |
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Given API Operator Global Inbound multiple parcels using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
-#    And API Operator RTS orders:
-#      | orderId                           | rtsRequest                                                                                                 |
-#      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-#      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-#    When Operator go to menu Order -> All Orders
-#    And Operator Force Success orders with COD collection on All Orders page:
-#      | trackingId                                 | collected |
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | true      |
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | false     |
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | true      |
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | false     |
-#    Then Operator verifies error messages in dialog on All Orders page:
-#      | 1.{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Order id = {KEY_LIST_OF_CREATED_ORDER_ID[1]}not allowed to collect cod! |
-#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-#    Then Operator verify order status is "Completed" on Edit Order page
-#    And Operator verify order granular status is "Returned to Sender" on Edit Order page
-#    And Operator verify Pickup details on Edit order page using data below:
-#      | status | SUCCESS |
-#    And Operator verify Delivery details on Edit order page using data below:
-#      | status | SUCCESS |
-#    And Operator verify Pickup transaction on Edit order page using data below:
-#      | status | SUCCESS |
-#    And Operator verify Delivery transaction on Edit order page using data below:
-#      | status | SUCCESS |
-#    And Operator verify order event on Edit order page using data below:
-#      | name | PRICING CHANGE |
-#    And Operator verify order event on Edit order page using data below:
-#      | name | FORCED SUCCESS |
+  Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD (uid:8ea6768c-87d4-4845-a769-e99985363cdf)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS orders:
+      | orderId                           | rtsRequest                                                                                                 |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator go to menu Order -> All Orders
+    And Operator Force Success orders with COD collection on All Orders page:
+      | trackingId                                 | collected |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | true      |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | false     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | true      |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | false     |
+    Then Operator verifies error messages in dialog on All Orders page:
+      | 1.{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} \| Order id = {KEY_LIST_OF_CREATED_ORDER_ID[3]}not allowed to collect cod! |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[3]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | PENDING |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[4]}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on All Orders Page (uid:d4c62eac-0614-498b-8d30-9b204a7280f6)
@@ -849,7 +990,6 @@ Feature: All Orders
       | granularStatus    | Cancelled                                                        |
       | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

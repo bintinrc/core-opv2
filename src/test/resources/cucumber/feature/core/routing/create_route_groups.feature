@@ -1,7 +1,7 @@
 @OperatorV2 @Core @Routing @CreateRouteGroups
 Feature: Create Route Groups
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -885,7 +885,7 @@ Feature: Create Route Groups
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @DeleteFilterTemplate @Debug
+  @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - Shipment Filters (uid:8ea83f47-8df7-40af-af0f-1dd27283cd15)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Shipments Filter Template using data below:
@@ -929,6 +929,162 @@ Feature: Create Route Groups
       | shipmentType                   | Air Haul                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
+
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Group Page - <Note> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                |
+      | generateFromAndTo | RANDOM           |
+      | v4OrderRequest    | <v4OrderRequest> |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today             |
+      | Shipper       | {shipper-v4-name} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator add following filters on Transactions Filters section on Create Route Group page:
+      | orderServiceType | <service_type> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction records on Create Route Group page using data below:
+      | trackingId                                | type   | shipper                                 | address                                                  | status   |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
+      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
+    Examples:
+      | Note   | service_type    | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                   | hiptest-uid                              |
+      | Parcel | Parcel Delivery | Pending Pickup | DELIVERY Transaction | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} | uid:547bc7e9-1432-4d1f-8ea8-553086758134 |
+      | Return | Return          | Pending Pickup | DELIVERY Transaction | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}  | uid:fc3a7a68-feb0-4540-9599-5b957ed37047 |
+
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Group Page - Marketplace (uid:d7067f43-f02c-4dde-ba64-1aea558fed8c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                |
+      | generateFromAndTo | RANDOM           |
+      | v4OrderRequest    | <v4OrderRequest> |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator add following filters on Transactions Filters section on Create Route Group page:
+      | orderServiceType | <service_type> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction records on Create Route Group page using data below:
+      | trackingId                                | type   | shipper                                 | address                                                  | status   |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
+      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
+    Examples:
+      | service_type | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | hiptest-uid                              |
+      | Marketplace  | Pending Pickup | DELIVERY Transaction | {"service_type": "Marketplace","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": true,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}} | uid:3f17fe40-7fb8-44f5-ae5e-86639de78feb |
+
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Group Page - International (uid:30d34cc1-76db-4833-b434-0f06294cb5a3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                |
+      | v4OrderRequest | <v4OrderRequest> |
+      | addressType    | global           |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator add following filters on Transactions Filters section on Create Route Group page:
+      | orderServiceType | <service_type> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction records on Create Route Group page using data below:
+      | trackingId                                | type   | shipper                                 | address                                                  | status   |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
+      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
+    Examples:
+      | service_type  | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                        |
+      | International | Pending Pickup | DELIVERY Transaction | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
+
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Group Page - Marketplace International (uid:f8929f70-3e18-4be8-b490-20dd32b97e68)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                |
+      | v4OrderRequest | <v4OrderRequest> |
+      | addressType    | global           |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator add following filters on Transactions Filters section on Create Route Group page:
+      | orderServiceType | <service_type> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction records on Create Route Group page using data below:
+      | trackingId                                | type   | shipper                                 | address                                                  | status   |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
+      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
+    Examples:
+      | service_type              | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | Marketplace International | Pending Pickup | DELIVERY Transaction | {"service_type": "Marketplace International","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": false,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}, "international":{"portation":"import"}} |
+
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Group Page - Ninja Pack (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator generate 2 Ninja Pack Tracking Id with size "md"
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 1                |
+      | generateFromAndTo | RANDOM           |
+      | v4OrderRequest    | <v4OrderRequest> |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator add following filters on Transactions Filters section on Create Route Group page:
+      | orderServiceType | <service_type> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction records on Create Route Group page using data below:
+      | trackingId                                | type   | shipper                                 | address                                                  | status   |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
+    Examples:
+      | service_type | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                                                                                                 | hiptest-uid                              |
+      | Ninja Pack   | Pending Pickup | DELIVERY Transaction | { "requested_tracking_number":"{KEY_NINJA_PACK_TRACKING_LIST[1].trackingId}","service_type":"Ninja Pack","service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} | uid:b2314731-a6d8-42e1-9f22-4b93dfbd88e9 |
+
+  @DeleteRouteGroups @DeleteFilterTemplate
+  Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset (uid:677056fa-a044-487e-8b10-f95739f8578b)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new Route Group:
+      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+    And API Operator creates new Route Groups Filter Template using data below:
+      | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
+      | value.shipperIds              | {shipper-v4-legacy-id}                       |
+      | value.orderDetailServiceTypes | PARCEL                                       |
+      | value.deliveryTypeIds         | 4                                            |
+      | value.showTransaction         | true                                         |
+      | value.showReservations        | false                                        |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Group page
+    And Operator click Load Selection on Create Route Group page
+    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
+      | trackingId                                 |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verifies that success toast displayed:
+      | top | Added successfully |
+    And Operator verifies selected General Filters on Create Route Group page:
+      | shipper | {shipper-v4-legacy-id}-{shipper-v4-name} |
+    And Operator verifies selected Transactions Filters on Create Route Group page:
+      | orderServiceType | Parcel Delivery |
+      | deliveryType     | Sameday         |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

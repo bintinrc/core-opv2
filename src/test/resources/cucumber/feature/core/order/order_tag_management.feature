@@ -182,7 +182,7 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     Then Operator searches and selects orders created on Order Tag Management page
 
-  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id (uid:0117a8b6-ddca-44c3-90ec-a741f0f7f157)
+  Scenario: View Tagged Orders on the Order Tag Management Page - Arrived at Sorting Hub, No Route Id (uid:0117a8b6-ddca-44c3-90ec-a741f0f7f157)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -206,7 +206,7 @@ Feature: Order Tag Management
       | daysFromFirstInbound | 1                               |
       | granularStatus       | Arrived at Sorting Hub          |
 
-  Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days (uid:890edc5f-46a4-4fde-990b-fa89bc0e94db)
+  Scenario: View Tagged Orders on the Order Tag Management Page - Pending Pickup, No Route Id, No Attempt, No Inbound Days (uid:890edc5f-46a4-4fde-990b-fa89bc0e94db)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -229,7 +229,7 @@ Feature: Order Tag Management
       | granularStatus       | Pending Pickup                  |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule (uid:3ea40471-cd24-4809-8b7d-c8e7605d4847)
+  Scenario: View Tagged Orders on the Order Tag Management Page - Delivery Attempted, Pending Reschedule (uid:3ea40471-cd24-4809-8b7d-c8e7605d4847)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

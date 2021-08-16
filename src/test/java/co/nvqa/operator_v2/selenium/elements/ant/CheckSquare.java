@@ -6,38 +6,46 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AntButton extends PageElement {
+/**
+ * Controller for ant-checkbox component
+ *
+ * @author Sergey Mishanin
+ */
+public class CheckSquare extends PageElement {
 
-  public AntButton(WebDriver webDriver, WebElement webElement) {
+  public CheckSquare(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  public AntButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+  public CheckSquare(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
     super(webDriver, searchContext, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  @FindBy(css = "i.anticon-loading")
-  public PageElement spinner;
-
-  public void click() {
-    waitUntilClickable();
-    super.click();
+  public boolean isChecked() {
+    return StringUtils.equals(getAttribute("data-prefix"), "fas");
   }
 
-  public void clickAndWaitUntilDone() {
-    click();
-    if (spinner.waitUntilVisible(1)) {
-      spinner.waitUntilInvisible();
+  public void check() {
+    if (!isChecked()) {
+      click();
     }
   }
 
-  @Override
-  public boolean isEnabled() {
-    return !StringUtils.containsIgnoreCase(getAttribute("class"), "disabled");
+  public void uncheck() {
+    if (isChecked()) {
+      click();
+    }
+  }
+
+  public void setValue(boolean value) {
+    if (value) {
+      check();
+    } else {
+      uncheck();
+    }
   }
 }

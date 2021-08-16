@@ -46,3 +46,7 @@ Feature: Check Pricing Script
       | codFee       | 0      |
       | handlingFee  | 0      |
       | comments     | OK     |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

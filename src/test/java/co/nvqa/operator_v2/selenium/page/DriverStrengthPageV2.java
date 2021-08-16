@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -15,6 +16,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -381,7 +383,29 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
         form.contactType.searchAndSelectValue(contactType);
       }
       if (contact != null) {
-        form.contact.setValue(contact);
+        final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
+        switch (country) {
+          case "SG":
+            form.contact.setValue("+6531594329");
+            break;
+          case "ID":
+            form.contact.setValue("+6282188881593");
+            break;
+          case "MY":
+            form.contact.setValue("+6066567878");
+            break;
+          case "PH":
+            form.contact.setValue("+639285554697");
+            break;
+          case "TH":
+            form.contact.setValue( "+66955573510");
+            break;
+          case "VN":
+            form.contact.setValue("+0812345678");
+            break;
+          default:
+            break;
+        }
       }
       return this;
     }
@@ -542,8 +566,29 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
         form.contactType.searchAndSelectValue(contactType);
       }
       if (contact != null) {
-        form.contact.setValue(contact);
-      }
+        final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
+        switch (country) {
+          case "SG":
+            form.contact.setValue("+6531594329");
+            break;
+          case "ID":
+            form.contact.setValue("+6282188881593");
+            break;
+          case "MY":
+            form.contact.setValue("+6066567878");
+            break;
+          case "PH":
+            form.contact.setValue("+639285554697");
+            break;
+          case "TH":
+            form.contact.setValue( "+66955573510");
+            break;
+          case "VN":
+            form.contact.setValue("+0812345678");
+            break;
+          default:
+            break;
+        }      }
       return this;
     }
 

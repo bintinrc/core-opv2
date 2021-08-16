@@ -9,7 +9,7 @@ Feature: Upload Invoiced Orders
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @KillBrowser
+
   Scenario: Download Template Sample (uid:73c198bf-91eb-4177-a2bb-bb4cf6b2f283)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Download sample CSV template button on the Upload Invoiced Orders Page
@@ -18,7 +18,7 @@ Feature: Upload Invoiced Orders
       | NVSAMPL00000000002 |
       | NVSAMPL00000000003 |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Upload Invoice Orders CSV - When Orders are Completed but not yet Invoiced (non-invoiced) (uid:ddb3318b-b545-411c-b750-1f1521befcdb)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -48,7 +48,7 @@ Feature: Upload Invoiced Orders
       | subject | Invoicing result                               |
       | body    | All tracking numbers are successfully invoiced |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Upload Invoice Orders CSV - When Orders are not in priced_orders neither invoiced_orders (non-priced) (uid:6c8bb540-5f3e-428f-a271-5fa05bf154aa)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -72,7 +72,7 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking id(s) is\are available in the CSV file
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Upload Invoice Orders CSV - With Orders are already in invoiced_orders (has-invoiced) (uid:0736ad19-8d02-49a4-b5a1-07368a743daa)
    #pre-condition: Orders are already in invoiced_orders
     Given API Shipper create V4 order using data below:
@@ -102,7 +102,7 @@ Feature: Upload Invoiced Orders
       | subject | Invoicing result                               |
       | body    | All tracking numbers are successfully invoiced |
 
-  @DeleteOrArchiveRoute @KillBrowser
+  @DeleteOrArchiveRoute
   Scenario: Upload Invoice Orders CSV - Some Orders are non-invoiced, Some Orders are non-priced neither non-invoiced (uid:531d9dea-0866-48e5-9fb8-522d029e696d)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -125,15 +125,18 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking id(s) is\are available in the CSV file
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
-  @KillBrowser
+
   Scenario: Upload Invoiced Orders with invalid file type (not .csv) (uid:3ef6bcc3-2c11-477e-82ed-27c477b783e8)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     Then Operator uploads a PDF and verifies that any other file except csv is not allowed
 
-  @KillBrowser
+
   Scenario: Upload Invoice Orders with invalid template (e.g. two columns) (uid:38d566d5-c35a-493f-bec3-7ca283661534)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     Then Operator uploads an invalid CSV and verifies error message
 
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

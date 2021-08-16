@@ -280,3 +280,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - COD
       | codPercentage | test |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

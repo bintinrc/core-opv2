@@ -16,6 +16,11 @@ Feature: Update Delivery Address with CSV
     Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
     And API Operator get order details
     And Operator verify created orders info after address update
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
 
   Scenario: Bulk Update Order Delivery Address with CSV - Empty File (uid:612068d5-7668-4c0c-a86d-9914477885a1)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -107,7 +112,7 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | status                                                                                                                                                |
       | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.phone_number, to.address.address2, Invalid entry '1.2860-17' for to.address.longitude, Invalid entry '' for to.address.latitude |
 
-  Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <note> (<hiptest-uid>)
+  Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -120,7 +125,7 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | status   |
       | {KEY_CREATED_ORDER_TRACKING_ID} | <status> |
     Examples:
-      | note                | lat          | long          | status                                                                                                       | hiptest-uid                              |
+      | Note                | lat          | long          | status                                                                                                       | hiptest-uid                              |
       | Lat Long Has String | 1.317219a344 | 103.925993?32 | Invalid entry '103.925993?32' for to.address.longitude, Invalid entry '1.317219a344' for to.address.latitude | uid:ca983071-6b37-4cae-92ba-4949bafd7bee |
       | Lat Long Has Dash   | -            | -             | Invalid entry '-' for to.address.longitude, Invalid entry '-' for to.address.latitude                        | uid:fa23656c-a43e-4630-be61-f6c436695687 |
       | Lat Is Empty        | empty        | 103.886438    | Invalid entry '' for to.address.latitude                                                                     | uid:6e986036-aeb6-4b42-823e-6b6fa5289404 |
@@ -140,6 +145,34 @@ Feature: Update Delivery Address with CSV
     Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
     And API Operator get order details
     And Operator verify created orders info after address update
+
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery (uid:c6c4b64a-2171-4c36-bb19-b119ab6a2dce)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
+    When Operator update delivery address of created orders on Update Delivery Address with CSV page
+    Then Operator verify updated addresses on Update Delivery Address with CSV page
+    When Operator confirm addresses update on Update Delivery Address with CSV page
+    Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
+    And API Operator get order details
+    And Operator verify created orders info after address update
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    When API Operator get order details
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | Routed |
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

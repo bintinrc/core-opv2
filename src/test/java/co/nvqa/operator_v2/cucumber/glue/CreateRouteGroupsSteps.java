@@ -321,7 +321,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
       createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter.clearAll();
       createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter
-          .selectFilter(splitAndNormalize(value));
+          .strictlySelectFilter(splitAndNormalize(value));
     }
 
     value = data.get("zone");

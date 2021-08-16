@@ -93,3 +93,7 @@ Feature: Service Type and Service Level params
     And Operator close page
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

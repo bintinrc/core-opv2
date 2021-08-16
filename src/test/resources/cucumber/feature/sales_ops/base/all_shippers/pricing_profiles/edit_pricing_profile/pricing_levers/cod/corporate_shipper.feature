@@ -111,3 +111,6 @@ Feature: Edit Pricing Profiles - Corporate Shippers - COD
       | codPercentage     | 30                                          |
       | comments          | This is a test pricing script               |
 
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
