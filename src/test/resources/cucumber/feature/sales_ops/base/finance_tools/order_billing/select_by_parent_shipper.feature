@@ -62,7 +62,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @nadeera
+
   @DeleteOrArchiveRoute @happyPath
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:56d32c3e-bb0f-4a7d-8c94-babe66f3e530)
     Given Operator go to menu Finance Tools -> Order Billing

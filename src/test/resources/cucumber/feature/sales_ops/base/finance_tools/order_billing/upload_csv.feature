@@ -11,7 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @DeleteOrArchiveRoute @happyPath @nadeerad
+  @DeleteOrArchiveRoute @happyPath
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |

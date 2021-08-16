@@ -11,7 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @happyPath @nadeera
+  @happyPath
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     Given Operator go to menu Finance Tools -> Order Billing
     Then Operator verifies "{default-csv-template}" is selected in Customized CSV File Template

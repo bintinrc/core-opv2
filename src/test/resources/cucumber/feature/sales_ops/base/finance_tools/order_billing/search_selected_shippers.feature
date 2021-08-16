@@ -153,7 +153,7 @@ Feature: Order Billing
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
-  @nadeera
+
   Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper - RTS Order Exist and RTS Fee in Surcharge (uid:d05170c7-85ce-4367-be64-740c730350d1)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-rts-surcharge-30-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
