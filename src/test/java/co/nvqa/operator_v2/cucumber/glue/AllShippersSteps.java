@@ -1013,12 +1013,12 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.editShipper(shipper);
   }
 
-  @When("Operator edits the created sub-shipper")
-  public void editCreatedSubshipper() {
-    Shipper shipper = new Shipper();
-    shipper.setName(get(KEY_SHIPPER_NAME));
-    allShippersPage.editShipper(shipper);
-  }
+//  @When("Operator edits the created sub-shipper")
+//  public void editCreatedSubshipper() {
+//    Shipper shipper = new Shipper();
+//    shipper.setName(get(KEY_SHIPPER_NAME));
+//    allShippersPage.editShipper(shipper);
+//  }
 
   @When("Operator edits the created corporate sub-shipper")
   public void editCreatedCorporateSubshipper() {
