@@ -1,13 +1,12 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling
 
-Feature: Order Billing
-  "SHIPPER": Orders consolidated by shipper (1 file per shipper)
+Feature: Generate Success Billing Report - Legacy Template
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper
+  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - Use Legacy Template - start date > 1 May (uid:432a59ca-7248-4194-b906-14175d3ca5a9)
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator selects Order Billing data as below
       | startDate | {gradle-current-date-yyyy-MM-dd} |
