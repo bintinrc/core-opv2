@@ -92,7 +92,8 @@ public class OrderBillingSteps extends AbstractSteps {
       }
       String csvFileTemplate = mapOfData.get("csvFileTemplate");
       if (Objects.nonNull(csvFileTemplate)) {
-        orderBillingPage.setCsvFileTemplateName(csvFileTemplate);
+        retryIfRuntimeExceptionOccurred(
+            () -> orderBillingPage.setCsvFileTemplateName(csvFileTemplate), 40);
       }
       String emailAddress = mapOfData.get("emailAddress");
       if (Objects.nonNull(emailAddress)) {
@@ -188,6 +189,7 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies {string} is not available in template selector drop down menu")
   public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String template) {
-    assertFalse(orderBillingPage.csvFileTemplate.isValueExist(template));
+    assertFalse(f(" Template with name : %s is available in the dropdown ", template),
+        orderBillingPage.csvFileTemplate.isValueExist(template));
   }
 }

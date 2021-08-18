@@ -795,7 +795,7 @@ public class OperatorV2SimplePage extends SimplePage {
             f("Value not found on NV Autocomplete. Error message: %s", actualNoMatchingErrorText));
       } catch (NoSuchElementException | TimeoutException ignore) {
       }
-    }, "Check if the value is not found on NV Autocomplete", 500, 15);
+    }, "Check if the value is not found on NV Autocomplete", 500, 25);
 
     inputElement.sendKeys(Keys.RETURN);
     pause200ms();

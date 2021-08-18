@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @SelectedShippers
 
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
@@ -28,7 +28,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -49,7 +49,7 @@ Feature: Order Billing
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -64,7 +64,7 @@ Feature: Order Billing
       | emailAddress | {order-billing-email}                                                                      |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator gets the orders and parcel size and weight from the database for specified shipper
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the orders grouped by shipper and parcel size and weight
@@ -85,7 +85,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Completed' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -123,7 +123,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Returned to Sender' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the priced order details in the body
 
@@ -149,9 +149,10 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Returned to Sender' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
+
 
   Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper - RTS Order Exist and RTS Fee in Surcharge (uid:d05170c7-85ce-4367-be64-740c730350d1)
     Given API Shipper create V4 order using data below:
@@ -174,7 +175,7 @@ Feature: Order Billing
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
     Then Operator gets 'Returned to Sender' price order details from the billing_qa_gl.priced_orders table
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
 
