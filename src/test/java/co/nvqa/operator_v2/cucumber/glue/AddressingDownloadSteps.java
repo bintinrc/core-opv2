@@ -11,16 +11,9 @@ import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.openqa.selenium.Keys;
 
 public class AddressingDownloadSteps extends AbstractSteps {
@@ -291,56 +284,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     NvLogger.infof("Order creation time is: %s", orderCreationTimestamp);
 
-    addressingDownloadPage.setCreationTimeDatepicker(generateDateTimeRange(orderCreationTimestamp));
-  }
-
-  private Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
-    /*
-     * Returns:
-     * - The same value for start date and end date
-     * - Floored value of start time by 30 minutes
-     * - End time = start time + 30 minutes
-     * */
-
-    // Creation time input: DATEPICKER
-    DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
-    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM");
-
-    int currentYear = orderCreationLocalDateTime.getYear();
-    int currentDecadeStart = currentYear - (currentYear % 10);
-    int currentDecadeEnd = currentDecadeStart + 9;
-
-    // Creation time input: TIMEPICKER
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-    DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH");
-    DateTimeFormatter minuteFormatter = DateTimeFormatter.ofPattern("mm");
-
-    int currentMinute = orderCreationLocalDateTime.getMinute();
-    int currentHour = (orderCreationLocalDateTime.minus(Duration.of(1, ChronoUnit.HOURS))).getHour();
-
-    int currentMinuteFloored = ((int) Math.floor((float) currentMinute / 30)) * 30; // Return 00 or 30
-    String currentMinuteFlooredAsString = currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
-    String currentHourAsString = currentHour < 10 ? f("0%d", currentHour) : f("%d", currentHour);
-
-    LocalTime startTime = LocalTime.parse(f("%s:%s", currentHourAsString, currentMinuteFlooredAsString), timeFormatter);
-    LocalTime endTime = startTime.plus(Duration.of(30, ChronoUnit.MINUTES));
-
-    Map<String, String> dateTimeRange = new HashMap<>();
-
-    dateTimeRange.put("start_decade", f("%d-%d", currentDecadeStart, currentDecadeEnd));
-    dateTimeRange.put("start_year", String.valueOf(currentYear));
-    dateTimeRange.put("start_month", monthFormatter.format(orderCreationLocalDateTime));
-    dateTimeRange.put("start_day", dayFormatter.format(orderCreationLocalDateTime));
-
-    dateTimeRange.put("start_hour", hourFormatter.format(startTime));
-    dateTimeRange.put("start_minute", minuteFormatter.format(startTime));
-
-    dateTimeRange.put("end_hour", hourFormatter.format(endTime));
-    dateTimeRange.put("end_minute", minuteFormatter.format(endTime));
-
-    NvLogger.infof("Set time range to creation time filter to %s:%s - %s:%s", dateTimeRange.get("start_hour"), dateTimeRange.get("start_minute"), dateTimeRange.get("end_hour"), dateTimeRange.get("end_minute"));
-
-    return dateTimeRange;
+    addressingDownloadPage.setCreationTimeDatepicker(addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp));
   }
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")

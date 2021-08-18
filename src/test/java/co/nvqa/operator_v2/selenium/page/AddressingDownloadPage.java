@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -134,6 +135,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       .getTimezone()));
   private static final String DATE_TIME = ZONED_DATE_TIME.format(DATE_FORMAT);
   private static final String CSV_FILENAME_FORMAT = TestConstants.ADDRESSING_PRESET_NAME + "_";
+
+  private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
   public AddressingDownloadPage(WebDriver webDriver) {
     super(webDriver);
@@ -343,6 +346,55 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     assertTrue("RTS Order Identified", isRtsFound);
   }
 
+  public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
+    /*
+     * Returns:
+     * - The same value for start date and end date
+     * - Floored value of start time by 30 minutes
+     * - End time = start time + 30 minutes
+     * */
+
+    // Creation time input: DATEPICKER
+    DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
+    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM");
+
+    int currentYear = orderCreationLocalDateTime.getYear();
+    int currentDecadeStart = currentYear - (currentYear % 10);
+    int currentDecadeEnd = currentDecadeStart + 9;
+
+    // Creation time input: TIMEPICKER
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH");
+    DateTimeFormatter minuteFormatter = DateTimeFormatter.ofPattern("mm");
+
+    int currentMinute = orderCreationLocalDateTime.getMinute();
+    int currentHour = (orderCreationLocalDateTime.minus(Duration.of(1, ChronoUnit.HOURS))).getHour();
+
+    int currentMinuteFloored = ((int) Math.floor((float) currentMinute / 30)) * 30; // Return 00 or 30
+    String currentMinuteFlooredAsString = currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
+    String currentHourAsString = currentHour < 10 ? f("0%d", currentHour) : f("%d", currentHour);
+
+    LocalTime startTime = LocalTime.parse(f("%s:%s", currentHourAsString, currentMinuteFlooredAsString), timeFormatter);
+    LocalTime endTime = startTime.plus(Duration.of(30, ChronoUnit.MINUTES));
+
+    Map<String, String> dateTimeRange = new HashMap<>();
+
+    dateTimeRange.put("start_decade", f("%d-%d", currentDecadeStart, currentDecadeEnd));
+    dateTimeRange.put("start_year", String.valueOf(currentYear));
+    dateTimeRange.put("start_month", monthFormatter.format(orderCreationLocalDateTime));
+    dateTimeRange.put("start_day", dayFormatter.format(orderCreationLocalDateTime));
+
+    dateTimeRange.put("start_hour", hourFormatter.format(startTime));
+    dateTimeRange.put("start_minute", minuteFormatter.format(startTime));
+
+    dateTimeRange.put("end_hour", hourFormatter.format(endTime));
+    dateTimeRange.put("end_minute", minuteFormatter.format(endTime));
+
+    NvLogger.infof("Set time range to creation time filter to %s:%s - %s:%s", dateTimeRange.get("start_hour"), dateTimeRange.get("start_minute"), dateTimeRange.get("end_hour"), dateTimeRange.get("end_minute"));
+
+    return dateTimeRange;
+  }
+
   public void setCreationTimeDatepicker(Map<String, String> selectedDate) {
     String selectYearButtonXpath = "//div[contains(@class, 'ant-picker-header-view')]//button[contains(@class, 'year')]";
     String selectMonthButtonXpath = "//div[contains(@class, 'ant-picker-header-view')]//button[contains(@class, 'month')]";
@@ -433,7 +485,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     int resultsCount = Integer.parseInt(resultText.substring(8,9));
     int verificationsPassed = 0;
 
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
     LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(
         Duration.of(1, ChronoUnit.HOURS));
 
@@ -450,7 +501,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         verifyChecklist.put("isAddressTwoFound", true);
       }
 
-      if (dtf.format(orderCreationTimestamp).equals(createdAtEl.get(i).getText())) {
+      if (ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp).equals(createdAtEl.get(i).getText())) {
         verifyChecklist.put("isCreatedAtFound", true);
       }
 
