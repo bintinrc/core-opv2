@@ -1238,7 +1238,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
 
-  @DeleteOrArchiveRoute @routing-refactor @wip
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1255,7 +1255,7 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verifies that info toast displayed:
       | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
-#    Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
+    Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE         |
       | routeId | KEY_CREATED_ROUTE_ID |
