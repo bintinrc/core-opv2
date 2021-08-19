@@ -398,8 +398,11 @@ Feature: Edit Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator add created order to the <routeType> route on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
     And Operator refresh page
     Then Operator verify the order is added to the <routeType> route on Edit Order page
+    Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE         |
       | routeId | KEY_CREATED_ROUTE_ID |
@@ -411,7 +414,6 @@ Feature: Edit Order
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
-
     Examples:
       | Note              | hiptest-uid                              | orderType | routeType |
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
@@ -1238,7 +1240,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @wip
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1255,6 +1257,7 @@ Feature: Edit Order
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verifies that info toast displayed:
       | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+    When Operator refresh page
     Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE         |
