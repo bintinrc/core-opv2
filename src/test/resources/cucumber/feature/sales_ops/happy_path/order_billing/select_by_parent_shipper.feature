@@ -40,7 +40,7 @@ Feature: Order Billing
       | csvFileTemplate | 2 - SG Default SSB Template                         |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
@@ -57,7 +57,7 @@ Feature: Order Billing
       | csvFileTemplate | 2 - SG Default SSB Template                               |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
@@ -73,7 +73,7 @@ Feature: Order Billing
       | emailAddress  | {order-billing-email}                                                                      |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {aggregated-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
@@ -90,7 +90,7 @@ Feature: Order Billing
       | csvFileTemplate | 2 - SG Default SSB Template                                                           |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator gets the success billing report entries
     Then Operator verifies the header using data {shipper-ssb-headers}
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
