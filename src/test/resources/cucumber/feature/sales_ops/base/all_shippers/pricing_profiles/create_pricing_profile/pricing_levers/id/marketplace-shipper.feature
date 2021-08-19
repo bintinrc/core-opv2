@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @PricingScriptsV2ID @SalesOpsID @MarketplaceID
+@OperatorV2 @LaunchBrowser @PricingScriptsV2ID @SalesOpsID @MarketplaceID   @nadeera
 Feature: Marketplace Shipper
 
   Background: Login to Operator Portal V2
@@ -8,7 +8,7 @@ Feature: Marketplace Shipper
     And DB Operator deletes "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-global-id}" shipper's pricing profiles
 
-    @nadeera
+
     @CloseNewWindows
   Scenario: Create Pricing Profile - Marketplace Shipper - with none Percentage Discount - Marketplace Sub Shipper has Reference Parent's Pricing Profile is Exists - ID (uid:5e639445-c303-4926-bc31-8cf566143708)
     Given Operator edits shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
