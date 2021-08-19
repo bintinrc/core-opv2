@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder
+@OperatorV2 @Core @Order @EditOrder @current
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -388,7 +388,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @wip
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -1238,7 +1238,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @wip
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
