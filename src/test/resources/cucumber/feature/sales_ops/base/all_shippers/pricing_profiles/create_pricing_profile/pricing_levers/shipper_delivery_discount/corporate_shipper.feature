@@ -216,7 +216,7 @@ Feature:  Corporate Shipper
     And DB Operator fetches pricing lever details
     And Operator verifies the pricing lever details in the database
     # update effective date from db
-    And Operator updates effective date to "{gradle-next-0-day-yyyy-MM-dd}" date
+    And Operator updates effective date of pricing profile to "{gradle-next-0-day-yyyy-MM-dd}" date
     And API Script Engine clear the shipper's cache
     Then DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
