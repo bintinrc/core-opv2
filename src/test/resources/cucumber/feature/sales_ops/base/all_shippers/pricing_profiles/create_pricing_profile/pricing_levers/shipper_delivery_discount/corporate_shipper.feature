@@ -334,3 +334,7 @@ Feature:  Corporate Shipper
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
