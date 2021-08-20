@@ -501,6 +501,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         verifyChecklist.put("isAddressTwoFound", true);
       }
 
+      NvLogger.infof("Creation time shown in OpV2: %s", createdAtEl.get(i).getText());
+      NvLogger.infof("Creation time from order creation: %s", ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp));
+
       if (ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp).equals(createdAtEl.get(i).getText())) {
         verifyChecklist.put("isCreatedAtFound", true);
       }
