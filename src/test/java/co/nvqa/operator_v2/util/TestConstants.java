@@ -41,6 +41,8 @@ public final class TestConstants extends CommonSeleniumTestConstants {
 
   public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
+  public static final String ADDRESSING_PRESET_NAME;
+
   static {
     String apiBase = NvSystemProperties
         .getString(NV_API_BASE, getString("operator-portal-base-url"));
@@ -75,6 +77,8 @@ public final class TestConstants extends CommonSeleniumTestConstants {
 
     HUB_ID = getLong("hub-id");
     HUB_NAME = getString("hub-name");
+
+    ADDRESSING_PRESET_NAME = getString("addressing-preset-name");
   }
 
   private TestConstants() {
