@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   @FindBy(xpath = "//md-virtual-repeat-container//div[@class='md-virtual-repeat-scroller']")
   public PageElement progressBar;
 
+  @FindBy(name = "container.pricing-scripts.create-draft")
+  public NvIconTextButton createDraftBtn;
+
+
   public PricingScriptsV2Page(WebDriver webDriver) {
     super(webDriver);
     pricingScriptsV2CreateEditDraftPage = new PricingScriptsV2CreateEditDraftPage(webDriver);
@@ -56,7 +61,13 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void createDraft(Script script) {
     clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
-    pricingScriptsV2CreateEditDraftPage.createDraft(script);
+    if (!getCurrentUrl().endsWith("pricing-scripts-v2/create?type=normal") && createDraftBtn
+        .isEnabled()) {
+      createDraftBtn.click();
+    } else {
+      pricingScriptsV2CreateEditDraftPage.createDraft(script);
+    }
+    //pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
   public void checkErrorHeader(String message) {

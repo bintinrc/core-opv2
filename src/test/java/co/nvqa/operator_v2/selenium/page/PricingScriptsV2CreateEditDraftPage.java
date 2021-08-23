@@ -342,7 +342,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   public void waitUntilPageLoaded(String expectedUrlEndsWith) {
     super.waitUntilPageLoaded();
-
     waitUntil(() ->
         {
           String currentUrl = getCurrentUrl();

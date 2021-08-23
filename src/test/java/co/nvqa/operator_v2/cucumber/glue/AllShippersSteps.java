@@ -1011,6 +1011,8 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.editShipper(shipper);
+    NvLogger.info("NADEERA after allShippersPage.editShipper(shipper)");
+    takesScreenshot();
   }
 
   @When("Operator edits the created marketplace sub-shipper")
