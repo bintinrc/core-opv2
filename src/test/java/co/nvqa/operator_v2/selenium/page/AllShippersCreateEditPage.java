@@ -1655,7 +1655,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     }
   }
 
-
   public void addNewPricingProfile() {
     waitUntilPageLoaded();
     createShipper.click();
@@ -1666,6 +1665,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     newPricingProfileDialog.waitUntilVisible();
   }
 
+  public void checkAddNewPricingProfileButton() {
+    waitUntilShipperCreateEditPageIsLoaded();
+    tabs.selectTab("Pricing and Billing");
+    pricingAndBillingForm.addNewProfile.click();
+    newPricingProfileDialog.waitUntilVisible();
+  }
 
   public void verifyStartDateInNewPricingScript() {
     assertEquals("Expected Start Date is not today ", DateUtil.getTodayDate_YYYY_MM_DD(),

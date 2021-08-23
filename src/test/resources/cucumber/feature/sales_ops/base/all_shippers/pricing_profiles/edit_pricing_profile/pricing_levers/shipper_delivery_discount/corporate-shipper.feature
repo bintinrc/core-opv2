@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @CreatePricingProfiles @Corporate
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @EditPricingProfiles @Corporate
 
 Feature: Corporate Shipper
 
@@ -99,7 +99,7 @@ Feature: Corporate Shipper
     When Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     Then Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
 
-  @CloseNewWindows @weam
+  @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - Edit Discount - Corporate Sub Shipper who has their own Pricing Profile exists (uid:d979aa96-eeef-44a1-8bc1-15b947adbcff)
     Given Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
@@ -253,5 +253,8 @@ Feature: Corporate Shipper
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     When Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
-    Then Operator adds pricing profile with below details and verifies save button is disabled
-      | discount | 3.0 |
+    Then Operator verifies Add New Pricing Profile is exists
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

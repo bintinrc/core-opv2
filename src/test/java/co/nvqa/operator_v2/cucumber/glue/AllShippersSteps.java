@@ -1041,6 +1041,11 @@ public class AllShippersSteps extends AbstractSteps {
     openSpecificShipperEditPage(shipperLegacyId);
   }
 
+  @Then("Operator verifies Add New Pricing Profile is exists")
+  public void operatorVerifiesNewPricingProfileExsits() {
+    allShippersPage.allShippersCreateEditPage.checkAddNewPricingProfileButton();
+  }
+
   private void openSpecificShipperEditPage(String shipperLegacyId) {
     for (String handle : getWebDriver().getWindowHandles()) {
       if (!handle.equals(get(KEY_MAIN_WINDOW_HANDLE))) {
