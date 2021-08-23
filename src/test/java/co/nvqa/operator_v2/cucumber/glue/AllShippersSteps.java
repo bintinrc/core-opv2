@@ -1035,6 +1035,7 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private void openSpecificShipperEditPage(String shipperLegacyId) {
+    NvLogger.info("NADEERA LOG : openSpecificShipperEditPage");
     for (String handle : getWebDriver().getWindowHandles()) {
       if (!handle.equals(get(KEY_MAIN_WINDOW_HANDLE))) {
         getWebDriver().switchTo().window(handle);
@@ -1046,12 +1047,16 @@ public class AllShippersSteps extends AbstractSteps {
         TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, shipperLegacyId));
     pause10ms();
+    NvLogger.info(
+        "NADEERA LOG : before : getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE)");
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
     getWebDriver().get(editSpecificShipperPageURL);
+    NvLogger.info("NADEERA LOG : after : getWebDriver().get(editSpecificShipperPageURL)");
     allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    NvLogger.info("NADEERA LOG : after : waitUntilShipperCreateEditPageIsLoaded)");
   }
 
   @And("Operator edits shipper with ID and Name {string}")
