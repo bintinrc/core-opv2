@@ -323,7 +323,7 @@ Feature:  Corporate Shipper
     And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-active-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @weam
   Scenario: Create a new Corporate Sub Shipper - Reference Pricing Profile from Corporate (Parent) Shipper who has Expired Pricing Profile only (uid:c36e6129-acfa-45a4-b049-8d0b49f1cd87)
     Given Operator edits shipper "{shipper-sop-corp-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator go to "Corporate sub shippers" tab on Edit Shipper page
