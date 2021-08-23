@@ -1,15 +1,18 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import org.openqa.selenium.Keys;
 
@@ -245,5 +248,60 @@ public class AddressingDownloadSteps extends AbstractSteps {
     addressingDownloadPage.trackingIdtextArea.sendKeys("," + trackingId);
     String trackingIdsListed = addressingDownloadPage.trackingIdtextArea.getText();
     assertTrue(!(trackingIdsListed.contains("," + trackingId)));
+  }
+
+  @When("Operator clicks on Load Address button")
+  public void operatorClicksOnLoadAddressButton() {
+    addressingDownloadPage.loadAddresses.click();
+  }
+
+  @When("Operator selects preset {string}")
+  public void operatorSelectsPresetName(String preset) {
+    String presetName = preset.equals("DEFAULT") ? TestConstants.ADDRESSING_PRESET_NAME : preset;
+    String presetNameFieldValue = addressingDownloadPage.selectPresetLoadAddresses.getValue();
+
+    if (presetNameFieldValue.equals("")) {
+      addressingDownloadPage.selectPresetLoadAddresses.click();
+      addressingDownloadPage.selectPresetLoadAddresses.sendKeys(presetName);
+    }
+
+    addressingDownloadPage.selectPresetLoadAddresses.sendKeys(Keys.ENTER);
+    put(KEY_SELECTED_PRESET_NAME, presetName);
+  }
+
+  @And("Operator input the created order's creation time")
+  public void operatorInputTheCreatedOrderSCreationTime() {
+    Order createdOrder = get(KEY_ORDER_DETAILS);
+
+    if (createdOrder == null) {
+      assertTrue(f("Order hasn't been created"), true);
+      return;
+    }
+
+    NvLogger.infof("Order tracking ID is: %s", createdOrder.getTrackingId());
+
+    LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+    NvLogger.infof("Order creation time is: %s", orderCreationTimestamp);
+
+    addressingDownloadPage.setCreationTimeDatepicker(addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp));
+  }
+
+  @Then("Operator verifies that the Address Download Table Result contains all basic data")
+  public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
+    addressingDownloadPage.addressDownloadTableResult.isDisplayed();
+
+    Order createdOrder = get(KEY_ORDER_DETAILS);
+    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+
+    addressingDownloadPage.basicOrderDataUIChecking(createdOrder, waypoint);
+  }
+
+  @Then("Operator verifies that the downloaded csv file contains all correct data")
+  public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
+    Order order = get(KEY_ORDER_DETAILS);
+    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+
+    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint);
   }
 }
