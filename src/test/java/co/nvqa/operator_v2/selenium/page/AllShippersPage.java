@@ -360,6 +360,12 @@ public class AllShippersPage extends OperatorV2SimplePage {
     sendKeys(XPATH_SEARCH_SHIPPER_BY_NAME_LIST_PAGE, keyword);
   }
 
+  public void editShipperOnShipperListPage() {
+    shippersTable.clickActionButton(1, ACTION_EDIT);
+    allShippersCreateEditPage.switchToNewWindow();
+    allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+  }
+
   public void editShipper(Shipper shipper) {
     quickSearchShipper(getSearchKeyword(shipper));
     shippersTable.clickActionButton(1, ACTION_EDIT);

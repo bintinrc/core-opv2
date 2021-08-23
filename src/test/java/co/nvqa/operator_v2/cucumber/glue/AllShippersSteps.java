@@ -1013,6 +1013,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.editShipper(shipper);
   }
 
+  @When("Operator edits the created corporate sub-shipper")
+  public void editCreatedCorporateSubshipper() {
+    String corporateSubShipperName = get(KEY_SHIPPER_NAME);
+    allShippersPage.searchShipperByNameOnShipperListPage(corporateSubShipperName);
+    allShippersPage.editShipperOnShipperListPage();
+  }
+
   @When("Operator edits the created marketplace sub-shipper")
   public void operatorEditsCreatedMarketplaceSubshipper() {
     Marketplace marketplaceSellerId = get(KEY_MARKETPLACE_SUB_SHIPPER);
