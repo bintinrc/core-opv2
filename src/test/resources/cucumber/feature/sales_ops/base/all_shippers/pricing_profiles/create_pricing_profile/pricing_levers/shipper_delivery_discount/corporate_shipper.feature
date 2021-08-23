@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @CreatePricingProfiles @Corporate @weam
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @CreatePricingProfiles @Corporate
 
 Feature:  Corporate Shipper
 
@@ -247,7 +247,7 @@ Feature:  Corporate Shipper
     And DB Operator fetches pricing lever details
     And Operator verifies the pricing lever details in the database
     # update effective date from db
-    And Operator updates effective date to "{gradle-next-0-day-yyyy-MM-dd}" date
+    And Operator updates effective date of pricing profile to "{gradle-next-0-day-yyyy-MM-dd}" date
     And API Script Engine clear the shipper's cache
     Then DB Operator gets the shippers active pricing script ID
     Then DB Operator fetches pricing profile and shipper discount details
@@ -304,9 +304,9 @@ Feature:  Corporate Shipper
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator go to "Corporate sub shippers" tab on Edit Shipper page
     And Operator create corporate sub shipper with data below:
-      | branchId | Dummy-Subshipper-{gradle-current-date-yyyyMMddHHmmsss}                                       |
-      | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
-      | email    | test@ninjavan.com                                                                            |
+      | branchId | Dummy-Branch-{gradle-current-date-yyyyMMddHHmmsss}                             |
+      | name     | Dummy-Branch-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
+      | email    | test@ninjavan.com                                                              |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
@@ -316,9 +316,9 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-active-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator go to "Corporate sub shippers" tab on Edit Shipper page
     And Operator create corporate sub shipper with data below:
-      | branchId | Dummy-Subshipper-{gradle-current-date-yyyyMMddHHmmsss}                                       |
-      | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
-      | email    | test@ninjavan.com                                                                            |
+      | branchId | Dummy-Branch-{gradle-current-date-yyyyMMddHHmmsss}                             |
+      | name     | Dummy-Branch-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
+      | email    | test@ninjavan.com                                                              |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-active-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
@@ -328,9 +328,9 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator go to "Corporate sub shippers" tab on Edit Shipper page
     And Operator create corporate sub shipper with data below:
-      | branchId | Dummy-Subshipper-{gradle-current-date-yyyyMMddHHmmsss}                                       |
-      | name     | Dummy-Subshipper-Corporate-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
-      | email    | test@ninjavan.com                                                                            |
+      | branchId | Dummy-Branch-{gradle-current-date-yyyyMMddHHmmsss}                             |
+      | name     | Dummy-Branch-DynamicPricingScriptForOPV2-{gradle-current-date-yyyyMMddHHmmsss} |
+      | email    | test@ninjavan.com                                                              |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits the created corporate sub-shipper
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-expired-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
