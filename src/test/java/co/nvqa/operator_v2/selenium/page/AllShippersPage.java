@@ -344,7 +344,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     String editShipperPageURL = (f("%s/%s/shippers", TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE));
 
-    if (currentURL.contains(editShipperPageURL)) {
+    if (!currentURL.contains(editShipperPageURL)) {
       getWebDriver().navigate().to(editShipperPageURL);
     }
 

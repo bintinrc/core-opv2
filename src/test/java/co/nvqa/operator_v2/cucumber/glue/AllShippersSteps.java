@@ -587,7 +587,9 @@ public class AllShippersSteps extends AbstractSteps {
         NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
         if (errorMessage.contains("devsupport@ninjavan.co")) {
           allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
+          takesScreenshot();
           allShippersPage.allShippersCreateEditPage.saveChanges.click();
+          takesScreenshot();
         }
       }
       allShippersPage.allShippersCreateEditPage
@@ -1073,7 +1075,7 @@ public class AllShippersSteps extends AbstractSteps {
     pause10ms();
     NvLogger.info(
         "NADEERA LOG : before : getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE)");
-    takesScreenshot();
+    //takesScreenshot();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
     takesScreenshot();
