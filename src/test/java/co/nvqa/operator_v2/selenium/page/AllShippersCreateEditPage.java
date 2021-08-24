@@ -177,6 +177,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     String currentWindowHandle = switchToNewWindow();
 
     createNewShipperSteps(shipper);
+    if (errorSaveDialog.isDisplayed() && errorSaveDialog.message.getText()
+        .contains("devsupport@ninjavan.co")) {
+      NvLogger.info("NADEERA : inside error msg");
+      errorSaveDialog.close();
+      createShipper.click();
+    }
+
     waitUntilInvisibilityOfToast("All changes saved successfully");
     String url = getWebDriver().getCurrentUrl();
     shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
