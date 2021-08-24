@@ -173,6 +173,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     shipperInformation.waitUntilClickable(60);
   }
 
+  public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {
+    shipperInformation.waitUntilClickable(timeoutInSeconds);
+  }
+
   public void createNewShipper(Shipper shipper) {
     String currentWindowHandle = switchToNewWindow();
 

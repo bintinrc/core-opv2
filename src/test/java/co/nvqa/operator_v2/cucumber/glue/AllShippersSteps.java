@@ -1030,7 +1030,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.switchToNewWindow();
     NvLogger.info("NADEERA after  switchToNewWindow");
     takesScreenshot();
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(120);
     takesScreenshot();
     NvLogger.info("NADEERA after  waitUntilShipperCreateEditPageIsLoaded");
     NvLogger.info("NADEERA after allShippersPage.editShipper(shipper)");
