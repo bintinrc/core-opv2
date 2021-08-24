@@ -1041,7 +1041,7 @@ public class AllShippersSteps extends AbstractSteps {
     openSpecificShipperEditPage(shipperLegacyId);
   }
 
-  @Then("Operator verifies Add New Pricing Profile is exists")
+  @Then("Operator verifies Add New Pricing Profile Button is displayed")
   public void operatorVerifiesNewPricingProfileExsits() {
     allShippersPage.allShippersCreateEditPage.checkAddNewPricingProfileButton();
   }
@@ -1356,6 +1356,11 @@ public class AllShippersSteps extends AbstractSteps {
     profilePage.clickProfileButton();
     profilePage.changeCountry(country);
     profilePage.closeProfile();
+  }
+
+  @Then("Operator verifies that Add New Pricing Profile Button is displayed")
+  public void operatorVerifiesThatAddNewPricingProfileButtonIsDisplayed() {
+    allShippersPage.verifyAddNewPricingProfileButtonIsDisplayed();
   }
 
   @And("Operator verifies that Edit Pending Profile is displayed")

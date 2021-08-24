@@ -160,6 +160,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_PRICING_PROFILE_INS_MIN = "//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
   public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
+  public static final String XPATH_ADD_NEW_PRICING_PROFILE = "//button[@aria-label='Add New Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
 
   public final B2bManagementPage b2bManagementPage;
@@ -1444,6 +1445,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     pause3s();
   }
 
+  public void verifyAddNewPricingProfileButtonIsDisplayed() {
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    clickTabItem(" Pricing and Billing");
+
+    assertTrue("Add New Pricing Profile Button is not displayed",
+        isElementVisible(XPATH_ADD_NEW_PRICING_PROFILE));
+
+    backToShipperList();
+    pause3s();
+  }
+
   public void verifyEditPendingProfileIsDisplayed() {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
     clickTabItem(" Pricing and Billing");
@@ -1669,7 +1681,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     waitUntilShipperCreateEditPageIsLoaded();
     tabs.selectTab("Pricing and Billing");
     pricingAndBillingForm.addNewProfile.click();
-    newPricingProfileDialog.waitUntilVisible();
   }
 
   public void verifyStartDateInNewPricingScript() {

@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @EditPricingProfiles @Corporate
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @EditPricingProfiles @Corporate @weam
 
 Feature: Corporate Shipper
 
@@ -253,7 +253,7 @@ Feature: Corporate Shipper
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
     When Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
-    Then Operator verifies Add New Pricing Profile is exists
+    Then Operator verifies that Add New Pricing Profile Button is displayed
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
