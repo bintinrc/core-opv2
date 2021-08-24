@@ -1073,14 +1073,19 @@ public class AllShippersSteps extends AbstractSteps {
     pause10ms();
     NvLogger.info(
         "NADEERA LOG : before : getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE)");
+    takesScreenshot();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
+    takesScreenshot();
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
+    takesScreenshot();
     getWebDriver().get(editSpecificShipperPageURL);
+    takesScreenshot();
     NvLogger.info("NADEERA LOG : after : getWebDriver().get(editSpecificShipperPageURL)");
     allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
     NvLogger.info("NADEERA LOG : after : waitUntilShipperCreateEditPageIsLoaded)");
+    takesScreenshot();
   }
 
   @And("Operator edits shipper with ID and Name {string}")
@@ -1162,6 +1167,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator verifies that Pricing Script is {string} and {string}")
   public void operatorVerifiesThatPricingScriptIsActiveAnd(String status, String status1) {
+    takesScreenshot();
     allShippersPage.verifyPricingScriptIsActive(status, status1);
   }
 
