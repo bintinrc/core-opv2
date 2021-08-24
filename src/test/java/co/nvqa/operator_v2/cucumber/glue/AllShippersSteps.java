@@ -28,6 +28,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
+import co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -579,9 +580,19 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue() {
     try {
       allShippersPage.allShippersCreateEditPage.saveChanges.click();
+      if (allShippersPage.allShippersCreateEditPage.errorSaveDialog.isDisplayed()) {
+        takesScreenshot();
+        String errorMessage = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message
+            .getText();
+        NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
+        if (errorMessage.contains("devsupport@ninjavan.co")) {
+          allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
+          allShippersPage.allShippersCreateEditPage.saveChanges.click();
+        }
+      }
       allShippersPage.allShippersCreateEditPage
           .waitUntilInvisibilityOfToast("All changes saved successfully");
-
+      takesScreenshot();
       Shipper shipper = get(KEY_CREATED_SHIPPER);
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
       openSpecificShipperEditPage(shipper.getLegacyId().toString());
@@ -1011,6 +1022,17 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.editShipper(shipper);
+
+    NvLogger.info("NADEERA before  clickActionButton");
+    allShippersPage.shippersTable.clickActionButton(1, ShippersTable.ACTION_EDIT);
+    NvLogger.info("NADEERA after  clickActionButton");
+    takesScreenshot();
+    allShippersPage.allShippersCreateEditPage.switchToNewWindow();
+    NvLogger.info("NADEERA after  switchToNewWindow");
+    takesScreenshot();
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    takesScreenshot();
+    NvLogger.info("NADEERA after  waitUntilShipperCreateEditPageIsLoaded");
     NvLogger.info("NADEERA after allShippersPage.editShipper(shipper)");
     takesScreenshot();
   }

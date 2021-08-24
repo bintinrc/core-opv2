@@ -363,13 +363,13 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public void editShipper(Shipper shipper) {
     NvLogger.info("NADEERA before  quickSearchShipper");
     quickSearchShipper(getSearchKeyword(shipper));
-    NvLogger.info("NADEERA before  clickActionButton");
-    shippersTable.clickActionButton(1, ACTION_EDIT);
-    NvLogger.info("NADEERA after  clickActionButton");
-    allShippersCreateEditPage.switchToNewWindow();
-    NvLogger.info("NADEERA after  switchToNewWindow");
-    allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
-    NvLogger.info("NADEERA after  waitUntilShipperCreateEditPageIsLoaded");
+//    NvLogger.info("NADEERA before  clickActionButton");
+//    shippersTable.clickActionButton(1, ACTION_EDIT);
+//    NvLogger.info("NADEERA after  clickActionButton");
+//    allShippersCreateEditPage.switchToNewWindow();
+//    NvLogger.info("NADEERA after  switchToNewWindow");
+//    allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+//    NvLogger.info("NADEERA after  waitUntilShipperCreateEditPageIsLoaded");
   }
 
   public void editShipper(Marketplace marketplace) {
