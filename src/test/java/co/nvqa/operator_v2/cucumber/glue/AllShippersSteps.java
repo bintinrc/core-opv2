@@ -1043,7 +1043,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator verifies Add New Pricing Profile Button is displayed")
   public void operatorVerifiesNewPricingProfileExsits() {
-    allShippersPage.allShippersCreateEditPage.checkAddNewPricingProfileButton();
+    allShippersPage.allShippersCreateEditPage.verifyAddNewPricingProfileButtonIsDisplayed();
   }
 
   private void openSpecificShipperEditPage(String shipperLegacyId) {
