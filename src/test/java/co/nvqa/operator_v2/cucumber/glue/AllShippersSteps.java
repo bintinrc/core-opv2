@@ -1353,6 +1353,11 @@ public class AllShippersSteps extends AbstractSteps {
     profilePage.closeProfile();
   }
 
+  @Then("Operator verifies that Add New Pricing Profile Button is displayed")
+  public void operatorVerifiesThatAddNewPricingProfileButtonIsDisplayed() {
+    allShippersPage.verifyAddNewPricingProfileButtonIsDisplayed();
+  }
+
   @And("Operator verifies that Edit Pending Profile is displayed")
   public void operatorVerifiesThatEditPendingProfileIsDisplayed() {
     allShippersPage.verifyEditPendingProfileIsDisplayed();
