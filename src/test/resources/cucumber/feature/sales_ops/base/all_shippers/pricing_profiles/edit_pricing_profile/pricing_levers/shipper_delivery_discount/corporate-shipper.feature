@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @EditPricingProfiles @Corporate @weam
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @EditPricingProfiles @Corporate
 
 Feature: Corporate Shipper
 
