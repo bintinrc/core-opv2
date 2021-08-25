@@ -27,6 +27,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.ErrorSaveDialog;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
@@ -582,10 +583,22 @@ public class AllShippersSteps extends AbstractSteps {
       allShippersPage.allShippersCreateEditPage.saveChanges.click();
       if (allShippersPage.allShippersCreateEditPage.errorSaveDialog.isDisplayed()) {
         takesScreenshot();
-        String errorMessage = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message
-            .getText();
+        ErrorSaveDialog errorSaveDialog = allShippersPage.allShippersCreateEditPage.errorSaveDialog;
+        String errorMessage = errorSaveDialog.message.getText();
         NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
-        if (errorMessage.contains("devsupport@ninjavan.co")) {
+
+        if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
+            .contains("DB constraints")) {
+          NvLogger.info("NADEERA : inside error msg");
+          errorSaveDialog.close();
+          if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
+            NvLogger.info("NADEERA : inside toast");
+            NvLogger.info(
+                "NADEERA : toast msg" + allShippersPage.allShippersCreateEditPage.getToast()
+                    .getText());
+            allShippersPage.allShippersCreateEditPage.closeToast();
+          }
+
           allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
           takesScreenshot();
           allShippersPage.allShippersCreateEditPage.saveChanges.click();
@@ -1082,10 +1095,14 @@ public class AllShippersSteps extends AbstractSteps {
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
     takesScreenshot();
+    NvLogger
+        .info("NADEERA LOG : before : editSpecificShipperPageURLL)" + editSpecificShipperPageURL);
     getWebDriver().get(editSpecificShipperPageURL);
+    NvLogger
+        .info("NADEERA LOG : after : editSpecificShipperPageURLL)" + editSpecificShipperPageURL);
     takesScreenshot();
     NvLogger.info("NADEERA LOG : after : getWebDriver().get(editSpecificShipperPageURL)");
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(120);
     NvLogger.info("NADEERA LOG : after : waitUntilShipperCreateEditPageIsLoaded)");
     takesScreenshot();
   }
