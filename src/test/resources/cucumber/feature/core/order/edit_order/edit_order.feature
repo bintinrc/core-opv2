@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder
+@OperatorV2 @Core @Order @EditOrder @current
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1079,6 +1079,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
 
+  @routing-refactor
   Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Collect COD (uid:2c0df634-56da-4771-8989-fd9e746870bd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -1106,7 +1107,7 @@ Feature: Edit Order
       | transactionMode   | DELIVERY                      |
       | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Collect COD (uid:c763009d-b2b4-4746-9794-272317d96cd6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -1139,6 +1140,7 @@ Feature: Edit Order
       | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
       | driverId          | {ninja-driver-id}             |
 
+  @routing-refactor
   Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Do not Collect COD (uid:6d6c623c-1f06-4d4e-a39d-0ef3226c3547)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -1166,7 +1168,7 @@ Feature: Edit Order
       | transactionMode   | DELIVERY |
       | expectedCodAmount | 0        |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Do not Collect COD (uid:5d1aadd6-394d-4cbd-ad20-7858a8bae9c5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -1348,7 +1350,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-   @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -2049,6 +2051,8 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
@@ -2073,6 +2077,8 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
@@ -2098,6 +2104,8 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all waypoints status is "PENDING"
     And DB Operator verifies all waypoints.route_id & seq_no is NULL
