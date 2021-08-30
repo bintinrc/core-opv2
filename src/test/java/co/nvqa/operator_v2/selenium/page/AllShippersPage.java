@@ -558,6 +558,11 @@ public class AllShippersPage extends OperatorV2SimplePage {
     pause2s();
   }
 
+  public void verifyAddNewPricingProfileButtonIsDisplayed() {
+    waitUntilPageLoaded();
+    allShippersCreateEditPage.verifyAddNewPricingProfileButtonIsDisplayed();
+  }
+
   public void verifyEditPendingProfileIsDisplayed() {
     waitUntilPageLoaded();
     allShippersCreateEditPage.verifyEditPendingProfileIsDisplayed();

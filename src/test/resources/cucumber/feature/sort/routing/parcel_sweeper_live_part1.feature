@@ -309,7 +309,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
   @CloseNewWindows
-  Scenario Outline: Parcel Sweeper Live - With Priority Level - <scenarioName> (<hiptest-uid>)
+  Scenario Outline: Parcel Sweeper Live - With Priority Level - <dataset_name> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
@@ -352,10 +352,10 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
-      | scenarioName           | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | No Priority (1)        | uid:2cf3bc90-c0e0-402f-8638-5c47379bddab | 1             | #f8cf5c                 |
-      | Late Priority (2 - 90) | uid:5c2ba0db-4564-472d-b665-e6a394b0ecee | 50            | #e29d4a                 |
-      | Urgent Priority (91++) | uid:f357f17a-ac88-416f-80c3-e50484c41f4b | 100           | #c65d44                 |
+      | scenarioName           | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex | dataset_name           |
+      | No Priority (1)        | uid:2cf3bc90-c0e0-402f-8638-5c47379bddab | 1             | #f8cf5c                 | No Priority (1)        |
+      | Late Priority (2 - 90) | uid:5c2ba0db-4564-472d-b665-e6a394b0ecee | 50            | #e29d4a                 | Late Priority (2 - 90) |
+      | Urgent Priority (91++) | uid:f357f17a-ac88-416f-80c3-e50484c41f4b | 100           | #c65d44                 | Urgent Priority (91++) |
 
   @CloseNewWindows
   Scenario: Parcel Sweeper Live - RTS Order (uid:b2541a22-8243-41bf-8210-b558c83fb4be)
