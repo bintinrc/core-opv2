@@ -1039,8 +1039,9 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorEditsTheCreatedShipper() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-    allShippersPage.editShipper(shipper);
-
+//    allShippersPage.editShipper(shipper);
+    NvLogger.info("NADEERA before  quickSearchShipper");
+    allShippersPage.quickSearchShipper(allShippersPage.getSearchKeyword(shipper));
     NvLogger.info("NADEERA before  clickActionButton");
     allShippersPage.shippersTable.clickActionButton(1, ShippersTable.ACTION_EDIT);
     NvLogger.info("NADEERA after  clickActionButton");

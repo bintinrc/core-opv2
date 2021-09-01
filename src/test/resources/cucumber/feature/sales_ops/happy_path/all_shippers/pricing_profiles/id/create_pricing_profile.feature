@@ -3,8 +3,8 @@ Feature: All Shippers
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
-  @CloseNewWindows @DeletePricingProfile
+@nadeera
+@CloseNewWindows @DeletePricingProfile
   Scenario: Create Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:855e77b3-1187-4bd2-aeaa-4040074f7894)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
