@@ -181,17 +181,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     String currentWindowHandle = switchToNewWindow();
 
     createNewShipperSteps(shipper);
-    if (errorSaveDialog.isDisplayed() && (errorSaveDialog.message.getText()
-        .contains("devsupport@ninjavan.co")) || errorSaveDialog.message.getText()
-        .contains("DB constraints")) {
-      NvLogger.info("NADEERA : inside error msg");
-      errorSaveDialog.close();
-      if (Objects.nonNull(getToast())) {
-        NvLogger.info("NADEERA : inside toast");
-        NvLogger.info("NADEERA : toast msg" + getToast().getText());
-        closeToast();
+    if (errorSaveDialog.isDisplayed()) {
+      if ((errorSaveDialog.message.getText().contains("devsupport@ninjavan.co"))
+          || errorSaveDialog.message.getText()
+          .contains("DB constraints")) {
+        NvLogger.info("NADEERA : inside error msg");
+        errorSaveDialog.close();
+        if (Objects.nonNull(getToast())) {
+          NvLogger.info("NADEERA : inside toast");
+          NvLogger.info("NADEERA : toast msg" + getToast().getText());
+          closeToast();
+        }
+        createShipper.click();
       }
-      createShipper.click();
     }
 
     waitUntilInvisibilityOfToast("All changes saved successfully");

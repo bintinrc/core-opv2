@@ -4,8 +4,8 @@ Feature: Create Pricing Profile
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
-
-  @CloseNewWindows
+@nadeera
+@CloseNewWindows
   Scenario: Create a new Shipper - Create Pricing Profile (uid:78dadc9d-16ea-429f-88ff-eb472bad435f)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -64,7 +64,7 @@ Feature: Create Pricing Profile
       | isDisableDriverAppReschedule | true            |
       | industryName                 | {industry-name} |
       | salesPerson                  | {sales-person}  |
-
+#@nadeera
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator go to menu Shipper -> All Shippers
