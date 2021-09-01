@@ -5,7 +5,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeletePricingProfile
-  Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
+  Scenario: Create Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper with ID and Name "{shipper-v4-active-expired-pp-legacy-id}-{shipper-v4-active-expired-pp-name}"
     Then Operator verifies that Pricing Script is "Active" and "Expired"
