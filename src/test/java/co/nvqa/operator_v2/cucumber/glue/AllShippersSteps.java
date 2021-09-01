@@ -29,7 +29,6 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.ErrorSaveDialog;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
-import co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -1035,26 +1034,30 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.quickSearchShipper(keyword);
   }
 
+//  @And("Operator edits the created shipper")
+//  public void operatorEditsTheCreatedShipper() {
+//    Shipper shipper = get(KEY_CREATED_SHIPPER);
+//    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+//    allShippersPage.editShipper(shipper);
+//  }
+
   @And("Operator edits the created shipper")
   public void operatorEditsTheCreatedShipper() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-//    allShippersPage.editShipper(shipper);
-    NvLogger.info("NADEERA before  quickSearchShipper");
-    allShippersPage.quickSearchShipper(allShippersPage.getSearchKeyword(shipper));
-    NvLogger.info("NADEERA before  clickActionButton");
-    allShippersPage.shippersTable.clickActionButton(1, ShippersTable.ACTION_EDIT);
-    NvLogger.info("NADEERA after  clickActionButton");
-    takesScreenshot();
-    allShippersPage.allShippersCreateEditPage.switchToNewWindow();
-    NvLogger.info("NADEERA after  switchToNewWindow");
-    takesScreenshot();
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(120);
-    takesScreenshot();
-    NvLogger.info("NADEERA after  waitUntilShipperCreateEditPageIsLoaded");
-    NvLogger.info("NADEERA after allShippersPage.editShipper(shipper)");
-    takesScreenshot();
+
+    String shipperLegacyId = Objects.toString(shipper.getLegacyId(), null);
+    if (Objects.nonNull(shipper.getLegacyId())) {
+      getWebDriver().navigate()
+          .to(f("%s/%s/shippers/%S", TestConstants.OPERATOR_PORTAL_BASE_URL,
+              TestConstants.COUNTRY_CODE, shipperLegacyId));
+    } else {
+      throw new NvTestRuntimeException("Legacy_id is null");
+    }
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    //  allShippersPage.editShipper(shipper);
   }
+
 
   @When("Operator edits the created marketplace sub-shipper")
   public void operatorEditsCreatedMarketplaceSubshipper() {
