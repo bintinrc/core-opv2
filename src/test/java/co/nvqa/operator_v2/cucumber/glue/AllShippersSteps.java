@@ -590,7 +590,10 @@ public class AllShippersSteps extends AbstractSteps {
         if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
             .contains("DB constraints")) {
           NvLogger.info("NADEERA : inside error msg");
-          errorSaveDialog.close();
+          errorSaveDialog.forceClose();
+          NvLogger.info("NADEERA : error closed");
+          takesScreenshot();
+
           if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
             NvLogger.info("NADEERA : inside toast");
             NvLogger.info(
