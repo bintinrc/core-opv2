@@ -552,7 +552,7 @@ Feature: DP Administration - Distribution Points
     And API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
 
   @HardDeleteDp
-  Scenario: Create DP - Auto Reservation Disabled
+  Scenario: Create DP - Auto Reservation Disabled (uid:72a1c15d-3253-4009-bd50-3a9875516380)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
     Given Operator go to menu Distribution Points -> DP Administration
@@ -586,7 +586,7 @@ Feature: DP Administration - Distribution Points
     Then Operator verifies the cut off time is "23:59:59"
 
   @HardDeleteDp
-  Scenario: Edit Existing DP - Auto Reservation to Disabled
+  Scenario: Edit Existing DP - Auto Reservation to Disabled (uid:c3a67ffb-9a8f-4b4f-afa4-066b5c83d8ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
     Given API Operator add new DP for the created DP Partner with the following attributes:
