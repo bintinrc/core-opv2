@@ -1034,30 +1034,12 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.quickSearchShipper(keyword);
   }
 
-//  @And("Operator edits the created shipper")
-//  public void operatorEditsTheCreatedShipper() {
-//    Shipper shipper = get(KEY_CREATED_SHIPPER);
-//    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-//    allShippersPage.editShipper(shipper);
-//  }
-
   @And("Operator edits the created shipper")
   public void operatorEditsTheCreatedShipper() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-
-    String shipperLegacyId = Objects.toString(shipper.getLegacyId(), null);
-    if (Objects.nonNull(shipper.getLegacyId())) {
-      getWebDriver().navigate()
-          .to(f("%s/%s/shippers/%S", TestConstants.OPERATOR_PORTAL_BASE_URL,
-              TestConstants.COUNTRY_CODE, shipperLegacyId));
-    } else {
-      throw new NvTestRuntimeException("Legacy_id is null");
-    }
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
-    //  allShippersPage.editShipper(shipper);
+    allShippersPage.editShipper(shipper);
   }
-
 
   @When("Operator edits the created marketplace sub-shipper")
   public void operatorEditsCreatedMarketplaceSubshipper() {
@@ -1104,7 +1086,7 @@ public class AllShippersSteps extends AbstractSteps {
     takesScreenshot();
     NvLogger
         .info("NADEERA LOG : before : editSpecificShipperPageURLL)" + editSpecificShipperPageURL);
-    getWebDriver().get(editSpecificShipperPageURL);
+    getWebDriver().navigate().to(editSpecificShipperPageURL);
     NvLogger
         .info("NADEERA LOG : after : editSpecificShipperPageURLL)" + editSpecificShipperPageURL);
     takesScreenshot();

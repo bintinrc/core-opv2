@@ -1299,7 +1299,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   private void addNewPricingProfile(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     tabs.selectTab("Pricing and Billing");
     pricingAndBillingForm.addNewProfile.click();
     dialogHeader.waitUntilVisible();
@@ -1448,7 +1448,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void verifyPricingScriptIsActive(String status, String status1) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     clickTabItem(" Pricing and Billing");
 
     String statusText = getText(f(XPATH_PRICING_PROFILE_STATUS, status));
@@ -1464,7 +1464,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void verifyEditPendingProfileIsDisplayed() {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     clickTabItem(" Pricing and Billing");
 
     assertTrue("Edit Pending Profile is not displayed",
@@ -1493,7 +1493,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");

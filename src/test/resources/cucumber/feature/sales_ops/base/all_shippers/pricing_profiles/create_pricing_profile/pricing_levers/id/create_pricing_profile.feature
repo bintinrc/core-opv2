@@ -3,7 +3,7 @@ Feature: Create Pricing Profile - ID
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-#@nadeera
+
   @CloseNewWindows @DeletePricingProfile
   Scenario: Create a new Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:bafe6400-ee59-4068-9e6d-fc3395ac7a8a)
     Given Operator changes the country to "Indonesia"
