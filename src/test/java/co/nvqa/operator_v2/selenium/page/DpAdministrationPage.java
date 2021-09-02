@@ -602,8 +602,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public String getErrorMessage() {
+    waitUntilVisibilityOfElementLocated(XPATH_PUDO_POINT_IFRAME);
     WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
+    waitUntilVisibilityOfElementLocated(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
     String errorMessage = getText(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
     getWebDriver().switchTo().defaultContent();
     return errorMessage;
