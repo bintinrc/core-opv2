@@ -147,7 +147,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public void verifiesPageIsFullyLoaded() {
-    isElementExist(EXISTED_PRESET_SELECTION_XPATH);
+    isElementExistWait1Second(EXISTED_PRESET_SELECTION_XPATH);
   }
 
   public void verifiesOptionIsShown() {
