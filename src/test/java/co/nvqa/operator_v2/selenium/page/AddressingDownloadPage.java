@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -346,6 +347,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     assertTrue("RTS Order Identified", isRtsFound);
   }
 
+  public LocalDateTime getUTC(Date date) {
+    return date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+  }
+
   public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
     /*
      * Returns:
@@ -368,7 +373,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     DateTimeFormatter minuteFormatter = DateTimeFormatter.ofPattern("mm");
 
     int currentMinute = orderCreationLocalDateTime.getMinute();
-    int currentHour = (orderCreationLocalDateTime.minus(Duration.of(1, ChronoUnit.HOURS))).getHour();
+    int currentHour = orderCreationLocalDateTime.getHour();
 
     int currentMinuteFloored = ((int) Math.floor((float) currentMinute / 30)) * 30; // Return 00 or 30
     String currentMinuteFlooredAsString = currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
@@ -485,51 +490,47 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     int resultsCount = Integer.parseInt(resultText.substring(8,9));
     int verificationsPassed = 0;
 
-    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(
-        Duration.of(1, ChronoUnit.HOURS));
+    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
 
     for (int i = 0; i < resultsCount; i++) {
       if (order.getTrackingId().equalsIgnoreCase(trackingIDEl.get(i).getText())) {
         verifyChecklist.put("isTrackingIDFound", true);
       }
 
-      if (order.getToAddress1().equalsIgnoreCase(addressOneEl.get(i).getText())) {
-        verifyChecklist.put("isAddressOneFound", true);
+      if (verifyChecklist.get("isTrackingIDFound")) {
+        if (order.getToAddress1().equalsIgnoreCase(addressOneEl.get(i).getText())) {
+          verifyChecklist.put("isAddressOneFound", true);
+        }
+
+        if (order.getToAddress2().equalsIgnoreCase(addressTwoEl.get(i).getText())) {
+          verifyChecklist.put("isAddressTwoFound", true);
+        }
+
+        NvLogger.infof("Creation time shown in OpV2: %s", createdAtEl.get(i).getText());
+        NvLogger.infof("Creation time from order creation: %s", ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp));
+
+        if (ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp).equals(createdAtEl.get(i).getText())) {
+          verifyChecklist.put("isCreatedAtFound", true);
+        }
+
+        if (order.getToPostcode().equalsIgnoreCase(postcodeEl.get(i).getText())) {
+          verifyChecklist.put("isPostcodeFound", true);
+        }
+
+        if (waypoint.getId() == Long.parseLong(waypointIDEl.get(i).getText())) {
+          verifyChecklist.put("isWaypointIDFound", true);
+        }
+
+        if (waypoint.getLatitude() == Double.parseDouble(latitudeEl.get(i).getText())) {
+          verifyChecklist.put("isLatitudeFound", true);
+        }
+
+        if (waypoint.getLongitude() == Double.parseDouble(longitudeEl.get(i).getText())) {
+          verifyChecklist.put("isLongitudeFound", true);
+        }
+
+        break;
       }
-
-      if (order.getToAddress2().equalsIgnoreCase(addressTwoEl.get(i).getText())) {
-        verifyChecklist.put("isAddressTwoFound", true);
-      }
-
-      NvLogger.infof("Creation time shown in OpV2: %s", createdAtEl.get(i).getText());
-      NvLogger.infof("Creation time from order creation: %s", ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp));
-
-      if (ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp).equals(createdAtEl.get(i).getText())) {
-        verifyChecklist.put("isCreatedAtFound", true);
-      }
-
-      if (order.getToPostcode().equalsIgnoreCase(postcodeEl.get(i).getText())) {
-        verifyChecklist.put("isPostcodeFound", true);
-      }
-
-      if (waypoint.getId() == Long.parseLong(waypointIDEl.get(i).getText())) {
-        verifyChecklist.put("isWaypointIDFound", true);
-      }
-
-      if (waypoint.getLatitude() == Double.parseDouble(latitudeEl.get(i).getText())) {
-        verifyChecklist.put("isLatitudeFound", true);
-      }
-
-      if (waypoint.getLongitude() == Double.parseDouble(longitudeEl.get(i).getText())) {
-        verifyChecklist.put("isLongitudeFound", true);
-      }
-
-      verificationsPassed = verifyChecklist.entrySet()
-          .stream()
-          .filter(map -> map.getValue())
-          .collect(Collectors.toMap(map -> map.getKey(), map -> true)).size();
-
-      if (verificationsPassed >= verifyChecklist.size()) break;
     }
 
     if (verificationsPassed < verifyChecklist.size()) {
@@ -554,8 +555,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         "Getting Exact File Name");
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
-    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(
-        Duration.of(1, ChronoUnit.HOURS));
+    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
