@@ -533,6 +533,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       }
     }
 
+    verificationsPassed = verifyChecklist.entrySet()
+          .stream()
+          .filter(map -> map.getValue())
+          .collect(Collectors.toMap(map -> map.getKey(), map -> true)).size();
+
     if (verificationsPassed < verifyChecklist.size()) {
       Map<String, Boolean> verificationFailed = verifyChecklist.entrySet()
           .stream()
