@@ -6,7 +6,7 @@ Feature: Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario Outline: Inbound parcel at hub on Operator v2 - <orderType> (<hiptest-uid>)
+  Scenario Outline: Inbound parcel at hub on Operator v2 - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -28,12 +28,12 @@ Feature: Global Inbound
     And Operator verify order event on Edit order page using data below:
       | name | HUB INBOUND SCAN |
     Examples:
-      | orderType    | service | hiptest-uid                              |
-      | Normal order | Parcel  | uid:1b29cfe9-33b6-498d-80d0-ac89b4868f81 |
-      | Return order | Return  | uid:2785626f-4012-4a4a-a722-00661a8b4261 |
+      | orderType    | service | hiptest-uid                              | dataset_name |
+      | Normal order | Parcel  | uid:1b29cfe9-33b6-498d-80d0-ac89b4868f81 | Normal order |
+      | Return order | Return  | uid:2785626f-4012-4a4a-a722-00661a8b4261 | Return order |
 
   @CloseNewWindows
-  Scenario Outline: Inbound parcel with changes in size - <size> (<hiptest-uid>)
+  Scenario Outline: Inbound parcel with changes in size - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -59,11 +59,11 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
     Examples:
-      | size | hiptest-uid                              |
-      | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b |
-      | M    | uid:17d8ecb4-414c-4830-a0ee-a3dc9af9e376 |
-      | L    | uid:be495115-41c4-4432-8fdc-6c16638eae98 |
-      | XL   | uid:9bf35d1f-1f78-4a59-a9c6-c5d99acd2f64 |
+      | size | hiptest-uid                              | dataset_name |
+      | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b | S            |
+      | M    | uid:17d8ecb4-414c-4830-a0ee-a3dc9af9e376 | M            |
+      | L    | uid:be495115-41c4-4432-8fdc-6c16638eae98 | L            |
+      | XL   | uid:9bf35d1f-1f78-4a59-a9c6-c5d99acd2f64 | XL           |
 
   @CloseNewWindows
   Scenario: Inbound parcel with changes in weight - Inbound in SG (uid:60912e81-74bf-4d06-a823-909a40c6b9ce)
@@ -312,7 +312,7 @@ Feature: Global Inbound
       | color          | #e86161               |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario Outline: Inbound failed delivery - <Note> (<hiptest-uid>)
+  Scenario Outline: Inbound failed delivery - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -351,12 +351,12 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | FAIL |
     Examples:
-      | Note                       | hiptest-uid                              | failureReasonCodeId | rackColor |
-      | failure_reason_code_id = 1 | uid:cf4d5066-8706-43d4-8eaa-6ff0f6664648 | 1                   | #90EE90   |
-      | failure_reason_code_id = 2 | uid:e1e5fc32-05bb-46a3-81e8-b5d6e9235e7f | 2                   | #FFFFED   |
-      | failure_reason_code_id = 3 | uid:e0789546-619e-47ef-bcff-8b362da04d80 | 3                   | #D8BFD8   |
-      | failure_reason_code_id = 5 | uid:93e4b151-b514-4f4d-8580-bc92f1120319 | 13                  | #90EE90   |
-      | failure_reason_code_id = 6 | uid:6f91726d-ba39-462b-ac0e-e7533d00bd5e | 6                   | #9999FF   |
+      | Note                       | hiptest-uid                              | failureReasonCodeId | rackColor | dataset_name               |
+      | failure_reason_code_id = 1 | uid:cf4d5066-8706-43d4-8eaa-6ff0f6664648 | 1                   | #90EE90   | failure_reason_code_id = 1 |
+      | failure_reason_code_id = 2 | uid:e1e5fc32-05bb-46a3-81e8-b5d6e9235e7f | 2                   | #FFFFED   | failure_reason_code_id = 2 |
+      | failure_reason_code_id = 3 | uid:e0789546-619e-47ef-bcff-8b362da04d80 | 3                   | #D8BFD8   | failure_reason_code_id = 3 |
+      | failure_reason_code_id = 5 | uid:93e4b151-b514-4f4d-8580-bc92f1120319 | 13                  | #90EE90   | failure_reason_code_id = 5 |
+      | failure_reason_code_id = 6 | uid:6f91726d-ba39-462b-ac0e-e7533d00bd5e | 6                   | #9999FF   | failure_reason_code_id = 6 |
 
   @CloseNewWindows
   Scenario: Inbound showing weight discrepancy alert - weight tolerance is not set, lower weight (uid:272f52ce-9443-4510-a7fd-10ff40c28c4c)
@@ -516,7 +516,7 @@ Feature: Global Inbound
       | hubName | {hub-name-3}     |
 
   @CloseNewWindows
-  Scenario Outline: Inbound with Priority Level - <Note> (<hiptest-uid>)
+  Scenario Outline: Inbound with Priority Level - <dataset_name> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -555,10 +555,10 @@ Feature: Global Inbound
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
-      | Note   | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 |
-      | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 |
-      | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 |
+      | Note   | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex | dataset_name |
+      | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 | 1            |
+      | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 | 2 - 90       |
+      | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 | > 90         |
 
   @CloseNewWindows
   Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
