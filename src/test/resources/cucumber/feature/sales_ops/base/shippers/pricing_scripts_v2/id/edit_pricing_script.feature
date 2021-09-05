@@ -6,7 +6,7 @@ Feature: Edit Pricing Script
     And Operator changes the country to "Indonesia"
 
   @DeletePricingScript
-  Scenario Outline: Edit and Check Script - Send is_RTS - Use calculatePricing() - <dataset_name> (<hiptest-uid>)
+  Scenario Outline: Edit and Check Script - Send is_RTS - Use calculatePricing() - ID - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else if (params.from_metadata.l1_tier === "ID_A00002_01") {result.delivery_fee = 8.5;} else {result.delivery_fee = 5 * params.weight;}}return result;} |
