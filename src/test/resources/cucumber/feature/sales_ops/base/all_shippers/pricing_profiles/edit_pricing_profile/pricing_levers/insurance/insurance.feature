@@ -17,7 +17,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
       | comments            | This is a test pricing script               |
     And Operator save changes on Edit Shipper Page
 
-@weam
 Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage (uid:3a379fd3-5464-46a3-817d-123ef0a13e23)
   Given Operator go to menu Shipper -> All Shippers
   And Operator edits shipper "{shipper-v4-dummy-pricing-profile-ins-2-legacy-id}"
