@@ -618,7 +618,7 @@ public class AllShippersSteps extends AbstractSteps {
           allShippersPage.allShippersCreateEditPage.closeToast();
         }
 
-        allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
+        //allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
         takesScreenshot();
         allShippersPage.allShippersCreateEditPage.saveChanges.click();
         takesScreenshot();
