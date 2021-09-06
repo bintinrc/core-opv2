@@ -180,6 +180,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void createNewShipper(Shipper shipper) {
     String currentWindowHandle = switchToNewWindow();
+
     createNewShipperSteps(shipper);
     if (errorSaveDialog.isDisplayed()) {
       String errorMessage = errorSaveDialog.message.getText();

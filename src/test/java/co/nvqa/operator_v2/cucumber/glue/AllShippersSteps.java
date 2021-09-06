@@ -611,14 +611,11 @@ public class AllShippersSteps extends AbstractSteps {
           .contains("DB constraints")) {
         errorSaveDialog.forceClose();
         takesScreenshot();
-
         if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
           NvLogger.info(f("Toast msg is displayed :  %s ",
               allShippersPage.allShippersCreateEditPage.getToast().getText()));
           allShippersPage.allShippersCreateEditPage.closeToast();
         }
-
-        //allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
         takesScreenshot();
         allShippersPage.allShippersCreateEditPage.saveChanges.click();
         takesScreenshot();
