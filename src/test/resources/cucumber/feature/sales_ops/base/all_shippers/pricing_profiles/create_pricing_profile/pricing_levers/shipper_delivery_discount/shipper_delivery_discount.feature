@@ -3,7 +3,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-#@nadeera
+
   @CloseNewWindows @DeletePricingProfile
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
     Given Operator go to menu Shipper -> All Shippers

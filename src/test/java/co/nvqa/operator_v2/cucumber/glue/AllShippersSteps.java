@@ -580,33 +580,7 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue() {
     try {
       allShippersPage.allShippersCreateEditPage.saveChanges.click();
-      if (allShippersPage.allShippersCreateEditPage.errorSaveDialog.isDisplayed()) {
-        takesScreenshot();
-        ErrorSaveDialog errorSaveDialog = allShippersPage.allShippersCreateEditPage.errorSaveDialog;
-        String errorMessage = errorSaveDialog.message.getText();
-        NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
-
-        if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
-            .contains("DB constraints")) {
-          NvLogger.info("NADEERA : inside error msg");
-          errorSaveDialog.forceClose();
-          NvLogger.info("NADEERA : error closed");
-          takesScreenshot();
-
-          if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
-            NvLogger.info("NADEERA : inside toast");
-            NvLogger.info(
-                "NADEERA : toast msg" + allShippersPage.allShippersCreateEditPage.getToast()
-                    .getText());
-            allShippersPage.allShippersCreateEditPage.closeToast();
-          }
-
-          allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
-          takesScreenshot();
-          allShippersPage.allShippersCreateEditPage.saveChanges.click();
-          takesScreenshot();
-        }
-      }
+      closeErrorToastIfDisplayedAndSaveShipper();
       allShippersPage.allShippersCreateEditPage
           .waitUntilInvisibilityOfToast("All changes saved successfully");
       takesScreenshot();
@@ -623,6 +597,32 @@ public class AllShippersSteps extends AbstractSteps {
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
+    }
+  }
+
+  private void closeErrorToastIfDisplayedAndSaveShipper() {
+    if (allShippersPage.allShippersCreateEditPage.errorSaveDialog.isDisplayed()) {
+      takesScreenshot();
+      ErrorSaveDialog errorSaveDialog = allShippersPage.allShippersCreateEditPage.errorSaveDialog;
+      String errorMessage = errorSaveDialog.message.getText();
+      NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
+
+      if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
+          .contains("DB constraints")) {
+        errorSaveDialog.forceClose();
+        takesScreenshot();
+
+        if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
+          NvLogger.info("Toast msg" + allShippersPage.allShippersCreateEditPage.getToast()
+              .getText());
+          allShippersPage.allShippersCreateEditPage.closeToast();
+        }
+
+        allShippersPage.allShippersCreateEditPage.errorSaveDialog.close();
+        takesScreenshot();
+        allShippersPage.allShippersCreateEditPage.saveChanges.click();
+        takesScreenshot();
+      }
     }
   }
 
@@ -1063,7 +1063,6 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private void openSpecificShipperEditPage(String shipperLegacyId) {
-    NvLogger.info("NADEERA LOG : openSpecificShipperEditPage");
     for (String handle : getWebDriver().getWindowHandles()) {
       if (!handle.equals(get(KEY_MAIN_WINDOW_HANDLE))) {
         getWebDriver().switchTo().window(handle);
@@ -1075,24 +1074,13 @@ public class AllShippersSteps extends AbstractSteps {
         TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, shipperLegacyId));
     pause10ms();
-    NvLogger.info(
-        "NADEERA LOG : before : getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE)");
-    //takesScreenshot();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
     takesScreenshot();
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
-    takesScreenshot();
-    NvLogger
-        .info("NADEERA LOG : before : editSpecificShipperPageURLL)" + editSpecificShipperPageURL);
     getWebDriver().navigate().to(editSpecificShipperPageURL);
-    NvLogger
-        .info("NADEERA LOG : after : editSpecificShipperPageURLL)" + editSpecificShipperPageURL);
-    takesScreenshot();
-    NvLogger.info("NADEERA LOG : after : getWebDriver().get(editSpecificShipperPageURL)");
     allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(120);
-    NvLogger.info("NADEERA LOG : after : waitUntilShipperCreateEditPageIsLoaded)");
     takesScreenshot();
   }
 
@@ -1175,7 +1163,6 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator verifies that Pricing Script is {string} and {string}")
   public void operatorVerifiesThatPricingScriptIsActiveAnd(String status, String status1) {
-    takesScreenshot();
     allShippersPage.verifyPricingScriptIsActive(status, status1);
   }
 

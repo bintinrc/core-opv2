@@ -40,8 +40,8 @@ Feature: Edit Pricing Profiles - ID
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | 0 is not a valid discount value |
 
-    #@nadeera
-    @CloseNewWindows
+
+  @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with none Percentage Discount (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers

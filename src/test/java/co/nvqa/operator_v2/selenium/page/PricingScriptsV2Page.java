@@ -67,7 +67,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     } else {
       pricingScriptsV2CreateEditDraftPage.createDraft(script);
     }
-    //pricingScriptsV2CreateEditDraftPage.createDraft(script);
   }
 
   public void checkErrorHeader(String message) {

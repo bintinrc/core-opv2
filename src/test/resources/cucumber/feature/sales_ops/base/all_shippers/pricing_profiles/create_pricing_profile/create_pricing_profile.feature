@@ -64,7 +64,7 @@ Feature: Create Pricing Profile
       | isDisableDriverAppReschedule | true            |
       | industryName                 | {industry-name} |
       | salesPerson                  | {sales-person}  |
-#@nadeera
+
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator go to menu Shipper -> All Shippers
@@ -102,7 +102,6 @@ Feature: Create Pricing Profile
     When Operator adds new pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable
 
-#  @nadeera
   @CloseNewWindows
   Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
     Given Operator go to menu Shipper -> All Shippers

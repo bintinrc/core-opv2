@@ -8,7 +8,6 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     And DB Operator deletes "{shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}" shipper's pricing profiles
 
-#@nadeera
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:9039d1db-af3f-44f6-a851-87353eceefcf)
        #Add new pricing profile and verify - corporate shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"

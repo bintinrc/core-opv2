@@ -179,23 +179,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void createNewShipper(Shipper shipper) {
     String currentWindowHandle = switchToNewWindow();
-
     createNewShipperSteps(shipper);
     if (errorSaveDialog.isDisplayed()) {
-      if ((errorSaveDialog.message.getText().contains("devsupport@ninjavan.co"))
-          || errorSaveDialog.message.getText()
+      String errorMessage = errorSaveDialog.message.getText();
+      if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
           .contains("DB constraints")) {
-        NvLogger.info("NADEERA : inside error msg");
-        errorSaveDialog.close();
+        errorSaveDialog.forceClose();
         if (Objects.nonNull(getToast())) {
-          NvLogger.info("NADEERA : inside toast");
-          NvLogger.info("NADEERA : toast msg" + getToast().getText());
+          NvLogger.info("Toast msg" + getToast().getText());
           closeToast();
         }
         createShipper.click();
       }
     }
-
     waitUntilInvisibilityOfToast("All changes saved successfully");
     String url = getWebDriver().getCurrentUrl();
     shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
