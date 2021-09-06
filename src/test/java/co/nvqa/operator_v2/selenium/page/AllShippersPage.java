@@ -375,7 +375,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
 
-  public String getSearchKeyword(Shipper shipper) {
+  private String getSearchKeyword(Shipper shipper) {
     String shipperName = shipper.getName();
     String shipperLegacyId = Objects.toString(shipper.getLegacyId(), null);
     NvLogger.infof("Created Shipper name : %s ", shipperName);
