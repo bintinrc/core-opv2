@@ -1041,6 +1041,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.editShipper(shipper);
   }
 
+  @When("Operator edits the created corporate sub-shipper")
+  public void editCreatedCorporateSubshipper() {
+    String corporateSubShipperName = get(KEY_SHIPPER_NAME);
+    allShippersPage.searchShipperByNameOnShipperListPage(corporateSubShipperName);
+    allShippersPage.editShipperOnShipperListPage();
+  }
+
   @When("Operator edits the created marketplace sub-shipper")
   public void operatorEditsCreatedMarketplaceSubshipper() {
     Marketplace marketplaceSellerId = get(KEY_MARKETPLACE_SUB_SHIPPER);
@@ -1374,6 +1381,11 @@ public class AllShippersSteps extends AbstractSteps {
     profilePage.clickProfileButton();
     profilePage.changeCountry(country);
     profilePage.closeProfile();
+  }
+
+  @Then("Operator verifies that Add New Pricing Profile Button is displayed")
+  public void operatorVerifiesThatAddNewPricingProfileButtonIsDisplayed() {
+    allShippersPage.verifyAddNewPricingProfileButtonIsDisplayed();
   }
 
   @And("Operator verifies that Edit Pending Profile is displayed")
