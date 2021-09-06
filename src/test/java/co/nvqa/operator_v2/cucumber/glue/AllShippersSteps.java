@@ -613,8 +613,8 @@ public class AllShippersSteps extends AbstractSteps {
         takesScreenshot();
 
         if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
-          NvLogger.info("Toast msg" + allShippersPage.allShippersCreateEditPage.getToast()
-              .getText());
+          NvLogger.info(f("Toast msg is displayed :  %s ",
+              allShippersPage.allShippersCreateEditPage.getToast().getText()));
           allShippersPage.allShippersCreateEditPage.closeToast();
         }
 

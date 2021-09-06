@@ -183,11 +183,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     createNewShipperSteps(shipper);
     if (errorSaveDialog.isDisplayed()) {
       String errorMessage = errorSaveDialog.message.getText();
+      NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
       if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
           .contains("DB constraints")) {
         errorSaveDialog.forceClose();
         if (Objects.nonNull(getToast())) {
-          NvLogger.info("Toast msg" + getToast().getText());
+          NvLogger.info(f("Toast msg is displayed :  %s ", getToast().getText()));
           closeToast();
         }
         createShipper.click();
