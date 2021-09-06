@@ -1829,6 +1829,7 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies the pricing profile is referred to parent shipper {string}")
   public void operatorVerifiesThePricingProfileIsReferredToParentShipper(
       String parentShipperLegacyId) {
+    takesScreenshot();
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
     assertEquals(
         "This is a Marketplace Seller / Corporate Branch that refers to its parent's profile(s). To see cascaded profiles,",
