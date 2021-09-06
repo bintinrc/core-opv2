@@ -6,7 +6,7 @@ Feature: Pricing Scripts V2
     And Operator changes the country to "Indonesia"
 
   @DeletePricingScript
-  Scenario Outline: Create and Check Script with Send is_RTS - Use calculatePricing()- ID (<hiptest-uid>)
+  Scenario Outline: Create and Check Script with Send is_RTS - Use calculatePricing()- ID - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {if (params.from_metadata.l1_tier === "ID_A00007_01") {result.delivery_fee = 3;} else {result.delivery_fee = 5;}}return result;} |
@@ -33,9 +33,9 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
     Examples:
-      | Note        | is_RTS_toggle | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
-      | RTS = True  | Yes           | 3.03       | 0.03 | 3           | 0            | 0      | 0           | OK       | uid:e5f7b563-c157-4152-a16a-83ea2f134d5f |
-      | RTS = False | No            | 1.01       | 0.01 | 1           | 0            | 0      | 0           | OK       | uid:c8a30f4a-fd2a-46f7-9253-c0372e821ed7 |
+      | dataset_name | Note        | is_RTS_toggle | grandTotal | gst  | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
+      | RTS = True   | RTS = True  | Yes           | 3.03       | 0.03 | 3           | 0            | 0      | 0           | OK       | uid:e5f7b563-c157-4152-a16a-83ea2f134d5f |
+      | RTS = False  | RTS = False | No            | 1.01       | 0.01 | 1           | 0            | 0      | 0           | OK       | uid:c8a30f4a-fd2a-46f7-9253-c0372e821ed7 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
