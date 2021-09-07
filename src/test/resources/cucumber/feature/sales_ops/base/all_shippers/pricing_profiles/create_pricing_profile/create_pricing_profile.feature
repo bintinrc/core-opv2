@@ -66,7 +66,7 @@ Feature: Create Pricing Profile
       | salesPerson                  | {sales-person}  |
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
+  Scenario: Create Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -97,7 +97,7 @@ Feature: Create Pricing Profile
     And Operator verifies that Edit Pending Profile is displayed
 
   @CloseNewWindows
-  Scenario: Add New Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
+  Scenario: Create Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable

@@ -182,7 +182,7 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
-  Scenario: Search by Uploading Empty Csv File (uid:3c8f9e4e-ae03-4054-9b4e-b1fecd83bdc5)
+  Scenario: Search by Uploading empty CSV file (uid:3c8f9e4e-ae03-4054-9b4e-b1fecd83bdc5)
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
     Then Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message "Empty csv file detected"
 
