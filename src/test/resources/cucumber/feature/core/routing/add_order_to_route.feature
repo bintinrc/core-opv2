@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @AddOrderToRoute @current
+@OperatorV2 @Core @Routing @AddOrderToRoute
 Feature: Add Order To Route
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -96,7 +96,8 @@ Feature: Add Order To Route
   Scenario: Operator Add Marketplace Sort Order To Route via Add Order To Route Page - RTS = 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -131,7 +132,8 @@ Feature: Add Order To Route
   Scenario: Operator Add Marketplace Sort Order To Route via Add Order To Route Page - RTS = 0
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

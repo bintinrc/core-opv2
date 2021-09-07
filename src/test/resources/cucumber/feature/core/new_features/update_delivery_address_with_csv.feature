@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV @current
+@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV
 Feature: Update Delivery Address with CSV
 
   @LaunchBrowser @ShouldAlwaysRun
