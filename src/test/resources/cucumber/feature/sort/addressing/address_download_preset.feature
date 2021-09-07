@@ -1,7 +1,7 @@
 @Sort @AddressDownload
 Feature: Address Download
 
-  @LaunchBrowser @ShouldAlwaysRun @WIP
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -150,7 +150,6 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-    @WIP
   Scenario: Load Addresses (uid:1d7f5dab-36aa-48a0-861b-22213dc1b491)
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -170,6 +169,6 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file contains all correct data
 
-  @KillBrowser @ShouldAlwaysRun @WIP
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
