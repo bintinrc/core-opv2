@@ -174,10 +174,27 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     shipperInformation.waitUntilClickable(60);
   }
 
+  public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {
+    shipperInformation.waitUntilClickable(timeoutInSeconds);
+  }
+
   public void createNewShipper(Shipper shipper) {
     String currentWindowHandle = switchToNewWindow();
 
     createNewShipperSteps(shipper);
+    if (errorSaveDialog.isDisplayed()) {
+      String errorMessage = errorSaveDialog.message.getText();
+      NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
+      if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
+          .contains("DB constraints")) {
+        errorSaveDialog.forceClose();
+        if (Objects.nonNull(getToast())) {
+          NvLogger.info(f("Toast msg is displayed :  %s ", getToast().getText()));
+          closeToast();
+        }
+        createShipper.click();
+      }
+    }
     waitUntilInvisibilityOfToast("All changes saved successfully");
     String url = getWebDriver().getCurrentUrl();
     shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
@@ -1281,7 +1298,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   private void addNewPricingProfile(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     tabs.selectTab("Pricing and Billing");
     pricingAndBillingForm.addNewProfile.click();
     dialogHeader.waitUntilVisible();
@@ -1430,7 +1447,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void verifyPricingScriptIsActive(String status, String status1) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     clickTabItem(" Pricing and Billing");
 
     String statusText = getText(f(XPATH_PRICING_PROFILE_STATUS, status));
@@ -1457,7 +1474,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void verifyEditPendingProfileIsDisplayed() {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     clickTabItem(" Pricing and Billing");
 
     assertTrue("Edit Pending Profile is not displayed",
@@ -1486,7 +1503,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
