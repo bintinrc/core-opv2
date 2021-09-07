@@ -1035,7 +1035,7 @@ Feature: Create Route Groups
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Group Page - Ninja Pack (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Operator generate 2 Ninja Pack Tracking Id with size "md"
+    And API Operator generate 2 Ninja Pack Tracking Id
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 1                |
       | generateFromAndTo | RANDOM           |
@@ -1078,6 +1078,34 @@ Feature: Create Route Groups
     And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
       | trackingId                                 |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verifies that success toast displayed:
+      | top | Added successfully |
+    And Operator verifies selected General Filters on Create Route Group page:
+      | shipper | {shipper-v4-legacy-id}-{shipper-v4-name} |
+    And Operator verifies selected Transactions Filters on Create Route Group page:
+      | orderServiceType | Parcel Delivery |
+      | deliveryType     | Sameday         |
+
+  @DeleteRouteGroups @DeleteFilterTemplate
+  Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator creates new Route Groups Filter Template using data below:
+      | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
+      | value.shipperIds              | {shipper-v4-legacy-id}                       |
+      | value.orderDetailServiceTypes | PARCEL                                       |
+      | value.deliveryTypeIds         | 4                                            |
+      | value.showTransaction         | true                                         |
+      | value.showReservations        | false                                        |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Group page
+    And Operator click Load Selection on Create Route Group page
+    When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
     Then Operator verifies that success toast displayed:
       | top | Added successfully |
     And Operator verifies selected General Filters on Create Route Group page:
