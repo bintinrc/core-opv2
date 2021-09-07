@@ -3,6 +3,7 @@ Feature: Create Pricing Profile
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    And DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
 
   @CloseNewWindows
   Scenario: Create a new Shipper - Create Pricing Profile (uid:78dadc9d-16ea-429f-88ff-eb472bad435f)
@@ -65,7 +66,7 @@ Feature: Create Pricing Profile
       | salesPerson                  | {sales-person}  |
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
+  Scenario: Create Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -96,7 +97,7 @@ Feature: Create Pricing Profile
     And Operator verifies that Edit Pending Profile is displayed
 
   @CloseNewWindows
-  Scenario: Add New Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
+  Scenario: Create Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
     Then Operator verifies that Start Date is populated as today's date and is not editable
@@ -104,22 +105,7 @@ Feature: Create Pricing Profile
   @CloseNewWindows
   Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
     Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
@@ -138,22 +124,7 @@ Feature: Create Pricing Profile
   @CloseNewWindows
   Scenario: Create Pricing Profile with Use Country Level COD and Insurance (uid:0bee7a3c-9c6c-4260-bd68-21d110d4c40e)
     Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
