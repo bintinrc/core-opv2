@@ -128,6 +128,15 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String CREATION_TIME_FILTER_OK = "//li[@class='ant-picker-ok']/button";
   private static final String ORDER_DATA_CELL_XPATH = "//td[@class='%s']";
 
+  private static final String ORDER_TRACKING_ID_EXISTS = "isTrackingIDFound";
+  private static final String ORDER_ADDRESS_ONE_EXISTS = "isAddressOneFound";
+  private static final String ORDER_ADDRESS_TWO_EXISTS = "isAddressTwoFound";
+  private static final String ORDER_CREATED_AT_EXISTS = "isCreatedAtFound";
+  private static final String ORDER_POSTCODE_EXISTS = "isPostcodeFound";
+  private static final String ORDER_WAYPOINT_ID_EXISTS = "isWaypointIDFound";
+  private static final String ORDER_LATITUDE_EXISTS = "isLatitudeFound";
+  private static final String ORDER_LONGITUDE_EXISTS = "isLongitudeFound";
+
   private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
       .ofPattern("yyyy-MM-dd_HH-mm");
   // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
@@ -476,14 +485,14 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     List<WebElement> longitudeEl= webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
     Map<String, Boolean> verifyChecklist = new HashMap<>();
-    verifyChecklist.put("isTrackingIDFound", false);
-    verifyChecklist.put("isAddressOneFound", false);
-    verifyChecklist.put("isAddressTwoFound", false);
-    verifyChecklist.put("isCreatedAtFound", false);
-    verifyChecklist.put("isPostcodeFound", false);
-    verifyChecklist.put("isWaypointIDFound", false);
-    verifyChecklist.put("isLatitudeFound", false);
-    verifyChecklist.put("isLongitudeFound", false);
+    verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, false);
+    verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, false);
+    verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, false);
+    verifyChecklist.put(ORDER_CREATED_AT_EXISTS, false);
+    verifyChecklist.put(ORDER_POSTCODE_EXISTS, false);
+    verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, false);
+    verifyChecklist.put(ORDER_LATITUDE_EXISTS, false);
+    verifyChecklist.put(ORDER_LONGITUDE_EXISTS, false);
 
     WebElement resultsTextEl = webDriver.findElement(By.xpath("//div[contains(@class, 'ant-card-body')]/span/span[contains(text(), 'Showing')]"));
     String resultText = resultsTextEl.getText();
@@ -494,39 +503,39 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     for (int i = 0; i < resultsCount; i++) {
       if (order.getTrackingId().equalsIgnoreCase(trackingIDEl.get(i).getText())) {
-        verifyChecklist.put("isTrackingIDFound", true);
+        verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, true);
       }
 
       if (verifyChecklist.get("isTrackingIDFound")) {
         if (order.getToAddress1().equalsIgnoreCase(addressOneEl.get(i).getText())) {
-          verifyChecklist.put("isAddressOneFound", true);
+          verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, true);
         }
 
         if (order.getToAddress2().equalsIgnoreCase(addressTwoEl.get(i).getText())) {
-          verifyChecklist.put("isAddressTwoFound", true);
+          verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, true);
         }
 
         NvLogger.infof("Creation time shown in OpV2: %s", createdAtEl.get(i).getText());
         NvLogger.infof("Creation time from order creation: %s", ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp));
 
         if (ADDRESS_DOWNLOAD_DATE_FORMAT.format(orderCreationTimestamp).equals(createdAtEl.get(i).getText())) {
-          verifyChecklist.put("isCreatedAtFound", true);
+          verifyChecklist.put(ORDER_CREATED_AT_EXISTS, true);
         }
 
         if (order.getToPostcode().equalsIgnoreCase(postcodeEl.get(i).getText())) {
-          verifyChecklist.put("isPostcodeFound", true);
+          verifyChecklist.put(ORDER_POSTCODE_EXISTS, true);
         }
 
         if (waypoint.getId() == Long.parseLong(waypointIDEl.get(i).getText())) {
-          verifyChecklist.put("isWaypointIDFound", true);
+          verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, true);
         }
 
         if (waypoint.getLatitude() == Double.parseDouble(latitudeEl.get(i).getText())) {
-          verifyChecklist.put("isLatitudeFound", true);
+          verifyChecklist.put(ORDER_LATITUDE_EXISTS, true);
         }
 
         if (waypoint.getLongitude() == Double.parseDouble(longitudeEl.get(i).getText())) {
-          verifyChecklist.put("isLongitudeFound", true);
+          verifyChecklist.put(ORDER_LONGITUDE_EXISTS, true);
         }
 
         break;
