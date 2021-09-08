@@ -77,6 +77,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     }
     pricingScriptsV2Page.createDraft(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
+    takesScreenshot();
   }
 
   @Then("Operator verify error message in header with {string}")
