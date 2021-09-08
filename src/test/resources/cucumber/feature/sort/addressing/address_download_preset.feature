@@ -150,7 +150,7 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  Scenario: Load Addresses
+  Scenario: Load Addresses (uid:1d7f5dab-36aa-48a0-861b-22213dc1b491)
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
       | shipperV4ClientSecret | {addressing-shipper-v4-client-secret} |
