@@ -5,7 +5,7 @@ Feature: View Tagged Orders
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days
+  Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days (uid:b6a6b1fc-6e70-402d-8646-1f1ce7d02fe9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -26,7 +26,7 @@ Feature: View Tagged Orders
       | granularStatus       | Pending Pickup                  |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule
+  Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule (uid:ed0f7f4b-4158-4044-9a5f-4ae27fb5ed10)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -61,7 +61,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | 1                                   |
       | granularStatus       | Pending Reschedule                  |
 
-  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id,  No Attempt
+  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id,  No Attempt (uid:388b0dc8-f85c-478d-84d0-7e40093c8e34)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -83,7 +83,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | 1                               |
       | granularStatus       | Arrived at Sorting Hub          |
 
-  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id,  No Attempt
+  Scenario: View Tagged Orders - Staging, No Route Id, No Attempt, No Inbound Days (uid:6a174a76-2ec9-4c2b-b3f3-f021a5e87d87)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -103,7 +103,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Staging                         |
 
-  Scenario: View Tagged Orders - On Hold, No Route Id,  No Attempt, No Inbound Days
+  Scenario: View Tagged Orders - On Hold, No Route Id,  No Attempt, No Inbound Days (uid:50e91935-b501-47f7-9877-43cf62e306ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -138,7 +138,7 @@ Feature: View Tagged Orders
       | granularStatus       | On Hold                         |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - DP Delivery Attempted, Arrived at Distribution Point
+  Scenario: View Tagged Orders - DP Delivery Attempted, Arrived at Distribution Point (uid:394ad334-33f9-430e-bd86-0bba014816da)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -173,7 +173,7 @@ Feature: View Tagged Orders
       | granularStatus       | Arrived at Distribution Point       |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - En-route to Sorting Hub, No Route Id,  No Attempt, No Inbound Days
+  Scenario: View Tagged Orders - En-route to Sorting Hub, No Route Id,  No Attempt, No Inbound Days (uid:c85cdc7d-03ad-4d19-9e84-f6a09b3fe923)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -202,7 +202,7 @@ Feature: View Tagged Orders
       | granularStatus       | En-route to Sorting Hub         |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - On Vehicle Delivery, No Attempt
+  Scenario: View Tagged Orders - On Vehicle Delivery, No Attempt (uid:47e71b73-c90e-43f8-86dd-869be076ec5d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -234,7 +234,7 @@ Feature: View Tagged Orders
       | granularStatus       | On Vehicle for Delivery         |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Pending Pickup at Distribution Point, No Route Id, No Attempt, No Inbound Days
+  Scenario: View Tagged Orders - Pending Pickup at Distribution Point, No Route Id, No Attempt, No Inbound Days (uid:006826c7-611c-4212-8e02-fe65c7a32292)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -256,7 +256,7 @@ Feature: View Tagged Orders
       | granularStatus       | Pending Pickup at Distribution Point |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Pickup Fail, No Attempt, No Inbound Days
+  Scenario: View Tagged Orders - Pickup Fail, No Attempt, No Inbound Days (uid:df1fb45b-264f-4689-bbdd-044690c46754)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -289,7 +289,7 @@ Feature: View Tagged Orders
       | granularStatus       | Pickup fail                     |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Van en-route to pickup, No Attempt, No Inbound Days
+  Scenario: View Tagged Orders - Van en-route to pickup, No Attempt, No Inbound Days (uid:77704c4b-9221-4320-9449-8047d4f0159e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

@@ -13,12 +13,12 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMultiselect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -65,13 +66,16 @@ public class RouteLogsPage extends SimpleReactPage {
   @FindBy(css = "md-dialog")
   public UnarchiveSelectedRoutesDialog unarchiveSelectedRoutesDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public BulkEditDetailsDialog bulkEditDetailsDialog;
+
+  @FindBy(css = "div.ant-modal")
+  public BulkRouteOptimisationDialog bulkRouteOptimisationDialog;
 
   @FindBy(css = "md-dialog")
   public EditDetailsDialog editDetailsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public MergeTransactionsWithinSelectedRoutesDialog mergeTransactionsWithinSelectedRoutesDialog;
 
   @FindBy(css = "md-dialog")
@@ -86,25 +90,25 @@ public class RouteLogsPage extends SimpleReactPage {
   @FindBy(css = "input[placeholder='Search for route ID']")
   public TextBox routeIdInput;
 
-  @FindBy(css = "div.view-container md-menu")
-  public MdMenu actionsMenu;
+  @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
+  public AntMenu actionsMenu;
 
-  @FindBy(css = "[id^='container.route-logs.select-tag']")
-  public MdSelect selectTag;
+  @FindBy(css = "div[data-datakey='tags'] div.ant-dropdown-trigger")
+  public AntMultiselect selectTag;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[contains(.,'Route Date')]]")
+  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Route Date')]]")
   public AntIntervalCalendarPicker routeDateFilter;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Hub']]")
+  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Hub')]]")
   public AntFilterSelect hubFilter;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Driver']]")
+  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Driver')]]")
   public AntFilterSelect driverFilter;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Zone']]")
+  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Zone')]]")
   public AntFilterSelect zoneFilter;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[text()='Archived Routes']]")
+  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Archived Routes')]]")
   public AntFilterSwitch archivedRoutesFilter;
 
   @FindBy(id = "crossdock_hub")
@@ -130,7 +134,7 @@ public class RouteLogsPage extends SimpleReactPage {
   public static final String ACTION_ARCHIVE_SELECTED = "Archive Selected";
   public static final String ACTION_UNARCHIVE_SELECTED = "Unarchive Selected";
   public static final String ACTION_BULK_EDIT_DETAILS = "Bulk Edit Details";
-  public static final String ACTION_MERGE_TRANSACTIONS_OF_SELECTED = "Merge Transactions of Selected";
+  public static final String ACTION_MERGE_TRANSACTIONS_OF_SELECTED = "Merge Transactions Of Selected";
   public static final String ACTION_OPTIMISE_SELECTED = "Optimise Selected";
   public static final String ACTION_PRINT_PASSWORDS_OF_SELECTED = "Print Passwords of Selected";
   public static final String ACTION_PRINT_SELECTED = "Print Selected";
@@ -144,20 +148,20 @@ public class RouteLogsPage extends SimpleReactPage {
   public void verifyMultipleRoutesIsOptimisedSuccessfully(
       List<Long> expectedRouteIds) {
     int sizeOfListOfCreateRouteParams = expectedRouteIds.size();
-    String[] arrayOfRouteIdAsString = expectedRouteIds.stream()
-        .map(String::valueOf).toArray(String[]::new);
-    waitUntilVisibilityOfElementLocated(String.format(
-        "//h5[contains(text(), 'Optimized Routes')]/small[contains(text(), '%d of %d route(s) completed')]",
-        sizeOfListOfCreateRouteParams, sizeOfListOfCreateRouteParams));
 
-    for (int i = 1; i <= sizeOfListOfCreateRouteParams; i++) {
-      String actualRouteId = getText(
-          String.format("//tr[@ng-repeat='route in optimizedRoutes'][%d]/td[1]", i));
-      String actualStatus = getText(
-          String.format("//tr[@ng-repeat='route in optimizedRoutes'][%d]/td[2]", i));
-      assertThat("Route ID not found in optimised list.", actualRouteId,
-          isOneOf(arrayOfRouteIdAsString));
-      assertEquals(String.format("Route ID = %s", actualRouteId), "Optimized", actualStatus);
+    bulkRouteOptimisationDialog.waitUntilVisible();
+    String expectedStatus = f("%1$d of %1$d route(s) completed", sizeOfListOfCreateRouteParams);
+    waitUntil(() -> StringUtils.equalsIgnoreCase(
+        bulkRouteOptimisationDialog.optimizedRoutesStatus.getText(),
+        expectedStatus), 10000);
+    pause2s();
+
+    for (int i = 0; i < sizeOfListOfCreateRouteParams; i++) {
+      Long actualRouteId = Long.valueOf(bulkRouteOptimisationDialog.optimizedRouteIds.get(i).getText());
+      String actualStatus = bulkRouteOptimisationDialog.optimizedRouteStatuses.get(i).getText();
+      assertThat("Route ID not found in optimised list.", expectedRouteIds,
+          Matchers.hasItem(actualRouteId));
+      assertEquals(String.format("Route ID = %s", actualRouteId), "PENDING", actualStatus);
     }
   }
 
@@ -226,7 +230,7 @@ public class RouteLogsPage extends SimpleReactPage {
     }
   }
 
-  public static class RoutesTable extends MdVirtualRepeatTable<RouteLogsParams> {
+  public static class RoutesTable extends AntTableV2<RouteLogsParams> {
 
     public static final String COLUMN_ROUTE_ID = "id";
     public static final String COLUMN_STATUS = "status";
@@ -237,20 +241,19 @@ public class RouteLogsPage extends SimpleReactPage {
     public RoutesTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("date", "_date")
+          .put("date", "date")
           .put(COLUMN_ROUTE_ID, "id")
           .put(COLUMN_STATUS, "status")
-          .put("driverName", "_driver-name")
-          .put("routePassword", "route-password")
-          .put("hub", "_hub-name")
-          .put("zone", "_zone-name")
-          .put("driverTypeName", "_driver-type-name")
+          .put("driverName", "driver_name")
+          .put("routePassword", "route_password")
+          .put("hub", "hub_name")
+          .put("zone", "zone_name")
+          .put("driverTypeName", "driver_type")
           .put("comments", "comments")
           .put(COLUMN_TAGS, "tags")
           .build()
       );
       setEntityClass(RouteLogsParams.class);
-      setMdVirtualRepeat("route in getTableData()");
       setColumnReaders(ImmutableMap.of(COLUMN_TAGS, this::getTags));
       setActionButtonsLocators(ImmutableMap.of(
           ACTION_EDIT_DETAILS, "container.route-logs.edit-details",
@@ -259,9 +262,9 @@ public class RouteLogsPage extends SimpleReactPage {
 
     public String getTags(int rowIndex) {
       String xpath = f(
-          "//tr[@md-virtual-repeat='route in getTableData()'][%d]//td[contains(@class,'tags')]//md-select[contains(@aria-label, 'Select Tag:')]",
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tags']//div[contains(@class,'SelectTag')]",
           rowIndex);
-      return isElementExistFast(xpath) ? getText(xpath) : null;
+      return isElementExistFast(xpath) ? StringUtils.join(getTextOfElements(xpath), ",") : null;
     }
   }
 
@@ -285,38 +288,41 @@ public class RouteLogsPage extends SimpleReactPage {
     }
   }
 
-  public static class BulkEditDetailsDialog extends MdDialog {
+  public static class BulkEditDetailsDialog extends AntModal {
 
-    @FindBy(id = "commons.model.route-date")
-    public MdDatepicker routeDate;
+    @FindBy(css = ".ant-calendar-picker")
+    public AntCalendarPicker routeDate;
 
-    @FindBy(css = "[id^='commons.model.route-tags']")
-    public MdSelect routeTags;
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[contains(text(),'Route Tags')]]//div[contains(@class,'ant-dropdown-trigger')]")
+    public AntMultiselect routeTags;
 
-    @FindBy(xpath = "(.//md-autocomplete)[1]")
-    public MdAutocomplete hub;
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Zone']]//div[contains(@class,'ant-select')]")
+    public AntSelect2 zone;
 
-    @FindBy(xpath = "(.//md-autocomplete)[2]")
-    public MdAutocomplete assignedDriver;
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Hub']]//div[contains(@class,'ant-select')]")
+    public AntSelect2 hub;
 
-    @FindBy(xpath = "(.//md-autocomplete)[3]")
-    public MdAutocomplete vehicle;
+    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
+    public AntSelect2 assignedDriver;
 
-    @FindBy(id = "comments")
+    @FindBy(xpath = ".//div[contains(@class,'ant-select-selection')][.//div[.='Vehicle']]")
+    public AntSelect2 vehicle;
+
+    @FindBy(css = "[placeholder='Comment']")
     public TextBox comments;
 
-    @FindBy(name = "commons.save-changes")
-    public NvButtonSave saveChanges;
+    @FindBy(css = "button[data-testid='create-button']")
+    public AntButton saveChanges;
 
     public BulkEditDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class MergeTransactionsWithinSelectedRoutesDialog extends MdDialog {
+  public static class MergeTransactionsWithinSelectedRoutesDialog extends AntModal {
 
-    @FindBy(css = "button[aria-label='Merge Transactions']")
-    public Button mergeTransactions;
+    @FindBy(xpath = ".//button[.='Merge Transactions']")
+    public AntButton mergeTransactions;
 
     public MergeTransactionsWithinSelectedRoutesDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -419,8 +425,8 @@ public class RouteLogsPage extends SimpleReactPage {
       @FindBy(css = ".ant-calendar-picker")
       public AntCalendarPicker routeDate;
 
-      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Tags']]//div[contains(@class,'ant-select')]")
-      public AntSelect2 routeTags;
+      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[contains(text(),'Route Tags')]]//div[contains(@class,'ant-dropdown-trigger')]")
+      public AntMultiselect routeTags;
 
       @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Zone']]//div[contains(@class,'ant-select')]")
       public AntSelect2 zone;
@@ -434,7 +440,7 @@ public class RouteLogsPage extends SimpleReactPage {
       @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][4]//div[contains(@class,'ant-select')]")
       public AntSelect2 vehicle;
 
-      @FindBy(css = "[placeholder='Comments']")
+      @FindBy(css = "[placeholder='Comment']")
       public TextBox comments;
 
       public RouteDetailsForm(WebDriver webDriver, SearchContext searchContext,
@@ -442,6 +448,23 @@ public class RouteLogsPage extends SimpleReactPage {
         super(webDriver, searchContext, webElement);
       }
     }
+  }
+
+  public static class BulkRouteOptimisationDialog extends AntModal {
+
+    @FindBy(css = "div[class*='OptimiseSelected'] > h4 + div")
+    public PageElement optimizedRoutesStatus;
+
+    @FindBy(xpath = "(.//div[@class='BaseTable__body'])[1]//div[@role='row']/div[@role='gridcell'][1]")
+    public List<PageElement> optimizedRouteIds;
+
+    @FindBy(xpath = "(.//div[@class='BaseTable__body'])[1]//div[@role='row']/div[@role='gridcell'][2]")
+    public List<PageElement> optimizedRouteStatuses;
+
+    public BulkRouteOptimisationDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
   }
 
   public static class DeleteRoutesDialog extends MdDialog {

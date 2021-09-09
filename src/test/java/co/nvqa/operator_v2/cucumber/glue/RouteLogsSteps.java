@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
@@ -210,37 +211,36 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("^Operator bulk edits details of created routes using data below:$")
   public void operatorBulkEditDetailsMultipleRoutesUsingDataBelow(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    RouteLogsParams newParams = new RouteLogsParams(data);
+    routeLogsPage.inFrame(() -> {
+      RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
 
-    List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_BULK_EDIT_DETAILS);
+      routeLogsPage.bulkEditDetailsDialog.waitUntilVisible();
+      if (StringUtils.isNotBlank(newParams.getDate())) {
+        routeLogsPage.bulkEditDetailsDialog.routeDate.setValue(newParams.getDate());
+      }
+      if (CollectionUtils.isNotEmpty(newParams.getTags())) {
+        routeLogsPage.bulkEditDetailsDialog.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getHub())) {
+        routeLogsPage.bulkEditDetailsDialog.hub.selectValue(newParams.getHub());
+      }
+      if (StringUtils.isNotBlank(newParams.getDriverName())) {
+        routeLogsPage.bulkEditDetailsDialog.assignedDriver.selectValue(newParams.getDriverName());
+      }
+      if (StringUtils.isNotBlank(newParams.getVehicle())) {
+        routeLogsPage.bulkEditDetailsDialog.vehicle.selectValue(newParams.getVehicle());
+      }
+      if (StringUtils.isNotBlank(newParams.getComments())) {
+        routeLogsPage.bulkEditDetailsDialog.comments.setValue(newParams.getComments());
+      }
+      routeLogsPage.bulkEditDetailsDialog.saveChanges.click();
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_BULK_EDIT_DETAILS);
-    routeLogsPage.bulkEditDetailsDialog.waitUntilVisible();
-    if (StringUtils.isNotBlank(newParams.getDate())) {
-      routeLogsPage.bulkEditDetailsDialog.routeDate.simpleSetValue(newParams.getDate());
-    }
-    if (CollectionUtils.isNotEmpty(newParams.getTags())) {
-      routeLogsPage.bulkEditDetailsDialog.routeTags.selectValues(newParams.getTags());
-    }
-    if (StringUtils.isNotBlank(newParams.getHub())) {
-      routeLogsPage.bulkEditDetailsDialog.hub.selectValue(newParams.getHub());
-    }
-    if (StringUtils.isNotBlank(newParams.getDriverName())) {
-      routeLogsPage.bulkEditDetailsDialog.assignedDriver.selectValue(newParams.getDriverName());
-    }
-    if (StringUtils.isNotBlank(newParams.getVehicle())) {
-      routeLogsPage.bulkEditDetailsDialog.vehicle.selectValue(newParams.getVehicle());
-    }
-    if (StringUtils.isNotBlank(newParams.getComments())) {
-      routeLogsPage.bulkEditDetailsDialog.comments.setValue(newParams.getComments());
-    }
-    routeLogsPage.bulkEditDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    routeLogsPage.bulkEditDetailsDialog.waitUntilInvisible();
-    routeLogsPage.waitUntilInvisibilityOfToast(routeIds.size() + " Route(s) Edited");
   }
 
   @When("^Operator edits details of created route using data below:$")
@@ -278,31 +278,37 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("^Operator merge transactions of created routes$")
   public void operatorMergeTransactionsOfMultipleRoutes() {
-    List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_MERGE_TRANSACTIONS_OF_SELECTED);
+      routeLogsPage.mergeTransactionsWithinSelectedRoutesDialog.waitUntilVisible();
+      routeLogsPage.mergeTransactionsWithinSelectedRoutesDialog.mergeTransactions.click();
+      routeLogsPage.mergeTransactionsWithinSelectedRoutesDialog.waitUntilInvisible();
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_MERGE_TRANSACTIONS_OF_SELECTED);
-    routeLogsPage.mergeTransactionsWithinSelectedRoutesDialog.waitUntilVisible();
-    routeLogsPage.mergeTransactionsWithinSelectedRoutesDialog.mergeTransactions.click();
-    routeLogsPage.mergeTransactionsWithinSelectedRoutesDialog.waitUntilInvisible();
   }
 
   @When("^Operator optimise created routes$")
   public void operatorOptimiseMultipleRoutes() {
-    List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_OPTIMISE_SELECTED);
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_OPTIMISE_SELECTED);
   }
 
   @Then("^Operator verifies created routes are optimised successfully$")
   public void operatorVerifyMultipleRoutesIsOptimisedSuccessfully() {
-    List<Long> listOfCreateRouteParams = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    routeLogsPage.verifyMultipleRoutesIsOptimisedSuccessfully(listOfCreateRouteParams);
+    routeLogsPage.inFrame(() -> {
+      List<Long> listOfCreateRouteParams = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeLogsPage.verifyMultipleRoutesIsOptimisedSuccessfully(listOfCreateRouteParams);
+    });
   }
 
   @When("^Operator print passwords of created routes$")
@@ -820,12 +826,13 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("Operator adds tag {string} to created route")
   public void opAddNewTagToRoute(String newTag) {
-    newTag = resolveValue(newTag);
     Long routeId = get(KEY_CREATED_ROUTE_ID);
-    routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-    routeLogsPage.selectTag.selectValue(newTag);
-    routeLogsPage.click("//nv-table-description"); //to close tag selection popup
-    routeLogsPage.waitUntilInvisibilityOfToast("1 Route(s) Tagged");
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.selectTag.selectValue(resolveValue(newTag));
+      routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
+      routeLogsPage.waitUntilInvisibilityOfNotification("1 Route(s) Tagged", true);
+    });
   }
 
   @When("^Operator deletes created route on Route Logs page$")
@@ -863,11 +870,12 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator verify route details on Route Logs page using data below:")
   public void operatorVerifyRouteDetails(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    RouteLogsParams expected = new RouteLogsParams(data);
-    routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, expected.getId());
-    RouteLogsParams actual = routeLogsPage.routesTable.readEntity(1);
-    expected.compareWithActual(actual);
+    routeLogsPage.inFrame(() -> {
+      RouteLogsParams expected = new RouteLogsParams(resolveKeyValues(data));
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, expected.getId());
+      RouteLogsParams actual = routeLogsPage.routesTable.readEntity(1);
+      expected.compareWithActual(actual);
+    });
   }
 
   @And("Operator verify routes details on Route Logs page using data below:")
@@ -901,7 +909,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
     assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
-    if (waitUntilInvisible) {
+    if (toastInfo != null && waitUntilInvisible) {
       toastInfo.waitUntilInvisible();
     }
   }
@@ -917,9 +925,11 @@ public class RouteLogsSteps extends AbstractSteps {
       do {
         toastInfo = routeLogsPage.noticeNotifications.stream()
             .filter(toast -> {
+              String actualTop = toast.message.getNormalizedText();
+              NvLogger.info("Found notification: " + actualTop);
               String value = finalData.get("top");
               if (StringUtils.isNotBlank(value)) {
-                if (!StringUtils.equalsIgnoreCase(value, toast.message.getNormalizedText())) {
+                if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
                   return false;
                 }
               }
@@ -933,7 +943,7 @@ public class RouteLogsSteps extends AbstractSteps {
             .orElse(null);
       } while (toastInfo == null && new Date().getTime() - start < 20000);
       assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
-      if (waitUntilInvisible) {
+      if (toastInfo != null && waitUntilInvisible) {
         toastInfo.waitUntilInvisible();
       }
     });

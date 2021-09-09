@@ -14,7 +14,7 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
-  private static final String CELL_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
+  private static final String CELL_LOCATOR_PATTERN = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
   private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='actions']//button[.//*[@data-icon='%s']]";
   private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//input";
 
