@@ -12,12 +12,15 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import org.openqa.selenium.Keys;
 
@@ -25,7 +28,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   private AddressingDownloadPage addressingDownloadPage;
 
-  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]";
+  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
 
   public AddressingDownloadSteps() {
   }
@@ -262,7 +265,16 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator selects preset {string}")
   public void operatorSelectsPresetName(String preset) {
-    String presetName = preset.equals("DEFAULT") ? TestConstants.ADDRESSING_PRESET_NAME : preset;
+    String presetName = "";
+
+    if (preset.equals("DEFAULT")) {
+      presetName = TestConstants.ADDRESSING_PRESET_NAME;
+    } else if (preset.equals("CREATED")) {
+      presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+    } else {
+      presetName = preset;
+    }
+
     String presetNameFieldValue = addressingDownloadPage.selectPresetLoadAddresses.getValue();
 
     if (presetNameFieldValue.equals("")) {
@@ -283,12 +295,15 @@ public class AddressingDownloadSteps extends AbstractSteps {
       return;
     }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
+//    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
+    LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
 
     NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
     NvLogger.infof("Order creation time in UTC: %s", orderCreationTimestamp);
 
-    addressingDownloadPage.setCreationTimeDatepicker(addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp));
+    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp);
+
+    addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
   }
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")
