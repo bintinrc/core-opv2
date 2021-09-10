@@ -1,7 +1,7 @@
 @Sort @AddressDownload
 Feature: Address Download
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @WIP
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -160,6 +160,28 @@ Feature: Address Download
     And Operator go to menu Addressing -> Address Download
     And Operator verifies that the page is fully loaded
     When Operator selects preset "DEFAULT"
+    And DB operator gets order details
+    And DB operator gets details for delivery transactions by order id
+    And DB operator gets details for delivery waypoint
+    And Operator input the created order's creation time
+    And Operator clicks on Load Address button
+    Then Operator verifies that the Address Download Table Result contains all basic data
+    When Operator clicks on download csv button on Address Download Page
+    Then Operator verifies that the downloaded csv file contains all correct data
+@WIP
+  Scenario: Download Address by Created Time on New Preset
+    Given API Shipper set Shipper V4 using data below:
+      | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
+      | shipperV4ClientSecret | {addressing-shipper-v4-client-secret} |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Addressing -> Address Download
+    And Operator verifies that the page is fully loaded
+    When Operator clicks on the ellipses
+    And Operator clicks on "create" Preset Option on the Address Download Page
+    And Operator creates a preset using "created_at" filter
+    And Operator selects preset "CREATED"
     And DB operator gets order details
     And DB operator gets details for delivery transactions by order id
     And DB operator gets details for delivery waypoint
