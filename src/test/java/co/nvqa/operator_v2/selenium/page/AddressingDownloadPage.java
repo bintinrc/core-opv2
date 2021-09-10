@@ -117,7 +117,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String ZONE_IDS_DATA_TESTID = "zone_ids";
   private static final String HUB_IDS_DATA_TESTID = "hub_ids";
   private static final String RTS_DATA_TESTID = "rts";
+  private static final String CREATED_AT_TESTID = "created_at";
 
+  private static final String CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD = "//div[contains(@class, 'ant-picker-range')]//input[@placeholder='%s time']";
   private static final String CREATION_TIME_FILTER_DATEPICKER_FIELD = "//div[contains(@class, 'ant-picker-range')]//input[@placeholder='%s date']";
   private static final String CREATION_TIME_FILTER_DROPDOWN = "//div[contains(@class, 'ant-picker-dropdown')]";
   private static final String CREATION_TIME_FILTER_DATEPICKER_YEAR = "//td[contains(@class, 'ant-picker-cell') and @title='%s']";
@@ -202,6 +204,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         click(f(PRESET_SELECTION_XPATH, RTS_DATA_TESTID));
         break;
 
+      case CREATED_AT:
+        click(f(PRESET_SELECTION_XPATH, CREATED_AT_TESTID));
+        break;
+
       default:
         NvLogger.warn("Invalid Address Download Filter Type");
     }
@@ -260,6 +266,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       case RTS_YES:
         filterDropDown.click();
         noRtsOption.click();
+        break;
+
+      case CREATED_AT:
+        setCreatedAtFilter();
         break;
 
       default:
@@ -356,6 +366,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     assertTrue("RTS Order Identified", isRtsFound);
   }
 
+  public void setCreatedAtFilter() {
+    Map<String, String> currentTimeRange = generateDateTimeRange(LocalDateTime.now());
+    setPresetCreationTimeDatepicker(currentTimeRange);
+  }
+
   public LocalDateTime getUTC(Date date) {
     return date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
   }
@@ -407,6 +422,42 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     NvLogger.infof("Set time range to creation time filter to %s:%s - %s:%s", dateTimeRange.get("start_hour"), dateTimeRange.get("start_minute"), dateTimeRange.get("end_hour"), dateTimeRange.get("end_minute"));
 
     return dateTimeRange;
+  }
+
+  public void setPresetCreationTimeDatepicker(Map<String, String> selectedTime) {
+    String startTimepickerFieldXpath = f(CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD, "Start");
+    String endTimepickerFieldXpath = f(CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD, "End");
+
+    String startHourVal = selectedTime.get("start_hour");
+    String startMinuteVal = selectedTime.get("start_minute");
+    String endHourVal = selectedTime.get("end_hour");
+    String endMinuteVal = selectedTime.get("end_minute");
+
+    String startHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, startHourVal);
+    String startMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, startMinuteVal);
+    String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
+    String endMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, endMinuteVal);
+
+    click(startTimepickerFieldXpath);
+    waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
+
+    // Select start hour
+    click(startHourPickerXpath);
+
+    // Select start minute
+    click(startMinutePickerXpath);
+
+    click(endTimepickerFieldXpath);
+    waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
+
+    // Select end hour
+    click(endHourPickerXpath);
+
+    // Select end minute
+    click(endMinutePickerXpath);
+
+    // Click Ok
+    click(CREATION_TIME_FILTER_OK);
   }
 
   public void setCreationTimeDatepicker(Map<String, String> selectedDate) {
@@ -499,7 +550,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     int resultsCount = Integer.parseInt(resultText.substring(8,9));
     int verificationsPassed = 0;
 
-    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+//    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
 
     for (int i = 0; i < resultsCount; i++) {
       if (order.getTrackingId().equalsIgnoreCase(trackingIDEl.get(i).getText())) {
@@ -569,7 +621,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         "Getting Exact File Name");
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
-    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+//    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
