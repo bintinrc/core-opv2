@@ -879,6 +879,7 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When API Operator cancel created order and get error:
@@ -1292,6 +1293,7 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
