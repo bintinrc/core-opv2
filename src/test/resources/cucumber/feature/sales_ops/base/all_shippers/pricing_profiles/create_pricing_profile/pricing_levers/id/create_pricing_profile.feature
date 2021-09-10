@@ -5,7 +5,7 @@ Feature: Create Pricing Profile - ID
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeletePricingProfile
-  Scenario: Create a new Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:bafe6400-ee59-4068-9e6d-fc3395ac7a8a)
+  Scenario: Create Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:bafe6400-ee59-4068-9e6d-fc3395ac7a8a)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
@@ -22,7 +22,7 @@ Feature: Create Pricing Profile - ID
     And Operator verifies the pricing profile and shipper discount details are correct
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
+  Scenario: Create Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -47,7 +47,7 @@ Feature: Create Pricing Profile - ID
       | errorMessage      | 0 is not a valid discount value                 |
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
+  Scenario: Create Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
