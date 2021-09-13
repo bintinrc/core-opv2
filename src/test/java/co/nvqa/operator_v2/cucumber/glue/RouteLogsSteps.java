@@ -7,8 +7,8 @@ import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
-import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteReactDialog;
-import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteReactDialog.RouteDetailsForm;
+import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog;
+import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -79,9 +79,9 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
       routeLogsPage.createRouteReact.click();
-      routeLogsPage.createRouteReactDialog.waitUntilVisible();
+      routeLogsPage.createRouteDialog.waitUntilVisible();
 
-      CreateRouteReactDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteReactDialog.routeDetailsForms
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
           .get(0);
 
       if (StringUtils.isNotBlank(newParams.getDate())) {
@@ -106,7 +106,7 @@ public class RouteLogsSteps extends AbstractSteps {
         routeDetailsForm.comments.setValue(newParams.getComments());
       }
 
-      routeLogsPage.createRouteReactDialog.createRoutes.click();
+      routeLogsPage.createRouteDialog.createRoutes.click();
       routeLogsPage.waitUntilVisibilityOfNotification("1 Route(s) created");
       String toastBottom = routeLogsPage.noticeNotifications.get(0).description.getText();
       newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
@@ -148,10 +148,10 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
       routeLogsPage.createRouteReact.click();
-      routeLogsPage.createRouteReactDialog.waitUntilVisible();
+      routeLogsPage.createRouteDialog.waitUntilVisible();
 
       RouteLogsParams newParams = routeParamsList.get(0);
-      RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteReactDialog.routeDetailsForms
+      RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
           .get(0);
 
       if (StringUtils.isNotBlank(newParams.getDate())) {
@@ -177,14 +177,14 @@ public class RouteLogsSteps extends AbstractSteps {
       }
 
       for (int i = 1; i < routeParamsList.size(); i++) {
-        routeLogsPage.createRouteReactDialog.duplicateAbove.click();
+        routeLogsPage.createRouteDialog.duplicateAbove.click();
         String comments = routeParamsList.get(i).getComments();
         if (StringUtils.isNotBlank(comments)) {
-          routeLogsPage.createRouteReactDialog.routeDetailsForms.get(i).comments.setValue(comments);
+          routeLogsPage.createRouteDialog.routeDetailsForms.get(i).comments.setValue(comments);
         }
       }
 
-      routeLogsPage.createRouteReactDialog.createRoutes.click();
+      routeLogsPage.createRouteDialog.createRoutes.click();
       routeLogsPage.waitUntilVisibilityOfNotification(routeParamsList.size() + " Route(s) Created");
       String toastBottom = routeLogsPage.noticeNotifications.get(0).description.getText();
       newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
@@ -245,35 +245,34 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("^Operator edits details of created route using data below:$")
   public void operatorEditDetailsMultipleRouteUsingDataBelow(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    RouteLogsParams newParams = new RouteLogsParams(data);
+    routeLogsPage.inFrame(() -> {
+      RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
 
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-    routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
-    routeLogsPage.editDetailsDialog.waitUntilVisible();
+      Long routeId = get(KEY_CREATED_ROUTE_ID);
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
+      routeLogsPage.editDetailsDialog.waitUntilVisible();
 
-    if (StringUtils.isNotBlank(newParams.getDate())) {
-      routeLogsPage.editDetailsDialog.routeDate.simpleSetValue(newParams.getDate());
-    }
-    if (CollectionUtils.isNotEmpty(newParams.getTags())) {
-      routeLogsPage.editDetailsDialog.routeTags.selectValues(newParams.getTags());
-    }
-    if (StringUtils.isNotBlank(newParams.getHub())) {
-      routeLogsPage.editDetailsDialog.hub.selectValue(newParams.getHub());
-    }
-    if (StringUtils.isNotBlank(newParams.getDriverName())) {
-      routeLogsPage.editDetailsDialog.assignedDriver.selectValue(newParams.getDriverName());
-    }
-    if (StringUtils.isNotBlank(newParams.getVehicle())) {
-      routeLogsPage.editDetailsDialog.vehicle.selectValue(newParams.getVehicle());
-    }
-    if (StringUtils.isNotBlank(newParams.getComments())) {
-      routeLogsPage.editDetailsDialog.comments.setValue(newParams.getComments());
-    }
-    routeLogsPage.editDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    routeLogsPage.editDetailsDialog.waitUntilInvisible();
-    routeLogsPage.waitUntilInvisibilityOfToast("1 Route(s) Edited");
+      if (StringUtils.isNotBlank(newParams.getDate())) {
+        routeLogsPage.editDetailsDialog.routeDate.setValue(newParams.getDate());
+      }
+      if (CollectionUtils.isNotEmpty(newParams.getTags())) {
+        routeLogsPage.editDetailsDialog.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getHub())) {
+        routeLogsPage.editDetailsDialog.hub.selectValue(newParams.getHub());
+      }
+      if (StringUtils.isNotBlank(newParams.getDriverName())) {
+        routeLogsPage.editDetailsDialog.assignedDriver.selectValue(newParams.getDriverName());
+      }
+      if (StringUtils.isNotBlank(newParams.getVehicle())) {
+        routeLogsPage.editDetailsDialog.vehicle.selectValue(newParams.getVehicle());
+      }
+      if (StringUtils.isNotBlank(newParams.getComments())) {
+        routeLogsPage.editDetailsDialog.comments.setValue(newParams.getComments());
+      }
+      routeLogsPage.editDetailsDialog.saveChanges.click();
+    });
   }
 
   @When("^Operator merge transactions of created routes$")
@@ -313,13 +312,14 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("^Operator print passwords of created routes$")
   public void operatorPrintPasswordsOfMultipleRoutes() {
-    List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_PRINT_PASSWORDS_OF_SELECTED);
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_PRINT_PASSWORDS_OF_SELECTED);
-    routeLogsPage.waitUntilInvisibilityOfToast("Downloading routes_password");
   }
 
   @Then("^Operator verify printed passwords of selected routes info is correct$")
@@ -330,78 +330,81 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("^Operator print created routes$")
   public void operatorPrintMultipleRoutes() {
-    List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_PRINT_SELECTED);
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_PRINT_SELECTED);
-    routeLogsPage.waitUntilInvisibilityOfToast("Downloading route_printout");
   }
 
   @When("^Operator verifies created routes are printed successfully$")
   public void operatorVerifyMultipleRoutesIsPrintedSuccessfully() {
-    routeLogsPage.verifyMultipleRoutesIsPrintedSuccessfully();
+    String latestFilenameOfDownloadedPdf = routeLogsPage.getLatestDownloadedFilename(
+        "route_printout");
+    routeLogsPage.verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
   }
 
   @When("^Operator archive routes on Route Logs page:$")
   public void operatorArchiveMultipleRoutes(List<String> routeIds) {
-    routeIds = resolveValues(routeIds);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      resolveValues(routeIds).forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_ARCHIVE_SELECTED);
+      routeLogsPage.archiveSelectedRoutesDialog.waitUntilVisible();
+      routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_ARCHIVE_SELECTED);
-    routeLogsPage.archiveSelectedRoutesDialog.waitUntilVisible();
-    routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
-    routeLogsPage.archiveSelectedRoutesDialog.waitUntilInvisible();
-    routeLogsPage.waitUntilInvisibilityOfToast(routeIds.size() + " Route(s) Archived");
   }
 
   @When("^Operator delete routes on Route Logs page:$")
   public void operatorDeleteMultipleRoutes(List<String> routeIds) {
-    routeIds = resolveValues(routeIds);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      resolveValues(routeIds).forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_DELETE_SELECTED);
+      routeLogsPage.deleteRoutesDialog.waitUntilVisible();
+      routeLogsPage.deleteRoutesDialog.delete.click();
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_DELETE_SELECTED);
-    routeLogsPage.deleteRoutesDialog.waitUntilVisible();
-    routeLogsPage.deleteRoutesDialog.delete.click();
-    routeLogsPage.deleteRoutesDialog.waitUntilInvisible();
-    routeLogsPage.waitUntilInvisibilityOfToast(routeIds.size() + " Route(s) Deleted");
   }
 
   @When("^Operator unarchive routes on Route Logs page:$")
   public void operatorUnarchiveMultipleRoutes(List<String> routeIds) {
-    routeIds = resolveValues(routeIds);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      resolveValues(routeIds).forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_UNARCHIVE_SELECTED);
+      routeLogsPage.unarchiveSelectedRoutesDialog.waitUntilVisible();
+      routeLogsPage.unarchiveSelectedRoutesDialog.unarchiveRoutes.click();
     });
-    routeLogsPage.actionsMenu.selectOption(ACTION_UNARCHIVE_SELECTED);
-    routeLogsPage.unarchiveSelectedRoutesDialog.waitUntilVisible();
-    routeLogsPage.unarchiveSelectedRoutesDialog.unarchiveRoutes.click();
-    routeLogsPage.unarchiveSelectedRoutesDialog.waitUntilInvisible();
-    routeLogsPage.waitUntilInvisibilityOfToast(routeIds.size() + " Route(s) Unarchived");
   }
 
   @When("^Operator save data of created routes on Route Logs page$")
   public void operatorSaveRouteData() {
-    List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-    List<RouteLogsParams> params = routeIds.stream().map(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      return routeLogsPage.routesTable.readEntity(1);
-    }).collect(Collectors.toList());
-    put(KEY_LIST_OF_CREATE_ROUTE_PARAMS, params);
+    routeLogsPage.inFrame(() -> {
+      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      List<RouteLogsParams> params = routeIds.stream().map(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        return routeLogsPage.routesTable.readEntity(1);
+      }).collect(Collectors.toList());
+      put(KEY_LIST_OF_CREATE_ROUTE_PARAMS, params);
+    });
   }
 
   @Then("^Operator verify routes are deleted successfully:$")
   public void operatorVerifyMultipleRoutesIsDeletedSuccessfully(List<String> routeIds) {
-    routeIds = resolveValues(routeIds);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      assertTrue("Route " + routeId + " was deleted", routeLogsPage.routesTable.isTableEmpty());
+    routeLogsPage.inFrame(() -> {
+      resolveValues(routeIds).forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        assertTrue("Route " + routeId + " was deleted", routeLogsPage.routesTable.isEmpty());
+      });
     });
   }
 
@@ -768,11 +771,13 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
   public void loadWaypointsOfSelectedRoute() {
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-    routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
-    routeLogsPage.editRoutesDialog.waitUntilVisible();
-    routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
+    routeLogsPage.inFrame(() -> {
+      Long routeId = get(KEY_CREATED_ROUTE_ID);
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
+      routeLogsPage.editRoutesDialog.waitUntilVisible();
+      routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
+    });
   }
 
   @Then("Operator is redirected to this page {string}")
@@ -831,22 +836,22 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.selectTag.selectValue(resolveValue(newTag));
       routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
-      routeLogsPage.waitUntilInvisibilityOfNotification("1 Route(s) Tagged", true);
     });
   }
 
   @When("^Operator deletes created route on Route Logs page$")
   public void opDeleteDeleteRoute() {
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-    routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
-    routeLogsPage.editDetailsDialog.waitUntilVisible();
-    routeLogsPage.editDetailsDialog.delete.click();
-    routeLogsPage.deleteRoutesDialog.waitUntilVisible();
-    pause500ms();
-    routeLogsPage.deleteRoutesDialog.delete.click();
-    routeLogsPage.deleteRoutesDialog.waitUntilInvisible();
-    routeLogsPage.waitUntilInvisibilityOfToast("1 Route(s) Deleted");
+    routeLogsPage.inFrame(() -> {
+      Long routeId = get(KEY_CREATED_ROUTE_ID);
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
+      routeLogsPage.editDetailsDialog.waitUntilVisible();
+      routeLogsPage.editDetailsDialog.delete.click();
+      routeLogsPage.deleteRoutesDialog.waitUntilVisible();
+      pause500ms();
+      routeLogsPage.deleteRoutesDialog.delete.click();
+      routeLogsPage.deleteRoutesDialog.waitUntilInvisible();
+    });
   }
 
   @And("Operator open Route Manifest of created route from Route Logs page")
@@ -865,6 +870,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.waitUntilLoaded();
       routeLogsPage.routeIdInput.setValue(resolveValue(routeId));
       routeLogsPage.search.click();
+      routeLogsPage.waitUntilLoaded(5);
     });
   }
 
@@ -914,7 +920,8 @@ public class RouteLogsSteps extends AbstractSteps {
     }
   }
 
-  @And("Operator verifies that success react notification displayed:")
+  @Then("Operator verifies that success react notification displayed:")
+  @And("Operator verifies that error react notification displayed:")
   public void operatorVerifySuccessReactToast(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
       Map<String, String> finalData = resolveKeyValues(data);
@@ -1021,45 +1028,48 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @Then("Operator verify {string} process data in Selection Error dialog on Route Logs page:")
   public void verifySelectionErrors(String process, List<Map<String, String>> data) {
-    process = resolveValue(process);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.selectionErrorDialog.waitUntilVisible();
+      assertEquals("Process", resolveValue(process),
+          routeLogsPage.selectionErrorDialog.process.getText().replace("Process", "").trim());
 
-    routeLogsPage.selectionErrorDialog.waitUntilVisible();
-    assertEquals("Process", process, routeLogsPage.selectionErrorDialog.process.getText());
+      assertEquals("Number Of routes", data.size(),
+          routeLogsPage.selectionErrorDialog.routeIds.size());
 
-    assertEquals("Number Of routes", data.size(),
-        routeLogsPage.selectionErrorDialog.routeIds.size());
-
-    for (int i = 0; i < data.size(); i++) {
-      Map<String, String> expected = resolveKeyValues(data.get(i));
-      String routeId = expected.get("routeId");
-      String reason = expected.get("reason");
-      int routeIndex = -1;
-      for (int j = 0; j < data.size(); j++) {
-        if (StringUtils
-            .equals(routeId, routeLogsPage.selectionErrorDialog.routeIds.get(i).getText())) {
-          routeIndex = i;
-          break;
+      for (int i = 0; i < data.size(); i++) {
+        Map<String, String> expected = resolveKeyValues(data.get(i));
+        String routeId = expected.get("routeId");
+        String reason = expected.get("reason");
+        int routeIndex = -1;
+        for (int j = 0; j < data.size(); j++) {
+          if (StringUtils
+              .equals(routeId, routeLogsPage.selectionErrorDialog.routeIds.get(i).getText())) {
+            routeIndex = i;
+            break;
+          }
         }
+        assertTrue(f("Route %s found", routeId), routeIndex >= 0);
+        assertEquals(f("Reason for route %s", routeId), reason,
+            routeLogsPage.selectionErrorDialog.reasons.get(i).getText());
       }
-      assertTrue(f("Route %s found", routeId), routeIndex >= 0);
-      assertEquals(f("Reason for route %s", routeId), reason,
-          routeLogsPage.selectionErrorDialog.reasons.get(i).getText());
-    }
+    });
   }
 
   @When("Operator select {string} for given routes on Route Logs page:")
   public void operatorSelectAction(String action, List<String> routeIds) {
-    action = resolveValue(action);
-    routeIds = resolveValues(routeIds);
-    routeIds.forEach(routeId -> {
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.selectRow(1);
+    routeLogsPage.inFrame(() -> {
+      resolveValues(routeIds).forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(resolveValue(action));
     });
-    routeLogsPage.actionsMenu.selectOption(action);
   }
 
   @Then("Operator clicks 'Continue' button in Selection Error dialog on Route Logs page")
   public void clickContinue() {
-    routeLogsPage.selectionErrorDialog.continueBtn.click();
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.selectionErrorDialog.continueBtn.click();
+    });
   }
 }
