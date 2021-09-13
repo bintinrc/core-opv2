@@ -2552,7 +2552,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | userId | automation@ninjavan.co |
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
-  Scenario: Van Inbound Scan for Trip with Driver(s) in Transit using 2 tabs (Validation at Start&End Inbound) (uid:2bae42b6-23d5-4f01-ae18-d1bf0262badd)
+  Scenario: Van Inbound Scan for Trip with Driver in Transit using 2 tabs (Validation at Start&End Inbound) (uid:2bae42b6-23d5-4f01-ae18-d1bf0262badd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates 3 new Hub using data below:
