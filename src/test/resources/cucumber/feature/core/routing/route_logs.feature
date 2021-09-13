@@ -7,7 +7,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create a Single Route from Route Logs Page (uid:76362592-6316-4521-a835-dbe10a1b2f12)
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     When Operator create new route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd} |
       | tags       | {route-tag-name}                 |
@@ -33,7 +33,7 @@ Feature: Route Logs
   @DeleteOrArchiveRoute
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     When Operator create multiple routes using data below:
       | numberOfRoute | 2                                |
       | date          | {gradle-current-date-yyyy-MM-dd} |
@@ -58,7 +58,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -71,6 +71,9 @@ Feature: Route Logs
       | driverName | {ninja-driver-2-name}                   |
       | vehicle    | {vehicle-name}                          |
       | comments   | Route has been edited by automated test |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Updated |
+      | waitUntilInvisible | true               |
     Then Operator verify routes details on Route Logs page using data below:
       | date                             | id                                | driverName            | hub        | driverTypeName       | comments                                | tags             |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
@@ -92,14 +95,14 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 2 Routes Merged                                        |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 2 Routes Merged                                          |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
   @DeleteOrArchiveRoute
@@ -117,7 +120,7 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -132,13 +135,15 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator save data of created routes on Route Logs page
     And Operator print passwords of created routes
+    Then Operator verifies that success react notification displayed:
+      | top | Downloaded file routes_password.pdf... |
     Then Operator verify printed passwords of selected routes info is correct
 
   @DeleteOrArchiveRoute
@@ -148,13 +153,15 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    When Operator print created routes
-    Then Operator verifies created routes are printed successfully
+    And Operator print created routes
+    Then Operator verifies that success react notification displayed:
+      | top | Downloaded file route_printout.pdf... |
+    And Operator verifies created routes are printed successfully
 
   @DeleteOrArchiveRoute
   Scenario: Operator Archive Multiple Routes from Route Logs Page (uid:885b74a1-bcc4-48a7-a9df-fb5392e92971)
@@ -163,7 +170,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -171,6 +178,9 @@ Feature: Route Logs
     And Operator archive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Archived |
+      | waitUntilInvisible | true                |
     Then Operator verify routes details on Route Logs page using data below:
       | id                                | status   |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | ARCHIVED |
@@ -183,7 +193,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -191,6 +201,9 @@ Feature: Route Logs
     When Operator delete routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Deleted |
+      | waitUntilInvisible | true               |
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
@@ -200,7 +213,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs
+    And Operator go to menu Routing -> Route Logs V2
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -208,17 +221,18 @@ Feature: Route Logs
     And Operator edits details of created route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | tags       | {route-tag-name}                        |
-      | zone       | {zone-name}                             |
-      | hub        | {hub-name}                              |
+      | hub        | {hub-name-2}                            |
       | driverName | {ninja-driver-2-name}                   |
-      | vehicle    | {vehicle-name}                          |
       | comments   | Route has been edited by automated test |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Updated |
+      | waitUntilInvisible | true               |
     Then Operator verify route details on Route Logs page using data below:
       | date           | {gradle-current-date-yyyy-MM-dd}        |
       | id             | {KEY_CREATED_ROUTE_ID}                  |
       | status         | PENDING                                 |
       | driverName     | {ninja-driver-2-name}                   |
-      | hub            | {hub-name}                              |
+      | hub            | {hub-name-2}                            |
       | zone           | {zone-name}                             |
       | driverTypeName | {driver-type-name-2}                    |
       | comments       | Route has been edited by automated test |
@@ -229,12 +243,15 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator adds tag "{route-tag-name}" to created route
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Tagged |
+      | waitUntilInvisible | true              |
     Then Operator verify route details on Route Logs page using data below:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
@@ -244,13 +261,16 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator deletes created route on Route Logs page
-    Then Operator verify routes are deleted successfully:
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Deleted |
+      | waitUntilInvisible | true               |
+    And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
 
   @DeleteOrArchiveRoute @CloseNewWindows
@@ -258,20 +278,20 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
-    Then Operator is redirected to this page "/sg/zonal-routing/edit?ids={KEY_CREATED_ROUTE_ID}&unrouted=false&cluster=true"
+    Then Operator is redirected to this page "/sg/zonal-routing/edit?cluster=true&ids={KEY_CREATED_ROUTE_ID}&unrouted=false"
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Route by Route Id on Route Logs Page (uid:273b5063-c85e-47a1-bada-f50d3f755541)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
     Then Operator verify route details on Route Logs page using data below:
       | date           | {gradle-current-date-yyyy-MM-dd} |
@@ -289,14 +309,17 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator unarchive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    Then Operator verify routes details on Route Logs page using data below:
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Unarchived |
+      | waitUntilInvisible | true                  |
+    And Operator verify routes details on Route Logs page using data below:
       | id                                | status      |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
 
@@ -310,7 +333,7 @@ Feature: Route Logs
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -318,6 +341,9 @@ Feature: Route Logs
     When Operator unarchive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Unarchived |
+      | waitUntilInvisible | true                  |
     Then Operator verify routes details on Route Logs page using data below:
       | id                                | status      |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
@@ -328,7 +354,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -339,7 +365,7 @@ Feature: Route Logs
       | routeId                           | reason                   |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | Invalid status to change |
     When Operator clicks 'Continue' button in Selection Error dialog on Route Logs page
-    Then Operator verifies that error toast displayed:
+    Then Operator verifies that error react notification displayed:
       | top    | Unable to apply actions |
       | bottom | No valid selection      |
 
@@ -350,7 +376,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -363,7 +389,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | Invalid status to change |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | Invalid status to change |
     When Operator clicks 'Continue' button in Selection Error dialog on Route Logs page
-    Then Operator verifies that error toast displayed:
+    Then Operator verifies that error react notification displayed:
       | top    | Unable to apply actions |
       | bottom | No valid selection      |
 
@@ -382,14 +408,14 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -413,14 +439,14 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -444,14 +470,14 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -475,14 +501,14 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -506,14 +532,14 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -537,14 +563,14 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -576,14 +602,14 @@ Feature: Route Logs
       | orderId                           | addParcelToRouteRequest |
       | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | { "type":"DD" }         |
       | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"DD" }         |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 1 Routes Merged     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies Pickup transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -617,14 +643,14 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"DD" }         |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 2 Routes Merged                                        |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 2 Routes Merged                                          |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     And API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
@@ -635,7 +661,7 @@ Feature: Route Logs
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Route Logs Page (uid:f259e5b1-5e98-4672-9b9f-ebf34bd3470f)
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
       | routeDateTo    | {gradle-current-date-dd/MM/yyyy}   |
@@ -756,6 +782,22 @@ Feature: Route Logs
       | top    | 1 filter preset deleted            |
       | bottom | ID: {KEY_ROUTES_FILTERS_PRESET_ID} |
     And DB Operator verifies "{KEY_ROUTES_FILTERS_PRESET_ID}" filter preset is deleted
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Remove Tag of a Single Route on Route Logs Page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
+    When Operator go to menu Routing -> Route Logs V2
+    And Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator adds tag "{route-tag-name}" to created route
+    Then Operator verify route details on Route Logs page using data below:
+      | id   | {KEY_CREATED_ROUTE_ID} |
+      | tags | {route-tag-name}       |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

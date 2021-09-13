@@ -453,8 +453,8 @@ Feature: Failed Delivery Management
       | address.name     | Compassvale Drive                                                              |
       | address.country  | Singapore                                                                      |
       | address.city     | Singapore                                                                      |
-      | address.address1 | BLOCK 216C COMPASSVALE DRIVE                                                   |
-      | address.postcode | 543216                                                                         |
+      | address.address1 | BLOCK 212A COMPASSVALE DRIVE                                                   |
+      | address.postcode | 541212                                                                         |
     Then Operator verify failed delivery order RTS-ed successfully
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
