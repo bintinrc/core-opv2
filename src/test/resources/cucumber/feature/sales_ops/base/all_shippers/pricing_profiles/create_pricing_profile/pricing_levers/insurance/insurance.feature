@@ -212,7 +212,7 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
       | insuranceThreshold | 10000000000                                     |
       | errorMessage       | Value cannot exceed 10 figures.                 |
 
-  Scenario: Create Pricing Profile with Shipper Insurance Fee and “Up to 10 digits” Insurance Threshold (uid:ae509551-6fc3-4a91-b8dc-264d19793b40)
+  Scenario Outline: Create Pricing Profile with Shipper Insurance Fee and “Up to 10 digits” Insurance Threshold - <dataset_name> (<hiptest-uid>)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-ins-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -221,28 +221,15 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
       | discount            | 20                                          |
       | insuranceMinFee     | 1.2                                         |
       | insurancePercentage | 3                                           |
-      | insuranceThreshold  | 1000000000                                  |
+      | insuranceThreshold  | <value_threshold>                           |
       | comments            | This is a test pricing script               |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing profile and shipper discount details
     Then Operator verifies the pricing profile and shipper discount details are correct
-    And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details in the database
-
-  Scenario: Create Pricing Profile with Shipper Insurance Fee and “Up to 10 digits” Insurance Threshold (uid:a359c010-4036-4975-96eb-eb99df587d1d)
-    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-ins-legacy-id}"
-    When Operator adds new Shipper's Pricing Profile
-      | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
-      | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
-      | type                | FLAT                                        |
-      | discount            | 20                                          |
-      | insuranceMinFee     | 1.2                                         |
-      | insurancePercentage | 3                                           |
-      | insuranceThreshold  | 1000000000.0                                |
-      | comments            | This is a test pricing script               |
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And DB Operator fetches pricing profile and shipper discount details
-    Then Operator verifies the pricing profile and shipper discount details are correct
+    Examples:
+      | value_threshold | dataset_name    | hiptest-uid                              |
+      | 10000000        | Without Decimal | uid:dfa6a412-f5f0-4220-b2fe-2ae6f069ba25 |
+      | 1000000000.00   | Exclude Decimal | uid:d0f343f8-f898-4295-a59f-ed565dba4a50 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
