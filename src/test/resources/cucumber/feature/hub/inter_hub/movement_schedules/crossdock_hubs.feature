@@ -328,25 +328,6 @@ Feature: Crossdock Hubs
     Then Operator verifies a new schedule is created on Movement Management page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
-  Scenario: Create New Crossdock Movement Schedule - Origin Crossdock Hub same with Destination Crossdock Hub (uid:5086569b-7db9-495b-a3e3-f7e8c0a94ff1)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
-    When Operator go to menu Inter-Hub -> Movement Schedules
-    And Movement Management page is loaded
-    And Operator opens Add Movement Schedule modal on Movement Management page
-    And Operator fill Add Movement Schedule form using data below:
-      | schedules[1].originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-    Then Operator can not select "{KEY_LIST_OF_CREATED_HUBS[1].name}" destination crossdock hub on Add Movement Schedule dialog
-
-  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cancel Create New Crossdock Movement Schedule (uid:5c65e255-6ea6-4049-99ba-f1e1d92b33c6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
