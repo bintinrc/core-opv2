@@ -174,6 +174,30 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(id = "pickup-details")
   public PickupDetailsBox pickupDetailsBox;
 
+  @FindBy(xpath = "//label[text()='Total']/following-sibling::p")
+  public PageElement totalPrice;
+
+  @FindBy(xpath = "//label[text()='Delivery Fee']/following-sibling::p")
+  public PageElement deliveryFee;
+
+  @FindBy(xpath = "//label[text()='COD Fee']/following-sibling::p")
+  public PageElement codFee;
+
+  @FindBy(xpath = "//label[text()='Insurance Fee']/following-sibling::p")
+  public PageElement insuranceFee;
+
+  @FindBy(xpath = "//label[text()='Handling Fee']/following-sibling::p")
+  public PageElement handlingFee;
+
+  @FindBy(xpath = "//label[text()='RTS Fee']/following-sibling::p")
+  public PageElement rtsFee;
+
+  @FindBy(xpath = "//label[text()='GST']/following-sibling::p")
+  public PageElement gst;
+
+  @FindBy(xpath = "//label[text()='Insured Value']/following-sibling::p")
+  public PageElement insuredValue;
+
   private EventsTable eventsTable;
   private EditDeliveryDetailsDialog editDeliveryDetailsDialog;
   private DpDropOffSettingDialog dpDropOffSettingDialog;
@@ -705,7 +729,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public Double getTotal() {
     Double total = null;
-    String actualText = getText("//label[text()='Total']/following-sibling::p");
+    String actualText = totalPrice.getText();
 
     if (!actualText.contains("-")) {
       String temp = actualText.substring(3); //Remove currency text (e.g. SGD)

@@ -632,7 +632,6 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID (uid:ce1f0e4d-435e-4467-ab58-76019c30f8a4)
     Given API Shipper create V4 order using data below:
@@ -880,6 +879,7 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When API Operator cancel created order and get error:
@@ -1293,6 +1293,7 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
@@ -1348,7 +1349,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-   @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -2049,6 +2050,8 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
@@ -2073,6 +2076,8 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
@@ -2098,6 +2103,8 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all waypoints status is "PENDING"
     And DB Operator verifies all waypoints.route_id & seq_no is NULL
@@ -2106,7 +2113,8 @@ Feature: Edit Order
   Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -2141,7 +2149,8 @@ Feature: Edit Order
   Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 0
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -2169,7 +2178,8 @@ Feature: Edit Order
   Scenario: Operator Cancel RTS For Routed Marketplace Sort Order via Edit Order Page
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -2200,7 +2210,8 @@ Feature: Edit Order
   Scenario: Operator Cancel RTS For Unrouted Marketplace Sort Order via Edit Order Page
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -2225,7 +2236,8 @@ Feature: Edit Order
   Scenario: Do not Allow Cancel RTS for Marketplace Sort Order
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

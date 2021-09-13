@@ -32,7 +32,7 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Change Selected Hub']")
   public AntSelect changeSelectedHub;
 
-  @FindBy(xpath = "(//div[@id='hubId'])[1]")
+  @FindBy(xpath = "(//div[contains(@class,'ant-form-item-control-input-content')])[1]")
   public AntSelect selectHub;
 
   @FindBy(xpath = "(//button[contains(@class,'ant-btn')])[1]")
@@ -41,7 +41,7 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Refresh table']")
   public AntButton refreshTable;
 
-  @FindBy(xpath = "(//span[contains(text(), 'Add/Remove Outputs')])[1]")
+  @FindBy(xpath = "(//a[contains(text(), 'Add/Remove Outputs')])[1]")
   public PageElement sideBar;
 
   @FindBy(xpath = "//button/span[contains(text(), 'Create new middle tier')]")
@@ -53,7 +53,7 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(id = "name")
   public TextBox midTierName;
 
-  @FindBy(xpath = "//button/span[text()='Create']")
+  @FindBy(xpath = "//button[text()='Create']")
   public Button create;
 
   @FindBy(xpath = "(//input[@placeholder='Find...'])[1]")
@@ -68,19 +68,19 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[contains(@class,'ant-tree-title')]//div[contains(@class, 'ant-col')][1]/span")
   public List<PageElement> nodeNames;
 
-  @FindBy(xpath = "//td[@class='hubName']/span/span")
+  @FindBy(xpath = "//td[@class='hub_name']/span/span")
   public PageElement actualHubName;
 
   @FindBy(xpath = "//td[@class='type.name']/span/span")
   public PageElement actualSortType;
 
-  @FindBy(xpath = "//a[@class='link']/span")
+  @FindBy(xpath = "//a[@class='link']")
   public AntButton delete;
 
   @FindBy(xpath = "//button//span[text()='Confirm']")
   public AntButton confirm;
 
-  @FindBy(xpath = "//div[contains(@class,'NoResult')]/span")
+  @FindBy(xpath = "//div[contains(text(), 'No Results Found')]")
   public PageElement noResult;
 
   @FindBy(css = ".ant-checkbox")
