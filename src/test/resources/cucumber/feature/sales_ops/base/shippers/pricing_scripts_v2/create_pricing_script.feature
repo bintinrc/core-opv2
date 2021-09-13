@@ -24,7 +24,7 @@ Feature: Pricing Scripts V2
     And Operator verify the script is saved successfully
 
   @DeletePricingScript
-  Scenario: Create Draft Script (uid:233f896b-0e1c-4e21-87c1-8c927b4d91d0)
+  Scenario: Create Draft Script (uid:c5547380-8b96-4454-9aeb-a482afea9115)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var price = 0.0;var handlingFee = 0.0;var insuranceFee = 0.0;var codFee = 0.0;var deliveryType = params.delivery_type;if (deliveryType == "STANDARD") {price += 0.3} else if (deliveryType == "EXPRESS") {price += 0.5} else if (deliveryType == "NEXT_DAY") {price += 0.7} else if (deliveryType == "SAME_DAY") {price += 1.1} else {throw "Unknown delivery type.";}var orderType = params.order_type;if (orderType == "NORMAL") {price += 1.3} else if (orderType == "RETURN") {price += 1.7} else if (orderType == "C2C") {price += 1.9} else {throw "Unknown order type.";}var timeslotType = params.timeslot_type;if (timeslotType == "NONE") {price += 2.3} else if (timeslotType == "DAY_NIGHT") {price += 2.9} else if (timeslotType == "TIMESLOT") {price += 3.1} else {throw "Unknown timeslot type.";}var size = params.size;if (size == "S") {price += 3.7} else if (size == "M") {price += 4.1} else if (size == "L") {price += 4.3} else if (size == "XL") {price += 4.7} else if (size == "XXL") {price += 5.3} else {throw "Unknown size.";}price += params.weight;var fromBillingZone = params.from_zone;var toBillingZone = params.to_zone;if (fromBillingZone == "EAST") {handlingFee += 0.3} else if (fromBillingZone == "WEST") {handlingFee += 0.5}if (toBillingZone == "EAST") {handlingFee += 0.7} else if (toBillingZone == "WEST") {handlingFee += 1.1}insuranceFee = params.insured_value * 0.1;codFee = params.cod_value * 0.1;var result = {};result.delivery_fee = price;result.cod_fee = codFee;result.insurance_fee = insuranceFee;result.handling_fee = handlingFee;return result} |
@@ -245,40 +245,193 @@ Feature: Pricing Scripts V2
     Then Operator verify error message in header with "CSV Header contain invalid character, accept ([A-Z],[a-z],space)"
 
   @DeletePricingScript
-  Scenario Outline: Create and Check Script - <dataset_name> (<hiptest-uid>)
+  Scenario: Create and Check Script - NORMAL, STANDARD, NONE, S (uid:34d9484e-5a4a-4a35-90de-e519450ac0f1)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
-      | orderFields  | Legacy         |
-      | deliveryType | <deliveryType> |
-      | orderType    | <orderType>    |
-      | timeslotType | <timeslotType> |
-      | isRts        | No             |
-      | size         | <size>         |
-      | weight       | <weight>       |
-      | insuredValue | <insuredValue> |
-      | codValue     | <codValue>     |
-      | fromZone     | <fromZone>     |
-      | toZone       | <toZone>       |
-
+      | orderFields  | Legacy   |
+      | deliveryType | STANDARD |
+      | orderType    | NORMAL   |
+      | timeslotType | NONE     |
+      | isRts        | No       |
+      | size         | S        |
+      | weight       | 5.9      |
+      | insuredValue | 100      |
+      | codValue     | 200      |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | <grandTotal>   |
-      | gst          | <gst>          |
-      | deliveryFee  | <deliveryFee>  |
-      | insuranceFee | <insuranceFee> |
-      | codFee       | <codFee>       |
-      | handlingFee  | <handlingFee>  |
-      | comments     | <comments>     |
-    Examples:
-      | dataset_name                       | Note                               | orderType | deliveryType | timeslotType | size | weight | insuredValue | codValue | fromZone | toZone | grandTotal | gst   | deliveryFee | insuranceFee | codFee | handlingFee | comments | hiptest-uid                              |
-      | NORMAL - STANDARD - NONE - S       | NORMAL - STANDARD - NONE - S       | NORMAL    | STANDARD     | NONE         | S    | 5.9    | 100          | 200      | EAST     | WEST   | 48.043     | 3.143 | 13.5        | 10           | 20     | 1.4         | OK       | uid:34d9484e-5a4a-4a35-90de-e519450ac0f1 |
-      | NORMAL - NEXT_DAY - DAY_NIGHT - XL | NORMAL - NEXT_DAY - DAY_NIGHT - XL | NORMAL    | NEXT_DAY     | DAY_NIGHT    | XL   | 5.9    | 100          | 200      | EAST     | WEST   | 50.183     | 3.283 | 15.5        | 10           | 20     | 1.4         | OK       | uid:5c89fb60-e033-41e5-a370-c15eb21bd223 |
-      | C2C - EXPRESS - DAY_NIGHT - M      | C2C - EXPRESS - DAY_NIGHT - M      | C2C       | EXPRESS      | DAY_NIGHT    | M    | 5.9    | 100          | 200      | EAST     | WEST   | 49.969     | 3.269 | 15.3        | 10           | 20     | 1.4         | OK       | uid:895ce6ad-980f-4453-b9a5-b47f37b0a0ca |
-      | C2C - SAME_DAY - NONE - XL         | C2C - SAME_DAY - NONE - XL         | C2C       | SAME_DAY     | NONE         | XL   | 5.9    | 100          | 200      | EAST     | WEST   | 50.611     | 3.311 | 15.9        | 10           | 20     | 1.4         | OK       | uid:696a6d32-e15b-4f10-9628-5c3c5e953391 |
-      | RETURN - NEXT_DAY - TIMESLOT - L   | RETURN - NEXT_DAY - TIMESLOT - L   | RETURN    | NEXT_DAY     | TIMESLOT     | L    | 5.9    | 100          | 200      | EAST     | WEST   | 50.397     | 3.297 | 15.7        | 10           | 20     | 1.4         | OK       | uid:297bb781-77e3-486e-b88a-e596aacfc5e1 |
-      | RETURN - STANDARD - TIMESLOT - M   | RETURN - STANDARD - TIMESLOT - M   | RETURN    | STANDARD     | TIMESLOT     | M    | 5.9    | 100          | 200      | EAST     | WEST   | 49.755     | 3.255 | 15.1        | 10           | 20     | 1.4         | OK       | uid:10efe3c4-ec2b-4567-90b8-9bc19d344787 |
+      | grandTotal   | 48.043 |
+      | gst          | 3.143  |
+      | deliveryFee  | 13.5   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
+
+  @DeletePricingScript
+  Scenario: : Create and Check Script - NORMAL, NEXT_DAY, DAY_NIGHT, XL (uid:5c89fb60-e033-41e5-a370-c15eb21bd223)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | Legacy    |
+      | deliveryType | NEXT_DAY  |
+      | orderType    | NORMAL    |
+      | timeslotType | DAY_NIGHT |
+      | isRts        | No        |
+      | size         | XL        |
+      | weight       | 5.9       |
+      | insuredValue | 100       |
+      | codValue     | 200       |
+      | fromZone     | EAST      |
+      | toZone       | WEST      |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 50.183 |
+      | gst          | 3.283  |
+      | deliveryFee  | 15.5   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
+
+  @DeletePricingScript
+  Scenario: : Create and Check Script - C2C, EXPRESS, DAY_NIGHT, M (uid:895ce6ad-980f-4453-b9a5-b47f37b0a0ca)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | Legacy    |
+      | deliveryType | EXPRESS   |
+      | orderType    | C2C       |
+      | timeslotType | DAY_NIGHT |
+      | isRts        | No        |
+      | size         | M         |
+      | weight       | 5.9       |
+      | insuredValue | 100       |
+      | codValue     | 200       |
+      | fromZone     | EAST      |
+      | toZone       | WEST      |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 49.969 |
+      | gst          | 3.269  |
+      | deliveryFee  | 15.3   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
+
+  @DeletePricingScript
+  Scenario: : Create and Check Script - C2C, EXPRESS, DAY_NIGHT, M (uid:895ce6ad-980f-4453-b9a5-b47f37b0a0ca)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | Legacy    |
+      | deliveryType | EXPRESS   |
+      | orderType    | C2C       |
+      | timeslotType | DAY_NIGHT |
+      | isRts        | No        |
+      | size         | M         |
+      | weight       | 5.9       |
+      | insuredValue | 100       |
+      | codValue     | 200       |
+      | fromZone     | EAST      |
+      | toZone       | WEST      |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 49.969 |
+      | gst          | 3.269  |
+      | deliveryFee  | 15.3   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
+
+  @DeletePricingScript
+  Scenario: Create and Check Script - C2C, SAME_DAY, NONE, XL (uid:696a6d32-e15b-4f10-9628-5c3c5e953391)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | Legacy   |
+      | deliveryType | SAME_DAY |
+      | orderType    | C2C      |
+      | timeslotType | NONE     |
+      | isRts        | No       |
+      | size         | XL       |
+      | weight       | 5.9      |
+      | insuredValue | 100      |
+      | codValue     | 200      |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 50.611 |
+      | gst          | 3.311  |
+      | deliveryFee  | 15.9   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
+
+  @DeletePricingScript
+  Scenario: Create and Check Script - RETURN, NEXT_DAY, TIMESLOT, L (uid:297bb781-77e3-486e-b88a-e596aacfc5e1)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | Legacy   |
+      | deliveryType | NEXT_DAY |
+      | orderType    | RETURN   |
+      | timeslotType | TIMESLOT |
+      | isRts        | No       |
+      | size         | L        |
+      | weight       | 5.9      |
+      | insuredValue | 100      |
+      | codValue     | 200      |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 50.397 |
+      | gst          | 3.297  |
+      | deliveryFee  | 15.7   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
+
+  @DeletePricingScript
+  Scenario: Create and Check Script - RETURN, STANDARD, TIMESLOT, M (uid:10efe3c4-ec2b-4567-90b8-9bc19d344787)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params){var price=0.0;var handlingFee=0.0;var insuranceFee=0.0;var codFee=0.0;var deliveryType=params.delivery_type;if(deliveryType=="STANDARD"){price+=0.3}else if(deliveryType=="EXPRESS"){price+=0.5}else if(deliveryType=="NEXT_DAY"){price+=0.7}else if(deliveryType=="SAME_DAY"){price+=1.1}else{throw"Unknown delivery type.";}var orderType=params.order_type;if(orderType=="NORMAL"){price+=1.3}else if(orderType=="RETURN"){price+=1.7}else if(orderType=="C2C"){price+=1.9}else{throw"Unknown order type.";}var timeslotType=params.timeslot_type;if(timeslotType=="NONE"){price+=2.3}else if(timeslotType=="DAY_NIGHT"){price+=2.9}else if(timeslotType=="TIMESLOT"){price+=3.1}else{throw"Unknown timeslot type.";}var size=params.size;if(size=="XS"){price+=3.2}else if(size=="S"){price+=3.7}else if(size=="M"){price+=4.1}else if(size=="L"){price+=4.3}else if(size=="XL"){price+=4.7}else if(size=="XXL"){price+=5.3}else{throw"Unknown size.";}price+=params.weight;var fromBillingZone=params.from_zone;var toBillingZone=params.to_zone;if(fromBillingZone=="EAST"){handlingFee+=0.3}else if(fromBillingZone=="WEST"){handlingFee+=0.5}if(toBillingZone=="EAST"){handlingFee+=0.7}else if(toBillingZone=="WEST"){handlingFee+=1.1}insuranceFee=params.insured_value*0.1;codFee=params.cod_value*0.1;var result={};result.delivery_fee=price;result.cod_fee=codFee;result.insurance_fee=insuranceFee;result.handling_fee=handlingFee;return result} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | Legacy   |
+      | deliveryType | STANDARD |
+      | orderType    | RETURN   |
+      | timeslotType | TIMESLOT |
+      | isRts        | No       |
+      | size         | M        |
+      | weight       | 5.9      |
+      | insuredValue | 100      |
+      | codValue     | 200      |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 49.755 |
+      | gst          | 3.255  |
+      | deliveryFee  | 15.1   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
 
   @DeletePricingScript
   Scenario Outline: Create and Check Script - Legacy Order Fields - <dataset_name> (<hiptest-uid>)

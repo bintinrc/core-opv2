@@ -275,7 +275,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   }
 
   public void verifyCsvFileDownloadedSuccessfully(ReservationInfo reservationInfo) {
-    verifyFileDownloadedSuccessfully(CSV_FILENAME, reservationInfo.toCsvLine(), false, true);
+    verifyFileDownloadedSuccessfully(CSV_FILENAME, reservationInfo.toCsvLine(), false, true, true);
   }
 
   public List<ReservationInfo> duplicateReservations(List<Address> addresses, Date date) {

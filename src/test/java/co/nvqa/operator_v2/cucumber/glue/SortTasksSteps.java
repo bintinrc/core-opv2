@@ -199,7 +199,8 @@ public class SortTasksSteps extends AbstractSteps {
     newName = resolveValue(newName);
     sortTasksPage.clickEditName(oldName);
     sortTasksPage.editMiddleTierNameModal.waitUntilLoaded();
-    sortTasksPage.editMiddleTierNameModal.name.setValue(newName);
+    sortTasksPage.editMiddleTierNameModal.name.forceClear();
+    sortTasksPage.editMiddleTierNameModal.name.clearAndSendKeys(newName);
     sortTasksPage.editMiddleTierNameModal.save.click();
     sortTasksPage.editMiddleTierNameModal.waitUntilInvisible();
     put(KEY_CREATED_MIDDLE_TIER_NAME, newName);

@@ -164,6 +164,7 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name-4} |
       | hubId   | {hub-id-4}   |
+    And Operator refresh table on Sort Tasks page
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIER{gradle-current-date-yyyyMMddHHmmsss} |
@@ -181,7 +182,7 @@ Feature: Sort Task
     And Operator refresh diagram on View Sort Structure page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
       | {mid-tier-name}                      |
-      | EDITED{KEY_CREATED_MIDDLE_TIER_NAME} |
+      | {KEY_CREATED_MIDDLE_TIER_NAME} |
 
   @CloseNewWindows @DeleteNodes
   Scenario: Refresh Diagram - Delete nodes (uid:0f299ec0-fea8-437d-bd6b-85b32d2b0646)
@@ -191,6 +192,7 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name-5} |
       | hubId   | {hub-id-5}   |
+    And Operator refresh table on Sort Tasks page
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIER{gradle-current-date-yyyyMMddHHmmsss} |
@@ -219,16 +221,15 @@ Feature: Sort Task
     And Operator click View Sort Structure on Sort Tasks page
     When Operator search for "SORT-SG-2-HUB" node on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
+      | SORT-SG-2-HUB   |
       | {hub-name-4}    |
       | {mid-tier-name} |
-      | SORT-SG-2-HUB   |
     When Operator reset view on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
+      | SORT-SG-2-HUB   |
       | {hub-name-4}    |
       | {mid-tier-name} |
       | SORT-1          |
-      | SORT-1          |
-      | SORT-SG-2-HUB   |
 
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
     When Operator go to menu Sort -> Sort Tasks
@@ -249,7 +250,6 @@ Feature: Sort Task
     And Operator search for "{mid-tier-name}" node on Sort Tasks page
     Then Operator verify displayed nodes on Sort Tasks page:
       | {hub-name-4}    |
-      | MIDTIERDONOTUSE |
       | {mid-tier-name} |
     And Operator verify following nodes are highlighted on Sort Tasks page:
       | {mid-tier-name} |

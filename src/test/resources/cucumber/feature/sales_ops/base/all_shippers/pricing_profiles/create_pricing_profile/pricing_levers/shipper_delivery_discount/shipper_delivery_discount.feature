@@ -21,7 +21,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     And Operator verifies the pricing profile and shipper discount details are correct
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
+  Scenario: Create Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -44,7 +44,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | errorMessage | 0 is not a valid discount value |
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with none Flat Discount (uid:3895c1e8-58b5-4625-9175-788c133a4b92)
+  Scenario: Create Pricing Profile - with none Flat Discount (uid:3895c1e8-58b5-4625-9175-788c133a4b92)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -72,7 +72,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     And Operator verifies the pricing profile and shipper discount details are correct
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with special characters Discount (uid:4dde3d48-2513-4c84-9b6c-4b848833d3eb)
+  Scenario: Create Pricing Profile - with special characters Discount (uid:4dde3d48-2513-4c84-9b6c-4b848833d3eb)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -95,7 +95,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | errorMessage | Special character is not allowed |
 
   @CloseNewWindows @NotInGaia
-  Scenario: Create a new Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
+  Scenario: Create Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -119,7 +119,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | errorMessage | Please provide only 2 decimal places. |
 
   @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:5e17e04a-7461-4546-9e3b-20dc2add40e6)
+  Scenario: Create Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:5e17e04a-7461-4546-9e3b-20dc2add40e6)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -148,7 +148,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     And Operator verifies the pricing profile and shipper discount details are correct
 
   @CloseNewWindows  @NotInGaia
-  Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount  (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
+  Scenario: Create Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |

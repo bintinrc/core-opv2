@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 
 /**
@@ -240,8 +241,9 @@ public class AddShipperToPresetSteps extends AbstractSteps {
         .fromCsvFile(ShipperInfo.class, pathName, true);
     FileUtils.deleteQuietly(new File(pathName));
 
-    assertEquals("Unexpected number of lines in CSV file", expected.size(),
-        actual.size());
+    Assertions.assertThat(actual.size())
+        .as("number of lines in CSV")
+        .isGreaterThanOrEqualTo(expected.size());
 
     for (int i = 0; i < expected.size(); i++) {
       expected.get(i).compareWithActual("Shipper Result " + (i + 1), actual.get(i));

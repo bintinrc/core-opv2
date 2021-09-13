@@ -649,6 +649,18 @@ public class ShipperPickupsSteps extends AbstractSteps {
     }
   }
 
+  @Then("^Operator verifies downloaded POD CSV file on Shipper Pickups page contains no details$")
+  public void operatorVerifiesEmptyPodCsvFile() {
+    assertTrue("Reservation dialog is opened",
+        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+    String podId = shipperPickupsPage.reservationDetailsDialog.podName.getAttribute("name")
+        .replace("POD-", "");
+    shipperPickupsPage.reservationDetailsDialog.downloadCsvFile.click();
+    shipperPickupsPage
+          .verifyFileDownloadedSuccessfully("pod-file-id-" + podId + ".csv",
+              "Scanned at Shipper (POD),Removed TID by Driver\n" + "," , true, true, false);
+  }
+
   @When("^Operator edit reservation address details on Edit Route Details dialog using data below:$")
   public void operatorEditReservationAddressFromEditRouteDetailsDialog(Map<String, String> data) {
     Address oldAddress = resolveValue(data.get("oldAddress"));
