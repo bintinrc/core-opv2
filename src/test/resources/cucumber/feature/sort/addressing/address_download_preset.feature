@@ -177,7 +177,7 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
+#    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
@@ -209,7 +209,7 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
+#    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
@@ -243,7 +243,7 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
+#    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
@@ -276,7 +276,7 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
+#    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
@@ -304,7 +304,7 @@ Feature: Address Download
 
   @wip
   Scenario: Download Address by Created Time on Existing Preset - Update Creation Time value
-    Given Operator refresh page v1
+#    Given Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
