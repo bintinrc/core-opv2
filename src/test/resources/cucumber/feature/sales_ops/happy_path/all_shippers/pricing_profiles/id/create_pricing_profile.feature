@@ -5,7 +5,7 @@ Feature: All Shippers
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeletePricingProfile
-  Scenario: Create Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:855e77b3-1187-4bd2-aeaa-4040074f7894)
+  Scenario: Create Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:bafe6400-ee59-4068-9e6d-fc3395ac7a8a)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
