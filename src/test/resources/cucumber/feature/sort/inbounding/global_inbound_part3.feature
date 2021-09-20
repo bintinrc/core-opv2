@@ -62,7 +62,7 @@ Feature: Global Inbound
     And Operator enters the tracking id and verifies that is exists
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Standard (uid:c43a34d0-b8ba-4e6f-9304-51320543b9ee)
+  Scenario: Inbound Parcel with change in order SLA - Standard Service (uid:c43a34d0-b8ba-4e6f-9304-51320543b9ee)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                            |
@@ -81,7 +81,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-3-working-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Express (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
+  Scenario: Inbound Parcel with change in order SLA - Express Service (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -100,7 +100,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-2-working-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Nextday (uid:69d8cd89-bfd3-4e1a-ad04-ece038974e99)
+  Scenario: Inbound Parcel with change in order SLA - Next Day Service (uid:69d8cd89-bfd3-4e1a-ad04-ece038974e99)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -119,7 +119,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-1-working-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Sameday (uid:79a946bb-aa72-4e5e-a063-9656f8826a7b)
+  Scenario: Inbound Parcel with change in order SLA - Same Day (uid:79a946bb-aa72-4e5e-a063-9656f8826a7b)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                 |
