@@ -4,10 +4,10 @@ import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.ShipmentGlobalInboundPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 
 /**

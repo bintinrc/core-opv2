@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.selenium.page.MessagingModulePage;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.util.List;
 import java.util.Map;

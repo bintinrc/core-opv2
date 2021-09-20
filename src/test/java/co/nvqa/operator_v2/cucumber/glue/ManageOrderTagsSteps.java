@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Tag;
 import co.nvqa.operator_v2.selenium.page.ManageOrderTagsPage;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;

@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.page.ViewTaggedOrdersPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 

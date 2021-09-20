@@ -34,11 +34,11 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
-import cucumber.api.java.After;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -651,7 +651,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @After(value = {"@DeleteDpPartner"})
+  @After(value = "@DeleteDpPartner")
   public void deleteDpPartner() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
 
@@ -660,7 +660,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @After(value = {"@DeleteDpAndPartner"})
+  @After(value = "@DeleteDpAndPartner")
   public void deleteDp() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
 
@@ -670,7 +670,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @After(value = {"@DeleteDpUserDpAndPartner"})
+  @After(value = "@DeleteDpUserDpAndPartner")
   public void deleteDpUser() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
 

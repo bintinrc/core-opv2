@@ -4,8 +4,8 @@ import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.page.BulkOrdersPage;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import org.junit.Assert;
 

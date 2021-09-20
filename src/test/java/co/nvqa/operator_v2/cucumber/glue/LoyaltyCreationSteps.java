@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.operator_v2.selenium.page.LoyaltyCreationPage;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import java.util.List;
 
 import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;

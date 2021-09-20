@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.PrinterSettings;
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 
 import static co.nvqa.operator_v2.selenium.page.PrinterSettingsPage.PrintersTable.ACTION_SET_DEFAULT;

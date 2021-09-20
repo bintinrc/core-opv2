@@ -17,10 +17,10 @@ import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -509,7 +509,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.manuallyCompleteOrder();
   }
 
-  @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder on Edit Order Page")
+  @And("^Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder on Edit Order Page$")
   public void operatorSelectTheRouteTagsOfFromTheRouteFinder(String routeTag) {
     editOrderPage.clickMenu("Delivery", "Add To Route");
     editOrderPage.addToRouteDialog.waitUntilVisible();

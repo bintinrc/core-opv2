@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.page.NinjaPackTrackingIdGeneratorPage;
-import cucumber.api.java.en.And;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.guice.ScenarioScoped;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
