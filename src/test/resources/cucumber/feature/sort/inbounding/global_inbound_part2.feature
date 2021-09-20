@@ -84,7 +84,7 @@ Feature: Global Inbound
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows
-  Scenario: Inbound showing Weight Discrepancy Alert - weight tolerance is set, higher weigh (uid:6fd8c798-b6b4-4920-bbc8-891bd6355eae)
+  Scenario: Inbound showing weight discrepancy alert - weight tolerance is set, higher weight (uid:6fd8c798-b6b4-4920-bbc8-891bd6355eae)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -129,7 +129,7 @@ Feature: Global Inbound
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows
-  Scenario: Inbound parcel picked up from DP - Pickup Pending (uid:9ed6ad00-9a3c-4bc8-b4ab-3f67d6238d58)
+  Scenario: Inbound parcel picked up from DP - pickup pending (uid:69c149a5-468c-4f1e-97a5-f54a7a33ab56)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -174,7 +174,7 @@ Feature: Global Inbound
       | hubName | {hub-name-3}     |
 
   @CloseNewWindows
-  Scenario: Inbound parcel picked up from DP - Pickup Successed (uid:7c40f1b0-f27e-4699-b9ca-839b7923eddb)
+  Scenario: Inbound parcel picked up from DP - pickup succeed (uid:e24608b8-20b0-412f-83ba-af0ecafb7f3d)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -262,9 +262,9 @@ Feature: Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | Note   | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex | dataset_name |
-      | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 | 1            |
-      | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 | 2 - 90       |
-      | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 | > 90         |
+      | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 | Level 1      |
+      | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 | Level 2-90   |
+      | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 | Level >90    |
 
   @CloseNewWindows
   Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
