@@ -232,8 +232,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
         sortBeltManagerPage.uniqueCombinationsTable.isEmpty());
   }
 
-  @When("Operator verifies that \"(.+)\" success notification is displayed")
-  @And("Operator verifies that \"(.+)\" error notification is displayed")
+  @When("^Operator verifies that \"(.+)\" success notification is displayed$")
+  @And("^Operator verifies that \"(.+)\" error notification is displayed$")
   public void operatorVerifiesToast(String message) {
     message = resolveValue(message);
     sortBeltManagerPage.waitUntilInvisibilityOfNotification(message, true);

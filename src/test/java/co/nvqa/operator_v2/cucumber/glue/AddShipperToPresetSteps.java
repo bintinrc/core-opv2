@@ -77,12 +77,12 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     addShipperToPresetPage.loadSelection.click();
   }
 
-  @When("Operator applies \"(.+)\" sorting to \"(.+)\" column on Add Shipper To Preset page")
+  @When("^Operator applies \"(.+)\" sorting to \"(.+)\" column on Add Shipper To Preset page$")
   public void operatorAppliesSorting(String direction, String columnName) {
     addShipperToPresetPage.shippersTable.sortColumn(columnName, direction);
   }
 
-  @When("Operator applies \"(.+)\" filter to \"(.+)\" column on Add Shipper To Preset page")
+  @When("^Operator applies \"(.+)\" filter to \"(.+)\" column on Add Shipper To Preset page$")
   public void operatorAppliesFilter(String filter, String columnName) {
     filter = resolveValue(filter);
     String columnId = AddShipperToPresetPage.ShippersTable.COLUMN_IDS_BY_NAME
@@ -114,7 +114,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     }
   }
 
-  @When("Operator verify \"(.+)\" sorting is applied to \"(.+)\" column on Add Shipper To Preset page")
+  @When("^Operator verify \"(.+)\" sorting is applied to \"(.+)\" column on Add Shipper To Preset page$")
   public void operatorVerifySorting(String direction, String columnName) {
     String columnId = AddShipperToPresetPage.ShippersTable.COLUMN_IDS_BY_NAME
         .get(columnName.trim().toLowerCase());

@@ -473,7 +473,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.movementScheduleModal.editSchedule.isEnabled());
   }
 
-  @When("Operator select \"(.+)\" tab on Movement Management page")
+  @When("^Operator select \"(.+)\" tab on Movement Management page$")
   public void operatorSelectTabOnMovementManagementPage(String tabName) {
     switch (StringUtils.normalizeSpace(tabName.toLowerCase())) {
       case "crossdock hubs":
@@ -510,7 +510,7 @@ public class MovementManagementSteps extends AbstractSteps {
     assertTrue("Completed tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
   }
 
-  @When("Operator verify \"(.+)\" tab is selected on 'Relations' tab")
+  @When("^Operator verify \"(.+)\" tab is selected on 'Relations' tab$")
   public void operatorVerifyTabIsSelectedOnRelationsTab(String tabName) {
     PageElement tabElement = null;
     switch (StringUtils.normalizeSpace(tabName.toLowerCase())) {
@@ -530,7 +530,7 @@ public class MovementManagementSteps extends AbstractSteps {
         tabElement.hasClass("ant-radio-button-wrapper-checked"));
   }
 
-  @When("Operator verify all Crossdock Hub in Pending tab have \"(.+)\" value")
+  @When("^Operator verify all Crossdock Hub in Pending tab have \"(.+)\" value$")
   public void operatorVerifyCrossdockHubInPendingTabOnRelationsTab(String expectedValue) {
     assertTrue(f("All Crossdock Hub in Pending tab have '%s' value", expectedValue),
         movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText())
