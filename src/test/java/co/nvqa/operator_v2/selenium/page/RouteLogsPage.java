@@ -16,7 +16,6 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMultiselect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -122,6 +121,12 @@ public class RouteLogsPage extends SimpleReactPage {
   @FindBy(css = "div.ant-modal-content")
   public DeletePresetDialog deletePresetDialog;
 
+  @FindBy(css = "div.ant-modal-content")
+  public AddressVerifyRouteDialog addressVerifyRouteDialog;
+
+  @FindBy(css = "div.ant-modal-content")
+  public OptimizeSelectedRouteDialog optimizeSelectedRouteDialog;
+
   public RoutesTable routesTable;
 
   public static final String ACTION_ARCHIVE_SELECTED = "Archive Selected";
@@ -226,6 +231,8 @@ public class RouteLogsPage extends SimpleReactPage {
     public static final String COLUMN_TAGS = "tags";
     public static final String ACTION_EDIT_DETAILS = "Edit Details";
     public static final String ACTION_EDIT_ROUTE = "Edit Route";
+    public static final String ACTION_OPTIMIZE_ROUTE = "Optimize Route";
+    public static final String ACTION_VERIFY_ADDRESS = "Verify Address";
 
     public RoutesTable(WebDriver webDriver) {
       super(webDriver);
@@ -248,7 +255,11 @@ public class RouteLogsPage extends SimpleReactPage {
           ACTION_EDIT_DETAILS,
           "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-edit')]",
           ACTION_EDIT_ROUTE,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-stock')]"));
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-stock')]",
+          ACTION_OPTIMIZE_ROUTE,
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-deployment-unit')]",
+          ACTION_VERIFY_ADDRESS,
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-reload')]"));
     }
 
     public String getTags(int rowIndex) {
@@ -488,6 +499,32 @@ public class RouteLogsPage extends SimpleReactPage {
     public Button delete;
 
     public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class AddressVerifyRouteDialog extends AntModal {
+
+    @FindBy(xpath = ".//button[.='Address Verify Route']")
+    public Button addressVerifyRoute;
+
+    public AddressVerifyRouteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class OptimizeSelectedRouteDialog extends AntModal {
+
+    @FindBy(css = "div > p")
+    public List<PageElement> message;
+
+    @FindBy(xpath = ".//button[.='Cancel']")
+    public Button cancel;
+
+    @FindBy(xpath = ".//button[.='Optimise Route']")
+    public Button optimizeRoute;
+
+    public OptimizeSelectedRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

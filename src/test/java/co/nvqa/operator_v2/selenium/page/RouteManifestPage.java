@@ -6,6 +6,7 @@ import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -33,6 +34,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
+
+  @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
+  public PageElement routeId;
 
   @FindBy(css = "md-dialog[aria-label='Are you sure?All ...']")
   public ConfirmationDialog confirmationDialog;
@@ -160,6 +164,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
             .readEntity(1);
         expectedDelivery.compareWithActual(actualDelivery);
       }
+      waypointDetailsDialog.closeDialogIfVisible();
     }
   }
 

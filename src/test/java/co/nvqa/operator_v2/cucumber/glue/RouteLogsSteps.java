@@ -44,6 +44,8 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_PRINT_SELEC
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_UNARCHIVE_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_EDIT_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_EDIT_ROUTE;
+import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_OPTIMIZE_ROUTE;
+import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_VERIFY_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_ROUTE_ID;
 
 /**
@@ -275,6 +277,17 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verifies address of {string} route on Route Logs page")
+  public void operatorVerifiesRouteAddress(String routeIdVal) {
+    routeLogsPage.inFrame(() -> {
+      Long routeId = Long.valueOf(resolveValue(routeIdVal));
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_VERIFY_ADDRESS);
+      routeLogsPage.addressVerifyRouteDialog.waitUntilVisible();
+      routeLogsPage.addressVerifyRouteDialog.addressVerifyRoute.click();
+    });
+  }
+
   @When("^Operator merge transactions of created routes$")
   public void operatorMergeTransactionsOfMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
@@ -293,12 +306,43 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("^Operator optimise created routes$")
   public void operatorOptimiseMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded(3);
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
       routeIds.forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeLogsPage.routesTable.selectRow(1);
       });
       routeLogsPage.actionsMenu.selectOption(ACTION_OPTIMISE_SELECTED);
+    });
+  }
+
+  @When("Operator opens Optimize Selected Route dialog for {string} route on Route Logs page")
+  public void operatorOptimiseRoute(String routeId) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded(3);
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, resolveValue(routeId));
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_OPTIMIZE_ROUTE);
+      routeLogsPage.optimizeSelectedRouteDialog.waitUntilVisible();
+    });
+  }
+
+  @When("Optimize Selected Route dialog contains message on Route Logs page:")
+  public void operatorOptimiseRoute(List<String> lines) {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded(3);
+      List<String> actual = routeLogsPage.optimizeSelectedRouteDialog.message.stream()
+          .map(PageElement::getText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("Optimize Selected Route dialog message")
+          .containsExactlyElementsOf(lines);
+    });
+  }
+
+  @When("Operator clicks Optimize Route button in Optimize Selected Route dialog on Route Logs page")
+  public void operatorClickOptimizeRouteButton() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.optimizeSelectedRouteDialog.optimizeRoute.click();
     });
   }
 
@@ -839,6 +883,16 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator removes tag {string} from created route")
+  public void removeNewTagToRoute(String tag) {
+    Long routeId = get(KEY_CREATED_ROUTE_ID);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.selectTag.selectValue(resolveValue(tag));
+      routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
+    });
+  }
+
   @When("^Operator deletes created route on Route Logs page$")
   public void opDeleteDeleteRoute() {
     routeLogsPage.inFrame(() -> {
@@ -857,9 +911,11 @@ public class RouteLogsSteps extends AbstractSteps {
   @And("Operator open Route Manifest of created route from Route Logs page")
   public void operatorOpenRouteManifestOfCreatedRouteFromRouteLogsPage() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
-    put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
-    routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
-    routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
+    routeLogsPage.inFrame(() -> {
+      put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
+      routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
+    });
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
     routeLogsPage.waitUntilPageLoaded();
   }
