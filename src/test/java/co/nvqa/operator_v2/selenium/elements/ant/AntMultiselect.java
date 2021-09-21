@@ -12,8 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AntMultiselect extends PageElement {
 
-  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')]";
-  public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
+  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-dropdown')][not(contains(@class,'dropdown-hidden'))]/ul//div[contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-dropdown')][not(contains(@class,'dropdown-hidden'))]/ul//div[@data-rowindex='%d']";
 
   public AntMultiselect(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
