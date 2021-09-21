@@ -7,12 +7,13 @@ import co.nvqa.commons.util.factory.FailureReasonFactory;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_CODE_ID_ALL;
@@ -109,5 +110,17 @@ public class RouteManifestSteps extends AbstractSteps {
   public void operatorOpenRouteManifestPage(String routeId) {
     routeId = resolveValue(routeId);
     routeManifestPage.openPage(Long.parseLong(StringUtils.trim(routeId)));
+  }
+
+  @When("Operator verifies route details on Route Manifest page:")
+  public void verifyRouteDetails(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    if (data.containsKey("routeId")) {
+      assertions.assertThat(routeManifestPage.routeId.getText())
+          .as("Route ID")
+          .isEqualTo(data.get("routeId"));
+    }
+    assertions.assertAll();
   }
 }

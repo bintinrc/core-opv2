@@ -3,10 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -178,12 +178,12 @@ public class ZonesSteps extends AbstractSteps {
         Matchers.everyItem(Matchers.containsString(zone.getHubName())));
   }
 
-  @When("^Operator download Zone CSV file$")
+  @When("Operator download Zone CSV file")
   public void operatorDownloadZoneCsvFile() {
     zonesPage.downloadCsvFile.click();
   }
 
-  @Then("^Operator verify Zone CSV file is downloaded successfully$")
+  @Then("Operator verify Zone CSV file is downloaded successfully")
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
     Zone zone = get(KEY_CREATED_ZONE);
     zonesPage.verifyCsvFileDownloadedSuccessfully(zone);

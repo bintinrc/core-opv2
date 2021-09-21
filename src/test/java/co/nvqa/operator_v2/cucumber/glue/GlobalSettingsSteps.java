@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.GlobalSettingsPage;
-import cucumber.api.java.en.And;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 /**

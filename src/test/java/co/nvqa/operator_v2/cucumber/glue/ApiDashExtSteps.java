@@ -6,8 +6,8 @@ import co.nvqa.commons.model.dash.report.DashPaymentHistory;
 import co.nvqa.commons.model.dash.report.DashPaymentHistoryRequest;
 import co.nvqa.commons.model.dash.report.DashPaymentRecord;
 import co.nvqa.operator_v2.model.ShipperBillingRecord;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
 
 /**

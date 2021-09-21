@@ -11,22 +11,21 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
-
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 
 public class AddressingDownloadSteps extends AbstractSteps {
 
   private AddressingDownloadPage addressingDownloadPage;
 
-  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
-
-  private static final String TIME_BRACKET_ALL_DAY = "ALL_DAY";
-  private static final String TIME_BRACKET_DAY_SLOT = "DAY_SLOT";
-  private static final String TIME_BRACKET_NIGHT_SLOT = "NIGHT_SLOT";
+  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]";
 
   public AddressingDownloadSteps() {
   }
@@ -227,11 +226,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on download csv button on Address Download Page")
   public void operatorClicksOnDownloadCsvButtonOnAddressDownloadPage() {
-    String addressDownloadStats = "//div[@class='download-csv-holder']/div[@class='download-stats']";
-
     addressingDownloadPage.downloadCsv.click();
-    addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadStats);
-    addressingDownloadPage.waitUntilInvisibilityOfElementLocated(addressDownloadStats);
   }
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
@@ -267,16 +262,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator selects preset {string}")
   public void operatorSelectsPresetName(String preset) {
-    String presetName = "";
-
-    if (preset.equals("DEFAULT")) {
-      presetName = TestConstants.ADDRESSING_PRESET_NAME;
-    } else if (preset.equals("CREATED")) {
-      presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
-    } else {
-      presetName = preset;
-    }
-
+    String presetName = preset.equals("DEFAULT") ? TestConstants.ADDRESSING_PRESET_NAME : preset;
     String presetNameFieldValue = addressingDownloadPage.selectPresetLoadAddresses.getValue();
 
     if (presetNameFieldValue.equals("")) {
@@ -302,15 +288,12 @@ public class AddressingDownloadSteps extends AbstractSteps {
     NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
     NvLogger.infof("Order creation time in UTC: %s", orderCreationTimestamp);
 
-    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp);
-
-    addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+    addressingDownloadPage.setCreationTimeDatepicker(addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp));
   }
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")
   public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
-    WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
-    addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
+    addressingDownloadPage.addressDownloadTableResult.isDisplayed();
 
     Order createdOrder = get(KEY_ORDER_DETAILS);
     Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
@@ -322,117 +305,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
     Order order = get(KEY_ORDER_DETAILS);
     Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
-    String preset = get(KEY_SELECTED_PRESET_NAME);
 
-    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint, preset);
-  }
-
-  @And("Operator edits selected preset")
-  public void operatorEditsSelectedPreset() {
-    String presetName = get(KEY_SELECTED_PRESET_NAME);
-    addressingDownloadPage.selectPresetEditModal.click();
-    addressingDownloadPage.selectPresetEditModal.sendKeys(presetName);
-    addressingDownloadPage.selectPresetEditModal.sendKeys(Keys.ENTER);
-  }
-
-  @And("Operator sets new shipper to selected preset as {string}")
-  public void operatorSetsNewShipperToSelectedPresetAs(String shipper) {
-    String newShipper = "";
-
-    if (shipper.equals("DEFAULT")) {
-      newShipper = TestConstants.ADDRESSING_SHIPPER_NAME;
-    } else {
-      newShipper = shipper;
-    }
-
-    addressingDownloadPage.setNewShipperOnShipperFilter(newShipper);
-  }
-
-  @And("Operator adds {string} filter to selected preset")
-  public void operatorAddsFilterToSelectedPreset(String filter) {
-    AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
-
-    retryIfAssertionErrorOccurred(() -> {
-              addressingDownloadPage.filterButton.click();
-              pause1s();
-              addressingDownloadPage.selectPresetFilter(filterType);
-              assertTrue(addressingDownloadPage.isElementExistFast(FILTER_SHOWN_XPATH));
-            },
-            "Clicking Filter for Preset");
-
-    addressingDownloadPage.setPresetFilter(filterType);
-  }
-
-  @And("Operator save the new preset data")
-  public void operatorSaveTheNewPresetData() {
-    addressingDownloadPage.mainPresetButtonInModal.click();
-  }
-
-  @And("Operator input the new preset name")
-  public void operatorInputTheNewPresetName() {
-    String presetName =
-            "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-                    .randomString(7);
-
-    addressingDownloadPage.inputPresetName.sendKeys(presetName);
-    put(KEY_CREATED_ADDRESS_PRESET_NAME, presetName);
-  }
-
-  @And("Operator sets creation time filter to selected preset as {string}")
-  public void operatorSetsCreationTimeFilterToSelectedPresetAs(String bracket) {
-    /*
-     * Possible time brackets: ALL_DAY (9-22), DAY_SLOT (9-18), NIGHT_SLOT (18-22)
-     * */
-
-    String timeRange = "";
-
-    switch (bracket) {
-      case TIME_BRACKET_ALL_DAY:
-        timeRange = "09:00-22:00";
-        break;
-
-      case TIME_BRACKET_DAY_SLOT:
-        timeRange = "09:00-18:00";
-        break;
-
-      case TIME_BRACKET_NIGHT_SLOT:
-        timeRange = "18:00-22:00";
-        break;
-
-      default:
-        assertFalse("Invalid time bracket given.", true);
-    }
-
-    NvLogger.infof("timeRange: %s", timeRange);
-
-    String[] timeRangePoints = timeRange.split("-");
-    String startTimeString = timeRangePoints[0];
-    String endTimeString = timeRangePoints[1];
-
-    Map<String, String> timeRangeMap = new HashMap<>();
-
-    String[] startTimes = startTimeString.split(":");
-    timeRangeMap.put("start_hour", startTimes[0]);
-    timeRangeMap.put("start_minute", startTimes[1]);
-
-    String[] endTimes = endTimeString.split(":");
-    timeRangeMap.put("end_hour", endTimes[0]);
-    timeRangeMap.put("end_minute", endTimes[1]);
-
-    NvLogger.infof("start_hour: %s", timeRangeMap.get("start_hour"));
-    NvLogger.infof("start_minute: %s", timeRangeMap.get("start_minute"));
-    NvLogger.infof("end_hour: %s", timeRangeMap.get("end_hour"));
-    NvLogger.infof("end_minute: %s", timeRangeMap.get("end_minute"));
-    addressingDownloadPage.setPresetCreationTimeDatepicker(timeRangeMap);
-    put(KEY_ADDRESSING_CREATION_TIME_FILTER, timeRange);
-  }
-
-  @And("Operator verifies that the creation time filter is updated")
-  public void operatorVerifiesThatTheCreationTimeFilterIsUpdated() {
-    String newCreationTime = get(KEY_ADDRESSING_CREATION_TIME_FILTER);
-
-    boolean isTimeMatch = addressingDownloadPage.compareUpdatedCreationTimeValue(newCreationTime);
-
-    assertTrue("The creation time value is updated.", isTimeMatch);
+    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint);
   }
 }

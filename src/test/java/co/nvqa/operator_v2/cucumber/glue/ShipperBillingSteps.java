@@ -3,8 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.model.ShipperBillingRecord;
 import co.nvqa.operator_v2.selenium.page.ShipperBillingPage;
 import co.nvqa.operator_v2.util.TestUtils;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 
 /**

@@ -4,9 +4,9 @@ import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
 import co.nvqa.operator_v2.selenium.page.DpCompanyAgentPage;
 import co.nvqa.operator_v2.selenium.page.DpCompanyManagementPage;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 
 /**
  * @author Daniel Joi Partogi Hutapea

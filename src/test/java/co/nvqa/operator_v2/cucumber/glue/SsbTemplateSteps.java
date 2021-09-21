@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.billing.SsbTemplate;
 import co.nvqa.operator_v2.selenium.page.SsbTemplatePage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
