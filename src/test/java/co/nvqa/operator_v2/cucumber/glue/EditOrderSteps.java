@@ -10,6 +10,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
@@ -580,7 +581,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
       Assert.assertThat("Delivery Details - Start Date / Time",
@@ -589,7 +590,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
@@ -599,7 +600,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
       Assert.assertThat("Delivery Details - End Date / Time",
@@ -608,7 +609,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
@@ -628,7 +629,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
       Assert.assertThat("Pickup Details - Start Date / Time",
@@ -637,7 +638,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
@@ -647,7 +648,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
       Assert.assertThat("Pickup Details - End Date / Time",
@@ -656,7 +657,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
@@ -666,7 +667,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("lastServiceEndDate")) {
       String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("lastServiceEndDate"));
       Assert.assertThat("Pickup Details - Last Service End",
@@ -675,7 +676,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("lastServiceEndDateTime")) {
       String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
       Date actualDateTime = Date.from(DateUtil.getDate(actual,
-          DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("lastServiceEndDateTime"));
@@ -1457,5 +1458,102 @@ public class EditOrderSteps extends AbstractSteps {
     } catch (IOException e) {
       throw new NvTestRuntimeException("Could not get file path " + pathname, e);
     }
+  }
+
+  @Then("Operator updates recovery ticket on Edit Order page:")
+  public void updateRecoveryTicket(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    editOrderPage.recoveryTicket.click();
+    editOrderPage.editTicketDialog.waitUntilVisible();
+    pause5s();
+    if (data.containsKey("status")) {
+      editOrderPage.editTicketDialog.ticketStatus.selectValue(data.get("status"));
+    }
+    if (data.containsKey("outcome")) {
+      editOrderPage.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
+    }
+    if (data.containsKey("assignTo")) {
+      editOrderPage.editTicketDialog.assignTo.selectValue(data.get("assignTo"));
+    }
+    if (data.containsKey("newInstructions")) {
+      editOrderPage.editTicketDialog.newInstructions.setValue(data.get("newInstructions"));
+    }
+    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
+  }
+
+  @When("^Operator create new recovery ticket on Edit Order page:$")
+  public void createNewTicket(Map<String, String> mapOfData) {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+
+    String entrySource = mapOfData.get("entrySource");
+    String investigatingDepartment = mapOfData.get("investigatingDepartment");
+    String investigatingHub = mapOfData.get("investigatingHub");
+    String ticketType = mapOfData.get("ticketType");
+    String ticketSubType = mapOfData.get("ticketSubType");
+    String parcelLocation = mapOfData.get("parcelLocation");
+    String liability = mapOfData.get("liability");
+    String damageDescription = mapOfData.get("damageDescription");
+    String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
+    String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
+    String custZendeskId = mapOfData.get("custZendeskId");
+    String shipperZendeskId = mapOfData.get("shipperZendeskId");
+    String ticketNotes = mapOfData.get("ticketNotes");
+    String parcelDescription = mapOfData.get("parcelDescription");
+    String exceptionReason = mapOfData.get("exceptionReason");
+    String orderOutcomeInaccurateAddress = mapOfData.get("orderOutcomeInaccurateAddress");
+    String orderOutcomeDuplicateParcel = mapOfData.get("orderOutcomeDuplicateParcel");
+    String issueDescription = mapOfData.get("issueDescription");
+    String rtsReason = mapOfData.get("rtsReason");
+
+    if ("GENERATED".equals(damageDescription)) {
+      damageDescription = f("This damage description is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(ticketNotes)) {
+      ticketNotes = f("This ticket notes is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(parcelDescription)) {
+      parcelDescription = f("This parcel description is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(exceptionReason)) {
+      exceptionReason = f("This exception reason is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(issueDescription)) {
+      issueDescription = f("This issue description is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    RecoveryTicket recoveryTicket = new RecoveryTicket();
+    recoveryTicket.setTrackingId(trackingId);
+    recoveryTicket.setEntrySource(entrySource);
+    recoveryTicket.setInvestigatingDepartment(investigatingDepartment);
+    recoveryTicket.setInvestigatingHub(investigatingHub);
+    recoveryTicket.setTicketType(ticketType);
+    recoveryTicket.setTicketSubType(ticketSubType);
+    recoveryTicket.setParcelLocation(parcelLocation);
+    recoveryTicket.setLiability(liability);
+    recoveryTicket.setDamageDescription(damageDescription);
+    recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
+    recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
+    recoveryTicket.setCustZendeskId(custZendeskId);
+    recoveryTicket.setShipperZendeskId(shipperZendeskId);
+    recoveryTicket.setTicketNotes(ticketNotes);
+    recoveryTicket.setParcelDescription(parcelDescription);
+    recoveryTicket.setExceptionReason(exceptionReason);
+    recoveryTicket.setOrderOutcomeInaccurateAddress(orderOutcomeInaccurateAddress);
+    recoveryTicket.setOrderOutcomeDuplicateParcel(orderOutcomeDuplicateParcel);
+    recoveryTicket.setIssueDescription(issueDescription);
+    recoveryTicket.setRtsReason(rtsReason);
+
+    editOrderPage.clickMenu("Order Settings", "Create Recovery Ticket");
+    editOrderPage.createTicket(recoveryTicket);
+    put("recoveryTicket", recoveryTicket);
   }
 }

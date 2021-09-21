@@ -73,7 +73,6 @@ Feature: Route Manifest
       | pickupsCount       | 0                          |
       | reservation.id     | KEY_CREATED_RESERVATION_ID |
       | reservation.status | Fail                       |
-    When Operator waits for 1 seconds
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest (uid:46644aae-1191-4fed-8d85-32e391dc90d3)
@@ -222,6 +221,52 @@ Feature: Route Manifest
     Then Operator verify waypoint tags at Route Manifest using data below:
       | {order-tag-name}   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {order-tag-name-2} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Load Route Manifest of a Driver Multiple Pending Waypoints (uid:d712b733-4edc-420a-baa9-fd042ef41940)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest    | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcels to the route using data below:
+      | orderId                           | addParcelToRouteRequest |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} | { "type":"DD" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} | { "type":"PP" }         |
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status             | Pending                      |
+      | deliveriesCount    | 0                            |
+      | pickupsCount       | 0                            |
+      | reservation.id     | {KEY_CREATED_RESERVATION_ID} |
+      | reservation.status | Pending                      |
+    And Operator verify waypoint at Route Manifest using data below:
+      | status              | Pending                                    |
+      | deliveriesCount     | 1                                          |
+      | pickupsCount        | 0                                          |
+      | trackingIds         | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | delivery.trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | delivery.status     | Pending                                    |
+    And Operator verify waypoint at Route Manifest using data below:
+      | status            | Pending                                    |
+      | deliveriesCount   | 0                                          |
+      | pickupsCount      | 1                                          |
+      | trackingIds       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | pickup.trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | pickup.status     | Pending                                    |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

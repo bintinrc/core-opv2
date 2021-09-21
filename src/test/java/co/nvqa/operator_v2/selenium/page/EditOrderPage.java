@@ -13,6 +13,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
+import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -28,6 +29,8 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ManuallyCompleteOrderDialog;
+import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.CreateTicketDialog;
+import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.EditTicketDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -103,6 +106,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//label[text()='Weight']/following-sibling::p")
   public PageElement weight;
+
+  @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
+  public Button recoveryTicket;
+
+  @FindBy(css = "md-dialog")
+  public CreateTicketDialog createTicketDialog;
+
+  @FindBy(css = "md-dialog")
+  public EditTicketDialog editTicketDialog;
 
   @FindBy(css = "[name='commons.edit']")
   public NvIconButton deliveryVerificationTypeEdit;
@@ -2087,6 +2099,75 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(name = "container.order.edit.resume-order")
     public NvApiTextButton resumeOrder;
+  }
+
+  public void createTicket(RecoveryTicket recoveryTicket) {
+    waitUntilPageLoaded();
+    String trackingId = recoveryTicket.getTrackingId();
+    String ticketType = recoveryTicket.getTicketType();
+
+    createTicketDialog.waitUntilVisible();
+    createTicketDialog.trackingId.setValue(trackingId
+        + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
+    createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
+    createTicketDialog.investigatingDept.selectValue(recoveryTicket.getInvestigatingDepartment());
+    createTicketDialog.investigatingHub.searchAndSelectValue(recoveryTicket.getInvestigatingHub());
+    createTicketDialog.ticketType.selectValue(ticketType);
+
+    switch (ticketType) {
+      case RecoveryTicketsPage.TICKET_TYPE_DAMAGED: {
+        //Damaged Details
+        createTicketDialog.orderOutcome
+            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDamaged());
+        createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
+        createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
+        createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
+        break;
+      }
+      case RecoveryTicketsPage.TICKET_TYPE_MISSING: {
+        createTicketDialog.orderOutcome
+            .searchAndSelectValue(recoveryTicket.getOrderOutcomeMissing());
+        createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
+        createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
+        break;
+      }
+      case RecoveryTicketsPage.TICKET_TYPE_PARCEL_EXCEPTION: {
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.orderOutcome
+            .searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.exceptionReason.setValue(recoveryTicket.getExceptionReason());
+        break;
+      }
+      case RecoveryTicketsPage.TICKET_TYPE_SHIPPER_ISSUE: {
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.orderOutcome
+            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
+      }
+    }
+
+    createTicketDialog.customerZendeskId.setValue(recoveryTicket.getCustZendeskId());
+    createTicketDialog.shipperZendeskId.setValue(recoveryTicket.getShipperZendeskId());
+    createTicketDialog.ticketNotes.setValue(recoveryTicket.getTicketNotes());
+
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      if (createTicketDialog.createTicket.isDisabled()) {
+        createTicketDialog.trackingId.setValue(trackingId + " ");
+        pause100ms();
+        throw new NvTestRuntimeException(
+            "Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
+      }
+    });
+
+    createTicketDialog.createTicket.clickAndWaitUntilDone();
+    waitUntilInvisibilityOfToast("Ticket created");
   }
 
   /**

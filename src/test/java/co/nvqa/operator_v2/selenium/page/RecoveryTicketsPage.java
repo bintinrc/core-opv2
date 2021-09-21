@@ -29,11 +29,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
 
   public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
 
-  private static final String TICKET_TYPE_DAMAGED = "DAMAGED";
-  private static final String TICKET_TYPE_MISSING = "MISSING";
-  private static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
-  private static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
-  private static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
+  public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
+  public static final String TICKET_TYPE_MISSING = "MISSING";
+  public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
+  public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
+  public static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
 
   public TicketsTable ticketsTable;
 
