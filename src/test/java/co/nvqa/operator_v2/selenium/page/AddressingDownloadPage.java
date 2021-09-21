@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -556,7 +555,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
     LocalDateTime adjustedOCCreatedAt = getUTC(order.getCreatedAt());
-//    LocalDateTime adjustedOCCreatedAt = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
 
     String ocTrackingID = order.getTrackingId();
     String ocAddressOne = order.getToAddress1();
@@ -630,7 +628,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
     LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
-//    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
