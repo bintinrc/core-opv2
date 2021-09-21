@@ -11,14 +11,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import org.openqa.selenium.Keys;
 
 public class AddressingDownloadSteps extends AbstractSteps {
@@ -305,7 +299,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
     Order order = get(KEY_ORDER_DETAILS);
     Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+    String preset = get(KEY_SELECTED_PRESET_NAME);
 
-    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint);
+    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint, preset);
   }
 }
