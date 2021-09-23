@@ -18,17 +18,18 @@ Feature: Route Logs
     And Operator edits details of created route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | tags       | {route-tag-name}                        |
-      | zone       | {zone-name}                             |
-      | hub        | {hub-name}                              |
+      | hub        | {hub-name-2}                            |
       | driverName | {ninja-driver-2-name}                   |
-      | vehicle    | {vehicle-name}                          |
       | comments   | Route has been edited by automated test |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Updated |
+      | waitUntilInvisible | true               |
     Then Operator verify route details on Route Logs page using data below:
       | date           | {gradle-current-date-yyyy-MM-dd}        |
       | id             | {KEY_CREATED_ROUTE_ID}                  |
       | status         | PENDING                                 |
       | driverName     | {ninja-driver-2-name}                   |
-      | hub            | {hub-name}                              |
+      | hub            | {hub-name-2}                            |
       | zone           | {zone-name}                             |
       | driverTypeName | {driver-type-name-2}                    |
       | comments       | Route has been edited by automated test |
