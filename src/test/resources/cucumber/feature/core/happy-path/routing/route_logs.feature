@@ -10,7 +10,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs
+    And Operator go to menu Routing -> Route Logs V2
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -41,7 +41,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -49,6 +49,9 @@ Feature: Route Logs
     And Operator archive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Archived |
+      | waitUntilInvisible | true                |
     Then Operator verify routes details on Route Logs page using data below:
       | id                                | status   |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | ARCHIVED |
@@ -70,19 +73,19 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
-    Then Operator verifies that info toast displayed:
-      | top    | Transactions within 2 Routes Merged                                        |
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 2 Routes Merged                                          |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create a Single Route from Route Logs Page (uid:31070e4b-b30d-4323-8ea0-96be44488282)
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     When Operator create new route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd} |
       | tags       | {route-tag-name}                 |
@@ -115,7 +118,7 @@ Feature: Route Logs
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    Given Operator go to menu Routing -> Route Logs
+    Given Operator go to menu Routing -> Route Logs V2
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -123,6 +126,9 @@ Feature: Route Logs
     When Operator unarchive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Unarchived |
+      | waitUntilInvisible | true                  |
     Then Operator verify routes details on Route Logs page using data below:
       | id                                | status      |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
