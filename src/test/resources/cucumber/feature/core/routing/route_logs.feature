@@ -709,7 +709,7 @@ Feature: Route Logs
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
       | value.archived  | true                                         |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     Then Operator verifies selected filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
@@ -729,7 +729,7 @@ Feature: Route Logs
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
       | value.archived  | false                                        |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-2-day-dd/MM/yyyy} |
@@ -770,7 +770,7 @@ Feature: Route Logs
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
       | value.archived  | false                                        |
-    When Operator go to menu Routing -> Route Logs
+    When Operator go to menu Routing -> Route Logs V2
     And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     And Operator selects "Delete Preset" preset action on Route Logs page
     Then Operator verifies Cancel button in Delete Preset dialog on Route Logs page is enabled
