@@ -12,7 +12,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import org.openqa.selenium.Keys;
@@ -292,30 +297,43 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorInputTheCreatedOrderSCreationTime() {
     Order createdOrder = get(KEY_ORDER_DETAILS);
 
-    if (createdOrder == null) {
-      assertTrue(f("Order hasn't been created"), true);
-      return;
-    }
+      if (createdOrder == null) {
+          assertTrue(f("Order hasn't been created"), true);
+          return;
+      }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
+      LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
+//    LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
-    NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
-    NvLogger.infof("Order creation time in UTC: %s", orderCreationTimestamp);
+      NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
+      NvLogger.infof("Order creation time init value: %s", createdOrder.getCreatedAt().toString());
+      NvLogger.infof("Order creation time adjusted: %s", orderCreationTimestamp);
 
-    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp);
+      Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp);
 
-    addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+      addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
   }
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")
   public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
-    WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
-    addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
+      WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
+      addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
 
-    Order createdOrder = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+      Order createdOrder = get(KEY_ORDER_DETAILS);
+      Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
 
-    addressingDownloadPage.basicOrderDataUIChecking(createdOrder, waypoint);
+      boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(createdOrder, waypoint);
+
+      if (latencyExists) {
+          LocalDateTime adjustedOCCreatedAt = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(1, ChronoUnit.MINUTES));
+          Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
+          NvLogger.infof("Adjusted OC Created at LocalDateTime: %s", adjustedOCCreatedAt.toString());
+          NvLogger.infof("There had been time latency. Creation time is adjusted to %s", newCreatedAt.toString());
+          NvLogger.infof("Initial crated at: %s", createdOrder.getCreatedAt().toString());
+          createdOrder.setCreatedAt(newCreatedAt);
+          put(KEY_ORDER_DETAILS, createdOrder);
+          NvLogger.infof("Reassigned crated at: %s", createdOrder.getCreatedAt().toString());
+      }
   }
 
   @Then("Operator verifies that the downloaded csv file contains all correct data")

@@ -544,7 +544,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     waitUntilInvisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
   }
 
-  public void basicOrderDataUIChecking(Order order, Waypoint waypoint) {
+  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
     List<WebElement> trackingIDEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "tracking_number")));
     List<WebElement> addressOneEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_one")));
     List<WebElement> addressTwoEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_two")));
@@ -555,6 +555,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
     LocalDateTime adjustedOCCreatedAt = getUTC(order.getCreatedAt());
+//    LocalDateTime adjustedOCCreatedAt = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     String ocTrackingID = order.getTrackingId();
     String ocAddressOne = order.getToAddress1();
@@ -578,6 +579,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     WebElement resultsTextEl = webDriver.findElement(By.xpath("//div[contains(@class, 'ant-card-body')]/span/span[contains(text(), 'Showing')]"));
     String resultText = resultsTextEl.getText();
     int resultsCount = Integer.parseInt(resultText.split(" ")[1]);
+    boolean creationTimeLatencyExists = false;
 
     for (int i = 0; i < resultsCount; i++) {
       verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, trackingIDEl.get(i).getText().equals(ocTrackingID));
@@ -590,6 +592,17 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         NvLogger.infof("Creation time from order creation: %s", ocCreatedAt);
 
         verifyChecklist.put(ORDER_CREATED_AT_EXISTS, createdAtEl.get(i).getText().equals(ocCreatedAt));
+
+        /*
+         * Tolerate creation time latency because the sources are different and sometimes there are time difference
+         * */
+        if (!verifyChecklist.get(ORDER_CREATED_AT_EXISTS)) {
+          LocalDateTime toleratedCreatedAt = adjustedOCCreatedAt.plus(Duration.of(1, ChronoUnit.MINUTES));
+          String toleratedCreatedAtStr = ADDRESS_DOWNLOAD_DATE_FORMAT.format(toleratedCreatedAt);
+          creationTimeLatencyExists = createdAtEl.get(i).getText().equals(toleratedCreatedAtStr);
+          verifyChecklist.put(ORDER_CREATED_AT_EXISTS, creationTimeLatencyExists);
+        }
+
         verifyChecklist.put(ORDER_POSTCODE_EXISTS, postcodeEl.get(i).getText().equals(ocPostcode));
         verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
         verifyChecklist.put(ORDER_LATITUDE_EXISTS, Double.parseDouble(latitudeEl.get(i).getText()) == ocLatitude);
@@ -616,6 +629,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     }
 
     assertTrue("All data are correct", verificationsPassed == verifyChecklist.size());
+
+    /*
+     * Inform the step that there is latency adjustment to creation time
+     * Doing it this way because I can't access the scenario storage in this file
+     * */
+    return creationTimeLatencyExists;
   }
 
   public void csvDownloadSuccessfullyAndContainsBasicData(Order order, Waypoint waypoint, String preset) {
@@ -628,10 +647,13 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
     LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+//    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress2());
+    NvLogger.infof("Creation time (unformatted) checked in csv: %s", orderCreationTimestamp.toString());
+    NvLogger.infof("Creation time checked in csv: %s", dtf.format(orderCreationTimestamp));
     verifyFileDownloadedSuccessfully(csvFileName, dtf.format(orderCreationTimestamp));
     verifyFileDownloadedSuccessfully(csvFileName, order.getToPostcode());
     verifyFileDownloadedSuccessfully(csvFileName, waypoint.getId().toString());
