@@ -383,7 +383,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public LocalDateTime getUTC(Date date) {
-    return date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+//    return date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
   }
 
   public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
