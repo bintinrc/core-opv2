@@ -169,7 +169,6 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file contains all correct data
 
-  @wip
   Scenario: Download Address by Created Time on New Preset
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -201,7 +200,6 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  @wip
   Scenario: Download Address by Created Time on Existing Preset
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -235,7 +233,6 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  @wip
   Scenario: Download Address by Created Time and Other Filters on New Preset
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -268,7 +265,6 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  @wip
   Scenario: Download Address by Created Time and Other Filters on Existing Preset
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -302,7 +298,6 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  @wip
   Scenario: Download Address by Created Time on Existing Preset - Update Creation Time value
     Given Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
