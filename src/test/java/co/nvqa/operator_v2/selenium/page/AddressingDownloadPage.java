@@ -384,7 +384,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   public LocalDateTime getUTC(Date date) {
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-//    return date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
   }
 
   public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
@@ -556,7 +555,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
     LocalDateTime adjustedOCCreatedAt = getUTC(order.getCreatedAt());
-//    LocalDateTime adjustedOCCreatedAt = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
+    // For local debugging purpose:
+    // LocalDateTime adjustedOCCreatedAt = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     String ocTrackingID = order.getTrackingId();
     String ocAddressOne = order.getToAddress1();
@@ -648,13 +648,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
     LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
-//    LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
+    // For local debugging purpose:
+    // LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress2());
-    NvLogger.infof("Creation time (unformatted) checked in csv: %s", orderCreationTimestamp.toString());
-    NvLogger.infof("Creation time checked in csv: %s", dtf.format(orderCreationTimestamp));
     verifyFileDownloadedSuccessfully(csvFileName, dtf.format(orderCreationTimestamp));
     verifyFileDownloadedSuccessfully(csvFileName, order.getToPostcode());
     verifyFileDownloadedSuccessfully(csvFileName, waypoint.getId().toString());
