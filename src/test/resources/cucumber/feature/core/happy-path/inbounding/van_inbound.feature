@@ -25,7 +25,7 @@ Feature: Van Inbound
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
-    And Operator go to menu Routing -> Route Logs
+    And Operator go to menu Routing -> Route Logs V2
     Then Operator verify the route is started after van inbounding using data below:
       | routeDateFrom | {gradle-current-date-yyyy-MM-dd} |
       | routeDateTo   | {gradle-current-date-yyyy-MM-dd} |
