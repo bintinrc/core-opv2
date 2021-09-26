@@ -1,0 +1,238 @@
+[
+  {
+    "line": 2,
+    "elements": [
+      {
+        "start_timestamp": "2021-09-22T06:58:36.889Z",
+        "line": 44,
+        "name": "Scenario_1 (uid:477b8e47-4904-4b91-8887-d8337c2eeb58)",
+        "description": "",
+        "id": "all-station-management-home-related-tests;scenario-1-(uid:477b8e47-4904-4b91-8887-d8337c2eeb58);;2",
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "status": "undefined"
+            },
+            "line": 21,
+            "name": "Operator go to menu Station Management Tool -\u003e Station Management Homepage",
+            "match": {},
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 22,
+            "name": "Operator selects the hub as \"AUTO-STATION-1\" and proceed",
+            "match": {},
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 23,
+            "name": "get the count from the tile: \"Number of parcels in hub\"",
+            "match": {},
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3000000,
+              "status": "skipped"
+            },
+            "line": 24,
+            "name": "API Shipper create V4 order using data below:",
+            "match": {},
+            "rows": [
+              {
+                "cells": [
+                  "generateFromAndTo",
+                  "RANDOM"
+                ]
+              },
+              {
+                "cells": [
+                  "v4OrderRequest",
+                  "{ \"service_type\":\"Parcel\", \"service_level\":\"Standard\", \"parcel_job\":{ \"is_pickup_required\":false, \"pickup_date\":\"{{next-1-day-yyyy-MM-dd}}\", \"pickup_timeslot\":{ \"start_time\":\"12:00\", \"end_time\":\"15:00\"}, \"delivery_start_date\":\"{{next-1-day-yyyy-MM-dd}}\", \"delivery_timeslot\":{ \"start_time\":\"09:00\", \"end_time\":\"22:00\"}}}"
+                ]
+              }
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 27,
+            "name": "Operator go to menu Inbounding -\u003e Global Inbound",
+            "match": {},
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 28,
+            "name": "Operator global inbounds parcel using data below:",
+            "match": {},
+            "rows": [
+              {
+                "cells": [
+                  "hubName",
+                  "AUTO-STATION-1"
+                ]
+              },
+              {
+                "cells": [
+                  "trackingId",
+                  "{KEY_CREATED_ORDER_TRACKING_ID}"
+                ]
+              }
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 31,
+            "name": "Operator go to menu Station Management Tool -\u003e Station Management Homepage",
+            "match": {},
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 32,
+            "name": "Operator selects the hub as \"AUTO-STATION-1\" and proceed",
+            "match": {},
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 33,
+            "name": "verifies that the count in tile: \"Number of parcels in hub\" has increased by 1",
+            "match": {},
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 34,
+            "name": "opens modal pop-up: \"Parcels in Hub\" through hamburger button for the tile: \"Number of parcels in hub\"",
+            "match": {},
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 35,
+            "name": "verifies that the table:\"By Parcel Size\" is displayed with following columns:",
+            "match": {},
+            "rows": [
+              {
+                "cells": [
+                  "Size"
+                ]
+              },
+              {
+                "cells": [
+                  "Count"
+                ]
+              }
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 38,
+            "name": "verifies that the table:\"By Zones\" is displayed with following columns:",
+            "match": {},
+            "rows": [
+              {
+                "cells": [
+                  "Zones"
+                ]
+              },
+              {
+                "cells": [
+                  "Count"
+                ]
+              }
+            ],
+            "keyword": "And "
+          }
+        ],
+        "tags": [
+          {
+            "name": "@OperatorV2"
+          },
+          {
+            "name": "@Station-Management"
+          },
+          {
+            "name": "@Station-Mgmt"
+          },
+          {
+            "name": "@Station-Mgmt-1"
+          },
+          {
+            "name": "@Case-1"
+          },
+          {
+            "name": "@Station-Mgmt-1"
+          }
+        ]
+      }
+    ],
+    "name": "All station management home related tests",
+    "description": "",
+    "id": "all-station-management-home-related-tests",
+    "keyword": "Feature",
+    "uri": "file:src/test/resources/cucumber/feature/station_management/station_management_home.feature",
+    "tags": [
+      {
+        "name": "@OperatorV2",
+        "type": "Tag",
+        "location": {
+          "line": 1,
+          "column": 1
+        }
+      },
+      {
+        "name": "@Station-Management",
+        "type": "Tag",
+        "location": {
+          "line": 1,
+          "column": 13
+        }
+      },
+      {
+        "name": "@Station-Mgmt",
+        "type": "Tag",
+        "location": {
+          "line": 1,
+          "column": 33
+        }
+      },
+      {
+        "name": "@Station-Mgmt-1",
+        "type": "Tag",
+        "location": {
+          "line": 1,
+          "column": 47
+        }
+      }
+    ]
+  }
+]

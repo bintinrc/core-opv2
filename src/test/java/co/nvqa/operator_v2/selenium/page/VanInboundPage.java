@@ -15,7 +15,7 @@ public class VanInboundPage extends OperatorV2SimplePage {
   public void fillRouteIdOnVanInboundPage(String routeId) {
     sendKeysById("route-id", routeId);
     clickNvApiTextButtonByNameAndWaitUntilDone("container.van-inbound.fetch");
-  }
+    }
 
   public void fillTrackingIdOnVanInboundPage(String trackingId) {
     sendKeysById("tracking-id-scan", trackingId + Keys.RETURN);
