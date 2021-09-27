@@ -153,6 +153,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
         .put("Creation Time", this::setCreationTimeFilter)
         .put("Route Grouping", routeGroupingFilter::selectFilter)
         .put("Shipper", shipperFilter::selectFilter)
+        .put("Master Shipper", masterShipperFilter::selectFilter)
         .put("DP Order", value -> dpOrderFilter.selectFilter(value))
         .build();
     txnRsvnTable = new TxnRsvnTable(webDriver);
@@ -161,6 +162,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
         .put("End Datetime", endDateTimeFilter)
         .put("Creation Time", creationTimeFilter)
         .put("Shipper", shipperFilter)
+        .put("Master Shipper", masterShipperFilter)
         .put("DP Order", dpOrderFilter)
         .put("Route Grouping", routeGroupingFilter)
         .put("Routed", routedFilter)

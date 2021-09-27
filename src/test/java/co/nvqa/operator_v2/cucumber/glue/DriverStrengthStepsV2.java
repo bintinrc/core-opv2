@@ -2,11 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
@@ -67,12 +68,16 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   }
 
   @When("^Operator edit created Driver on Driver Strength page using data below:$")
-  public void operatorEditCreatedDriverOnDriverStrengthPageUsingDataBelow(
-      Map<String, String> mapOfData) {
+  public void operatorEditCreatedDriver(Map<String, String> mapOfData) {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     String username = driverInfo.getUsername();
     driverInfo.fromMap(mapOfData);
-    dsPage.editDriver(username, driverInfo);
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.fillForm(driverInfo);
+      dsPage.editDriverDialog.submitForm();
+    });
   }
 
   @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
@@ -108,7 +113,38 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @Then("^Operator verify driver strength params of created driver on Driver Strength page$")
   public void dbOperatorVerifyDriverIsCreatedSuccessfully() {
     DriverInfo expectedDriverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.verifyDriverInfo(expectedDriverInfo);
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, expectedDriverInfo.getUsername());
+      DriverInfo actualDriverInfo = dsPage.driversTable.readEntity(1);
+      if (expectedDriverInfo.getId() != null) {
+        assertThat("Id", actualDriverInfo.getId(), equalTo(expectedDriverInfo.getId()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getUsername())) {
+        assertThat("Username", actualDriverInfo.getUsername(),
+            equalTo(expectedDriverInfo.getUsername()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getFirstName())) {
+        assertThat("First Name", actualDriverInfo.getFirstName(),
+            equalTo(expectedDriverInfo.getFirstName()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getLastName())) {
+        assertThat("Last Name", actualDriverInfo.getLastName(),
+            equalTo(expectedDriverInfo.getLastName()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
+        assertThat("Type", actualDriverInfo.getType(), equalTo(expectedDriverInfo.getType()));
+      }
+      if (expectedDriverInfo.getZoneMin() != null) {
+        assertThat("Min", actualDriverInfo.getZoneMin(), equalTo(expectedDriverInfo.getZoneMin()));
+      }
+      if (expectedDriverInfo.getZoneMax() != null) {
+        assertThat("Max", actualDriverInfo.getZoneMax(), equalTo(expectedDriverInfo.getZoneMax()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getComments())) {
+        assertThat("Comments", actualDriverInfo.getComments(),
+            equalTo(expectedDriverInfo.getComments()));
+      }
+    });
   }
 
   @Then("^Operator verify contact details of created driver on Driver Strength page$")
@@ -141,45 +177,28 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   }
 
   @When("Operator filter driver strength using data below:")
-  public void operatorFilterDriverStrengthUsingDataBelow(Map<String, String> data) {
-    data = resolveKeyValues(data);
+  public void operatorFilterDriverStrengthUsingDataBelow(Map<String, String> map) {
+    Map<String, String> data = resolveKeyValues(map);
+    dsPage.inFrame(() -> {
+      dsPage.loadSelection.waitUntilClickable();
+      dsPage.clearSelection.click();
 
-    if (dsPage.editSearchFilter.isDisplayedFast()) {
-      dsPage.editSearchFilter.click();
-    }
-
-    dsPage.addFilter.waitUntilClickable();
-
-    if (data.containsKey("zones")) {
-      if (!dsPage.zonesFilter.isDisplayedFast()) {
-        dsPage.addFilter("Zones");
+      if (data.containsKey("zones")) {
+        List<String> zones = splitAndNormalize(data.get("zones"));
+        dsPage.zonesFilter.selectValues(zones);
       }
-      List<String> tags = splitAndNormalize(data.get("zones"));
-      dsPage.zonesFilter.clearAll();
-      dsPage.zonesFilter.selectFilter(tags);
-    }
 
-    if (data.containsKey("driverTypes")) {
-      if (!dsPage.driverTypesFilter.isDisplayedFast()) {
-        dsPage.addFilter("Driver Types");
+      if (data.containsKey("driverTypes")) {
+        List<String> driverTypes = splitAndNormalize(data.get("driverTypes"));
+        dsPage.driverTypesFilter.selectValues(driverTypes);
       }
-      List<String> tags = splitAndNormalize(data.get("driverTypes"));
-      dsPage.driverTypesFilter.clearAll();
-      dsPage.driverTypesFilter.selectFilter(tags);
-    }
 
-    if (data.containsKey("resigned")) {
-      if (!dsPage.resignedFilter.isDisplayedFast()) {
-        dsPage.addFilter("Resigned");
+      if (data.containsKey("resigned")) {
+        dsPage.resignedFilter.setValue(data.get("resigned").toLowerCase());
       }
-      dsPage.resignedFilter.setFilter(data.get("resigned").toLowerCase());
-    }
 
-    if (dsPage.loadSelection.isDisplayedFast()) {
       dsPage.loadSelection();
-    } else {
-      dsPage.loadEverything();
-    }
+    });
   }
 
   @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" zone$")

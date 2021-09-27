@@ -35,6 +35,10 @@ Feature: Driver Strength
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
     When Operator edit created Driver on Driver Strength page using data below:
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
@@ -43,13 +47,21 @@ Feature: Driver Strength
       | vehicleLicenseNumber | GENERATED                                                        |
       | vehicleCapacity      | 200                                                              |
       | contact              | GENERATED                                                        |
-      | zoneId               | {zone-name}                                                      |
+      | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 2                                                                |
       | zoneMax              | 2                                                                |
       | zoneCost             | 2                                                                |
       | password             | GENERATED                                                        |
       | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
-    Then Operator verify driver strength params of created driver on Driver Strength page
+    Then Operator verifies that success react notification displayed:
+      | top                | Driver Updated                 |
+      | bottom             | Driver {KEY_CREATED_DRIVER_ID} |
+      | waitUntilInvisible | true                           |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name-2}      |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    And Operator verify driver strength params of created driver on Driver Strength page
 
   @DeleteDriver
   Scenario: Create New Driver Account and Verify Contact Detail is Correct (uid:fadb6a2a-6f2a-4c6f-94a9-e9f41c8795cc)
