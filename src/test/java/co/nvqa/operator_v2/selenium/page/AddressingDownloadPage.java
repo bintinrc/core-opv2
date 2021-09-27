@@ -150,27 +150,27 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
           .ofPattern("yyyy-MM-dd_HH-mm");
-  // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
-  // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
-  private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
-          .getTimezone()));
-  private static final String DATE_TIME = ZONED_DATE_TIME.format(DATE_FORMAT);
-  private static final String CSV_FILENAME_FORMAT = TestConstants.ADDRESSING_PRESET_NAME + "_";
+    // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
+    // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
+    private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
+            .getTimezone()));
+    private static final String DATE_TIME = ZONED_DATE_TIME.format(DATE_FORMAT);
+    private static final String CSV_FILENAME_FORMAT = TestConstants.ADDRESSING_PRESET_NAME + "_";
 
-  private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
+    private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
-  public String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
-  public String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
+    public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
+    public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
 
-  public AddressingDownloadPage(WebDriver webDriver) {
-    super(webDriver);
-  }
+    public AddressingDownloadPage(WebDriver webDriver) {
+        super(webDriver);
+    }
 
-  public void switchToIframe() {
-    getWebDriver().switchTo().frame(pageFrame.getWebElement());
-  }
+    public void switchToIframe() {
+        getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    }
 
-  public void verifiesPageIsFullyLoaded() {
+    public void verifiesPageIsFullyLoaded() {
     isElementExistWait5Seconds(EXISTED_PRESET_SELECTION_XPATH);
   }
 
