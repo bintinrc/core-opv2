@@ -38,6 +38,7 @@ Feature: Priority Parcel in Hub
       | Tracking ID                     | Order Tags |
       | {KEY_CREATED_ORDER_TRACKING_ID} | PRIOR      |
     And verifies that Edit Order page is opened on clicking tracking id
+    And reloads operator portal to reset the test state
 
     Examples:
       | TileName                | ModalName               |

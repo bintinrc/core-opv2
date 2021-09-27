@@ -50,6 +50,7 @@ Feature: Priority Parcels On Vehicle for Delivery
       | {KEY_CREATED_ORDER_TRACKING_ID} | {KEY_CREATED_ROUTE_ID} |
     And verifies that Edit Order page is opened on clicking tracking id
     And verifies that Route Manifest page is opened on clicking route id
+    And reloads operator portal to reset the test state
 
     Examples:
       | TileName                                 | ModalName                   |

@@ -29,6 +29,7 @@ Feature: Number of Parcels In Hub
     And verifies that the table:"<TableName2>" is displayed with following columns:
       | Zones |
       | Count |
+    And reloads operator portal to reset the test state
 
     Examples:
       | TileName                 | ModalName      | TableName1     | TableName2 |
