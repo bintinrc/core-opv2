@@ -13,6 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 public class AntSelect2 extends PageElement {
 
   public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_EQUALS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[normalize-space(text())='%s']";
   public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
 
   public AntSelect2(WebDriver webDriver, WebElement webElement) {
@@ -58,7 +59,12 @@ public class AntSelect2 extends PageElement {
   }
 
   public void clickMenuItem(String value) {
-    clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
+    String xpath = f(ITEM_EQUALS_LOCATOR, StringUtils.normalizeSpace(value));
+    if (isElementVisible(xpath, 1)) {
+      click(xpath);
+    } else {
+      clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
+    }
   }
 
   public void clickMenuItemByIndex(int index) {
