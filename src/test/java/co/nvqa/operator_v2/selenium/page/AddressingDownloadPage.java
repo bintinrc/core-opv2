@@ -159,6 +159,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
+  public String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
+  public String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
+
   public AddressingDownloadPage(WebDriver webDriver) {
     super(webDriver);
   }

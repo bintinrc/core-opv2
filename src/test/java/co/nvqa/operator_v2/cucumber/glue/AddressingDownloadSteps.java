@@ -17,7 +17,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Date;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -25,8 +28,6 @@ import org.openqa.selenium.WebElement;
 public class AddressingDownloadSteps extends AbstractSteps {
 
   private AddressingDownloadPage addressingDownloadPage;
-
-  private static final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
 
   private static final String TIME_BRACKET_ALL_DAY = "ALL_DAY";
   private static final String TIME_BRACKET_DAY_SLOT = "DAY_SLOT";
@@ -77,8 +78,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() -> {
           addressingDownloadPage.filterButton.click();
           pause1s();
-          addressingDownloadPage.selectPresetFilter(filterType);
-          assertTrue(addressingDownloadPage.isElementExistFast(FILTER_SHOWN_XPATH));
+              addressingDownloadPage.selectPresetFilter(filterType);
+              assertTrue(addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH));
         },
         "Clicking Filter for Preset");
 
@@ -231,7 +232,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on download csv button on Address Download Page")
   public void operatorClicksOnDownloadCsvButtonOnAddressDownloadPage() {
-    String addressDownloadStats = "//div[@class='download-csv-holder']/div[@class='download-stats']";
+    String addressDownloadStats = addressingDownloadPage.ADDRESS_DOWNLOAD_STATS;
 
     addressingDownloadPage.downloadCsv.click();
     addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadStats);
@@ -372,7 +373,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
               addressingDownloadPage.filterButton.click();
               pause1s();
               addressingDownloadPage.selectPresetFilter(filterType);
-              assertTrue(addressingDownloadPage.isElementExistFast(FILTER_SHOWN_XPATH));
+              assertTrue(addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH));
             },
             "Clicking Filter for Preset");
 
