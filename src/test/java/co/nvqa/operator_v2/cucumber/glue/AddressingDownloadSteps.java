@@ -302,9 +302,9 @@ public class AddressingDownloadSteps extends AbstractSteps {
       return;
     }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
+//    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
     // For local debugging purpose:
-    // LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
+    LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
     NvLogger.infof("Order creation time: %s", orderCreationTimestamp);
