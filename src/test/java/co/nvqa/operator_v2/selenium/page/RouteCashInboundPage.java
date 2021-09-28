@@ -88,6 +88,7 @@ public class RouteCashInboundPage extends SimpleReactPage {
              */
       routeCashInboundTable
           .filterByColumn(COLUMN_RECEIPT_NUMBER, routeCashInboundCod.getReceiptNumber());
+      pause2s();
       isTableEmpty = routeCashInboundTable.isEmpty();
     }
 

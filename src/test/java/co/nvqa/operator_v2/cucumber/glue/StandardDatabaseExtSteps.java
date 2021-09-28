@@ -34,11 +34,11 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
-import cucumber.api.java.After;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -174,6 +174,36 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
           assertEquals("Number of jaro scores", 1, jaroScores.size());
           assertTrue("jaro scores are archived", jaroScores.get(0).getArchived() == 1);
+        }
+      } else {
+        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
+      }
+    });
+  }
+
+  @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:")
+  public void dbOperatorVerifyJaroScores(List<Map<String, String>> data) {
+    Order order = get(KEY_ORDER_DETAILS);
+    String trackingId = order.getTrackingId();
+
+    List<Transaction> transactions = order.getTransactions();
+
+    ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+    {
+      Optional<Transaction> transactionOptional = transactions.stream()
+          .filter(t -> transactionType.equals(t.getType())).findFirst();
+
+      if (transactionOptional.isPresent()) {
+        Transaction transaction = transactionOptional.get();
+        Long waypointId = transaction.getWaypointId();
+        if (waypointId != null) {
+          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          assertEquals("Number of jaro scores", data.size(), jaroScores.size());
+          for (int i = 0; i < data.size(); i++) {
+            JaroScore expected = new JaroScore(resolveKeyValues(data.get(i)));
+            JaroScore actual = jaroScores.get(i);
+            expected.compareWithActual(actual);
+          }
         }
       } else {
         fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
@@ -651,7 +681,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @After(value = {"@DeleteDpPartner"})
+  @After(value = "@DeleteDpPartner")
   public void deleteDpPartner() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
 
@@ -660,7 +690,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @After(value = {"@DeleteDpAndPartner"})
+  @After(value = "@DeleteDpAndPartner")
   public void deleteDp() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
 
@@ -670,7 +700,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @After(value = {"@DeleteDpUserDpAndPartner"})
+  @After(value = "@DeleteDpUserDpAndPartner")
   public void deleteDpUser() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
 

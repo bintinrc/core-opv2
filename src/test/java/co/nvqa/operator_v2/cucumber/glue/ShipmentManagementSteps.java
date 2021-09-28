@@ -12,11 +12,11 @@ import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -590,7 +590,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.forceSuccessShipment();
   }
 
-  @And("Operator create CSV \"([^\"]*)\" file which has multiple valid Tracking ID in it and upload the CSV")
+  @And("^Operator create CSV \"([^\"]*)\" file which has multiple valid Tracking ID in it and upload the CSV$")
   public void createAndUploadCsvMultipleTrackingId(String fileName) throws FileNotFoundException {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
@@ -598,7 +598,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.createAndUploadCsv(orders, fileName, numberOfOrder, shipmentInfo);
   }
 
-  @And("Operator create CSV \"([^\"]*)\" file which has duplicated Tracking ID in it and upload the CSV")
+  @And("^Operator create CSV \"([^\"]*)\" file which has duplicated Tracking ID in it and upload the CSV$")
   public void createAndUploadCsvDuplicatedTrackingId(String fileName) throws FileNotFoundException {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
@@ -607,7 +607,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         .createAndUploadCsv(orders, fileName, true, true, numberOfOrder, shipmentInfo);
   }
 
-  @And("Operator create CSV \"([^\"]*)\" file which has invalid Tracking ID in it and upload the CSV")
+  @And("^Operator create CSV \"([^\"]*)\" file which has invalid Tracking ID in it and upload the CSV$")
   public void createAndUploadCsvInvalidTrackingId(String fileName) throws FileNotFoundException {
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
     shipmentManagementPage.createAndUploadCsv(fileName, shipmentInfo);

@@ -3,10 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsScanningPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.HashMap;
 import java.util.Map;
 

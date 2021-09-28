@@ -81,7 +81,7 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  Scenario: Create New Filter Preset With RTS Filter Successfully - No (uid:2d0c6714-6451-4d5e-b92b-33b03489742e)
+  Scenario: Create New Filter Preset With RTS Filter Successfully - RTS No (uid:2d0c6714-6451-4d5e-b92b-33b03489742e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
@@ -94,7 +94,7 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  Scenario: Create New Filter Preset With RTS Filter Successfully - Yes (uid:3cafa693-247b-49c5-91dc-b3b0e25f3664)
+  Scenario: Create New Filter Preset With RTS Filter Successfully - RTS Yes (uid:3cafa693-247b-49c5-91dc-b3b0e25f3664)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
     Then Operator verifies that the page is fully loaded
@@ -150,7 +150,7 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  Scenario: Load Addresses
+  Scenario: Load Addresses (uid:1d7f5dab-36aa-48a0-861b-22213dc1b491)
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
       | shipperV4ClientSecret | {addressing-shipper-v4-client-secret} |

@@ -8,12 +8,17 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
 import co.nvqa.operator_v2.util.TestConstants;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import org.openqa.selenium.Keys;
 
 public class AddressingDownloadSteps extends AbstractSteps {
@@ -278,11 +283,10 @@ public class AddressingDownloadSteps extends AbstractSteps {
       return;
     }
 
-    NvLogger.infof("Order tracking ID is: %s", createdOrder.getTrackingId());
+    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
 
-    LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-    NvLogger.infof("Order creation time is: %s", orderCreationTimestamp);
+    NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
+    NvLogger.infof("Order creation time in UTC: %s", orderCreationTimestamp);
 
     addressingDownloadPage.setCreationTimeDatepicker(addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp));
   }

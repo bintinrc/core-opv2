@@ -11,10 +11,10 @@ import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.BulkRouteAssignmentSidePanel.ReservationCard;
 import co.nvqa.operator_v2.util.TestUtils;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -647,6 +647,18 @@ public class ShipperPickupsSteps extends AbstractSteps {
       shipperPickupsPage
           .verifyFileDownloadedSuccessfully("pod-file-id-" + podId + ".csv", trackingId);
     }
+  }
+
+  @Then("^Operator verifies downloaded POD CSV file on Shipper Pickups page contains no details$")
+  public void operatorVerifiesEmptyPodCsvFile() {
+    assertTrue("Reservation dialog is opened",
+        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+    String podId = shipperPickupsPage.reservationDetailsDialog.podName.getAttribute("name")
+        .replace("POD-", "");
+    shipperPickupsPage.reservationDetailsDialog.downloadCsvFile.click();
+    shipperPickupsPage
+          .verifyFileDownloadedSuccessfully("pod-file-id-" + podId + ".csv",
+              "Scanned at Shipper (POD),Removed TID by Driver\n" + "," , true, true, false);
   }
 
   @When("^Operator edit reservation address details on Edit Route Details dialog using data below:$")

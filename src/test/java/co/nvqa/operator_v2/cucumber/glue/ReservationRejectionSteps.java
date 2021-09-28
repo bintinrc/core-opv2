@@ -4,9 +4,9 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.driver.RejectReservationRequest;
 import co.nvqa.operator_v2.model.ReservationRejectionEntity;
 import co.nvqa.operator_v2.selenium.page.ReservationRejectionPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.guice.ScenarioScoped;
 
 /**
  * @author Kateryna Skakunova

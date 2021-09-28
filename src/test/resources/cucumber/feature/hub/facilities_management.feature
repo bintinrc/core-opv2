@@ -29,8 +29,8 @@ Feature: Facilities Management
     Examples:
       | name                | type              | hiptest-uid                              | dataset_name         |
       | Station             | STATION           | uid:6f350889-3076-4293-992a-7b0443dac7d8 | Station              |
-      | Station - Crossdock | CROSSDOCK_STATION | uid:4d9e12db-b529-4b93-b7fc-776ac32bc7dc | Station - Crossdock  |
-      | Hub - Crossdock     | CROSSDOCK         | uid:846081f6-4fa4-4ecc-b3a4-2a2ee1e2b68e | Hub - Crossdock      |
+      | Station - Crossdock | CROSSDOCK_STATION | uid:4d9e12db-b529-4b93-b7fc-776ac32bc7dc | Station Crossdock  |
+      | Hub - Crossdock     | CROSSDOCK         | uid:846081f6-4fa4-4ecc-b3a4-2a2ee1e2b68e | Hub Crossdock      |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Disable Hub - DP/Recovery/Others - <dataset_name> (<hiptest-uid>)
@@ -84,8 +84,8 @@ Feature: Facilities Management
     Examples:
       | name                | type              | hiptest-uid                              | dataset_name         |
       | Station             | STATION           | uid:2a62c480-b20c-40c4-b89e-3a9118b8878a | Station              |
-      | Hub - Crossdock     | CROSSDOCK         | uid:58bba508-9557-46b3-b863-10c6c9445961 | Hub - Crossdock      |
-      | Station - Crossdock | CROSSDOCK_STATION | uid:580558a4-ea3d-4813-8770-36fc9c5c3a97 | Station - Crossdock  |
+      | Hub - Crossdock     | CROSSDOCK         | uid:58bba508-9557-46b3-b863-10c6c9445961 | Hub Crossdock      |
+      | Station - Crossdock | CROSSDOCK_STATION | uid:580558a4-ea3d-4813-8770-36fc9c5c3a97 | Station Crossdock  |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Facility Type - DP/Recovery/Others - <dataset_name> (<hiptest-uid>)
@@ -141,8 +141,8 @@ Feature: Facilities Management
     Examples:
       | name                | type              | hiptest-uid                              | dataset_name         |
       | Station             | STATION           | uid:02bc0971-fc3a-4ce7-af48-5fe38fd7263a | Station              |
-      | Hub - Crossdock     | CROSSDOCK         | uid:8d07757e-b05d-4b85-8069-761105214f2a | Hub - Crossdock      |
-      | Station - Crossdock | CROSSDOCK_STATION | uid:2e18f1fe-0e8c-45d7-a8d8-26d783312cbf | Station - Crossdock  |
+      | Hub - Crossdock     | CROSSDOCK         | uid:8d07757e-b05d-4b85-8069-761105214f2a | Hub Crossdock      |
+      | Station - Crossdock | CROSSDOCK_STATION | uid:2e18f1fe-0e8c-45d7-a8d8-26d783312cbf | Station Crossdock  |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Lat/Long of Facility - DP/Recovery/Others - <dataset_name> (<hiptest-uid>)
@@ -200,8 +200,8 @@ Feature: Facilities Management
     Examples:
       | name                | type              | hiptest-uid                              | dataset_name         |
       | Station             | STATION           | uid:0bb1b3ed-fc84-40ce-8b80-ab46cf80a024 | Station              |
-      | Hub - Crossdock     | CROSSDOCK         | uid:55dc4d29-3f3c-4c0e-aa49-994a832ca3e2 | Hub - Crossdock      |
-      | Station - Crossdock | CROSSDOCK_STATION | uid:71919b9e-e0b3-466e-a187-882456f9b488 | Station - Crossdock  |
+      | Hub - Crossdock     | CROSSDOCK         | uid:55dc4d29-3f3c-4c0e-aa49-994a832ca3e2 | Hub Crossdock      |
+      | Station - Crossdock | CROSSDOCK_STATION | uid:71919b9e-e0b3-466e-a187-882456f9b488 | Station Crossdock  |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb 
   Scenario Outline: Update Lat/Long and Facility Type - DP/Recovery/Others - <dataset_name> (<hiptest-uid>)

@@ -3,20 +3,19 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -25,32 +24,35 @@ import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_CONTACT_INFO;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_DELETE;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 
 /**
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class DriverStrengthPageV2 extends OperatorV2SimplePage {
+public class DriverStrengthPageV2 extends SimpleReactPage {
 
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
   public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public AddDriverDialog addDriverDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public EditDriverDialog editDriverDialog;
 
   public DriversTable driversTable;
+
   private ContactDetailsMenu contactDetailsMenu;
 
   @FindBy(name = "container.driver-strength.edit-search-filter")
   public NvIconTextButton editSearchFilter;
 
-  @FindBy(name = "container.driver-strength.load-selection")
-  public NvIconTextButton loadSelection;
+  @FindBy(xpath = "//button[.='Load Selection']")
+  public Button loadSelection;
+
+  @FindBy(xpath = "//button[.='Clear Selection']")
+  public Button clearSelection;
 
   @FindBy(name = "container.driver-strength.load-everything")
   public NvIconTextButton loadEverything;
@@ -58,14 +60,14 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
   @FindBy(name = "Add New Driver")
   public NvIconTextButton addNewDriver;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Zones']")
-  public NvFilterBox zonesFilter;
+  @FindBy(name = "zones")
+  public AntSelect2 zonesFilter;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Driver Types']")
-  public NvFilterBox driverTypesFilter;
+  @FindBy(name = "driverTypes")
+  public AntSelect2 driverTypesFilter;
 
-  @FindBy(css = "nv-filter-boolean-box[main-title='Resigned']")
-  public NvFilterBooleanBox resignedFilter;
+  @FindBy(id = "resigned")
+  public AntSwitch resignedFilter;
 
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
@@ -111,20 +113,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     addDriverDialog.submitForm();
   }
 
-  public void editDriver(String username, DriverInfo newDriverInfo) {
-    filterBy(COLUMN_USERNAME, username);
-    driversTable.clickActionButton(1, ACTION_EDIT);
-    editDriverDialog.fillForm(newDriverInfo);
-    editDriverDialog.submitForm();
-  }
-
   public void filterBy(String columnName, String value) {
-    if (loadEverything.isDisplayed()) {
-      loadEverything.click();
-      if (halfCircleSpinner.waitUntilVisible(2)) {
-        halfCircleSpinner.waitUntilInvisible();
-      }
-    }
     driversTable.filterByColumn(columnName, value);
   }
 
@@ -198,60 +187,63 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
    * Accessor for Add Driver dialog
    */
   @SuppressWarnings("UnusedReturnValue")
-  public static class AddDriverDialog extends MdDialog {
+  public static class AddDriverDialog extends AntModal {
 
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
+    @FindBy(xpath = ".//button[.='Submit']")
+    public Button submit;
 
     @FindBy(css = "div.hints")
     public PageElement hints;
 
-    @FindBy(css = "nv-autocomplete[placeholder='Hub']")
-    public NvAutocomplete hub;
+    @FindBy(id = "firstName")
+    public ForceClearTextBox firstName;
 
-    @FindBy(id = "employment-start-date")
-    public MdDatepicker employmentStartDate;
+    @FindBy(id = "lastName")
+    public ForceClearTextBox lastName;
 
-    @FindBy(css = "input[aria-label='First Name']")
-    public TextBox firstName;
+    @FindBy(id = "licenseNumber")
+    public ForceClearTextBox driverLicenseNumber;
 
-    @FindBy(css = "input[aria-label='Last Name']")
-    public TextBox lastName;
+    @FindBy(name = "type")
+    public AntSelect type;
 
-    @FindBy(css = "input[aria-label='COD Limit']")
+    @FindBy(id = "codLimit")
     public TextBox codLimit;
 
-    @FindBy(css = "input[aria-label='Driver License Number']")
-    public TextBox driverLicenseNumber;
+    @FindBy(name = "hub")
+    public AntSelect hub;
 
-    @FindBy(css = "input[aria-label='Username']")
-    public TextBox username;
+    @FindBy(css = ".ant-calendar-picker")
+    public AntCalendarPicker employmentStartDate;
 
-    @FindBy(css = "input[aria-label='Password']")
-    public TextBox password;
+    @FindBy(id = "username")
+    public ForceClearTextBox username;
 
-    @FindBy(name = "commons.comments")
-    public TextBox comments;
+    @FindBy(id = "password")
+    public ForceClearTextBox password;
+
+    @FindBy(id = "comment")
+    public ForceClearTextBox comments;
 
     @FindBy(css = "button[aria-label='Check Availability']")
     public Button checkAvailability;
 
-    @FindBy(name = "Add More Vehicles")
+    @FindBy(xpath = ".//button[.='Add More Vehicle']")
     public NvIconTextButton addMoreVehicles;
 
-    @FindBy(css = "div[ng-repeat='vehicle in fields.vehicles._values track by $index']")
+    @FindBy(xpath = ".//div[@class='ant-space-item'][contains(.,'Vehicles')]//div[@class='ant-row']")
     public List<VehicleSettingsForm> vehicleSettingsForm;
 
-    @FindBy(name = "Add More Contacts")
+    @FindBy(xpath = ".//button[.='Add More Contacts']")
     public NvIconTextButton addMoreContacts;
 
-    @FindBy(css = "div[ng-repeat='contact in fields.contacts._values track by $index']")
+    @FindBy(xpath = ".//div[@class='ant-space-item'][contains(.,'Contacts')]//div[@class='ant-row']")
     public List<ContactsSettingsForm> contactsSettingsForms;
 
-    @FindBy(name = "Add More Zones")
+    @FindBy(xpath = ".//button[.='Add More Zones']")
     public NvIconTextButton addMoreZones;
 
-    @FindBy(css = "div[ng-repeat='zonePreference in fields.zonePreferences._values track by $index']")
+    @FindBy(xpath = ".//div[@class='ant-space-item'][contains(.,'Preferred Zones')]//div[@class='ant-row']")
     public List<ZoneSettingsForm> zoneSettingsForms;
 
     public static class VehicleSettingsForm extends PageElement {
@@ -261,13 +253,16 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
         super(webDriver, searchContext, webElement);
       }
 
-      @FindBy(css = "input[aria-label='License Number']")
-      public TextBox vehicleLicenseNumber;
+      @FindBy(css = "div[name*='vehicleType']")
+      public AntSelect2 vehicleType;
 
-      @FindBy(css = "input[aria-label='Vehicle Capacity']")
-      public TextBox vehicleCapacity;
+      @FindBy(css = "input[name*='vehicleNo']")
+      public ForceClearTextBox vehicleLicenseNumber;
 
-      @FindBy(css = "button[aria-label='Remove']")
+      @FindBy(css = "input[name*='capacity']")
+      public ForceClearTextBox vehicleCapacity;
+
+      @FindBy(xpath = ".//button[.='Remove']")
       public Button remove;
 
     }
@@ -279,13 +274,13 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
         super(webDriver, searchContext, webElement);
       }
 
-      @FindBy(css = "md-select[id^='contact-type']")
-      public MdSelect contactType;
+      @FindBy(css = "div[name*='type']")
+      public AntSelect contactType;
 
-      @FindBy(css = "input[aria-label='Contact']")
-      public TextBox contact;
+      @FindBy(css = "input[name*='details']")
+      public ForceClearTextBox contact;
 
-      @FindBy(css = "button[aria-label='Remove']")
+      @FindBy(xpath = ".//button[.='Remove']")
       public Button remove;
 
     }
@@ -297,25 +292,25 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
         super(webDriver, searchContext, webElement);
       }
 
-      @FindBy(css = "md-select[id^='zone']")
-      public MdSelect zoneName;
+      @FindBy(css = "div[name*='zone']")
+      public AntSelect2 zoneName;
 
-      @FindBy(css = "input[aria-label='Min']")
-      public TextBox min;
+      @FindBy(css = "input[name*='minWaypoints']")
+      public ForceClearTextBox min;
 
-      @FindBy(css = "input[aria-label='Max']")
-      public TextBox max;
+      @FindBy(css = "input[name*='maxWaypoints']")
+      public ForceClearTextBox max;
 
-      @FindBy(css = "input[aria-label='Cost']")
-      public TextBox cost;
+      @FindBy(css = "input[name*='cost']")
+      public ForceClearTextBox cost;
 
-      @FindBy(css = "input[aria-label='Seed Latitude']")
-      public TextBox seedLatitude;
+      @FindBy(css = "input[name*='latitude']")
+      public ForceClearTextBox seedLatitude;
 
-      @FindBy(css = "input[aria-label='Seed Longitude']")
-      public TextBox seedLongitude;
+      @FindBy(css = "input[name*='latitude']")
+      public ForceClearTextBox seedLongitude;
 
-      @FindBy(css = "button[aria-label='Remove']")
+      @FindBy(xpath = ".//button[.='Remove']")
       public Button remove;
 
     }
@@ -345,7 +340,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
 
     public AddDriverDialog setEmploymentStartDate(String value) {
       if (value != null) {
-        employmentStartDate.simpleSetValue(value);
+        employmentStartDate.setValue(value);
       }
       return this;
     }
@@ -380,7 +375,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
       addMoreContacts.click();
       ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
       if (StringUtils.isNotBlank(contactType)) {
-        form.contactType.searchAndSelectValue(contactType);
+        form.contactType.selectValue(contactType);
       }
       if (contact != null) {
         final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
@@ -398,7 +393,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
             form.contact.setValue("+639285554697");
             break;
           case "TH":
-            form.contact.setValue( "+66955573510");
+            form.contact.setValue("+66955573510");
             break;
           case "VN":
             form.contact.setValue("+0812345678");
@@ -414,7 +409,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
       addMoreZones.click();
       ZoneSettingsForm form = zoneSettingsForms.get(zoneSettingsForms.size() - 1);
       if (StringUtils.isNotBlank(zoneName)) {
-        form.zoneName.searchAndSelectValue(zoneName);
+        form.zoneName.selectValue(zoneName);
       }
       if (min != null) {
         form.min.setValue(min);
@@ -450,7 +445,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     }
 
     public void submitForm() {
-      submit.clickAndWaitUntilDone();
+      submit.click();
       waitUntilInvisible();
     }
 
@@ -563,39 +558,40 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     public EditDriverDialog editContact(String contactType, String contact) {
       ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
       if (StringUtils.isNotBlank(contactType)) {
-        form.contactType.searchAndSelectValue(contactType);
+        form.contactType.selectValue(contactType);
       }
       if (contact != null) {
         final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
         switch (country) {
           case "SG":
-            form.contact.setValue("+6531594329");
+            form.contact.setValue("31594329");
             break;
           case "ID":
-            form.contact.setValue("+6282188881593");
+            form.contact.setValue("82188881593");
             break;
           case "MY":
-            form.contact.setValue("+6066567878");
+            form.contact.setValue("66567878");
             break;
           case "PH":
-            form.contact.setValue("+639285554697");
+            form.contact.setValue("9285554697");
             break;
           case "TH":
-            form.contact.setValue( "+66955573510");
+            form.contact.setValue("955573510");
             break;
           case "VN":
-            form.contact.setValue("+0812345678");
+            form.contact.setValue("12345678");
             break;
           default:
             break;
-        }      }
+        }
+      }
       return this;
     }
 
     public EditDriverDialog editZone(String zoneName, Integer min, Integer max, Integer cost) {
       ZoneSettingsForm form = zoneSettingsForms.get(zoneSettingsForms.size() - 1);
       if (StringUtils.isNotBlank(zoneName)) {
-        form.zoneName.searchAndSelectValue(zoneName);
+        form.zoneName.selectValue(zoneName);
       }
       if (min != null) {
         form.min.setValue(min);
@@ -643,12 +639,10 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     }
   }
 
-  /**
-   * Accessor for DP table
-   */
-  public static class DriversTable extends MdVirtualRepeatTable<DriverInfo> {
+  public static class DriversTable extends AntTableV3<DriverInfo> {
 
-    private static final String LOCATOR_COMING_TOGGLE = "//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'availability')]/nv-toggle-button/button";
+    private static final String LOCATOR_COMING_TOGGLE = "(//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//button)[1]";
+    private static final String LOCATOR_COMING_VALUE = "//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//span[contains(@class,'ant-typography')]";
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_USERNAME = "username";
@@ -665,37 +659,36 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage {
     public DriversTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_ID, "id")
-          .put(COLUMN_USERNAME, "username")
-          .put("name", "name")
-          .put("hub", "hub")
-          .put(COLUMN_TYPE, "driver-type")
-          .put("vehicleType", "vehicles-vehicle-type")
-          .put("vehicleOwn", "vehicles-own-vehicle")
-          .put(COLUMN_ZONE, "zone-preferences-zone-id")
-          .put("zoneMin", "zone-preferences-min-waypoints")
-          .put("zoneMax", "zone-preferences-max-waypoints")
-          .put("comments", "comments")
-          .put(COLUMN_EMPLOYMENT_START_DATE, "_employment-start-date")
-          .put(COLUMN_EMPLOYMENT_END_DATE, "_employment-end-date")
-          .put(COLUMN_RESIGNED, "resign")
+          .put(COLUMN_ID, "2")
+          .put(COLUMN_USERNAME, "3")
+          .put("name", "4")
+          .put("hub", "5")
+          .put(COLUMN_TYPE, "6")
+          .put("dpms_id", "7")
+          .put("vehicleType", "8")
+          .put("vehicleOwn", "9")
+          .put(COLUMN_ZONE, "10")
+          .put("zoneMin", "11")
+          .put("zoneMax", "12")
+          .put("comments", "13")
+          .put(COLUMN_EMPLOYMENT_START_DATE, "14")
+          .put(COLUMN_EMPLOYMENT_END_DATE, "15")
+          .put(COLUMN_RESIGNED, "16")
           .build()
       );
       setActionButtonsLocators(ImmutableMap
-          .of(ACTION_CONTACT_INFO, "//button[@aria-label='Contact Info']", ACTION_EDIT, "Edit",
-              ACTION_DELETE, "Delete"));
+          .of(ACTION_CONTACT_INFO, "2", ACTION_EDIT, "3",
+              ACTION_DELETE, "4"));
       setEntityClass(DriverInfo.class);
-      setMdVirtualRepeat("driver in getTableData()");
     }
 
     public String getComingStatus(int rowNumber) {
-      String xpath = String
-          .format(LOCATOR_COMING_TOGGLE + "/span", getMdVirtualRepeat(), rowNumber);
+      String xpath = String.format(LOCATOR_COMING_VALUE, rowNumber);
       return getText(xpath);
     }
 
     public void toggleComingStatus(int rowNumber) {
-      String xpath = String.format(LOCATOR_COMING_TOGGLE, getMdVirtualRepeat(), rowNumber);
+      String xpath = String.format(LOCATOR_COMING_TOGGLE, rowNumber);
       waitUntilElementIsClickable(xpath);
       click(xpath);
     }

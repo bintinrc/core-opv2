@@ -3,9 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.InvoicedOrdersSearchPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
 

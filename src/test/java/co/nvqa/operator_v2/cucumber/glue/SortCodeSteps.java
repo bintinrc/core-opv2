@@ -6,9 +6,9 @@ import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.SortCodePage;
 import co.nvqa.operator_v2.util.TestUtils;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.Objects;
 

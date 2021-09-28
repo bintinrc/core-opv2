@@ -879,6 +879,7 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When API Operator cancel created order and get error:
@@ -1292,6 +1293,7 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
+    And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
@@ -2108,7 +2110,7 @@ Feature: Edit Order
     And DB Operator verifies all waypoints.route_id & seq_no is NULL
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 1
+  Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 1 (uid:4cf017ce-642e-4f98-95be-674bd0305f17)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
@@ -2144,7 +2146,7 @@ Feature: Edit Order
     And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 0
+  Scenario: Operator Add Marketplace Sort Order To Route via Edit Order Page - RTS = 0 (uid:12de41cd-ba4d-4303-9c49-c1ec9b15a04e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
@@ -2173,7 +2175,7 @@ Feature: Edit Order
     And DB Operator verifies transaction route id is null
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Cancel RTS For Routed Marketplace Sort Order via Edit Order Page
+  Scenario: Operator Cancel RTS For Routed Marketplace Sort Order via Edit Order Page (uid:7b95e8ec-e000-4c2b-93ae-d62063c3dd4d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
@@ -2205,7 +2207,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies route_monitoring_data record
 
-  Scenario: Operator Cancel RTS For Unrouted Marketplace Sort Order via Edit Order Page
+  Scenario: Operator Cancel RTS For Unrouted Marketplace Sort Order via Edit Order Page (uid:40ce5b0f-8d71-42f9-af4d-08b0c8c25f52)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
@@ -2231,7 +2233,7 @@ Feature: Edit Order
       | rts | 0 |
 
   @DeleteOrArchiveRoute
-  Scenario: Do not Allow Cancel RTS for Marketplace Sort Order
+  Scenario: Do not Allow Cancel RTS for Marketplace Sort Order (uid:2334f294-1959-4add-8278-a6c3b2a55e29)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
@@ -2266,6 +2268,90 @@ Feature: Edit Order
       | name | REVERT RTS |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
+
+  Scenario: Resume Pickup For On Hold Order (uid:75e59db9-3f68-4979-8cde-493cb766d524)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                   | CUSTOMER COMPLAINT |
+      | investigatingDepartment       | Recovery           |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE STATUS |
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED      |
+      | outcome | RESUME PICKUP |
+    And Operator refresh page
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | RESUME PICKUP   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Create Recovery Ticket For Return Pickup (uid:a0dc605d-7a22-43db-929c-d38311720b52)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Van en-route to Pickup" on Edit Order page
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | PENDING |
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource                   | CUSTOMER COMPLAINT |
+      | investigatingDepartment       | Recovery           |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+      | UPDATE STATUS  |
+      | RESCHEDULE     |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | PICKUP |
+      | status | FAIL   |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | PICKUP  |
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY |
+      | status | PENDING  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

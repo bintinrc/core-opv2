@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements;
 
+import co.nvqa.commons.util.NvLogger;
 import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -210,7 +211,11 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
         FieldUtils.writeDeclaredField(locator, "cachedElement", null, true);
         Object searchContext = FieldUtils.readField(locator, "searchContext", true);
         if (searchContext instanceof WebElement) {
-          FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
+          try {
+            FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
+          } catch (Exception ex1) {
+            NvLogger.warn("Error while handling StaleElementReferenceException", ex1);
+          }
         }
         element = locator.findElement();
       }

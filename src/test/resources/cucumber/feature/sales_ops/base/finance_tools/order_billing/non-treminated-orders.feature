@@ -222,6 +222,7 @@ Feature: Order Billing
     And API Operator trigger Add Overstayed Orders
     And DB Operator set collect until date of DP reservation to yesterday's date
     And API Operator trigger overstay to create new reservation
+    And API Operator delete or archive created route
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -275,6 +276,7 @@ Feature: Order Billing
     And API Operator trigger Add Overstayed Orders
     And DB Operator set collect until date of DP reservation to yesterday's date
     And API Operator trigger overstay to create new reservation
+    And API Operator delete or archive created route
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -324,6 +326,7 @@ Feature: Order Billing
     And API Operator trigger Add Overstayed Orders
     And DB Operator set collect until date of DP reservation to yesterday's date
     And API Operator trigger overstay to create new reservation
+    And API Operator delete or archive created route
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     And API Operator create new route using data below:

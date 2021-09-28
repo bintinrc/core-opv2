@@ -4,10 +4,10 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.OrderHelper;
 import co.nvqa.operator_v2.selenium.page.ImplantedManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -181,8 +181,8 @@ public class ImplantedManifestSteps extends AbstractSteps {
     implantedManifestPage.createManifestDialog.waitUntilInvisible();
   }
 
-  @When("Operator verifies that \"(.+)\" success toast message is displayed")
-  @And("Operator verifies that \"(.+)\" error toast message is displayed")
+  @When("^Operator verifies that \"(.+)\" success toast message is displayed$")
+  @And("^Operator verifies that \"(.+)\" error toast message is displayed$")
   public void operatorVerifiesErrorToast(String message) {
     message = resolveValue(message);
     implantedManifestPage.waitUntilInvisibilityOfToast(message);

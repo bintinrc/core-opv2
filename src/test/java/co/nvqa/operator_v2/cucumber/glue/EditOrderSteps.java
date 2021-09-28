@@ -10,6 +10,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
@@ -17,10 +18,10 @@ import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -109,6 +110,57 @@ public class EditOrderSteps extends AbstractSteps {
     }
     softAssertions.assertAll();
   }
+
+  @Then("^Operator verifies pricing information on Edit Order page:$")
+  public void operatorVerifyPricingInformation(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String expectedTotal = data.get("total");
+    if (StringUtils.isNotBlank(expectedTotal)) {
+      softAssert.assertEquals("Expected and actual mismatch of value for Total ", expectedTotal,
+          editOrderPage.getTotal().toString());
+    }
+    String expectedDeliveryFee = data.get("deliveryFee");
+    if (StringUtils.isNotBlank(expectedDeliveryFee)) {
+      softAssert.assertEquals("Expected and actual mismatch of value for Delivery Fee ",
+          expectedDeliveryFee,
+          editOrderPage.deliveryFee.getText());
+    }
+    String expectedCodFee = data.get("codFee");
+    if (StringUtils.isNotBlank(expectedCodFee)) {
+      softAssert.assertEquals("Expected and actual mismatch of value for COD Fee ", expectedCodFee,
+          editOrderPage.codFee.getText());
+    }
+    String expectedInsuranceFee = data.get("insuranceFee");
+    if (StringUtils.isNotBlank(expectedInsuranceFee)) {
+      softAssert.assertEquals("Expected and actual mismatch of value for Insurance Fee ",
+          expectedInsuranceFee, editOrderPage.insuranceFee.getText());
+    }
+    String expectedHandlingFee = data.get("handlingFee");
+    if (StringUtils.isNotBlank(expectedHandlingFee)) {
+      softAssert
+          .assertEquals("Expected and actual mismatch of value for Handling Fee ",
+              expectedHandlingFee,
+              editOrderPage.handlingFee.getText());
+    }
+    String expectedRtsFee = data.get("rtsFee");
+    if (StringUtils.isNotBlank(expectedRtsFee)) {
+      softAssert.assertEquals("Expected and actual mismatch of value for Rts Fee ", expectedRtsFee,
+          editOrderPage.rtsFee.getText());
+    }
+    String expectedGst = data.get("gst");
+    if (StringUtils.isNotBlank(expectedGst)) {
+      softAssert.assertEquals("Expected and actual mismatch of value for Gst ", expectedGst,
+          editOrderPage.gst.getText());
+    }
+    String expectedInsuredValue = data.get("insuredValue");
+    if (StringUtils.isNotBlank(expectedInsuredValue)) {
+      softAssert
+          .assertEquals("Expected and actual mismatch of value for Insured Fee ",
+              expectedInsuredValue,
+              editOrderPage.insuredValue.getText());
+    }
+  }
+
 
   @When("^Operator enter Order Instructions on Edit Order page:$")
   public void operatorEnterOrderInstructionsOnEditOrderPage(Map<String, String> data) {
@@ -458,7 +510,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.manuallyCompleteOrder();
   }
 
-  @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder on Edit Order Page")
+  @And("^Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder on Edit Order Page$")
   public void operatorSelectTheRouteTagsOfFromTheRouteFinder(String routeTag) {
     editOrderPage.clickMenu("Delivery", "Add To Route");
     editOrderPage.addToRouteDialog.waitUntilVisible();
@@ -1406,5 +1458,102 @@ public class EditOrderSteps extends AbstractSteps {
     } catch (IOException e) {
       throw new NvTestRuntimeException("Could not get file path " + pathname, e);
     }
+  }
+
+  @Then("Operator updates recovery ticket on Edit Order page:")
+  public void updateRecoveryTicket(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    editOrderPage.recoveryTicket.click();
+    editOrderPage.editTicketDialog.waitUntilVisible();
+    pause5s();
+    if (data.containsKey("status")) {
+      editOrderPage.editTicketDialog.ticketStatus.selectValue(data.get("status"));
+    }
+    if (data.containsKey("outcome")) {
+      editOrderPage.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
+    }
+    if (data.containsKey("assignTo")) {
+      editOrderPage.editTicketDialog.assignTo.selectValue(data.get("assignTo"));
+    }
+    if (data.containsKey("newInstructions")) {
+      editOrderPage.editTicketDialog.newInstructions.setValue(data.get("newInstructions"));
+    }
+    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
+  }
+
+  @When("^Operator create new recovery ticket on Edit Order page:$")
+  public void createNewTicket(Map<String, String> mapOfData) {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+
+    String entrySource = mapOfData.get("entrySource");
+    String investigatingDepartment = mapOfData.get("investigatingDepartment");
+    String investigatingHub = mapOfData.get("investigatingHub");
+    String ticketType = mapOfData.get("ticketType");
+    String ticketSubType = mapOfData.get("ticketSubType");
+    String parcelLocation = mapOfData.get("parcelLocation");
+    String liability = mapOfData.get("liability");
+    String damageDescription = mapOfData.get("damageDescription");
+    String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
+    String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
+    String custZendeskId = mapOfData.get("custZendeskId");
+    String shipperZendeskId = mapOfData.get("shipperZendeskId");
+    String ticketNotes = mapOfData.get("ticketNotes");
+    String parcelDescription = mapOfData.get("parcelDescription");
+    String exceptionReason = mapOfData.get("exceptionReason");
+    String orderOutcomeInaccurateAddress = mapOfData.get("orderOutcomeInaccurateAddress");
+    String orderOutcomeDuplicateParcel = mapOfData.get("orderOutcomeDuplicateParcel");
+    String issueDescription = mapOfData.get("issueDescription");
+    String rtsReason = mapOfData.get("rtsReason");
+
+    if ("GENERATED".equals(damageDescription)) {
+      damageDescription = f("This damage description is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(ticketNotes)) {
+      ticketNotes = f("This ticket notes is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(parcelDescription)) {
+      parcelDescription = f("This parcel description is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(exceptionReason)) {
+      exceptionReason = f("This exception reason is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    if ("GENERATED".equals(issueDescription)) {
+      issueDescription = f("This issue description is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    RecoveryTicket recoveryTicket = new RecoveryTicket();
+    recoveryTicket.setTrackingId(trackingId);
+    recoveryTicket.setEntrySource(entrySource);
+    recoveryTicket.setInvestigatingDepartment(investigatingDepartment);
+    recoveryTicket.setInvestigatingHub(investigatingHub);
+    recoveryTicket.setTicketType(ticketType);
+    recoveryTicket.setTicketSubType(ticketSubType);
+    recoveryTicket.setParcelLocation(parcelLocation);
+    recoveryTicket.setLiability(liability);
+    recoveryTicket.setDamageDescription(damageDescription);
+    recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
+    recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
+    recoveryTicket.setCustZendeskId(custZendeskId);
+    recoveryTicket.setShipperZendeskId(shipperZendeskId);
+    recoveryTicket.setTicketNotes(ticketNotes);
+    recoveryTicket.setParcelDescription(parcelDescription);
+    recoveryTicket.setExceptionReason(exceptionReason);
+    recoveryTicket.setOrderOutcomeInaccurateAddress(orderOutcomeInaccurateAddress);
+    recoveryTicket.setOrderOutcomeDuplicateParcel(orderOutcomeDuplicateParcel);
+    recoveryTicket.setIssueDescription(issueDescription);
+    recoveryTicket.setRtsReason(rtsReason);
+
+    editOrderPage.clickMenu("Order Settings", "Create Recovery Ticket");
+    editOrderPage.createTicket(recoveryTicket);
+    put("recoveryTicket", recoveryTicket);
   }
 }

@@ -3,11 +3,11 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.model.ArmCombination;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.ArmCombinationContainer;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -232,8 +232,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
         sortBeltManagerPage.uniqueCombinationsTable.isEmpty());
   }
 
-  @When("Operator verifies that \"(.+)\" success notification is displayed")
-  @And("Operator verifies that \"(.+)\" error notification is displayed")
+  @When("^Operator verifies that \"(.+)\" success notification is displayed$")
+  @And("^Operator verifies that \"(.+)\" error notification is displayed$")
   public void operatorVerifiesToast(String message) {
     message = resolveValue(message);
     sortBeltManagerPage.waitUntilInvisibilityOfNotification(message, true);

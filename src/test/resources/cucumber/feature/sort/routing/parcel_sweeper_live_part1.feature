@@ -56,7 +56,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Van En-Route to Pickup (uid:c69dde9c-d01a-439f-94d1-de932d7e84a6)
+  Scenario: Parcel Sweeper Live - Van enroute to pickup (uid:c69dde9c-d01a-439f-94d1-de932d7e84a6)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -353,7 +353,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | scenarioName           | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex | dataset_name           |
-      | No Priority (1)        | uid:2cf3bc90-c0e0-402f-8638-5c47379bddab | 1             | #f8cf5c                 | No Priority (1)        |
+      | No Priority (1)        | uid:2cf3bc90-c0e0-402f-8638-5c47379bddab | 1             | #f8cf5c                 | Normal Priority (1)    |
       | Late Priority (2 - 90) | uid:5c2ba0db-4564-472d-b665-e6a394b0ecee | 50            | #e29d4a                 | Late Priority (2 - 90) |
       | Urgent Priority (91++) | uid:f357f17a-ac88-416f-80c3-e50484c41f4b | 100           | #c65d44                 | Urgent Priority (91++) |
 
@@ -453,7 +453,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "On Hold" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - On Hold Order - MISSING TICKET (uid:85edd7d1-f479-471a-bd26-563d387ca91e)
+  Scenario: Parcel Sweeper Live - On Hold Order - Resolve PENDING MISSING Ticket (uid:85edd7d1-f479-471a-bd26-563d387ca91e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |

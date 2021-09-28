@@ -3,15 +3,16 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ShipperInfo;
 import co.nvqa.operator_v2.selenium.page.AddShipperToPresetPage;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 
 /**
@@ -76,12 +77,12 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     addShipperToPresetPage.loadSelection.click();
   }
 
-  @When("Operator applies \"(.+)\" sorting to \"(.+)\" column on Add Shipper To Preset page")
+  @When("^Operator applies \"(.+)\" sorting to \"(.+)\" column on Add Shipper To Preset page$")
   public void operatorAppliesSorting(String direction, String columnName) {
     addShipperToPresetPage.shippersTable.sortColumn(columnName, direction);
   }
 
-  @When("Operator applies \"(.+)\" filter to \"(.+)\" column on Add Shipper To Preset page")
+  @When("^Operator applies \"(.+)\" filter to \"(.+)\" column on Add Shipper To Preset page$")
   public void operatorAppliesFilter(String filter, String columnName) {
     filter = resolveValue(filter);
     String columnId = AddShipperToPresetPage.ShippersTable.COLUMN_IDS_BY_NAME
@@ -113,7 +114,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     }
   }
 
-  @When("Operator verify \"(.+)\" sorting is applied to \"(.+)\" column on Add Shipper To Preset page")
+  @When("^Operator verify \"(.+)\" sorting is applied to \"(.+)\" column on Add Shipper To Preset page$")
   public void operatorVerifySorting(String direction, String columnName) {
     String columnId = AddShipperToPresetPage.ShippersTable.COLUMN_IDS_BY_NAME
         .get(columnName.trim().toLowerCase());
@@ -240,8 +241,9 @@ public class AddShipperToPresetSteps extends AbstractSteps {
         .fromCsvFile(ShipperInfo.class, pathName, true);
     FileUtils.deleteQuietly(new File(pathName));
 
-    assertEquals("Unexpected number of lines in CSV file", expected.size(),
-        actual.size());
+    Assertions.assertThat(actual.size())
+        .as("number of lines in CSV")
+        .isGreaterThanOrEqualTo(expected.size());
 
     for (int i = 0; i < expected.size(); i++) {
       expected.get(i).compareWithActual("Shipper Result " + (i + 1), actual.get(i));

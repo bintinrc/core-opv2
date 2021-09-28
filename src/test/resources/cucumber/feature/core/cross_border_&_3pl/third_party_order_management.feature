@@ -97,10 +97,10 @@ Feature: Third Party Order Management
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
     Then Operator verify upload results on Third Party Order Management page:
-      | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                 |
-      | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                  |
-      | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}          |
-      | status            | Order {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId} Completed |
+      | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                         |
+      | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                          |
+      | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}                  |
+      | status            | Order {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId} Already Completed |
     And API Operator verifies order state:
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | status         | COMPLETED                                  |
@@ -125,10 +125,10 @@ Feature: Third Party Order Management
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
     Then Operator verify upload results on Third Party Order Management page:
-      | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                                                                                          |
-      | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                                                                                           |
-      | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}                                                                                   |
-      | status            | Order {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId} uploaded with 3PL {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId} |
+      | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                                                                                                             |
+      | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                                                                                                              |
+      | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}                                                                                                      |
+      | status            | Order {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId} uploaded multiple times with 3PL id: {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId} |
     And API Operator verifies order state:
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | status         | COMPLETED                                  |
