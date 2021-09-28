@@ -72,7 +72,7 @@ Feature: Driver Type Management
     And Operator verify new Driver Type params
 
   @DeleteDriverType
-  Scenario Outline: Operator should be able to filter by '<value>' on Driver Type Management page (<hiptest-uid>)
+  Scenario Outline: Filter Driver Type - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
@@ -83,28 +83,28 @@ Feature: Driver Type Management
       | <param> | <value> |
     Then Operator verify filter results on Driver Type Management page
     Examples:
-      | Note                                  | hiptest-uid                              | param           | value                |
-      | deliveryType: Normal Delivery         | uid:f9b37dac-8d1f-41f7-be76-8d25444dda91 | deliveryType    | Normal Delivery      |
-      | deliveryType: C2C + Return Pick Up    | uid:ec607fad-a709-4662-b3c1-428fc245a774 | deliveryType    | C2C + Return Pick Up |
-      | deliveryType: Reservation Pick Up     | uid:c49805f4-f82f-4738-83a5-2f5d3b483e17 | deliveryType    | Reservation Pick Up  |
-      | priorityLevel: Priority               | uid:f91f40e6-354f-49ff-a3b0-e552a17d6b6c | priorityLevel   | Priority             |
-      | priorityLevel: Non-Priority           | uid:f39ec62a-d5c1-45a3-80ac-d4c9c7dcca5c | priorityLevel   | Non-Priority         |
-      | reservationSize: Less Than 3 Parcels  | uid:e7ee4097-6b56-408f-acfb-ace79cba492a | reservationSize | Less Than 3 Parcels  |
-      | reservationSize: Less Than 10 Parcels | uid:a68160bf-d8d6-4ea6-af89-b76aab131124 | reservationSize | Less Than 10 Parcels |
-      | reservationSize: Trolley Required     | uid:1dda72e6-9ca0-4c57-87c7-8d493512a3dc | reservationSize | Trolley Required     |
-      | reservationSize: Half Van Load        | uid:910dcf45-5361-43eb-9e09-9e57e8b5aca2 | reservationSize | Half Van Load        |
-      | reservationSize: Full Van Load        | uid:1c8f4fcd-be2b-4da1-9a8e-3b671b301cb1 | reservationSize | Full Van Load        |
-      | reservationSize: Larger Than Van Load | uid:eb53b254-a2df-4513-a877-1b80267161dc | reservationSize | Larger Than Van Load |
-      | parcelSize: Small                     | uid:590e63b3-7b7c-4abd-b66a-4c9ff7ec0b86 | parcelSize      | Small                |
-      | parcelSize: Medium                    | uid:6bb0673d-8c66-4efa-98f0-cac222adb250 | parcelSize      | Medium               |
-      | parcelSize: Large                     | uid:089b4ea6-3cfb-43e4-8fbd-13d853cfacf5 | parcelSize      | Large                |
-      | parcelSize: Extra Large               | uid:c060d91d-2551-4ac8-9512-0f70794b1d59 | parcelSize      | Extra Large          |
-      | timeslot: 9AM To 6PM                  | uid:2c827a3b-4ef4-4a28-8ac7-31302269eb17 | timeslot        | 9AM To 6PM           |
-      | timeslot: 9AM To 10PM                 | uid:791bc6fd-e689-4bbd-807c-31936acf7f55 | timeslot        | 9AM To 10PM          |
-      | timeslot: 9AM To 12PM                 | uid:7bf849c2-86be-48db-93ec-ef8bfba824e5 | timeslot        | 9AM To 12PM          |
-      | timeslot: 12PM To 3PM                 | uid:2b0d5790-9d3f-492f-955f-cee9b22f9879 | timeslot        | 12PM To 3PM          |
-      | timeslot: 3PM To 6PM                  | uid:08e3f316-04a9-4aae-b55f-94eb86aa719f | timeslot        | 3PM To 6PM           |
-      | timeslot: 6PM To 10PM                 | uid:5ceba73a-806b-4115-824f-01345fec3ed9 | timeslot        | 6PM To 10PM          |
+      | dataset_name                           | hiptest-uid                              | param           | value                |
+      | Delivery Type: Normal Delivery         | uid:a69d8fa5-aad1-4170-a100-bd43c9b0b793 | deliveryType    | Normal Delivery      |
+      | Delivery Type: C2C + Return Pick Up    | uid:00b15b2c-e87c-4e07-823c-24ee481380cf | deliveryType    | C2C + Return Pick Up |
+      | Delivery Type: Reservation Pick Up     | uid:21c1de4e-0619-4b53-8d23-64105d2acf79 | deliveryType    | Reservation Pick Up  |
+      | Priority Level: Priority               | uid:b514d462-467c-47a0-b4fe-c82df5834889 | priorityLevel   | Priority             |
+      | Priority Level: Non-Priority           | uid:9027f529-996c-4d58-a4c9-5e6bac0a2277 | priorityLevel   | Non-Priority         |
+      | Reservation Size: Less Than 3 Parcels  | uid:ba68986e-ee83-4cec-abf5-4cebf192794f | reservationSize | Less Than 3 Parcels  |
+      | Reservation Size: Less Than 10 Parcels | uid:f8d513f3-ae0a-4e64-95a7-ebf664923665 | reservationSize | Less Than 10 Parcels |
+      | Reservation Size: Trolley Required     | uid:9804ec93-777d-4f93-943b-aaa457e4303a | reservationSize | Trolley Required     |
+      | Reservation Size: Half Van Load        | uid:72144b17-806c-45e5-a0fb-78582d974f52 | reservationSize | Half Van Load        |
+      | Reservation Size: Full Van Load        | uid:f6b83d44-d9d2-4260-98d5-de01176275f7 | reservationSize | Full Van Load        |
+      | Reservation Size: Larger Than Van Load | uid:40c8c390-cf70-4c72-886e-c9da988ac0f9 | reservationSize | Larger Than Van Load |
+      | Parcel Size: Small                     | uid:20280f7f-776b-459c-898a-ab395149d9f9 | parcelSize      | Small                |
+      | Parcel Size: Medium                    | uid:0bc47f9e-84e9-44e3-8b3c-0713d2fb9155 | parcelSize      | Medium               |
+      | Parcel Size: Large                     | uid:9cd5657d-91d5-4007-90bb-d73c56c6ce73 | parcelSize      | Large                |
+      | Parcel Size: Extra Large               | uid:323c0136-f16a-4a50-ba57-b228b8785ad3 | parcelSize      | Extra Large          |
+      | Timeslot: 9AM to 6PM                   | uid:059d54c9-5c0b-460a-871d-993b7bf30a6b | timeslot        | 9AM To 6PM           |
+      | Timeslot: 9AM to 10PM                  | uid:edff64fb-462c-4634-bb6f-d48a684f35d9 | timeslot        | 9AM To 10PM          |
+      | Timeslot: 9AM to 12PM                  | uid:53f0409a-e6a4-4cf3-b21e-c2d1304f070e | timeslot        | 9AM To 12PM          |
+      | Timeslot: 12PM to 3PM                  | uid:61d3a209-bb95-43bd-9c17-900809c502a1 | timeslot        | 12PM To 3PM          |
+      | Timeslot: 3PM to 6PM                   | uid:f10f162d-1a52-4889-ba33-da950d324327 | timeslot        | 3PM To 6PM           |
+      | Timeslot: 6PM to 10PM                  | uid:867017c2-566a-465f-b253-b78b52367824 | timeslot        | 6PM To 10PM          |
 
   @DeleteDriverType
   Scenario: Search Driver Type by ID
