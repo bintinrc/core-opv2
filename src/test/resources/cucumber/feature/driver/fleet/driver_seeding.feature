@@ -76,7 +76,7 @@ Feature: Driver Seeding
       | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
 
   @DeleteCreatedZone @DeleteDriver
-  Scenario:   Scenario: Changing Zone Preference of the Driver by Moving It to Another Zone (uid:216f28e3-ea31-47d3-9828-ede8a4621350)
+  Scenario: Changing Zone Preference of the Driver by Moving It to Another Zone (uid:216f28e3-ea31-47d3-9828-ede8a4621350)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
