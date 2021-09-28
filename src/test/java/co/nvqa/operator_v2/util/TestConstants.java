@@ -42,6 +42,7 @@ public final class TestConstants extends CommonSeleniumTestConstants {
   public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
   public static final String ADDRESSING_PRESET_NAME;
+  public static final String ADDRESSING_SHIPPER_NAME;
 
   static {
     String apiBase = NvSystemProperties
@@ -79,6 +80,7 @@ public final class TestConstants extends CommonSeleniumTestConstants {
     HUB_NAME = getString("hub-name");
 
     ADDRESSING_PRESET_NAME = getString("addressing-preset-name");
+    ADDRESSING_SHIPPER_NAME = getString("addressing-shipper-v4-name");
   }
 
   private TestConstants() {
