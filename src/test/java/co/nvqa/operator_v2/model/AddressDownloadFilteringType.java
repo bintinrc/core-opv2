@@ -11,7 +11,8 @@ public enum AddressDownloadFilteringType {
   ZONE_IDS("zone_ids"),
   HUB_IDS("hub_ids"),
   RTS_NO("rts_no"),
-  RTS_YES("rts_yes");
+  RTS_YES("rts_yes"),
+  CREATED_AT("created_at");
 
   final String val;
 

@@ -31,4 +31,6 @@ public interface ScenarioStorageKeys extends StandardScenarioStorageKeys {
   String KEY_LIST_SUB_SHIPPER_SELLER_EMAIL = "KEY_LIST_SUB_SHIPPER_SELLER_EMAIL";
 
   String KEY_TRIP_ID = "KEY_TRIP_ID";
+
+  String KEY_NUMBER_OF_PARCELS_IN_HUB = "KEY_NUMBER_OF_PARCELS_IN_HUB";
 }

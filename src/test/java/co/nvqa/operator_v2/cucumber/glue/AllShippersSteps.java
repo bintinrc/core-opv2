@@ -121,6 +121,7 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = prepareShipperData(mapOfData);
 
     allShippersPage.createNewShipper(shipper);
+
     put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);

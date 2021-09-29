@@ -15,6 +15,7 @@ import org.openqa.selenium.support.PageFactory;
 public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private static final String CELL_LOCATOR_PATTERN = "//tr[contains(@class,'ant-table-row')][%d]/td[%s]";
+  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "(//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//button)[%s]";
 
   @FindBy(css = "p.ant-empty-description")
   public PageElement noResultsFound;
@@ -35,7 +36,14 @@ public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    String actionButtonLocator = getActionButtonsLocators().get(actionId);
+    String xpath = actionButtonLocator.startsWith("/") ?
+        f(actionButtonLocator, rowNumber) :
+        f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    click(xpath);
   }
 
   @Override

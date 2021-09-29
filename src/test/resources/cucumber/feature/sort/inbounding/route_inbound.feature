@@ -6,7 +6,7 @@ Feature: Route Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: View Photo Evidence Unsuccessful Waypoint (uid:debb74de-d2b9-422f-b011-5cb9223990af)
+  Scenario: View Photo Evidence Unsuccessful Waypoint - Unsuccessful waypoint (uid:debb74de-d2b9-422f-b011-5cb9223990af)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -59,7 +59,7 @@ Feature: Route Inbound
     And Operator click 'Go Back' button on Route Inbound page
 
   @DeleteOrArchiveRoute
-  Scenario: View Photo Evidence Partial Waypoint (uid:0b1e29ae-945e-46e9-8095-bced449a3935)
+  Scenario: View Photo Evidence Partial Waypoint - Partial waypoint (uid:0b1e29ae-945e-46e9-8095-bced449a3935)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -127,7 +127,7 @@ Feature: Route Inbound
     And Operator click 'Go Back' button on Route Inbound page
 
   @DeleteOrArchiveRoute
-  Scenario: View Photo Evidence Successful Waypoint (uid:257035f8-29f1-40af-97ec-b8de2580fc7d)
+  Scenario: View Photo Evidence Successful Waypoint - Successful waypoint (uid:257035f8-29f1-40af-97ec-b8de2580fc7d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
