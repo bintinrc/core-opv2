@@ -18,6 +18,7 @@ Feature: Pricing Scripts V2
     And Operator refresh page
     And Operator verify the script is saved successfully
 
+  @HappyPath
   Scenario: Link Script to Shipper - Script is Already Linked To Shipper (uid:736caea8-5b80-401c-a1ae-3d9400fd4569)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -41,7 +42,7 @@ Feature: Pricing Scripts V2
     When Operator delete Draft Script
     Then Operator verify the Draft Script is deleted successfully
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPath
   Scenario: Search Active Scripts - Search by Script Name (uid:ea84db1d-94f5-4c85-800c-f8055ff394f9)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -69,8 +70,7 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     And Operator search according to "description" and verify search result
 
-
-  @DeletePricingScript
+  @DeletePricingScript @HappyPath
   Scenario: Search Active Scripts - Search by ID (uid:2f5578ff-eb9e-452c-8eb4-a4e82224a7f2)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -90,7 +90,7 @@ Feature: Pricing Scripts V2
     When Operator delete Active Script
     Then Operator verify the Active Script is deleted successfully
 
-
+  @HappyPath
   Scenario: Delete Script - Active Script, Linked Shippers is Exists (uid:d46959d1-3bae-4658-b9ba-92a3424b5222)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

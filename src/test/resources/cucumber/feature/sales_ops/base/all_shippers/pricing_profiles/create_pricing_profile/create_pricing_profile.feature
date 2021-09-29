@@ -47,7 +47,7 @@ Feature: Create Pricing Profile
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
 
-  @CloseNewWindows
+  @CloseNewWindows @HappyPath
   Scenario: Create a new Shipper - Not Creating Pricing Profile (uid:5f2fdf58-bc27-4a5f-9961-9f2b0b06f820)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and without Pricing profile using data below:
