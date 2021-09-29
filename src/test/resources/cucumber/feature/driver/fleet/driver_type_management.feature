@@ -107,7 +107,7 @@ Feature: Driver Type Management
       | Timeslot: 6PM to 10PM                  | uid:867017c2-566a-465f-b253-b78b52367824 | timeslot        | 6PM To 10PM          |
 
   @DeleteDriverType
-  Scenario: Search Driver Type by ID
+  Scenario: Search Driver Type by ID (uid:xxx)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
@@ -121,7 +121,7 @@ Feature: Driver Type Management
     Then Operator search created Driver Type using ID
 
   @DeleteDriverType
-  Scenario: Search Driver Type by ID
+  Scenario: List All Driver Type (uid:xxx)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
