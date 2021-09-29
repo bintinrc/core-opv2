@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ShipperPickups @current
+@OperatorV2 @Core @PickUps @ShipperPickups
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun
