@@ -5,7 +5,7 @@ Feature: Upload Invoiced Orders
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
+  @HappyPath
   Scenario: Search by uploading CSV which contains existing invoiced order (uid:e21e7b2f-1423-494e-ae7b-842c42e6ced9)
     #pre-condition: Order is already in invoiced_orders
     Given API Shipper create V4 order using data below:
@@ -51,6 +51,7 @@ Feature: Upload Invoiced Orders
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
     Then Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message "More than 1 column detected in csv file"
 
+  @HappyPath
   Scenario: Search by Inputting invoiced order tracking IDs manually (uid:caceedb4-fdd5-4f71-a82c-e80271b6cc4b)
        #pre-condition: Order is already in invoiced_orders
     Given API Shipper create V4 order using data below:

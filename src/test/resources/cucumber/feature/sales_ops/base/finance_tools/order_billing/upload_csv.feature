@@ -11,7 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HappyPath
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -132,7 +132,7 @@ Feature: Order Billing
       | top    | Network Request Error                                                                              |
       | bottom | the request can't be processed: No orders found for the report request ; no file will be generated |
 
-  @DeleteOrArchiveRoute @happyPath
+  @DeleteOrArchiveRoute @@HappyPath
   Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:94211053-c20d-499b-9742-54baa208182a)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -190,7 +190,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HappyPath
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "AGGREGATED" Report (uid:6e4e54e5-fb92-4ecc-a61a-1301799d969c)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -246,7 +246,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HappyPath
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SCRIPT" Report (uid:2d148d59-72e0-4516-b9ac-165f4fe1e2fc)
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                                                      |

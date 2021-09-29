@@ -18,7 +18,7 @@ Feature: Upload Invoiced Orders
       | NVSAMPL00000000002 |
       | NVSAMPL00000000003 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HappyPath
   Scenario: Upload Invoice Orders CSV - When Orders are Completed but not yet Invoiced (non-invoiced) (uid:ddb3318b-b545-411c-b750-1f1521befcdb)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |

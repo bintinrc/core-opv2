@@ -104,7 +104,7 @@ Feature: Edit Pricing Script
       | RTS = True   | RTS = True  | Yes    | 2.14       | 0.14 | 2           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
       | RTS = False  | RTS = False | No     | 2.14       | 0.14 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPath
   Scenario: Edit Active Script - No Syntax Error (uid:5256ee16-eda2-4963-a7c9-a129845f6b3d)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -128,7 +128,7 @@ Feature: Edit Pricing Script
       | source | function calculatePricing(params) {var price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
     Then Operator verify error message in header with "SyntaxError"
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPath
   Scenario: Edit Draft Script - No Syntax Error (uid:df962b1b-5b1c-453f-bbae-a7e3d1893f8f)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

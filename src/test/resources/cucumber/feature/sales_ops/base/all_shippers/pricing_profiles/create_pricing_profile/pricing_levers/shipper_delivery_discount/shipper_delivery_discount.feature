@@ -4,7 +4,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows @DeletePricingProfile
+  @CloseNewWindows @DeletePricingProfile @HappyPath
   Scenario: Create Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper with ID and Name "{shipper-v4-active-expired-pp-legacy-id}-{shipper-v4-active-expired-pp-name}"
@@ -20,7 +20,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @CloseNewWindows
+  @CloseNewWindows @HappyPath
   Scenario: Create Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

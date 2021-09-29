@@ -8,7 +8,7 @@ Feature:  Corporate Shipper
     And DB Operator deletes "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}" shipper's pricing profiles
 
-  @CloseNewWindows
+  @CloseNewWindows @HappyPathID
   Scenario: Create Pricing Profile - Corporate Shipper - with none Percentage Discount - Corporate Sub Shipper has Reference Parent's Pricing Profile is Exists - ID (uid:a0b84f72-9fe9-4557-8853-d648a86ea55c)
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
