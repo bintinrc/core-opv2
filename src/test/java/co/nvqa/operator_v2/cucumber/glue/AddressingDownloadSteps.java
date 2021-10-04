@@ -236,7 +236,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     addressingDownloadPage.downloadCsv.click();
 
-    LocalDateTime formattedDateTime = addressingDownloadPage.getUTC(new Date());
+    LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(8, ChronoUnit.HOURS));
     // For local debugging purpose:
     // LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
     String csvTimestamp = AddressingDownloadPage.DATE_FORMAT.format(formattedDateTime);
