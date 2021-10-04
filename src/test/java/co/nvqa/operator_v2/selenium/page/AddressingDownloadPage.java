@@ -148,14 +148,14 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String PRESET_DIALOG_MULTISELECT_FILTER_ITEM = "//div[@class='multi-select']//label[contains(text(), '%s')]/following-sibling::div//span[@class='ant-select-selection-item']";
   private static final String PRESET_DIALOG_MULTISELECT_FILTER_DELETE = "//div[@class='multi-select']//label[contains(text(), '%s')]/following-sibling::div//span[contains(@class, 'anticon-close')]";
 
-  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
+  public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
           .ofPattern("yyyy-MM-dd_HH-mm");
   // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
   // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
   private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
           .getTimezone()));
   private static final String DATE_TIME = ZONED_DATE_TIME.format(DATE_FORMAT);
-  private static final String CSV_FILENAME_FORMAT = TestConstants.ADDRESSING_PRESET_NAME + "_";
+  private static final String CSV_FILENAME_FORMAT = "av-addresses_";
 
   private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
@@ -311,12 +311,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     assertTrue("Preset is Deleted", isElementExist(PRESET_NOT_FOUND_XPATH));
   }
 
-  public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders) {
-    String csvContainedFileName = CSV_FILENAME_FORMAT + DATE_TIME;
+  public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders, String csvTimestamp) {
+    String csvContainedFileName = CSV_FILENAME_FORMAT + csvTimestamp;
     NvLogger.infof("Looking for CSV with Name contained %s", csvContainedFileName);
     String csvFileName = retryIfAssertionErrorOccurred(() ->
-            getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
-        "Getting Exact File Name");
+                    getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
+            "Getting Exact File Name");
 
     for (int i = 0; i < orders.size(); i++) {
       verifyFileDownloadedSuccessfully(csvFileName, orders.get(i).getTrackingId());
@@ -548,11 +548,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
-//    List<WebElement> trackingIDEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "tracking_number")));
-//    List<WebElement> addressOneEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_one")));
-//    List<WebElement> addressTwoEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_two")));
+    List<WebElement> trackingIDEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "tracking_number")));
+    List<WebElement> addressOneEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_one")));
+    List<WebElement> addressTwoEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_two")));
     List<WebElement> createdAtEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "created_at")));
-//    List<WebElement> postcodeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "postcode")));
+    List<WebElement> postcodeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "postcode")));
     List<WebElement> waypointIDEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "waypoint_id")));
     List<WebElement> latitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "latitude")));
     List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
@@ -561,21 +561,21 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // For local debugging purpose:
     // LocalDateTime adjustedOCCreatedAt = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
-//    String ocTrackingID = order.getTrackingId();
-//    String ocAddressOne = order.getToAddress1();
-//    String ocAddressTwo = order.getToAddress2();
+    String ocTrackingID = order.getTrackingId();
+    String ocAddressOne = order.getToAddress1();
+    String ocAddressTwo = order.getToAddress2();
     String ocCreatedAt = ADDRESS_DOWNLOAD_DATE_FORMAT.format(adjustedOCCreatedAt);
-//    String ocPostcode = order.getToPostcode();
+    String ocPostcode = order.getToPostcode();
     Long ocWaypoint = waypoint.getId();
     Double ocLatitude = waypoint.getLatitude();
     Double ocLongitude = waypoint.getLongitude();
 
     Map<String, Boolean> verifyChecklist = new HashMap<>();
-//    verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, false);
-//    verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, false);
-//    verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, false);
+    verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, false);
+    verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, false);
+    verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, false);
     verifyChecklist.put(ORDER_CREATED_AT_EXISTS, false);
-//    verifyChecklist.put(ORDER_POSTCODE_EXISTS, false);
+    verifyChecklist.put(ORDER_POSTCODE_EXISTS, false);
     verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, false);
     verifyChecklist.put(ORDER_LATITUDE_EXISTS, false);
     verifyChecklist.put(ORDER_LONGITUDE_EXISTS, false);
@@ -586,12 +586,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     boolean creationTimeLatencyExists = false;
 
     for (int i = 0; i < resultsCount; i++) {
-      verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
-//      verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, trackingIDEl.get(i).getText().equals(ocTrackingID));
+      verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, trackingIDEl.get(i).getText().equals(ocTrackingID));
 
-      if (verifyChecklist.get(ORDER_WAYPOINT_ID_EXISTS)) {
-//        verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, addressOneEl.get(i).getText().equals(ocAddressOne));
-//        verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, addressTwoEl.get(i).getText().equals(ocAddressTwo));
+      if (verifyChecklist.get(ORDER_TRACKING_ID_EXISTS)) {
+        verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, addressOneEl.get(i).getText().equals(ocAddressOne));
+        verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, addressTwoEl.get(i).getText().equals(ocAddressTwo));
 
         NvLogger.infof("Creation time shown in OpV2: %s", createdAtEl.get(i).getText());
         NvLogger.infof("Creation time from order creation: %s", ocCreatedAt);
@@ -608,7 +607,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
           verifyChecklist.put(ORDER_CREATED_AT_EXISTS, creationTimeLatencyExists);
         }
 
-//        verifyChecklist.put(ORDER_POSTCODE_EXISTS, postcodeEl.get(i).getText().equals(ocPostcode));
+        verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
+        verifyChecklist.put(ORDER_POSTCODE_EXISTS, postcodeEl.get(i).getText().equals(ocPostcode));
         verifyChecklist.put(ORDER_LATITUDE_EXISTS, Double.parseDouble(latitudeEl.get(i).getText()) == ocLatitude);
         verifyChecklist.put(ORDER_LONGITUDE_EXISTS, Double.parseDouble(longitudeEl.get(i).getText()) == ocLongitude);
 
@@ -654,11 +654,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // For local debugging purpose:
     // LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
-//    verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
-//    verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
-//    verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress2());
+    verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
+    verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
+    verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress2());
     verifyFileDownloadedSuccessfully(csvFileName, dtf.format(orderCreationTimestamp));
-//    verifyFileDownloadedSuccessfully(csvFileName, order.getToPostcode());
+    verifyFileDownloadedSuccessfully(csvFileName, order.getToPostcode());
     verifyFileDownloadedSuccessfully(csvFileName, waypoint.getId().toString());
     verifyFileDownloadedSuccessfully(csvFileName, waypoint.getLatitude().toString());
     verifyFileDownloadedSuccessfully(csvFileName, waypoint.getLongitude().toString());
@@ -691,5 +691,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     String endTimeValue = endDateField.getAttribute("value").split(" ")[1];
 
     return newValue.equals(startTimeValue + "-" + endTimeValue);
+  }
+
+  public void scrollDownAddressTable() {
+    while (!isElementExist("//div[contains(@class, 'table-container')]/div[contains(text(), 'End of Table')]")) {
+      scrollIntoView("(//tr)[last()]");
+    }
   }
 }
