@@ -1,4 +1,4 @@
-@StationHome @StationManagement
+@StationHome @StationManagement @StationHomePage
 Feature: Station Management Homepage
 
   @LaunchBrowser @ShouldAlwaysRun
