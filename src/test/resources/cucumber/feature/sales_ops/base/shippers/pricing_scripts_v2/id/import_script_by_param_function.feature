@@ -33,7 +33,7 @@ Feature: Import Script ByParam Function
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPathID
   Scenario: Create Script with importScriptByParams include the input params logic (uid:032b15f5-8b26-41f2-b0af-fa78d9245d1b)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -51,7 +51,7 @@ Feature: Import Script ByParam Function
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPathID
   Scenario: Create Script with importScript (uid:7d63a996-1129-4d82-910f-b112a186b8ad)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

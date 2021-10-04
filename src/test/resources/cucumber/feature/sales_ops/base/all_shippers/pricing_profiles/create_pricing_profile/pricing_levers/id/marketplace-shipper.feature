@@ -8,7 +8,7 @@ Feature: Marketplace Shipper
     And DB Operator deletes "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-global-id}" shipper's pricing profiles
 
-  @CloseNewWindows
+  @CloseNewWindows @HappyPathID
   Scenario: Create Pricing Profile - Marketplace Shipper - with none Percentage Discount - Marketplace Sub Shipper has Reference Parent's Pricing Profile is Exists - ID (uid:5e639445-c303-4926-bc31-8cf566143708)
     Given Operator edits shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile

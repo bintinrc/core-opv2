@@ -4,7 +4,7 @@ Feature: Pricing Scripts V2
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPath
   Scenario: Create Pricing Script, Verify and Release Script Successfully (uid:987f2b36-b724-4858-bf15-1d06473a72d9)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -244,7 +244,7 @@ Feature: Pricing Scripts V2
       | fileContent | deliveryType':'EXPRESS' \n 'parcelSize':'S' |
     Then Operator verify error message in header with "CSV Header contain invalid character, accept ([A-Z],[a-z],space)"
 
-  @DeletePricingScript
+  @DeletePricingScript @HappyPath
   Scenario: Create and Check Script - NORMAL, STANDARD, NONE, S (uid:34d9484e-5a4a-4a35-90de-e519450ac0f1)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
