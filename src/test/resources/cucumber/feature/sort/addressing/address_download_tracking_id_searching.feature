@@ -126,7 +126,6 @@ Feature: Address Download
     Then Operator verifies that the Address Download Table Result is shown up
     And Operator verifies that the RTS order is identified
 
-
   Scenario: Successfully Load 100 Valid Tracking IDs (uid:ff4e6e2f-0c5f-42dc-a5f4-f6d740115fd1)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -136,7 +135,6 @@ Feature: Address Download
     And Operator fills the "valid" Tracking ID textbox with "new_line" separation
     And Operator clicks on Next Button on Address Download Load Tracking ID modal
     Then Operator verifies that the Address Download Table Result for bulk tracking ids is shown up
-
 
   Scenario: Entering More Than 100 Tracking IDs will be restricted (uid:bbabea60-61aa-4e43-9d43-26a741895bdf)
     Given Operator refresh page v1

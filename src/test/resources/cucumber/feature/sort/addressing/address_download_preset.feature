@@ -169,7 +169,6 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file contains all correct data
 
-
   Scenario: Download Address by Created Time on New Preset (uid:770e4323-f6d7-46f7-a33a-c427c28f31e7)
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -200,7 +199,6 @@ Feature: Address Download
     When Operator deletes the created preset
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
-
 
   Scenario: Download Address by Created Time on Existing Preset (uid:b3ecc8dd-f228-4607-bf43-57a3df033614)
     Given API Shipper set Shipper V4 using data below:
@@ -235,7 +233,6 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-
   Scenario: Download Address by Created Time and Other Filters on New Preset (uid:2b0dbbcb-748f-42ec-b034-d2a0c682a6ed)
     Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {addressing-shipper-v4-client-id}     |
@@ -267,7 +264,6 @@ Feature: Address Download
     When Operator deletes the created preset
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
-
 
   Scenario: Download Address by Created Time and Other Filters on Existing Preset (uid:c7d551f3-33c4-4325-ab3a-230a98aa25c4)
     Given API Shipper set Shipper V4 using data below:
@@ -301,7 +297,6 @@ Feature: Address Download
     When Operator deletes the created preset
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
-
 
   Scenario: Download Address by Created Time on Existing Preset - Update Creation Time value (uid:1b799ba2-de9a-44d4-871c-26ad8a5350e8)
     Given Operator refresh page v1
