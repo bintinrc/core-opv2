@@ -4,7 +4,7 @@ Feature: Create Pricing Profile - ID
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows @DeletePricingProfile
+  @CloseNewWindows @DeletePricingProfile @HappyPathID
   Scenario: Create Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:bafe6400-ee59-4068-9e6d-fc3395ac7a8a)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
@@ -46,7 +46,7 @@ Feature: Create Pricing Profile - ID
       | discount          | 0                                               |
       | errorMessage      | 0 is not a valid discount value                 |
 
-  @CloseNewWindows
+  @CloseNewWindows @HappyPathID
   Scenario: Create Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers

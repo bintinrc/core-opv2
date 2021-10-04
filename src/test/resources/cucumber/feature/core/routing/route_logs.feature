@@ -274,7 +274,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Redirected to Edit Route Page from Route Logs (uid:f07cd3bd-e0a4-4117-a92f-e4005e3d5c6a)
+  Scenario: Operator Redirected to Edit Route Page from Route Logs - Load Waypoints of Selected Route(s) only (uid:f07cd3bd-e0a4-4117-a92f-e4005e3d5c6a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -720,7 +720,7 @@ Feature: Route Logs
       | zone           | {zone-name}                        |
 
   @DeleteFilterTemplate
-  Scenario: Operator Update Existing Preset on Route Logs Page (uid:d2232710-301a-4be4-ad8c-06c00507ec5b)
+  Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page (uid:d2232710-301a-4be4-ad8c-06c00507ec5b)
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-dd/MM/yyyy}           |
