@@ -207,7 +207,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @Then("Operator verifies that the Address Download Table Result is shown up")
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
-
+    addressingDownloadPage.scrollDownAddressTable();
     if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
       List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
       for (Order order : orders) {
@@ -235,14 +235,34 @@ public class AddressingDownloadSteps extends AbstractSteps {
     String addressDownloadStats = addressingDownloadPage.ADDRESS_DOWNLOAD_STATS;
 
     addressingDownloadPage.downloadCsv.click();
+
+    LocalDateTime formattedDateTime = addressingDownloadPage.getUTC(new Date());
+    // For local debugging purpose:
+    // LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
+    String csvTimestamp = AddressingDownloadPage.DATE_FORMAT.format(formattedDateTime);
+
+    // Get the file timestamp ASAP to reduce time latency
+    put(KEY_DOWNLOADED_CSV_TIMESTAMP, csvTimestamp);
+
     addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadStats);
     addressingDownloadPage.waitUntilInvisibilityOfElementLocated(addressDownloadStats);
+
+    // Wait 1 seconds at most to complete the downloads to avoid .crdownload files
+    pause1s();
   }
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
   public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-    addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders);
+    String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
+
+    // Debug
+    NvLogger.info("Checking tracking IDs below in csv file:");
+    for (Order order : orders) {
+      NvLogger.info(order.getTrackingId());
+    }
+
+    addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
   }
 
   @Then("Operator verifies there will be error dialog shown and clicks on next button")
