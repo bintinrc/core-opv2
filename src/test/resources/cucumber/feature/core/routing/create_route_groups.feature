@@ -1141,7 +1141,8 @@ Feature: Create Route Groups
   Scenario: Operator Filter Order by Service Type on Create Route Group Page - Marketplace Sort (uid:e49e7cbc-d702-43cf-bc49-05201f83b8e1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
