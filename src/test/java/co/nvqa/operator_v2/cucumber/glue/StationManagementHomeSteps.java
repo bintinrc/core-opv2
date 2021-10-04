@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
@@ -34,6 +35,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.selectHubAndProceed(hubName);
     }
 
+    @When("Operator chooses the hub as {string} displayed in {string} and proceed")
+    public void operator_chooses_the_hub_as_displayed_in_Language_and_proceed(String hubName, String language) {
+        hubName = resolveValue(hubName);
+        StationLanguage.HubSelectionText enumLanguage = StationLanguage.HubSelectionText.valueOf(language.toUpperCase());
+        //StationLanguage.HubSelectionText enumLanguage = Enum.valueOf(StationLanguage.HubSelectionText.class, language.toUpperCase());
+        stationManagementHomePage.selectHubAndProceed(hubName, enumLanguage);
+    }
+
     @Then("Operator changes hub as {string} through the dropdown in header")
     public void operator_changes_hub_as_through_the_dropdown_in_header(String hubName) {
         stationManagementHomePage.changeHubInHeaderDropdown(hubName);
@@ -41,11 +50,32 @@ public class StationManagementHomeSteps extends AbstractSteps {
 
     @Then("verifies that the url path parameter changes to hub-id:{string}")
     public void verifies_that_the_url_path_parameter_changes_to_hub_id(String urlHub) {
-        stationManagementHomePage.validateURLPath(urlHub);
+        urlHub = resolveValue(urlHub);
+        stationManagementHomePage.validateHubURLPath(urlHub);
+    }
+
+    @When("updates station hub-id as {string} directly in the url")
+    public void updates_station_hub_id_as_directly_in_the_url(String hubId) {
+        hubId = resolveValue(hubId);
+        stationManagementHomePage.reloadURLWithNewHudId(hubId);
+    }
+
+    @Then("verifies that the hub has changed to:{string} in header dropdown")
+    public void verifies_that_the_hub_has_changed_to_in_header_dropdown(String hubName) {
+        hubName = resolveValue(hubName);
+        stationManagementHomePage.validateHeaderHubValue(hubName);
     }
 
     @Then("verifies that the count in tile: {string} has increased by {int}")
     public void verifies_that_the_count_in_tile_has_increased_by(String tileName, Integer totOrder) {
+        int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
+        int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }
+
+    @Then("verifies that the count in tile: {string} has decreased by {int}")
+    public void verifies_that_the_count_in_tile_has_decreased_by(String tileName, Integer totOrder) {
+        totOrder = -totOrder;
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
@@ -86,13 +116,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void searches_for_the_order_details_in_the_table_by_applying_the_following_filters(String tableName, DataTable searchParameters) {
         List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
         Map<String, String> filter = resolveKeyValues(filters.get(0));
-        stationManagementHomePage.applyFilters(tableName,filter);
+        stationManagementHomePage.applyFilters(tableName, filter);
     }
 
     @Then("verifies that Edit Order page is opened on clicking tracking id")
     public void verifies_that_Edit_Order_page_is_opened_on_clicking_tracking_id() {
-       String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-       stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId);
     }
 
     @Then("verifies that Route Manifest page is opened on clicking route id")
@@ -106,4 +136,42 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.reloadOperatorPortal();
     }
 
+    @Then("verifies that the toast message {string} is displayed")
+    public void verifies_that_the_toast_message_is_displayed(String message) {
+        stationManagementHomePage.verifyHubNotFoundToast(message);
+    }
+
+    @Then("verifies that station management home screen url is loaded")
+    public void verifies_that_station_management_home_screen_url_is_loaded() {
+        stationManagementHomePage.validateStationURLPath();
+    }
+
+    @Then("verifies that the following navigation links are displayed under the header:{string}")
+    public void verifies_that_the_following_navigation_links_are_displayed_under_the_header(String headerName, DataTable navLinks) {
+        List<String> expectedNavLinks = navLinks.asList();
+        stationManagementHomePage.verifyLinksDisplayedInLeftPanel(headerName, expectedNavLinks);
+    }
+
+    @Then("verifies that the page:{string} is loaded on new tab on clicking the link:{string}")
+    public void verifies_that_the_page_is_loaded_on_new_tab_on_clicking_the_link(String linkName, String pageName) {
+        stationManagementHomePage.verifyPageOpenedOnClickingHyperlink(linkName, pageName);
+    }
+
+    @Then("verifies that the text:{string} is displayed on the hub modal selection")
+    public void verifies_that_the_text_is_displayed_on_the_hub_modal_selection(String modalText) {
+        StationLanguage.ModalText language = StationLanguage.ModalText.getLanguage(modalText);
+        stationManagementHomePage.verifyLanguageModalTextLanguage(language);
+    }
+
+    @Then("verifies that the station home :{string} is displayed as expected")
+    public void verifies_that_the_station_home_is_displayed_as_expected(String pageHeader) {
+        StationLanguage.HeaderText language = StationLanguage.HeaderText.getLanguage(pageHeader);
+        stationManagementHomePage.verifyPageUsingPageHeader(language);
+    }
+
+    @Then("verifies that the info on page refresh text: {string} is shown on top left of the page")
+    public void verifies_that_the_info_on_page_refresh_text_is_shown_on_top_left_of_the_page(String pollingInfoText) {
+        StationLanguage.PollingTimeText language = StationLanguage.PollingTimeText.getLanguage(pollingInfoText);
+        stationManagementHomePage.verifyPagePollingTimeInfo(language);
+    }
 }

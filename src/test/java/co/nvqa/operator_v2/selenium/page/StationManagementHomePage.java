@@ -1,29 +1,40 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Veera N
  */
+
+
 @SuppressWarnings("WeakerAccess")
 public class StationManagementHomePage extends OperatorV2SimplePage {
-    private static final String STATION_URL_PATH = "/station-homepage/hubs/%s";
+
+    private static final String STATION_HOME_URL_PATH = "/station-homepage";
+    private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
     private static final String TILE_VALUE_XPATH = ".//div[text()='%s']/ancestor::div[@class='ant-card-body']//div[@class='value']";
     private static final String TILE_HAMBURGER_XPATH = "//div[text()='%s']/ancestor::div[@class='ant-card-body']//*[@role='img']";
     private static final String MODAL_CONTENT_XPATH = "//span[contains(text(),'%s')]//ancestor::div//*[@class='ant-modal-content']";
     private static final String MODAL_TABLE_FILTER_XPATH = "//div[text()='%s']/parent::div[@class='th']//input";
     private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
     private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
+    private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
+    private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
+
 
     public StationManagementHomePage(WebDriver webDriver) {
         super(webDriver);
@@ -38,7 +49,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     @FindBy(xpath = "(//div[text()='Search or Select'])[2]//ancestor::div[@role='combobox']")
     public AntSelect2 hubs;
 
-    @FindBy(xpath = ".//span[text()='Proceed']")
+    @FindBy(xpath = "//button[contains(@*,'proceed')]")
     public PageElement proceedBtn;
 
     @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
@@ -57,17 +68,35 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     private PageElement routeManifestRouteId;
 
 
-    public void switchTo() {
+    public void switchToStationHomeFrame() {
         getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
     }
 
     public void selectHubAndProceed(String hubName) {
-        if(pageFrame.size() > 0){
-            waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(),15);
-            switchTo();
+        if (pageFrame.size() > 0) {
+            waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
+            switchToStationHomeFrame();
         }
         waitUntilVisibilityOfElementLocated("(//div[text()='Search or Select'])[2]", 30);
         hubs.enterSearchTerm(hubName);
+        hubDropdownValues.click();
+        proceedBtn.click();
+        waitWhilePageIsLoading();
+    }
+
+
+    public void selectHubAndProceed(String hubName, StationLanguage.HubSelectionText language) {
+        String langDropdownText = "";
+        if (pageFrame.size() > 0) {
+            waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
+            switchToStationHomeFrame();
+        }
+        langDropdownText = language.getText();
+        waitUntilVisibilityOfElementLocated(f("(//div[text()='%s'])[2]", langDropdownText), 30);
+        WebElement hubs = getWebDriver().findElement(By.xpath(f(HUB_SELECTION_COMBO_VALUE_XPATH, langDropdownText)));
+        AntSelect2 pageHubs = new AntSelect2(getWebDriver(), hubs);
+        pageHubs.click();
+        pageHubs.enterSearchTerm(hubName);
         hubDropdownValues.click();
         proceedBtn.click();
         waitWhilePageIsLoading();
@@ -84,10 +113,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         try {
             String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
             waitWhilePageIsLoading();
-            if(pageFrame.size() > 0){
-                switchTo();
+            if (pageFrame.size() > 0) {
+                switchToStationHomeFrame();
             }
-            waitUntilVisibilityOfElementLocated(tileValueXpath,15);
+            waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
             int actualCount = Integer.parseInt(tile.getText().trim());
             return actualCount;
@@ -105,15 +134,71 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         hamburger.click();
         waitWhilePageIsLoading();
         WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
-        waitUntilVisibilityOfElementLocated(modalContent,15);
+        waitUntilVisibilityOfElementLocated(modalContent, 15);
         Assert.assertTrue("Assert that modal pop-up is opened",
                 modalContent.isDisplayed());
     }
 
-    public void validateURLPath(String hubId) {
-        String expectedURLPath = f(STATION_URL_PATH, hubId);
+    public void validateHubURLPath(String hubId) {
+        String expectedURLPath = f(STATION_HUB_URL_PATH, hubId);
         Assert.assertTrue("Assert that URL path is updated on selecting the hub",
                 getCurrentUrl().endsWith(expectedURLPath));
+    }
+
+    public void validateStationURLPath() {
+        waitUntilStationHomeUrlLoads(STATION_HOME_URL_PATH);
+        Assert.assertTrue("Assert that URL path is updated with station management url",
+                getCurrentUrl().endsWith(STATION_HOME_URL_PATH));
+    }
+
+    public void reloadURLWithNewHudId(String hubId) {
+        String currentHubId = "";
+        String currentUrl = getCurrentUrl();
+        Pattern pattern = Pattern.compile("hubs.(\\d+)");
+        Matcher matcher = pattern.matcher(currentUrl);
+        if (matcher.find()) {
+            currentHubId = matcher.group(1);
+            Assert.assertTrue("Assert that the current hub id is extracted from the url ", currentHubId.length() > 0);
+        }
+        String newUrl = currentUrl.replace(currentHubId, hubId);
+        getWebDriver().get(newUrl);
+        Assert.assertTrue("Assert that URL path is updated with new hub id",
+                getCurrentUrl().endsWith(hubId));
+        getWebDriver().navigate().refresh();
+    }
+
+    public void waitUntilStationHomeUrlLoads(String partUrl) {
+        Wait<WebDriver> fWait = new FluentWait<WebDriver>(getWebDriver())
+                .withTimeout(Duration.ofSeconds(15))
+                .pollingEvery(Duration.ofMillis(100))
+                .ignoring(NoSuchElementException.class);
+        fWait.until(driver -> {
+            System.out.println(f("THE CURRENT URL IS %s", driver.getCurrentUrl()));
+            return driver.getCurrentUrl().endsWith(partUrl);
+        });
+    }
+
+    @FindBy(css = "div.ant-notification-notice-message")
+    private PageElement toastMessage;
+
+    public void verifyHubNotFoundToast(String message) {
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
+        }
+        waitUntilVisibilityOfElementLocated(hubs.getWebElement());
+        waitUntilVisibilityOfToastReact(message);
+    }
+
+    @FindBy(css = "div[class*='selected-value']")
+    private PageElement headerHubValue;
+
+    public void validateHeaderHubValue(String expectedHub) {
+        refreshPage_v1();
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
+        }
+        String actualHub = headerHubValue.getText().trim();
+        Assert.assertTrue("Assert that the actual hub selected is as expected", actualHub.startsWith(expectedHub));
     }
 
     public void validateTileValueMatches(int beforeOrder, int afterOrder, int delta) {
@@ -121,33 +206,31 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 afterOrder == (beforeOrder + delta));
     }
 
-    public void verifyTableIsDisplayedInModal(String tableName){
+    public void verifyTableIsDisplayedInModal(String tableName) {
         String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
         List<WebElement> modalTables = getWebDriver().findElements(By.xpath(tableXpath));
         int isDisplayed = modalTables.size();
-        Assert.assertTrue(f("Assert that the table by name : %s is displayed",tableName),
+        Assert.assertTrue(f("Assert that the table by name : %s is displayed", tableName),
                 isDisplayed > 0);
     }
 
-    public void verifyColumnsInTableDisplayed(String tableName, List<String> expectedColumns){
+    public void verifyColumnsInTableDisplayed(String tableName, List<String> expectedColumns) {
         List<String> actualColumns = new ArrayList<String>();
         String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
         String tableColumnsXpath = tableXpath.concat("//div[contains(@class,'th')]/*[1]");
         List<WebElement> tableColumns = getWebDriver().findElements(By.xpath(tableColumnsXpath));
-        //List<WebElement> tableColumns = getWebDriver().findElement(By.xpath(tableXpath)).findElements(By.cssSelector("div.th"));
-        tableColumns.forEach( (tableColumn) -> actualColumns.add(tableColumn.getText().trim()));
-        Assert.assertTrue(f("Assert that the table: %s has all columns as expected",tableName),
+        tableColumns.forEach((tableColumn) -> actualColumns.add(tableColumn.getText().trim()));
+        Assert.assertTrue(f("Assert that the table: %s has all columns as expected", tableName),
                 actualColumns.containsAll(expectedColumns));
     }
 
 
-    //div[@class='modal-content']//div[contains(@class,'th')]/*[1]
     @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
     private List<PageElement> modalTableColumns;
 
-    public void verifyColumnsInTableDisplayed(List<String> expectedColumns){
+    public void verifyColumnsInTableDisplayed(List<String> expectedColumns) {
         List<String> actualColumns = new ArrayList<String>();
-        modalTableColumns.forEach( (tableColumn) -> {
+        modalTableColumns.forEach((tableColumn) -> {
             scrollIntoView(tableColumn.getWebElement());
             actualColumns.add(tableColumn.getText().trim());
         });
@@ -156,13 +239,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualColumns.containsAll(expectedColumns));
     }
 
-    public void applyFilters(Map<String,String> filters){
+    public void applyFilters(Map<String, String> filters) {
 
         for (Map.Entry<String, String> filter : filters.entrySet()) {
-            String filterXpath = f(MODAL_TABLE_FILTER_XPATH,filter.getKey());
+            String filterXpath = f(MODAL_TABLE_FILTER_XPATH, filter.getKey());
             scrollIntoView(filterXpath);
             List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterXpath));
-            if(filterFields.size() > 0){
+            if (filterFields.size() > 0) {
                 filterFields.get(0).click();
                 filterFields.get(0).sendKeys(filter.getValue());
             }
@@ -172,13 +255,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 results.size() > 0);
     }
 
-    public void applyFilters(String tableName, Map<String,String> filters){
+    public void applyFilters(String tableName, Map<String, String> filters) {
 
         for (Map.Entry<String, String> filter : filters.entrySet()) {
             String filterXpath = f(MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH, tableName, filter.getKey());
             scrollIntoView(filterXpath);
             List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterXpath));
-            if(filterFields.size() > 0){
+            if (filterFields.size() > 0) {
                 filterFields.get(0).click();
                 filterFields.get(0).sendKeys(filter.getValue());
             }
@@ -191,7 +274,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 tableRows.size() > 0);
     }
 
-    public void verifyNavigationToEditOrderScreen(String expectedTrackingId){
+    public void verifyNavigationToEditOrderScreen(String expectedTrackingId) {
         String windowHandle = getWebDriver().getWindowHandle();
         WebElement trackingIdLink = getWebDriver().findElement(By.linkText(expectedTrackingId));
         trackingIdLink.click();
@@ -205,11 +288,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
     }
 
-    public void verifyNavigationToRouteManifestScreen(String expectedRouteId){
+    public void verifyNavigationToRouteManifestScreen(String expectedRouteId) {
         waitWhilePageIsLoading();
         String windowHandle = getWebDriver().getWindowHandle();
-        if(pageFrame.size() > 0){
-            switchTo();
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
         }
         WebElement routeIdLink = getWebDriver().findElement(By.linkText(expectedRouteId));
         routeIdLink.click();
@@ -221,7 +304,69 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualRouteId.equalsIgnoreCase(expectedRouteId));
     }
 
-    public void reloadOperatorPortal(){
+    public void reloadOperatorPortal() {
         getWebDriver().get(TestConstants.OPERATOR_PORTAL_BASE_URL);
     }
+
+    public void verifyLinksDisplayedInLeftPanel(String headerName, List<String> expectedNavLinks) {
+        List<String> actualNavLinks = new ArrayList<String>();
+        String linksXpath = f(LEFT_NAVIGATION_LINKS_BY_HEADER, headerName, headerName);
+        List<WebElement> navLinks = getWebDriver().findElements(By.xpath(linksXpath));
+        navLinks.forEach((navLink) -> actualNavLinks.add(navLink.getText().trim()));
+        Assert.assertTrue(f("Assert that the header: %s has all navigation links as expected", headerName),
+                actualNavLinks.containsAll(expectedNavLinks));
+    }
+
+    @FindBy(css = "div.nv-h4")
+    private PageElement pageHeader;
+
+    public void verifyPageOpenedOnClickingHyperlink(String linkName, String expectedPageName) {
+        WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
+        navLink.click();
+        switchToNewWindow();
+        waitWhilePageIsLoading();
+        String actualPageName = pageHeader.getText().trim();
+        Assert.assertTrue("Assert that the expected page has opened in new tab from navigation links",
+                actualPageName.contains(expectedPageName));
+        closeAllWindowsExceptCurrentWindow();
+        pause3s();
+    }
+
+    public void verifyPageUsingPageHeader(StationLanguage.HeaderText language) {
+        waitWhilePageIsLoading();
+        pause3s();
+        getWebDriver().switchTo().defaultContent();
+        waitUntilVisibilityOfElementLocated(pageHeader.getWebElement());
+        String actualPageName = pageHeader.getText().trim();
+        Assert.assertTrue(f("Assert that the expected page : %s has opened", language.getText()),
+                actualPageName.contains(language.getText()));
+    }
+
+    @FindBy(css = "div.polling-time-info")
+    public PageElement pollingTimeInfo;
+
+    public void verifyPagePollingTimeInfo(StationLanguage.PollingTimeText language) {
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
+        }
+        waitUntilVisibilityOfElementLocated(pollingTimeInfo.getWebElement());
+        String actualText = pollingTimeInfo.getText().trim();
+        Assert.assertTrue(f("Assert that the expected text : %s is displayed", language.getText()),
+                actualText.contains(language.getText()));
+    }
+
+
+    @FindBy(css = "[id*='DialogTitle']")
+    public PageElement dialogLanguage;
+
+    public void verifyLanguageModalTextLanguage(StationLanguage.ModalText lang) {
+        waitWhilePageIsLoading();
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
+        }
+        waitUntilVisibilityOfElementLocated(dialogLanguage.getWebElement());
+        String modalText = dialogLanguage.getText().trim();
+        Assert.assertTrue(f("Assert that the text displayed is %s", lang), modalText.equals(lang.getText()));
+    }
+
 }
