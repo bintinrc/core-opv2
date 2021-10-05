@@ -2386,7 +2386,7 @@ Feature: Edit Order
       | name | FORCED SUCCESS |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Reverify Order Address in Edit Order Page
+  Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -2406,7 +2406,7 @@ Feature: Edit Order
       | 1        | 1.0   |
       | 0        | 0.5   |
 
-  Scenario: Operator Cancel Order From Resolved Recovery Ticket
+  Scenario: Operator Cancel Order From Resolved Recovery Ticket (uid:46244d7b-ed84-4d1e-a1ab-84a5ab5b66a9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -2460,7 +2460,7 @@ Feature: Edit Order
     And DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Pull Out Parcel from a Route - PICKUP - Route is Soft Deleted
+  Scenario: Operator Pull Out Parcel from a Route - PICKUP - Route is Soft Deleted (uid:ea35eba9-818c-4a84-a4c5-bb884bd1ba91)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -2486,7 +2486,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "PENDING"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted
+  Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted (uid:a3346fd5-8f4f-40c6-98f1-5fd172a2261c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

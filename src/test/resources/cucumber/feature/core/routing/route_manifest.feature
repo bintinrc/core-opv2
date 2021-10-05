@@ -268,7 +268,7 @@ Feature: Route Manifest
       | pickup.status     | Pending                                    |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP (uid:dd6557a3-a532-480e-b51b-d09cec40e7c6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                       |
@@ -300,7 +300,7 @@ Feature: Route Manifest
       | driverId          | {ninja-driver-id}           |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP (uid:f16ca446-8af1-49c0-9308-a89a56c18103)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                       |
@@ -339,7 +339,7 @@ Feature: Route Manifest
       | driverId          | {ninja-driver-id} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD (uid:5f718e9c-ff87-44dd-bbc9-6c5d67287852)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -382,7 +382,7 @@ Feature: Route Manifest
       | driverId          | {ninja-driver-id}             |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD (uid:3f2b7577-43e2-4354-bed9-2a5faa9aa6b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

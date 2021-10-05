@@ -992,7 +992,7 @@ Feature: All Orders
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Pull Out Multiple Orders from Route on All Orders Page - Route is Soft Deleted
+  Scenario: Operator Pull Out Multiple Orders from Route on All Orders Page - Route is Soft Deleted (uid:6af580d8-534b-432d-9e00-7993023a9eee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |

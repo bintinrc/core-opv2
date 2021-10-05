@@ -146,7 +146,7 @@ Feature: Outbound Monitoring
       | routeId | KEY_CREATED_ROUTE_ID |
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V1 Page - Route is Soft Deleted
+  Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V1 Page - Route is Soft Deleted (uid:f474c12f-e041-46ce-8e39-9008f501a8b7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
