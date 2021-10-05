@@ -5,6 +5,7 @@ Feature: Check Pricing Script
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
 
+    @nadeera
   Scenario: Check Script Successfully - ID (uid:4ae78f1e-a1e1-4bc6-acff-33c458f5b37e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     And Operator search custom script id "{pricing-script-id-3}"
