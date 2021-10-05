@@ -237,8 +237,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     addressingDownloadPage.downloadCsv.click();
 
     LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(8, ChronoUnit.HOURS));
-    // For local debugging purpose:
-    // LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(1, ChronoUnit.HOURS));
     String csvTimestamp = AddressingDownloadPage.DATE_FORMAT.format(formattedDateTime);
 
     // Get the file timestamp ASAP to reduce time latency
@@ -255,12 +253,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
     String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
-
-    // Debug
-    NvLogger.info("Checking tracking IDs below in csv file:");
-    for (Order order : orders) {
-      NvLogger.info(order.getTrackingId());
-    }
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
   }
@@ -323,9 +315,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     }
 
     LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
-    // For local debugging purpose:
-    // LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
-
     NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
     NvLogger.infof("Order creation time: %s", orderCreationTimestamp);
 

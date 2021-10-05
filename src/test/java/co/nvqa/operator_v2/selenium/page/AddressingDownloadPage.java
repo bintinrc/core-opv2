@@ -558,8 +558,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
     LocalDateTime adjustedOCCreatedAt = getUTC(order.getCreatedAt());
-    // For local debugging purpose:
-    // LocalDateTime adjustedOCCreatedAt = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     String ocTrackingID = order.getTrackingId();
     String ocAddressOne = order.getToAddress1();
@@ -597,9 +595,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
         verifyChecklist.put(ORDER_CREATED_AT_EXISTS, createdAtEl.get(i).getText().equals(ocCreatedAt));
 
-        /*
-         * Tolerate creation time latency because the sources are different and sometimes there are time difference
-         * */
+        // Tolerate creation time latency because the sources are different and sometimes there are time difference
         if (!verifyChecklist.get(ORDER_CREATED_AT_EXISTS)) {
           LocalDateTime toleratedCreatedAt = adjustedOCCreatedAt.plus(Duration.of(1, ChronoUnit.MINUTES));
           String toleratedCreatedAtStr = ADDRESS_DOWNLOAD_DATE_FORMAT.format(toleratedCreatedAt);
@@ -651,8 +647,6 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
     LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
-    // For local debugging purpose:
-    // LocalDateTime orderCreationTimestamp = order.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
