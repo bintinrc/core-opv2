@@ -39,7 +39,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void operator_chooses_the_hub_as_displayed_in_Language_and_proceed(String hubName, String language) {
         hubName = resolveValue(hubName);
         StationLanguage.HubSelectionText enumLanguage = StationLanguage.HubSelectionText.valueOf(language.toUpperCase());
-        //StationLanguage.HubSelectionText enumLanguage = Enum.valueOf(StationLanguage.HubSelectionText.class, language.toUpperCase());
         stationManagementHomePage.selectHubAndProceed(hubName, enumLanguage);
     }
 
@@ -174,4 +173,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
         StationLanguage.PollingTimeText language = StationLanguage.PollingTimeText.getLanguage(pollingInfoText);
         stationManagementHomePage.verifyPagePollingTimeInfo(language);
     }
+
+    @When("gets the count of the parcel by parcel size from the table: {string}")
+    public void gets_the_count_of_the_parcel_by_parcel_size_from_the_table(String tableName) {
+        String columnName = "size";
+        String columnValue =  "count";
+        Map<String, String> tableContent = stationManagementHomePage.getColumnContentByTableName(tableName, columnName, columnValue);
+        System.out.println(tableContent);
+    }
+
+
 }

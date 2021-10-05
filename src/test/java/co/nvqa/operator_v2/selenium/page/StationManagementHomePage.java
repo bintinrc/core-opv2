@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -34,6 +35,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
     private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
     private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
+    private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
 
 
     public StationManagementHomePage(WebDriver webDriver) {
@@ -369,4 +371,20 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         Assert.assertTrue(f("Assert that the text displayed is %s", lang), modalText.equals(lang.getText()));
     }
 
+
+    public Map<String, String> getColumnContentByTableName(String tableName, String columnName, String columnValue ) {
+        Map<String,String> tabContent = new HashMap<String, String>();
+        String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
+        String tableColumnNameXpath = f(tableXpath.concat(TABLE_CONTENT_BY_COLUMN_NAME), columnName);
+        String tableColumnValueXpath = f(tableXpath.concat(TABLE_CONTENT_BY_COLUMN_NAME), columnValue);
+        List<WebElement> tableColumnNames = getWebDriver().findElements(By.xpath(tableColumnNameXpath));
+        List<WebElement> tableColumnValues = getWebDriver().findElements(By.xpath(tableColumnValueXpath));
+        String rowName, rowValue;
+        for(int row = 0; row < tableColumnNames.size(); row++){
+            rowName = tableColumnNames.get(row).getText();
+            rowValue = tableColumnValues.get(row).getText();
+            tabContent.put(rowName, rowValue);
+        }
+        return tabContent;
+    }
 }
