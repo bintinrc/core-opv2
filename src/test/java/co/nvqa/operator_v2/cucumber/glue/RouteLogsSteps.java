@@ -13,10 +13,10 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -651,8 +651,15 @@ public class RouteLogsSteps extends AbstractSteps {
           .filter(toast -> {
             String value = finalData.get("top");
             if (StringUtils.isNotBlank(value)) {
-              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-                return false;
+              String actual = toast.toastTop.getNormalizedText();
+              if (value.startsWith("^")) {
+                if (!actual.matches(value)) {
+                  return false;
+                }
+              } else {
+                if (!StringUtils.equalsIgnoreCase(value, actual)) {
+                  return false;
+                }
               }
             }
             value = finalData.get("bottom");

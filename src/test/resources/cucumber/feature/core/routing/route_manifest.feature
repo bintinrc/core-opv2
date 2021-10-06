@@ -267,6 +267,162 @@ Feature: Route Manifest
       | pickup.trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | pickup.status     | Pending                                    |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP (uid:dd6557a3-a532-480e-b51b-d09cec40e7c6)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update parcel COP to 20.00
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator success pickup waypoint with COD collection from Route Manifest page:
+      | trackingId                      | collected |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | true      |
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status            | Success                       |
+      | deliveriesCount   | 0                             |
+      | pickupsCount      | 1                             |
+      | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.status     | Success                       |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | PICKUP                      |
+      | expectedCodAmount | {KEY_CASH_ON_PICKUP_AMOUNT} |
+      | driverId          | {ninja-driver-id}           |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP (uid:f16ca446-8af1-49c0-9308-a89a56c18103)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update parcel COP to 20.00
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator success pickup waypoint with COD collection from Route Manifest page:
+      | trackingId                      | collected |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | false     |
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status            | Success                       |
+      | deliveriesCount   | 0                             |
+      | pickupsCount      | 1                             |
+      | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.status     | Success                       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | PICKUP            |
+      | expectedCodAmount | 0.00              |
+      | driverId          | {ninja-driver-id} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD (uid:5f718e9c-ff87-44dd-bbc9-6c5d67287852)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator success delivery waypoint with COD collection from Route Manifest page:
+      | trackingId                      | collected |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | true      |
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status              | Success                       |
+      | deliveriesCount     | 1                             |
+      | pickupsCount        | 0                             |
+      | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.status     | Success                       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY                      |
+      | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
+      | driverId          | {ninja-driver-id}             |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD (uid:3f2b7577-43e2-4354-bed9-2a5faa9aa6b9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator success delivery waypoint with COD collection from Route Manifest page:
+      | trackingId                      | collected |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | false     |
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status              | Success                       |
+      | deliveriesCount     | 1                             |
+      | pickupsCount        | 0                             |
+      | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.status     | Success                       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY          |
+      | expectedCodAmount | 0.00              |
+      | driverId          | {ninja-driver-id} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

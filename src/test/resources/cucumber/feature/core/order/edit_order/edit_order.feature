@@ -2353,6 +2353,164 @@ Feature: Edit Order
       | type   | DELIVERY |
       | status | PENDING  |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - End State = Returned to Sender (uid:5f5c3de3-50a7-483f-ac1e-2775204c3f91)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | FAIL |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator get order details
+    And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Delivery -> Reverify Delivery Address on Edit Order page
+    And Operator verifies that info toast displayed:
+      | top | Reverified Successfully |
+    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
+      | archived | score |
+      | 1        | 1.0   |
+      | 0        | 0.5   |
+
+  Scenario: Operator Cancel Order From Resolved Recovery Ticket (uid:46244d7b-ed84-4d1e-a1ab-84a5ab5b66a9)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT              |
+      | investigatingDepartment | Recovery                        |
+      | investigatingHub        | {hub-name}                      |
+      | ticketType              | DAMAGED                         |
+      | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DISPOSED |
+      | parcelLocation          | DAMAGED RACK                    |
+      | liability               | Shipper                         |
+      | damageDescription       | GENERATED                       |
+      | ticketNotes             | GENERATED                       |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+      | UPDATE STATUS  |
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED                        |
+      | outcome | NV NOT LIABLE - PARCEL DISPOSED |
+    Then Operator verifies that success toast displayed:
+      | top                | ^Ticket ID : .* updated |
+      | waitUntilInvisible | true                    |
+    And Operator refresh page
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type   | PICKUP    |
+      | status | CANCELLED |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY  |
+      | status | CANCELLED |
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+      | CANCEL          |
+    When API Operator get order details
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived
+    And DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Pull Out Parcel from a Route - PICKUP - Route is Soft Deleted (uid:ea35eba9-818c-4a84-a4c5-bb884bd1ba91)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Pickup -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Pickup on Edit Order page
+    And Operator refresh page
+    Then Operator verify order events on Edit order page using data below:
+      | name              |
+      | PULL OUT OF ROUTE |
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | routeId | 0 |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies waypoint status is "PENDING"
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted (uid:a3346fd5-8f4f-40c6-98f1-5fd172a2261c)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Delivery -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Delivery on Edit Order page
+    And Operator refresh page
+    Then Operator verify order events on Edit order page using data below:
+      | name              |
+      | PULL OUT OF ROUTE |
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | routeId | 0 |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies waypoint status is "PENDING"
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

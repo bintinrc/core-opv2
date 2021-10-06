@@ -33,7 +33,7 @@ public class RouteCashInboundPage extends SimpleReactPage {
   @FindBy(css = "div.cod-top-button-row > button")
   public Button addCod;
 
-  @FindBy(xpath = "//button[.='Download CSV']")
+  @FindBy(xpath = "//button[.='Download CSV File']")
   public Button downloadCsv;
 
   @FindBy(css = ".ant-modal")
