@@ -131,30 +131,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     });
   }
 
-  @Then("^DB Operator unarchive Jaro Scores of (Delivery|Pickup) Transaction waypoint of created order$")
-  public void dbOperatorUnarchiveJaroScoresOfDeliveryWaypoint(String type) {
-    Order order = get(KEY_ORDER_DETAILS);
-    String trackingId = order.getTrackingId();
-
-    List<Transaction> transactions = order.getTransactions();
-
-    ImmutableList.of(type.toUpperCase()).forEach(transactionType ->
-    {
-      Optional<Transaction> transactionOptional = transactions.stream()
-          .filter(t -> transactionType.equals(t.getType())).findFirst();
-
-      if (transactionOptional.isPresent()) {
-        Transaction transaction = transactionOptional.get();
-        Long waypointId = transaction.getWaypointId();
-        if (waypointId != null) {
-          getCoreJdbc().unarchiveJaroScores(waypointId);
-        }
-      } else {
-        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-      }
-    });
-  }
-
   @Then("^DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived$")
   public void dbOperatorVerifyJaroScoresArchived() {
     Order order = get(KEY_ORDER_DETAILS);
