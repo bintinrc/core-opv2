@@ -77,6 +77,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[label[.='Latest Event']]/h3")
   public PageElement latestEvent;
 
+  @FindBy(xpath = "//div[label[.='Zone']]/h3")
+  public PageElement zone;
+
   @FindBy(xpath = "//div[label[.='Status']]/h3")
   public PageElement status;
 
