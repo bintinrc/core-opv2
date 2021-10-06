@@ -7,9 +7,9 @@ import co.nvqa.commons.util.factory.FailureReasonFactory;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -104,6 +104,35 @@ public class RouteManifestSteps extends AbstractSteps {
       default:
         routeManifestPage.successDeliveryWaypoint();
     }
+  }
+
+  @When("^Operator success (delivery|pickup) waypoint with COD collection from Route Manifest page:$")
+  public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType,
+      List<Map<String, String>> data) {
+    routeManifestPage.clickActionButtonOnTable(1, RouteManifestPage.ACTION_BUTTON_EDIT);
+    routeManifestPage.chooseAnOutcomeForTheWaypointDialog.success.click();
+    routeManifestPage.codCollectionDialog.waitUntilVisible();
+    int count = routeManifestPage.codCollectionDialog.trackingId.size();
+    data.forEach(entry -> {
+      entry = resolveKeyValues(entry);
+      String trackingId = entry.get("trackingId");
+      boolean collected = Boolean.parseBoolean(entry.get("collected"));
+      boolean found = false;
+      for (int i = 0; i < count; i++) {
+        if (StringUtils.equals(
+            routeManifestPage.codCollectionDialog.trackingId.get(i).getNormalizedText(),
+            trackingId)) {
+          routeManifestPage.codCollectionDialog.collected.get(i).setValue(collected);
+          found = true;
+          break;
+        }
+      }
+      assertTrue("Tracking id " + trackingId + " was not found in COD collection dialog", found);
+    });
+    routeManifestPage.codCollectionDialog.ok.clickAndWaitUntilDone();
+    routeManifestPage.confirmationDialog.waitUntilVisible();
+    routeManifestPage.confirmationDialog.proceed.click();
+    routeManifestPage.confirmationDialog.waitUntilInvisible();
   }
 
   @When("^Operator open Route Manifest page for route ID \"(.+)\"$")

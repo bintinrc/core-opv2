@@ -363,7 +363,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
         .createOrdersFilerTemplate(shipperPickupFilterTemplate);
     put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
-    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
+    put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
   @Given("^API Operator creates new Routes Filter Template using data below:$")

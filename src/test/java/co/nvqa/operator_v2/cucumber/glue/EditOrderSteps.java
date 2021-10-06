@@ -18,10 +18,11 @@ import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -391,12 +392,17 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator change Stamp ID of the created order to \"(.+)\" on Edit order page$")
   public void operatorEditStampIdOnEditOrderPage(String stampId) {
     if (StringUtils.equalsIgnoreCase(stampId, "GENERATED")) {
-      stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7);
+      stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7).toUpperCase();
     }
-    NvLogger.warn(stampId);
     editOrderPage.editOrderStamp(stampId);
     Order order = get(KEY_CREATED_ORDER);
     order.setStampId(stampId);
+    put(KEY_STAMP_ID, stampId);
+  }
+
+  @Given("New Stamp ID was generated")
+  public void newStampIdWasGenerated() {
+    String stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(9).toUpperCase();
     put(KEY_STAMP_ID, stampId);
   }
 
@@ -406,13 +412,7 @@ public class EditOrderSteps extends AbstractSteps {
           Replace searchTerm value to value on ScenarioStorage.
          */
     String trackingIdOfExistingOrder = get(KEY_TRACKING_ID_BY_ACCESSING_STAMP_ID);
-    if (containsKey(stampId)) {
-      if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID")) {
-        trackingIdOfExistingOrder = get(stampId);
-      }
-      stampId = get(stampId);
-    }
-    editOrderPage.editOrderStampToExisting(stampId, trackingIdOfExistingOrder);
+    editOrderPage.editOrderStampToExisting(resolveValue(stampId), trackingIdOfExistingOrder);
   }
 
   @When("^Operator remove Stamp ID of the created order on Edit order page$")

@@ -667,8 +667,8 @@ Feature: All Orders
       | expectedCodAmount | <collected_amount> |
       | driverId          | {ninja-driver-id}  |
     Examples:
-      | note               | cod_amount | collected_amount | collected | uid                                      |
-      | Collect COD        | 23.57      | 23.57            | true      | uid:ae5c6bab-1d1b-48bf-a32e-779983df9087 |
+      | note        | cod_amount | collected_amount | collected | uid                                      |
+      | Collect COD | 23.57      | 23.57            | true      | uid:ae5c6bab-1d1b-48bf-a32e-779983df9087 |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD (<uid>)
@@ -739,8 +739,8 @@ Feature: All Orders
       | transactionMode   | DELIVERY           |
       | expectedCodAmount | <collected_amount> |
     Examples:
-      | note               | cod_amount | collected_amount | collected | uid                                      |
-      | Collect COD        | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
+      | note        | cod_amount | collected_amount | collected | uid                                      |
+      | Collect COD | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
 
   Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD (<uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -990,6 +990,40 @@ Feature: All Orders
       | granularStatus    | Cancelled                                                        |
       | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Pull Out Multiple Orders from Route on All Orders Page - Route is Soft Deleted (uid:6af580d8-534b-432d-9e00-7993023a9eee)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+    When API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    When Operator pull out multiple orders from route on All Orders page
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | orderId | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | routeId | 0                                 |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies waypoint status is "PENDING"
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | orderId | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+      | routeId | 0                                 |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies waypoint status is "PENDING"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
