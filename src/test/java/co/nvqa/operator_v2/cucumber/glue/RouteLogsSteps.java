@@ -458,7 +458,9 @@ public class RouteLogsSteps extends AbstractSteps {
     Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
     Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
     String hubName = mapOfData.get("hubName");
-    routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+    });
   }
 
   @When("^Operator set filters on Route Logs page:")
@@ -1082,11 +1084,13 @@ public class RouteLogsSteps extends AbstractSteps {
     Date routeDateTo = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateTo"));
     String hubName = mapOfData.get("hubName");
 
-    routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
-    routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
-    String actualRouteStatus = routeLogsPage.routesTable
-        .getColumnText(1, RoutesTable.COLUMN_STATUS);
-    assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+      routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
+      String actualRouteStatus = routeLogsPage.routesTable
+          .getColumnText(1, RoutesTable.COLUMN_STATUS);
+      assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
+    });
   }
 
   @Then("Operator verify {string} process data in Selection Error dialog on Route Logs page:")

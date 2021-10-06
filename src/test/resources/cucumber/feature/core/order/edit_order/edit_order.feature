@@ -1941,8 +1941,8 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click View/Print -> View all PODs on Edit Order page
     Then Operator verify delivery POD details is correct on Edit Order page using date below:
-      | driver              | {ninja-driver-name} |
-      | verification method | NO_VERIFICATION     |
+      | driver              | {ninja-driver-username} |
+      | verification method | NO_VERIFICATION         |
 
   Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Collect COD (uid:eca7d659-1475-4913-8459-c063e9fe306a)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -2488,7 +2488,7 @@ Feature: Edit Order
   @DeleteOrArchiveRoute
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted (uid:a3346fd5-8f4f-40c6-98f1-5fd172a2261c)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
