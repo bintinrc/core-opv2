@@ -7,7 +7,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create a Single Route from Route Logs Page (uid:76362592-6316-4521-a835-dbe10a1b2f12)
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd} |
       | tags       | {route-tag-name}                 |
@@ -33,7 +33,7 @@ Feature: Route Logs
   @DeleteOrArchiveRoute
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute | 2                                |
       | date          | {gradle-current-date-yyyy-MM-dd} |
@@ -58,7 +58,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -95,7 +95,7 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -120,7 +120,7 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -135,7 +135,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -153,7 +153,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -170,7 +170,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -193,7 +193,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -213,7 +213,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs V2
+    And Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -243,7 +243,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -261,7 +261,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -278,7 +278,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -291,7 +291,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
     Then Operator verify route details on Route Logs page using data below:
       | date           | {gradle-current-date-yyyy-MM-dd} |
@@ -309,7 +309,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -333,7 +333,7 @@ Feature: Route Logs
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -354,7 +354,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -376,7 +376,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -408,7 +408,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -439,7 +439,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -470,7 +470,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -501,7 +501,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -532,7 +532,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -563,7 +563,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"<type>" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -602,7 +602,7 @@ Feature: Route Logs
       | orderId                           | addParcelToRouteRequest |
       | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | { "type":"DD" }         |
       | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"DD" }         |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -643,7 +643,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"DD" }         |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -661,7 +661,7 @@ Feature: Route Logs
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Route Logs Page (uid:f259e5b1-5e98-4672-9b9f-ebf34bd3470f)
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
       | routeDateTo    | {gradle-current-date-dd/MM/yyyy}   |
@@ -709,7 +709,7 @@ Feature: Route Logs
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
       | value.archived  | true                                         |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     Then Operator verifies selected filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
@@ -729,7 +729,7 @@ Feature: Route Logs
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
       | value.archived  | false                                        |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-2-day-dd/MM/yyyy} |
@@ -770,7 +770,7 @@ Feature: Route Logs
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
       | value.archived  | false                                        |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     And Operator selects "Delete Preset" preset action on Route Logs page
     Then Operator verifies Cancel button in Delete Preset dialog on Route Logs page is enabled
@@ -789,7 +789,7 @@ Feature: Route Logs
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator set tags of the new created route to [{route-tag-id},{route-tag-id-2}]
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -813,7 +813,7 @@ Feature: Route Logs
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -834,7 +834,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id-2}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator filters route by "<Search>" Route ID on Route Logs page
     Then Operator verify route details on Route Logs page using data below:
       | date           | {gradle-current-date-yyyy-MM-dd}  |
@@ -870,7 +870,7 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -890,7 +890,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |

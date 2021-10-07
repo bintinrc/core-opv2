@@ -134,6 +134,7 @@ public class AllOrdersSteps extends AbstractSteps {
       throw new IllegalArgumentException(
           "List of created Tracking ID should not be null or empty.");
     }
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(resolveValues(listOfCreatedTrackingId));
   }
 
@@ -308,8 +309,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyRouteIdValues(List<Map<String, String>> data) {
     data.forEach(orderData -> {
       orderData = resolveKeyValues(orderData);
-      String trackingId = orderData.get("trackingId");
-      String expectedRouteId = orderData.get("routeId");
+      String trackingId = StringUtils.trimToEmpty(orderData.get("trackingId"));
+      String expectedRouteId = StringUtils.trimToEmpty(orderData.get("routeId"));
       assertEquals(f("Route Id for %s order", trackingId), expectedRouteId,
           allOrdersPage.addToRouteDialog.getRouteId(trackingId));
     });
@@ -345,6 +346,7 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   private void resumeOrders(List<String> trackingIds) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(trackingIds);
     allOrdersPage.resumeSelected(trackingIds);
   }

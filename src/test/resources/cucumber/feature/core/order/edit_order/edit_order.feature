@@ -55,6 +55,9 @@ Feature: Edit Order
       | address1         | 116 Keng Lee Rd           |
       | address2         | 15                        |
       | postalCode       | 308402                    |
+    Then Operator verifies that success toast displayed:
+      | top                | Delivery Details Updated |
+      | waitUntilInvisible | true                     |
     Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
