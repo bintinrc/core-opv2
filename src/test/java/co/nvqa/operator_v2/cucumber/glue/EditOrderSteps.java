@@ -1234,6 +1234,11 @@ public class EditOrderSteps extends AbstractSteps {
             editOrderPage.latestEvent.getNormalizedText()), "Latest Event", 1000, 3);
   }
 
+  @Then("Operator verifies Zone is {string} on Edit Order page")
+  public void operatorVerifyZone(String value) {
+    assertEquals("Zone", resolveValue(value), editOrderPage.zone.getNormalizedText());
+  }
+
   @Then("Operator RTS order on Edit Order page using data below:")
   public void operatorRtsOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);

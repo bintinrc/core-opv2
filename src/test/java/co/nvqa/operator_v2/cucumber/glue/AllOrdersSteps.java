@@ -145,6 +145,7 @@ public class AllOrdersSteps extends AbstractSteps {
       throw new IllegalArgumentException("Created Order Tracking ID should not be null or empty.");
     }
 
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
   }
 
