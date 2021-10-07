@@ -72,6 +72,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
+    @Then("verifies that the count in tile: {string} has remained un-changed")
+    public void verifies_that_the_count_in_tile_has_remained_un_changed(String tileName) {
+        int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
+        int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+    }
+
     @Then("verifies that the count in tile: {string} has decreased by {int}")
     public void verifies_that_the_count_in_tile_has_decreased_by(String tileName, Integer totOrder) {
         totOrder = -totOrder;

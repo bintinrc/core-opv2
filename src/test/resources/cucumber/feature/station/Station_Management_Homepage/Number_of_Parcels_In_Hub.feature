@@ -47,6 +47,9 @@ Feature: Number of Parcels In Hub
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name-1}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -59,11 +62,8 @@ Feature: Number of Parcels In Hub
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
     And Operator verify ticket is created successfully on page Recovery Tickets
-    And Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
-    And get the count from the tile: "<TileName>"
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
+    And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
       | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
       | outcome                 | <Outcome>                 |
@@ -75,13 +75,135 @@ Feature: Number of Parcels In Hub
     And verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | TileName                             | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus | hiptest-uid                              |
-      | Number of missing or damaged parcels | RESOLVED | No                      | LOST - DECLARED   | Transit     | uid:136f000f-9deb-44b2-9e92-f2195932a3cc |
-      | Number of missing or damaged parcels | RESOLVED | No                      | LOST - UNDECLARED | Transit     | uid:70f81b81-e530-4a34-b520-ff5b0347977e |
-      | Number of missing or damaged parcels | RESOLVED | No                      | FOUND - INBOUND   | Transit     | uid:a1767cec-1039-4743-8f8a-210e8cab9255 |
-      | Number of missing or damaged parcels | RESOLVED | No                      | CUSTOMER RECEIVED | Completed   | uid:9c5beef9-79df-4423-9a2d-42b9d37e228d |
+      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus | hiptest-uid                              |
+      | Number of parcels in hub | RESOLVED | No                      | LOST - DECLARED   | Cancelled   | uid:136f000f-9deb-44b2-9e92-f2195932a3cc |
+      | Number of parcels in hub | RESOLVED | No                      | LOST - UNDECLARED | Transit     | uid:70f81b81-e530-4a34-b520-ff5b0347977e |
+      | Number of parcels in hub | RESOLVED | No                      | CUSTOMER RECEIVED | Completed   | uid:9c5beef9-79df-4423-9a2d-42b9d37e228d |
 
 
-  @KillBrowser @ShouldAlwaysRun
+  @coverage-manual @coverage-operator-manual @step-done @NVQA-3871
+  Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Found-Inbounded (uid:a1767cec-1039-4743-8f8a-210e8cab9255)
+    When API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And get the count from the tile: "<TileName>"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name-1}       |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator updates recovery ticket on Edit Order page:
+      | status                  | <Status>                  |
+      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
+      | outcome                 | <Outcome>                 |
+      | newInstructions         | GENERATED                 |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And verifies that the count in tile: "<TileName>" has remained un-changed
+
+    Examples:
+      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
+      | Number of parcels in hub | RESOLVED | No                      | FOUND - INBOUND | Transit     |
+
+
+  @coverage-manual @coverage-operator-manual @step-done @NVQA-3872
+  Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is <Outcome> (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And get the count from the tile: "<TileName>"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name-1}       |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator updates recovery ticket on Edit Order page:
+      | status                  | <Status>                  |
+      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
+      | outcome                 | <Outcome>                 |
+      | newInstructions         | GENERATED                 |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And verifies that the count in tile: "<TileName>" has decreased by 1
+
+    Examples:
+      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                         | OrderStatus | hiptest-uid                              |
+      | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - UNDECLARED | Transit     | uid:d26b7fca-7087-4fd1-af2b-15e4a7c6f7e6 |
+      | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - DECLARED   | Cancelled   | uid:e1957051-c693-420f-8650-073a9bcb023b |
+
+
+  @coverage-manual @coverage-operator-manual @step-done @NVQA-3872
+  Scenario Outline: View Parcel of Cancelled Missing Ticket Type (uid:0c3ca8da-7671-4e3c-bd28-8adb6bfb07f5)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And get the count from the tile: "<TileName>"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name-1}       |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status                  | <Status>                  |
+      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
+      | outcome                 | <Outcome>                 |
+      | newInstructions         | GENERATED                 |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And verifies that the count in tile: "<TileName>" has remained un-changed
+
+    Examples:
+      | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome                        | OrderStatus |
+      | Number of parcels in hub | CANCELLED | No                      | CANCEL - NINJA DID NOT RECEIVE | Transit     |
+
+  @KillBrowser @ShouldAlwaysRun @NVQA-3871
   Scenario: Kill Browser
     Given no-op
