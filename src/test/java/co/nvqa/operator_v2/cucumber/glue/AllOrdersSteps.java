@@ -134,7 +134,6 @@ public class AllOrdersSteps extends AbstractSteps {
       throw new IllegalArgumentException(
           "List of created Tracking ID should not be null or empty.");
     }
-    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(resolveValues(listOfCreatedTrackingId));
   }
 
@@ -146,7 +145,6 @@ public class AllOrdersSteps extends AbstractSteps {
       throw new IllegalArgumentException("Created Order Tracking ID should not be null or empty.");
     }
 
-    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
   }
 
@@ -346,7 +344,6 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   private void resumeOrders(List<String> trackingIds) {
-    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(trackingIds);
     allOrdersPage.resumeSelected(trackingIds);
   }
@@ -656,6 +653,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} preset action on All Orders page")
   public void selectPresetAction(String action) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.presetActions.selectOption(resolveValue(action));
   }
 
@@ -797,6 +795,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.filterPreset.searchAndSelectValue(resolveValue(value));
     if (allOrdersPage.halfCircleSpinner.waitUntilVisible(3)) {
       allOrdersPage.halfCircleSpinner.waitUntilInvisible();
