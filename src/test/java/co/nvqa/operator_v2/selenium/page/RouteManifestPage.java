@@ -7,11 +7,14 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import java.util.Stack;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -34,6 +37,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
+
+  @FindBy(css = "md-dialog")
+  public CodCollectionDialog codCollectionDialog;
 
   @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
   public PageElement routeId;
@@ -348,6 +354,25 @@ public class RouteManifestPage extends OperatorV2SimplePage {
           index);
       new MdSelect(this, xpath).selectValue(reason);
     }
+  }
+
+  public static class CodCollectionDialog extends MdDialog {
+
+    public CodCollectionDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = ".//tr[@ng-repeat='orderCod in ctrl.orderCods']/td[1]")
+    public List<PageElement> trackingId;
+
+    @FindBy(xpath = ".//tr[@ng-repeat='orderCod in ctrl.orderCods']/td[2]")
+    public List<PageElement> amount;
+
+    @FindBy(xpath = ".//tr[@ng-repeat='orderCod in ctrl.orderCods']/td[3]/md-checkbox")
+    public List<MdCheckbox> collected;
+
+    @FindBy(name = "commons.ok")
+    public NvApiTextButton ok;
   }
 
   public static class ConfirmationDialog extends MdDialog {

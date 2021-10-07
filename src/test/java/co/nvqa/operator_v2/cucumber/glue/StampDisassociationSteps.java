@@ -45,7 +45,7 @@ public class StampDisassociationSteps extends AbstractSteps {
     stampDisassociationPage.stampIdInput.setValue(resolveValue(value).toString() + Keys.ENTER);
   }
 
-  @Then("Operator will get the ([^\"]*) alert on Stamp Disassociation page")
+  @Then("^Operator will get the ([^\"]*) alert on Stamp Disassociation page")
   public void operatorWillGetTheAlertOfMessageShown(String alert) {
     assertEquals("Not Found Alert", resolveValue(alert),
         stampDisassociationPage.alertLabel.getText());

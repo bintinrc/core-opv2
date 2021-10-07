@@ -34,12 +34,12 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.common.collect.ImmutableList;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.datatable.DataTable;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -131,30 +131,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     });
   }
 
-  @Then("^DB Operator unarchive Jaro Scores of (Delivery|Pickup) Transaction waypoint of created order$")
-  public void dbOperatorUnarchiveJaroScoresOfDeliveryWaypoint(String type) {
-    Order order = get(KEY_ORDER_DETAILS);
-    String trackingId = order.getTrackingId();
-
-    List<Transaction> transactions = order.getTransactions();
-
-    ImmutableList.of(type.toUpperCase()).forEach(transactionType ->
-    {
-      Optional<Transaction> transactionOptional = transactions.stream()
-          .filter(t -> transactionType.equals(t.getType())).findFirst();
-
-      if (transactionOptional.isPresent()) {
-        Transaction transaction = transactionOptional.get();
-        Long waypointId = transaction.getWaypointId();
-        if (waypointId != null) {
-          getCoreJdbc().unarchiveJaroScores(waypointId);
-        }
-      } else {
-        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-      }
-    });
-  }
-
   @Then("^DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived$")
   public void dbOperatorVerifyJaroScoresArchived() {
     Order order = get(KEY_ORDER_DETAILS);
@@ -163,6 +139,32 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     List<Transaction> transactions = order.getTransactions();
 
     ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+    {
+      Optional<Transaction> transactionOptional = transactions.stream()
+          .filter(t -> transactionType.equals(t.getType())).findFirst();
+
+      if (transactionOptional.isPresent()) {
+        Transaction transaction = transactionOptional.get();
+        Long waypointId = transaction.getWaypointId();
+        if (waypointId != null) {
+          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          assertEquals("Number of jaro scores", 1, jaroScores.size());
+          assertTrue("jaro scores are archived", jaroScores.get(0).getArchived() == 1);
+        }
+      } else {
+        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
+      }
+    });
+  }
+
+  @Then("^DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived$")
+  public void dbOperatorVerifyJaroScoresOfPickupTransactionArchived() {
+    Order order = get(KEY_ORDER_DETAILS);
+    String trackingId = order.getTrackingId();
+
+    List<Transaction> transactions = order.getTransactions();
+
+    ImmutableList.of(TRANSACTION_TYPE_PICKUP).forEach(transactionType ->
     {
       Optional<Transaction> transactionOptional = transactions.stream()
           .filter(t -> transactionType.equals(t.getType())).findFirst();
@@ -605,7 +607,18 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     mapOfData = resolveKeyValues(mapOfData);
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData);
 
-    Order order = get(KEY_CREATED_ORDER);
+    Order order;
+    if (mapOfData.containsKey("orderId")) {
+      Long orderId = Long.parseLong(mapOfData.get("orderId"));
+      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+      order = orders.stream()
+          .filter(o -> Objects.equals(o.getId(), orderId))
+          .findFirst()
+          .orElseThrow(
+              () -> new IllegalArgumentException("Order with id " + orderId + " was not created"));
+    } else {
+      order = get(KEY_CREATED_ORDER);
+    }
     String type = "PP";
     List<TransactionEntity> transactions = getCoreJdbc()
         .findTransactionByOrderIdAndType(order.getId(), type);

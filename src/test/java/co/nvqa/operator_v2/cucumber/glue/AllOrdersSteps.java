@@ -8,9 +8,9 @@ import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -98,7 +99,15 @@ public class AllOrdersSteps extends AbstractSteps {
       searchTerm = get(searchTerm);
     }
 
-    allOrdersPage.searchWithoutResult(category, searchLogic, searchTerm);
+    allOrdersPage.waitUntilPageLoaded();
+    allOrdersPage.categorySelect.selectValue(category.getValue());
+    allOrdersPage.searchLogicSelect.selectValue(searchLogic.getValue());
+    try {
+      allOrdersPage.searchTerm.selectValue(searchTerm);
+      fail("Order " + searchTerm + " was found on All Orders page");
+    } catch (NoSuchElementException ex) {
+      //passed
+    }
   }
 
   @When("^Operator filter the result table by Tracking ID on All Orders page and verify order info is correct$")
@@ -136,6 +145,7 @@ public class AllOrdersSteps extends AbstractSteps {
       throw new IllegalArgumentException("Created Order Tracking ID should not be null or empty.");
     }
 
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
   }
 
@@ -756,7 +766,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     presetName = resolveValue(presetName);
     allOrdersPage.savePresetDialog.presetName.setValue(presetName);
-    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, presetName);
+    put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, presetName);
   }
 
   @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it")

@@ -139,8 +139,6 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | startDate  |                                 |
-      | endDate    |                                 |
       | timewindow | 0                               |
     Given Operator go to menu Order -> All Orders
     And Operator open page of an order from All Orders page using data below:

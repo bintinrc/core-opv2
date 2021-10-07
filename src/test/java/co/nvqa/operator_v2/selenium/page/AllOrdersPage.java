@@ -620,20 +620,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
   }
 
-  public void searchWithoutResult(Category category, SearchLogic searchLogic, String searchTerm) {
-    waitUntilPageLoaded();
-    selectValueFromMdSelectByIdContains("category", category.getValue());
-    selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
-    sendKeys("//input[starts-with(@id, 'fl-input') or starts-with(@id, 'searchTerm')]", searchTerm);
-    pause3s(); // Wait until the page finished matching the tracking ID.
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
-    Actions actions = new Actions(getWebDriver());
-    actions.sendKeys(Keys.ESCAPE).build().perform();
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
-    pause100ms();
-    waitUntilVisibilityOfElementLocated("//div[@ng-message='noResult']");
-  }
-
   public void filterTableOrderByTrackingId(String trackingId) {
     searchTableCustom1("tracking-id", trackingId);
   }
