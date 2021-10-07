@@ -92,6 +92,14 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited);
   }
 
+  @When("updates parcel size from {string} to {string} for the order")
+  public void updates_parcel_size_from_to_for_the_order(String fromSize, String toSize) {
+    Order order = get(KEY_CREATED_ORDER);
+    Dimension.Size parcelSize = Dimension.Size.fromString(toSize);
+    order.setParcelSize(parcelSize.getRegular());
+    editOrderPage.editOrderDetails(order);
+  }
+
   @Then("^Operator verifies dimensions information on Edit Order page:$")
   public void operatorVerifyDimensionInformation(Map<String, String> data) {
     data = resolveKeyValues(data);
