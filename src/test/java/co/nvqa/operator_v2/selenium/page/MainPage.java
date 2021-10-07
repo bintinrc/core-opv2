@@ -57,6 +57,9 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Corporate Manual AWB TID Generator", "corporate-manual-awb-tid");
     MAP_OF_END_URL.put("SSB Template", "order-billing-template");
     MAP_OF_END_URL.put("Station Management Homepage", "station-homepage");
+    MAP_OF_END_URL.put("Trang quản lý trạm", "station-homepage");
+    MAP_OF_END_URL.put("Beranda Manajemen Stasiun", "station-homepage");
+    MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
   }
 
   public MainPage(WebDriver webDriver) {

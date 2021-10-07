@@ -17,6 +17,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -887,4 +889,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
   }
+
+  @FindBy(css = "button[aria-label*='Profile']")
+  public PageElement profile;
+
+  @FindBy(css = "button[aria-label='Settings']")
+  public PageElement settings;
+
+  @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
+  public List<PageElement> settingsHeader;
+
+  public void navigateToSettingsPage() {
+    getWebDriver().get(TestConstants.OPERATOR_PORTAL_BASE_URL);
+    waitUntilElementIsClickable(profile.getWebElement());
+    profile.click();
+    settings.click();
+    Assert.assertTrue("Assert that the settings page has loaded", settingsHeader.size() > 0);
+  }
+
 }
