@@ -24,7 +24,8 @@ Feature: Unverified Address Assignment
 
   @DeleteAddress
   Scenario: Operator Assign a Zone to an Unverified Address Successfully (uid:2bf09de6-73bb-42b5-b052-69be8aca67dc)
-    Given API Operator create new shipper address V2 using data below:
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Shipper create V4 order using data below:
