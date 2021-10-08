@@ -9,7 +9,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper with ID and Name "{shipper-v4-active-expired-pp-legacy-id}-{shipper-v4-active-expired-pp-name}"
     Then Operator verifies that Pricing Script is "Active" and "Expired"
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -38,7 +38,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | 0                               |
       | errorMessage | 0 is not a valid discount value |
@@ -61,7 +61,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -89,7 +89,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | $#^$^#@                          |
       | errorMessage | Special character is not allowed |
@@ -112,7 +112,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | 20.54321                              |
       | comments     | This is an invalid discount           |
@@ -136,7 +136,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -165,7 +165,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | 10000000                           |
       | comments     | This is an invalid discount        |
@@ -188,7 +188,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |

@@ -29,7 +29,7 @@ Feature: Marketplace Shipper
       | marketplace.selectedOcServices      | 3DAY                  |
       | marketplace.trackingType            | Dynamic               |
       | marketplace.premiumPickupDailyLimit | 2                     |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |

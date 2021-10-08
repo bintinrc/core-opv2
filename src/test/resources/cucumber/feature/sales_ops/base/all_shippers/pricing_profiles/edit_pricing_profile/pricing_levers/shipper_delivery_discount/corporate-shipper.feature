@@ -32,7 +32,7 @@ Feature: Corporate Shipper
       | discount | 1.2 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | discount | 1.2 |
@@ -61,7 +61,7 @@ Feature: Corporate Shipper
       | discount | 1.2 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | discount | 1.2 |
@@ -92,7 +92,7 @@ Feature: Corporate Shipper
       | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
@@ -131,7 +131,7 @@ Feature: Corporate Shipper
       | discount | 1.2 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | discount | 1.2 |
@@ -176,7 +176,7 @@ Feature: Corporate Shipper
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
@@ -229,7 +229,7 @@ Feature: Corporate Shipper
       | discount | 1.2 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | discount | 1.2 |

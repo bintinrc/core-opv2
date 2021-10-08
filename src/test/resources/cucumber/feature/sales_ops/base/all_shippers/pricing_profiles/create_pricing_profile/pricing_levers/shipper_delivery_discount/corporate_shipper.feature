@@ -26,7 +26,7 @@ Feature:  Corporate Shipper
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |

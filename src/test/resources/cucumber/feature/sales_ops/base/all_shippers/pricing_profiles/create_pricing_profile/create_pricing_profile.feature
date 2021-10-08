@@ -23,7 +23,7 @@ Feature: Create Pricing Profile
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator verifies that Pricing Script is "Active" and ""
 
   @CloseNewWindows
@@ -44,7 +44,7 @@ Feature: Create Pricing Profile
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator verifies that Pricing Script is "Active" and ""
 
   @CloseNewWindows @HappyPath
@@ -83,7 +83,7 @@ Feature: Create Pricing Profile
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -91,9 +91,9 @@ Feature: Create Pricing Profile
       | comments          | This is a test pricing script                   |
       | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator verifies that Pricing Script is "Pending" and "Active"
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator verifies that Edit Pending Profile is displayed
 
   @CloseNewWindows

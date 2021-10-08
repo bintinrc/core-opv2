@@ -10,7 +10,7 @@ Feature: Create Pricing Profile - ID
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
     Then Operator verifies that Pricing Script is "Active" and "Expired"
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -40,7 +40,7 @@ Feature: Create Pricing Profile - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds pricing script with invalid discount and verifies the error message
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 0                                               |
@@ -65,7 +65,7 @@ Feature: Create Pricing Profile - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -94,7 +94,7 @@ Feature: Create Pricing Profile - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName   | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -129,7 +129,7 @@ Feature: Create Pricing Profile - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |

@@ -23,7 +23,7 @@ Feature: Edit Pricing Profiles - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -59,7 +59,7 @@ Feature: Edit Pricing Profiles - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate           | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -80,7 +80,7 @@ Feature: Edit Pricing Profiles - ID
       | discount          | none                                            |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName       | {KEY_CREATED_SHIPPER.name}                      |
@@ -109,7 +109,7 @@ Feature: Edit Pricing Profiles - ID
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -139,7 +139,7 @@ Feature: Edit Pricing Profiles - ID
       | insuranceThreshold  | 0                                               |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName         | {KEY_CREATED_SHIPPER.name}                      |

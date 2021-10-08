@@ -40,7 +40,7 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
       | insuranceThreshold  | 10 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     And Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceMinFee     | 10 |

@@ -36,8 +36,8 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | insuranceThreshold  | 0   |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
-    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+  And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+  And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceMinFee     | 1.2 |
       | insurancePercentage | 3   |
@@ -98,7 +98,7 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | insuranceThreshold  | 0   |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceMinFee     | 250 |
@@ -124,7 +124,7 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | insuranceThreshold  | 0     |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceMinFee     | 0     |
@@ -150,7 +150,7 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | insuranceThreshold  | 0 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceMinFee     | 0 |
@@ -318,7 +318,7 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | insuranceThreshold | 80 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceThreshold | 80 |
@@ -346,7 +346,7 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | insuranceThreshold | 99.9 |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceThreshold | 99.9 |
@@ -428,7 +428,7 @@ Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' 
       | isDefaultIns | true |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
-    And Operator edits the created shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | isDefaultIns | true |
