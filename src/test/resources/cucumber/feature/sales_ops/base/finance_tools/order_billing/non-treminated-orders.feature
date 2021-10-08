@@ -90,8 +90,6 @@ Feature: Order Billing
     And DB Operator get DP job id
     And API Operator do the DP Success for From Driver Flow
     And API Driver v5 success dp drop off
-    And API Operator gets all the SMS notification by Tracking ID
-    And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
     And API Operator runs the RecalculatePricedOrders endpoint
@@ -134,8 +132,6 @@ Feature: Order Billing
     And DB Operator get DP job id
     And API Operator do the DP Success for From Driver Flow
     And API Driver v5 success dp drop off
-    And API Operator gets all the SMS notification by Tracking ID
-    And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
     And API Operator runs the RecalculatePricedOrders endpoint
@@ -177,8 +173,6 @@ Feature: Order Billing
     And DB Operator get DP job id
     And API Operator do the DP Success for From Driver Flow
     And API Driver v5 success dp drop off
-    And API Operator gets all the SMS notification by Tracking ID
-    And DB Operator gets all details for ninja collect driver drop off confirmed status
     And DB Operator gets Customer Unlock Code Based on Tracking ID
     And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
     And API Operator runs the RecalculatePricedOrders endpoint
