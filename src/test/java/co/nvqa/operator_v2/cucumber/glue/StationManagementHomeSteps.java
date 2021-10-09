@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
@@ -7,8 +8,10 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Veera N
@@ -87,7 +90,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
-    @Given("get the count from the tile: {string}")
+    @When("get the count from the tile: {string}")
     public void get_the_count_from_the_tile(String tileName) {
         int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
         put(KEY_NUMBER_OF_PARCELS_IN_HUB, beforeOrder);
@@ -185,9 +188,57 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void gets_the_count_of_the_parcel_by_parcel_size_from_the_table(String tableName) {
         String columnName = "size";
         String columnValue =  "count";
-        Map<String, String> tableContent = stationManagementHomePage.getColumnContentByTableName(tableName, columnName, columnValue);
-        System.out.println(tableContent);
+        Map<String, String> tableBeforeChange = stationManagementHomePage.getColumnContentByTableName(tableName, columnName, columnValue);
+        //JSONObject parcelInfoJson = new JSONObject(tableContent);
+        //NumberOfParcelsBySize parcelsBySize =  JsonUtils.fromJson(parcelInfoJson.toString(), NumberOfParcelsBySize.class);
+        put(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE, tableBeforeChange);
     }
 
+    @Then("verifies that the parcel count for {string} is decreased by {int} in the table: {string}")
+    public void verifies_that_the_parcel_count_for_is_decreased_by_in_the_table(String size, Integer delta, String tableName) {
+        String columnName = "size";
+        String columnValue =  "count";
+        final AtomicBoolean asserts = new AtomicBoolean(false);
+        Map<String, String> tableBeforeChange = get(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE);
+        Map<String, String> tableAfterChange = stationManagementHomePage.getColumnContentByTableName(tableName, columnName, columnValue);
+        Dimension.Size parcelSize = Dimension.Size.fromString(size);
+        String regularSize = parcelSize.getRegular();
+        tableAfterChange.forEach((key,value) -> {
+            String formattedKey = key.replace("-","").toUpperCase();
+            if(formattedKey.contentEquals(regularSize)){
+                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key));
+                int sizeAfterChange = Integer.parseInt(value);
+                Assert.assertTrue(f("Assert that the number of parcel count is decreased for the size %s",size),
+                        sizeAfterChange == (sizeBeforeChange - delta));
+                asserts.set(true);
+            }
+        });
+        Assert.assertTrue(f("Assert that the number of parcel count is decreased for the size %s",size),
+                asserts.get());
+    }
+
+    @Then("verifies that the parcel count for {string} is increased by {int} in the table: {string}")
+    public void verifies_that_the_parcel_count_for_is_increased_by_in_the_table(String size, Integer delta, String tableName) {
+        String columnName = "size";
+        String columnValue =  "count";
+        final AtomicBoolean asserts = new AtomicBoolean(false);
+        Map<String, String> tableBeforeChange = get(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE);
+        Map<String, String> tableAfterChange = stationManagementHomePage.getColumnContentByTableName(tableName, columnName, columnValue);
+        Dimension.Size parcelSize = Dimension.Size.fromString(size);
+        String regularSize = parcelSize.getRegular();
+        tableAfterChange.forEach((key,value) -> {
+            String formattedKey = key.replace("-","").toUpperCase();
+            if(formattedKey.contentEquals(regularSize)){
+                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key));
+                int sizeAfterChange = Integer.parseInt(value);
+                Assert.assertTrue(f("Assert that number of parcel count is increased for the size %s",size),
+                        sizeAfterChange == (sizeBeforeChange + delta));
+                asserts.set(true);
+                return;
+            }
+        });
+        Assert.assertTrue(f("Assert that number of parcel count is increased for the size %s",size),
+                asserts.get());
+    }
 
 }

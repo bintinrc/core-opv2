@@ -204,6 +204,69 @@ Feature: Number of Parcels In Hub
       | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome                        | OrderStatus |
       | Number of parcels in hub | CANCELLED | No                      | CANCEL - NINJA DID NOT RECEIVE | Transit     |
 
-  @KillBrowser @ShouldAlwaysRun @NVQA-3871
+  @coverage-operator-manual @coverage-manual @step-done @station-happy-path @NVQA-3870
+  Scenario Outline: View Parcel in Hub after Update to Higher Size in Edit Order (uid:78bf5b4c-6222-42ff-9033-eb2bfedfab57)
+    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    When API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<LowerSize>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And get the count from the tile: "<TileName>"
+    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And gets the count of the parcel by parcel size from the table: "<TableName>"
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Edit Order Details on Edit Order page
+    And updates parcel size from "<LowerSize>" to "<UpperSize>" for the order
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And verifies that the count in tile: "<TileName>" has remained un-changed
+    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And verifies that the parcel count for "<LowerSize>" is decreased by 1 in the table: "<TableName>"
+    And verifies that the parcel count for "<UpperSize>" is increased by 1 in the table: "<TableName>"
+    And verifies that the size is also updated as "<UpperSize>" in station database
+    And reloads operator portal to reset the test state
+
+    Examples:
+      | TileName                 | ModalName      | TableName      | LowerSize | UpperSize |
+      | Number of parcels in hub | Parcels in Hub | By Parcel Size | S         | XXL       |
+
+
+  @coverage-operator-manual @coverage-manual @step-done @station-happy-path @NVQA-3870
+  Scenario Outline: View Parcel in Hub after Update to Lower Size in Edit Order (uid:11e13743-5c66-4f81-abf8-9605d55de470)
+    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    When API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<UpperSize>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And get the count from the tile: "<TileName>"
+    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And gets the count of the parcel by parcel size from the table: "<TableName>"
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Edit Order Details on Edit Order page
+    And updates parcel size from "<UpperSize>" to "<LowerSize>" for the order
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "{hub-name-1}" and proceed
+    And verifies that the count in tile: "<TileName>" has remained un-changed
+    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And verifies that the parcel count for "<UpperSize>" is decreased by 1 in the table: "<TableName>"
+    And verifies that the parcel count for "<LowerSize>" is increased by 1 in the table: "<TableName>"
+    And verifies that the size is also updated as "<LowerSize>" in station database
+    And reloads operator portal to reset the test state
+
+    Examples:
+      | TileName                 | ModalName      | TableName      | UpperSize | LowerSize |
+      | Number of parcels in hub | Parcels in Hub | By Parcel Size | XXL       | S         |
+
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
