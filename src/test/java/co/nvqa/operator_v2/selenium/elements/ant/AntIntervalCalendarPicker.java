@@ -50,10 +50,14 @@ public class AntIntervalCalendarPicker extends PageElement {
   public TextBox inputTo;
 
   public void setFrom(String from) {
-    valueFrom.click();
-    inputFrom.waitUntilVisible();
-    inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
-    inputFrom.waitUntilInvisible();
+    if (!StringUtils.equals(from, getValueFrom())) {
+      if (!inputFrom.isDisplayedFast()) {
+        valueFrom.click();
+        inputFrom.waitUntilVisible();
+      }
+      inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
+      inputFrom.waitUntilInvisible();
+    }
   }
 
   public void setFrom(Date from) {
@@ -61,11 +65,15 @@ public class AntIntervalCalendarPicker extends PageElement {
   }
 
   public void setTo(String to) {
-    valueFrom.click();
-    inputTo.waitUntilVisible();
-    inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
-    inputFrom.sendKeys(Keys.ENTER);
-    inputTo.waitUntilInvisible();
+    if (!StringUtils.equals(to, getValueTo())) {
+      if (!inputTo.isDisplayedFast()) {
+        valueFrom.click();
+        inputTo.waitUntilVisible();
+      }
+      inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+      valueFrom.jsClick();
+      inputTo.waitUntilInvisible();
+    }
   }
 
   public void setTo(Date to) {

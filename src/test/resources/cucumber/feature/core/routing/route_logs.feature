@@ -549,14 +549,14 @@ Feature: Route Logs
       | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | another@test.co | +6595557073    | +6595557073    | true               | uid:22d6a084-2967-4f1b-949f-9f7ee8d19d99 |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transaction - Same Address & Phone Number But Different Email (<hiptest-uid>)
+  Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transaction - Same Address & Phone Number But Different Email (uid:c1d930e3-2a56-4a33-b065-6db26a8396fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>",    "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Shipper create V4 order using data below:
-      | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_2>","email": "<email_2>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_2>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -570,14 +570,15 @@ Feature: Route Logs
       | hubName       | {hub-name} |
     When Operator merge transactions of created routes
     Then Operator verifies that success react notification displayed:
-      | top    | Transactions with 1 Routes Merged       |
-      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
+      | top                | Transactions with 1 Routes Merged       |
+      | bottom             | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | waitUntilInvisible | true                                    |
+    And API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
     Examples:
-      | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2         | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
-      | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | another@test.co | +6595557073    | +6595557073    | false              | uid:c1d930e3-2a56-4a33-b065-6db26a8396fb |
+      | type | email_1       | email_2         | phone_number_1 |
+      | DD   | binti@test.co | another@test.co | +6595557073    |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions - Same address, Email & Phone Number (uid:9d3895d6-7837-4ca0-9d7a-41a4d2789337)
@@ -661,6 +662,7 @@ Feature: Route Logs
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Route Logs Page (uid:f259e5b1-5e98-4672-9b9f-ebf34bd3470f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
@@ -701,10 +703,11 @@ Feature: Route Logs
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Route Logs Page (uid:6707eccc-3717-43d4-8f5f-a582ee833507)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.startDate | {gradle-previous-1-day-dd/MM/yyyy}           |
-      | value.endDate   | {gradle-current-date-dd/MM/yyyy}             |
+      | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
+      | value.endDate   | {gradle-current-date-yyyy-MM-dd}             |
       | value.hubIds    | {hub-id}                                     |
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
@@ -721,10 +724,11 @@ Feature: Route Logs
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page (uid:d2232710-301a-4be4-ad8c-06c00507ec5b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.startDate | {gradle-previous-1-day-dd/MM/yyyy}           |
-      | value.endDate   | {gradle-current-date-dd/MM/yyyy}             |
+      | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
+      | value.endDate   | {gradle-current-date-yyyy-MM-dd}             |
       | value.hubIds    | {hub-id}                                     |
       | value.driverIds | {ninja-driver-id}                            |
       | value.zoneIds   | {zone-id}                                    |
