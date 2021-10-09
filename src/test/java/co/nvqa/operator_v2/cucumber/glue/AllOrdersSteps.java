@@ -464,21 +464,6 @@ public class AllOrdersSteps extends AbstractSteps {
       }
     }
 
-    if (data.containsKey("creationTimeFrom")) {
-      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Creation Time");
-      }
-      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
-      allOrdersPage.creationTimeFilter.selectFromHours("04");
-      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
-    } else {
-      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
-        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
-        allOrdersPage.creationTimeFilter.selectFromHours("04");
-        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
-      }
-    }
-
     if (data.containsKey("creationTimeTo")) {
       if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Creation Time");
@@ -491,6 +476,21 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.creationTimeFilter.selectToDate(DateUtil.getTodayDate_YYYY_MM_DD());
         allOrdersPage.creationTimeFilter.selectToHours("04");
         allOrdersPage.creationTimeFilter.selectToMinutes("00");
+      }
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
+      allOrdersPage.creationTimeFilter.selectFromHours("04");
+      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+    } else {
+      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
+        allOrdersPage.creationTimeFilter.selectFromHours("04");
+        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
       }
     }
 

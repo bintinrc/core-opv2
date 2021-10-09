@@ -558,8 +558,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilInvisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading");
+    waitUntilVisibilityOfToast("Attempting to download");
+    waitUntilInvisibilityOfToast("Downloading",true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {

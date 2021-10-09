@@ -353,6 +353,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify Pickup transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
@@ -384,6 +387,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify Delivery transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
@@ -1767,6 +1773,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify order event on Edit order page using data below:
       | name | PULL OUT OF ROUTE |
 
