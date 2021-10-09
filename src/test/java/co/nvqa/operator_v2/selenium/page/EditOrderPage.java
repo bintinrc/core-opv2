@@ -164,7 +164,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   private EditPickupDetailsDialog editPickupDetailsDialog;
 
   @FindBy(css = "md-dialog")
-  private PullFromRouteDialog pullFromRouteDialog;
+  public PullFromRouteDialog pullFromRouteDialog;
 
   @FindBy(css = "md-dialog")
   private EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
@@ -892,16 +892,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
   }
 
-  public void pullOutParcelFromTheRoute(Order order, String txnType, Long routeId) {
-    String trackingId = order.getTrackingId();
-
-    pullFromRouteDialog.waitUntilVisible();
-    pullFromRouteDialog.toPull.check();
-    pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast(
-        f("%s has been pulled from route %d successfully", trackingId, routeId), true);
-  }
-
   public static class TransactionsTable extends NgRepeatTable<TransactionInfo> {
 
     public static final String COLUMN_TYPE = "type";
@@ -1049,7 +1039,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String fromPickUpStartTimePattern = f("Pickup Start Time .* (to|new value) %s %s.*",
           order.getPickupDate(), order.getPickupTimeslot().getStartTime());
       String fromPickUpEndTimePattern = f(".* Pickup End Time .* (to|new value) %s %s.*",
-          order.getPickupDate(), order.getPickupTimeslot().getEndTime());
+          order.getPickupEndDate(), order.getPickupTimeslot().getEndTime());
       assertTrue(
           f("'%s' pattern is not present in the '%s' event description", fromPickUpStartTimePattern,
               eventDescription),

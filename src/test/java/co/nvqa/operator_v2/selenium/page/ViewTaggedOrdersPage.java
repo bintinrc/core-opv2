@@ -52,9 +52,12 @@ public class ViewTaggedOrdersPage extends OperatorV2SimplePage {
       );
       setMdVirtualRepeat("data in getTableData()");
       setColumnValueProcessors(ImmutableMap.of(
-          COLUMN_DRIVER, value -> StringUtils.normalizeSpace(value.split(" - ")[0]),
-          COLUMN_ROUTE, value -> StringUtils.normalizeSpace(value.split(" - ")[1]),
-          COLUMN_TAGS, value -> StringUtils.replace(StringUtils.normalizeSpace(value), " ", ",")
+          COLUMN_DRIVER,
+          value -> value == null ? null : StringUtils.normalizeSpace(value.split(" - ")[0]),
+          COLUMN_ROUTE,
+          value -> value == null ? null : StringUtils.normalizeSpace(value.split(" - ")[1]),
+          COLUMN_TAGS, value -> value == null ? null
+              : StringUtils.replace(StringUtils.normalizeSpace(value), " ", ",")
       ));
       setEntityClass(TaggedOrderParams.class);
     }

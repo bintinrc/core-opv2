@@ -274,12 +274,12 @@ Feature: Shipper Pickups
       | zone     | <zoneName>                       |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}      |
-      | routeId     | GET_FROM_CREATED_ROUTE |
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | Note      | hiptest-uid                              | hubName      | zoneName           |
+      | Note      | hiptest-uid                              | hubName | zoneName           |
       | Hub Name  | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-name-3} |                    |
-      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 |              | {zone-full-name-3} |
+      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 |         | {zone-full-name-3} |
 
   Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Shipper Support -> Blocked Dates

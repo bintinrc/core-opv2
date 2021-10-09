@@ -54,6 +54,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -277,13 +278,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyDeliveryWaypointRecordUpdated() {
     String transactionType = "Delivery";
     Order order = get(KEY_CREATED_ORDER);
-    List<Transaction> transactions = order.getTransactions();
-
-    Transaction transaction = transactions.stream()
-        .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst()
-        .orElseThrow(() -> new AssertionFailedError(
-            f("%s transaction not found for order ID = '%s'.", transactionType, order.getId())));
-
+    Transaction transaction = order.getLastDeliveryTransaction();
     validateDeliveryInWaypointRecord(order, transactionType, transaction.getWaypointId());
   }
 
@@ -522,9 +517,33 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             .format(order.getDeliveryTimeslot().getStartTime()),
         DateUtil.displayDateTime(entityStartDateTime));
     assertEquals("Delivery end date/time",
-        order.getDeliveryDate() + " " + TIME_FORMATTER_1
+        order.getDeliveryEndDate() + " " + TIME_FORMATTER_1
             .format(order.getDeliveryTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
+  }
+
+  @Then("DB Operator verify {word} transaction record of order {string}:")
+  public void dbOperatorVerifyTransactionRecord(String typeStr, String orderIdStr,
+      Map<String, String> data) {
+    String type = StringUtils.equalsIgnoreCase(typeStr, "Delivery") ? "DD" : "PP";
+    Long orderId = resolveValue(orderIdStr);
+    TransactionEntity expected = new TransactionEntity(resolveKeyValues(data));
+
+    List<TransactionEntity> transactions = getCoreJdbc()
+        .findTransactionByOrderIdAndType(orderId, type);
+    assertThat(f("There is more than 1 %s transaction for orderId %d", type, orderId),
+        transactions, hasSize(1));
+    TransactionEntity actual = transactions.get(0);
+
+    expected.compareWithActual(actual, "startTime", "endTime");
+
+    SoftAssertions assertions = new SoftAssertions();
+    assertions.assertThat(actual.getDisplayedStartTime())
+        .as("Start Time")
+        .isEqualTo(expected.getStartTime());
+    assertions.assertThat(actual.getDisplayedEndTime())
+        .as("End Time")
+        .isEqualTo(expected.getEndTime());
   }
 
   @Then("^DB Operator verify next Delivery transaction values are updated for the created order:$")
@@ -1068,8 +1087,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         order.getFromAddress2(), StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
     assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId),
         order.getFromPostcode(), StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
-    assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
-        order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
+    //TODO need to clarify source of timewindow_id
+//    assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
+//        order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
   }
 
   private void validateDeliveryInWaypointRecord(Order order, String transactionType,
