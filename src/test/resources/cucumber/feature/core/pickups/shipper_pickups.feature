@@ -206,9 +206,9 @@ Feature: Shipper Pickups
       | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd}         |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}           |
+      | shipperName | {shipper-v4-legacy-id}-{shipper-v4-name} |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
       | routeTagName | {route-tag-name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
@@ -277,9 +277,9 @@ Feature: Shipper Pickups
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | Note      | hiptest-uid                              | hubName | zoneName           |
+      | Note      | hiptest-uid                              | hubName      | zoneName           |
       | Hub Name  | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-name-3} |                    |
-      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 |         | {zone-full-name-3} |
+      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 |              | {zone-full-name-3} |
 
   Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Shipper Support -> Blocked Dates

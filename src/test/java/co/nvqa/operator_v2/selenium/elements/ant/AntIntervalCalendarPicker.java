@@ -81,12 +81,22 @@ public class AntIntervalCalendarPicker extends PageElement {
   }
 
   public void setInterval(String from, String to) {
-    valueFrom.click();
-    inputFrom.waitUntilVisible();
-    inputFrom.jsSetValue(from);
-    inputTo.jsSetValue(to);
-    valueFrom.jsClick();
-    inputTo.waitUntilInvisible();
+    String currentFrom = getValueFrom();
+    String currentTo = getValueTo();
+    if (!StringUtils.equals(from, currentFrom) || !StringUtils.equals(to, currentTo)) {
+      if (!inputFrom.isDisplayedFast()) {
+        valueFrom.click();
+        inputFrom.waitUntilVisible();
+      }
+      if (!StringUtils.equals(from, currentFrom)) {
+        inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from);
+      }
+      if (!StringUtils.equals(to, currentTo)) {
+        inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+      }
+      valueFrom.jsClick();
+      inputTo.waitUntilInvisible();
+    }
   }
 
   public void setInterval(Date from, Date to) {

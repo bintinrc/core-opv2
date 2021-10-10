@@ -70,7 +70,7 @@ Feature: Add Shipper To Preset
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
-  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
+  @DeleteShipper @@DeleteFilterTemplate @CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Multiple Addresses (uid:fd702085-61cd-4aab-9f18-e8a556f45544)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Shipper Pickup Filter Template using data below:
