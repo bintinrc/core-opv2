@@ -2398,4 +2398,26 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String actualSortCode = PdfUtils.getSortCode(orderAirwayBillPdfAsByteArray);
     assertTrue("Sort Code", sortCode.equalsIgnoreCase(actualSortCode));
   }
+
+  @FindBy(css = "[aria-label*='Order outcome']")
+  public List<PageElement> orderOutcomeDialog;
+
+  @FindBy(css = "button[aria-label='No']")
+  public PageElement noBtn;
+
+  @FindBy(css = "button[aria-label='Keep']")
+  public PageElement keepBtn;
+
+  public void chooseCurrentOrderOutcome(String value) {
+    if (orderOutcomeDialog.size() > 0) {
+        if(value.equalsIgnoreCase("keep")){
+          keepBtn.click();
+        }
+        if (value.equalsIgnoreCase("no")) {
+          noBtn.click();
+        }
+    }
+
+  }
+
 }

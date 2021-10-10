@@ -93,6 +93,14 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited);
   }
 
+  @When("updates parcel size from {string} to {string} for the order")
+  public void updates_parcel_size_from_to_for_the_order(String fromSize, String toSize) {
+    Order order = get(KEY_CREATED_ORDER);
+    Dimension.Size parcelSize = Dimension.Size.fromString(toSize);
+    order.setParcelSize(parcelSize.getRegular());
+    editOrderPage.editOrderDetails(order);
+  }
+
   @Then("^Operator verifies dimensions information on Edit Order page:$")
   public void operatorVerifyDimensionInformation(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -1473,6 +1481,10 @@ public class EditOrderSteps extends AbstractSteps {
     pause5s();
     if (data.containsKey("status")) {
       editOrderPage.editTicketDialog.ticketStatus.selectValue(data.get("status"));
+    }
+    pause5s();
+    if (data.containsKey("keepCurrentOrderOutcome")) {
+      editOrderPage.chooseCurrentOrderOutcome(data.get("keepCurrentOrderOutcome"));
     }
     if (data.containsKey("outcome")) {
       editOrderPage.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
