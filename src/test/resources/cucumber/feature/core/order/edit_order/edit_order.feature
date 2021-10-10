@@ -2156,7 +2156,8 @@ Feature: Edit Order
       | type    | Delivery               |
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verifies that info toast displayed:
-      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                        |
     And API Operator get order details
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE           |
