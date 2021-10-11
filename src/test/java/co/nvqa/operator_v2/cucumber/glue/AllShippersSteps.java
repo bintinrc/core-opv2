@@ -32,13 +32,13 @@ import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -1048,10 +1048,10 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator edits the created marketplace sub-shipper")
   public void operatorEditsCreatedMarketplaceSubshipper() {
-    Marketplace marketplaceSellerId = get(KEY_MARKETPLACE_SUB_SHIPPER);
+    Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     pause1s();
-    allShippersPage.editShipper(marketplaceSellerId);
+    allShippersPage.editShipper(marketplaceSubShipper);
   }
 
   @And("Operator edits shipper {string}")
@@ -1187,7 +1187,9 @@ public class AllShippersSteps extends AbstractSteps {
     generatePickupAddresses(shipper, mapOfData);
 
     allShippersPage.createNewShipperWithUpdatedPricingScript(shipper);
+    put(KEY_LEGACY_SHIPPER_ID, String.valueOf(shipper.getLegacyId()));
     put(KEY_CREATED_SHIPPER, shipper);
+    putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
 
   private void setBilling(Shipper shipper, String dateUniqueString) {
