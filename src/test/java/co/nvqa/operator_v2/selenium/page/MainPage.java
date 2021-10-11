@@ -60,6 +60,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Trang quản lý trạm", "station-homepage");
     MAP_OF_END_URL.put("Beranda Manajemen Stasiun", "station-homepage");
     MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
+    MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
   }
 
   public MainPage(WebDriver webDriver) {

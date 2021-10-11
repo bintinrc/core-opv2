@@ -118,7 +118,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void searches_for_the_orders_in_modal_pop_up_by_applying_the_following_filters(DataTable searchParameters) {
         List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
         Map<String, String> filter = resolveKeyValues(filters.get(0));
-        stationManagementHomePage.applyFilters(filter);
+        stationManagementHomePage.applyFilters(filter, 1);
+    }
+
+    @When("expects no results when searching for the orders by applying the following filters:")
+    public void expects_no_results_when_searching_for_the_orders_by_applying_the_following_filters(DataTable searchParameters) {
+        List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
+        Map<String, String> filter = resolveKeyValues(filters.get(0));
+        stationManagementHomePage.applyFilters(filter, 0);
     }
 
     @When("searches for the order details in the table:{string} by applying the following filters:")
@@ -189,8 +196,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
         String columnName = "size";
         String columnValue =  "count";
         Map<String, String> tableBeforeChange = stationManagementHomePage.getColumnContentByTableName(tableName, columnName, columnValue);
-        //JSONObject parcelInfoJson = new JSONObject(tableContent);
-        //NumberOfParcelsBySize parcelsBySize =  JsonUtils.fromJson(parcelInfoJson.toString(), NumberOfParcelsBySize.class);
         put(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE, tableBeforeChange);
     }
 
