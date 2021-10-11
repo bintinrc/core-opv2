@@ -359,6 +359,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
           .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
               TestConstants.COUNTRY_CODE, keyword));
       assertTrue("Shipper table is empty", !shippersTable.isTableEmpty());
+      assertEquals("Shipper table has more than one row", 1, shippersTable.getRowsCount());
     }, "Search specific shipper in shipper table", 100, 5);
   }
 
