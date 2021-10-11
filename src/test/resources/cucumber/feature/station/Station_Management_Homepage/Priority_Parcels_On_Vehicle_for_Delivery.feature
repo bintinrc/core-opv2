@@ -1,7 +1,7 @@
 @PriorityParcelOnVehicle @StationHome @StationManagement
 Feature: Priority Parcels On Vehicle for Delivery
 
-  @LaunchBrowser @ShouldAlwaysRun @NVQA-3904
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -113,6 +113,6 @@ Feature: Priority Parcels On Vehicle for Delivery
       | TileName                                 | ModalName                   |
       | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
-  @KillBrowser @ShouldAlwaysRun @NVQA-3904
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

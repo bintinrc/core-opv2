@@ -236,6 +236,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     File csvFile = createFile(
         String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
 
+    waitUntilPageLoaded();
     findOrdersWithCsv.click();
     findOrdersWithCsvDialog.waitUntilVisible();
     findOrdersWithCsvDialog.selectFile.setValue(csvFile);
@@ -559,8 +560,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilInvisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading");
+    waitUntilVisibilityOfToast("Attempting to download");
+    waitUntilInvisibilityOfToast("Downloading",true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {

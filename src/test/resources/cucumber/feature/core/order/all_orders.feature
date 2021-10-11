@@ -181,7 +181,7 @@ Feature: All Orders
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     And Operator Force Success single order on All Orders page
     Then API Operator verify order info after Force Successed
@@ -196,6 +196,10 @@ Feature: All Orders
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Pickup" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -235,6 +239,8 @@ Feature: All Orders
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get multiple "Delivery" transactions with status "Success"
+    Then DB Operator verifies all waypoints status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -283,9 +289,9 @@ Feature: All Orders
   Scenario: Operator RTS Multiple Orders on All Orders Page (uid:0061ef8a-2496-4ed9-a259-4dd01e8c7cba)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                          |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator go to menu Order -> All Orders
@@ -295,9 +301,9 @@ Feature: All Orders
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                        |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+      | status    | PENDING                                |
+      | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:
@@ -319,9 +325,9 @@ Feature: All Orders
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                        |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+      | status    | PENDING                                |
+      | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:
@@ -627,6 +633,8 @@ Feature: All Orders
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:

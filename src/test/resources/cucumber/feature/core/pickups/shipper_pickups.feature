@@ -71,6 +71,7 @@ Feature: Shipper Pickups
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
 
   @DeleteOrArchiveRoute
@@ -206,9 +207,9 @@ Feature: Shipper Pickups
       | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd}         |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}           |
+      | shipperName | {shipper-v4-legacy-id}-{shipper-v4-name} |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
       | routeTagName | {route-tag-name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
@@ -274,7 +275,7 @@ Feature: Shipper Pickups
       | zone     | <zoneName>                       |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}      |
-      | routeId     | GET_FROM_CREATED_ROUTE |
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
     Examples:
       | Note      | hiptest-uid                              | hubName      | zoneName           |

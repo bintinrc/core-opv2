@@ -2,11 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Tristania Siagian
@@ -27,6 +28,13 @@ public class OutboundMonitoringSteps extends AbstractSteps {
   @When("^Operator click on 'Load Selection' Button on Outbound Monitoring Page$")
   public void clickLoadSelection() {
     outboundMonitoringPage.loadSelection.clickAndWaitUntilDone();
+  }
+
+  @When("Operator verifies Date is {string} on Outbound Monitoring Page")
+  public void verifyDate(String expected) {
+    Assertions.assertThat(outboundMonitoringPage.dateFilter.fromDate.getValue())
+        .as("Date")
+        .isEqualTo(expected);
   }
 
   @And("^Operator search on Route ID Header Table on Outbound Monitoring Page$")
@@ -76,9 +84,13 @@ public class OutboundMonitoringSteps extends AbstractSteps {
   @When("^Operator select filter and click Load Selection on Outbound Monitoring page using data below:$")
   public void selectFiltersAndClickLoadSelection(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String zoneName = data.get("zoneName");
-    String hubName = data.get("hubName");
-    outboundMonitoringPage.selectFiltersAndClickLoadSelection(zoneName, hubName);
+    if (data.containsKey("zoneName")) {
+      outboundMonitoringPage.zonesSelect.selectFilter(splitAndNormalize(data.get("zoneName")));
+    }
+    if (data.containsKey("hubName")) {
+      outboundMonitoringPage.hubsSelect.selectFilter(splitAndNormalize(data.get("hubName")));
+    }
+    outboundMonitoringPage.loadSelection.clickAndWaitUntilDone();
   }
 
   @When("^Operator pull out order from route on Outbound Monitoring page$")

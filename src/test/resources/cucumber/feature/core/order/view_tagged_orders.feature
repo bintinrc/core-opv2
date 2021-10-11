@@ -112,18 +112,18 @@ Feature: View Tagged Orders
       | {order-tag-id} |
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | entrySource             | CUSTOMER COMPLAINT                  |
+      | investigatingDepartment | Fleet (First Mile)                  |
+      | investigatingHub        | {hub-name}                          |
+      | ticketType              | DAMAGED                             |
+      | ticketSubType           | IMPROPER PACKAGING                  |
+      | parcelLocation          | DAMAGED RACK                        |
+      | liability               | Shipper                             |
+      | damageDescription       | GENERATED                           |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED |
+      | custZendeskId           | 1                                   |
+      | shipperZendeskId        | 1                                   |
+      | ticketNotes             | GENERATED                           |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |

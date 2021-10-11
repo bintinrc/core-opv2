@@ -2,11 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.page.ViewTaggedOrdersPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -14,14 +15,14 @@ import java.util.Map;
 @ScenarioScoped
 public class ViewTaggedOrdersSteps extends AbstractSteps {
 
-  private ViewTaggedOrdersPage viewTaggedOrdersSteps;
+  private ViewTaggedOrdersPage viewTaggedOrdersPage;
 
   public ViewTaggedOrdersSteps() {
   }
 
   @Override
   public void init() {
-    viewTaggedOrdersSteps = new ViewTaggedOrdersPage(getWebDriver());
+    viewTaggedOrdersPage = new ViewTaggedOrdersPage(getWebDriver());
   }
 
   @When("^Operator selects filter and clicks Load Selection on View Tagged Orders page:$")
@@ -29,24 +30,24 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
       Map<String, String> data) {
     data = resolveKeyValues(data);
 
-    viewTaggedOrdersSteps.loadSelection.waitUntilVisible();
+    viewTaggedOrdersPage.loadSelection.waitUntilVisible();
 
     if (data.containsKey("orderTags")) {
       List<String> tags = splitAndNormalize(data.get("orderTags"));
-      viewTaggedOrdersSteps.orderTagsFilter.clearAll();
-      viewTaggedOrdersSteps.orderTagsFilter.selectFilter(tags);
+      viewTaggedOrdersPage.orderTagsFilter.clearAll();
+      viewTaggedOrdersPage.orderTagsFilter.selectFilter(tags);
     }
 
     if (data.containsKey("granularStatus")) {
-      viewTaggedOrdersSteps.granularStatusFilter.clearAll();
-      viewTaggedOrdersSteps.granularStatusFilter.selectFilter(data.get("granularStatus"));
+      viewTaggedOrdersPage.granularStatusFilter.clearAll();
+      viewTaggedOrdersPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
     } else {
-      if (viewTaggedOrdersSteps.granularStatusFilter.isDisplayedFast()) {
-        viewTaggedOrdersSteps.granularStatusFilter.clearAll();
+      if (viewTaggedOrdersPage.granularStatusFilter.isDisplayedFast()) {
+        viewTaggedOrdersPage.granularStatusFilter.clearAll();
       }
     }
 
-    viewTaggedOrdersSteps.loadSelection.click();
+    viewTaggedOrdersPage.loadSelection.click();
   }
 
 
@@ -54,8 +55,11 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
   public void operatorVerifyTaggedOrderParams(Map<String, String> data) {
     data = resolveKeyValues(data);
     TaggedOrderParams expected = new TaggedOrderParams(data);
-    viewTaggedOrdersSteps.taggedOrdersTable.filterByColumn("trackingId", expected.getTrackingId());
-    TaggedOrderParams actual = viewTaggedOrdersSteps.taggedOrdersTable.readEntity(1);
+    viewTaggedOrdersPage.taggedOrdersTable.filterByColumn("trackingId", expected.getTrackingId());
+    Assertions.assertThat(viewTaggedOrdersPage.taggedOrdersTable.isEmpty())
+        .as("Tagged orders table is empty")
+        .isFalse();
+    TaggedOrderParams actual = viewTaggedOrdersPage.taggedOrdersTable.readEntity(1);
     expected.compareWithActual(actual);
   }
 

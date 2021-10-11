@@ -10,40 +10,42 @@ Feature: Outbound Monitoring
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
+    And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
+    And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound Load Monitoring
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
-    When Operator search on Route ID Header Table on Outbound Monitoring Page
+    And Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the route ID is exist on Outbound Monitoring Page
 
   @DeleteOrArchiveRoute
   Scenario: Operator Verifies the In Progress Outbound Status on Outbound Monitoring Page (uid:4414c191-4865-4d4f-8722-8678795d3636)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
+    And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
+    And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound Load Monitoring
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    When Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
-    When Operator search on Route ID Header Table on Outbound Monitoring Page
+    And Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the In Progress Outbound Status on Outbound Monitoring Page
 
   @DeleteOrArchiveRoute
@@ -66,6 +68,7 @@ Feature: Outbound Monitoring
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
     Given Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the Complete Outbound Status on Outbound Monitoring Page
@@ -87,6 +90,7 @@ Feature: Outbound Monitoring
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on flag icon on chosen route ID on Outbound Monitoring Page
@@ -109,6 +113,7 @@ Feature: Outbound Monitoring
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on comment icon on chosen route ID on Outbound Monitoring Page
@@ -128,6 +133,7 @@ Feature: Outbound Monitoring
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
@@ -156,6 +162,7 @@ Feature: Outbound Monitoring
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
