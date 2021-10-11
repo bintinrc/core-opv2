@@ -81,6 +81,10 @@ Feature: Edit Order
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator tags order to "{dpms-id}" DP on Edit Order Page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
+    And Operator verify order event on Edit order page using data below:
+      | name | ASSIGNED TO DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When DB Operator get DP address by ID = "{dpms-id}"
     Then DB Operator verifies orders record using data below:
       | toAddress1 | GET_FROM_CREATED_ORDER |
@@ -114,7 +118,10 @@ Feature: Edit Order
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
-#  initially city is ""
+    And Operator verify order event on Edit order page using data below:
+      | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
       | distribution_point_id | 0                      |
       | address1              | GET_FROM_CREATED_ORDER |
@@ -413,6 +420,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     Examples:
       | Note              | hiptest-uid                              | orderType | routeType |
@@ -1042,6 +1050,10 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Pickup" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1098,6 +1110,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1130,6 +1144,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1158,6 +1174,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1190,6 +1208,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1269,6 +1289,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -1980,6 +2001,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -2380,6 +2403,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | FAIL |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
