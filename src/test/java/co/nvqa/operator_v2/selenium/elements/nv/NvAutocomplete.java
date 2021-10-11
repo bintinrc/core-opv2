@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -103,7 +104,9 @@ public class NvAutocomplete extends PageElement {
   }
 
   public void clear() {
-    clear.click();
+    if (StringUtils.isNotBlank(getValue())) {
+      clear.click();
+    }
   }
 
   public String getValue() {

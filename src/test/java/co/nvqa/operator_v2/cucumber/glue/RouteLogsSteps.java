@@ -470,9 +470,11 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
       if (finalData.containsKey("routeDateFrom")) {
+        pause1s();
         routeLogsPage.routeDateFilter.setFrom(finalData.get("routeDateFrom"));
       }
       if (finalData.containsKey("routeDateTo")) {
+        pause1s();
         routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
       }
       if (finalData.containsKey("hub")) {
