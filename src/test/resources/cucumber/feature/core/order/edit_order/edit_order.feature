@@ -7,22 +7,22 @@ Feature: Edit Order
 
   Scenario: Operator Edit Pickup Details on Edit Order page (uid:bde3592e-843f-4a99-9a60-66c46c4b257c)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Edit Pickup Details on Edit Order page
     And Operator update Pickup Details on Edit Order Page
-      | senderName     | test sender name          |
-      | senderContact  | +9727894434               |
-      | senderEmail    | test@mail.com             |
-      | internalNotes  | test internalNotes        |
-      | pickupDate     | {{next-1-day-yyyy-MM-dd}} |
-      | pickupTimeslot | 9AM - 12PM                |
-      | country        | Singapore                 |
-      | city           | Singapore                 |
-      | address1       | 116 Keng Lee Rd           |
-      | address2       | 15                        |
-      | postalCode     | 308402                    |
+      | senderName     | test sender name                       |
+      | senderContact  | +9727894434                            |
+      | senderEmail    | test@mail.com                          |
+      | internalNotes  | test internalNotes                     |
+      | pickupDate     | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | pickupTimeslot | 9AM - 12PM                             |
+      | country        | Singapore                              |
+      | city           | Singapore                              |
+      | address1       | 116 Keng Lee Rd                        |
+      | address2       | 15                                     |
+      | postalCode     | 308402                                 |
     Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
@@ -39,22 +39,26 @@ Feature: Edit Order
 
   Scenario: Operator Edit Delivery Details on Edit Order page (uid:e17ae476-5ccb-436e-b256-21ab3443a2ee)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Edit Delivery Details on Edit Order page
+    And API Operator get order details
     And Operator update Delivery Details on Edit Order Page
-      | recipientName    | test sender name          |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-      | country          | Singapore                 |
-      | city             | Singapore                 |
-      | address1         | 116 Keng Lee Rd           |
-      | address2         | 15                        |
-      | postalCode       | 308402                    |
+      | recipientName    | test sender name                       |
+      | recipientContact | +9727894434                            |
+      | recipientEmail   | test@mail.com                          |
+      | internalNotes    | test internalNotes                     |
+      | deliveryDate     | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | deliveryTimeslot | 9AM - 12PM                             |
+      | country          | Singapore                              |
+      | city             | Singapore                              |
+      | address1         | 116 Keng Lee Rd                        |
+      | address2         | 15                                     |
+      | postalCode       | 308402                                 |
+    Then Operator verifies that success toast displayed:
+      | top                | Delivery Details Updated |
+      | waitUntilInvisible | true                     |
     Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
@@ -66,7 +70,17 @@ Feature: Edit Order
       | 11 |
       | 12 |
     And DB Operator verify Delivery '17' order_events record for the created order
-    And DB Operator verify Delivery transaction record is updated for the created order
+    And DB Operator verify Delivery transaction record of order "KEY_CREATED_ORDER_ID":
+      | address1  | {KEY_CREATED_ORDER.toAddress1}                  |
+      | address2  | {KEY_CREATED_ORDER.toAddress2}                  |
+      | postcode  | {KEY_CREATED_ORDER.toPostcode}                  |
+      | city      | {KEY_CREATED_ORDER.toCity}                      |
+      | country   | {KEY_CREATED_ORDER.toCountry}                   |
+      | name      | {KEY_CREATED_ORDER.toName}                      |
+      | email     | {KEY_CREATED_ORDER.toEmail}                     |
+      | contact   | {KEY_CREATED_ORDER.toContact}                   |
+      | startTime | {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 |
+      | endTime   | {gradle-next-4-working-day-yyyy-MM-dd} 12:00:00 |
     And DB Operator verify Delivery waypoint record is updated
 
   Scenario: Operator Tag Order to DP (uid:b6540556-8969-4519-9716-f273a96db356)
@@ -346,6 +360,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify Pickup transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
@@ -377,6 +394,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify Delivery transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
@@ -706,7 +726,7 @@ Feature: Edit Order
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Shipper            |
       | damageDescription       | GENERATED          |
       | orderOutcomeDamaged     | NV LIABLE - FULL   |
       | custZendeskId           | 1                  |
@@ -1774,6 +1794,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify order event on Edit order page using data below:
       | name | PULL OUT OF ROUTE |
 
@@ -1888,6 +1911,9 @@ Feature: Edit Order
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
     When Operator selects "All Events" in Events Filter menu on Edit Order page
@@ -2153,7 +2179,8 @@ Feature: Edit Order
       | type    | Delivery               |
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verifies that info toast displayed:
-      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                        |
     And API Operator get order details
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE           |

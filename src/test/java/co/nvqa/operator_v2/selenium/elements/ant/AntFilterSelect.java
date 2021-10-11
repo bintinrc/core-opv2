@@ -20,7 +20,7 @@ public class AntFilterSelect extends PageElement {
   @FindBy(css = ".ant-select")
   public AntSelect2 searchOrSelect;
 
-  @FindBy(css = "div.nv-fa-icon")
+  @FindBy(css = "[data-icon='layer-minus']")
   public Button clearAll;
 
   @FindBy(css = "div.close > button")

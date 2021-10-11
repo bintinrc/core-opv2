@@ -837,7 +837,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (Objects.nonNull(pickupDate)) {
       order.setPickupDate(pickupDate);
     }
-    if (Objects.nonNull(pickupTimeslot)) {
+    if (StringUtils.isNotBlank(pickupTimeslot)) {
       order.setPickupTimeslot(pickupTimeslot);
     }
     if (Objects.nonNull(address1)) {
@@ -1062,9 +1062,9 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("^Operator pull out parcel from the route for (Pickup|Delivery) on Edit Order page$")
   public void operatorPullsOrderFromRouteOnEditOrderPage(String txnType) {
-    Order createdOrder = get(KEY_CREATED_ORDER);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    editOrderPage.pullOutParcelFromTheRoute(createdOrder, txnType, routeId);
+    editOrderPage.pullFromRouteDialog.waitUntilVisible();
+    editOrderPage.pullFromRouteDialog.toPull.check();
+    editOrderPage.pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
   }
 
   @When("^Operator verify next order info on Edit order page:$")

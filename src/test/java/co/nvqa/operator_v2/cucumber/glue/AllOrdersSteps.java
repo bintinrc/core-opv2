@@ -145,7 +145,6 @@ public class AllOrdersSteps extends AbstractSteps {
       throw new IllegalArgumentException("Created Order Tracking ID should not be null or empty.");
     }
 
-    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
   }
 
@@ -308,8 +307,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyRouteIdValues(List<Map<String, String>> data) {
     data.forEach(orderData -> {
       orderData = resolveKeyValues(orderData);
-      String trackingId = orderData.get("trackingId");
-      String expectedRouteId = orderData.get("routeId");
+      String trackingId = StringUtils.trimToEmpty(orderData.get("trackingId"));
+      String expectedRouteId = StringUtils.trimToEmpty(orderData.get("routeId"));
       assertEquals(f("Route Id for %s order", trackingId), expectedRouteId,
           allOrdersPage.addToRouteDialog.getRouteId(trackingId));
     });
@@ -465,21 +464,6 @@ public class AllOrdersSteps extends AbstractSteps {
       }
     }
 
-    if (data.containsKey("creationTimeFrom")) {
-      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Creation Time");
-      }
-      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
-      allOrdersPage.creationTimeFilter.selectFromHours("04");
-      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
-    } else {
-      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
-        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
-        allOrdersPage.creationTimeFilter.selectFromHours("04");
-        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
-      }
-    }
-
     if (data.containsKey("creationTimeTo")) {
       if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Creation Time");
@@ -492,6 +476,21 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.creationTimeFilter.selectToDate(DateUtil.getTodayDate_YYYY_MM_DD());
         allOrdersPage.creationTimeFilter.selectToHours("04");
         allOrdersPage.creationTimeFilter.selectToMinutes("00");
+      }
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
+      allOrdersPage.creationTimeFilter.selectFromHours("04");
+      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+    } else {
+      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
+        allOrdersPage.creationTimeFilter.selectFromHours("04");
+        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
       }
     }
 
@@ -654,6 +653,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} preset action on All Orders page")
   public void selectPresetAction(String action) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.presetActions.selectOption(resolveValue(action));
   }
 
@@ -795,6 +795,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.filterPreset.searchAndSelectValue(resolveValue(value));
     if (allOrdersPage.halfCircleSpinner.waitUntilVisible(3)) {
       allOrdersPage.halfCircleSpinner.waitUntilInvisible();

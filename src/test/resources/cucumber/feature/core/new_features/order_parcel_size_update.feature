@@ -24,7 +24,8 @@ Feature: Order Parcel Size Update
       | top | Matches with file shown in table |
     When Operator clicks Upload button on Order Parcel Size Update page
     Then Operator verifies that success toast displayed:
-      | top | Parcel size update success |
+      | top                | Parcel size update success |
+      | waitUntilInvisible | true                       |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verifies dimensions information on Edit Order page:
       | size | MEDIUM |

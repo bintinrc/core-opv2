@@ -11,10 +11,10 @@ import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.BulkRouteAssignmentSidePanel.ReservationCard;
 import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -145,8 +145,9 @@ public class ShipperPickupsSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     String addressKey = mapOfData.getOrDefault("address", "KEY_CREATED_ADDRESS");
     Address addressResult = resolveValue(addressKey);
-    mapOfData = resolveKeyValues(mapOfData);
-    verifyReservationData(addressResult, mapOfData);
+    retryIfAssertionErrorOccurred(() ->
+            verifyReservationData(addressResult, resolveKeyValues(mapOfData)),
+        " Verify reservation parameters", 500, 3);
   }
 
   @Then("^Operator verify the new reservations are listed on table in Shipper Pickups page using data below:$")
@@ -657,8 +658,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
         .replace("POD-", "");
     shipperPickupsPage.reservationDetailsDialog.downloadCsvFile.click();
     shipperPickupsPage
-          .verifyFileDownloadedSuccessfully("pod-file-id-" + podId + ".csv",
-              "Scanned at Shipper (POD),Removed TID by Driver\n" + "," , true, true, false);
+        .verifyFileDownloadedSuccessfully("pod-file-id-" + podId + ".csv",
+            "Scanned at Shipper (POD),Removed TID by Driver\n" + ",", true, true, false);
   }
 
   @When("^Operator edit reservation address details on Edit Route Details dialog using data below:$")
