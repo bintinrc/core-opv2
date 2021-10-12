@@ -226,7 +226,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualColumns.containsAll(expectedColumns));
     }
 
-
     @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
     private List<PageElement> modalTableColumns;
 
@@ -241,7 +240,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualColumns.containsAll(expectedColumns));
     }
 
-    public void applyFilters(Map<String, String> filters) {
+    public void applyFilters(Map<String, String> filters, int resultsCount) {
 
         for (Map.Entry<String, String> filter : filters.entrySet()) {
             String filterXpath = f(MODAL_TABLE_FILTER_XPATH, filter.getKey());
@@ -254,7 +253,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         }
         waitWhilePageIsLoading();
         Assert.assertTrue("Assert that the search has results as expected after applying filters",
-                results.size() > 0);
+                results.size() == resultsCount);
     }
 
     public void applyFilters(String tableName, Map<String, String> filters) {
