@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder
+@OperatorV2 @Core @Order @EditOrder @current
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
