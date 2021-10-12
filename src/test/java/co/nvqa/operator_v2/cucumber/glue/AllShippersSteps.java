@@ -1532,7 +1532,7 @@ public class AllShippersSteps extends AbstractSteps {
     }
     String fixedName = data.get("name");
     if ("generated".equalsIgnoreCase(fixedName)) {
-      data.put("name", "sub shipper " + random);
+      data.put("name", "Dummy Shipper branch " + random);
     }
     String fixedEmail = data.get("email");
     if ("generated".equalsIgnoreCase(fixedEmail)) {
