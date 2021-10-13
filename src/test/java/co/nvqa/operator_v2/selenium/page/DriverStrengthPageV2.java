@@ -17,6 +17,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,7 +36,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
   public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
 
-  @FindBy(css = "div.ant-modal")
+  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public AddDriverDialog addDriverDialog;
 
   @FindBy(css = "div.ant-modal")
@@ -57,8 +58,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(name = "container.driver-strength.load-everything")
   public NvIconTextButton loadEverything;
 
-  @FindBy(name = "Add New Driver")
-  public NvIconTextButton addNewDriver;
+  @FindBy(xpath = "//button[.='Add New Driver']")
+  public Button addNewDriver;
 
   @FindBy(name = "zones")
   public AntSelect2 zonesFilter;
@@ -67,7 +68,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public AntSelect2 driverTypesFilter;
 
   @FindBy(id = "resigned")
-  public AntSwitch resignedFilter;
+  public PageElement resignedFilter;
 
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
@@ -102,8 +103,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void clickAddNewDriver() {
-    waitUntilVisibilityOfElementLocated("//nv-icon-text-button[@name='Add New Driver']//button");
-    click("//nv-icon-text-button[@name='Add New Driver']//button");
+    final String xpathAddButton ="//div[@class='ant-collapse-header']//div[2]/button";
+    waitUntilVisibilityOfElementLocated(xpathAddButton);
+    click(xpathAddButton);
+    pause3s();
   }
 
   public void addNewDriver(DriverInfo driverInfo) {
@@ -118,6 +121,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void verifyContactDetails(String username, DriverInfo expectedContactDetails) {
+    waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
     filterBy(COLUMN_USERNAME, username);
     driversTable.clickActionButton(1, ACTION_CONTACT_INFO);
     DriverInfo actualContactDetails = contactDetailsMenu.readData();
@@ -126,16 +130,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
           equalTo(expectedContactDetails.getLicenseNumber()));
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContact())) {
-      assertThat("Contact", actualContactDetails.getContact(),
+      assertThat("Contact", actualContactDetails.getContact().replaceAll("\\s", ""),
           equalTo(expectedContactDetails.getContact()));
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContactType())) {
       assertThat("Contact Type", actualContactDetails.getContactType(),
           containsString(expectedContactDetails.getContactType()));
-    }
-    if (StringUtils.isNotBlank(expectedContactDetails.getComments())) {
-      assertThat("Comments", actualContactDetails.getComments(),
-          equalTo(expectedContactDetails.getComments()));
     }
   }
 
@@ -192,8 +192,14 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(xpath = ".//button[.='Submit']")
     public Button submit;
 
-    @FindBy(css = "div.hints")
-    public PageElement hints;
+    @FindBy(xpath = "//span[.='At least one contacts required.']")
+    public PageElement contactHints;
+
+    @FindBy(xpath = "//span[.='At least one vehicle required.']")
+    public PageElement vehicleHints;
+
+    @FindBy(xpath = "//span[.='At least one zone preference required.']")
+    public PageElement zoneHints;
 
     @FindBy(id = "firstName")
     public ForceClearTextBox firstName;
@@ -205,7 +211,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public ForceClearTextBox driverLicenseNumber;
 
     @FindBy(name = "type")
-    public AntSelect type;
+    public AntSelect2 type;
+
+    @FindBy(id = "maxOnDemandWaypoints")
+    public PageElement maximumOnDemandWaypoints;
 
     @FindBy(id = "codLimit")
     public TextBox codLimit;
@@ -213,7 +222,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(name = "hub")
     public AntSelect hub;
 
-    @FindBy(css = ".ant-calendar-picker")
+    @FindBy(css = ".ant-picker-input")
     public AntCalendarPicker employmentStartDate;
 
     @FindBy(id = "username")
@@ -225,23 +234,20 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(id = "comment")
     public ForceClearTextBox comments;
 
-    @FindBy(css = "button[aria-label='Check Availability']")
-    public Button checkAvailability;
-
     @FindBy(xpath = ".//button[.='Add More Vehicle']")
-    public NvIconTextButton addMoreVehicles;
+    public Button addMoreVehicles;
 
     @FindBy(xpath = ".//div[@class='ant-space-item'][contains(.,'Vehicles')]//div[@class='ant-row']")
     public List<VehicleSettingsForm> vehicleSettingsForm;
 
-    @FindBy(xpath = ".//button[.='Add More Contacts']")
-    public NvIconTextButton addMoreContacts;
+    @FindBy(xpath = ".//button[.='Add More Contact']")
+    public Button addMoreContacts;
 
     @FindBy(xpath = ".//div[@class='ant-space-item'][contains(.,'Contacts')]//div[@class='ant-row']")
     public List<ContactsSettingsForm> contactsSettingsForms;
 
     @FindBy(xpath = ".//button[.='Add More Zones']")
-    public NvIconTextButton addMoreZones;
+    public Button addMoreZones;
 
     @FindBy(xpath = ".//div[@class='ant-space-item'][contains(.,'Preferred Zones')]//div[@class='ant-row']")
     public List<ZoneSettingsForm> zoneSettingsForms;
@@ -359,9 +365,22 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       return this;
     }
 
+    public void setType() {
+      type.selectValue("Testing1234C");
+      waitUntilVisibilityOfElementLocated("//div[@label='Testing1234C']");
+      click("//div[@label='Testing1234C']");
+    }
+
+    public void setMaximumOnDemandWaypoint(long param) {
+      maximumOnDemandWaypoints.sendKeys(param);
+    }
+
     public AddDriverDialog addVehicle(String licenseNumber, Integer capacity) {
       addMoreVehicles.click();
       VehicleSettingsForm form = vehicleSettingsForm.get(vehicleSettingsForm.size() - 1);
+      form.vehicleType.selectValue("Bus");
+      waitUntilVisibilityOfElementLocated("//div[@label='Bus']");
+      click("//div[@label='Bus']");
       if (licenseNumber != null) {
         form.vehicleLicenseNumber.setValue(licenseNumber);
       }
@@ -374,14 +393,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public AddDriverDialog addContact(String contactType, String contact) {
       addMoreContacts.click();
       ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
-      if (StringUtils.isNotBlank(contactType)) {
-        form.contactType.selectValue(contactType);
-      }
+
       if (contact != null) {
         final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
         switch (country) {
           case "SG":
-            form.contact.setValue("+6531594329");
+            form.contact.setValue("31594329");
             break;
           case "ID":
             form.contact.setValue("+6282188881593");
@@ -454,6 +471,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
+      setType();
+      setMaximumOnDemandWaypoint(10l);
       setCodLimit(driverInfo.getCodLimit());
       setHub(driverInfo.getHub());
       setEmploymentStartDate(driverInfo.getEmploymentStartDate());
@@ -478,20 +497,21 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
    */
   public static class ContactDetailsMenu extends OperatorV2SimplePage {
 
-    public static final String LOCATOR_CONTACT = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[1]";
-    public static final String LOCATOR_CONTACT_TYPE = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[2]";
+    public static final String LOCATOR_LICENSE = "//div[@class='ant-popover-inner-content']/div/div[2]/span[2]";
+    public static final String LOCATOR_CONTACT = "//div[contains(@class, 'ant-col ant-col-24')]/div/div[1]/span[1]";
+    public static final String LOCATOR_CONTACT_TYPE = "//div[@class='ant-col ant-col-24']/div/div[2]/span[1]";
     public static final String LOCATOR_COMMENTS = "//*[contains(@class,'md-active')]//*[@class='contact-info-comments']/div[contains(.,'Comments')]/div[2]";
 
-    @FindBy(xpath = "//*[contains(@class,'md-active')]")
-    private ContactDetailsDialog contactDetailsDialog;
+    @FindBy(xpath = "//div[@class = 'ant-popover-title']")
+    private PageElement contactDetailsDialog;
 
     public ContactDetailsMenu(WebDriver webDriver) {
       super(webDriver);
     }
 
     public String getLicenseNumber() {
-      contactDetailsDialog.waitUntilVisible();
-      return contactDetailsDialog.driverLicenseNumber.getText();
+      waitUntilVisibilityOfElementLocated(LOCATOR_LICENSE);
+      return getText(LOCATOR_LICENSE);
     }
 
     public String getContact() {
@@ -530,7 +550,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         super(webDriver, searchContext, webElement);
       }
 
-      @FindBy(xpath = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]")
+      @FindBy(xpath = "//div[@class='ant-popover-inner-content']/div/div[2]/span[2]")
       public PageElement driverLicenseNumber;
     }
   }
@@ -645,6 +665,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     private static final String LOCATOR_COMING_VALUE = "//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//span[contains(@class,'ant-typography')]";
 
     public static final String COLUMN_ID = "id";
+    //    public static final String COLUMN_ID = "//span[@class='ant-table-filter-column-title']/div/div/span[.='Id']";
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_ZONE = "zoneId";
@@ -692,5 +713,9 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       waitUntilElementIsClickable(xpath);
       click(xpath);
     }
+  }
+
+  public void waitUntilTableLoaded() {
+    waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
   }
 }

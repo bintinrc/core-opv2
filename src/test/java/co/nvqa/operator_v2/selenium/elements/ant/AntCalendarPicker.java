@@ -31,16 +31,16 @@ public class AntCalendarPicker extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  @FindBy(css = ".ant-calendar-picker-input")
+  @FindBy(id = "startDate")
   public TextBox input;
 
-  @FindBy(xpath = "//input[contains(@class,'ant-calendar-input')]")
+  @FindBy(xpath = "//input[contains(@class,'.ant-picker-input')]")
   public TextBox panelInput;
 
   public void setValue(String value) {
     input.click();
-    panelInput.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
-    panelInput.setValue(value);
+    input.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
+    input.setValue(value);
     input.jsClick();
   }
 
