@@ -39,8 +39,8 @@ Feature: Edit Pricing Profiles - ID
       | discount | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | 0 is not a valid discount value |
-
-  @CloseNewWindows
+@nadeeraID
+@CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with none Percentage Discount - ID (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
@@ -90,7 +90,7 @@ Feature: Edit Pricing Profiles - ID
       | type              | Percentage                                      |
       | discount          | none                                            |
 
-
+  @nadeeraID
   Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:9f2e8e1f-de51-4475-806a-c63e021f729d)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
