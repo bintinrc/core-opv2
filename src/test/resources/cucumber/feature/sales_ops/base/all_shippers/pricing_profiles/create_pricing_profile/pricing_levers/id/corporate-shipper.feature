@@ -23,8 +23,8 @@ Feature:  Corporate Shipper
     # Verify pricing profile is changed - sub shipper
     And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
-@nadeera
-@CloseNewWindows
+
+  @CloseNewWindows
   Scenario: Create Pricing Profile - Corporate Shipper - with Int Percentage Discount - Corporate Sub Shipper has Reference Parent's Pricing Profile is Exists - ID (uid:70ebb4d2-9b4c-4934-93ce-53b0037f74bd)
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
