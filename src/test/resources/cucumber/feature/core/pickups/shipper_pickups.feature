@@ -15,7 +15,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}                  |
       | approxVolume | Less than 10 Parcels               |
@@ -36,7 +36,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
       | approxVolume | Less than 10 Parcels         |
@@ -58,7 +58,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator refresh routes on Shipper Pickups page
     And Operator assign Reservation to Route on Shipper Pickups page
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
@@ -88,7 +88,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator refresh routes on Shipper Pickups page
     And Operator assign Reservation to Route with priority level = "3" on Shipper Pickups page
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
@@ -113,7 +113,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     Then Operator verify the reservations details is correct on Shipper Pickups page using data below:
       | shipperName   | {shipper-v4-name}            |
       | shipperId     | {shipper-v4-legacy-id}       |
@@ -130,7 +130,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator duplicates created reservation
     Then Operator verify the duplicated reservation is created successfully
 
@@ -146,7 +146,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator duplicates created reservations
     Then Operator verify the duplicated reservations are created successfully
 
@@ -175,7 +175,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator use the Route Suggestion to add created reservation to the route using data below:
       | routeTagName | {route-tag-name} |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
@@ -232,7 +232,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator removes the route from the created reservation
     Then Operator verify the route was removed from the created reservation
 
@@ -252,7 +252,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator removes the route from the created reservations
     Then Operator verify the route was removed from the created reservations
 
@@ -293,7 +293,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator download CSV file for created reservation
     Then Operator verify the reservation info is correct in downloaded CSV file
 
@@ -308,7 +308,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator set the Priority Level of the created reservation to "2" from Apply Action
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
@@ -327,7 +327,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator set the Priority Level of the created reservations to "2" from Apply Action
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
@@ -344,7 +344,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator set the Priority Level of the created reservations to "2" from Apply Action using "Set To All" option
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
@@ -360,7 +360,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | PENDING                          |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
@@ -382,7 +382,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
@@ -420,7 +420,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | SUCCESS                          |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}    |
@@ -457,7 +457,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | FAIL                             |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}    |
@@ -534,7 +534,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator removes reservation from route from Edit Route Details dialog
     Then Operator verify the route was removed from the created reservation
     And DB Operator verifies waypoint status is "PENDING"
@@ -566,7 +566,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator use the Route Suggestion to add created reservation to the route using data below:
       | routeTagName | {route-tag-name} |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
@@ -599,7 +599,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator select Route Tags for Route Suggestion of created reservation using data below:
       | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
@@ -630,7 +630,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
       | routeTagName | {route-tag-name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
@@ -666,7 +666,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator select Route Tags for Route Suggestion of created reservations using data below:
       | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
@@ -687,7 +687,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
@@ -723,7 +723,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | SUCCESS                          |
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
@@ -756,7 +756,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | FAIL                             |
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
@@ -775,7 +775,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
     Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
     When Operator select created reservations on Shipper Pickup page
@@ -808,7 +808,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
     Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
     When Operator select created reservations on Shipper Pickup page
@@ -845,7 +845,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator select created reservations on Shipper Pickup page
     And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
@@ -881,7 +881,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | FAIL                             |
     And Operator select created reservations on Shipper Pickup page
     And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
@@ -920,7 +920,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | SUCCESS                          |
     And Operator select created reservations on Shipper Pickup page
     And Operator switch on Bulk Assign Route toggle on Shipper Pickups page
@@ -943,7 +943,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
@@ -957,7 +957,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | SUCCESS                          |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
@@ -980,7 +980,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}            |
@@ -994,7 +994,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | FAIL                             |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {shipper-v4-name}    |
@@ -1012,7 +1012,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     Then Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
   @DeleteOrArchiveRoute
@@ -1027,7 +1027,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator refresh routes on Shipper Pickups page
@@ -1068,7 +1068,7 @@ Feature: Shipper Pickups
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
       | status      | SUCCESS                          |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | timestamp             | {gradle-current-date-yyyy-MM-dd}           |
@@ -1114,7 +1114,7 @@ Feature: Shipper Pickups
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
       | status      | FAIL                             |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | timestamp             | {gradle-current-date-yyyy-MM-dd} |
@@ -1145,7 +1145,7 @@ Feature: Shipper Pickups
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
 
@@ -1160,7 +1160,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -1200,7 +1200,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | SUCCESS                          |
     Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
 
@@ -1232,7 +1232,7 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
       | status      | SUCCESS                          |
     Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
 

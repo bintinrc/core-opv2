@@ -1,10 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.RouteGroup;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteGroupInfo;
+import co.nvqa.operator_v2.model.RouteGroupJobDetails;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
@@ -25,6 +29,9 @@ import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.RouteGr
  */
 @ScenarioScoped
 public class RouteGroupManagementSteps extends AbstractSteps {
+
+  public static final String CSV_FILE_NAME = "route-group-jobs.csv.csv";
+  public static final String LIST_OF_ROUTE_GROUP_JOBS = "LIST_OF_ROUTE_GROUP_JOBS";
 
   private RouteGroupManagementPage routeGroupManagementPage;
 
@@ -248,5 +255,41 @@ public class RouteGroupManagementSteps extends AbstractSteps {
           .isNotEmpty()
           .allMatch(val -> val.matches(date));
     });
+  }
+
+  @When("Operator download jobs of {string} route group on Edit Route Group modal on Route Group Management page")
+  public void operatorDownloadsTransactions(String name) {
+    routeGroupManagementPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.routeGroupsTable.filterByColumn(COLUMN_NAME, resolveValue(name));
+      Assertions.assertThat(page.routeGroupsTable.isEmpty())
+          .as("Route Groups table is empty")
+          .isFalse();
+      page.routeGroupsTable.clickActionButton(1, ACTION_EDIT);
+      page.editRouteGroupDialog.waitUntilVisible();
+      pause2s();
+      List<RouteGroupJobDetails> transactions = routeGroupManagementPage.editRouteGroupDialog.jobDetailsTable
+          .readAllEntities();
+      put(LIST_OF_ROUTE_GROUP_JOBS, transactions);
+      for (int i = 1; i <= transactions.size(); i++) {
+        routeGroupManagementPage.editRouteGroupDialog.jobDetailsTable.selectRow(i);
+      }
+      routeGroupManagementPage.editRouteGroupDialog.downloadSelected.click();
+      routeGroupManagementPage.verifyFileDownloadedSuccessfully(CSV_FILE_NAME);
+    });
+  }
+
+  @Given("^Operator verify route group jobs CSV file on Route Group Management page$")
+  public void operatorVerifyCsvFile() {
+    List<RouteGroupJobDetails> expected = get(LIST_OF_ROUTE_GROUP_JOBS);
+    String fileName = routeGroupManagementPage.getLatestDownloadedFilename(CSV_FILE_NAME);
+    String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    List<RouteGroupJobDetails> actual = DataEntity
+        .fromCsvFile(RouteGroupJobDetails.class, pathName, true);
+    assertEquals("Number of records in " + CSV_FILE_NAME, expected.size(), actual.size());
+
+    for (int i = 0; i < expected.size(); i++) {
+      expected.get(i).compareWithActual(actual.get(i));
+    }
   }
 }

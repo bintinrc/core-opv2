@@ -160,35 +160,33 @@ Feature: Route Group Management
       | toDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies route groups table is filtered by "^{gradle-current-date-yyyy-MM-dd}.*" date on Route Group Management page
 
-#  Not available on the new react page
-#  @DeleteRouteGroups
-#  Scenario: Download CSV File of Transactions of a Route Group (uid:5ba4b6f7-7af1-4bf0-8e70-d7b472870676)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Given API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-#      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    When Operator go to menu Routing -> 1. Create Route Groups
-#    And Operator wait until 'Create Route Group' page is loaded
-#    And Operator removes all General Filters except following: "Creation Time"
-#    And Operator add following filters on General Filters section on Create Route Group page:
-#      | Creation Time | Today |
-#    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-#    And Operator click Load Selection on Create Route Group page
-#    When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
-#      | trackingId                                 | type     |
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
-#    Then Operator verifies that success toast displayed:
-#      | top | Added successfully |
-#    When Operator go to menu Routing -> 2. Route Group Management
-#    And Operator wait until 'Route Group Management' page is loaded
-#    And Operator download route group jobs on Edit Route Group modal on Route Group Management page
-#    Then Operator verify route group jobs CSV file on Route Group Management page
+  @DeleteRouteGroups
+  Scenario: Download CSV File of Transactions of a Route Group (uid:5ba4b6f7-7af1-4bf0-8e70-d7b472870676)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator click Load Selection on Create Route Group page
+    When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
+    Then Operator verifies that success toast displayed:
+      | top | Added successfully |
+    When Operator go to menu Routing -> 2. Route Group Management
+    And Operator download jobs of "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group on Edit Route Group modal on Route Group Management page
+    Then Operator verify route group jobs CSV file on Route Group Management page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
