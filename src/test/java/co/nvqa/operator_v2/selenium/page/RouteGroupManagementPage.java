@@ -1,17 +1,17 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.RouteGroupInfo;
 import co.nvqa.operator_v2.model.RouteGroupJobDetails;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import com.google.common.collect.ImmutableMap;
-import java.util.Date;
 import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,142 +20,61 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class RouteGroupManagementPage extends OperatorV2SimplePage {
+public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManagementPage> {
 
-  private static final String MD_VIRTUAL_REPEAT = "routeGroup in getTableData()";
-  public static final String COLUMN_CLASS_DATA_NAME = "name";
+  @FindBy(xpath = "//button[.='Create Route Group']")
+  public Button createRouteGroup;
 
-  public static final String ACTION_BUTTON_EDIT = "commons.edit";
-  public static final String ACTION_BUTTON_DELETE = "commons.delete";
+  @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
+  public AntMenu actionsMenu;
 
-  private final CreateRouteGroupsPage createRouteGroupsPage;
+  @FindBy(xpath = "//div[contains(@class,'StyledFilterDateBox')][.//div[.='Creation Date']]")
+  public AntIntervalCalendarPicker creationDate;
 
-  @FindBy(css = "div.action-toolbar  md-menu")
-  public MdMenu actionsMenu;
+  @FindBy(css = "div.ant-modal")
+  public CreateRouteGroupsDialog createRouteGroupsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public EditRouteGroupDialog editRouteGroupDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
+  public ConfirmDeleteRouteGroupDialog confirmDeleteRouteGroupDialog;
+
+  @FindBy(css = "div.ant-modal")
   public DeleteRouteGroupsDialog deleteRouteGroupsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public ClearRouteGroupsDialog clearRouteGroupsDialog;
 
-  @FindBy(css = "md-dialog")
-  public ConfirmDeleteDialog confirmDeleteRouteGroupDialog;
-
-  @FindBy(xpath = "//div[.='Loading route groups...']")
-  public PageElement loadingMessage;
-
-  @FindBy(name = "container.route-group.create-route-group")
-  public NvIconTextButton createRouteGroup;
-
-  @FindBy(name = "Create Route Group & Add Transactions")
-  public NvButtonSave createRouteGroupAndAddTransaction;
-
-  @FindBy(css = "md-datepicker[ng-model='ctrl.filter.frDate']")
-  public MdDatepicker fromDateFilter;
-
-  @FindBy(css = "md-datepicker[ng-model='ctrl.filter.toDate']")
-  public MdDatepicker toDateFilter;
-
-  @FindBy(css = "input[ng-model='searchText']")
-  public TextBox searchText;
+  public RouteGroupsTable routeGroupsTable;
 
   public RouteGroupManagementPage(WebDriver webDriver) {
     super(webDriver);
-    createRouteGroupsPage = new CreateRouteGroupsPage(webDriver);
+    routeGroupsTable = new RouteGroupsTable(webDriver);
   }
 
-  public void createRouteGroup(String routeGroupName, String hubName) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
-      try {
-        loadingMessage.waitUntilInvisible();
-        createRouteGroup.click();
-      } catch (Throwable ex) {
-        refreshPage();
-        throw ex;
-      }
-    }, 5);
+  public static class EditRouteGroupDialog extends AntModal {
 
-    setRouteGroupNameValue(routeGroupName);
-    setRouteGroupDescriptionValue(String
-        .format("This Route Group is created by automation test from Operator V2. Created at %s.",
-            CREATED_DATE_SDF.format(new Date())));
+    @FindBy(xpath = ".//button[.='Save Changes']")
+    public Button saveChanges;
 
-    if (hubName != null) {
-      selectValueFromNvAutocompleteByPossibleOptions("fields.hub.options", hubName);
-    }
+    @FindBy(xpath = ".//button[.='Remove Selected']")
+    public Button removeSelected;
 
-    createRouteGroupAndAddTransaction.clickAndWaitUntilDone();
-    retryIfRuntimeExceptionOccurred(createRouteGroupsPage::waitUntilRouteGroupPageIsLoaded, 3);
-  }
+    @FindBy(xpath = ".//button[.='Delete']")
+    public Button delete;
 
-  public void selectRouteGroups(List<String> routeGroupNames) {
-    routeGroupNames.forEach(this::selectRouteGroup);
-  }
+    @FindBy(xpath = ".//button[.='Download Selected']")
+    public Button downloadSelected;
 
-  public void selectRouteGroup(String routeGroupName) {
-    searchTable(routeGroupName);
-    pause100ms();
-    checkRowWithMdVirtualRepeat(1, "routeGroup in getTableData()");
-  }
-
-  public void openEditRouteGroupDialog(String filterRouteGroupName) {
-    searchTable(filterRouteGroupName);
-    pause100ms();
-    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-    editRouteGroupDialog.waitUntilVisible();
-  }
-
-  public void setRouteGroupNameValue(String value) {
-    sendKeysById("commons.model.group-name", value);
-  }
-
-  public void setRouteGroupDescriptionValue(String value) {
-    sendKeysById("commons.description", value);
-  }
-
-  public void searchTable(String keyword) {
-    toDateFilter.setDate(TestUtils.getNextDate(1));
-    pause1s();
-    searchText.clearAndSendKeys(keyword);
-  }
-
-  public String getTextOnTable(int rowNumber, String columnDataClass) {
-    return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-  }
-
-  public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
-    clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-  }
-
-  public void waitUntilRouteGroupPageIsLoaded() {
-    waitUntilInvisibilityOfElementLocated(
-        "//div[contains(@class,'message') and text()='Loading route groups...']");
-  }
-
-  /**
-   * Accessor for Edit Route Group dialog
-   */
-  public static class EditRouteGroupDialog extends MdDialog {
-
-    @FindBy(name = "container.route-group.dialogs.save-changes")
-    public NvButtonSave saveChanges;
-
-    @FindBy(name = "container.route-group.dialogs.remove-selected")
-    public NvIconTextButton removeSelected;
-
-    @FindBy(name = "commons.delete")
-    public NvIconTextButton delete;
-
-    @FindBy(name = "Download Selected")
-    public NvApiTextButton downloadSelected;
-
-    @FindBy(css = "[id^='commons.model.group-name']")
+    @FindBy(css = "input[placeholder='Group Name']")
     public TextBox groupName;
+
+    @FindBy(css = "input[placeholder='Description']")
+    public TextBox description;
+
+    @FindBy(xpath = ".//div[./div[contains(text(),'Hub')]]//div[@role='combobox']")
+    public AntSelect2 hub;
 
     public JobDetailsTable jobDetailsTable;
 
@@ -167,7 +86,7 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
     /**
      * Accessor for Jobs table
      */
-    public static class JobDetailsTable extends MdVirtualRepeatTable<RouteGroupJobDetails> {
+    public static class JobDetailsTable extends AntTableV2<RouteGroupJobDetails> {
 
       public static final String COLUMN_TRACKING_ID = "trackingId";
       public static final String COLUMN_TYPE = "type";
@@ -175,61 +94,145 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage {
       public JobDetailsTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.<String, String>builder()
-            .put("sn", "_idx")
+            .put("sn", "__index__")
             .put("id", "id")
-            .put("orderId", "order-id")
-            .put(COLUMN_TRACKING_ID, "tracking-id")
+            .put("orderId", "orderId")
+            .put(COLUMN_TRACKING_ID, "trackingId")
             .put(COLUMN_TYPE, "type")
             .put("shipper", "shipper")
             .put("address", "address")
-            .put("routeId", "route-id")
+            .put("routeId", "routeId")
             .put("status", "status")
-            .put("startDateTime", "sdt")
-            .put("endDateTime", "edt")
-            .put("dp", "dp")
-            .put("pickupSize", "pickup-size")
+            .put("priorityLevel", "priorityLevel")
+            .put("startDateTime", "startDateTime")
+            .put("endDateTime", "endDateTime")
+            .put("dp", "dpName")
+            .put("pickupSize", "pickupSize")
             .put("comments", "comments")
-            .put("priorityLevel", "priority-level")
             .build()
         );
         setEntityClass(RouteGroupJobDetails.class);
-        setMdVirtualRepeat("job in getTableData()");
+        setTableLocator("//div[contains(@class,'EditRouteGroupFormTable')]");
       }
     }
   }
 
-  /**
-   * Accessor for Delete Route Group(s) dialog
-   */
-  public static class DeleteRouteGroupsDialog extends MdDialog {
+  public static class DeleteRouteGroupsDialog extends AntModal {
 
     public DeleteRouteGroupsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "container.route-group.delete-route-groups")
-    public NvApiTextButton deleteRouteGroups;
+    @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][1]")
+    public List<PageElement> groupIds;
 
-    public void enterPassword(String password) {
-      sendKeysById("password", password);
-    }
+    @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][2]")
+    public List<PageElement> groupNames;
 
-    public List<String> getRouteGroupNames() {
-      return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
+    @FindBy(css = "input[type='password']")
+    public TextBox password;
+
+    @FindBy(xpath = ".//button[.='Delete Route Group(s)']")
+    public Button delete;
+
+  }
+
+  public static class ConfirmDeleteRouteGroupDialog extends AntModal {
+
+    @FindBy(xpath = ".//button[.='Delete']")
+    public AntButton delete;
+
+    public ConfirmDeleteRouteGroupDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 
-  public static class ClearRouteGroupsDialog extends MdDialog {
+  public static class ClearRouteGroupsDialog extends AntModal {
 
     public ClearRouteGroupsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "container.route-group.clear-route-groups")
-    public NvApiTextButton clearRouteGroups;
+    @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][1]")
+    public List<PageElement> groupIds;
 
-    public List<String> getRouteGroupNames() {
-      return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
+    @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][2]")
+    public List<PageElement> groupNames;
+
+    @FindBy(css = "input[type='password']")
+    public TextBox password;
+
+    @FindBy(xpath = ".//button[.='Clear Route Group(s)']")
+    public Button clear;
+
+  }
+
+  public static class CreateRouteGroupsDialog extends AntModal {
+
+    public CreateRouteGroupsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = ".//div[./div[contains(text(),'Group Name')]]/input")
+    public TextBox groupName;
+
+    @FindBy(xpath = ".//div[./div[contains(text(),'Description')]]/input")
+    public TextBox description;
+
+    @FindBy(xpath = ".//div[./div[contains(text(),'Hub')]]//div[@role='combobox']")
+    public AntSelect2 hub;
+
+    @FindBy(xpath = ".//button[.='Create Route Group & Add Transactions']")
+    public Button create;
+  }
+
+  public static class RouteGroupsTable extends AntTableV2<RouteGroupInfo> {
+
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_CREATION_DATE_TIME = "createDateTime";
+    public static final String ACTION_EDIT = "edit";
+    public static final String ACTION_DELETE = "delete";
+
+    public RouteGroupsTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("id", "id")
+          .put(COLUMN_NAME, "name")
+          .put(COLUMN_DESCRIPTION, "name")
+          .put(COLUMN_CREATION_DATE_TIME, "createDateTime")
+          .put("noTransactions", "noTransactions")
+          .put("noRoutedTransactions", "noRoutedTransactions")
+          .put("noReservations", "noReservations")
+          .put("noRoutedReservations", "noRoutedReservations")
+          .put("hubName", "hubName")
+          .build()
+      );
+      setEntityClass(RouteGroupInfo.class);
+      setColumnReaders(ImmutableMap.of(
+          COLUMN_NAME, this::getName,
+          COLUMN_DESCRIPTION, this::getDescription
+      ));
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT,
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[@aria-label='icon: edit']",
+          ACTION_DELETE,
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[@aria-label='icon: delete']"
+      ));
+    }
+
+    public String getName(int rowIndex) {
+      String xpath = f(
+          "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='name']/div/div/div[1]",
+          rowIndex);
+      return isElementExistFast(xpath) ? getText(xpath) : null;
+    }
+
+    public String getDescription(int rowIndex) {
+      String xpath = f(
+          "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='name']/div/div/div[2]",
+          rowIndex);
+      return isElementExistFast(xpath) ? getText(xpath) : null;
     }
   }
 }
