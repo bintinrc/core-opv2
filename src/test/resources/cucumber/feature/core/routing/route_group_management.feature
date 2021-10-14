@@ -149,7 +149,7 @@ Feature: Route Group Management
     And Operator verifies "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was cleared on Route Group Management page
 
   @DeleteRouteGroups
-  Scenario: Filter Route Groups Based on Creation Date
+  Scenario: Filter Route Groups Based on Creation Date (uid:bd08ae06-107e-4b82-8863-56a0d77105d6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
