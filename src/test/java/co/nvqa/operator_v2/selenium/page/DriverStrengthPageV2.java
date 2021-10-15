@@ -346,7 +346,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public AddDriverDialog setEmploymentStartDate(String value) {
       if (value != null) {
-        employmentStartDate.setValue(value);
+        employmentStartDate.setValueV2(value);
       }
       return this;
     }
