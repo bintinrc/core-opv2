@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
+import co.nvqa.operator_v2.selenium.elements.ant.driver_strength.DriverStrengthAntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -223,7 +224,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public AntSelect hub;
 
     @FindBy(css = ".ant-picker-input")
-    public AntCalendarPicker employmentStartDate;
+    public DriverStrengthAntCalendarPicker employmentStartDate;
 
     @FindBy(id = "username")
     public ForceClearTextBox username;
@@ -346,7 +347,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public AddDriverDialog setEmploymentStartDate(String value) {
       if (value != null) {
-        employmentStartDate.setValueV2(value);
+        employmentStartDate.setValue(value);
       }
       return this;
     }
