@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @ParentShipper @nadeera
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @ParentShipper
 
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
@@ -11,6 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @nadeera
   @DeleteOrArchiveRoute @HappyPath
   Scenario: Test Data: Generate order for MarketPlace shipper
     Given API Shipper create V4 order using data below:
