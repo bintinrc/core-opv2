@@ -31,7 +31,7 @@ public class AntCalendarPicker extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  @FindBy(xpath = "//input[contains(@class,'ant-calendar-input')]")
+  @FindBy(css = ".ant-calendar-picker-input")
   public TextBox input;
 
   @FindBy(xpath = "//input[contains(@class,'ant-calendar-input')]")
