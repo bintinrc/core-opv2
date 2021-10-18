@@ -716,6 +716,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.ordersWithCod']/td[2]//md-checkbox")
     public List<MdCheckbox> codCheckboxes;
 
+    @FindBy(css = "[id^='container.order.edit.input-reason-for-change']")
+    public TextBox changeReason;
+
     public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }

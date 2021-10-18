@@ -227,6 +227,19 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
+  @When("completes COD order manually by updating reason for change as {string}")
+  public void completes_COD_order_manually_by_updating_reason_for_change_as(String changeReason) {
+    if("GENERATED".equals(changeReason)){
+      changeReason = f("This reason is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+    editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.markAll.click();
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
+  }
+
   @When("^Operator confirm manually complete order without collecting COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
