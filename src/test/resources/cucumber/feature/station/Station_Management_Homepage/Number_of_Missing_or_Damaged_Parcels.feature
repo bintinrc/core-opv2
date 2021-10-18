@@ -89,6 +89,7 @@ Feature: Number of Missing or Damaged Parcels
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And verifies that Edit Order page is opened on clicking tracking id
     And reloads operator portal to reset the test state
+
     Examples:
       | TileName                             | ModalName                   | TableName       |
       | Number of missing or damaged parcels | Missing and Damaged Parcels | Damaged Parcels |

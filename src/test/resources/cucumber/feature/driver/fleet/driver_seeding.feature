@@ -6,7 +6,7 @@ Feature: Driver Seeding
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteCreatedZone @DeleteDriver
-  Scenario: Load Driver Involved by Selecting Zone - Checks on Inactive Drivers Checkbox (uid:edf11da5-c3e1-409d-87c7-5c20edf094ea)
+  Scenario: Load Inactive Driver Involved by Selecting Zone (uid:xxx)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
@@ -30,7 +30,7 @@ Feature: Driver Seeding
       | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
 
   @DeleteCreatedZone @DeleteDriver
-  Scenario: Load Driver Involved by Selecting Zone - Checks on All Preferred Zones Checkbox (uid:d2df2edd-a328-44aa-909c-50558c4be619)
+  Scenario: Load All Preferred Zones Driver Involved by Selecting Zone (uid:xxx)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
@@ -58,7 +58,7 @@ Feature: Driver Seeding
       | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
 
   @DeleteCreatedZone @DeleteDriver
-  Scenario: Load Driver Involved by Selecting Zone - Checks on Reserve Fleet Drivers (uid:b8e1a010-0513-4703-90ac-07898beeacca)
+  Scenario: Load Reserve Fleet Driver Involved by Selecting Zone (uid:xxx)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |

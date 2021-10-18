@@ -207,7 +207,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @Then("Operator verifies that the Address Download Table Result is shown up")
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
-
+    addressingDownloadPage.scrollDownAddressTable();
     if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
       List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
       for (Order order : orders) {
@@ -235,14 +235,26 @@ public class AddressingDownloadSteps extends AbstractSteps {
     String addressDownloadStats = addressingDownloadPage.ADDRESS_DOWNLOAD_STATS;
 
     addressingDownloadPage.downloadCsv.click();
+
+    LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(8, ChronoUnit.HOURS));
+    String csvTimestamp = AddressingDownloadPage.DATE_FORMAT.format(formattedDateTime);
+
+    // Get the file timestamp ASAP to reduce time latency
+    put(KEY_DOWNLOADED_CSV_TIMESTAMP, csvTimestamp);
+
     addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadStats);
     addressingDownloadPage.waitUntilInvisibilityOfElementLocated(addressDownloadStats);
+
+    // Wait 1 seconds at most to complete the downloads to avoid .crdownload files
+    pause1s();
   }
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
   public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-    addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders);
+    String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
+
+    addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
   }
 
   @Then("Operator verifies there will be error dialog shown and clicks on next button")
@@ -303,9 +315,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     }
 
     LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
-    // For local debugging purpose:
-    // LocalDateTime orderCreationTimestamp = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(7, ChronoUnit.HOURS));
-
     NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
     NvLogger.infof("Order creation time: %s", orderCreationTimestamp);
 

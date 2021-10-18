@@ -77,6 +77,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[label[.='Latest Event']]/h3")
   public PageElement latestEvent;
 
+  @FindBy(xpath = "//div[label[.='Zone']]/h3")
+  public PageElement zone;
+
   @FindBy(xpath = "//div[label[.='Status']]/h3")
   public PageElement status;
 
@@ -161,7 +164,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   private EditPickupDetailsDialog editPickupDetailsDialog;
 
   @FindBy(css = "md-dialog")
-  private PullFromRouteDialog pullFromRouteDialog;
+  public PullFromRouteDialog pullFromRouteDialog;
 
   @FindBy(css = "md-dialog")
   private EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
@@ -889,16 +892,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
   }
 
-  public void pullOutParcelFromTheRoute(Order order, String txnType, Long routeId) {
-    String trackingId = order.getTrackingId();
-
-    pullFromRouteDialog.waitUntilVisible();
-    pullFromRouteDialog.toPull.check();
-    pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast(
-        f("%s has been pulled from route %d successfully", trackingId, routeId), true);
-  }
-
   public static class TransactionsTable extends NgRepeatTable<TransactionInfo> {
 
     public static final String COLUMN_TYPE = "type";
@@ -1046,7 +1039,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String fromPickUpStartTimePattern = f("Pickup Start Time .* (to|new value) %s %s.*",
           order.getPickupDate(), order.getPickupTimeslot().getStartTime());
       String fromPickUpEndTimePattern = f(".* Pickup End Time .* (to|new value) %s %s.*",
-          order.getPickupDate(), order.getPickupTimeslot().getEndTime());
+          order.getPickupEndDate(), order.getPickupTimeslot().getEndTime());
       assertTrue(
           f("'%s' pattern is not present in the '%s' event description", fromPickUpStartTimePattern,
               eventDescription),
@@ -2405,4 +2398,26 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String actualSortCode = PdfUtils.getSortCode(orderAirwayBillPdfAsByteArray);
     assertTrue("Sort Code", sortCode.equalsIgnoreCase(actualSortCode));
   }
+
+  @FindBy(css = "[aria-label*='Order outcome']")
+  public List<PageElement> orderOutcomeDialog;
+
+  @FindBy(css = "button[aria-label='No']")
+  public PageElement noBtn;
+
+  @FindBy(css = "button[aria-label='Keep']")
+  public PageElement keepBtn;
+
+  public void chooseCurrentOrderOutcome(String value) {
+    if (orderOutcomeDialog.size() > 0) {
+        if(value.equalsIgnoreCase("keep")){
+          keepBtn.click();
+        }
+        if (value.equalsIgnoreCase("no")) {
+          noBtn.click();
+        }
+    }
+
+  }
+
 }

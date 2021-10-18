@@ -10,7 +10,6 @@ Feature: Change Delivery Timings
     When Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample
     Then Operator verify CSV file of Change Delivery Timings' sample
 
-  @CloseNewWindows
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page (uid:c45d09b1-9082-4e8d-86f6-1fee6987ea15)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -22,10 +21,11 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-current-date-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow | 0                                |
-    Given Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verifies that info toast displayed:
+      | top                | 1 order(s) updated      |
+      | bottom             | Change delivery timings |
+      | waitUntilInvisible | true                    |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
@@ -42,11 +42,12 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-current-date-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow |                                  |
-    Given Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
-    And Operator verify Delivery details on Edit order page using data below:
+    Then Operator verifies that info toast displayed:
+      | top                | 1 order(s) updated      |
+      | bottom             | Change delivery timings |
+      | waitUntilInvisible | true                    |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
@@ -60,7 +61,7 @@ Feature: Change Delivery Timings
       | timewindow | -1                               |
     Then Operator verify the tracking ID is invalid on Change Delivery Timings page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Order State (uid:66c7644b-64e7-4c60-963c-1ef5a837cd8e)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -82,15 +83,15 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-current-date-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow | 0                                |
-    And Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verifies that info toast displayed:
+      | top                | 1 order(s) updated      |
+      | bottom             | Change delivery timings |
+      | waitUntilInvisible | true                    |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-  @CloseNewWindows
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty (uid:16505a85-abcd-4121-a5e5-598e1d9cd2d9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -102,15 +103,11 @@ Feature: Change Delivery Timings
       | startDate  |                                  |
       | endDate    | {gradle-current-date-yyyy-MM-dd} |
       | timewindow | -1                               |
-    And Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-  @CloseNewWindows
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Start Date is Later than End Date (uid:7b563c16-28f8-48a7-ac6e-5967d0042c3f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -122,15 +119,11 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-next-1-day-yyyy-MM-dd}   |
       | endDate    | {gradle-current-date-yyyy-MM-dd} |
       | timewindow | -1                               |
-    And Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-  @CloseNewWindows
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty (uid:bf8bfde6-f452-4bf8-ab4d-c5bb299ce9c4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -139,13 +132,8 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | startDate  |                                 |
-      | endDate    |                                 |
       | timewindow | 0                               |
-    Given Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |

@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,8 +36,8 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   @FindBy(tagName = "md-dialog")
   public PutCommentsModal putCommentsModal;
 
-  @FindBy(name = "fromDateField")
-  public MdDatepicker fromDateField;
+  @FindBy(xpath = "//nv-filter-date-box[.//p[.='Date']]")
+  public NvFilterDateBox dateFilter;
 
   @FindBy(css = "nv-filter-box[item-types='Hubs Select']")
   public NvFilterBox hubsSelect;
@@ -54,13 +55,8 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
     routesTable = new RoutesTable(webDriver);
   }
 
-  public void selectFiltersAndClickLoadSelection(String zoneName, String hubName) {
-    hubsSelect.selectFilter(hubName);
-    zonesSelect.selectFilter(zoneName);
-    loadSelection.clickAndWaitUntilDone();
-  }
-
   public void verifyRouteIdExists(String routeId) {
+    assertFalse("Routes table is empty", routesTable.isTableEmpty());
     String actualRouteId = routesTable.getColumnText(1, COLUMN_ROUTE_ID);
     assertEquals("Route ID is not found.", routeId, actualRouteId);
   }

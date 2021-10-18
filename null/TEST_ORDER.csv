@@ -1,5 +1,0 @@
-"Scenario","Result","Tracking Ids","Shipper Legacy Id"
-"Login to Operator Portal V2","FAILED","",""
-"Operator download sample CSV file for Find Orders with CSV on All Orders page (uid:477b8e47-4904-4b91-8887-d8337c2eeb58)","FAILED","",""
-"Scenario_1 (uid:477b8e47-4904-4b91-8887-d8337c2eeb58)","FAILED","",""
-"Kill Browser","FAILED","",""

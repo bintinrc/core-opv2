@@ -58,8 +58,8 @@ Feature: Create Route Groups
       | shipper       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address       | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status        | Arrived at Sorting Hub                                     |
-      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00                    |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
+      | startDateTime | {KEY_LIST_OF_CREATED_ORDER[1].pickupDate} 12:00:00         |
+      | endDateTime   | {KEY_LIST_OF_CREATED_ORDER[1].pickupEndDate} 15:00:00      |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Routed Transaction on Route Group (uid:9dbd0ea4-c2f5-43cc-aaa4-86b96edf944a)
@@ -88,8 +88,8 @@ Feature: Create Route Groups
       | shipper       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address       | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status        | Pending Pickup                                             |
-      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00                    |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
+      | startDateTime | {KEY_LIST_OF_CREATED_ORDER[1].pickupDate} 12:00:00         |
+      | endDateTime   | {KEY_LIST_OF_CREATED_ORDER[1].pickupEndDate} 15:00:00      |
 
   @DeleteRouteGroups
   Scenario: Operator Filter by Route Grouping on Create Route Group Page (uid:ba0eaa68-b518-481c-9ac5-73d32dd5b51b)
@@ -247,7 +247,7 @@ Feature: Create Route Groups
       | masterShipper     | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | granularOrderStatus | Arrived at Sorting Hub |
-      | orderServiceType    | Document               |
+      | orderServiceType    | Corporate Document     |
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
@@ -500,7 +500,7 @@ Feature: Create Route Groups
       | masterShipper     | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | granularOrderStatus | Arrived at Sorting Hub |
-      | orderServiceType    | Document               |
+      | orderServiceType    | Corporate Document     |
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
@@ -990,6 +990,7 @@ Feature: Create Route Groups
       | numberOfOrder  | 2                |
       | v4OrderRequest | <v4OrderRequest> |
       | addressType    | global           |
+      | generateTo     | RANDOM           |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time"
@@ -1016,6 +1017,7 @@ Feature: Create Route Groups
       | numberOfOrder  | 2                |
       | v4OrderRequest | <v4OrderRequest> |
       | addressType    | global           |
+      | generateTo     | RANDOM           |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time"
@@ -1105,7 +1107,7 @@ Feature: Create Route Groups
     When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     Then Operator verifies that success toast displayed:
       | top | Added successfully |
     And Operator verifies selected General Filters on Create Route Group page:
@@ -1141,7 +1143,8 @@ Feature: Create Route Groups
   Scenario: Operator Filter Order by Service Type on Create Route Group Page - Marketplace Sort (uid:e49e7cbc-d702-43cf-bc49-05201f83b8e1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
-      | legacyId | {shipper-v4-marketplace-sort-legacy-id} |
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |

@@ -33,4 +33,5 @@ public interface ScenarioStorageKeys extends StandardScenarioStorageKeys {
   String KEY_TRIP_ID = "KEY_TRIP_ID";
 
   String KEY_NUMBER_OF_PARCELS_IN_HUB = "KEY_NUMBER_OF_PARCELS_IN_HUB";
+  String KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE = "KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE";
 }

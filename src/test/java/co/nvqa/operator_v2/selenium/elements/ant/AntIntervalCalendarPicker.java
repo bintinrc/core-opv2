@@ -50,10 +50,14 @@ public class AntIntervalCalendarPicker extends PageElement {
   public TextBox inputTo;
 
   public void setFrom(String from) {
-    valueFrom.click();
-    inputFrom.waitUntilVisible();
-    inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
-    inputFrom.waitUntilInvisible();
+    if (!StringUtils.equals(from, getValueFrom())) {
+      if (!inputFrom.isDisplayedFast()) {
+        valueFrom.click();
+        inputFrom.waitUntilVisible();
+      }
+      inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
+      inputFrom.waitUntilInvisible();
+    }
   }
 
   public void setFrom(Date from) {
@@ -61,11 +65,15 @@ public class AntIntervalCalendarPicker extends PageElement {
   }
 
   public void setTo(String to) {
-    valueFrom.click();
-    inputTo.waitUntilVisible();
-    inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
-    inputFrom.sendKeys(Keys.ENTER);
-    inputTo.waitUntilInvisible();
+    if (!StringUtils.equals(to, getValueTo())) {
+      if (!inputTo.isDisplayedFast()) {
+        valueFrom.click();
+        inputTo.waitUntilVisible();
+      }
+      inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+      valueFrom.jsClick();
+      inputTo.waitUntilInvisible();
+    }
   }
 
   public void setTo(Date to) {
@@ -73,12 +81,22 @@ public class AntIntervalCalendarPicker extends PageElement {
   }
 
   public void setInterval(String from, String to) {
-    valueFrom.click();
-    inputFrom.waitUntilVisible();
-    inputFrom.jsSetValue(from);
-    inputTo.jsSetValue(to);
-    valueFrom.jsClick();
-    inputTo.waitUntilInvisible();
+    String currentFrom = getValueFrom();
+    String currentTo = getValueTo();
+    if (!StringUtils.equals(from, currentFrom) || !StringUtils.equals(to, currentTo)) {
+      if (!inputFrom.isDisplayedFast()) {
+        valueFrom.click();
+        inputFrom.waitUntilVisible();
+      }
+      if (!StringUtils.equals(from, currentFrom)) {
+        inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from);
+      }
+      if (!StringUtils.equals(to, currentTo)) {
+        inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+      }
+      valueFrom.jsClick();
+      inputTo.waitUntilInvisible();
+    }
   }
 
   public void setInterval(Date from, Date to) {

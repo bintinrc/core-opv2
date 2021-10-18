@@ -95,8 +95,10 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
   }
 
   public void uploadBulkMapping(List<ThirdPartyOrderMapping> thirdPartyOrderMappings) {
-    String csvContents = thirdPartyOrderMappings.stream().map(ThirdPartyOrderMapping::toCsvLine)
-        .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    String csvContents =
+        "\"NV Tracking ID\",\"Third Party Shipper ID\",\"Third Party Tracking Id\"\n" +
+            thirdPartyOrderMappings.stream().map(ThirdPartyOrderMapping::toCsvLine)
+                .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     File csvFile = createFile(
         String.format("third-party-order-mappings-with-csv_%s.csv", generateDateUniqueString()),
         csvContents);
@@ -137,7 +139,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
         getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
     assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(),
         getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
-    assertEquals("Third Party Order 3PL Provider", StringUtils.trim(expectedOrderMapping.getShipperName()),
+    assertEquals("Third Party Order 3PL Provider",
+        StringUtils.trim(expectedOrderMapping.getShipperName()),
         StringUtils.trim(getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME)));
   }
 

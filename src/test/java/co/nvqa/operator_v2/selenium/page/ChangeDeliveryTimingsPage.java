@@ -3,6 +3,11 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -21,6 +27,15 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
   @FindBy(css = "div[ng-repeat='error in ctrl.payload.errors track by $index']")
   public PageElement errorMessage;
 
+  @FindBy(name = "Upload CSV")
+  public NvApiTextButton uploadCsv;
+
+  @FindBy(name = "commons.download-sample-excel")
+  public NvIconTextButton downloadSampleCsv;
+
+  @FindBy(css = "md-dialog")
+  public UploadChangeDeliveryTimingCsvDialog uploadCsvDialog;
+
   private static final String CSV_FILENAME_PATTERN = "sample_change_delivery_timings";
   private static final String COMMA = ",";
   private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
@@ -29,23 +44,11 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void downloadSampleCSVFile() {
-    clickNvIconTextButtonByName("commons.download-sample-excel");
-  }
-
   public void csvSampleDownloadSuccessful() {
     verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
   }
 
-  public void uploadCsvCampaignFile(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
-    File csvResultFile = createDeliveryTimingChanging(listOfChangeDeliveryTimings);
-    clickNvApiTextButtonByName("Upload CSV");
-    waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
-    sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
-    clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
-  }
-
-  private File createDeliveryTimingChanging(
+  public File createDeliveryTimingChanging(
       List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
     File csvResultFile = TestUtils.createFileOnTempFolder(
         String.format("change-delivery-timings_%s.csv", generateDateUniqueString()));
@@ -84,5 +87,18 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
     errorMessage.waitUntilClickable();
     assertThat("Tracking ID is valid.", errorMessage.getText(),
         Matchers.containsStringIgnoringCase("Invalid tracking Id"));
+  }
+
+  public static class UploadChangeDeliveryTimingCsvDialog extends MdDialog {
+
+    @FindBy(css = "[label='Choose']")
+    public NvButtonFilePicker selectFile;
+
+    @FindBy(name = "Upload CSV")
+    public NvButtonSave upload;
+
+    public UploadChangeDeliveryTimingCsvDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

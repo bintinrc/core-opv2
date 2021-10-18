@@ -18,10 +18,11 @@ import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -90,6 +91,14 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorEditOrderDetailsOnEditOrderPageSuccessfully() {
     Order orderEdited = get("orderEdited");
     editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited);
+  }
+
+  @When("updates parcel size from {string} to {string} for the order")
+  public void updates_parcel_size_from_to_for_the_order(String fromSize, String toSize) {
+    Order order = get(KEY_CREATED_ORDER);
+    Dimension.Size parcelSize = Dimension.Size.fromString(toSize);
+    order.setParcelSize(parcelSize.getRegular());
+    editOrderPage.editOrderDetails(order);
   }
 
   @Then("^Operator verifies dimensions information on Edit Order page:$")
@@ -391,12 +400,17 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator change Stamp ID of the created order to \"(.+)\" on Edit order page$")
   public void operatorEditStampIdOnEditOrderPage(String stampId) {
     if (StringUtils.equalsIgnoreCase(stampId, "GENERATED")) {
-      stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7);
+      stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7).toUpperCase();
     }
-    NvLogger.warn(stampId);
     editOrderPage.editOrderStamp(stampId);
     Order order = get(KEY_CREATED_ORDER);
     order.setStampId(stampId);
+    put(KEY_STAMP_ID, stampId);
+  }
+
+  @Given("New Stamp ID was generated")
+  public void newStampIdWasGenerated() {
+    String stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(9).toUpperCase();
     put(KEY_STAMP_ID, stampId);
   }
 
@@ -406,13 +420,7 @@ public class EditOrderSteps extends AbstractSteps {
           Replace searchTerm value to value on ScenarioStorage.
          */
     String trackingIdOfExistingOrder = get(KEY_TRACKING_ID_BY_ACCESSING_STAMP_ID);
-    if (containsKey(stampId)) {
-      if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID")) {
-        trackingIdOfExistingOrder = get(stampId);
-      }
-      stampId = get(stampId);
-    }
-    editOrderPage.editOrderStampToExisting(stampId, trackingIdOfExistingOrder);
+    editOrderPage.editOrderStampToExisting(resolveValue(stampId), trackingIdOfExistingOrder);
   }
 
   @When("^Operator remove Stamp ID of the created order on Edit order page$")
@@ -829,7 +837,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (Objects.nonNull(pickupDate)) {
       order.setPickupDate(pickupDate);
     }
-    if (Objects.nonNull(pickupTimeslot)) {
+    if (StringUtils.isNotBlank(pickupTimeslot)) {
       order.setPickupTimeslot(pickupTimeslot);
     }
     if (Objects.nonNull(address1)) {
@@ -1054,9 +1062,9 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("^Operator pull out parcel from the route for (Pickup|Delivery) on Edit Order page$")
   public void operatorPullsOrderFromRouteOnEditOrderPage(String txnType) {
-    Order createdOrder = get(KEY_CREATED_ORDER);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    editOrderPage.pullOutParcelFromTheRoute(createdOrder, txnType, routeId);
+    editOrderPage.pullFromRouteDialog.waitUntilVisible();
+    editOrderPage.pullFromRouteDialog.toPull.check();
+    editOrderPage.pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
   }
 
   @When("^Operator verify next order info on Edit order page:$")
@@ -1232,6 +1240,11 @@ public class EditOrderSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() ->
         assertEquals("Latest Event", resolveValue(value),
             editOrderPage.latestEvent.getNormalizedText()), "Latest Event", 1000, 3);
+  }
+
+  @Then("Operator verifies Zone is {string} on Edit Order page")
+  public void operatorVerifyZone(String value) {
+    assertEquals("Zone", resolveValue(value), editOrderPage.zone.getNormalizedText());
   }
 
   @Then("Operator RTS order on Edit Order page using data below:")
@@ -1468,6 +1481,10 @@ public class EditOrderSteps extends AbstractSteps {
     pause5s();
     if (data.containsKey("status")) {
       editOrderPage.editTicketDialog.ticketStatus.selectValue(data.get("status"));
+    }
+    pause5s();
+    if (data.containsKey("keepCurrentOrderOutcome")) {
+      editOrderPage.chooseCurrentOrderOutcome(data.get("keepCurrentOrderOutcome"));
     }
     if (data.containsKey("outcome")) {
       editOrderPage.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));

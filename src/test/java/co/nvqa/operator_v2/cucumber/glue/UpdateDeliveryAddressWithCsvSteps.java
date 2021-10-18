@@ -7,10 +7,10 @@ import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
 import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -110,12 +110,12 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     for (int i = 1; i <= tableSize; i++) {
       String trackingId = updateDeliveryAddressWithCsvPage.addressesTable
           .getColumnText(i, COLUMN_TRACKING_ID);
-      assertTrue(f("Unexpected Tracking ID [%s]", trackingId), data.containsKey(trackingId));
+      assertTrue("Unexpected Tracking ID " + trackingId, data.containsKey(trackingId));
       String actualStatus = updateDeliveryAddressWithCsvPage.addressesTable
           .getColumnText(i, COLUMN_VALIDATION);
-      String expectedAddress = data.get(trackingId);
-      assertThat(f("Validation status for Tracking ID", trackingId), actualStatus,
-          Matchers.equalToIgnoringCase(expectedAddress));
+      String status = data.get(trackingId);
+      assertThat("Validation status for Tracking ID " + trackingId, actualStatus,
+          Matchers.equalToIgnoringCase(status));
     }
   }
 

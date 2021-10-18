@@ -28,6 +28,9 @@ Feature: Failed Delivery Management
       | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
       | deliveryDate  | {{next-1-day-yyyy-MM-dd}}                                                 |
       | timeSlot      | <timeslot>                                                                |
+    Then Operator verifies that info toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "<status>" on Edit Order page
     And Operator verify order granular status is "<granularStatus>" on Edit Order page

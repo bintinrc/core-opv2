@@ -17,6 +17,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -234,6 +236,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     File csvFile = createFile(
         String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
 
+    waitUntilPageLoaded();
     findOrdersWithCsv.click();
     findOrdersWithCsvDialog.waitUntilVisible();
     findOrdersWithCsvDialog.selectFile.setValue(csvFile);
@@ -557,8 +560,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilInvisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading");
+    waitUntilVisibilityOfToast("Attempting to download");
+    waitUntilInvisibilityOfToast("Downloading",true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {
@@ -616,20 +619,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
     waitUntilInvisibilityOfElementLocated(
         searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
-  }
-
-  public void searchWithoutResult(Category category, SearchLogic searchLogic, String searchTerm) {
-    waitUntilPageLoaded();
-    selectValueFromMdSelectByIdContains("category", category.getValue());
-    selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
-    sendKeys("//input[starts-with(@id, 'fl-input') or starts-with(@id, 'searchTerm')]", searchTerm);
-    pause3s(); // Wait until the page finished matching the tracking ID.
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
-    Actions actions = new Actions(getWebDriver());
-    actions.sendKeys(Keys.ESCAPE).build().perform();
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
-    pause100ms();
-    waitUntilVisibilityOfElementLocated("//div[@ng-message='noResult']");
   }
 
   public void filterTableOrderByTrackingId(String trackingId) {
@@ -901,4 +890,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
   }
+
+  @FindBy(css = "button[aria-label*='Profile']")
+  public PageElement profile;
+
+  @FindBy(css = "button[aria-label='Settings']")
+  public PageElement settings;
+
+  @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
+  public List<PageElement> settingsHeader;
+
+  public void navigateToSettingsPage() {
+    getWebDriver().get(TestConstants.OPERATOR_PORTAL_BASE_URL);
+    waitUntilElementIsClickable(profile.getWebElement());
+    profile.click();
+    settings.click();
+    Assert.assertTrue("Assert that the settings page has loaded", settingsHeader.size() > 0);
+  }
+
 }

@@ -13,10 +13,10 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -458,7 +458,9 @@ public class RouteLogsSteps extends AbstractSteps {
     Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
     Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
     String hubName = mapOfData.get("hubName");
-    routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+    });
   }
 
   @When("^Operator set filters on Route Logs page:")
@@ -468,9 +470,11 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
       if (finalData.containsKey("routeDateFrom")) {
+        pause1s();
         routeLogsPage.routeDateFilter.setFrom(finalData.get("routeDateFrom"));
       }
       if (finalData.containsKey("routeDateTo")) {
+        pause1s();
         routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
       }
       if (finalData.containsKey("hub")) {
@@ -651,8 +655,15 @@ public class RouteLogsSteps extends AbstractSteps {
           .filter(toast -> {
             String value = finalData.get("top");
             if (StringUtils.isNotBlank(value)) {
-              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-                return false;
+              String actual = toast.toastTop.getNormalizedText();
+              if (value.startsWith("^")) {
+                if (!actual.matches(value)) {
+                  return false;
+                }
+              } else {
+                if (!StringUtils.equalsIgnoreCase(value, actual)) {
+                  return false;
+                }
               }
             }
             value = finalData.get("bottom");
@@ -1075,11 +1086,13 @@ public class RouteLogsSteps extends AbstractSteps {
     Date routeDateTo = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateTo"));
     String hubName = mapOfData.get("hubName");
 
-    routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
-    routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
-    String actualRouteStatus = routeLogsPage.routesTable
-        .getColumnText(1, RoutesTable.COLUMN_STATUS);
-    assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+      routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
+      String actualRouteStatus = routeLogsPage.routesTable
+          .getColumnText(1, RoutesTable.COLUMN_STATUS);
+      assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
+    });
   }
 
   @Then("Operator verify {string} process data in Selection Error dialog on Route Logs page:")

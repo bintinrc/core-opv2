@@ -8,9 +8,9 @@ import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -98,7 +99,15 @@ public class AllOrdersSteps extends AbstractSteps {
       searchTerm = get(searchTerm);
     }
 
-    allOrdersPage.searchWithoutResult(category, searchLogic, searchTerm);
+    allOrdersPage.waitUntilPageLoaded();
+    allOrdersPage.categorySelect.selectValue(category.getValue());
+    allOrdersPage.searchLogicSelect.selectValue(searchLogic.getValue());
+    try {
+      allOrdersPage.searchTerm.selectValue(searchTerm);
+      fail("Order " + searchTerm + " was found on All Orders page");
+    } catch (NoSuchElementException ex) {
+      //passed
+    }
   }
 
   @When("^Operator filter the result table by Tracking ID on All Orders page and verify order info is correct$")
@@ -298,8 +307,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyRouteIdValues(List<Map<String, String>> data) {
     data.forEach(orderData -> {
       orderData = resolveKeyValues(orderData);
-      String trackingId = orderData.get("trackingId");
-      String expectedRouteId = orderData.get("routeId");
+      String trackingId = StringUtils.trimToEmpty(orderData.get("trackingId"));
+      String expectedRouteId = StringUtils.trimToEmpty(orderData.get("routeId"));
       assertEquals(f("Route Id for %s order", trackingId), expectedRouteId,
           allOrdersPage.addToRouteDialog.getRouteId(trackingId));
     });
@@ -455,21 +464,6 @@ public class AllOrdersSteps extends AbstractSteps {
       }
     }
 
-    if (data.containsKey("creationTimeFrom")) {
-      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Creation Time");
-      }
-      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
-      allOrdersPage.creationTimeFilter.selectFromHours("04");
-      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
-    } else {
-      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
-        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
-        allOrdersPage.creationTimeFilter.selectFromHours("04");
-        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
-      }
-    }
-
     if (data.containsKey("creationTimeTo")) {
       if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Creation Time");
@@ -482,6 +476,21 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.creationTimeFilter.selectToDate(DateUtil.getTodayDate_YYYY_MM_DD());
         allOrdersPage.creationTimeFilter.selectToHours("04");
         allOrdersPage.creationTimeFilter.selectToMinutes("00");
+      }
+    }
+
+    if (data.containsKey("creationTimeFrom")) {
+      if (!allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.addFilter("Creation Time");
+      }
+      allOrdersPage.creationTimeFilter.selectFromDate(data.get("creationTimeFrom"));
+      allOrdersPage.creationTimeFilter.selectFromHours("04");
+      allOrdersPage.creationTimeFilter.selectFromMinutes("00");
+    } else {
+      if (allOrdersPage.creationTimeFilter.isDisplayedFast()) {
+        allOrdersPage.creationTimeFilter.selectFromDate(DateUtil.getTodayDate_YYYY_MM_DD());
+        allOrdersPage.creationTimeFilter.selectFromHours("04");
+        allOrdersPage.creationTimeFilter.selectFromMinutes("00");
       }
     }
 
@@ -644,6 +653,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} preset action on All Orders page")
   public void selectPresetAction(String action) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.presetActions.selectOption(resolveValue(action));
   }
 
@@ -756,7 +766,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     presetName = resolveValue(presetName);
     allOrdersPage.savePresetDialog.presetName.setValue(presetName);
-    put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, presetName);
+    put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, presetName);
   }
 
   @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it")
@@ -785,6 +795,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
+    allOrdersPage.waitUntilPageLoaded();
     allOrdersPage.filterPreset.searchAndSelectValue(resolveValue(value));
     if (allOrdersPage.halfCircleSpinner.waitUntilVisible(3)) {
       allOrdersPage.halfCircleSpinner.waitUntilInvisible();

@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Address;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Sergey Mishanin
@@ -36,10 +37,17 @@ public class WaypointReservationInfo extends DataEntity<WaypointReservationInfo>
   }
 
   public void setLocation(Address location) {
-    String address =
-        location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode() + " "
-            + location.getCountry();
-    setLocation(address.trim());
+    String address = location.getAddress1();
+    if (StringUtils.isNotBlank(location.getAddress2())) {
+      address += " " + location.getAddress2();
+    }
+    if (StringUtils.isNotBlank(location.getPostcode())) {
+      address += " " + location.getPostcode();
+    }
+    if (StringUtils.isNotBlank(location.getCountry())) {
+      address += " " + location.getCountry();
+    }
+    setLocation(StringUtils.normalizeSpace(address));
   }
 
   public String getReadyToLatestTime() {

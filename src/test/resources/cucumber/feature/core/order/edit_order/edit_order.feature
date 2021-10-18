@@ -7,22 +7,22 @@ Feature: Edit Order
 
   Scenario: Operator Edit Pickup Details on Edit Order page (uid:bde3592e-843f-4a99-9a60-66c46c4b257c)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Edit Pickup Details on Edit Order page
     And Operator update Pickup Details on Edit Order Page
-      | senderName     | test sender name          |
-      | senderContact  | +9727894434               |
-      | senderEmail    | test@mail.com             |
-      | internalNotes  | test internalNotes        |
-      | pickupDate     | {{next-1-day-yyyy-MM-dd}} |
-      | pickupTimeslot | 9AM - 12PM                |
-      | country        | Singapore                 |
-      | city           | Singapore                 |
-      | address1       | 116 Keng Lee Rd           |
-      | address2       | 15                        |
-      | postalCode     | 308402                    |
+      | senderName     | test sender name                       |
+      | senderContact  | +9727894434                            |
+      | senderEmail    | test@mail.com                          |
+      | internalNotes  | test internalNotes                     |
+      | pickupDate     | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | pickupTimeslot | 9AM - 12PM                             |
+      | country        | Singapore                              |
+      | city           | Singapore                              |
+      | address1       | 116 Keng Lee Rd                        |
+      | address2       | 15                                     |
+      | postalCode     | 308402                                 |
     Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
@@ -39,22 +39,26 @@ Feature: Edit Order
 
   Scenario: Operator Edit Delivery Details on Edit Order page (uid:e17ae476-5ccb-436e-b256-21ab3443a2ee)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Edit Delivery Details on Edit Order page
+    And API Operator get order details
     And Operator update Delivery Details on Edit Order Page
-      | recipientName    | test sender name          |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-      | country          | Singapore                 |
-      | city             | Singapore                 |
-      | address1         | 116 Keng Lee Rd           |
-      | address2         | 15                        |
-      | postalCode       | 308402                    |
+      | recipientName    | test sender name                       |
+      | recipientContact | +9727894434                            |
+      | recipientEmail   | test@mail.com                          |
+      | internalNotes    | test internalNotes                     |
+      | deliveryDate     | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | deliveryTimeslot | 9AM - 12PM                             |
+      | country          | Singapore                              |
+      | city             | Singapore                              |
+      | address1         | 116 Keng Lee Rd                        |
+      | address2         | 15                                     |
+      | postalCode       | 308402                                 |
+    Then Operator verifies that success toast displayed:
+      | top                | Delivery Details Updated |
+      | waitUntilInvisible | true                     |
     Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
@@ -66,7 +70,17 @@ Feature: Edit Order
       | 11 |
       | 12 |
     And DB Operator verify Delivery '17' order_events record for the created order
-    And DB Operator verify Delivery transaction record is updated for the created order
+    And DB Operator verify Delivery transaction record of order "KEY_CREATED_ORDER_ID":
+      | address1  | {KEY_CREATED_ORDER.toAddress1}                  |
+      | address2  | {KEY_CREATED_ORDER.toAddress2}                  |
+      | postcode  | {KEY_CREATED_ORDER.toPostcode}                  |
+      | city      | {KEY_CREATED_ORDER.toCity}                      |
+      | country   | {KEY_CREATED_ORDER.toCountry}                   |
+      | name      | {KEY_CREATED_ORDER.toName}                      |
+      | email     | {KEY_CREATED_ORDER.toEmail}                     |
+      | contact   | {KEY_CREATED_ORDER.toContact}                   |
+      | startTime | {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 |
+      | endTime   | {gradle-next-4-working-day-yyyy-MM-dd} 12:00:00 |
     And DB Operator verify Delivery waypoint record is updated
 
   Scenario: Operator Tag Order to DP (uid:b6540556-8969-4519-9716-f273a96db356)
@@ -81,6 +95,10 @@ Feature: Edit Order
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator tags order to "{dpms-id}" DP on Edit Order Page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
+    And Operator verify order event on Edit order page using data below:
+      | name | ASSIGNED TO DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     When DB Operator get DP address by ID = "{dpms-id}"
     Then DB Operator verifies orders record using data below:
       | toAddress1 | GET_FROM_CREATED_ORDER |
@@ -114,7 +132,10 @@ Feature: Edit Order
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
-#  initially city is ""
+    And Operator verify order event on Edit order page using data below:
+      | name | UNASSIGNED FROM DP |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
       | distribution_point_id | 0                      |
       | address1              | GET_FROM_CREATED_ORDER |
@@ -339,6 +360,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify Pickup transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
@@ -370,6 +394,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify Delivery transaction on Edit order page using data below:
       | routeId |  |
     And Operator verify order event on Edit order page using data below:
@@ -413,6 +440,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     Examples:
       | Note              | hiptest-uid                              | orderType | routeType |
@@ -698,7 +726,7 @@ Feature: Edit Order
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Shipper            |
       | damageDescription       | GENERATED          |
       | orderOutcomeDamaged     | NV LIABLE - FULL   |
       | custZendeskId           | 1                  |
@@ -1042,6 +1070,10 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Pickup" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1098,6 +1130,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1130,6 +1164,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1158,6 +1194,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1190,6 +1228,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -1269,6 +1309,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -1753,6 +1794,9 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     Then Operator verify order event on Edit order page using data below:
       | name | PULL OUT OF ROUTE |
 
@@ -1867,6 +1911,9 @@ Feature: Edit Order
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verifies that info toast displayed:
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                           |
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
     When Operator selects "All Events" in Events Filter menu on Edit Order page
@@ -1941,8 +1988,8 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click View/Print -> View all PODs on Edit Order page
     Then Operator verify delivery POD details is correct on Edit Order page using date below:
-      | driver              | {ninja-driver-name} |
-      | verification method | NO_VERIFICATION     |
+      | driver              | {ninja-driver-username} |
+      | verification method | NO_VERIFICATION         |
 
   Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Collect COD (uid:eca7d659-1475-4913-8459-c063e9fe306a)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -1980,6 +2027,8 @@ Feature: Edit Order
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -2130,7 +2179,8 @@ Feature: Edit Order
       | type    | Delivery               |
       | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verifies that info toast displayed:
-      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
+      | waitUntilInvisible | true                                                                                        |
     And API Operator get order details
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE           |
@@ -2352,6 +2402,166 @@ Feature: Edit Order
     And Operator verify transaction on Edit order page using data below:
       | type   | DELIVERY |
       | status | PENDING  |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - End State = Returned to Sender (uid:5f5c3de3-50a7-483f-ac1e-2775204c3f91)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | FAIL |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator get order details
+    And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Delivery -> Reverify Delivery Address on Edit Order page
+    And Operator verifies that info toast displayed:
+      | top | Reverified Successfully |
+    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
+      | archived | score |
+      | 1        | 1.0   |
+      | 0        | 0.5   |
+
+  Scenario: Operator Cancel Order From Resolved Recovery Ticket (uid:46244d7b-ed84-4d1e-a1ab-84a5ab5b66a9)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT              |
+      | investigatingDepartment | Recovery                        |
+      | investigatingHub        | {hub-name}                      |
+      | ticketType              | DAMAGED                         |
+      | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DISPOSED |
+      | parcelLocation          | DAMAGED RACK                    |
+      | liability               | Shipper                         |
+      | damageDescription       | GENERATED                       |
+      | ticketNotes             | GENERATED                       |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+      | UPDATE STATUS  |
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED                        |
+      | outcome | NV NOT LIABLE - PARCEL DISPOSED |
+    Then Operator verifies that success toast displayed:
+      | top                | ^Ticket ID : .* updated |
+      | waitUntilInvisible | true                    |
+    And Operator refresh page
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type   | PICKUP    |
+      | status | CANCELLED |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY  |
+      | status | CANCELLED |
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+      | CANCEL          |
+    When API Operator get order details
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | Pending |
+    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived
+    And DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Pull Out Parcel from a Route - PICKUP - Route is Soft Deleted (uid:ea35eba9-818c-4a84-a4c5-bb884bd1ba91)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Pickup -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Pickup on Edit Order page
+    And Operator refresh page
+    Then Operator verify order events on Edit order page using data below:
+      | name              |
+      | PULL OUT OF ROUTE |
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | routeId | 0 |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies waypoint status is "PENDING"
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted (uid:a3346fd5-8f4f-40c6-98f1-5fd172a2261c)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+    And API Operator get order details
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Delivery -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Delivery on Edit Order page
+    And Operator refresh page
+    Then Operator verify order events on Edit order page using data below:
+      | name              |
+      | PULL OUT OF ROUTE |
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | routeId | 0 |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Operator verifies waypoint status is "PENDING"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
