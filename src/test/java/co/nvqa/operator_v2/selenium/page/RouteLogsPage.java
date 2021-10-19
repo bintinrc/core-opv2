@@ -32,7 +32,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class RouteLogsPage extends SimpleReactPage {
+public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   @FindBy(name = "Create Route")
   public NvIconTextButton createRoute;
