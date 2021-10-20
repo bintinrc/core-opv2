@@ -79,6 +79,7 @@ Feature: Driver Strength
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+    And Operator load all data for driver on Driver Strength Page
     When Operator delete created driver on Driver Strength page
     Then Operator verify new driver is deleted successfully on Driver Strength page
 
@@ -88,6 +89,7 @@ Feature: Driver Strength
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+    And Operator load all data for driver on Driver Strength Page
     When Operator change Coming value for created driver on Driver Strength page
     Then Operator verify Coming value for created driver has been changed on Driver Strength page
 
@@ -193,6 +195,7 @@ Feature: Driver Strength
       | resigned    | No                 |
     Then Operator verify driver strength is filtered by "{zone-name}" zone
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
+        #To be unlocked when slide/horizontal scroll action is solved on react page
     Then Operator verify driver strength is filtered by "No" resigned
 
   Scenario: Can Not Create New Driver Account Without Active Contact (uid:30bcd5fd-376f-45be-bbf5-2e420a760f2c)
@@ -268,9 +271,9 @@ Feature: Driver Strength
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
+    And Operator load all data for driver on Driver Strength Page
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
     And  Operator removes contact details on Edit Driver dialog on Driver Strength page
-    Then Operator verifies Submit button in Add Driver dialog is disabled
     And Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
 
   @DeleteDriver
@@ -279,9 +282,10 @@ Feature: Driver Strength
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
+    And Operator load all data for driver on Driver Strength Page
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
     And  Operator removes vehicle details on Edit Driver dialog on Driver Strength page
-    Then Operator verifies Submit button in Add Driver dialog is disabled
+    And Operator click Submit button in Add Driver dialog
     And Operator verifies hint "At least one vehicle required." is displayed in Add Driver dialog
 
   @DeleteDriver
@@ -290,10 +294,11 @@ Feature: Driver Strength
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
+    And Operator load all data for driver on Driver Strength Page
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
-    And  Operator removes zone preferences on Edit Driver dialog on Driver Strength page
-    Then Operator verifies Submit button in Add Driver dialog is disabled
-    And Operator verifies hint "At least one preferred zone requireduired." is displayed in Add Driver dialog
+    And Operator removes zone preferences on Edit Driver dialog on Driver Strength page
+    And Operator click Submit button in Add Driver dialog
+    And Operator verifies hint "At least one preferred zone required." is displayed in Add Driver dialog
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
