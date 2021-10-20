@@ -39,6 +39,7 @@ import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -459,7 +460,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void confirmCompleteOrder() {
+    String changeReason = f("This reason is created by automation at %s.",
+        CREATED_DATE_SDF.format(new Date()));
     manuallyCompleteOrderDialog.waitUntilVisible();
+    manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     waitUntilInvisibilityOfToast("The order has been completed", true);
   }

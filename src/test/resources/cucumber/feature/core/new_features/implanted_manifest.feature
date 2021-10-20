@@ -93,7 +93,7 @@ Feature: Implanted Manifest
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
 
@@ -128,7 +128,7 @@ Feature: Implanted Manifest
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
       | status      | FAIL                             |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | scannedAtShipperCount | 0       |
@@ -170,7 +170,7 @@ Feature: Implanted Manifest
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
       | status      | SUCCESS                          |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | scannedAtShipperCount | 1                                          |
@@ -205,7 +205,7 @@ Feature: Implanted Manifest
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
       | status      | SUCCESS                          |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | scannedAtShipperCount | 0       |
@@ -247,7 +247,7 @@ Feature: Implanted Manifest
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Normal                           |
       | status      | SUCCESS                          |
-      | shipperName | {shipper-v4-name}                |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
       | inputOnPod            | 2                                                                                     |
