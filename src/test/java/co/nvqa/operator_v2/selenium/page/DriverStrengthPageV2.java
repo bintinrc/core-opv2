@@ -6,11 +6,9 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.driver_strength.DriverStrengthAntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -18,7 +16,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,7 +32,7 @@ import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTabl
 public class DriverStrengthPageV2 extends SimpleReactPage {
 
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
-  public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
+  public static final String LOCATOR_DELETE_BUTTON = "//button/span[.='Delete']";
 
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public AddDriverDialog addDriverDialog;
@@ -174,11 +171,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void deleteDriver(String username) {
-    filterBy(COLUMN_USERNAME, username);
+    driversTable.filterByColumn(COLUMN_USERNAME, username);
+    waitUntilTableLoaded();
+
     driversTable.clickActionButton(1, ACTION_DELETE);
-    waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
-    waitUntilVisibilityOfElementLocated(LOCATOR_DELETE_BUTTON);
-    waitUntilElementIsClickable(LOCATOR_DELETE_BUTTON);
     pause1s();
     click(LOCATOR_DELETE_BUTTON);
     waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
@@ -718,5 +714,14 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   public void waitUntilTableLoaded() {
     waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
+  }
+
+  public boolean isTableLoaded(){
+    return isElementExist("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
+  }
+
+  public boolean verifyNoDataOnTable(){
+    final WebElement noData = findElementByXpath("//div[@class='ant-empty ant-empty-normal']/p[.='No Data']");
+    return noData.getText().equals("No Data");
   }
 }
