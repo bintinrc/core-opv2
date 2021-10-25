@@ -36,7 +36,7 @@ public class MdMenuBar extends PageElement {
     openMenu(menu);
     option = escapeValue(option);
     String selector = f(MD_MENU_ITEM_LOCATOR, option);
-    return new Button(getWebDriver(), getWebDriver().findElement(By.cssSelector(selector)))
+    return new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector)))
         .isEnabled();
   }
 
