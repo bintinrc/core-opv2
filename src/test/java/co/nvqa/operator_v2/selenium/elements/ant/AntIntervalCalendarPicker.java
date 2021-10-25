@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,9 @@ import static co.nvqa.commons.support.DateUtil.DATE_FORMATTER_SNS_1;
  * @author Sergey Mishanin
  */
 public class AntIntervalCalendarPicker extends PageElement {
+
+  private static final SimpleDateFormat DATE_CELL_FORMAT = new SimpleDateFormat("MMMMM d, yyyy");
+  private static final String DATE_CELL_LOCATOR = "//td[@role='gridcell'][@title='%s']";
 
   public AntIntervalCalendarPicker(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
@@ -102,6 +107,21 @@ public class AntIntervalCalendarPicker extends PageElement {
   public void setInterval(Date from, Date to) {
     setInterval(DATE_FORMATTER_SNS_1.format(DateUtil.getDate(from.toInstant())),
         DATE_FORMATTER_SNS_1.format(DateUtil.getDate(to.toInstant())));
+  }
+
+  public void fairSetInterval(Date from, Date to) {
+    if (!inputFrom.isDisplayedFast()) {
+      valueFrom.click();
+      inputFrom.waitUntilVisible();
+    }
+    String xpath = f(DATE_CELL_LOCATOR, DATE_CELL_FORMAT.format(from));
+    new PageElement(getWebDriver(), xpath).click();
+    xpath = f(DATE_CELL_LOCATOR, DATE_CELL_FORMAT.format(to));
+    new PageElement(getWebDriver(), xpath).click();
+  }
+
+  public void fairSetInterval(String from, String to) {
+    fairSetInterval(DataEntity.toDateTime(from), DataEntity.toDateTime(to));
   }
 
   public String getValueFrom() {

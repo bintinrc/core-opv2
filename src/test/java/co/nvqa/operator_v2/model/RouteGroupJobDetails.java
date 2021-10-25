@@ -159,12 +159,12 @@ public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
     setAddress(getValueIfIndexExists(values, 6));
     setRouteId(getValueIfIndexExists(values, 7));
     setStatus(getValueIfIndexExists(values, 8));
-    setStartDateTime(getValueIfIndexExists(values, 9));
-    setEndDateTime(getValueIfIndexExists(values, 10));
-    setDp(getValueIfIndexExists(values, 11));
-    setPickupSize(getValueIfIndexExists(values, 12));
-    setComments(getValueIfIndexExists(values, 13));
-    setPriorityLevel(getValueIfIndexExists(values, 14));
+    setPriorityLevel(getValueIfIndexExists(values, 9));
+    setStartDateTime(getValueIfIndexExists(values, 10));
+    setEndDateTime(getValueIfIndexExists(values, 11));
+    setDp(getValueIfIndexExists(values, 12));
+    setPickupSize(getValueIfIndexExists(values, 13));
+    setComments(getValueIfIndexExists(values, 14));
   }
 
 }
