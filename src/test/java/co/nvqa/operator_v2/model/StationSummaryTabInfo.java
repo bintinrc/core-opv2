@@ -1,67 +1,84 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /**
- * @author Sergey Mishanin
+ * @author Veera
  */
-public class ShipperInfo extends DataEntity<ShipperInfo> {
+public class StationSummaryTabInfo extends DataEntity<StationSummaryTabInfo> {
 
-  private String createdAt;
-  private String address;
-  private String name;
-  private Long legacyId;
+  @JsonProperty("No.")
+  private String no;
 
-  public ShipperInfo() {
+  @JsonProperty("Driver Name")
+  private String driverName;
+
+  @JsonProperty("Hub")
+  private String hub;
+
+  @JsonProperty("Route ID")
+  private String routeId;
+
+  @JsonProperty("COD Amount")
+  private String codAmount;
+
+  public StationSummaryTabInfo() {
   }
 
-  public ShipperInfo(Map<String, ?> dataMap) {
+  public StationSummaryTabInfo(Map<String, ?> dataMap) {
     fromMap(dataMap);
   }
 
-  public String getCreatedAt() {
-    return createdAt;
+  public String getNo() {
+    return no;
   }
 
-  public void setCreatedAt(String createdAt) {
-    this.createdAt = createdAt;
+  public void setNo(String no) {
+    this.no = no;
   }
 
-  public String getAddress() {
-    return address;
+  public String getDriverName() {
+    return driverName;
   }
 
-  public void setAddress(String address) {
-    this.address = address;
+  public void setDriverName(String driverName) {
+    this.driverName = driverName;
   }
 
-  public String getName() {
-    return name;
+  public String getHub() {
+    return hub;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setHub(String hub) {
+    this.hub = hub;
   }
 
-  public Long getLegacyId() {
-    return legacyId;
+  public String getRouteId() {
+    return routeId;
   }
 
-  public void setLegacyId(Long legacyId) {
-    this.legacyId = legacyId;
+  public void setRouteId(String routeId) {
+    this.routeId = routeId;
   }
 
-  public void setLegacyId(String legacyId) {
-    setLegacyId(Long.parseLong(legacyId));
+  public String getCodAmount() {
+    return codAmount;
+  }
+
+  public void setCodAmount(String codAmount) {
+    this.codAmount = codAmount;
   }
 
   @Override
   public void fromCsvLine(String csvLine) {
     String[] values = splitCsvLine(csvLine);
-    setCreatedAt(getValueIfIndexExists(values, 1));
-    setAddress(getValueIfIndexExists(values, 2));
-    setName(getValueIfIndexExists(values, 3));
-    setLegacyId(getValueIfIndexExists(values, 4));
+    setNo(getValueIfIndexExists(values, 0));
+    setDriverName(getValueIfIndexExists(values, 1));
+    setHub(getValueIfIndexExists(values, 2));
+    setRouteId(getValueIfIndexExists(values, 3));
+    setCodAmount(getValueIfIndexExists(values, 4));
   }
+
 }

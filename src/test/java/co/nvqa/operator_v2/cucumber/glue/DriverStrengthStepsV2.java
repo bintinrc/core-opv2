@@ -104,6 +104,19 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     });
   }
 
+  @When("Operator updates driver details with the following info:")
+  public void operator_updates_driver_details_with_the_following_info(Map<String, String> mapOfData) {
+    DriverInfo driverInfo = new DriverInfo();
+    driverInfo.fromMap(mapOfData);
+    put(KEY_CREATED_DRIVER_INFO, driverInfo);
+    put(KEY_UPDATED_DRIVER_FIRST_NAME,driverInfo.getFirstName());
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.fillForm(driverInfo);
+      dsPage.editDriverDialog.submitForm();
+    });
+  }
+
   @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveContactDetails() {
     if (dsPage.editDriverDialog.contactsSettingsForms.size() > 0) {

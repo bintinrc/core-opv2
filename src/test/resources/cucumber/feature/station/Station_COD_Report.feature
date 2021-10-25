@@ -1,4 +1,4 @@
-@StationManagement @StationCODReport
+@StationManagement @StationCODReport @re-test
 Feature: Station COD Report
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -231,9 +231,9 @@ Feature: Station COD Report
     And Operator go to menu Station Management Tool -> <PageHeader>
     Then verifies that the following UI elements are displayed in station cod report page
       | လုပ်ဆောင်မှု ပြီးစီးသည့်ရက် |
-      | ပင်မနေရာများ            |
-      | လုပ်ဆောင်မှု အမျိုးအစား    |
-      | လုပ်ဆောင်မှု အခြေအနေ     |
+      | ပင်မနေရာများ                |
+      | လုပ်ဆောင်မှု အမျိုးအစား     |
+      | လုပ်ဆောင်မှု အခြေအနေ        |
     And verifies that the following buttons are displayed in disabled state
       | Clear Selection |
       | Load Selection  |
@@ -307,17 +307,17 @@ Feature: Station COD Report
       | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
     And gets the order details from details tab of station cod report
     And verifies that the following details are displayed in details tab:
-      | Route ID                    | {KEY_CREATED_ROUTE_ID}          |
-      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | Hub                         | <HubName>                       |
-      | Route Date                  | {gradle-current-date-yyyy-MM-dd}|
-      | Transaction Status          | <TransactionStatus>             |
-      | Granular Status             | <GranularStatus>                |
-      | Collected At                | <CollectedAt>                   |
-      | COD Amount                  | <CODAmount>                     |
-      | Shipper Name                | {shipper-v4-name}               |
-      | Driver Name                 | {ninja-driver-name}             |
-      | Driver ID                   | {ninja-driver-id}               |
+      | Route ID                    | {KEY_CREATED_ROUTE_ID}           |
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID}  |
+      | Hub                         | <HubName>                        |
+      | Route Date                  | {gradle-current-date-yyyy-MM-dd} |
+      | Transaction Status          | <TransactionStatus>              |
+      | Granular Status             | <GranularStatus>                 |
+      | Collected At                | <CollectedAt>                    |
+      | COD Amount                  | <CODAmount>                      |
+      | Shipper Name                | {shipper-v4-name}                |
+      | Driver Name                 | {ninja-driver-name}              |
+      | Driver ID                   | {ninja-driver-id}                |
     And verifies that the COD amount: "<CODAmount>" is separated by comma for thousands and by dot for decimals
     And reloads operator portal to reset the test state
 
@@ -363,17 +363,17 @@ Feature: Station COD Report
       | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
     And gets the order details from details tab of station cod report
     And verifies that the following details are displayed in details tab:
-      | Route ID                    | {KEY_CREATED_ROUTE_ID}          |
-      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | Hub                         | <HubName>                       |
+      | Route ID                    | {KEY_CREATED_ROUTE_ID}           |
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID}  |
+      | Hub                         | <HubName>                        |
       | Route Date                  | {gradle-current-date-yyyy-MM-dd} |
-      | Transaction Status          | <TransactionStatus>             |
-      | Granular Status             | <GranularStatus>                |
-      | Collected At                | <CollectedAt>                   |
-      | COD Amount                  | <CODAmount>                     |
-      | Shipper Name                | {shipper-v4-name}               |
-      | Driver Name                 | {ninja-driver-name-1}           |
-      | Driver ID                   | {ninja-driver-id-1}             |
+      | Transaction Status          | <TransactionStatus>              |
+      | Granular Status             | <GranularStatus>                 |
+      | Collected At                | <CollectedAt>                    |
+      | COD Amount                  | <CODAmount>                      |
+      | Shipper Name                | {shipper-v4-name}                |
+      | Driver Name                 | {ninja-driver-name-1}            |
+      | Driver ID                   | {ninja-driver-id-1}              |
     And verifies that the COD amount: "<CODAmount>" is separated by dot for thousands and by comma for decimals
     And reloads operator portal to reset the test state
 
@@ -475,10 +475,10 @@ Feature: Station COD Report
     And navigates to summary tab in the result grid
     And searches for the details in result grid using the following search criteria:
       | Driver Name | {ninja-driver-name-1} |
-      | Hub         | <HubName>           |
+      | Hub         | <HubName>             |
     And gets the order details from summary tab of station cod report
     And verifies that the following details are displayed in summary tab:
-      | Driver Name | {ninja-driver-name-1}    |
+      | Driver Name | {ninja-driver-name-1}  |
       | Hub         | <HubName>              |
       | Route ID    | {KEY_CREATED_ROUTE_ID} |
       | COD Amount  | <CODAmount>            |
@@ -494,6 +494,265 @@ Feature: Station COD Report
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery |
+
+  @default-sg
+  Scenario Outline: [SG, MY, PH] Transaction End Date Should Match Country's Timezone UTC+8 (uid:6522d856-e82f-4eb4-8d1d-d82344eea5d7)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order scan updated
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click on start route after van inbounding
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator go to menu Station Management Tool -> Station COD Report
+    And chooses start and end date on transaction end date using the following data:
+      | transactionEndDateFrom | {gradle-previous-1-day-dd/MM/yyyy} |
+      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
+    And searches for station cod report by applying following filters:
+      | Hubs      | Transaction Status |
+      | <HubName> | <TransStatus>      |
+    And searches for the details in result grid using the following search criteria:
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And gets the order details from details tab of station cod report
+    And verifies that the following details are displayed in details tab:
+      | Route ID                    | {KEY_CREATED_ROUTE_ID}           |
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID}  |
+      | Hub                         | <HubName>                        |
+      | Route Date                  | {gradle-current-date-yyyy-MM-dd} |
+      | Transaction Status          | <TransactionStatus>              |
+      | Granular Status             | <GranularStatus>                 |
+      | Collected At                | <CollectedAt>                    |
+      | COD Amount                  | <CODAmount>                      |
+      | Shipper Name                | {shipper-v4-name}                |
+      | Driver Name                 | {ninja-driver-name}              |
+      | Driver ID                   | {ninja-driver-id}                |
+    And verifies that transaction end datetime is +8 hours from job_service_end_datetime_utc in station database
+    And reloads operator portal to reset the test state
+
+    Examples:
+      | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
+      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
+
+  @default-id
+  Scenario Outline: [ID, TH, VN] Transaction End Date Should Match Country's Timezone UTC+7 (uid:31fc432f-6be1-43ab-9764-f520c98920a0)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": <CODAmount>,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order scan updated
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click on start route after van inbounding
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator go to menu Station Management Tool -> Station COD Report
+    And chooses start and end date on transaction end date using the following data:
+      | transactionEndDateFrom | {gradle-previous-1-day-dd/MM/yyyy} |
+      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
+    And searches for station cod report by applying following filters:
+      | Hubs      | Transaction Status |
+      | <HubName> | <TransStatus>      |
+    And searches for the details in result grid using the following search criteria:
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And gets the order details from details tab of station cod report
+    And verifies that the following details are displayed in details tab:
+      | Route ID                    | {KEY_CREATED_ROUTE_ID}           |
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID}  |
+      | Hub                         | <HubName>                        |
+      | Route Date                  | {gradle-current-date-yyyy-MM-dd} |
+      | Transaction Status          | <TransactionStatus>              |
+      | Granular Status             | <GranularStatus>                 |
+      | Collected At                | <CollectedAt>                    |
+      | COD Amount                  | <CODAmount>                      |
+      | Shipper Name                | {shipper-v4-name}                |
+      | Driver Name                 | {ninja-driver-name-1}            |
+      | Driver ID                   | {ninja-driver-id-1}              |
+    And verifies that transaction end datetime is +7 hours from job_service_end_datetime_utc in station database
+    And reloads operator portal to reset the test state
+
+    Examples:
+      | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
+      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
+
+
+  Scenario Outline: View Updated Driver Name (uid:3f3c7bfc-ee27-403d-b613-93a4621ecac0)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order scan updated
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click on start route after van inbounding
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator go to menu Fleet -> Driver Strength
+    When Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    And Operator updates driver details with the following info:
+      | firstName | AUTO-DRIVER-{gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator verifies that success react notification displayed:
+      | top | Driver Updated |
+    And Operator go to menu Station Management Tool -> Station COD Report
+    And chooses start and end date on transaction end date using the following data:
+      | transactionEndDateFrom | {gradle-previous-1-day-dd/MM/yyyy} |
+      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
+    And searches for station cod report by applying following filters:
+      | Hubs      | Transaction Status |
+      | <HubName> | <TransStatus>      |
+    And searches for the details in result grid using the following search criteria:
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And gets the order details from details tab of station cod report
+    Then verifies that the updated driver name: "{KEY_UPDATED_DRIVER_FIRST_NAME}" is displayed in the grid
+    And navigates to summary tab in the result grid
+    And searches for the details in result grid using the following search criteria:
+      | Driver Name | {KEY_UPDATED_DRIVER_FIRST_NAME} |
+      | Hub         | <HubName>                       |
+    And gets the order details from summary tab of station cod report
+    And verifies that the updated driver name: "{KEY_UPDATED_DRIVER_FIRST_NAME}" is displayed in the grid
+    And reloads operator portal to reset the test state
+
+    Examples:
+      | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
+      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery |
+
+  Scenario Outline: Download CSV of COD Report Detail (uid:69ca23d3-f0f9-4929-89e9-089321d3b5b7)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order scan updated
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click on start route after van inbounding
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator go to menu Station Management Tool -> Station COD Report
+    And chooses start and end date on transaction end date using the following data:
+      | transactionEndDateFrom | {gradle-previous-1-day-dd/MM/yyyy} |
+      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
+    And searches for station cod report by applying following filters:
+      | Hubs      | Transaction Status |
+      | <HubName> | <TransStatus>      |
+    And searches for the details in result grid using the following search criteria:
+      | Tracking ID/ Reservation ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And gets the order details from details tab of station cod report
+    And verifies that the downloaded CSV file matches with the expected details in "<TabName>" tab
+    And verifies that COD amount is rounded off to two decimal in CSV downloaded from "<TabName>" tab
+
+    Examples:
+      | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   | TabName |
+      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery | Details |
+
+  Scenario Outline: Download CSV of COD Report Summary (uid:e732bb2b-c198-4406-bc0c-1c34450e7d97)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-1}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order scan updated
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click on start route after van inbounding
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator go to menu Station Management Tool -> Station COD Report
+    And chooses start and end date on transaction end date using the following data:
+      | transactionEndDateFrom | {gradle-previous-1-day-dd/MM/yyyy} |
+      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
+    And searches for station cod report by applying following filters:
+      | Hubs      | Transaction Status |
+      | <HubName> | <TransStatus>      |
+    And navigates to summary tab in the result grid
+    And searches for the details in result grid using the following search criteria:
+      | Driver Name | {ninja-driver-name} |
+      | Hub         | <HubName>           |
+    And gets the order details from summary tab of station cod report
+    And verifies that the downloaded CSV file matches with the expected details in "<TabName>" tab
+    And verifies that COD amount is rounded off to two decimal in CSV downloaded from "<TabName>" tab
+
+    Examples:
+      | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   | TabName |
+      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery | Summary |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

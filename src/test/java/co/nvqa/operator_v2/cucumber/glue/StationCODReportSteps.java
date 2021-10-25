@@ -6,8 +6,11 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.junit.Assert;
 import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
 
 /**
@@ -167,6 +170,56 @@ public class StationCODReportSteps extends AbstractSteps {
       DataTable columns) {
     List<String> expectedColumns = columns.asList();
     stationCODReportPage.verifyColumnsInCashCollectedSummary(expectedColumns);
+  }
+
+  @Then("verifies that the (updated )driver name: {string} is displayed in the grid")
+  public void verifies_that_the_updated_driver_name_is_displayed_in_the_grid(
+      String driverFirstName) {
+    Map<String, String> actualDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
+    Map<String, String> expectedDetails = new HashMap<>();
+    expectedDetails.put("Driver Name", resolveValue(driverFirstName));
+    stationCODReportPage.verifyResultGridContent(expectedDetails, actualDetails);
+  }
+
+  @When("downloads station cod report in CSV file format")
+  public void downloads_station_cod_report_in_CSV_file_format() {
+    stationCODReportPage.downloadReportInCSVFormat();
+  }
+
+  @Then("verifies that the downloaded CSV file matches with the expected details in {string} tab")
+  public void verifies_that_the_downloaded_CSV_file_matches_with_the_expected_details_in_tab(String tab) {
+    final AtomicBoolean asserts = new AtomicBoolean(false);
+    Map<String, String> expectedDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
+    Map<String, Object> actualDetails = stationCODReportPage.getContentFromDownloadedCSV(tab);
+    expectedDetails.forEach((key, value) -> {
+      if(!actualDetails.containsKey(key)){
+        Assert.assertTrue(f("Assert that the record: %s in CSV match with the results displayed in the grid!",value),
+            false);;
+      }
+      if(actualDetails.containsKey(key)){
+        asserts.set(actualDetails.get(key).toString().contentEquals(value));
+        if(key.contentEquals("COD Amount")){
+          asserts.set(actualDetails.get(key).toString().contains(value.replace(",","")));
+        }
+        Assert.assertTrue(f("Assert that the record: %s in CSV match with the results displayed in the grid!",value),
+            asserts.get());;
+      }
+    });
+  }
+
+  @Then("verifies that COD amount is rounded off to two decimal in CSV downloaded from {string} tab")
+  public void verifies_that_COD_amount_is_rounded_off_to_two_decimal_in_CSV_downloaded_from_tab(String tab) {
+    Map<String, String> expectedDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
+    Map<String, Object> actualDetails = stationCODReportPage.getContentFromDownloadedCSV(tab);
+    String formattedExpectedCODAmount = expectedDetails.get("COD Amount").replace(",","");
+    if(actualDetails.containsKey("COD Amount")){
+      formattedExpectedCODAmount = String.format("%.2f",Float.parseFloat(formattedExpectedCODAmount));
+      Assert.assertTrue("Assert that the cod amount in CSV is rounded off to 2 decimals",
+          formattedExpectedCODAmount.contentEquals((String)actualDetails.get("COD Amount")));
+      return;
+    }
+    Assert.assertTrue("Assert that the downloaded CSV contains COD Amount",
+        actualDetails.containsKey("COD Amount"));
   }
 
 }

@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
@@ -179,6 +180,12 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
   @FindBy(css = "[aria-label='Remove route from driver app']")
   public MdCheckbox removeRouteFromDriverApp;
+
+  @FindBy(css = "[aria-label='Submit']")
+  public PageElement submit;
+
+  @FindBy(css = "[aria-label='Reason']")
+  public MdSelect reason;
 
   public RouteInboundPage(WebDriver webDriver) {
     super(webDriver);
