@@ -1,4 +1,4 @@
-@StationManagement @StationCODReport @re-test
+@StationManagement @StationCODReport
 Feature: Station COD Report
 
   @LaunchBrowser @ShouldAlwaysRun
