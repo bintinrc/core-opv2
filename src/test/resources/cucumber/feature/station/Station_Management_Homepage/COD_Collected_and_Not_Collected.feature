@@ -308,3 +308,7 @@ Feature: COD Collected and Not Collected
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TileName                            | ModalName                           |
       | {hub-id-1} | {hub-name-1} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
