@@ -1,11 +1,10 @@
-@StationHome @StationManagement @StationHomePage
+@StationManagement @StationHome
 Feature: Station Management Homepage
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path @NVQA-3829
   Scenario Outline: Station Management Homepage Navigation Panel (<hiptest-uid>)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     When Operator selects the hub as "<HubName>" and proceed
@@ -40,7 +39,6 @@ Feature: Station Management Homepage
       | {hub-name-1} | Standard Operating Procedure | Reports | Driver Performance Report    | Driver Performance             | uid:24ee3ae1-9d5c-4615-9ae7-0cbec6776a43 |
       | {hub-name-1} | Standard Operating Procedure | Reports | COD Report                   | COD Report                     | uid:8c31a90a-02b0-490a-8436-c94b9cb656de |
 
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3868
   Scenario Outline: Change the Language to <Language> and Open Station Management Homepage (<hiptest-uid>)
     Given Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"
@@ -60,7 +58,6 @@ Feature: Station Management Homepage
       | Burmese    | Station Management Homepage | Station Management Tool မှ ကြိုဆိုပါသည်။              | Refresh the page to retrieve updated data   | uid:b39aa6ed-03cd-4571-a094-135a2c5e71a4 |
       | English    | Station Management Homepage | Welcome to Station Management Tool                 | Refresh the page to retrieve updated data   | uid:71904a8b-f17a-4606-9efb-e8177f79f7eb |
 
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path @NVQA-3869
   Scenario: Able to Access Station Management Homepage Through URL (uid:3823b3b9-a2ab-45d5-80b6-67c6ec0d0db0)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     When Operator selects the hub as "{hub-name-1}" and proceed
@@ -69,7 +66,6 @@ Feature: Station Management Homepage
     And verifies that the hub has changed to:"{hub-name-2}" in header dropdown
     And reloads operator portal to reset the test state
 
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3869
   Scenario: Station Management Homepage URL is Updated Following The Hub (uid:4018e123-49da-4ea0-9962-e7894625aca8)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     When Operator selects the hub as "{hub-name-1}" and proceed
@@ -78,7 +74,6 @@ Feature: Station Management Homepage
     And verifies that the url path parameter changes to hub-id:"{hub-id-2}"
     And reloads operator portal to reset the test state
 
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3869
   Scenario Outline: Required to Select Hub When Hub ID in URL is Wrong (uid:d721e257-5455-4e17-ab0e-9885e6f66f38)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     When Operator selects the hub as "{hub-name-1}" and proceed

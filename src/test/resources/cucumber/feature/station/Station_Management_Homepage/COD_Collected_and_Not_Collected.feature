@@ -1,4 +1,4 @@
-@StationManagement @StationHomePage
+@StationManagement @COD
 Feature: COD Collected and Not Collected
 
   @LaunchBrowser @ShouldAlwaysRun

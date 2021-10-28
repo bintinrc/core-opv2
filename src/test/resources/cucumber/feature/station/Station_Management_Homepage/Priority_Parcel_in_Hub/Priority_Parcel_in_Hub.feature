@@ -1,4 +1,4 @@
-@PriorityParcels @StationHome @StationManagement
+@StationManagement @StationHome
 Feature: Priority Parcel in Hub
 
 
@@ -6,8 +6,6 @@ Feature: Priority Parcel in Hub
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path @auto-done
   Scenario Outline: View Priority Parcel in Hub (uid:4e760809-5688-407c-83c5-32f2fe53e368)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed

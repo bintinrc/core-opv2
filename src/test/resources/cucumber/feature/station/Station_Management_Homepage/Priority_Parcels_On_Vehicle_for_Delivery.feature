@@ -1,11 +1,10 @@
-@PriorityParcelOnVehicle @StationHome @StationManagement
+@StationManagement @StationHome
 Feature: Priority Parcels On Vehicle for Delivery
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path @NVQA-3904
   Scenario Outline: View Priority Parcel on Vehicle for Delivery (uid:bd22c933-b02b-4302-b086-9336148dc9a8)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
@@ -56,7 +55,6 @@ Feature: Priority Parcels On Vehicle for Delivery
       | TileName                                 | ModalName                   |
       | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3904
   Scenario Outline: Number of Priority Parcel on Vehicle for Delivery is Decreasing After Parcel Completed (uid:01b34681-796b-432a-af31-33fb8c2cf930)
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

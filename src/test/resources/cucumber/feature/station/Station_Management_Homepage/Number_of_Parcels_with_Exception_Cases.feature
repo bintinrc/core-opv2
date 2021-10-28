@@ -1,4 +1,4 @@
-@ExceptionCases @StationHome @StationManagement
+@StationManagement @RecoveryTickets
 Feature: Number of Parcels with Exception Cases
 
   @LaunchBrowser @ShouldAlwaysRun

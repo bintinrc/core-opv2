@@ -1,4 +1,4 @@
-@MissingOrDamagedParcels @StationHome @StationManagement
+@StationManagement @RecoveryTickets
 Feature: Number of Missing or Damaged Parcels
 
 
@@ -6,8 +6,6 @@ Feature: Number of Missing or Damaged Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path @auto-done
   Scenario Outline: View Missing Ticket Type and Order Outcome Is NULL (uid:4e719189-0118-4ab9-bfa1-b391c47816ca)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
@@ -48,8 +46,6 @@ Feature: Number of Missing or Damaged Parcels
       | TileName                             | ModalName                   | TableName       |
       | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
 
-
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path @auto-done
   Scenario Outline: View Damaged Ticket Type and Order Outcome Is NULL (uid:93fe9553-9c98-4305-9cb1-04aa72383d7c)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
