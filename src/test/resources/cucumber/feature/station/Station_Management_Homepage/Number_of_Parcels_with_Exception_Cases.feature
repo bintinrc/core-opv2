@@ -7,20 +7,20 @@ Feature: Number of Parcels with Exception Cases
 
   Scenario Outline: Detail of Pending Ticket Status (uid:5fa7ce50-3f6d-470b-a707-46c3aec317ca)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "{hub-name-3}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
       | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | {hub-name-1}       |
+      | investigatingHub            | {hub-name-3}       |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
       | orderOutcomeDuplicateParcel | XMAS CAGE          |
@@ -30,7 +30,7 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes                 | GENERATED          |
     And Operator verify ticket is created successfully on page Recovery Tickets
     Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "{hub-name-3}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
     And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And verifies that a table is displayed with following columns:
@@ -53,20 +53,20 @@ Feature: Number of Parcels with Exception Cases
 
   Scenario Outline: Detail of Pending Ticket Status (uid:3c439b3b-2e3a-43b8-8b49-3b17f221de9d)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "{hub-name-3}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
       | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name-1}       |
+      | investigatingHub        | {hub-name-3}       |
       | ticketType              | <TicketType>       |
       | ticketSubType           | <TicketSubType>    |
       | orderOutcome            | RESUME DELIVERY    |
@@ -76,7 +76,7 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes             | GENERATED          |
     And Operator verify ticket is created successfully on page Recovery Tickets
     Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "{hub-name-3}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
     And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And verifies that a table is displayed with following columns:
@@ -99,20 +99,20 @@ Feature: Number of Parcels with Exception Cases
 
   Scenario Outline: Detail of Pending Ticket Status (uid:a4e30417-acb7-4fbb-ae98-d80fee952283)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "{hub-name-3}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
       | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | {hub-name-1}       |
+      | investigatingHub              | {hub-name-3}       |
       | ticketType                    | <TicketType>       |
       | ticketSubType                 | <TicketSubType>    |
       | orderOutcomeInaccurateAddress | RTS                |
@@ -123,7 +123,7 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes                   | GENERATED          |
     And Operator verify ticket is created successfully on page Recovery Tickets
     Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "{hub-name-3}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
     And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And verifies that a table is displayed with following columns:
