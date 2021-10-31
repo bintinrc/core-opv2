@@ -36,7 +36,7 @@ public class StationCODReportSteps extends AbstractSteps {
       DataTable fields) {
     List<String> labels = fields.asList();
     for (String label : labels) {
-      //stationCODReportPage.verifyFieldInCODReport(label);
+      stationCODReportPage.verifyFieldInCODReport(label);
     }
   }
 
@@ -45,7 +45,7 @@ public class StationCODReportSteps extends AbstractSteps {
       DataTable buttonNames) {
     List<String> buttons = buttonNames.asList();
     for (String button : buttons) {
-      //stationCODReportPage.verifyButtonDisplayedInDisabledState(button);
+      stationCODReportPage.verifyButtonDisplayedInDisabledState(button);
     }
   }
 
