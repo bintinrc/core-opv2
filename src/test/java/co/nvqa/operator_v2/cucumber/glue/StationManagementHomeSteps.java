@@ -207,8 +207,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
 
     @Then("reloads operator portal to reset the test state")
     public void reloads_operator_portal_to_reset_the_test_state() {
-        stationManagementHomePage.reloadOperatorPortal();
+        stationManagementHomePage.loadOperatorPortal();
     }
+
+    @When("Operator loads Operator portal home page")
+    public void operator_loads_Operator_portal_home_page() {
+        stationManagementHomePage.loadOperatorPortal();
+    }
+
 
     @Then("verifies that the toast message {string} is displayed")
     public void verifies_that_the_toast_message_is_displayed(String message) {

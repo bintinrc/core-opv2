@@ -330,7 +330,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualRouteId.equalsIgnoreCase(expectedRouteId));
     }
 
-    public void reloadOperatorPortal() {
+    public void loadOperatorPortal() {
         getWebDriver().get(TestConstants.OPERATOR_PORTAL_BASE_URL);
     }
 

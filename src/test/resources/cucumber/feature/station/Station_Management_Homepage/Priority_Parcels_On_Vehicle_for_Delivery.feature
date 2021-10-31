@@ -26,7 +26,6 @@ Feature: Priority Parcels On Vehicle for Delivery
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -73,7 +72,6 @@ Feature: Priority Parcels On Vehicle for Delivery
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
