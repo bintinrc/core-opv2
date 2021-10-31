@@ -112,6 +112,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     for (Map.Entry<String, String> filter : filters.entrySet()) {
       String filterXpath = f(STATION_COD_REPORT_COMBOBOX_XPATH, filter.getKey());
       List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterXpath));
+      System.out.println(filterFields.size());
       if (filterFields.size() > 0) {
         AntSelect2 dropdown = new AntSelect2(getWebDriver(), filterFields.get(0));
         dropdown.enterSearchTerm(filter.getValue());
