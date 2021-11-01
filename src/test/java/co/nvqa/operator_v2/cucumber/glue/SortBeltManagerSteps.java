@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 
 /**
@@ -216,7 +217,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
           return false;
         }
       });
-      assertTrue(f("Not found unique arm combination " + expectedCombination.toMap()), found);
+     Assertions.assertThat(found).as(f("Not found unique arm combination " + expectedCombination.toMap())).isTrue();
     });
   }
 

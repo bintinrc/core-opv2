@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -117,8 +118,8 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage {
 
   public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId) {
     failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
-    assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId),
-        failedPickupsTable.isEmpty());
+    Assertions.assertThat(failedPickupsTable.isEmpty())
+        .as(f("Tracking ID '%s' is still listed on failed order list.", trackingId)).isTrue();
   }
 
   public static class FailedPickupsTable extends MdVirtualRepeatTable<FailedDelivery> {
