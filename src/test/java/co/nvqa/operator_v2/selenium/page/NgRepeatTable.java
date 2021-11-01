@@ -43,7 +43,13 @@ public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T> {
    */
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
-    clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonsLocators.get(actionId), ngRepeat);
+    String locator = actionButtonsLocators.get(actionId);
+    if (locator.startsWith("/")) {
+      clickf(locator, rowNumber);
+    } else {
+      clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonsLocators.get(actionId),
+          ngRepeat);
+    }
   }
 
   @Override

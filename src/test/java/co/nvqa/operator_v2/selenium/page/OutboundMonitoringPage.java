@@ -1,11 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.commons.model.DataEntity;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
@@ -16,7 +13,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_COMMENT;
-import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_FLAG;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_COMMENTS;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_OUTBOUND_STATUS;
@@ -28,8 +24,7 @@ import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTab
 @SuppressWarnings("WeakerAccess")
 public class OutboundMonitoringPage extends OperatorV2SimplePage implements ScenarioStorageKeys {
 
-  private ScenarioStorage scenarioStorage;
-  private OutboundBreakroutePage outboundBreakroutePage;
+  public OutboundBreakroutePage outboundBreakroutePage;
 
   public RoutesTable routesTable;
 
@@ -48,9 +43,8 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   @FindBy(name = "Load Selection")
   public NvApiTextButton loadSelection;
 
-  public OutboundMonitoringPage(WebDriver webDriver, ScenarioStorage scenarioStorage) {
+  public OutboundMonitoringPage(WebDriver webDriver) {
     super(webDriver);
-    this.scenarioStorage = scenarioStorage;
     outboundBreakroutePage = new OutboundBreakroutePage(getWebDriver());
     routesTable = new RoutesTable(webDriver);
   }
@@ -91,19 +85,6 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   public void verifyCommentIsRight() {
     String actualComment = routesTable.getColumnText(1, COLUMN_COMMENTS);
     assertEquals("Comment is different.", "This comment is for test purpose.", actualComment);
-  }
-
-  public void pullOutOrderFromRoute(Order order, long routeId) {
-    String mainWindowHandle = getWebDriver().getWindowHandle();
-    scenarioStorage.put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
-
-    searchTableByRouteId(routeId);
-    assertFalse(String.format("Cannot find Route with ID = '%d' on table.", routeId),
-        isTableEmpty());
-    routesTable.clickActionButton(1, ACTION_EDIT);
-
-    switchToOutboundBreakrouteWindow(routeId);
-    outboundBreakroutePage.pullOrderFromRoute(order.getTrackingId());
   }
 
   public void searchTableByRouteId(long routeId) {

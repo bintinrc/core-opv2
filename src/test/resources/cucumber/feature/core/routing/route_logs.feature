@@ -764,6 +764,39 @@ Feature: Route Logs
       | archivedRoutes | true                               |
 
   @DeleteFilterTemplate
+  Scenario: Operator Update Existing Preset via Update Preset button on Route Logs Page (uid:be052c39-d986-4205-8b7f-c3e47005d887)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given  API Operator creates new Routes Filter Template using data below:
+      | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
+      | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
+      | value.endDate   | {gradle-current-date-yyyy-MM-dd}             |
+      | value.hubIds    | {hub-id}                                     |
+      | value.driverIds | {ninja-driver-id}                            |
+      | value.zoneIds   | {zone-id}                                    |
+      | value.archived  | false                                        |
+    When Operator go to menu Routing -> Route Logs
+    And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
+    And Operator set filters on Route Logs page:
+      | routeDateFrom  | {gradle-previous-2-day-dd/MM/yyyy} |
+      | routeDateTo    | {gradle-previous-1-day-dd/MM/yyyy} |
+      | hub            | {hub-name-2}                       |
+      | driver         | {ninja-driver-2-name}              |
+      | archivedRoutes | true                               |
+    And Operator selects "Update Preset" preset action on Route Logs page
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 filter preset updated                |
+      | bottom             | Name: {KEY_ROUTES_FILTERS_PRESET_NAME} |
+      | waitUntilInvisible | true                                   |
+    When Operator refresh page
+    And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
+    Then Operator verifies selected filters on Route Logs page:
+      | routeDateFrom  | {gradle-previous-2-day-dd/MM/yyyy} |
+      | routeDateTo    | {gradle-previous-1-day-dd/MM/yyyy} |
+      | hub            | {hub-name-2}                       |
+      | driver         | {ninja-driver-2-name}              |
+      | archivedRoutes | true                               |
+
+  @DeleteFilterTemplate
   Scenario: Operator Delete Preset on Route Logs Page (uid:c5baeef5-610b-4f1c-af63-61206cacd78d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given  API Operator creates new Routes Filter Template using data below:

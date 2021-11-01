@@ -106,26 +106,8 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
     assertEquals("Comment is different.", "This comment is for test purpose.", actualComment);
   }
 
-  public void pullOutOrderFromRoute(Order order, long routeId) {
-    String mainWindowHandle = getWebDriver().getWindowHandle();
-    scenarioStorage.put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
-
-    searchTableByRouteId(routeId);
-    assertFalse(String.format("Cannot find Route with ID = '%d' on table.", routeId),
-        isTableEmpty());
-    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-
-    switchToOutboundBreakrouteWindow(routeId);
-    outboundBreakroutePage.pullOrderFromRoute(order.getTrackingId());
-  }
-
   public void searchTableByRouteId(long routeId) {
     searchTableCustom1(COLUMN_CLASS_FILTER_ROUTE_ID, String.valueOf(routeId));
-  }
-
-  public void switchToOutboundBreakrouteWindow(long routeId) {
-    switchToOtherWindow("outbound-breakroute/" + routeId);
-    outboundBreakroutePage.waitUntilElementDisplayed();
   }
 
   public String getTextOnTable(int rowNumber, String columnDataClass) {
