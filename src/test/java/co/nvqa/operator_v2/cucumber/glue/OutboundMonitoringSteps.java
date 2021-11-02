@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.OutboundBreakroutePage.OrderInfo;
+import co.nvqa.operator_v2.selenium.page.OutboundBreakrouteV2Page;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -66,6 +67,116 @@ public class OutboundMonitoringSteps extends AbstractSteps {
         .isFalse();
     outboundMonitoringPage.routesTable.clickActionButton(1, ACTION_EDIT);
     outboundMonitoringPage.switchToOutboundBreakrouteWindow(Long.parseLong(routeId));
+  }
+
+  @Then("Operator clicks Pull Out button for routes on Outbound Monitoring Page:")
+  public void clickPullOutForRoutes(List<String> routeIds) {
+    String mainWindowHandle = getWebDriver().getWindowHandle();
+    put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+    routeIds = resolveValues(routeIds);
+    routeIds.forEach(routeId -> {
+      outboundMonitoringPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      Assertions.assertThat(outboundMonitoringPage.routesTable.isEmpty())
+          .as("Routes table is empty")
+          .isFalse();
+      outboundMonitoringPage.routesTable.selectRow(1);
+    });
+    outboundMonitoringPage.pullOut.click();
+    outboundMonitoringPage.switchToOtherWindowUrlContains("outbound-breakroute-v2");
+    outboundMonitoringPage.outboundBreakrouteV2Page.switchTo();
+    outboundMonitoringPage.outboundBreakrouteV2Page.waitUntilLoaded();
+    if (outboundMonitoringPage.outboundBreakrouteV2Page.processModal.waitUntilVisible(3)) {
+      outboundMonitoringPage.outboundBreakrouteV2Page.processModal.waitUntilInvisible();
+    }
+    pause1s();
+  }
+
+  @Then("Operator verifies {int} total selected Route IDs shown on Outbound Breakroute V2 page")
+  public void clickPullOutForRoutes(int count) {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      Assertions.assertThat(page.routesCount.getText())
+          .as("total selected Route ID(s) label")
+          .isEqualTo(count + " selected Route ID(s)");
+    });
+  }
+
+  @Then("Operator verifies {value} date shown on Outbound Breakroute V2 page")
+  public void checkDateOnOutboundBreakrouteV2Page(String date) {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      Assertions.assertThat(page.date.getText())
+          .as("Date label")
+          .isEqualTo("Date: " + resolveValue(date));
+    });
+  }
+
+  @Then("Operator verifies orders info on Outbound Breakroute V2 page:")
+  public void checkDateOnOutboundBreakrouteV2Page(List<Map<String, String>> data) {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      data.forEach(item -> {
+        OutboundBreakrouteV2Page.OrderInfo expected = new OutboundBreakrouteV2Page.OrderInfo(
+            resolveKeyValues(item));
+        outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable
+            .filterByColumn("tracking_id", expected.getTrackingId());
+        Assertions.assertThat(
+                outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable.isEmpty())
+            .as("Orders table is empty")
+            .isFalse();
+        OutboundBreakrouteV2Page.OrderInfo actual = outboundMonitoringPage.outboundBreakrouteV2Page
+            .ordersInRouteTable.readEntity(1);
+        expected.compareWithActual(actual);
+      });
+    });
+  }
+
+  @Then("Operator verifies orders table is empty on Outbound Breakroute V2 page")
+  public void checkOrdersTableIsEmpty() {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      Assertions.assertThat(
+              outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable.isEmpty())
+          .as("Orders table is empty")
+          .isTrue();
+    });
+  }
+
+  @Then("Operator verifies filter results on Outbound Breakroute V2 page:")
+  public void checkFilterResults(List<Map<String, String>> data) {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      Assertions.assertThat(
+              outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable.getRowsCount())
+          .as("Orders table rows count")
+          .isEqualTo(data.size());
+      List<OutboundBreakrouteV2Page.OrderInfo> actual =
+          outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable.readAllEntities();
+
+      data.forEach(item -> {
+        OutboundBreakrouteV2Page.OrderInfo expected = new OutboundBreakrouteV2Page.OrderInfo(
+            resolveKeyValues(item));
+        OutboundBreakrouteV2Page.OrderInfo actualItem = actual.stream()
+            .filter(o -> StringUtils.equals(o.getTrackingId(), expected.getTrackingId()))
+            .findFirst()
+            .orElseThrow(
+                () -> new AssertionError("Order " + expected.getTrackingId() + " was not found"));
+        expected.compareWithActual(actualItem);
+      });
+    });
+  }
+
+  @Then("Operator filter orders table on Outbound Breakroute V2 page:")
+  public void checkFilterResults(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      finalData.forEach((key, value) -> {
+        outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable
+            .filterByColumn(key, value);
+      });
+    });
+  }
+
+  @Then("Operator clear filters of orders table on Outbound Breakroute V2 page")
+  public void clearTableFilters() {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable.clearColumnFilters();
+    });
   }
 
   @Then("^Operator verify the In Progress Outbound Status on Outbound Monitoring Page$")

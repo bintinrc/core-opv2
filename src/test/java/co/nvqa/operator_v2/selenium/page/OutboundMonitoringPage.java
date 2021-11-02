@@ -3,10 +3,12 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,6 +27,7 @@ import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTab
 public class OutboundMonitoringPage extends OperatorV2SimplePage implements ScenarioStorageKeys {
 
   public OutboundBreakroutePage outboundBreakroutePage;
+  public OutboundBreakrouteV2Page outboundBreakrouteV2Page;
 
   public RoutesTable routesTable;
 
@@ -43,9 +46,15 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   @FindBy(name = "Load Selection")
   public NvApiTextButton loadSelection;
 
+  @FindBy(name = "container.outbound-routebreak.pull-out")
+  public NvIconTextButton pullOut;
+
+
+
   public OutboundMonitoringPage(WebDriver webDriver) {
     super(webDriver);
     outboundBreakroutePage = new OutboundBreakroutePage(getWebDriver());
+    outboundBreakrouteV2Page = new OutboundBreakrouteV2Page(getWebDriver());
     routesTable = new RoutesTable(webDriver);
   }
 
