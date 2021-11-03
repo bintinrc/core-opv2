@@ -1,12 +1,13 @@
 @StationManagement @RecoveryTickets
 Feature: Number of Parcels with Exception Cases
 
-  @LaunchBrowser @ShouldAlwaysRun @In-Progress
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Detail of Pending Ticket Status (uid:5fa7ce50-3f6d-470b-a707-46c3aec317ca)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-3}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -16,7 +17,7 @@ Feature: Number of Parcels with Exception Cases
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
+    When Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
       | investigatingDepartment     | Fleet (First Mile) |
@@ -44,15 +45,14 @@ Feature: Number of Parcels with Exception Cases
     And verifies that the following details are displayed on the modal
       | Ticket Type   | <TicketType> |
       | Ticket Status | CREATED      |
-    And reloads operator portal to reset the test state
 
     Examples:
       | TicketType    | TicketSubType    | TileName                               | ModalName                    |
       | SHIPPER ISSUE | DUPLICATE PARCEL | Number of parcels with exception cases | Parcels with Exception Cases |
 
-
   Scenario Outline: Detail of Pending Ticket Status (uid:3c439b3b-2e3a-43b8-8b49-3b17f221de9d)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-3}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -62,8 +62,8 @@ Feature: Number of Parcels with Exception Cases
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
       | investigatingDepartment | Fleet (First Mile) |
       | investigatingHub        | {hub-name-3}       |
@@ -90,15 +90,14 @@ Feature: Number of Parcels with Exception Cases
     And verifies that the following details are displayed on the modal
       | Ticket Type   | <TicketType> |
       | Ticket Status | CREATED      |
-    And reloads operator portal to reset the test state
 
     Examples:
       | TicketType     | TicketSubType   | TileName                               | ModalName                    |
       | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases |
 
-
   Scenario Outline: Detail of Pending Ticket Status (uid:a4e30417-acb7-4fbb-ae98-d80fee952283)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-3}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -137,14 +136,14 @@ Feature: Number of Parcels with Exception Cases
     And verifies that the following details are displayed on the modal
       | Ticket Type   | <TicketType> |
       | Ticket Status | CREATED      |
-    And reloads operator portal to reset the test state
 
     Examples:
       | TicketType       | TicketSubType      | TileName                               | ModalName                    |
       | PARCEL EXCEPTION | INACCURATE ADDRESS | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Detail of <Status> Ticket Status (<hiptest-uid>)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -168,10 +167,10 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes                 | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | outcome                 | <OrderOutcome>            |
-      | assignTo                | NikoSusanto               |
-      | newInstructions         | GENERATED                 |
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
@@ -187,15 +186,16 @@ Feature: Number of Parcels with Exception Cases
     And verifies that the following details are displayed on the modal
       | Ticket Type   | <TicketType> |
       | Ticket Status | <Status>     |
-    And reloads operator portal to reset the test state
 
     Examples:
-      | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                               | ModalName                    | hiptest-uid                              |
-      | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases | uid:f0862cee-84ba-4592-9855-517e1668098d |
-      | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD     | Number of parcels with exception cases | Parcels with Exception Cases | uid:87a1bdd6-61b1-44f3-83b0-e29760cfd5d6 |
+      | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                               | ModalName                    | hiptest-uid                              |
+      | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS     | Number of parcels with exception cases | Parcels with Exception Cases | uid:f0862cee-84ba-4592-9855-517e1668098d |
+      | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD         | Number of parcels with exception cases | Parcels with Exception Cases | uid:87a1bdd6-61b1-44f3-83b0-e29760cfd5d6 |
+      | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases | uid:87a1bdd6-61b1-44f3-83b0-e29760cfd5d6 |
 
   Scenario Outline: Detail of <Status> Ticket Status (<hiptest-uid>)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -206,7 +206,7 @@ Feature: Number of Parcels with Exception Cases
       | hubName    | {hub-name-1}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
+    And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
       | investigatingDepartment | Fleet (First Mile) |
       | investigatingHub        | {hub-name-1}       |
@@ -219,10 +219,10 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes             | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | outcome                 | <OrderOutcome>            |
-      | assignTo                | NikoSusanto               |
-      | newInstructions         | GENERATED                 |
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
@@ -241,12 +241,14 @@ Feature: Number of Parcels with Exception Cases
     And reloads operator portal to reset the test state
 
     Examples:
-      | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                               | ModalName                    | hiptest-uid                              |
-      | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases | uid:b0d60cea-bac7-4052-803c-b922bebf02b8 |
-      | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD     | Number of parcels with exception cases | Parcels with Exception Cases | uid:15615f65-3510-41d9-9056-d6e00512f493 |
+      | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                               | ModalName                    | hiptest-uid                              |
+      | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS     | Number of parcels with exception cases | Parcels with Exception Cases | uid:b0d60cea-bac7-4052-803c-b922bebf02b8 |
+      | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD         | Number of parcels with exception cases | Parcels with Exception Cases | uid:15615f65-3510-41d9-9056-d6e00512f493 |
+      | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases | uid:15615f65-3510-41d9-9056-d6e00512f493 |
 
   Scenario Outline: Detail of <Status> Ticket Status (<hiptest-uid>)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -257,7 +259,7 @@ Feature: Number of Parcels with Exception Cases
       | hubName    | {hub-name-1}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
+    And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
       | investigatingDepartment       | Fleet (First Mile) |
       | investigatingHub              | {hub-name-1}       |
@@ -271,10 +273,10 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes                   | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | outcome                 | <OrderOutcome>            |
-      | assignTo                | NikoSusanto               |
-      | newInstructions         | GENERATED                 |
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
@@ -290,12 +292,12 @@ Feature: Number of Parcels with Exception Cases
     And verifies that the following details are displayed on the modal
       | Ticket Type   | <TicketType> |
       | Ticket Status | <Status>     |
-    And reloads operator portal to reset the test state
 
     Examples:
-      | TicketType       | TicketSubType      | OrderOutcome | Status      | TileName                               | ModalName                    | hiptest-uid                              |
-      | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases | uid:2532f73d-7eeb-44b8-8478-f5edf53ba59f |
-      | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | ON HOLD     | Number of parcels with exception cases | Parcels with Exception Cases | uid:a39af543-e1fb-4304-a37c-7e30a4915371 |
+      | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                               | ModalName                    | hiptest-uid                              |
+      | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | IN PROGRESS     | Number of parcels with exception cases | Parcels with Exception Cases | uid:2532f73d-7eeb-44b8-8478-f5edf53ba59f |
+      | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | ON HOLD         | Number of parcels with exception cases | Parcels with Exception Cases | uid:a39af543-e1fb-4304-a37c-7e30a4915371 |
+      | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases | uid:a39af543-e1fb-4304-a37c-7e30a4915371 |
 
   Scenario Outline: SHIPPER ISSUE Ticket Type and Order Outcome Is RESOLVED (<hiptest-uid>)
     Given Operator loads Operator portal home page
@@ -355,7 +357,7 @@ Feature: Number of Parcels with Exception Cases
       | hubName    | {hub-name-1}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
+    And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
       | investigatingDepartment       | Fleet (First Mile) |
       | investigatingHub              | {hub-name-1}       |
@@ -404,7 +406,7 @@ Feature: Number of Parcels with Exception Cases
       | hubName    | {hub-name-1}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
+    And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
       | investigatingDepartment | Fleet (First Mile) |
       | investigatingHub        | {hub-name-1}       |
@@ -442,6 +444,6 @@ Feature: Number of Parcels with Exception Cases
       | TicketType     | TicketSubType   | OrderOutcome    | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    | hiptest-uid                              |
       | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases | uid:1df65d62-727a-4531-9368-a9f2079cb0f5 |
 
-  @KillBrowser @ShouldAlwaysRun @In-Progress
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

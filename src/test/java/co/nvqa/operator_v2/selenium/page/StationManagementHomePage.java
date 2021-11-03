@@ -266,7 +266,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void applyFilters(Map<String, String> filters, int resultsCount) {
-
+        waitWhilePageIsLoading();
         for (Map.Entry<String, String> filter : filters.entrySet()) {
             String filterXpath = f(MODAL_TABLE_FILTER_XPATH, filter.getKey());
             scrollIntoView(filterXpath);
