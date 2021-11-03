@@ -1,7 +1,7 @@
 @StationManagement @RecoveryTickets
 Feature: Number of Parcels with Exception Cases
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @In-Progress
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -166,12 +166,12 @@ Feature: Number of Parcels with Exception Cases
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
       | ticketNotes                 | GENERATED          |
-    And Operator searches the created ticket and clicks on Edit button
-    Then Operator updates the ticket settings with the following details:
-      | ticketStatus        | <Status>       |
-      | orderOutcome        | <OrderOutcome> |
-      | assignTo            | NikoSusanto    |
-      | enterNewInstruction | GENERATED      |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status                  | <Status>                  |
+      | outcome                 | <OrderOutcome>            |
+      | assignTo                | NikoSusanto               |
+      | newInstructions         | GENERATED                 |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
@@ -217,12 +217,12 @@ Feature: Number of Parcels with Exception Cases
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
-    And Operator searches the created ticket and clicks on Edit button
-    Then Operator updates the ticket settings with the following details:
-      | ticketStatus        | <Status>       |
-      | orderOutcome        | <OrderOutcome> |
-      | assignTo            | NikoSusanto    |
-      | enterNewInstruction | GENERATED      |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status                  | <Status>                  |
+      | outcome                 | <OrderOutcome>            |
+      | assignTo                | NikoSusanto               |
+      | newInstructions         | GENERATED                 |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
@@ -269,12 +269,12 @@ Feature: Number of Parcels with Exception Cases
       | custZendeskId                 | 1                  |
       | shipperZendeskId              | 1                  |
       | ticketNotes                   | GENERATED          |
-    And Operator searches the created ticket and clicks on Edit button
-    Then Operator updates the ticket settings with the following details:
-      | ticketStatus        | <Status>       |
-      | orderOutcome        | <OrderOutcome> |
-      | assignTo            | NikoSusanto    |
-      | enterNewInstruction | GENERATED      |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status                  | <Status>                  |
+      | outcome                 | <OrderOutcome>            |
+      | assignTo                | NikoSusanto               |
+      | newInstructions         | GENERATED                 |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
@@ -442,6 +442,6 @@ Feature: Number of Parcels with Exception Cases
       | TicketType     | TicketSubType   | OrderOutcome    | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    | hiptest-uid                              |
       | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases | uid:1df65d62-727a-4531-9368-a9f2079cb0f5 |
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @In-Progress
   Scenario: Kill Browser
     Given no-op
