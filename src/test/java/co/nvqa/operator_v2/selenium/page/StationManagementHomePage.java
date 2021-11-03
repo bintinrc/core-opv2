@@ -126,7 +126,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             }
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
-            int actualCount = Integer.parseInt(tile.getText().trim());
+            int actualCount = Integer.parseInt(tile.getText().replace(",","").trim());
             return actualCount;
         } catch (Exception e) {
             e.printStackTrace();
