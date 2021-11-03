@@ -4,8 +4,8 @@ import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,7 +25,7 @@ public class OutboundBreakrouteV2Page extends SimpleReactPage<OutboundBreakroute
   @FindBy(css = "div.table-stats > div > div:nth-of-type(3)")
   public PageElement date;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public ConfirmPulloutDialog confirmPulloutDialog;
 
   @FindBy(css = ".ant-modal")
@@ -146,6 +146,23 @@ public class OutboundBreakrouteV2Page extends SimpleReactPage<OutboundBreakroute
     public void setOrderDeliveryType(String orderDeliveryType) {
       this.orderDeliveryType = orderDeliveryType;
     }
+
+    @Override
+    public String toString() {
+      return "OrderInfo{" +
+          "trackingId='" + trackingId + '\'' +
+          ", granularStatus='" + granularStatus + '\'' +
+          ", lastScannedHub='" + lastScannedHub + '\'' +
+          ", routeId='" + routeId + '\'' +
+          ", routeDate='" + routeDate + '\'' +
+          ", driverId='" + driverId + '\'' +
+          ", driverName='" + driverName + '\'' +
+          ", driverType='" + driverType + '\'' +
+          ", address='" + address + '\'' +
+          ", lastScanType='" + lastScanType + '\'' +
+          ", orderDeliveryType='" + orderDeliveryType + '\'' +
+          '}';
+    }
   }
 
   public static class OrdersInRouteTable extends AntTableV2<OrderInfo> {
@@ -169,17 +186,29 @@ public class OutboundBreakrouteV2Page extends SimpleReactPage<OutboundBreakroute
     }
   }
 
-  public static class ConfirmPulloutDialog extends MdDialog {
+  public static class ConfirmPulloutDialog extends AntModal {
 
     public ConfirmPulloutDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "button[aria-label='Pull Out']")
+    @FindBy(css = "div[role='gridcell'][data-datakey='0']")
+    public List<PageElement> routeIds;
+
+    @FindBy(css = "div[role='gridcell'][data-datakey='1']")
+    public List<PageElement> trackingIds;
+
+    @FindBy(xpath = ".//button[.='Pull Out']")
     public Button pullOut;
   }
 
   public static class ProcessModal extends AntModal {
+
+    @FindBy(css = "table[data-testid='simple-table'] tr > td:nth-of-type(2)")
+    public List<PageElement> errors;
+
+    @FindBy(xpath = ".//button[.='Cancel']")
+    public Button cancel;
 
     public ProcessModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

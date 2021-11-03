@@ -1,12 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.NvWait;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakroutePage.OrderInfo;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakrouteV2Page;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
+import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -151,12 +155,17 @@ public class OutboundMonitoringSteps extends AbstractSteps {
       data.forEach(item -> {
         OutboundBreakrouteV2Page.OrderInfo expected = new OutboundBreakrouteV2Page.OrderInfo(
             resolveKeyValues(item));
-        OutboundBreakrouteV2Page.OrderInfo actualItem = actual.stream()
-            .filter(o -> StringUtils.equals(o.getTrackingId(), expected.getTrackingId()))
+        actual.stream()
+            .filter(o -> {
+              try {
+                expected.compareWithActual(o);
+                return true;
+              } catch (AssertionError e) {
+                return false;
+              }
+            })
             .findFirst()
-            .orElseThrow(
-                () -> new AssertionError("Order " + expected.getTrackingId() + " was not found"));
-        expected.compareWithActual(actualItem);
+            .orElseThrow(() -> new AssertionError("Order " + expected + " was not found"));
       });
     });
   }
@@ -325,5 +334,76 @@ public class OutboundMonitoringSteps extends AbstractSteps {
             outboundMonitoringPage.outboundBreakroutePage.ordersInRouteTable.isEmpty())
         .as("Orders in Route table is Empty")
         .isTrue();
+  }
+
+  @Then("Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:")
+  public void clickPullOutForOrders(List<String> trackingIds) {
+    List<String> finalTrackingIds = resolveValues(trackingIds);
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      finalTrackingIds.forEach(trackingId -> {
+        page.ordersInRouteTable.filterByColumn("tracking_id", trackingId);
+        Assertions.assertThat(page.ordersInRouteTable.isEmpty())
+            .as("Orders table is empty")
+            .isFalse();
+        page.ordersInRouteTable.selectRow(1);
+      });
+      page.pullOut.click();
+    });
+  }
+
+  @Then("Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:")
+  public void verifyConfirmPullOutModalRecords(List<Map<String, String>> data) {
+    List<Map<String, String>> finalData = resolveListOfMaps(data);
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      page.confirmPulloutDialog.waitUntilVisible();
+      int size = page.confirmPulloutDialog.routeIds.size();
+      Assertions.assertThat(size)
+          .as("Number of records in Confirm Pull Out modal")
+          .isEqualTo(data.size());
+      List<Map<String, String>> actual = new ArrayList<>();
+      for (int i = 0; i < size; i++) {
+        Map<String, String> item = ImmutableMap.of(
+            "routeId", page.confirmPulloutDialog.routeIds.get(i).getText(),
+            "trackingId", page.confirmPulloutDialog.trackingIds.get(i).getText()
+        );
+        actual.add(item);
+      }
+      Assertions.assertThat(actual)
+          .as("List of records in Confirm Pull Out modal")
+          .containsExactlyInAnyOrderElementsOf(finalData);
+    });
+  }
+
+  @Then("Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page")
+  public void clickPullOutInConfirmPullOutModal() {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      page.confirmPulloutDialog.waitUntilVisible();
+      page.confirmPulloutDialog.pullOut.click();
+    });
+  }
+
+  @Then("Operator verifies errors in Processing modal on Outbound Breakroute V2 page:")
+  public void verifyProcessingErrors(List<String> expected) {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      page.processModal.waitUntilVisible();
+      new NvWait(10_000).until(
+          () -> page.processModal.errors.size() == expected.size(),
+          "Number of errors is not " + expected.size());
+      List<String> actual = page.processModal.errors.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of pull out errors")
+          .isNotEmpty()
+          .containsExactlyInAnyOrderElementsOf(resolveValues(expected));
+    });
+  }
+
+  @Then("Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page")
+  public void clickCancelInProcessingModal() {
+    outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
+      page.processModal.waitUntilVisible();
+      page.processModal.cancel.click();
+    });
   }
 }
