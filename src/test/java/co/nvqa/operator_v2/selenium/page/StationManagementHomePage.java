@@ -28,18 +28,18 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
     private static final String STATION_HOME_URL_PATH = "/station-homepage";
     private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
+    private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
+    private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
     private static final String TILE_VALUE_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//div[@class='value']";
-    //private static final String TILE_VALUE_XPATH = ".//div[text()='%s']/ancestor::div[@class='ant-card-body']//div[@class='value']";
     private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
-    //private static final String TILE_HAMBURGER_XPATH = "//div[text()='%s']/ancestor::div[@class='ant-card-body']//*[@role='img']";
     private static final String MODAL_CONTENT_XPATH = "//span[contains(text(),'%s')]//ancestor::div//*[@class='ant-modal-content']";
     private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
-    //private static final String MODAL_TABLE_FILTER_XPATH = "//div[text()='%s']/parent::div[@class='th']//input";
     private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
     private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
     private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
     private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
     private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
+    private static final String RECOVERY_TICKETS = "Recovery Tickets";
 
 
     public StationManagementHomePage(WebDriver webDriver) {
@@ -174,6 +174,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         waitUntilStationHomeUrlLoads(STATION_HOME_URL_PATH);
         Assert.assertTrue("Assert that URL path is updated with station management url",
                 getCurrentUrl().endsWith(STATION_HOME_URL_PATH));
+    }
+
+    public void validateStationRecoveryURLPath(String trackingId) {
+        waitUntilStationHomeUrlLoads(f(STATION_RECOVERY_TICKETS_URL_PATH,trackingId));
+        Assert.assertTrue("Assert that Recovery Tickets URL is loaded with Tracking Id",
+            getCurrentUrl().endsWith(f(STATION_RECOVERY_TICKETS_URL_PATH,trackingId)));
     }
 
     public void reloadURLWithNewHudId(String hubId) {
@@ -311,7 +317,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         pause3s();
         Assert.assertTrue("Assert that the search has results as expected after applying filters",
                 actualTrackingId.equalsIgnoreCase(expectedTrackingId));
+    }
 
+    public void verifyEditOrderScreenURL(String expectedTrackingId, String orderId) {
+        String expectedEditOrderUrl = f(STATION_EDIT_ORDER_URL_PATH,orderId);
+        getWebDriver().switchTo().defaultContent();
+        String windowHandle = getWebDriver().getWindowHandle();
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
+        }
+        WebElement trackingIdLink = getWebDriver().findElement(By.linkText(expectedTrackingId));
+        trackingIdLink.click();
+        switchToNewWindow();
+        waitWhilePageIsLoading();
+        String actualEditOrderUrl = getCurrentUrl().trim();
+        closeAllWindows(windowHandle);
+        pause3s();
+        Assert.assertTrue("Assert that the edit order screen contains order id in the url",
+            actualEditOrderUrl.endsWith(expectedEditOrderUrl));
     }
 
     public void verifyNavigationToRouteManifestScreen(String expectedRouteId) {
@@ -357,6 +380,22 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         closeAllWindowsExceptCurrentWindow();
         pause3s();
     }
+
+    @FindBy(css = "button[class*='btn-icon']")
+    private PageElement arrowIcon;
+
+    public void verifyRecoveryTicketsOnClickingArrowIcon() {
+        waitUntilVisibilityOfElementLocated(arrowIcon.getWebElement());
+        arrowIcon.click();
+        switchToNewWindow();
+        waitWhilePageIsLoading();
+        String actualPageName = pageHeader.getText().trim();
+        Assert.assertTrue("Assert that recovery tickets page has opened in new tab",
+            actualPageName.contains(RECOVERY_TICKETS));
+        closeAllWindowsExceptCurrentWindow();
+        pause3s();
+    }
+
 
     public void verifyPageUsingPageHeader(StationLanguage.HeaderText language) {
         waitWhilePageIsLoading();

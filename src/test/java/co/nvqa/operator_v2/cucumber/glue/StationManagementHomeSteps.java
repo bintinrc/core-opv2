@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
@@ -324,6 +323,24 @@ public class StationManagementHomeSteps extends AbstractSteps {
             Assert.assertTrue("Assert that the result grid contains all expected column values",
             value.contentEquals(actualResults.get(key)));
         });
+    }
+
+    @Then("verifies that recovery tickets page is opened on clicking arrow button")
+    public void verifies_that_recovery_tickets_page_is_opened_on_clicking_arrow_button() {
+        stationManagementHomePage.verifyRecoveryTicketsOnClickingArrowIcon();
+    }
+
+    @Then("verifies that the url for recovery tickets page is loaded with tracking id")
+    public void verifies_that_the_url_for_recovery_tickets_page_is_loaded_with_tracking_id() {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        stationManagementHomePage.validateStationRecoveryURLPath(trackingId);
+    }
+
+    @Then("verifies that the url for edit order page is loaded with order id")
+    public void verifies_that_the_url_for_edit_order_page_is_loaded_with_order_id() {
+        String orderId = get(KEY_CREATED_ORDER_ID).toString();
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        stationManagementHomePage.verifyEditOrderScreenURL(trackingId,orderId);
     }
 
 }
