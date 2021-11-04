@@ -794,6 +794,118 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed          | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Pending Reschedule | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
 
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page -  Pending State & Non-Pending State Delivery (uid:bd01f24e-18ad-45e4-8f33-46ab5acb7324)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    Given Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
+      | zoneName | {zone-name} |
+      | hubName  | {hub-name}  |
+    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
+      | routeId                           | trackingId                                 |
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
+    Then Operator verifies errors in Processing modal on Outbound Breakroute V2 page:
+      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[2]}] is not in pending state] |
+    When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
+    Then Operator verifies that success react notification displayed:
+      | top                | Tracking IDs Pulled Out   |
+      | bottom             | 1 Tracking IDs pulled out |
+      | waitUntilInvisible | true                      |
+    And Operator verifies orders info on Outbound Breakroute V2 page:
+      | trackingId                                 | granularStatus | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Completed      | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+    When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
+    Then DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And DB Operator verifies route_monitoring_data is hard-deleted:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page - Delivery Order is Pulled Out (uid:b8856d12-3c45-42fc-a7db-0b95085d4099)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
+      | zoneName | {zone-name} |
+      | hubName  | {hub-name}  |
+    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
+      | routeId                           | trackingId                                 |
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    When API Operator pulled out parcel "DELIVERY" from route
+    When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
+    Then Operator verifies errors in Processing modal on Outbound Breakroute V2 page:
+      | Get ProcessingException [Code:BAD_REQUEST_EXCEPTION][Message:No route found to unroute for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[2]}]] |
+    When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
+    Then Operator verifies that success react notification displayed:
+      | top                | Tracking IDs Pulled Out   |
+      | bottom             | 1 Tracking IDs pulled out |
+      | waitUntilInvisible | true                      |
+    When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
+    Then DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And DB Operator verifies route_monitoring_data is hard-deleted:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

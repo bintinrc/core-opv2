@@ -24,15 +24,12 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.CANCEL_SELECTED;
@@ -324,6 +321,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
+    manuallyCompleteOrderDialog.changeReason.setValue("Force success from automated test");
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
     waitUntilInvisibilityOfToast("Complete Order");
@@ -561,7 +559,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
     waitUntilVisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading",true);
+    waitUntilInvisibilityOfToast("Downloading", true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {
