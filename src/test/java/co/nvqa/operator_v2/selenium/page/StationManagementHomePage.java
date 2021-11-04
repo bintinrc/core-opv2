@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -27,10 +28,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
     private static final String STATION_HOME_URL_PATH = "/station-homepage";
     private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
-    private static final String TILE_VALUE_XPATH = ".//div[text()='%s']/ancestor::div[@class='ant-card-body']//div[@class='value']";
-    private static final String TILE_HAMBURGER_XPATH = "//div[text()='%s']/ancestor::div[@class='ant-card-body']//*[@role='img']";
+    private static final String TILE_VALUE_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//div[@class='value']";
+    //private static final String TILE_VALUE_XPATH = ".//div[text()='%s']/ancestor::div[@class='ant-card-body']//div[@class='value']";
+    private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
+    //private static final String TILE_HAMBURGER_XPATH = "//div[text()='%s']/ancestor::div[@class='ant-card-body']//*[@role='img']";
     private static final String MODAL_CONTENT_XPATH = "//span[contains(text(),'%s')]//ancestor::div//*[@class='ant-modal-content']";
-    private static final String MODAL_TABLE_FILTER_XPATH = "//div[text()='%s']/parent::div[@class='th']//input";
+    private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
+    //private static final String MODAL_TABLE_FILTER_XPATH = "//div[text()='%s']/parent::div[@class='th']//input";
     private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
     private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
     private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
@@ -69,6 +73,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[text()='Route ID']/following-sibling::div")
     private PageElement routeManifestRouteId;
 
+    @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
+    private List<PageElement> modalTableColumns;
 
     public void switchToStationHomeFrame() {
         getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -128,6 +134,23 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         }
     }
 
+    public double getDollarValueFromTile(String tileName) {
+        try {
+            String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
+            waitWhilePageIsLoading();
+            if (pageFrame.size() > 0) {
+                switchToStationHomeFrame();
+            }
+            waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+            String dollarAmount = tile.getText().trim().replaceAll("\\$|\\,","");
+            double dollarValue = Double.parseDouble(dollarAmount);
+            return dollarValue;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
     public void openModalPopup(String modalTitle, String tileName) {
         waitWhilePageIsLoading();
         String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
@@ -208,6 +231,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 afterOrder == (beforeOrder + delta));
     }
 
+    public void validateTileValueMatches(double beforeOrder, double afterOrder, double delta) {
+        Assert.assertTrue("Assert that tile value after order equals the sum of before order count and # of order placed ",
+            afterOrder == (beforeOrder + delta));
+    }
+
     public void verifyTableIsDisplayedInModal(String tableName) {
         String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
         List<WebElement> modalTables = getWebDriver().findElements(By.xpath(tableXpath));
@@ -225,9 +253,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         Assert.assertTrue(f("Assert that the table: %s has all columns as expected", tableName),
                 actualColumns.containsAll(expectedColumns));
     }
-
-    @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
-    private List<PageElement> modalTableColumns;
 
     public void verifyColumnsInTableDisplayed(List<String> expectedColumns) {
         List<String> actualColumns = new ArrayList<String>();
@@ -385,5 +410,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             tabContent.put(rowName, rowValue);
         }
         return tabContent;
+    }
+
+    @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+    private List<PageElement> columnNames;
+
+    @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+    private List<PageElement> columnValues;
+
+    public Map<String, String> getResultGridContent() {
+        Map<String,String> gridContent = new HashMap<String, String>();
+        String columnName, columnValue;
+        pause3s();
+        for(int row = 0; row < columnNames.size(); row++){
+            scrollIntoView(columnNames.get(row).getWebElement());
+            columnName = columnNames.get(row).getText();
+            columnValue = columnValues.get(row).getText();
+            gridContent.put(columnName, columnValue);
+        }
+        return gridContent;
     }
 }

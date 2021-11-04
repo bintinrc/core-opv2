@@ -75,6 +75,64 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
+
+    @When("get the dollar amount from the tile: {string}")
+    public void get_the_dollar_amount_from_the_tile(String tileName) {
+        double beforeOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.toUpperCase().trim())){
+            put(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB, beforeOrder);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.toUpperCase().trim())){
+            put(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB, beforeOrder);
+        }
+    }
+
+    @Then("verifies that the dollar amount in tile: {string} has increased by {double}")
+    public void verifies_that_the_dollar_amount_in_tile_has_increased_by(String tileName, Double deltaDollar) {
+        String dollarValue = "";
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB);
+        }
+        dollarValue = dollarValue.replaceAll("\\$|\\,","");
+        double beforeOrder = Double.parseDouble(dollarValue);
+        double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
+    }
+
+    @Then("verifies that the dollar amount in tile: {string} has decreased by {double}")
+    public void verifies_that_the_dollar_amount_in_tile_has_decreased_by(String tileName, Double deltaDollar) {
+        deltaDollar = -deltaDollar;
+        String dollarValue = "";
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB);
+        }
+        dollarValue = dollarValue.replaceAll("\\$|\\,","");
+        double beforeOrder = Double.parseDouble(dollarValue);
+        double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
+    }
+
+    @Then("verifies that the dollar amount in tile: {string} has remained un-changed")
+    public void verifies_that_the_dollar_amount_in_tile_has_remained_un_changed(String tileName) {
+        String dollarValue = "";
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB);
+        }
+        dollarValue = dollarValue.replaceAll("\\$|\\,","");
+        double beforeOrder = Double.parseDouble(dollarValue);
+        double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0.0);
+    }
+
     @Then("verifies that the count in tile: {string} has remained un-changed")
     public void verifies_that_the_count_in_tile_has_remained_un_changed(String tileName) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
@@ -244,6 +302,22 @@ public class StationManagementHomeSteps extends AbstractSteps {
         });
         Assert.assertTrue(f("Assert that number of parcel count is increased for the size %s",size),
                 asserts.get());
+    }
+
+
+    @Then("verifies that the following details are displayed on the modal")
+    public void verifies_that_the_following_details_are_displayed_on_the_modal(Map<String,String> results) {
+        Map<String, String> expectedResults = resolveKeyValues(results);
+        Map<String, String> actualResults = stationManagementHomePage.getResultGridContent();
+        Assert.assertTrue("Assert that the result grid contains results",
+            actualResults.size() > 0);
+        expectedResults.forEach((key, value) -> {
+            if(key.startsWith("COD")){
+                actualResults.put(key,actualResults.get(key).replaceAll(",",""));
+            }
+            Assert.assertTrue("Assert that the result grid contains all expected column values",
+            value.contentEquals(actualResults.get(key)));
+        });
     }
 
 }

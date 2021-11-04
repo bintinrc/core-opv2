@@ -1,13 +1,19 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvCountry;
+import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.operator_v2.model.StationDetailsTabInfo;
+import co.nvqa.operator_v2.model.StationSummaryTabInfo;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -27,6 +33,10 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
+  public final static String SUMMARY_TAB = "SUMMARY";
+  public final static String DETAILS_TAB = "DETAILS";
+  public static final String CSV_DETAILS_FILE_DOWNLOAD_PATTERN ="station-cod-report-details.csv";
+  public static final String CSV_SUMMARY_FILE_DOWNLOAD_PATTERN ="station-cod-report-summary.csv";
   private static final String STATION_COD_REPORT_BUTTON_XPATH = "//button[@disabled]//*[text()='%s']";
   private static final String STATION_COD_REPORT_LABELS_XPATH = "//div[@class='nv-filter-container']//div[@class='ant-col']//div[contains(text(),'%s')]";
   private static final String STATION_COD_REPORT_COMBOBOX_XPATH = "//div[text()='%s']//ancestor::div[@class='ant-row-flex']//div[@role='combobox']";
@@ -34,7 +44,6 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   private static final String STATION_COD_COLUMN_VALUE_XPATH = "//div[@class='cell-wrapper']";
   private static final String STATION_COD_TABLE_FILTER_BY_COLUMN_NAME_XPATH = "//div[contains(@class,'th')][.//*[.='%s']]//input";
   private static final String STATION_COD_SUMMARY_ROW_BY_ROUTE_ID_XPATH = "//div[@role='row'][.//a[.='%s']]";
-
 
   @FindAll(@FindBy(xpath = "//iframe"))
   private List<PageElement> pageFrame;
@@ -60,6 +69,17 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@*='summary-button']")
   public PageElement summaryTab;
 
+  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+  private List<PageElement> columnNames;
+
+  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+  private List<PageElement> columnValues;
+
+  @FindBy(css = "div.cod-summary div.ant-col:nth-child(1)")
+  private List<PageElement> summaryColumns;
+
+  @FindBy(xpath = "//button//span[text()='Download CSV']")
+  private PageElement downloadCSV;
 
   private void switchToStationCODReportFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -162,12 +182,6 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     }
   }
 
-  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
-  private List<PageElement> columnNames;
-
-  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
-  private List<PageElement> columnValues;
-
   public Map<String, String> getResultGridContent() {
     Map<String,String> gridContent = new HashMap<String, String>();
     String columnName, columnValue;
@@ -228,9 +242,6 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     Assert.assertTrue("Assert that the cash collected has separators, comma and dot", expectedTotal.contentEquals(actualTotal));
   }
 
-  @FindBy(css = "div.cod-summary div.ant-col:nth-child(1)")
-  private List<PageElement> summaryColumns;
-
   public void verifyColumnsInCashCollectedSummary(List<String> expectedColumns) {
     List<String> actualColumns = new ArrayList<String>();
     summaryColumns.forEach((tableColumn) -> actualColumns.add(tableColumn.getText().trim()));
@@ -246,6 +257,36 @@ public class StationCODReportPage extends OperatorV2SimplePage {
       codAmount = codAmount.replaceAll(",", "~").replaceAll("\\.",",").replaceAll("~",".");
     }
     return codAmount;
+  }
+
+  public void downloadReportInCSVFormat(){
+    downloadCSV.click();
+  }
+
+  public Map<String, Object> getContentFromDownloadedCSV(String tab){
+    String actualDetailsJson = "", fileName = "", pathName = "";
+    downloadReportInCSVFormat();
+    if(tab.toUpperCase().contentEquals(SUMMARY_TAB)){
+      fileName = getLatestDownloadedFilename(CSV_SUMMARY_FILE_DOWNLOAD_PATTERN);
+      verifyFileDownloadedSuccessfully(fileName);
+      pathName = StandardTestConstants.TEMP_DIR + fileName;
+      List<StationSummaryTabInfo> actualDetails = StationSummaryTabInfo
+          .fromCsvFile(StationSummaryTabInfo.class, pathName, true);
+      Assert.assertTrue("Assert that the number of records in CSV is greater than 0", actualDetails.size() > 0);
+      actualDetailsJson = JsonUtils.toJson(actualDetails.get(actualDetails.size()-1));
+    }
+    if(tab.toUpperCase().contentEquals(DETAILS_TAB)){
+      fileName = getLatestDownloadedFilename(CSV_DETAILS_FILE_DOWNLOAD_PATTERN);
+      verifyFileDownloadedSuccessfully(fileName);
+      pathName = StandardTestConstants.TEMP_DIR + fileName;
+      List<StationDetailsTabInfo> actualDetails = StationDetailsTabInfo
+          .fromCsvFile(StationDetailsTabInfo.class, pathName, true);
+      Assert.assertTrue("Assert that the number of records in CSV is greater than 0", actualDetails.size() > 0);
+      actualDetailsJson = JsonUtils.toJson(actualDetails.get(0));
+    }
+    FileUtils.deleteQuietly(new File(pathName));
+    Map<String, Object> actualDetailsMap = JsonUtils.fromJsonToMap(actualDetailsJson);
+    return actualDetailsMap;
   }
 
 }
