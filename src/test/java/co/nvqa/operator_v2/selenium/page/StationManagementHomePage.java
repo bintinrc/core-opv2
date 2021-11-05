@@ -233,12 +233,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void validateTileValueMatches(int beforeOrder, int afterOrder, int delta) {
-        Assert.assertTrue(f("Assert that actual tile value: %s matches with expected tile value: %s", afterOrder, (beforeOrder + delta)),
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, beforeOrder, delta),
             afterOrder == (beforeOrder + delta));
     }
 
     public void validateTileValueMatches(double beforeOrder, double afterOrder, double delta) {
-        Assert.assertTrue(f("Assert that actual tile value: %s matches with expected tile value: %s", afterOrder, (beforeOrder + delta)),
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, beforeOrder, delta),
             afterOrder == (beforeOrder + delta));
     }
 
