@@ -31,6 +31,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
 
   public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
   public static final String TICKET_TYPE_MISSING = "MISSING";
+  public static final String TICKET_TYPE_PARCEL_ON_HOLD = "PARCEL ON HOLD";
   public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
   public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
   public static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
@@ -130,6 +131,17 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
+        break;
+      }
+      case TICKET_TYPE_PARCEL_ON_HOLD: {
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.orderOutcome
+            .searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.exceptionReason.setValue(recoveryTicket.getExceptionReason());
+        pause3s();
       }
     }
 

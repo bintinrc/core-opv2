@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @happy-path
+@OperatorV2 @Core @Routing @RouteLogs @happy-path @CWF
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -10,7 +10,7 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs V2
+    And Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -42,7 +42,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs V2
+    When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -74,7 +74,7 @@ Feature: Route Logs
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -86,7 +86,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create a Single Route from Route Logs Page (uid:31070e4b-b30d-4323-8ea0-96be44488282)
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd} |
       | tags       | {route-tag-name}                 |
@@ -119,7 +119,7 @@ Feature: Route Logs
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    Given Operator go to menu Routing -> Route Logs V2
+    Given Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |

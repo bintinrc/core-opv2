@@ -759,6 +759,8 @@ public class RouteInboundSteps extends AbstractSteps {
   @Then("^Operator verify 'Money to collect' value is \"(.+)\" on Route Inbound page$")
   public void operatorVerifyMoneyToCollectValueOnRouteInboundPage(String expectedValue) {
     String actualValue = routeInboundPage.getMoneyToCollectValue();
+    if(StringUtils.isNumeric(expectedValue))
+       expectedValue = f("%,d",Integer.parseInt(expectedValue));
     Assertions.assertEquals(expectedValue, actualValue, "Money to collect value");
   }
 
@@ -852,5 +854,15 @@ public class RouteInboundSteps extends AbstractSteps {
     routeId = resolveValue(routeId);
     routeInboundPage.endSession.clickAndWaitUntilDone();
     routeInboundPage.waitUntilVisibilityOfToast("Inbound completed for route " + routeId);
+  }
+
+
+  @Then("Operator ends session incompletely for route {string} with reason as {string}")
+  public void operator_ends_session_incompletely_for_route_with_reason_as(String routeId, String reason) {
+    routeId = resolveValue(routeId);
+    routeInboundPage.endSession.clickAndWaitUntilDone();
+    routeInboundPage.reason.selectValue(reason);
+    routeInboundPage.submit.click();
+    routeInboundPage.waitUntilVisibilityOfToast("Inbound updated for route " + routeId);
   }
 }

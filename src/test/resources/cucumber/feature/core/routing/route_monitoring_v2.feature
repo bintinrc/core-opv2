@@ -912,6 +912,179 @@ Feature: Route Monitoring
       | Valid Fail   | 8                   | 1              | 0                | uid:795339f1-f3db-4417-9c90-5b712a22adf9 |
       | Invalid Fail | 9                   | 0              | 1                | uid:eef28170-195e-45a1-97d7-1e99970ad1eb |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Reservation
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalWaypoint | 1                      |
+      | pendingCount  | 1                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Reservation From Route
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-legacy-id}           |
+    And Operator removes the route from the created reservation
+    And DB Operator verifies "{KEY_CREATED_RESERVATION.waypointId}" waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalWaypoint | 0                      |
+      | pendingCount  | 0                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery Transactions (uid:7ee66a53-0dc8-4b11-90de-88add722887b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "+6595557073 ","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator get order details
+    And API Operator gets "Delivery" transaction waypoint ids of created orders
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies that each "Delivery" transaction of created orders has the same waypoint_id
+    And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels  | 2                      |
+      | totalWaypoint | 1                      |
+      | pendingCount  | 1                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Pickup Transactions (uid:a2b915b0-e821-4d5b-8808-bebf6f69b40f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "+6595557073 ","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator get order details
+    And API Operator gets "Pickup" transaction waypoint ids of created orders
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies that each "Pickup" transaction of created orders has the same waypoint_id
+    And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels  | 2                      |
+      | totalWaypoint | 1                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery & Pickup Transactions (uid:5bddde45-bde6-403a-90dc-35c0cc0362ba)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "+6595557073 ","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "+6595557073 ","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcels to the route using data below:
+      | orderId                           | addParcelToRouteRequest |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} | { "type":"DD" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} | { "type":"DD" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | { "type":"PP" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"PP" }         |
+    And API Operator get order details
+    And API Operator gets "Delivery" transaction waypoint ids of created orders
+    And API Operator gets "Pickup" transaction waypoint ids of created orders
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies that each "Delivery" transaction of orders has the same waypoint_id:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    And API Operator verifies that each "Pickup" transaction of orders has the same waypoint_id:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels  | 4                      |
+      | totalWaypoint | 1                      |
+      | pendingCount  | 1                      |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
