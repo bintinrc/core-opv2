@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * @author Veera N
@@ -209,6 +210,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         });
     }
 
+    public void waitUntilTileValueMatches(String tileName, int expected){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),30);
+        wdWait.until(driver -> {
+            driver.navigate().refresh();
+            int actual = getNumberFromTile(tileName);
+            return (actual == expected) ? true : false;
+        });
+    }
+
+    public void waitUntilTileDollarValueMatches(String tileName, double expected){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),30);
+        wdWait.until(driver -> {
+            driver.navigate().refresh();
+            double actual = getDollarValueFromTile(tileName);
+            return (actual == expected) ? true : false;
+        });
+    }
+
     @FindBy(css = "div.ant-notification-notice-message")
     private PageElement toastMessage;
 
@@ -233,12 +252,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void validateTileValueMatches(int beforeOrder, int afterOrder, int delta) {
-        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, beforeOrder, delta),
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, delta, beforeOrder),
             afterOrder == (beforeOrder + delta));
     }
 
     public void validateTileValueMatches(double beforeOrder, double afterOrder, double delta) {
-        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, beforeOrder, delta),
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, delta, beforeOrder),
             afterOrder == (beforeOrder + delta));
     }
 

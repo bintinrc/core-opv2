@@ -71,6 +71,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void verifies_that_the_count_in_tile_has_increased_by(String tileName, Integer totOrder) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -78,6 +80,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @When("get the dollar amount from the tile: {string}")
     public void get_the_dollar_amount_from_the_tile(String tileName) {
         double beforeOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
         if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.toUpperCase().trim())){
             put(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB, beforeOrder);
         }
@@ -98,6 +101,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         dollarValue = dollarValue.replaceAll("\\$|\\,","");
         double beforeOrder = Double.parseDouble(dollarValue);
         double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, (beforeOrder+deltaDollar));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
     }
 
@@ -114,6 +119,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         dollarValue = dollarValue.replaceAll("\\$|\\,","");
         double beforeOrder = Double.parseDouble(dollarValue);
         double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, (beforeOrder+deltaDollar));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
     }
 
@@ -129,6 +136,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         dollarValue = dollarValue.replaceAll("\\$|\\,","");
         double beforeOrder = Double.parseDouble(dollarValue);
         double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, beforeOrder);
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0.0);
     }
 
@@ -136,6 +145,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void verifies_that_the_count_in_tile_has_remained_un_changed(String tileName) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, beforeOrder);
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
     }
 
@@ -144,11 +155,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
         totOrder = -totOrder;
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
     @When("get the count from the tile: {string}")
     public void get_the_count_from_the_tile(String tileName) {
+        takesScreenshot();
         int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
         put(KEY_NUMBER_OF_PARCELS_IN_HUB, beforeOrder);
     }
