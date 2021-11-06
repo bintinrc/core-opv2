@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
@@ -93,7 +94,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         waitWhilePageIsLoading();
     }
 
-
     public void selectHubAndProceed(String hubName, StationLanguage.HubSelectionText language) {
         String langDropdownText = "";
         if (pageFrame.size() > 0) {
@@ -126,12 +126,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 switchToStationHomeFrame();
             }
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
             int actualCount = Integer.parseInt(tile.getText().replace(",","").trim());
             return actualCount;
         } catch (Exception e) {
-            e.printStackTrace();
-            return 100;
+            NvLogger.error(e.getMessage());
+            return 0;
         }
     }
 
@@ -143,12 +144,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 switchToStationHomeFrame();
             }
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
             String dollarAmount = tile.getText().trim().replaceAll("\\$|\\,","");
             double dollarValue = Double.parseDouble(dollarAmount);
             return dollarValue;
         } catch (Exception e) {
-            e.printStackTrace();
+            NvLogger.error(e.getMessage());
             return 0;
         }
     }
@@ -213,7 +215,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     public void waitUntilTileValueMatches(String tileName, int expected){
         WebDriverWait wdWait = new WebDriverWait(getWebDriver(),30);
         wdWait.until(driver -> {
+            NvLogger.info("Refreshing the page to reload the tile value...");
             driver.navigate().refresh();
+            waitUntilPageLoaded();
             int actual = getNumberFromTile(tileName);
             return (actual == expected) ? true : false;
         });
@@ -222,7 +226,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     public void waitUntilTileDollarValueMatches(String tileName, double expected){
         WebDriverWait wdWait = new WebDriverWait(getWebDriver(),30);
         wdWait.until(driver -> {
+            NvLogger.info("Refreshing the page to reload the tile value...");
             driver.navigate().refresh();
+            waitUntilPageLoaded();
             double actual = getDollarValueFromTile(tileName);
             return (actual == expected) ? true : false;
         });
