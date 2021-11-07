@@ -308,7 +308,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             }
         }
         waitWhilePageIsLoading();
-        Assert.assertTrue("Assert that the search has results as expected after applying filters",
+        Assert.assertTrue(f("Assert that the search should have %s records as expected after applying filters", resultsCount),
                 results.size() == resultsCount);
     }
 

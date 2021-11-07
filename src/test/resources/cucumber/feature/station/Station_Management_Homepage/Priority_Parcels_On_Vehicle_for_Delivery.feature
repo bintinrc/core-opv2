@@ -7,7 +7,7 @@ Feature: Priority Parcels On Vehicle for Delivery
 
   Scenario Outline: View Priority Parcel on Vehicle for Delivery (uid:bd22c933-b02b-4302-b086-9336148dc9a8)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "<HubName>" and proceed
     And get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -16,10 +16,10 @@ Feature: Priority Parcels On Vehicle for Delivery
       | orderTag | 5570 |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-1}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -34,7 +34,7 @@ Feature: Priority Parcels On Vehicle for Delivery
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "<HubName>" and proceed
     And verifies that the count in tile: "<TileName>" has increased by 1
     And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And verifies that a table is displayed with following columns:
@@ -51,8 +51,8 @@ Feature: Priority Parcels On Vehicle for Delivery
     And reloads operator portal to reset the test state
 
     Examples:
-      | TileName                                 | ModalName                   |
-      | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
+      | HubName      | HubId      | TileName                                 | ModalName                   |
+      | {hub-name-5} | {hub-id-5} | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
   Scenario Outline: Number of Priority Parcel on Vehicle for Delivery is Decreasing After Parcel Completed (uid:01b34681-796b-432a-af31-33fb8c2cf930)
     When API Shipper create V4 order using data below:
@@ -62,10 +62,10 @@ Feature: Priority Parcels On Vehicle for Delivery
       | orderTag | 5570 |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-1}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -80,7 +80,7 @@ Feature: Priority Parcels On Vehicle for Delivery
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "<HubName>" and proceed
     And get the count from the tile: "<TileName>"
     And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And searches for the orders in modal pop-up by applying the following filters:
@@ -89,9 +89,9 @@ Feature: Priority Parcels On Vehicle for Delivery
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
-    Then Operator verify the order completed successfully on Edit Order page
+    And Operator verify the order completed successfully on Edit Order page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-1}" and proceed
+    And Operator selects the hub as "<HubName>" and proceed
     And verifies that the count in tile: "<TileName>" has decreased by 1
     And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And verifies that a table is displayed with following columns:
@@ -106,8 +106,8 @@ Feature: Priority Parcels On Vehicle for Delivery
     And reloads operator portal to reset the test state
 
     Examples:
-      | TileName                                 | ModalName                   |
-      | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
+      | HubName      | HubId      | TileName                                 | ModalName                   |
+      | {hub-name-5} | {hub-id-5} | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
