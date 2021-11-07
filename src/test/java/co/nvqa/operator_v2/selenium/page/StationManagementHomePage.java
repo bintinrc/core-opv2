@@ -48,6 +48,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         super(webDriver);
     }
 
+    @FindBy(css = "div.nv-h4")
+    private PageElement pageHeader;
+
     @FindBy(id = "hint-link")
     public PageElement referParentsProfileLink;
 
@@ -77,6 +80,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
     private List<PageElement> modalTableColumns;
+
+    @FindBy(css = "div.value svg")
+    private PageElement tileValueLoadIcon;
 
     public void switchToStationHomeFrame() {
         getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -125,6 +131,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             if (pageFrame.size() > 0) {
                 switchToStationHomeFrame();
             }
+            waitUntilInvisibilityOfElementLocated(tileValueLoadIcon.getWebElement());
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
             pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
@@ -156,6 +163,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
     public void openModalPopup(String modalTitle, String tileName) {
         waitWhilePageIsLoading();
+        moveToElement(pageHeader.getWebElement());
+        pause3s();
         String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
         String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
         WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
@@ -390,9 +399,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         Assert.assertTrue(f("Assert that the header: %s has all navigation links as expected", headerName),
                 actualNavLinks.containsAll(expectedNavLinks));
     }
-
-    @FindBy(css = "div.nv-h4")
-    private PageElement pageHeader;
 
     public void verifyPageOpenedOnClickingHyperlink(String linkName, String expectedPageName) {
         WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
