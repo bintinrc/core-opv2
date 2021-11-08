@@ -80,13 +80,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @When("get the dollar amount from the tile: {string}")
     public void get_the_dollar_amount_from_the_tile(String tileName) {
         double beforeOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
-        takesScreenshot();
         if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.toUpperCase().trim())){
             put(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB, beforeOrder);
         }
         if("COD COLLECTED FROM COURIERS".equals(tileName.toUpperCase().trim())){
             put(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB, beforeOrder);
         }
+        takesScreenshot();
     }
 
     @Then("verifies that the dollar amount in tile: {string} has increased by {double}")
@@ -162,9 +162,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
 
     @When("get the count from the tile: {string}")
     public void get_the_count_from_the_tile(String tileName) {
-        takesScreenshot();
         int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
         put(KEY_NUMBER_OF_PARCELS_IN_HUB, beforeOrder);
+        takesScreenshot();
     }
 
     @When("opens modal pop-up: {string} through hamburger button for the tile: {string}")
@@ -182,6 +182,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("verifies that a table is displayed with following columns:")
     public void verifies_that_a_table_is_displayed_with_following_columns(DataTable columnNames) {
         List<String> expectedColumns = columnNames.asList();
+        takesScreenshot();
         stationManagementHomePage.verifyColumnsInTableDisplayed(expectedColumns);
     }
 
