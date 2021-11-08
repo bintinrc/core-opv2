@@ -163,11 +163,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
     public void openModalPopup(String modalTitle, String tileName) {
         waitWhilePageIsLoading();
-        moveToElement(pageHeader.getWebElement());
         pause3s();
         String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
         String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
         WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
+        moveToElement(hamburger);
         hamburger.click();
         waitWhilePageIsLoading();
         WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
