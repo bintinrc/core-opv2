@@ -8,9 +8,9 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +42,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String createdDate = CREATED_DATE_SDF.format(new Date());
     String name = "Dummy Script #" + dateUniqueString;
     String description = f(
-        "This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".",
-        createdDate, scenarioName);
+        "This script is created for testing purpose only. Ignore this script. Created at %s.",
+        createdDate);
     NvLogger.infof("Created Pricing Script Name :" + name);
 
     Script script = new Script();

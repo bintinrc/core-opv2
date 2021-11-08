@@ -190,13 +190,11 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Order order = get(KEY_ORDER_DETAILS);
     String trackingId = order.getTrackingId();
 
-    List<Transaction> transactions = order.getTransactions();
+    Transaction transaction = StringUtils.equalsIgnoreCase(transactionType, "delivery") ?
+        order.getLastDeliveryTransaction() :
+        order.getLastPickupTransaction();
 
-    Optional<Transaction> transactionOptional = transactions.stream()
-        .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst();
-
-    if (transactionOptional.isPresent()) {
-      Transaction transaction = transactionOptional.get();
+    if (transaction != null) {
       Long waypointId = transaction.getWaypointId();
       Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
       put(KEY_WAYPOINT_ID, waypointId);

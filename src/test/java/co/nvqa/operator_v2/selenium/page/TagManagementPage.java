@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Tag;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,12 +13,12 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class TagManagementPage extends OperatorV2SimplePage {
+public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
 
-  @FindBy(name = "container.tag-management.create-tag")
-  public NvIconTextButton createTag;
+  @FindBy(xpath = "//button[.='Create Tag']")
+  public Button createTag;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public AddTagDialog addTagDialog;
 
   public TagsTable tagsTable;
@@ -28,26 +28,26 @@ public class TagManagementPage extends OperatorV2SimplePage {
     tagsTable = new TagsTable(webDriver);
   }
 
-  public static class AddTagDialog extends MdDialog {
+  public static class AddTagDialog extends AntModal {
 
-    @FindBy(css = "[id^='tag-name']")
+    @FindBy(css = "input[placeholder='Tag Name']")
     public TextBox tagName;
 
-    @FindBy(id = "description")
+    @FindBy(css = "input[placeholder='Description']")
     public TextBox description;
 
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
+    @FindBy(xpath = ".//button[.='Create Tag']")
+    public Button submit;
 
-    @FindBy(name = "Submit Changes")
-    public NvButtonSave submitChanges;
+    @FindBy(xpath = ".//button[.='Submit Changes']")
+    public Button submitChanges;
 
     public AddTagDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class TagsTable extends MdVirtualRepeatTable<Tag> {
+  public static class TagsTable extends AntTableV2<Tag> {
 
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_EDIT = "Edit";
@@ -59,8 +59,7 @@ public class TagManagementPage extends OperatorV2SimplePage {
           .put("description", "description")
           .build()
       );
-      setMdVirtualRepeat("tag in getTableData()");
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "commons.edit"));
+      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "edit"));
       setEntityClass(Tag.class);
     }
   }
