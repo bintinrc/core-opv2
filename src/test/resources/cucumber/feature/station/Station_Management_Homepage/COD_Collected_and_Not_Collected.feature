@@ -1,4 +1,4 @@
-@StationManagement @StationHomePage
+@StationManagement @COD
 Feature: COD Collected and Not Collected
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,8 @@ Feature: COD Collected and Not Collected
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Driver Collects x COD but Not Route Inbound x (uid:009c3453-5bed-446a-a8ba-d684a7f9ab93)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And get the dollar amount from the tile: "<TileName1>"
     And get the dollar amount from the tile: "<TileName2>"
@@ -15,7 +16,7 @@ Feature: COD Collected and Not Collected
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -50,14 +51,14 @@ Feature: COD Collected and Not Collected
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODAmount>            |
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
-      | {hub-id-1} | {hub-name-1} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
+      | {hub-id-4} | {hub-name-4} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
   Scenario Outline: Driver Collects x COD and Route Inbound y (x > y) (uid:5fb4c4d3-638d-4c28-8138-032d14fe75e6)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
@@ -65,7 +66,7 @@ Feature: COD Collected and Not Collected
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -91,7 +92,7 @@ Feature: COD Collected and Not Collected
     And get the dollar amount from the tile: "<TileName2>"
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name-1}                    |
+      | hubName      | <HubName>                       |
       | fetchBy      | FETCH_BY_TRACKING_ID            |
       | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator click 'Continue To Inbound' button on Route Inbound page
@@ -119,14 +120,14 @@ Feature: COD Collected and Not Collected
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODBalance>           |
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
-      | {hub-id-1} | {hub-name-1} | 2500      | 1500         | 1000       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
+      | {hub-id-4} | {hub-name-4} | 2500      | 1500         | 1000       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
   Scenario Outline: Driver Collects x COD and Route Inbound y (y > x) (uid:2ed21c73-2097-4afd-b29f-edb5a7d17514)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
@@ -134,7 +135,7 @@ Feature: COD Collected and Not Collected
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -160,7 +161,7 @@ Feature: COD Collected and Not Collected
     And get the dollar amount from the tile: "<TileName2>"
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name-1}                    |
+      | hubName      | <HubName>                       |
       | fetchBy      | FETCH_BY_TRACKING_ID            |
       | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator click 'Continue To Inbound' button on Route Inbound page
@@ -187,15 +188,15 @@ Feature: COD Collected and Not Collected
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODBalance>           |
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
-      | {hub-id-1} | {hub-name-1} | 2500      | 3000         | -500       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
+      | {hub-id-4} | {hub-name-4} | 2500      | 3000         | -500       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
 
   Scenario Outline: Driver Collects x COD and Route Inbound x (uid:093c7728-d38e-42d1-9e62-1db53fab1585)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
@@ -203,7 +204,7 @@ Feature: COD Collected and Not Collected
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -229,7 +230,7 @@ Feature: COD Collected and Not Collected
     And get the dollar amount from the tile: "<TileName2>"
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name-1}                    |
+      | hubName      | <HubName>                       |
       | fetchBy      | FETCH_BY_TRACKING_ID            |
       | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator click 'Continue To Inbound' button on Route Inbound page
@@ -257,14 +258,14 @@ Feature: COD Collected and Not Collected
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | Completed              |
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
-      | {hub-id-1} | {hub-name-1} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
+      | {hub-id-4} | {hub-name-4} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
   Scenario Outline: View Route Manifest Page (uid:ec35f255-6e77-4eaf-a457-7dedc4366690)
-    Given Operator go to menu Station Management Tool -> Station Management Homepage
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And get the dollar amount from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
@@ -272,7 +273,7 @@ Feature: COD Collected and Not Collected
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -303,11 +304,10 @@ Feature: COD Collected and Not Collected
       | Route ID               |
       | {KEY_CREATED_ROUTE_ID} |
     And verifies that Route Manifest page is opened on clicking route id
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TileName                            | ModalName                           |
-      | {hub-id-1} | {hub-name-1} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers |
+      | {hub-id-4} | {hub-name-4} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

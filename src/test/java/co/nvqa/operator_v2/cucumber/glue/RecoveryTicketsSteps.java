@@ -194,7 +194,6 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicket.setOrderOutcome(orderOutcome);
     recoveryTicket.setAssignTo(assignTo);
     recoveryTicket.setEnterNewInstruction(enterNewInstruction);
-
     recoveryTicketsPage.editTicketSettings(recoveryTicket);
     pause5s();
   }
