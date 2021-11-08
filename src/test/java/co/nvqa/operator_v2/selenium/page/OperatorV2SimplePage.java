@@ -214,7 +214,8 @@ public class OperatorV2SimplePage extends SimplePage {
 
   public void waitUntilVisibilityOfToastReact(String containsMessage) {
     waitUntilVisibilityOfElementLocated(
-        f("//div[contains(@class,'notification-notice')]//div[contains(text(),'%s')]", containsMessage));
+        f("//div[contains(@class,'notification-notice')]//div[contains(text(),'%s')]",
+            containsMessage));
   }
 
   public Map<String, String> waitUntilVisibilityAndGetErrorToastData() {
@@ -1256,6 +1257,34 @@ public class OperatorV2SimplePage extends SimplePage {
   public void switchToOtherWindowAndWaitWhileLoading(String expectedUrlEndWith) {
     retryIfExpectedExceptionOccurred(() -> switchToOtherWindow(expectedUrlEndWith), 4000,
         NvTestRuntimeException.class);
+  }
+
+  public void switchToOtherWindowUrlContains(String expectedUrlContains) {
+    waitUntilNewWindowOrTabOpened();
+    String currentWindowHandle = getWebDriver().getWindowHandle();
+    boolean windowFound = false;
+    int attempts = 0;
+
+    do {
+      pause1s();
+      Set<String> windowHandles = getWebDriver().getWindowHandles();
+      for (String windowHandle : windowHandles) {
+        getWebDriver().switchTo().window(windowHandle);
+        String currentWindowUrl = getCurrentUrl();
+
+        if (currentWindowUrl.contains(expectedUrlContains)) {
+          windowFound = true;
+          break;
+        }
+      }
+      attempts++;
+    } while (!windowFound && attempts <= 5);
+
+    if (!windowFound) {
+      getWebDriver().switchTo().window(currentWindowHandle);
+      throw new NvTestRuntimeException(
+          f("Window with URL end with '%s' not found.", expectedUrlContains));
+    }
   }
 
   public void switchToOtherWindow(String expectedUrlEndWith) {

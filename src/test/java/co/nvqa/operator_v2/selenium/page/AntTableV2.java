@@ -99,6 +99,24 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     return this;
   }
 
+  public void clearColumnFilters() {
+    getColumnLocators().values().forEach(value -> {
+      String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, value);
+      if (StringUtils.isNotBlank(tableLocator)) {
+        xpath = tableLocator + xpath;
+      }
+      String currentValue = getValue(xpath);
+      if (StringUtils.isNotEmpty(currentValue)) {
+        click(xpath);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < currentValue.length(); i++) {
+          sb.append(Keys.BACK_SPACE);
+        }
+        sendKeys(xpath, sb.toString());
+      }
+    });
+  }
+
   public AbstractTable<T> filterByColumn(String columnId, Object value) {
     return filterByColumn(columnId, String.valueOf(value));
   }
