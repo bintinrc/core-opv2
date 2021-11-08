@@ -5,50 +5,6 @@ Feature: Station COD Report
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Change the Language to English and Open Station COD Report (uid:fe2fa1b3-a69a-4751-a312-02ceb0ee3edc)
-    Given Operator opens profile and navigates to settings screen
-    When Operator selects language as "<Language>"
-    And Operator go to menu Station Management Tool -> <PageHeader>
-    Then verifies that the following UI elements are displayed in station cod report page
-      | Transaction End Date |
-      | Hubs                 |
-      | Transaction Type     |
-      | Transaction Status   |
-    And verifies that the following buttons are displayed in disabled state
-      | Clear Selection |
-      | Load Selection  |
-    And chooses start and end date on transaction end date using the following data:
-      | transactionEndDateFrom | {gradle-previous-2-day-dd/MM/yyyy} |
-      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
-    And searches for station cod report by applying following filters:
-      | Hubs      | Transaction Status |
-      | <HubName> | <TransStatus>      |
-    And verifies that tabs - Details and Summary are displayed after the search
-    And verifies that the following columns are displayed under "Details" tab
-      | Route ID                    |
-      | Tracking ID/ Reservation ID |
-      | Hub                         |
-      | Route Date                  |
-      | Transaction End Datetime    |
-      | Transaction Status          |
-      | Granular Status             |
-      | Collected At                |
-      | COD Amount                  |
-      | Shipper Name                |
-      | Driver Name                 |
-      | Driver ID                   |
-    And navigates to summary tab in the result grid
-    And verifies that the following columns are displayed under "Summary" tab
-      | Driver Name |
-      | Hub         |
-      | Route ID    |
-      | COD Amount  |
-    And reloads operator portal to reset the test state
-
-    Examples:
-      | Language | PageHeader         | HubName      | TransStatus   |
-      | English  | Station COD Report | {hub-name-1} | DD - Delivery |
-
   Scenario Outline: Change the Language to Malay and Open Station COD Report (uid:acd850b6-7b12-452c-8bce-74ef61d1696f)
     Given Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"
@@ -91,7 +47,7 @@ Feature: Station COD Report
 
     Examples:
       | Language | PageHeader         | HubName      | TransStatus       |
-      | Malay    | Station COD Report | {hub-name-1} | DD - Penghantaran |
+      | Malay    | Station COD Report | {hub-name-2} | DD - Penghantaran |
 
   Scenario Outline: Change the Language to Indonesia and Open Station COD Report (uid:e925c864-daa1-4a48-b9ba-878ea4f7aea3)
     Given Operator opens profile and navigates to settings screen
@@ -135,7 +91,7 @@ Feature: Station COD Report
 
     Examples:
       | Language   | PageHeader         | HubName      | TransStatus     |
-      | Indonesian | Station COD Report | {hub-name-1} | DD - Pengiriman |
+      | Indonesian | Station COD Report | {hub-name-2} | DD - Pengiriman |
 
   Scenario Outline: Change the Language to Vietnam and Open Station COD Report (uid:a61275bc-d5d3-4e5c-ba05-58c1e8e28118)
     Given Operator opens profile and navigates to settings screen
@@ -179,7 +135,7 @@ Feature: Station COD Report
 
     Examples:
       | Language | PageHeader         | HubName      | TransStatus |
-      | Vietnam  | Station COD Report | {hub-name-1} | Giao hàng   |
+      | Vietnam  | Station COD Report | {hub-name-2} | Giao hàng   |
 
   Scenario Outline: Change the Language to Thai and Open Station COD Report (uid:0630bc6a-9da2-4a3f-be6a-1d27069e3e7a)
     Given Operator opens profile and navigates to settings screen
@@ -223,8 +179,9 @@ Feature: Station COD Report
 
     Examples:
       | Language | PageHeader         | HubName      | TransStatus   |
-      | Thai     | Station COD Report | {hub-name-1} | DD - งานนำส่ง |
+      | Thai     | Station COD Report | {hub-name-2} | DD - งานนำส่ง |
 
+    @Bur
   Scenario Outline: Change the Language to Burmese and Open Station COD Report (uid:d1b77e0f-df8e-47c7-8b91-04eb13b8c4c2)
     Given Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"
@@ -267,7 +224,51 @@ Feature: Station COD Report
 
     Examples:
       | Language | PageHeader         | HubName      | TransStatus                |
-      | Burmese  | Station COD Report | {hub-name-1} | DD - ပစ္စည်းပို့ဆောင်ခြင်း |
+      | Burmese  | Station COD Report | {hub-name-2} | DD - ပစ္စည်းပို့ဆောင်ခြင်း |
+
+  Scenario Outline: Change the Language to English and Open Station COD Report (uid:fe2fa1b3-a69a-4751-a312-02ceb0ee3edc)
+    Given Operator opens profile and navigates to settings screen
+    When Operator selects language as "<Language>"
+    And Operator go to menu Station Management Tool -> <PageHeader>
+    Then verifies that the following UI elements are displayed in station cod report page
+      | Transaction End Date |
+      | Hubs                 |
+      | Transaction Type     |
+      | Transaction Status   |
+    And verifies that the following buttons are displayed in disabled state
+      | Clear Selection |
+      | Load Selection  |
+    And chooses start and end date on transaction end date using the following data:
+      | transactionEndDateFrom | {gradle-previous-2-day-dd/MM/yyyy} |
+      | transactionEndDateTo   | {gradle-current-date-dd/MM/yyyy}   |
+    And searches for station cod report by applying following filters:
+      | Hubs      | Transaction Status |
+      | <HubName> | <TransStatus>      |
+    And verifies that tabs - Details and Summary are displayed after the search
+    And verifies that the following columns are displayed under "Details" tab
+      | Route ID                    |
+      | Tracking ID/ Reservation ID |
+      | Hub                         |
+      | Route Date                  |
+      | Transaction End Datetime    |
+      | Transaction Status          |
+      | Granular Status             |
+      | Collected At                |
+      | COD Amount                  |
+      | Shipper Name                |
+      | Driver Name                 |
+      | Driver ID                   |
+    And navigates to summary tab in the result grid
+    And verifies that the following columns are displayed under "Summary" tab
+      | Driver Name |
+      | Hub         |
+      | Route ID    |
+      | COD Amount  |
+    And reloads operator portal to reset the test state
+
+    Examples:
+      | Language | PageHeader         | HubName      | TransStatus   |
+      | English  | Station COD Report | {hub-name-2} | DD - Delivery |
 
   @default-sg
   Scenario Outline: [SG, MY, TH, PH] View COD Amount in Detail Tab (uid:5acdcfa0-f03b-4f8d-adc7-b4f4c0eff567)
@@ -276,7 +277,7 @@ Feature: Station COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -286,7 +287,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -323,7 +323,7 @@ Feature: Station COD Report
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
-      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
+      | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
   @default-id
   Scenario Outline: [ID, VN] View COD Amount in Detail Tab (uid:f163c350-3f78-4a28-b16f-84c5bc7b33f4)
@@ -342,7 +342,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -388,7 +387,7 @@ Feature: Station COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -398,7 +397,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -436,7 +434,7 @@ Feature: Station COD Report
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
-      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery |
+      | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery |
 
   @default-id
   Scenario Outline: [ID, VN] View COD Collected in Summary Tab (uid:623d8469-1bea-4fdd-a7d7-721683628256)
@@ -455,7 +453,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -502,7 +499,7 @@ Feature: Station COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -512,7 +509,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -549,7 +545,7 @@ Feature: Station COD Report
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
-      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
+      | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
   @default-id
   Scenario Outline: [ID, TH, VN] Transaction End Date Should Match Country's Timezone UTC+7 (uid:31fc432f-6be1-43ab-9764-f520c98920a0)
@@ -568,7 +564,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -607,14 +602,13 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-
   Scenario Outline: View Updated Driver Name (uid:3f3c7bfc-ee27-403d-b613-93a4621ecac0)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
@@ -624,7 +618,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -664,15 +657,16 @@ Feature: Station COD Report
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
-      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery |
+      | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery |
 
+    @download
   Scenario Outline: Download CSV of COD Report Detail (uid:69ca23d3-f0f9-4929-89e9-089321d3b5b7)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -682,7 +676,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -707,7 +700,7 @@ Feature: Station COD Report
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   | TabName |
-      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery | Details |
+      | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery | Details |
 
   Scenario Outline: Download CSV of COD Report Summary (uid:e732bb2b-c198-4406-bc0c-1c34450e7d97)
     Given API Shipper create V4 order using data below:
@@ -715,7 +708,7 @@ Feature: Station COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-1}                    |
+      | hubName    | <HubName>                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -725,7 +718,6 @@ Feature: Station COD Report
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order scan updated
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
@@ -752,7 +744,7 @@ Feature: Station COD Report
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   | TabName |
-      | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery | Summary |
+      | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery | Summary |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
