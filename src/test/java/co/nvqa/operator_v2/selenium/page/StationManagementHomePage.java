@@ -131,7 +131,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             if (pageFrame.size() > 0) {
                 switchToStationHomeFrame();
             }
-            waitUntilInvisibilityOfElementLocated(tileValueLoadIcon.getWebElement());
+            waitUntilTileValueLoads(tileName);
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
             pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
@@ -150,7 +150,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             if (pageFrame.size() > 0) {
                 switchToStationHomeFrame();
             }
-            waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            waitUntilTileValueLoads(tileName);
             pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
             String dollarAmount = tile.getText().trim().replaceAll("\\$|\\,","");
@@ -229,6 +229,22 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             waitUntilPageLoaded();
             int actual = getNumberFromTile(tileName);
             return (actual == expected) ? true : false;
+        });
+    }
+
+    public void waitUntilTileValueLoads(String tileName){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
+        wdWait.until(driver -> {
+            double actualCount = -1;
+            NvLogger.info("Waiting for the tile value to load...");
+            try{
+                WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+                actualCount = Double.parseDouble(tile.getText().replaceAll("\\$|\\,","").trim());
+            }catch(NumberFormatException nfe){
+                actualCount = -1;
+            }
+            return actualCount >= 0;
         });
     }
 
