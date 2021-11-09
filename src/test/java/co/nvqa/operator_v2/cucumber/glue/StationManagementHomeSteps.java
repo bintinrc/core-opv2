@@ -71,6 +71,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void verifies_that_the_count_in_tile_has_increased_by(String tileName, Integer totOrder) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -84,6 +86,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         if("COD COLLECTED FROM COURIERS".equals(tileName.toUpperCase().trim())){
             put(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB, beforeOrder);
         }
+        takesScreenshot();
     }
 
     @Then("verifies that the dollar amount in tile: {string} has increased by {double}")
@@ -98,6 +101,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         dollarValue = dollarValue.replaceAll("\\$|\\,","");
         double beforeOrder = Double.parseDouble(dollarValue);
         double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, (beforeOrder+deltaDollar));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
     }
 
@@ -114,6 +119,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         dollarValue = dollarValue.replaceAll("\\$|\\,","");
         double beforeOrder = Double.parseDouble(dollarValue);
         double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, (beforeOrder+deltaDollar));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
     }
 
@@ -129,6 +136,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         dollarValue = dollarValue.replaceAll("\\$|\\,","");
         double beforeOrder = Double.parseDouble(dollarValue);
         double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, beforeOrder);
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0.0);
     }
 
@@ -136,6 +145,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void verifies_that_the_count_in_tile_has_remained_un_changed(String tileName) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, beforeOrder);
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
     }
 
@@ -144,6 +155,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         totOrder = -totOrder;
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -151,6 +164,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void get_the_count_from_the_tile(String tileName) {
         int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
         put(KEY_NUMBER_OF_PARCELS_IN_HUB, beforeOrder);
+        takesScreenshot();
     }
 
     @When("opens modal pop-up: {string} through hamburger button for the tile: {string}")
@@ -168,6 +182,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("verifies that a table is displayed with following columns:")
     public void verifies_that_a_table_is_displayed_with_following_columns(DataTable columnNames) {
         List<String> expectedColumns = columnNames.asList();
+        takesScreenshot();
         stationManagementHomePage.verifyColumnsInTableDisplayed(expectedColumns);
     }
 

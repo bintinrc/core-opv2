@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * @author Veera N
@@ -45,6 +47,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     public StationManagementHomePage(WebDriver webDriver) {
         super(webDriver);
     }
+
+    @FindBy(css = "div.nv-h4")
+    private PageElement pageHeader;
 
     @FindBy(id = "hint-link")
     public PageElement referParentsProfileLink;
@@ -76,6 +81,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
     private List<PageElement> modalTableColumns;
 
+    @FindBy(css = "div.value svg")
+    private PageElement tileValueLoadIcon;
+
     public void switchToStationHomeFrame() {
         getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
     }
@@ -91,7 +99,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         proceedBtn.click();
         waitWhilePageIsLoading();
     }
-
 
     public void selectHubAndProceed(String hubName, StationLanguage.HubSelectionText language) {
         String langDropdownText = "";
@@ -124,13 +131,15 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             if (pageFrame.size() > 0) {
                 switchToStationHomeFrame();
             }
+            waitUntilTileValueLoads(tileName);
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
             int actualCount = Integer.parseInt(tile.getText().replace(",","").trim());
             return actualCount;
         } catch (Exception e) {
-            e.printStackTrace();
-            return 100;
+            NvLogger.error(e.getMessage());
+            return 0;
         }
     }
 
@@ -141,21 +150,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             if (pageFrame.size() > 0) {
                 switchToStationHomeFrame();
             }
-            waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            waitUntilTileValueLoads(tileName);
+            pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
             String dollarAmount = tile.getText().trim().replaceAll("\\$|\\,","");
             double dollarValue = Double.parseDouble(dollarAmount);
             return dollarValue;
         } catch (Exception e) {
-            e.printStackTrace();
+            NvLogger.error(e.getMessage());
             return 0;
         }
     }
     public void openModalPopup(String modalTitle, String tileName) {
         waitWhilePageIsLoading();
+        pause3s();
         String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
         String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
         WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
+        moveToElement(hamburger);
         hamburger.click();
         waitWhilePageIsLoading();
         WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
@@ -209,6 +221,44 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         });
     }
 
+    public void waitUntilTileValueMatches(String tileName, int expected){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        wdWait.until(driver -> {
+            NvLogger.info("Refreshing the page to reload the tile value...");
+            driver.navigate().refresh();
+            waitUntilPageLoaded();
+            int actual = getNumberFromTile(tileName);
+            return (actual == expected) ? true : false;
+        });
+    }
+
+    public void waitUntilTileValueLoads(String tileName){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
+        wdWait.until(driver -> {
+            double actualCount = -1;
+            NvLogger.info("Waiting for the tile value to load...");
+            try{
+                WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+                actualCount = Double.parseDouble(tile.getText().replaceAll("\\$|\\,","").trim());
+            }catch(NumberFormatException nfe){
+                actualCount = -1;
+            }
+            return actualCount >= 0;
+        });
+    }
+
+    public void waitUntilTileDollarValueMatches(String tileName, double expected){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        wdWait.until(driver -> {
+            NvLogger.info("Refreshing the page to reload the tile value...");
+            driver.navigate().refresh();
+            waitUntilPageLoaded();
+            double actual = getDollarValueFromTile(tileName);
+            return (actual == expected) ? true : false;
+        });
+    }
+
     @FindBy(css = "div.ant-notification-notice-message")
     private PageElement toastMessage;
 
@@ -233,12 +283,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void validateTileValueMatches(int beforeOrder, int afterOrder, int delta) {
-        Assert.assertTrue("Assert that tile value after order equals the sum of before order count and # of order placed ",
-                afterOrder == (beforeOrder + delta));
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, delta, beforeOrder),
+            afterOrder == (beforeOrder + delta));
     }
 
     public void validateTileValueMatches(double beforeOrder, double afterOrder, double delta) {
-        Assert.assertTrue("Assert that tile value after order equals the sum of before order count and # of order placed ",
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, delta, beforeOrder),
             afterOrder == (beforeOrder + delta));
     }
 
@@ -283,7 +333,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             }
         }
         waitWhilePageIsLoading();
-        Assert.assertTrue("Assert that the search has results as expected after applying filters",
+        Assert.assertTrue(f("Assert that the search should have %s records as expected after applying filters", resultsCount),
                 results.size() == resultsCount);
     }
 
@@ -365,9 +415,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         Assert.assertTrue(f("Assert that the header: %s has all navigation links as expected", headerName),
                 actualNavLinks.containsAll(expectedNavLinks));
     }
-
-    @FindBy(css = "div.nv-h4")
-    private PageElement pageHeader;
 
     public void verifyPageOpenedOnClickingHyperlink(String linkName, String expectedPageName) {
         WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
