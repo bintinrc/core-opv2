@@ -37,6 +37,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     String parcelLocation = mapOfData.get("parcelLocation");
     String liability = mapOfData.get("liability");
     String damageDescription = mapOfData.get("damageDescription");
+    String orderOutcome = mapOfData.get("orderOutcome");
     String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
     String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
     String custZendeskId = mapOfData.get("custZendeskId");
@@ -84,6 +85,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicket.setParcelLocation(parcelLocation);
     recoveryTicket.setLiability(liability);
     recoveryTicket.setDamageDescription(damageDescription);
+    recoveryTicket.setOrderOutcome(orderOutcome);
     recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
     recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
     recoveryTicket.setCustZendeskId(custZendeskId);
@@ -173,6 +175,27 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         recoveryTicketsPage.getTextByIdForInputFields("last-instruction").toLowerCase());
     recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
     pause2s();
+  }
+
+  @Then("Operator updates the ticket settings with the following details:")
+  public void updateTicketSettings(Map<String, String> mapOfData) {
+    String ticketStatus = mapOfData.get("ticketStatus");
+    String orderOutcome = mapOfData.get("orderOutcome");
+    String assignTo = mapOfData.get("assignTo");
+    String enterNewInstruction = mapOfData.get("enterNewInstruction");
+
+    if ("GENERATED".equals(enterNewInstruction)) {
+      enterNewInstruction = f("This instruction is created by automation at %s.",
+          CREATED_DATE_SDF.format(new Date()));
+    }
+
+    RecoveryTicket recoveryTicket = new RecoveryTicket();
+    recoveryTicket.setTicketStatus(ticketStatus);
+    recoveryTicket.setOrderOutcome(orderOutcome);
+    recoveryTicket.setAssignTo(assignTo);
+    recoveryTicket.setEnterNewInstruction(enterNewInstruction);
+    recoveryTicketsPage.editTicketSettings(recoveryTicket);
+    pause5s();
   }
 
   @Then("Operator edits the Additional settings with below data and verifies it:")

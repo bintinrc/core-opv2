@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
@@ -72,13 +71,82 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void verifies_that_the_count_in_tile_has_increased_by(String tileName, Integer totOrder) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }
+
+
+    @When("get the dollar amount from the tile: {string}")
+    public void get_the_dollar_amount_from_the_tile(String tileName) {
+        double beforeOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.toUpperCase().trim())){
+            put(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB, beforeOrder);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.toUpperCase().trim())){
+            put(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB, beforeOrder);
+        }
+        takesScreenshot();
+    }
+
+    @Then("verifies that the dollar amount in tile: {string} has increased by {double}")
+    public void verifies_that_the_dollar_amount_in_tile_has_increased_by(String tileName, Double deltaDollar) {
+        String dollarValue = "";
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB);
+        }
+        dollarValue = dollarValue.replaceAll("\\$|\\,","");
+        double beforeOrder = Double.parseDouble(dollarValue);
+        double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, (beforeOrder+deltaDollar));
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
+    }
+
+    @Then("verifies that the dollar amount in tile: {string} has decreased by {double}")
+    public void verifies_that_the_dollar_amount_in_tile_has_decreased_by(String tileName, Double deltaDollar) {
+        deltaDollar = -deltaDollar;
+        String dollarValue = "";
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB);
+        }
+        dollarValue = dollarValue.replaceAll("\\$|\\,","");
+        double beforeOrder = Double.parseDouble(dollarValue);
+        double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, (beforeOrder+deltaDollar));
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, deltaDollar);
+    }
+
+    @Then("verifies that the dollar amount in tile: {string} has remained un-changed")
+    public void verifies_that_the_dollar_amount_in_tile_has_remained_un_changed(String tileName) {
+        String dollarValue = "";
+        if("COD NOT COLLECTED YET FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB);
+        }
+        if("COD COLLECTED FROM COURIERS".equals(tileName.trim().toUpperCase())){
+            dollarValue = getString(KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB);
+        }
+        dollarValue = dollarValue.replaceAll("\\$|\\,","");
+        double beforeOrder = Double.parseDouble(dollarValue);
+        double afterOrder = stationManagementHomePage.getDollarValueFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileDollarValueMatches(tileName, beforeOrder);
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0.0);
     }
 
     @Then("verifies that the count in tile: {string} has remained un-changed")
     public void verifies_that_the_count_in_tile_has_remained_un_changed(String tileName) {
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, beforeOrder);
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
     }
 
@@ -87,6 +155,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         totOrder = -totOrder;
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+        takesScreenshot();
+        stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -94,6 +164,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void get_the_count_from_the_tile(String tileName) {
         int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
         put(KEY_NUMBER_OF_PARCELS_IN_HUB, beforeOrder);
+        takesScreenshot();
     }
 
     @When("opens modal pop-up: {string} through hamburger button for the tile: {string}")
@@ -111,6 +182,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("verifies that a table is displayed with following columns:")
     public void verifies_that_a_table_is_displayed_with_following_columns(DataTable columnNames) {
         List<String> expectedColumns = columnNames.asList();
+        takesScreenshot();
         stationManagementHomePage.verifyColumnsInTableDisplayed(expectedColumns);
     }
 
@@ -149,8 +221,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
 
     @Then("reloads operator portal to reset the test state")
     public void reloads_operator_portal_to_reset_the_test_state() {
-        stationManagementHomePage.reloadOperatorPortal();
+        stationManagementHomePage.loadOperatorPortal();
     }
+
+    @When("Operator loads Operator portal home page")
+    public void operator_loads_Operator_portal_home_page() {
+        stationManagementHomePage.loadOperatorPortal();
+    }
+
 
     @Then("verifies that the toast message {string} is displayed")
     public void verifies_that_the_toast_message_is_displayed(String message) {
@@ -244,6 +322,40 @@ public class StationManagementHomeSteps extends AbstractSteps {
         });
         Assert.assertTrue(f("Assert that number of parcel count is increased for the size %s",size),
                 asserts.get());
+    }
+
+
+    @Then("verifies that the following details are displayed on the modal")
+    public void verifies_that_the_following_details_are_displayed_on_the_modal(Map<String,String> results) {
+        Map<String, String> expectedResults = resolveKeyValues(results);
+        Map<String, String> actualResults = stationManagementHomePage.getResultGridContent();
+        Assert.assertTrue("Assert that the result grid contains results",
+            actualResults.size() > 0);
+        expectedResults.forEach((key, value) -> {
+            if(key.startsWith("COD")){
+                actualResults.put(key,actualResults.get(key).replaceAll(",",""));
+            }
+            Assert.assertTrue("Assert that the result grid contains all expected column values",
+            value.contentEquals(actualResults.get(key)));
+        });
+    }
+
+    @Then("verifies that recovery tickets page is opened on clicking arrow button")
+    public void verifies_that_recovery_tickets_page_is_opened_on_clicking_arrow_button() {
+        stationManagementHomePage.verifyRecoveryTicketsOnClickingArrowIcon();
+    }
+
+    @Then("verifies that the url for recovery tickets page is loaded with tracking id")
+    public void verifies_that_the_url_for_recovery_tickets_page_is_loaded_with_tracking_id() {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        stationManagementHomePage.validateStationRecoveryURLPath(trackingId);
+    }
+
+    @Then("verifies that the url for edit order page is loaded with order id")
+    public void verifies_that_the_url_for_edit_order_page_is_loaded_with_order_id() {
+        String orderId = get(KEY_CREATED_ORDER_ID).toString();
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        stationManagementHomePage.verifyEditOrderScreenURL(trackingId,orderId);
     }
 
 }

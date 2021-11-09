@@ -208,7 +208,7 @@ Feature: Failed Delivery Management
       | Return | uid:bde7997d-8de5-4936-9197-d9c93dbaa498 | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Find Failed Delivery Order on Failed Delivery Management Page (<hiptest-uid>)
+  Scenario Outline: Operator Find Failed Delivery Order on Failed Delivery Management Page - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |

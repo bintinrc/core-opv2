@@ -58,6 +58,42 @@ Feature: Van Inbound
     And Operator fill the empty tracking ID on Van Inbound Page
     Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Van Inbounds Multiple Orders With Different Order Status And Checks Scanned Parcels (uid:836ad450-1dd6-4ea9-80af-123a1723c379)
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | On Vehicle for Delivery           |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+      | granularStatus | Arrived at Sorting Hub            |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
+      | granularStatus | Pending Pickup                    |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" tracking ID on Van Inbound Page
+    Then Operator verifies "1/3" scanned parcels displayed on Van Inbound Page
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" tracking ID on Van Inbound Page
+    Then Operator verifies "2/3" scanned parcels displayed on Van Inbound Page
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]}" tracking ID on Van Inbound Page
+    Then Operator verifies "3/3" scanned parcels displayed on Van Inbound Page
+    When Operator click Scanned Parcels area on Van Inbound Page
+    Then Operator verifies Scanned Parcels dialog contains orders info:
+      | trackingId                                 | name                                  | contact                                  | address                                             | granularStatus          | status  |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER[1].toName} | {KEY_LIST_OF_CREATED_ORDER[1].toContact} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | On Vehicle for Delivery | Transit |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].toContact} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | Arrived at Sorting Hub  | Transit |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {KEY_LIST_OF_CREATED_ORDER[3].toName} | {KEY_LIST_OF_CREATED_ORDER[3].toContact} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | Pending Pickup          | Pending |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

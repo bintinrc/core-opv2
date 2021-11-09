@@ -17,13 +17,13 @@ public class MdMenuBar extends PageElement {
     super(webDriver, searchContext, webElement);
   }
 
-  private static final String MD_MENU_ITEM_LOCATOR = "div.md-active md-menu-item button[aria-label='%s']";
+  private static final String MD_MENU_ITEM_LOCATOR = "//div[contains(@class,'md-active')]//md-menu-item//*[normalize-space(.)='%s']";
   private static final String MD_MENU_LOCATOR = ".//md-menu/button[normalize-space(.)='%s']";
 
   private void selectOptionInPopup(String option) {
     option = escapeValue(option);
     String selector = f(MD_MENU_ITEM_LOCATOR, option);
-    new Button(getWebDriver(), getWebDriver().findElement(By.cssSelector(selector))).click();
+    new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector))).click();
     pause100ms();
   }
 
@@ -36,7 +36,7 @@ public class MdMenuBar extends PageElement {
     openMenu(menu);
     option = escapeValue(option);
     String selector = f(MD_MENU_ITEM_LOCATOR, option);
-    return new Button(getWebDriver(), getWebDriver().findElement(By.cssSelector(selector)))
+    return new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector)))
         .isEnabled();
   }
 

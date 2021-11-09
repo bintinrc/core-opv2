@@ -1,13 +1,10 @@
-@NumberOfParcels @StationHome @StationManagement
+@StationManagement @StationHome
 Feature: Number of Parcels In Hub
-
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
-  @coverage-manual @coverage-operator-manual @step-done @station-happy-path
   Scenario Outline: View Number of Parcels in Hub (uid:34b4182d-ee92-4936-b4b8-fbc3890be67d)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-1}" and proceed
@@ -35,8 +32,6 @@ Feature: Number of Parcels In Hub
       | TileName                 | ModalName      | TableName1     | TableName2 |
       | Number of parcels in hub | Parcels in Hub | By Parcel Size | By Zones   |
 
-
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3871
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is <Outcome> (<hiptest-uid>)
   NOTE: For the Missing Ticket Type and Order Outcome Is CUSTOMER RECEIVED it suppose be included to the counts but because the granular status will be updated to Completed so it's not included (we have a logic to exclude order counts if the order granular status is '
   Completed', 'Cancelled', 'Returned to Sender')
@@ -80,8 +75,6 @@ Feature: Number of Parcels In Hub
       | Number of parcels in hub | RESOLVED | No                      | LOST - UNDECLARED | Transit     | uid:70f81b81-e530-4a34-b520-ff5b0347977e |
       | Number of parcels in hub | RESOLVED | No                      | CUSTOMER RECEIVED | Completed   | uid:9c5beef9-79df-4423-9a2d-42b9d37e228d |
 
-
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3871
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Found-Inbounded (uid:a1767cec-1039-4743-8f8a-210e8cab9255)
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -121,8 +114,6 @@ Feature: Number of Parcels In Hub
       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
       | Number of parcels in hub | RESOLVED | No                      | FOUND - INBOUND | Transit     |
 
-
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3872
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is <Outcome> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -163,8 +154,6 @@ Feature: Number of Parcels In Hub
       | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - UNDECLARED | Transit     | uid:d26b7fca-7087-4fd1-af2b-15e4a7c6f7e6 |
       | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - DECLARED   | Cancelled   | uid:e1957051-c693-420f-8650-073a9bcb023b |
 
-
-  @coverage-manual @coverage-operator-manual @step-done @NVQA-3872
   Scenario Outline: View Parcel of Cancelled Missing Ticket Type (uid:0c3ca8da-7671-4e3c-bd28-8adb6bfb07f5)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -204,7 +193,6 @@ Feature: Number of Parcels In Hub
       | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome                        | OrderStatus |
       | Number of parcels in hub | CANCELLED | No                      | CANCEL - NINJA DID NOT RECEIVE | Transit     |
 
-  @coverage-operator-manual @coverage-manual @step-done @station-happy-path @NVQA-3870
   Scenario Outline: View Parcel in Hub after Update to Higher Size in Edit Order (uid:78bf5b4c-6222-42ff-9033-eb2bfedfab57)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     When API Shipper create V4 order using data below:
@@ -235,8 +223,6 @@ Feature: Number of Parcels In Hub
       | TileName                 | ModalName      | TableName      | LowerSize | UpperSize |
       | Number of parcels in hub | Parcels in Hub | By Parcel Size | S         | XXL       |
 
-
-  @coverage-operator-manual @coverage-manual @step-done @station-happy-path @NVQA-3870
   Scenario Outline: View Parcel in Hub after Update to Lower Size in Edit Order (uid:11e13743-5c66-4f81-abf8-9605d55de470)
     Given Operator go to menu Station Management Tool -> Station Management Homepage
     When API Shipper create V4 order using data below:

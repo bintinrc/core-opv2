@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * @author Veera N
@@ -27,20 +30,26 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
     private static final String STATION_HOME_URL_PATH = "/station-homepage";
     private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
-    private static final String TILE_VALUE_XPATH = ".//div[text()='%s']/ancestor::div[@class='ant-card-body']//div[@class='value']";
-    private static final String TILE_HAMBURGER_XPATH = "//div[text()='%s']/ancestor::div[@class='ant-card-body']//*[@role='img']";
+    private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
+    private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
+    private static final String TILE_VALUE_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//div[@class='value']";
+    private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
     private static final String MODAL_CONTENT_XPATH = "//span[contains(text(),'%s')]//ancestor::div//*[@class='ant-modal-content']";
-    private static final String MODAL_TABLE_FILTER_XPATH = "//div[text()='%s']/parent::div[@class='th']//input";
+    private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
     private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
     private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
     private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
     private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
     private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
+    private static final String RECOVERY_TICKETS = "Recovery Tickets";
 
 
     public StationManagementHomePage(WebDriver webDriver) {
         super(webDriver);
     }
+
+    @FindBy(css = "div.nv-h4")
+    private PageElement pageHeader;
 
     @FindBy(id = "hint-link")
     public PageElement referParentsProfileLink;
@@ -69,6 +78,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[text()='Route ID']/following-sibling::div")
     private PageElement routeManifestRouteId;
 
+    @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
+    private List<PageElement> modalTableColumns;
+
+    @FindBy(css = "div.value svg")
+    private PageElement tileValueLoadIcon;
 
     public void switchToStationHomeFrame() {
         getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -85,7 +99,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         proceedBtn.click();
         waitWhilePageIsLoading();
     }
-
 
     public void selectHubAndProceed(String hubName, StationLanguage.HubSelectionText language) {
         String langDropdownText = "";
@@ -118,21 +131,43 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             if (pageFrame.size() > 0) {
                 switchToStationHomeFrame();
             }
+            waitUntilTileValueLoads(tileName);
             waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+            pause5s();
             WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
-            int actualCount = Integer.parseInt(tile.getText().trim());
+            int actualCount = Integer.parseInt(tile.getText().replace(",","").trim());
             return actualCount;
         } catch (Exception e) {
-            e.printStackTrace();
-            return 100;
+            NvLogger.error(e.getMessage());
+            return 0;
         }
     }
 
+    public double getDollarValueFromTile(String tileName) {
+        try {
+            String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
+            waitWhilePageIsLoading();
+            if (pageFrame.size() > 0) {
+                switchToStationHomeFrame();
+            }
+            waitUntilTileValueLoads(tileName);
+            pause5s();
+            WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+            String dollarAmount = tile.getText().trim().replaceAll("\\$|\\,","");
+            double dollarValue = Double.parseDouble(dollarAmount);
+            return dollarValue;
+        } catch (Exception e) {
+            NvLogger.error(e.getMessage());
+            return 0;
+        }
+    }
     public void openModalPopup(String modalTitle, String tileName) {
         waitWhilePageIsLoading();
+        pause3s();
         String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
         String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
         WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
+        moveToElement(hamburger);
         hamburger.click();
         waitWhilePageIsLoading();
         WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
@@ -151,6 +186,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         waitUntilStationHomeUrlLoads(STATION_HOME_URL_PATH);
         Assert.assertTrue("Assert that URL path is updated with station management url",
                 getCurrentUrl().endsWith(STATION_HOME_URL_PATH));
+    }
+
+    public void validateStationRecoveryURLPath(String trackingId) {
+        waitUntilStationHomeUrlLoads(f(STATION_RECOVERY_TICKETS_URL_PATH,trackingId));
+        Assert.assertTrue("Assert that Recovery Tickets URL is loaded with Tracking Id",
+            getCurrentUrl().endsWith(f(STATION_RECOVERY_TICKETS_URL_PATH,trackingId)));
     }
 
     public void reloadURLWithNewHudId(String hubId) {
@@ -180,6 +221,44 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         });
     }
 
+    public void waitUntilTileValueMatches(String tileName, int expected){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        wdWait.until(driver -> {
+            NvLogger.info("Refreshing the page to reload the tile value...");
+            driver.navigate().refresh();
+            waitUntilPageLoaded();
+            int actual = getNumberFromTile(tileName);
+            return (actual == expected) ? true : false;
+        });
+    }
+
+    public void waitUntilTileValueLoads(String tileName){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
+        wdWait.until(driver -> {
+            double actualCount = -1;
+            NvLogger.info("Waiting for the tile value to load...");
+            try{
+                WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+                actualCount = Double.parseDouble(tile.getText().replaceAll("\\$|\\,","").trim());
+            }catch(NumberFormatException nfe){
+                actualCount = -1;
+            }
+            return actualCount >= 0;
+        });
+    }
+
+    public void waitUntilTileDollarValueMatches(String tileName, double expected){
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        wdWait.until(driver -> {
+            NvLogger.info("Refreshing the page to reload the tile value...");
+            driver.navigate().refresh();
+            waitUntilPageLoaded();
+            double actual = getDollarValueFromTile(tileName);
+            return (actual == expected) ? true : false;
+        });
+    }
+
     @FindBy(css = "div.ant-notification-notice-message")
     private PageElement toastMessage;
 
@@ -204,8 +283,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void validateTileValueMatches(int beforeOrder, int afterOrder, int delta) {
-        Assert.assertTrue("Assert that tile value after order equals the sum of before order count and # of order placed ",
-                afterOrder == (beforeOrder + delta));
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, delta, beforeOrder),
+            afterOrder == (beforeOrder + delta));
+    }
+
+    public void validateTileValueMatches(double beforeOrder, double afterOrder, double delta) {
+        Assert.assertTrue(f("Assert that current tile value: %s is increased/decreased by %s from %s", afterOrder, delta, beforeOrder),
+            afterOrder == (beforeOrder + delta));
     }
 
     public void verifyTableIsDisplayedInModal(String tableName) {
@@ -226,9 +310,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualColumns.containsAll(expectedColumns));
     }
 
-    @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
-    private List<PageElement> modalTableColumns;
-
     public void verifyColumnsInTableDisplayed(List<String> expectedColumns) {
         List<String> actualColumns = new ArrayList<String>();
         modalTableColumns.forEach((tableColumn) -> {
@@ -241,7 +322,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void applyFilters(Map<String, String> filters, int resultsCount) {
-
+        waitWhilePageIsLoading();
         for (Map.Entry<String, String> filter : filters.entrySet()) {
             String filterXpath = f(MODAL_TABLE_FILTER_XPATH, filter.getKey());
             scrollIntoView(filterXpath);
@@ -252,7 +333,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             }
         }
         waitWhilePageIsLoading();
-        Assert.assertTrue("Assert that the search has results as expected after applying filters",
+        Assert.assertTrue(f("Assert that the search should have %s records as expected after applying filters", resultsCount),
                 results.size() == resultsCount);
     }
 
@@ -286,7 +367,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         pause3s();
         Assert.assertTrue("Assert that the search has results as expected after applying filters",
                 actualTrackingId.equalsIgnoreCase(expectedTrackingId));
+    }
 
+    public void verifyEditOrderScreenURL(String expectedTrackingId, String orderId) {
+        String expectedEditOrderUrl = f(STATION_EDIT_ORDER_URL_PATH,orderId);
+        getWebDriver().switchTo().defaultContent();
+        String windowHandle = getWebDriver().getWindowHandle();
+        if (pageFrame.size() > 0) {
+            switchToStationHomeFrame();
+        }
+        WebElement trackingIdLink = getWebDriver().findElement(By.linkText(expectedTrackingId));
+        trackingIdLink.click();
+        switchToNewWindow();
+        waitWhilePageIsLoading();
+        String actualEditOrderUrl = getCurrentUrl().trim();
+        closeAllWindows(windowHandle);
+        pause3s();
+        Assert.assertTrue("Assert that the edit order screen contains order id in the url",
+            actualEditOrderUrl.endsWith(expectedEditOrderUrl));
     }
 
     public void verifyNavigationToRouteManifestScreen(String expectedRouteId) {
@@ -305,7 +403,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualRouteId.equalsIgnoreCase(expectedRouteId));
     }
 
-    public void reloadOperatorPortal() {
+    public void loadOperatorPortal() {
         getWebDriver().get(TestConstants.OPERATOR_PORTAL_BASE_URL);
     }
 
@@ -318,9 +416,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 actualNavLinks.containsAll(expectedNavLinks));
     }
 
-    @FindBy(css = "div.nv-h4")
-    private PageElement pageHeader;
-
     public void verifyPageOpenedOnClickingHyperlink(String linkName, String expectedPageName) {
         WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
         navLink.click();
@@ -332,6 +427,22 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         closeAllWindowsExceptCurrentWindow();
         pause3s();
     }
+
+    @FindBy(css = "button[class*='btn-icon']")
+    private PageElement arrowIcon;
+
+    public void verifyRecoveryTicketsOnClickingArrowIcon() {
+        waitUntilVisibilityOfElementLocated(arrowIcon.getWebElement());
+        arrowIcon.click();
+        switchToNewWindow();
+        waitWhilePageIsLoading();
+        String actualPageName = pageHeader.getText().trim();
+        Assert.assertTrue("Assert that recovery tickets page has opened in new tab",
+            actualPageName.contains(RECOVERY_TICKETS));
+        closeAllWindowsExceptCurrentWindow();
+        pause3s();
+    }
+
 
     public void verifyPageUsingPageHeader(StationLanguage.HeaderText language) {
         waitWhilePageIsLoading();
@@ -385,5 +496,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             tabContent.put(rowName, rowValue);
         }
         return tabContent;
+    }
+
+    @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+    private List<PageElement> columnNames;
+
+    @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+    private List<PageElement> columnValues;
+
+    public Map<String, String> getResultGridContent() {
+        Map<String,String> gridContent = new HashMap<String, String>();
+        String columnName, columnValue;
+        pause3s();
+        for(int row = 0; row < columnNames.size(); row++){
+            scrollIntoView(columnNames.get(row).getWebElement());
+            columnName = columnNames.get(row).getText();
+            columnValue = columnValues.get(row).getText();
+            gridContent.put(columnName, columnValue);
+        }
+        return gridContent;
     }
 }

@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_RESIGNED;
@@ -63,7 +61,8 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator verifies Submit button in Add Driver dialog is disabled")
   public void operatorVerifiesSubmitButtonState() {
-    assertFalse("Submit button is enabled", dsPage.addDriverDialog.submit.isEnabled());
+    dsPage.inFrame(() ->
+        assertFalse("Submit button is enabled", dsPage.addDriverDialog.submit.isEnabled()));
   }
 
   @When("Operator verifies hint {string} is displayed in Add Driver dialog")
@@ -104,6 +103,19 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     });
   }
 
+  @When("Operator updates driver details with the following info:")
+  public void operator_updates_driver_details_with_the_following_info(Map<String, String> mapOfData) {
+    DriverInfo driverInfo = new DriverInfo();
+    driverInfo.fromMap(mapOfData);
+    put(KEY_CREATED_DRIVER_INFO, driverInfo);
+    put(KEY_UPDATED_DRIVER_FIRST_NAME,driverInfo.getFirstName());
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.fillForm(driverInfo);
+      dsPage.editDriverDialog.submitForm();
+    });
+  }
+
   @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveContactDetails() {
     dsPage.inFrame(() -> {
@@ -115,16 +127,20 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator removes vehicle details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveVehicleDetails() {
-    if (dsPage.editDriverDialog.vehicleSettingsForm.size() > 0) {
-      dsPage.editDriverDialog.vehicleSettingsForm.forEach(form -> form.remove.click());
-    }
+    dsPage.inFrame(() -> {
+      if (dsPage.editDriverDialog.vehicleSettingsForm.size() > 0) {
+        dsPage.editDriverDialog.vehicleSettingsForm.forEach(form -> form.remove.click());
+      }
+    });
   }
 
   @When("Operator removes zone preferences on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveZonePreference() {
-    if (dsPage.editDriverDialog.zoneSettingsForms.size() > 0) {
-      dsPage.editDriverDialog.zoneSettingsForms.forEach(form -> form.remove.click());
-    }
+    dsPage.inFrame((() -> {
+      if (dsPage.editDriverDialog.zoneSettingsForms.size() > 0) {
+        dsPage.editDriverDialog.zoneSettingsForms.forEach(form -> form.remove.click());
+      }
+    }));
   }
 
   @When("Operator opens Edit Driver dialog for created driver on Driver Strength page")
@@ -132,7 +148,10 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     String username = driverInfo.getUsername();
     dsPage.inFrame(() -> {
-      dsPage.filterBy(COLUMN_USERNAME, username);
+      if (!dsPage.isTableLoaded()) {
+        dsPage.click("//button[span[text()='Load Selection']]");
+      }
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
       dsPage.editDriverDialog.waitUntilVisible();
     });
@@ -277,14 +296,19 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @Then("^Operator delete created driver on Driver Strength page$")
   public void operatorDeleteCreatedDriverOnDriverStrengthPage() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.deleteDriver(driverInfo.getUsername());
+    dsPage.inFrame(() -> {
+      dsPage.waitUntilTableLoaded();
+      dsPage.deleteDriver(driverInfo.getUsername());
+    });
   }
 
   @Then("^Operator verify new driver is deleted successfully on Driver Strength page$")
   public void operatorVerifyNewDriverIsDeletedSuccessfullyOnDriverStrengthPage() throws Throwable {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
-    assertTrue("Driver has been deleted", dsPage.driversTable().isTableEmpty());
+    dsPage.inFrame(() -> {
+      dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
+      assertTrue("Table has no data", dsPage.verifyNoDataOnTable());
+    });
     remove(KEY_CREATED_DRIVER_UUID);
   }
 
@@ -292,7 +316,10 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   public void operatorChangeComingValueForCreatedDriverOnDriverStrengthPage() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
-      dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
+      if (!dsPage.isTableLoaded()) {
+        dsPage.click("//button[span[text()='Load Selection']]");
+      }
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
       put(KEY_INITIAL_COMING_VALUE, dsPage.driversTable().getComingStatus(1));
       dsPage.driversTable().toggleComingStatus(1);
     });
@@ -304,7 +331,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     assertThat("Initial Coming value", initialComingValue, not(isEmptyOrNullString()));
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
-      dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
       assertThat("Actual Coming Value", dsPage.driversTable().getComingStatus(1),
           not(equalToIgnoringCase(initialComingValue)));
     });
