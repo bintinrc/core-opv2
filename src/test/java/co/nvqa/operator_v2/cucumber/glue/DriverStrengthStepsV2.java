@@ -8,10 +8,7 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_RESIGNED;
@@ -247,10 +244,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       }
 
       if (data.containsKey("resigned")) {
-        dsPage.resignedFilter.click();
+        pause1s();
+        dsPage.clickResignedOption(data.get("resigned"));
       }
 
       dsPage.loadSelection();
+      pause2s();
     });
   }
 
@@ -285,12 +284,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" resigned")
   public void operatorVerifyDriverStrengthIsFilteredByResigned(String expected) {
-    List<String> actualDriverTypes = dsPage.driversTable()
-        .readFirstRowsInColumn(COLUMN_RESIGNED, 10);
     dsPage.inFrame(() -> {
+      List<String> actualDriverTypes = dsPage.driversTable()
+          .readFirstRowsInColumn(COLUMN_RESIGNED, 10);
       assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
       assertThat("Resigned", actualDriverTypes,
-          Matchers.everyItem(containsString(expected.toUpperCase())));
+          Matchers.everyItem(containsString(expected)));
     });
   }
 
@@ -342,6 +341,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   public void operatorLoadAllData() {
     final String loadSelectionXpath = "//button[span[text()='Load Selection']]";
     dsPage.inFrame(() -> {
+      pause2s();
       dsPage.waitUntilVisibilityOfElementLocated(loadSelectionXpath);
       dsPage.click(loadSelectionXpath);
     });
@@ -352,6 +352,11 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     dsPage.inFrame(() -> {
       dsPage.addDriverDialog.submit.click();
     });
+  }
+
+  @When("Operator wait until table loaded")
+  public void waitForTableToLoad() {
+    dsPage.inFrame(() -> dsPage.waitUntilTableLoaded());
   }
 
 }

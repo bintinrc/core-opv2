@@ -65,8 +65,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(name = "driverTypes")
   public AntSelect2 driverTypesFilter;
 
-  @FindBy(id = "resigned")
+//  @FindBy(className = "//span[.='All']")
+  @FindBy(xpath = "//div[contains(@class, 'ant-select') and @name='resigned']")
   public PageElement resignedFilter;
+
+  @FindBy(xpath = "//div[@class='rc-virtual-list-holder-inner']/div[2]")
+  public PageElement asda;
 
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
@@ -101,7 +105,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void clickAddNewDriver() {
-    final String xpathAddButton ="//div[@class='ant-collapse-header']//div[2]/button";
+    final String xpathAddButton ="//span[.='Add New Driver']";
     waitUntilVisibilityOfElementLocated(xpathAddButton);
     click(xpathAddButton);
     pause3s();
@@ -178,6 +182,16 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     pause1s();
     click(LOCATOR_DELETE_BUTTON);
     waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
+  }
+
+  public void clickResignedOption(String resigned){
+    pause2s();
+    resignedFilter.click();
+    if(resigned.equalsIgnoreCase("no")){
+        click("//div[@label='Not Resigned']");
+    } else {
+      click("//div[@label='Resigned']");
+    }
   }
 
   /**
