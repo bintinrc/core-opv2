@@ -200,11 +200,18 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.applyFilters(filter, 0);
     }
 
+    @Then("expects no results in the modal under the table:{string} when applying the following filters:")
+    public void expects_no_results_in_the_modal_under_the_table_when_applying_the_following_filters(String tableName, DataTable searchParameters) {
+        List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
+        Map<String, String> filter = resolveKeyValues(filters.get(0));
+        stationManagementHomePage.applyFilters(tableName, filter, 0);
+    }
+
     @When("searches for the order details in the table:{string} by applying the following filters:")
     public void searches_for_the_order_details_in_the_table_by_applying_the_following_filters(String tableName, DataTable searchParameters) {
         List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
         Map<String, String> filter = resolveKeyValues(filters.get(0));
-        stationManagementHomePage.applyFilters(tableName, filter);
+        stationManagementHomePage.applyFilters(tableName, filter, 1);
     }
 
     @Then("verifies that Edit Order page is opened on clicking tracking id")
@@ -324,7 +331,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
                 asserts.get());
     }
 
-
     @Then("verifies that the following details are displayed on the modal")
     public void verifies_that_the_following_details_are_displayed_on_the_modal(Map<String,String> results) {
         Map<String, String> expectedResults = resolveKeyValues(results);
@@ -337,6 +343,21 @@ public class StationManagementHomeSteps extends AbstractSteps {
             }
             Assert.assertTrue("Assert that the result grid contains all expected column values",
             value.contentEquals(actualResults.get(key)));
+        });
+    }
+
+    @Then("verifies that the following details are displayed on the modal under the table:{string}")
+    public void verifies_that_the_following_details_are_displayed_on_the_modal_under_the_table(String tableName, Map<String,String> results) {
+        Map<String, String> expectedResults = resolveKeyValues(results);
+        Map<String, String> actualResults = stationManagementHomePage.getResultGridContentByTableName(tableName);
+        Assert.assertTrue("Assert that the result grid contains results",
+            actualResults.size() > 0);
+        expectedResults.forEach((key, value) -> {
+            if(key.startsWith("COD")){
+                actualResults.put(key,actualResults.get(key).replaceAll(",",""));
+            }
+            Assert.assertTrue("Assert that the result grid contains all expected column values",
+                value.contentEquals(actualResults.get(key)));
         });
     }
 

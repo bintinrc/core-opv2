@@ -337,7 +337,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
                 results.size() == resultsCount);
     }
 
-    public void applyFilters(String tableName, Map<String, String> filters) {
+    public void applyFilters(String tableName, Map<String, String> filters, int resultSize) {
 
         for (Map.Entry<String, String> filter : filters.entrySet()) {
             String filterXpath = f(MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH, tableName, filter.getKey());
@@ -353,7 +353,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         String tableRowsXpath = tableXpath.concat("//div[contains(@class,'base-row')]");
         List<WebElement> tableRows = getWebDriver().findElements(By.xpath(tableRowsXpath));
         Assert.assertTrue("Assert that the search has results as expected after applying filters",
-                tableRows.size() > 0);
+                tableRows.size() == resultSize);
     }
 
     public void verifyNavigationToEditOrderScreen(String expectedTrackingId) {
@@ -512,6 +512,24 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             scrollIntoView(columnNames.get(row).getWebElement());
             columnName = columnNames.get(row).getText();
             columnValue = columnValues.get(row).getText();
+            gridContent.put(columnName, columnValue);
+        }
+        return gridContent;
+    }
+
+    public Map<String, String> getResultGridContentByTableName(String tableName) {
+        Map<String,String> gridContent = new HashMap<String, String>();
+        String columnName, columnValue;
+        String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
+        String tableColumnsXpath = tableXpath.concat("//div[contains(@class,'th')]/*[1]");
+        List<WebElement> tableColumns = getWebDriver().findElements(By.xpath(tableColumnsXpath));
+        String tableColumnValuesXpath = tableXpath.concat("//div[@class='cell-wrapper']");
+        List<WebElement> tableValues = getWebDriver().findElements(By.xpath(tableColumnValuesXpath));
+        pause3s();
+        for(int row = 0; row < tableColumns.size(); row++){
+            scrollIntoView(tableColumns.get(row));
+            columnName = tableColumns.get(row).getText();
+            columnValue = tableValues.get(row).getText();
             gridContent.put(columnName, columnValue);
         }
         return gridContent;
