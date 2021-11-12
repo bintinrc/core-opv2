@@ -1505,8 +1505,16 @@ public class EditOrderSteps extends AbstractSteps {
     if (data.containsKey("assignTo")) {
       editOrderPage.editTicketDialog.assignTo.selectValue(data.get("assignTo"));
     }
+    if (data.containsKey("rtsReason")) {
+      editOrderPage.editTicketDialog.rtsReason.selectValue(data.get("rtsReason"));
+    }
     if (data.containsKey("newInstructions")) {
-      editOrderPage.editTicketDialog.newInstructions.setValue(data.get("newInstructions"));
+      String instruction = data.get("newInstructions");
+      if ("GENERATED".equals(instruction)) {
+        instruction = f("This damage description is created by automation at %s.",
+            CREATED_DATE_SDF.format(new Date()));
+      }
+      editOrderPage.editTicketDialog.newInstructions.setValue(instruction);
     }
     editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
   }
