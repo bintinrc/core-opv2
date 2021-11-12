@@ -414,6 +414,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='order-outcome']")
     public MdSelect orderOutcome;
 
+    @FindBy(css = "[id*='rts-reason']")
+    public MdSelect rtsReason;
+
     @FindBy(css = "[id^='container.recovery-tickets.enter-new-instruction']")
     public TextBox newInstructions;
 
