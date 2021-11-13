@@ -56,6 +56,8 @@ import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
+import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -287,7 +289,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void editPriorityLevel(int priorityLevel) {
-    if (!StringUtils.equalsIgnoreCase(currentPriority.getText(), String.valueOf(priorityLevel))) {
+    if (!equalsIgnoreCase(currentPriority.getText(), String.valueOf(priorityLevel))) {
       clickMenu("Order Settings", "Edit Priority Level");
       editPriorityLevelDialog.waitUntilVisible();
       editPriorityLevelDialog.priorityLevel.setValue(priorityLevel);
@@ -459,13 +461,14 @@ public class EditOrderPage extends OperatorV2SimplePage {
     }
   }
 
-  public void confirmCompleteOrder() {
+  public String confirmCompleteOrder() {
     String changeReason = f("This reason is created by automation at %s.",
         CREATED_DATE_SDF.format(new Date()));
     manuallyCompleteOrderDialog.waitUntilVisible();
     manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     waitUntilInvisibilityOfToast("The order has been completed", true);
+    return changeReason;
   }
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
@@ -967,19 +970,19 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String fromCountryPattern = f(".* From Country .* (to|new value) %s.*",
           order.getFromCountry());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromAddress1Pattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromAddress1Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromAddress2Pattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromAddress2Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromPostcodePattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromPostcodePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromCityPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromCityPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromCountryPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromCountryPattern));
     }
 
@@ -990,19 +993,19 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String toCityPattern = f(".* To City .* (to|new value) %s.*", order.getToCity());
       String toCountryPattern = f(".* To Country .* (to|new value) %s.*", order.getToCountry());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toAddress1Pattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toAddress1Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toAddress2Pattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toAddress2Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toPostcodePattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toPostcodePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toCityPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toCityPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toCountryPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toCountryPattern));
     }
 
@@ -1013,13 +1016,13 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String fromContactPattern = f(".* From Contact .* (to|new value) \\%s.*",
           order.getFromContact());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromNamePattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromNamePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromEmailPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromEmailPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromContactPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(fromContactPattern));
     }
 
@@ -1029,13 +1032,13 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String toEmailPattern = f(".* To Email .* (to|new value) %s.*", order.getToEmail());
       String toContactPattern = f(".* To Contact .* (to|new value) \\%s.*", order.getToContact());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toNamePattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toNamePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toEmailPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toEmailPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toContactPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(toContactPattern));
     }
 
@@ -1074,7 +1077,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
           order.getFromAddress2(),
           order.getFromCity(), order.getFromCountry(), order.getFromPostcode());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(addressPattern));
     }
 
@@ -1083,7 +1086,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
           order.getToAddress2(),
           order.getToCity(), order.getToCountry(), order.getToPostcode());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(addressPattern));
     }
 
@@ -1092,12 +1095,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
       if (String.valueOf(order.getCod().getGoodsAmount()) == null) {
         cashPattern = f("Cash On Delivery changed from 0 to .*", order.getCod().getGoodsAmount());
         assertTrue(f("'%s' pattern is not present in the '%s' event description", cashPattern,
-            eventDescription),
+                eventDescription),
             eventDescription.matches(cashPattern));
       } else {
         cashPattern = f("Cash On Delivery changed from %s to .*", order.getCod().getGoodsAmount());
         assertTrue(f("'%s' pattern is not present in the '%s' event description", cashPattern,
-            eventDescription),
+                eventDescription),
             eventDescription.matches(cashPattern));
       }
     }
@@ -1128,7 +1131,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
       deviceIdPattern = f(".* Device Id: 12345 .*");
       assertTrue(f("'%s' pattern is not present in the '%s' event description", deviceIdPattern,
-          eventDescription),
+              eventDescription),
           eventDescription.matches(deviceIdPattern));
     }
   }
@@ -2138,6 +2141,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
         createTicketDialog.exceptionReason.setValue(recoveryTicket.getExceptionReason());
         break;
       }
+      case RecoveryTicketsPage.TICKET_TYPE_PARCEL_ON_HOLD: {
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
+        break;
+      }
       case RecoveryTicketsPage.TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
         createTicketDialog.orderOutcome
@@ -2356,8 +2368,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     public ChatOrderItem findOrderItemByTrackingId(String trackingId) {
       return orderItems.stream()
-          .filter(chatOrderItem -> StringUtils
-              .equalsIgnoreCase(trackingId, chatOrderItem.trackingId.getText()))
+          .filter(chatOrderItem -> equalsIgnoreCase(trackingId, chatOrderItem.trackingId.getText()))
           .findFirst()
           .orElseThrow(() -> new AssertionError(
               "Tracking ID " + trackingId + " not found in Chat With Driver dialog"));
@@ -2414,12 +2425,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void chooseCurrentOrderOutcome(String value) {
     if (orderOutcomeDialog.size() > 0) {
-        if(value.equalsIgnoreCase("keep")){
-          keepBtn.click();
-        }
-        if (value.equalsIgnoreCase("no")) {
-          noBtn.click();
-        }
+      if (equalsAnyIgnoreCase(value, "keep", "yes")) {
+        keepBtn.click();
+      }
+      if (equalsIgnoreCase(value, "no")) {
+        noBtn.click();
+      }
     }
 
   }

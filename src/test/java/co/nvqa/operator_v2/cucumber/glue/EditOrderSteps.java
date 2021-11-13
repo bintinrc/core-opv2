@@ -208,7 +208,8 @@ public class EditOrderSteps extends AbstractSteps {
 
   @When("^Operator confirm manually complete order on Edit Order page$")
   public void operatorManuallyCompleteOrderOnEditOrderPage() {
-    editOrderPage.confirmCompleteOrder();
+    String changeReason = editOrderPage.confirmCompleteOrder();
+    put("KEY_ORDER_CHANGE_REASON", changeReason);
   }
 
   @When("^Operator verify 'COD Collected' checkbox is disabled on Edit Order page$")
@@ -222,6 +223,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator confirm manually complete order with COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -229,7 +231,7 @@ public class EditOrderSteps extends AbstractSteps {
 
   @When("completes COD order manually by updating reason for change as {string}")
   public void completes_COD_order_manually_by_updating_reason_for_change_as(String changeReason) {
-    if("GENERATED".equals(changeReason)){
+    if ("GENERATED".equals(changeReason)) {
       changeReason = f("This reason is created by automation at %s.",
           CREATED_DATE_SDF.format(new Date()));
     }
@@ -243,6 +245,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator confirm manually complete order without collecting COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -1531,6 +1534,7 @@ public class EditOrderSteps extends AbstractSteps {
     String parcelLocation = mapOfData.get("parcelLocation");
     String liability = mapOfData.get("liability");
     String damageDescription = mapOfData.get("damageDescription");
+    String orderOutcome = mapOfData.get("orderOutcome");
     String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
     String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
     String custZendeskId = mapOfData.get("custZendeskId");
@@ -1578,6 +1582,7 @@ public class EditOrderSteps extends AbstractSteps {
     recoveryTicket.setParcelLocation(parcelLocation);
     recoveryTicket.setLiability(liability);
     recoveryTicket.setDamageDescription(damageDescription);
+    recoveryTicket.setOrderOutcome(orderOutcome);
     recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
     recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
     recoveryTicket.setCustZendeskId(custZendeskId);
