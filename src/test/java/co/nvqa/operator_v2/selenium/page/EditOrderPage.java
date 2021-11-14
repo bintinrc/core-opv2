@@ -18,6 +18,7 @@ import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -44,14 +45,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
@@ -216,9 +214,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[text()='Insured Value']/following-sibling::p")
   public PageElement insuredValue;
 
+  @FindBy(css = "md-dialog")
+  public DpDropOffSettingDialog dpDropOffSettingDialog;
+
   private EventsTable eventsTable;
-  private EditDeliveryDetailsDialog editDeliveryDetailsDialog;
-  private DpDropOffSettingDialog dpDropOffSettingDialog;
+  public EditDeliveryDetailsDialog editDeliveryDetailsDialog;
   private DeleteOrderDialog deleteOrderDialog;
   private PickupRescheduleDialog pickupRescheduleDialog;
   private DeliveryRescheduleDialog deliveryRescheduleDialog;
@@ -230,7 +230,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     eventsTable = new EventsTable(webDriver);
     deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
     editDeliveryDetailsDialog = new EditDeliveryDetailsDialog(webDriver);
-    dpDropOffSettingDialog = new DpDropOffSettingDialog(webDriver);
     deleteOrderDialog = new DeleteOrderDialog(webDriver);
     pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
     chatWithDriverDialog = new ChatWithDriverDialog(webDriver);
@@ -1137,18 +1136,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void tagOrderToDP(String dpId) {
-    dpDropOffSettingDialog.selectDpValue(dpId);
-    List<String> dpDropOffDates = dpDropOffSettingDialog.getListOfDropOffDates();
-    dpDropOffSettingDialog
-        .selectDropOffDateValue(dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
-    dpDropOffSettingDialog.saveChanges();
-    dpDropOffSettingDialog.confirmOrderIsTagged();
-  }
-
-  public void untagOrderFromDP() {
-    dpDropOffSettingDialog.clearSelectedDropOffValue();
-    dpDropOffSettingDialog.saveChanges();
-    dpDropOffSettingDialog.confirmOrderIsTagged();
+    dpDropOffSettingDialog.dropOffDp.selectValue(dpId);
+    List<String> dpDropOffDates = dpDropOffSettingDialog.dropOffDate.getOptions();
+    dpDropOffSettingDialog.dropOffDp
+        .selectValue(dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
+    dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
+    waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
   }
 
   public boolean deliveryIsIndicatedWithIcon() {
@@ -1503,55 +1496,22 @@ public class EditOrderPage extends OperatorV2SimplePage {
   /**
    * Accessor for DP Drop Off Setting dialog
    */
-  public static class DpDropOffSettingDialog extends OperatorV2SimplePage {
+  public static class DpDropOffSettingDialog extends MdDialog {
 
-    private static final String DIALOG_TITLE = "DP Drop Off Setting";
-    private static final String DP_LIST = "//nv-autocomplete[@item-types='DP']";
-    private static final String DROP_OFF_DATE_SELECT_LOCATOR = "container.order.edit.edit-dp-management-dropoff-date";
-    private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
-    private static final String TAG_DP_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Tagging to DP done successfully";
-    private static final String DP_CLEAR_SELECTED_BUTTON_LOCATOR = "//button/md-icon[@md-svg-icon='md-close']";
+    @FindBy(css = "button md-icon[md-svg-icon='md-close']")
+    public Button clearSelected;
 
-    public DpDropOffSettingDialog(WebDriver webDriver) {
-      super(webDriver);
-    }
+    @FindBy(name = "commons.save-changes")
+    public NvApiTextButton saveChanges;
 
-    public DpDropOffSettingDialog waitUntilVisibility() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-      return this;
-    }
+    @FindBy(css = "[id^='container.order.edit.edit-dp-management-dropoff-date']")
+    public MdSelect dropOffDate;
 
-    private List<String> getListOfDropOffDates() {
-      waitUntilVisibilityOfElementLocated("//md-select[@placeholder='Drop Off Date']");
-      clickAndWaitUntilDone("//md-select[@placeholder='Drop Off Date']");
-      waitUntilVisibilityOfElementLocated("//md-option[@aria-hidden='false']");
-      List<String> listOfDropOffDates = findElementsBy(
-          By.xpath("//md-option[@aria-hidden='false']")).stream()
-          .map(WebElement::getText).collect(Collectors.toList());
-      Actions actions = new Actions(getWebDriver());
-      actions.sendKeys(Keys.ESCAPE).build().perform();
-      return listOfDropOffDates;
-    }
+    @FindBy(css = "md-autocomplete")
+    public MdAutocomplete dropOffDp;
 
-    public void selectDpValue(String value) {
-      selectValueFromMdAutocomplete("", value);
-    }
-
-    public void selectDropOffDateValue(String value) {
-      selectValueFromMdSelectById(DROP_OFF_DATE_SELECT_LOCATOR, value);
-    }
-
-    public void clearSelectedDropOffValue() {
-      clickAndWaitUntilDone(DP_CLEAR_SELECTED_BUTTON_LOCATOR);
-    }
-
-    public void saveChanges() {
-      clickButtonByAriaLabel(SAVE_CHANGES_BUTTON_ARIA_LABEL);
-      waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
-    }
-
-    public void confirmOrderIsTagged() {
-      waitUntilInvisibilityOfToast(TAG_DP_DONE_SUCCESSFULLY_TOAST_MESSAGE, true);
+    public DpDropOffSettingDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 

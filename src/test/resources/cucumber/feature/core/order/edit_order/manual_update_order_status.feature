@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @ManualUpdateOrderStatus
+@OperatorV2 @Core @Order @EditOrder @ManualUpdateOrderStatus
 Feature: Manual Update Order Status
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -208,34 +208,36 @@ Feature: Manual Update Order Status
       | granularStatus | status      | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                             | uuid                                     |
       | Pickup fail    | Pickup fail | FAIL         | PENDING        | FAIL           | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: Status updated for testing purposes | uid:2857c8d6-004e-4a6f-8a1e-80c0bebe4137 |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Cancelled (<uuid>)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator update order status on Edit order page using data below:
-      | granularStatus | <granularStatus>                    |
-      | changeReason   | Status updated for testing purposes |
-    Then Operator verifies that success toast displayed:
-      | top                | Status Updated |
-      | waitUntilInvisible | true           |
-    And Operator verify order status is "<status>" on Edit Order page
-    And Operator verify order granular status is "<granularStatus>" on Edit Order page
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | <pickupStatus> |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | <deliveryStatus> |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description   |
-      | MANUAL ACTION | UPDATE STATUS | <description> |
-    When API Operator get order details
-    Then DB Operator verify Pickup waypoint of the created order using data below:
-      | status | <pickupWpStatus> |
-    And DB Operator verify Delivery waypoint of the created order using data below:
-      | status | <deliveryWpStatus> |
-    Examples:
-      | granularStatus | status    | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                              | uuid                                     |
-      | Cancelled      | Cancelled | CANCELLED    | CANCELLED      | PENDING        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Cancelled\n\nOld Delivery Status: Pending\nNew Delivery Status: Cancelled\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Cancelled\n\nOld Order Status: Pending\nNew Order Status: Cancelled\n\nReason: Status updated for testing purposes | uid:00d39d92-c30b-468b-b2e7-56435bbcabff |
+#  DEPRECATED
+#
+#  Scenario Outline: Operator Manually Update Order Granular Status - Cancelled (<uuid>)
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+#      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+#    And Operator update order status on Edit order page using data below:
+#      | granularStatus | <granularStatus>                    |
+#      | changeReason   | Status updated for testing purposes |
+#    Then Operator verifies that success toast displayed:
+#      | top                | Status Updated |
+#      | waitUntilInvisible | true           |
+#    And Operator verify order status is "<status>" on Edit Order page
+#    And Operator verify order granular status is "<granularStatus>" on Edit Order page
+#    And Operator verify Pickup transaction on Edit order page using data below:
+#      | status | <pickupStatus> |
+#    And Operator verify Delivery transaction on Edit order page using data below:
+#      | status | <deliveryStatus> |
+#    And Operator verify order events on Edit order page using data below:
+#      | tags          | name          | description   |
+#      | MANUAL ACTION | UPDATE STATUS | <description> |
+#    When API Operator get order details
+#    Then DB Operator verify Pickup waypoint of the created order using data below:
+#      | status | <pickupWpStatus> |
+#    And DB Operator verify Delivery waypoint of the created order using data below:
+#      | status | <deliveryWpStatus> |
+#    Examples:
+#      | granularStatus | status    | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                              | uuid                                     |
+#      | Cancelled      | Cancelled | CANCELLED    | CANCELLED      | PENDING        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Cancelled\n\nOld Delivery Status: Pending\nNew Delivery Status: Cancelled\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Cancelled\n\nOld Order Status: Pending\nNew Order Status: Cancelled\n\nReason: Status updated for testing purposes | uid:00d39d92-c30b-468b-b2e7-56435bbcabff |
 
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule (<uuid>)
     Given API Shipper create V4 order using data below:

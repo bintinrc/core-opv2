@@ -209,7 +209,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator confirm manually complete order on Edit Order page$")
   public void operatorManuallyCompleteOrderOnEditOrderPage() {
     String changeReason = editOrderPage.confirmCompleteOrder();
-    put("KEY_ORDER_CHANGE_REASON", changeReason);
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
   @When("^Operator verify 'COD Collected' checkbox is disabled on Edit Order page$")
@@ -956,7 +956,10 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("^Operator untags order from DP on Edit Order Page$")
   public void operatorUnTagOrderFromDP() {
-    editOrderPage.untagOrderFromDP();
+    editOrderPage.dpDropOffSettingDialog.waitUntilVisible();
+    editOrderPage.dpDropOffSettingDialog.clearSelected.click();
+    editOrderPage.dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
   }
 
   @Then("^Operator verifies delivery (is|is not) indicated by 'Ninja Collect' icon on Edit Order Page$")
