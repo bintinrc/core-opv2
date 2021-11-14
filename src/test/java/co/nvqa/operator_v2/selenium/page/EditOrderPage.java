@@ -1138,7 +1138,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   public void tagOrderToDP(String dpId) {
     dpDropOffSettingDialog.dropOffDp.selectValue(dpId);
     List<String> dpDropOffDates = dpDropOffSettingDialog.dropOffDate.getOptions();
-    dpDropOffSettingDialog.dropOffDp
+    dpDropOffSettingDialog.dropOffDate
         .selectValue(dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
     dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
     waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
