@@ -871,7 +871,7 @@ Feature: All Orders
       | status            | Transit                                                          |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                   |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
+      | shipperName       | {shipper-v4-legacy-id}                                           |
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:

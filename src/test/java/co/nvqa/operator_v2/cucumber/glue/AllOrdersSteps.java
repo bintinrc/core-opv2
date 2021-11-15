@@ -204,6 +204,7 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.manuallyCompleteOrderDialog.codCheckboxes.get(i).setValue(checked);
       }
     }
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     pause2s();
   }

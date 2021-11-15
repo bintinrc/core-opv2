@@ -405,19 +405,19 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   }
 
   public void openC2CReturnPickupsDialog() {
-    c2cReturnPickups.moveAndClick();
+    c2cReturnPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("C2C / Return Pickups");
     waitUntilLoaded();
   }
 
   public void openPendingC2CReturnPickupsDialog() {
-    pendingC2cReturnPickups.moveAndClick();
+    pendingC2cReturnPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("Pending C2C / Return Pickups");
     waitUntilLoaded();
   }
 
   public void openReservationPickupsDialog() {
-    reservationPickups.moveAndClick();
+    reservationPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("Reservation Pickups");
     waitUntilLoaded();
   }
