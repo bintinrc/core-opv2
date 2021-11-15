@@ -140,9 +140,9 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper, DP Order"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today             |
-      | Shipper       | {shipper-v4-name} |
-      | DP Order      | {dp-name}         |
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+      | DP Order      | {dp-name}              |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator click Load Selection on Create Route Group page
     Then Operator verifies Transaction records on Create Route Group page using data below:
@@ -160,8 +160,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today             |
-      | Shipper       | {shipper-v4-name} |
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
     And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Group page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
@@ -191,8 +191,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today             |
-      | Shipper       | {shipper-v4-name} |
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderType | Normal,Return |
@@ -945,8 +945,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today             |
-      | Shipper       | {shipper-v4-name} |
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <service_type> |
@@ -1065,6 +1065,7 @@ Feature: Create Route Groups
 
   @DeleteRouteGroups @DeleteFilterTemplate
   Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset (uid:677056fa-a044-487e-8b10-f95739f8578b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -1095,6 +1096,7 @@ Feature: Create Route Groups
 
   @DeleteRouteGroups @DeleteFilterTemplate
   Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset (uid:77c4ed63-51df-4998-a131-cb5cac5de236)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -1131,8 +1133,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today             |
-      | Shipper       | {shipper-v4-name} |
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <service_type> |
