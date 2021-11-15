@@ -434,7 +434,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Show DP Return Pickups Under Return Pickups Modal & Reservation Modal Route Inbound Page
+  Scenario: Show DP Return Pickups Under Return Pickups Modal & Reservation Modal Route Inbound Page (uid:76b0b222-d172-4ac6-8cac-6dff4f6c55a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

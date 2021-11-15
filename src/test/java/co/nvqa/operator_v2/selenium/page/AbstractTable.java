@@ -120,7 +120,11 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
       text = columnValueProcessors.get(columnId).apply(text);
     }
 
-    return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text), "-"));
+    if (StringUtils.isNotBlank(text) && text.matches("\\s*-?[\\d.]+\\s*")) {
+      return text.trim();
+    } else {
+      return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text), "-"));
+    }
   }
 
   public abstract void clickActionButton(int rowNumber, String actionId);

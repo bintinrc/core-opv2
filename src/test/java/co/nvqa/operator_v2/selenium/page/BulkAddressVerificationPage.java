@@ -104,7 +104,7 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage {
   public static class SuccessfulMatchesTable extends NgRepeatTable<JaroScore> {
 
     private static final Pattern LATLONG_PATTERN = Pattern
-        .compile(".*?([\\d\\.]+).*?([\\d\\.]+).*");
+        .compile(".*?(-?[\\d.]+).*?([\\d.]+).*");
     public static final String NG_REPEAT = "scs in $data";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
