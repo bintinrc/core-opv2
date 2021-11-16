@@ -51,6 +51,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
@@ -538,6 +539,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void verifyOrderGranularStatus(String expectedGranularStatus) {
     assertThat("Granular Status", granular.getText(), equalToIgnoringCase(expectedGranularStatus));
+  }
+
+  public void waitUntilGranularStatusChange(String expectedGranularStatus) {
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(),30);
+    wdWait.until((WebDriver driver) -> {
+      driver.navigate().refresh();
+      String status = granular.getText().trim();
+      return status.equalsIgnoreCase(expectedGranularStatus);
+    });
   }
 
   public void verifyOrderDeliveryTitle(String expectedDeliveryTitle) {

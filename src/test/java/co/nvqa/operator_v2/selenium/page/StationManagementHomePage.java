@@ -42,13 +42,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
     private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
     private static final String RECOVERY_TICKETS = "Recovery Tickets";
-
+    private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
 
     public StationManagementHomePage(WebDriver webDriver) {
         super(webDriver);
     }
 
-    @FindBy(css = "div.nv-h4")
+    @FindBy(css = "div.nv-h4, header div[style*='bold']")
     private PageElement pageHeader;
 
     @FindBy(id = "hint-link")
@@ -93,7 +93,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
             switchToStationHomeFrame();
         }
-        waitUntilVisibilityOfElementLocated("(//div[text()='Search or Select'])[2]", 30);
+        waitUntilVisibilityOfElementLocated("(//div[text()='Search or Select'])[2]", 60);
         hubs.enterSearchTerm(hubName);
         hubDropdownValues.click();
         proceedBtn.click();
@@ -183,6 +183,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void validateStationURLPath() {
+        getWebDriver().navigate().refresh();
         waitUntilStationHomeUrlLoads(STATION_HOME_URL_PATH);
         Assert.assertTrue("Assert that URL path is updated with station management url",
                 getCurrentUrl().endsWith(STATION_HOME_URL_PATH));
@@ -205,9 +206,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         }
         String newUrl = currentUrl.replace(currentHubId, hubId);
         getWebDriver().get(newUrl);
-        Assert.assertTrue("Assert that URL path is updated with new hub id",
-                getCurrentUrl().endsWith(hubId));
-        getWebDriver().navigate().refresh();
+        pause3s();
     }
 
     public void waitUntilStationHomeUrlLoads(String partUrl) {
@@ -278,8 +277,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         if (pageFrame.size() > 0) {
             switchToStationHomeFrame();
         }
+        waitUntilElementIsClickable(headerHubValue.getWebElement());
         String actualHub = headerHubValue.getText().trim();
-        Assert.assertTrue("Assert that the actual hub selected is as expected", actualHub.startsWith(expectedHub));
+        Assert.assertTrue("Assert that the actual hub selected is as expected", actualHub.contains(expectedHub));
     }
 
     public void validateTileValueMatches(int beforeOrder, int afterOrder, int delta) {
@@ -358,7 +358,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
     public void verifyNavigationToEditOrderScreen(String expectedTrackingId) {
         String windowHandle = getWebDriver().getWindowHandle();
-        WebElement trackingIdLink = getWebDriver().findElement(By.linkText(expectedTrackingId));
+        String trackingIdXpath = f(TABLE_TRACKING_ID_XPATH, expectedTrackingId, expectedTrackingId);
+        WebElement trackingIdLink = getWebDriver().findElement(By.xpath(trackingIdXpath));
         trackingIdLink.click();
         switchToNewWindow();
         waitWhilePageIsLoading();
