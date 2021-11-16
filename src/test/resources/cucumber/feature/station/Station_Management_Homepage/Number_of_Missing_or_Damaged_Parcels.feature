@@ -9,7 +9,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -34,16 +34,16 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-3}" and proceed
-    And verifies that the count in tile: "<TileName>" has increased by 1
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that the table:"<TableName>" is displayed with following columns:
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that the table:"<TableName>" is displayed with following columns:
       | Tracking ID   |
       | Ticket Status |
       | Order Tags    |
-    And searches for the order details in the table:"<TableName>" by applying the following filters:
+    And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And verifies that the following details are displayed on the modal under the table:"<TableName>"
+    And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | CREATED |
 
     Examples:
@@ -54,7 +54,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -76,16 +76,16 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "{hub-name-3}" and proceed
-    And verifies that the count in tile: "<TileName>" has increased by 1
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that the table:"<TableName>" is displayed with following columns:
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that the table:"<TableName>" is displayed with following columns:
       | Tracking ID   |
       | Ticket Status |
       | Order Tags    |
-    And searches for the order details in the table:"<TableName>" by applying the following filters:
+    And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And verifies that the following details are displayed on the modal under the table:"<TableName>"
+    And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | CREATED |
 
     Examples:
@@ -96,7 +96,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -128,16 +128,16 @@ Feature: Number of Missing or Damaged Parcels
       | newInstructions | GENERATED      |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the count in tile: "<TileName>" has increased by 1
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that the table:"<TableName>" is displayed with following columns:
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that the table:"<TableName>" is displayed with following columns:
       | Tracking ID   |
       | Ticket Status |
       | Order Tags    |
-    And searches for the order details in the table:"<TableName>" by applying the following filters:
+    And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And verifies that the following details are displayed on the modal under the table:"<TableName>"
+    And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | <Status> |
 
     Examples:
@@ -150,7 +150,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -178,16 +178,16 @@ Feature: Number of Missing or Damaged Parcels
       | newInstructions | GENERATED      |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the count in tile: "<TileName>" has increased by 1
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that the table:"<TableName>" is displayed with following columns:
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that the table:"<TableName>" is displayed with following columns:
       | Tracking ID   |
       | Ticket Status |
       | Order Tags    |
-    And searches for the order details in the table:"<TableName>" by applying the following filters:
+    And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And verifies that the following details are displayed on the modal under the table:"<TableName>"
+    And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | <Status> |
 
     Examples:
@@ -200,7 +200,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -225,8 +225,8 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the count in tile: "<TileName>" has increased by 1
-    And get the count from the tile: "<TileName>"
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator get the count from the tile: "<TileName>"
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -237,13 +237,13 @@ Feature: Number of Missing or Damaged Parcels
       | newInstructions         | GENERATED                 |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the count in tile: "<TileName>" has decreased by 1
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that the table:"<TableName>" is displayed with following columns:
+    And Operator verifies that the count in tile: "<TileName>" has decreased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that the table:"<TableName>" is displayed with following columns:
       | Tracking ID   |
       | Ticket Status |
       | Order Tags    |
-    And expects no results in the modal under the table:"<TableName>" when applying the following filters:
+    And Operator expects no results in the modal under the table:"<TableName>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
@@ -255,7 +255,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -277,8 +277,8 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the count in tile: "<TileName>" has increased by 1
-    And get the count from the tile: "<TileName>"
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator get the count from the tile: "<TileName>"
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -288,13 +288,13 @@ Feature: Number of Missing or Damaged Parcels
       | newInstructions         | GENERATED                 |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the count in tile: "<TileName>" has decreased by 1
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that the table:"<TableName>" is displayed with following columns:
+    And Operator verifies that the count in tile: "<TileName>" has decreased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that the table:"<TableName>" is displayed with following columns:
       | Tracking ID   |
       | Ticket Status |
       | Order Tags    |
-    And expects no results in the modal under the table:"<TableName>" when applying the following filters:
+    And Operator expects no results in the modal under the table:"<TableName>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 

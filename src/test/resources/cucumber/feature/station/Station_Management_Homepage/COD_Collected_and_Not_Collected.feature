@@ -1,7 +1,7 @@
 @StationManagement @COD
 Feature: COD Collected and Not Collected
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Failed-cod
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -9,8 +9,8 @@ Feature: COD Collected and Not Collected
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -22,32 +22,28 @@ Feature: COD Collected and Not Collected
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the tracking ID on Van Inbound Page then click enter
+    When API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator click on start route after van inbounding
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator wait until order granular status changes to "On Vehicle for Delivery"
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
-    When completes COD order manually by updating reason for change as "<ChangeReason>"
+    And Operator completes COD order manually by updating reason for change as "<ChangeReason>"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And verifies that the dollar amount in tile: "<TileName2>" has remained un-changed
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODAmount>            |
@@ -60,7 +56,7 @@ Feature: COD Collected and Not Collected
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -72,24 +68,20 @@ Feature: COD Collected and Not Collected
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the tracking ID on Van Inbound Page then click enter
+    When API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator click on start route after van inbounding
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator wait until order granular status changes to "On Vehicle for Delivery"
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
-    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    And Operator completes COD order manually by updating reason for change as "<ChangeReason>"
     And Operator verify order status is "Completed" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | <HubName>                       |
@@ -106,17 +98,17 @@ Feature: COD Collected and Not Collected
     And Operator ends session incompletely for route "{KEY_CREATED_ROUTE_ID}" with reason as "Incomplete money collection"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
-    And verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    Then Operator verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODBalance>           |
@@ -129,7 +121,7 @@ Feature: COD Collected and Not Collected
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -141,25 +133,21 @@ Feature: COD Collected and Not Collected
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the tracking ID on Van Inbound Page then click enter
+    When API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator click on start route after van inbounding
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator wait until order granular status changes to "On Vehicle for Delivery"
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
-    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    And Operator completes COD order manually by updating reason for change as "<ChangeReason>"
     And Operator verify order status is "Completed" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
-    When Operator go to menu Inbounding -> Route Inbound
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
+    And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | <HubName>                       |
       | fetchBy      | FETCH_BY_TRACKING_ID            |
@@ -174,17 +162,17 @@ Feature: COD Collected and Not Collected
     And Operator ends Route Inbound session for route "{KEY_CREATED_ROUTE_ID}" on Route Inbound page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
-    And verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    Then Operator verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODBalance>           |
@@ -193,12 +181,11 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 3000         | -500       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
-
   Scenario Outline: Driver Collects x COD and Route Inbound x (uid:093c7728-d38e-42d1-9e62-1db53fab1585)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -210,24 +197,20 @@ Feature: COD Collected and Not Collected
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the tracking ID on Van Inbound Page then click enter
+    When API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator click on start route after van inbounding
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator wait until order granular status changes to "On Vehicle for Delivery"
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
-    And completes COD order manually by updating reason for change as "<ChangeReason>"
+    And Operator completes COD order manually by updating reason for change as "<ChangeReason>"
     And Operator verify order status is "Completed" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | <HubName>                       |
@@ -244,17 +227,17 @@ Feature: COD Collected and Not Collected
     And Operator ends Route Inbound session for route "{KEY_CREATED_ROUTE_ID}" on Route Inbound page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODAmount>
-    And verifies that the dollar amount in tile: "<TileName2>" has increased by <CODAmount>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    Then Operator verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODAmount>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has increased by <CODAmount>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | Completed              |
@@ -267,7 +250,7 @@ Feature: COD Collected and Not Collected
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName>"
+    And Operator get the dollar amount from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -279,31 +262,27 @@ Feature: COD Collected and Not Collected
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the tracking ID on Van Inbound Page then click enter
+    When API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator click on start route after van inbounding
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator wait until order granular status changes to "On Vehicle for Delivery"
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
-    When completes COD order manually by updating reason for change as "<ChangeReason>"
+    And Operator completes COD order manually by updating reason for change as "<ChangeReason>"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName>" has increased by <CODAmount>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And verifies that a table is displayed with following columns:
+    And Operator verifies that the dollar amount in tile: "<TileName>" has increased by <CODAmount>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               |
       | {KEY_CREATED_ROUTE_ID} |
-    And verifies that Route Manifest page is opened on clicking route id
+    And Operator verifies that Route Manifest page is opened on clicking route id
 
     Examples:
       | HubId      | HubName      | CODAmount | ChangeReason | TileName                            | ModalName                           |
@@ -313,8 +292,8 @@ Feature: COD Collected and Not Collected
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -331,17 +310,17 @@ Feature: COD Collected and Not Collected
     And Operator verify order granular status is "<OrderStatus>" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And verifies that the dollar amount in tile: "<TileName2>" has remained un-changed
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODAmount>            |
@@ -354,7 +333,7 @@ Feature: COD Collected and Not Collected
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -371,9 +350,9 @@ Feature: COD Collected and Not Collected
     And Operator verify order granular status is "<OrderStatus>" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | <HubName>                       |
@@ -390,17 +369,17 @@ Feature: COD Collected and Not Collected
     And Operator ends session incompletely for route "{KEY_CREATED_ROUTE_ID}" with reason as "Incomplete money collection"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
-    And verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    Then Operator verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODBalance>           |
@@ -408,12 +387,12 @@ Feature: COD Collected and Not Collected
     Examples:
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 1500         | 1000       | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
-
+  @Failed-cod
   Scenario Outline: Driver Collects x COP and Route Inbound y (y > x) (uid:61f1d829-45f7-469d-ad43-57fe6f1ef392)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -430,9 +409,9 @@ Feature: COD Collected and Not Collected
     And Operator verify order granular status is "<OrderStatus>" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | <HubName>                       |
@@ -448,17 +427,17 @@ Feature: COD Collected and Not Collected
     And Operator ends Route Inbound session for route "{KEY_CREATED_ROUTE_ID}" on Route Inbound page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
-    And verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    Then Operator verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODToCollect>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has increased by <CODToCollect>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | <CODBalance>           |
@@ -466,12 +445,12 @@ Feature: COD Collected and Not Collected
     Examples:
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 3000         | -500       | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
-
+  @Failed-cod
   Scenario Outline: Driver Collects x COP and Route Inbound x (uid:47a4a0db-44b0-4231-abe6-8073d7ed40e2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -488,9 +467,9 @@ Feature: COD Collected and Not Collected
     And Operator verify order granular status is "<OrderStatus>" on Edit Order page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
-    And get the dollar amount from the tile: "<TileName1>"
-    And get the dollar amount from the tile: "<TileName2>"
+    And Operator verifies that the dollar amount in tile: "<TileName1>" has increased by <CODAmount>
+    And Operator get the dollar amount from the tile: "<TileName1>"
+    And Operator get the dollar amount from the tile: "<TileName2>"
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | <HubName>                       |
@@ -507,17 +486,17 @@ Feature: COD Collected and Not Collected
     And Operator ends Route Inbound session for route "{KEY_CREATED_ROUTE_ID}" on Route Inbound page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODAmount>
-    And verifies that the dollar amount in tile: "<TileName2>" has increased by <CODAmount>
-    And opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
-    And verifies that a table is displayed with following columns:
+    Then Operator verifies that the dollar amount in tile: "<TileName1>" has decreased by <CODAmount>
+    And Operator verifies that the dollar amount in tile: "<TileName2>" has increased by <CODAmount>
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName1>"
+    And Operator verifies that a table is displayed with following columns:
       | Driver Name           |
       | Route ID              |
       | COD Amount to Collect |
-    And searches for the orders in modal pop-up by applying the following filters:
+    And Operator searches for the orders in modal pop-up by applying the following filters:
       | Route ID               | Driver Name         |
       | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
-    And verifies that the following details are displayed on the modal
+    And Operator verifies that the following details are displayed on the modal
       | Driver Name           | {ninja-driver-name}    |
       | Route ID              | {KEY_CREATED_ROUTE_ID} |
       | COD Amount to Collect | Completed              |
@@ -526,6 +505,6 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 125.5     | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @Failed-cod
   Scenario: Kill Browser
     Given no-op
