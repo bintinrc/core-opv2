@@ -227,8 +227,8 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
-  @When("completes COD order manually by updating reason for change as {string}")
-  public void completes_COD_order_manually_by_updating_reason_for_change_as(String changeReason) {
+  @When("Operator completes COD order manually by updating reason for change as {string}")
+  public void operator_completes_COD_order_manually_by_updating_reason_for_change_as(String changeReason) {
     if("GENERATED".equals(changeReason)){
       changeReason = f("This reason is created by automation at %s.",
           CREATED_DATE_SDF.format(new Date()));
@@ -344,6 +344,11 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("^Operator verify order granular status is \"(.+)\" on Edit Order page$")
   public void operatorVerifyOrderGranularStatusOnEditOrderPage(String expectedValue) {
     editOrderPage.verifyOrderGranularStatus(expectedValue);
+  }
+
+  @Then("Operator wait until order granular status changes to {string}")
+  public void operator_wait_until_order_granular_status_changes_to(String expectedValue) {
+    editOrderPage.waitUntilGranularStatusChange(expectedValue);
   }
 
   @Then("^Operator verify order delivery title is \"(.+)\" on Edit Order page$")
