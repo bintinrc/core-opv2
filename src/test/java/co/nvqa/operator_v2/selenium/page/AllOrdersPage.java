@@ -316,15 +316,17 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectionMenu.selectOption("Select All Shown");
   }
 
-  public void forceSuccessOrders() {
+  public String forceSuccessOrders() {
     clearFilterTableOrderByTrackingId();
     selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue("Force success from automated test");
+    String reason = "Force success from automated test";
+    manuallyCompleteOrderDialog.changeReason.setValue(reason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
     waitUntilInvisibilityOfToast("Complete Order");
+    return reason;
   }
 
   public void verifyOrderIsForceSuccessedSuccessfully(Order order) {

@@ -208,7 +208,8 @@ public class EditOrderSteps extends AbstractSteps {
 
   @When("^Operator confirm manually complete order on Edit Order page$")
   public void operatorManuallyCompleteOrderOnEditOrderPage() {
-    editOrderPage.confirmCompleteOrder();
+    String changeReason = editOrderPage.confirmCompleteOrder();
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
   @When("^Operator verify 'COD Collected' checkbox is disabled on Edit Order page$")
@@ -222,6 +223,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator confirm manually complete order with COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -243,6 +245,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator confirm manually complete order without collecting COD on Edit Order page$")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -958,7 +961,10 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("^Operator untags order from DP on Edit Order Page$")
   public void operatorUnTagOrderFromDP() {
-    editOrderPage.untagOrderFromDP();
+    editOrderPage.dpDropOffSettingDialog.waitUntilVisible();
+    editOrderPage.dpDropOffSettingDialog.clearSelected.click();
+    editOrderPage.dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
+    editOrderPage.waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
   }
 
   @Then("^Operator verifies delivery (is|is not) indicated by 'Ninja Collect' icon on Edit Order Page$")
@@ -1536,6 +1542,7 @@ public class EditOrderSteps extends AbstractSteps {
     String parcelLocation = mapOfData.get("parcelLocation");
     String liability = mapOfData.get("liability");
     String damageDescription = mapOfData.get("damageDescription");
+    String orderOutcome = mapOfData.get("orderOutcome");
     String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
     String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
     String custZendeskId = mapOfData.get("custZendeskId");
@@ -1583,6 +1590,7 @@ public class EditOrderSteps extends AbstractSteps {
     recoveryTicket.setParcelLocation(parcelLocation);
     recoveryTicket.setLiability(liability);
     recoveryTicket.setDamageDescription(damageDescription);
+    recoveryTicket.setOrderOutcome(orderOutcome);
     recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
     recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
     recoveryTicket.setCustZendeskId(custZendeskId);

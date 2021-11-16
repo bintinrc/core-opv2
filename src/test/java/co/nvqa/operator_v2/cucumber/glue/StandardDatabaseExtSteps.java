@@ -54,6 +54,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
@@ -196,15 +197,18 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     if (transaction != null) {
       Long waypointId = transaction.getWaypointId();
-      Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+      Assertions.assertThat(waypointId)
+          .as("%s waypoint Id", transactionType)
+          .isNotNull();
       put(KEY_WAYPOINT_ID, waypointId);
       put(KEY_TRANSACTION_ID, transaction.getId());
 
       Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
 
       if (data.containsKey("status")) {
-        assertThat(f("%s waypoint [%d] status", transactionType, waypointId),
-            actualWaypoint.getStatus(), Matchers.equalToIgnoringCase(data.get("status")));
+        Assertions.assertThat(actualWaypoint.getStatus())
+            .as("%s waypoint [%d] status", transactionType, waypointId)
+            .isEqualToIgnoringCase(data.get("status"));
       }
     } else {
       fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
@@ -450,6 +454,24 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         order.getPickupDate() + " " + TIME_FORMATTER_1
             .format(order.getPickupTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
+  }
+
+  @Then("^DB Operator verify the last (Pickup|Delivery) transaction record of the created order:$")
+  public void dbOperatorVerifyPickupTransactionRecordUpdatedForTheCreatedOrder(String tranType,
+      Map<String, String> data) {
+    TransactionEntity expected = new TransactionEntity(resolveKeyValues(data));
+    Order order = get(KEY_CREATED_ORDER);
+    String type = tranType.equalsIgnoreCase("Pickup") ? "PP" : "DD";
+    List<TransactionEntity> transactions = getCoreJdbc()
+        .findTransactionByOrderIdAndType(order.getId(), type);
+
+    Assertions.assertThat(transactions)
+        .as("List of %s transactions of the %s order", tranType, order.getId())
+        .isNotEmpty();
+
+    TransactionEntity actual = transactions.get(transactions.size() - 1);
+    expected.compareWithActual(actual);
+    put(KEY_WAYPOINT_ID, actual.getWaypointId());
   }
 
   @Then("^DB Operator verify Delivery transaction record is updated for the created order$")
