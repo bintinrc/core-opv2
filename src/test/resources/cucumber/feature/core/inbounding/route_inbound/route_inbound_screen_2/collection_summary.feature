@@ -197,8 +197,8 @@ Feature: Collection Summary
       | reservationId                            | location                   | readyToLatestTime              | approxVolume                   | status  | receivedParcels |
       | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | GET_FROM_CREATED_ADDRESS_1 | GET_FROM_CREATED_RESERVATION_1 | GET_FROM_CREATED_RESERVATION_1 | Success | 1               |
     Then Operator verify Orders table in Reservations dialog using data below:
-      | trackingId                                 | stampId | location                   | type                  | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ADDRESS_1 | Pick Up (Reservation) | Success | 0        | Inbounded          |
+      | trackingId                                 | stampId | location                                               | type                  | status  | cmiCount | routeInboundStatus |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | {KEY_CREATED_ADDRESS.to1LineAddressWithSpaceDelimiter} | Pick Up (Reservation) | Success | 0        | Inbounded          |
     And Operator close Reservations dialog on Route Inbound page
 
   @KillBrowser @ShouldAlwaysRun

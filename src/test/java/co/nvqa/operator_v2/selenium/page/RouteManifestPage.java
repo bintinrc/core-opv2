@@ -177,6 +177,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   public void failDeliveryWaypoint(FailureReason failureReason) {
     clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
     chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
+    pause1s();
     chooseAnOutcomeForTheWaypointDialog.failure.click();
 
     Stack<FailureReason> stackOfFailureReason = new Stack<>();

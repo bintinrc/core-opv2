@@ -177,7 +177,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorForceSuccessSingleOrderOnAllOrdersPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    allOrdersPage.forceSuccessOrders();
+    String reason = allOrdersPage.forceSuccessOrders();
+    put(KEY_ORDER_CHANGE_REASON, reason);
   }
 
   @When("^Operator Force Success orders with COD collection on All Orders page:$")
@@ -203,6 +204,7 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.manuallyCompleteOrderDialog.codCheckboxes.get(i).setValue(checked);
       }
     }
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     pause2s();
   }
