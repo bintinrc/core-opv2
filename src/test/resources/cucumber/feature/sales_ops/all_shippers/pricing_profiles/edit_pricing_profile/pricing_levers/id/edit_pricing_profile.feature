@@ -3,26 +3,11 @@ Feature: Edit Pricing Profiles - ID
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    And Operator changes the country to "Indonesia"
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with 0 Percentage Discount - ID (uid:8fa73f4b-69a1-4ce0-927a-82b2be6ace0c)
-    Given Operator changes the country to "Indonesia"
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
+    Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -42,23 +27,7 @@ Feature: Edit Pricing Profiles - ID
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with none Percentage Discount - ID (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
-    Given Operator changes the country to "Indonesia"
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
+    Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -91,23 +60,7 @@ Feature: Edit Pricing Profiles - ID
       | discount          | none                                            |
 
   Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:9f2e8e1f-de51-4475-806a-c63e021f729d)
-    Given Operator changes the country to "Indonesia"
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
+    Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |

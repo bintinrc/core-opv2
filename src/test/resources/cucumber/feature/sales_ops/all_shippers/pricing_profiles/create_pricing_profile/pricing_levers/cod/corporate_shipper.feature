@@ -3,10 +3,8 @@ Feature:  Create Pricing Profile - Corporate Shippers - COD
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-sop-corp-v4-dummy-pricing-profile-cod-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-pricing-profile-cod-global-id}" shipper's pricing profiles
-
 
   Scenario: Create Pricing Profile - Corporate Shipper - with 'Int' COD Min Fee and 'Int' COD Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:40ca4247-a8b7-44a6-b64a-75624eeb39a7)
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-cod-legacy-id}"

@@ -4,7 +4,6 @@ Feature:  Corporate Shipper
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}" shipper's pricing profiles
 
@@ -29,9 +28,9 @@ Feature:  Corporate Shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | discount          | 2.00                                            |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                     |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | discount          | 2.00                                               |
       | comments          | This is a test pricing script                   |
       | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -45,8 +44,8 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -61,8 +60,8 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -93,9 +92,9 @@ Feature:  Corporate Shipper
     When Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                     |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -118,8 +117,8 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -131,9 +130,9 @@ Feature:  Corporate Shipper
     When Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                     |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -141,9 +140,9 @@ Feature:  Corporate Shipper
     And Operator verifies the pricing lever details in the database
     And Operator verifies the pricing profile details are like below:
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                     |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | empty                                           |
       | comments          | This is a test pricing script                   |
 
@@ -152,8 +151,8 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -165,8 +164,8 @@ Feature:  Corporate Shipper
     When Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -180,8 +179,8 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -205,9 +204,9 @@ Feature:  Corporate Shipper
     When Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                     |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     Then Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -236,9 +235,9 @@ Feature:  Corporate Shipper
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | endDate           | {gradle-next-3-day-yyyy-MM-dd}                     |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
@@ -260,8 +259,8 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     And Operator save changes on Edit Shipper Page
@@ -281,16 +280,16 @@ Feature:  Corporate Shipper
     Given Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.0                                             |
       | comments          | This is a test pricing script                   |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
-      | pricingScriptName | {pricing-script-id-3} - {pricing-script-name-3} |
-      | type              | FLAT                                            |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all |
+      | type              | FLAT                                               |
       | discount          | 2.5                                             |
       | comments          | This is a test pricing script                   |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values

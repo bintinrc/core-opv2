@@ -7,8 +7,7 @@ Feature: Edit Pricing Profile - Normal Shippers
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - Edit Pricing Script ID (uid:f7f04ae2-65ba-45a8-8627-79f732fae1a2)
-    Given Operator go to menu Shipper -> All Shippers
-    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | endDate           | {gradle-next-2-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
@@ -38,8 +37,7 @@ Feature: Edit Pricing Profile - Normal Shippers
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - Edit Start Date / End Date (uid:86101231-638d-4d38-917d-79dbb1b1d07d)
-    Given Operator go to menu Shipper -> All Shippers
-    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And Operator adds new Shipper's Pricing Profile
       | endDate           | {gradle-next-2-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |

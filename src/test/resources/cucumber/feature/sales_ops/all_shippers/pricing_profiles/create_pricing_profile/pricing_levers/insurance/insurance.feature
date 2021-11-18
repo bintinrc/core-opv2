@@ -3,7 +3,6 @@ Feature: Create Pricing Profile - Normal Shippers - Insurance
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-ins-global-id}" shipper's pricing profiles
 
   Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage, '0' Insurance Threshold (uid:8109e55a-bfbd-4d95-8ef7-102a05d18618)
