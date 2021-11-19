@@ -439,7 +439,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data) {
     try {
       data = resolveKeyValues(data);
-      Pricing pricing = get(KEY_PRICING_PROFILE);
+      Pricing pricing =
+          Objects.isNull(get(KEY_PRICING_PROFILE)) ? new Pricing() : get(KEY_PRICING_PROFILE);
 
       String value = data.get("startDate");
       if (StringUtils.isNotBlank(value)) {

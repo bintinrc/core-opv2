@@ -20,7 +20,7 @@ Feature: Create Pricing Profile - ID
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @CloseNewWindows
+  @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
     Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
@@ -29,7 +29,7 @@ Feature: Create Pricing Profile - ID
       | discount          | 0                                               |
       | errorMessage      | 0 is not a valid discount value                 |
 
-  @CloseNewWindows @HappyPathID
+  @DeleteNewlyCreatedShipper @CloseNewWindows @HappyPathID
   Scenario: Create Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
     Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
@@ -42,7 +42,7 @@ Feature: Create Pricing Profile - ID
     Then DB Operator fetches pricing profile details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @CloseNewWindows
+  @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:63d13a1d-cdbb-4a48-bde9-7c962f0101f8)
     Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
