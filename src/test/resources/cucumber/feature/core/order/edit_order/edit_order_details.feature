@@ -49,7 +49,7 @@ Feature: Edit Order Details
       | postalCode     | 308402                                 |
     Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
-    And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
+#    And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
     And Operator verifies Pickup Details are updated on Edit Order Page
     And Operator verifies Pickup Transaction is updated on Edit Order Page
     And DB Operator verifies pickup info is updated in order record
@@ -85,7 +85,7 @@ Feature: Edit Order Details
       | waitUntilInvisible | true                     |
     Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
-    And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
+#    And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
     And Operator verifies Delivery Details are updated on Edit Order Page
     And Operator verifies Delivery Transaction is updated on Edit Order Page
     And DB Operator verifies delivery info is updated in order record
