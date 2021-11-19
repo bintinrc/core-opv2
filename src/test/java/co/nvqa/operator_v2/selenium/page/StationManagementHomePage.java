@@ -221,7 +221,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void waitUntilTileValueMatches(String tileName, int expected){
-        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),90);
         wdWait.until(driver -> {
             NvLogger.info("Refreshing the page to reload the tile value...");
             driver.navigate().refresh();
@@ -232,7 +232,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
 
     public void waitUntilTileValueLoads(String tileName){
-        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
+        WebDriverWait wdWait = new WebDriverWait(getWebDriver(),90);
         String tileValueXpath = f(TILE_VALUE_XPATH, tileName);
         wdWait.until(driver -> {
             double actualCount = -1;
