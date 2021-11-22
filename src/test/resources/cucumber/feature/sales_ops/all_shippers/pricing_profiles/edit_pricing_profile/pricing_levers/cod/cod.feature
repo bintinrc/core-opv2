@@ -3,13 +3,15 @@ Feature: Edit Pricing Profiles - Normal Shippers - COD
 
   Background: Login to Operator Portal V2 and set up shipper for testing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator create new normal shipper
-    # add active pricing profile
-    And API operator adds new basic pricing profile with pricing script id "{pricing-script-id}" to created shipper
-    # add pending pricing profile
-    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
-      | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And DB Operator deletes "{shipper-v4-dummy-pricing-profile-cod-2-global-id}" shipper's pricing profiles
+      # create a pending pricing profile for shipper
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-cod-2-legacy-id}"
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-cod-2-global-id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-cod-2-global-id}"
+      | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    # edit pending pricing profile for shipper
+    When Operator edits shipper "{shipper-v4-dummy-pricing-profile-cod-2-legacy-id}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
 
   @DeleteNewlyCreatedShipper @CloseNewWindows

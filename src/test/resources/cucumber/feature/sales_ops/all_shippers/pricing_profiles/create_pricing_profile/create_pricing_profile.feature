@@ -67,10 +67,13 @@ Feature: Create Pricing Profile
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
-    Given API Operator create new normal shipper
-    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
-      | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
+    #add pending profile
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
+      | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
@@ -78,9 +81,9 @@ Feature: Create Pricing Profile
       | comments          | This is a test pricing script                   |
       | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     Then Operator verifies that Pricing Script is "Pending" and "Active"
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And Operator verifies that Edit Pending Profile is displayed
 
   @CloseNewWindows

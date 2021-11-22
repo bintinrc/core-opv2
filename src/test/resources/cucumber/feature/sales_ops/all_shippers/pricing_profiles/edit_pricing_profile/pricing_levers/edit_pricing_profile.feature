@@ -4,13 +4,13 @@ Feature: Edit Pricing Profile - Normal Shippers
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
-    And API Operator create new normal shipper
     # add active pricing profile
-    And API operator adds new basic pricing profile with pricing script id "{pricing-script-id}" to created shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
+      | {"effective_date":"{gradle-previous-1-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id}} |
     # add pending pricing profile
-    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
 
   @CloseNewWindows
