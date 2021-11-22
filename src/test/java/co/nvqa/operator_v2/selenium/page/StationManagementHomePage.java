@@ -227,7 +227,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             driver.navigate().refresh();
             waitUntilPageLoaded();
             int actual = getNumberFromTile(tileName);
-            return (actual == expected) ? true : false;
+            return actual == expected;
         });
     }
 
