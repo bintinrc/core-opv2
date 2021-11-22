@@ -139,7 +139,7 @@ Feature: Order Tag Management
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> Order Tag Management
     And Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName | {shipper-v4-legacy-id}-{shipper-v4-name} |
+      | shipperName | {shipper-v4-legacy-id} |
     Then Operator searches and selects orders created on Order Tag Management page
 
   Scenario: Search Orders on the Order Tag Management Page by Master Shipper Filter (uid:ae438b3a-376d-46bf-811a-1ccfcd8ef6b0)

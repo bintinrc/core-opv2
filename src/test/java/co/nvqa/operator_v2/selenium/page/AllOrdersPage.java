@@ -24,15 +24,12 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.CANCEL_SELECTED;
@@ -236,6 +233,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     File csvFile = createFile(
         String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
 
+    waitUntilPageLoaded();
     findOrdersWithCsv.click();
     findOrdersWithCsvDialog.waitUntilVisible();
     findOrdersWithCsvDialog.selectFile.setValue(csvFile);
@@ -318,14 +316,17 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectionMenu.selectOption("Select All Shown");
   }
 
-  public void forceSuccessOrders() {
+  public String forceSuccessOrders() {
     clearFilterTableOrderByTrackingId();
     selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
+    String reason = "Force success from automated test";
+    manuallyCompleteOrderDialog.changeReason.setValue(reason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
     waitUntilInvisibilityOfToast("Complete Order");
+    return reason;
   }
 
   public void verifyOrderIsForceSuccessedSuccessfully(Order order) {
@@ -559,8 +560,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilInvisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading");
+    waitUntilVisibilityOfToast("Attempting to download");
+    waitUntilInvisibilityOfToast("Downloading", true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {
@@ -714,6 +715,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.ordersWithCod']/td[2]//md-checkbox")
     public List<MdCheckbox> codCheckboxes;
+
+    @FindBy(css = "[id^='container.order.edit.input-reason-for-change']")
+    public TextBox changeReason;
 
     public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

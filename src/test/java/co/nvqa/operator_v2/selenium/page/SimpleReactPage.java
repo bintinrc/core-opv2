@@ -13,7 +13,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class SimpleReactPage extends OperatorV2SimplePage {
+public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2SimplePage {
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -53,12 +53,13 @@ public class SimpleReactPage extends OperatorV2SimplePage {
         , timeoutInMillis);
   }
 
-  public void inFrame(Consumer<SimpleReactPage> consumer) {
+  @SuppressWarnings("unchecked")
+  public void inFrame(Consumer<T> consumer) {
     getWebDriver().switchTo().defaultContent();
     pageFrame.waitUntilVisible();
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
     try {
-      consumer.accept(this);
+      consumer.accept((T) this);
     } finally {
       getWebDriver().switchTo().defaultContent();
     }

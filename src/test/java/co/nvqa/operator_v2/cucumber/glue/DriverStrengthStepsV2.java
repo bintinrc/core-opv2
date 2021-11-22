@@ -38,13 +38,17 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       Map<String, String> data) {
     DriverInfo driverInfo = new DriverInfo(resolveKeyValues(data));
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
-    dsPage.addNewDriver(driverInfo);
+    dsPage.inFrame(() -> {
+      dsPage.addNewDriver(driverInfo);
+    });
   }
 
   @When("^Operator opens Add Driver dialog on Driver Strength$")
   public void operatorOpensAddDriverDialog() {
-    dsPage.addNewDriver.click();
-    dsPage.addDriverDialog.waitUntilVisible();
+    dsPage.inFrame(() -> {
+      dsPage.addNewDriver.click();
+      pause3s();
+    });
   }
 
   @When("^Operator fill Add Driver form on Driver Strength page using data below:$")
@@ -52,19 +56,38 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       Map<String, String> mapOfData) {
     DriverInfo driverInfo = new DriverInfo(resolveKeyValues(mapOfData));
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
-    dsPage.addDriverDialog.fillForm(driverInfo);
+    dsPage.inFrame(() -> dsPage.addDriverDialog.fillForm(driverInfo));
   }
 
   @When("Operator verifies Submit button in Add Driver dialog is disabled")
   public void operatorVerifiesSubmitButtonState() {
-    assertFalse("Submit button is enabled", dsPage.addDriverDialog.submit.isEnabled());
+    dsPage.inFrame(() ->
+        assertFalse("Submit button is enabled", dsPage.addDriverDialog.submit.isEnabled()));
   }
 
   @When("Operator verifies hint {string} is displayed in Add Driver dialog")
   public void operatorVerifiesAddDriverHint(String expected) {
-    expected = resolveValue(expected);
-    assertTrue("Hint is displayed", dsPage.addDriverDialog.hints.isDisplayed());
-    assertEquals("Hint text", expected, dsPage.addDriverDialog.hints.getNormalizedText());
+    final String exp = resolveValue(expected);
+    dsPage.inFrame(() -> {
+      switch (exp) {
+        case "At least one contacts required.":
+          assertTrue("Hint is displayed", dsPage.addDriverDialog.contactHints.isDisplayed());
+          assertEquals("Hint text", expected,
+              dsPage.addDriverDialog.contactHints.getNormalizedText());
+          break;
+        case "At least one vehicle required.":
+          assertTrue("Hint is displayed", dsPage.addDriverDialog.vehicleHints.isDisplayed());
+          assertEquals("Hint text", expected,
+              dsPage.addDriverDialog.vehicleHints.getNormalizedText());
+          break;
+        case "At least one zone preference required.":
+          assertTrue("Hint is displayed", dsPage.addDriverDialog.zoneHints.isDisplayed());
+          assertEquals("Hint text", expected, dsPage.addDriverDialog.zoneHints.getNormalizedText());
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   @When("^Operator edit created Driver on Driver Strength page using data below:$")
@@ -80,40 +103,65 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     });
   }
 
+  @When("Operator updates driver details with the following info:")
+  public void operator_updates_driver_details_with_the_following_info(Map<String, String> mapOfData) {
+    DriverInfo driverInfo = new DriverInfo();
+    driverInfo.fromMap(mapOfData);
+    put(KEY_CREATED_DRIVER_INFO, driverInfo);
+    put(KEY_UPDATED_DRIVER_FIRST_NAME,driverInfo.getFirstName());
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.fillForm(driverInfo);
+      dsPage.editDriverDialog.submitForm();
+    });
+  }
+
   @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveContactDetails() {
-    if (dsPage.editDriverDialog.contactsSettingsForms.size() > 0) {
-      dsPage.editDriverDialog.contactsSettingsForms.forEach(form -> form.remove.click());
-    }
+    dsPage.inFrame(() -> {
+      if (dsPage.editDriverDialog.contactsSettingsForms.size() > 0) {
+        dsPage.editDriverDialog.contactsSettingsForms.forEach(form -> form.remove.click());
+      }
+    });
   }
 
   @When("Operator removes vehicle details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveVehicleDetails() {
-    if (dsPage.editDriverDialog.vehicleSettingsForm.size() > 0) {
-      dsPage.editDriverDialog.vehicleSettingsForm.forEach(form -> form.remove.click());
-    }
+    dsPage.inFrame(() -> {
+      if (dsPage.editDriverDialog.vehicleSettingsForm.size() > 0) {
+        dsPage.editDriverDialog.vehicleSettingsForm.forEach(form -> form.remove.click());
+      }
+    });
   }
 
   @When("Operator removes zone preferences on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveZonePreference() {
-    if (dsPage.editDriverDialog.zoneSettingsForms.size() > 0) {
-      dsPage.editDriverDialog.zoneSettingsForms.forEach(form -> form.remove.click());
-    }
+    dsPage.inFrame((() -> {
+      if (dsPage.editDriverDialog.zoneSettingsForms.size() > 0) {
+        dsPage.editDriverDialog.zoneSettingsForms.forEach(form -> form.remove.click());
+      }
+    }));
   }
 
   @When("Operator opens Edit Driver dialog for created driver on Driver Strength page")
   public void operatorOpensEditDriverDialogOnDriverStrengthPage() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     String username = driverInfo.getUsername();
-    dsPage.filterBy(COLUMN_USERNAME, username);
-    dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
-    dsPage.editDriverDialog.waitUntilVisible();
+    dsPage.inFrame(() -> {
+      if (!dsPage.isTableLoaded()) {
+        dsPage.click("//button[span[text()='Load Selection']]");
+      }
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.waitUntilVisible();
+    });
   }
 
   @Then("^Operator verify driver strength params of created driver on Driver Strength page$")
   public void dbOperatorVerifyDriverIsCreatedSuccessfully() {
     DriverInfo expectedDriverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
+      dsPage.waitUntilTableLoaded();
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, expectedDriverInfo.getUsername());
       DriverInfo actualDriverInfo = dsPage.driversTable.readEntity(1);
       if (expectedDriverInfo.getId() != null) {
@@ -150,7 +198,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @Then("^Operator verify contact details of created driver on Driver Strength page$")
   public void dbOperatorVerifyContactDetailsOfCreatedDriver() {
     DriverInfo expectedDriverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.verifyContactDetails(expectedDriverInfo.getUsername(), expectedDriverInfo);
+    dsPage.inFrame(() -> {
+      dsPage.verifyContactDetails(expectedDriverInfo.getUsername(), expectedDriverInfo);
+    });
   }
 
   @When("^Operator filter driver strength by \"([^\"]*)\" zone$")
@@ -173,7 +223,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator click Load Everything on Driver Strength page")
   public void operatorClickLoadEverything() {
-    dsPage.loadEverything();
+    dsPage.inFrame(() -> dsPage.loadEverything());
   }
 
   @When("Operator filter driver strength using data below:")
@@ -194,10 +244,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       }
 
       if (data.containsKey("resigned")) {
-        dsPage.resignedFilter.setValue(data.get("resigned").toLowerCase());
+        pause1s();
+        dsPage.clickResignedOption(data.get("resigned"));
       }
 
       dsPage.loadSelection();
+      pause2s();
     });
   }
 
@@ -207,9 +259,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
       expectedZone = driverInfo.getZoneId();
     }
-    List<String> actualZones = dsPage.driversTable().readFirstRowsInColumn(COLUMN_ZONE, 10);
-    assertThat("Driver Strength records list", actualZones, not(empty()));
-    assertThat("Zone values", actualZones, Matchers.everyItem(containsString(expectedZone)));
+    final String exp = expectedZone;
+    dsPage.inFrame(() -> {
+      List<String> actualZones = dsPage.driversTable().readFirstRowsInColumn(COLUMN_ZONE, 10);
+      assertThat("Driver Strength records list", actualZones, not(empty()));
+      assertThat("Zone values", actualZones, Matchers.everyItem(containsString(exp)));
+    });
   }
 
   @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" driver type")
@@ -218,41 +273,56 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
       expectedDriverType = driverInfo.getType();
     }
-    List<String> actualDriverTypes = dsPage.driversTable().readFirstRowsInColumn(COLUMN_TYPE, 10);
-    assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
-    assertThat("Type values", actualDriverTypes,
-        Matchers.everyItem(containsString(expectedDriverType)));
+    final String exp = expectedDriverType;
+    dsPage.inFrame(() -> {
+      List<String> actualDriverTypes = dsPage.driversTable().readFirstRowsInColumn(COLUMN_TYPE, 10);
+      assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
+      assertThat("Type values", actualDriverTypes,
+          Matchers.everyItem(containsString(exp)));
+    });
   }
 
   @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" resigned")
   public void operatorVerifyDriverStrengthIsFilteredByResigned(String expected) {
-    List<String> actualDriverTypes = dsPage.driversTable()
-        .readFirstRowsInColumn(COLUMN_RESIGNED, 10);
-    assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
-    assertThat("Resigned", actualDriverTypes,
-        Matchers.everyItem(containsString(expected.toUpperCase())));
+    dsPage.inFrame(() -> {
+      List<String> actualDriverTypes = dsPage.driversTable()
+          .readFirstRowsInColumn(COLUMN_RESIGNED, 10);
+      assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
+      assertThat("Resigned", actualDriverTypes,
+          Matchers.everyItem(containsString(expected)));
+    });
   }
 
   @Then("^Operator delete created driver on Driver Strength page$")
   public void operatorDeleteCreatedDriverOnDriverStrengthPage() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.deleteDriver(driverInfo.getUsername());
+    dsPage.inFrame(() -> {
+      dsPage.waitUntilTableLoaded();
+      dsPage.deleteDriver(driverInfo.getUsername());
+    });
   }
 
   @Then("^Operator verify new driver is deleted successfully on Driver Strength page$")
   public void operatorVerifyNewDriverIsDeletedSuccessfullyOnDriverStrengthPage() throws Throwable {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
-    assertTrue("Driver has been deleted", dsPage.driversTable().isTableEmpty());
+    dsPage.inFrame(() -> {
+      dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
+      assertTrue("Table has no data", dsPage.verifyNoDataOnTable());
+    });
     remove(KEY_CREATED_DRIVER_UUID);
   }
 
   @When("^Operator change Coming value for created driver on Driver Strength page$")
   public void operatorChangeComingValueForCreatedDriverOnDriverStrengthPage() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
-    put(KEY_INITIAL_COMING_VALUE, dsPage.driversTable().getComingStatus(1));
-    dsPage.driversTable().toggleComingStatus(1);
+    dsPage.inFrame(() -> {
+      if (!dsPage.isTableLoaded()) {
+        dsPage.click("//button[span[text()='Load Selection']]");
+      }
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
+      put(KEY_INITIAL_COMING_VALUE, dsPage.driversTable().getComingStatus(1));
+      dsPage.driversTable().toggleComingStatus(1);
+    });
   }
 
   @Then("^Operator verify Coming value for created driver has been changed on Driver Strength page$")
@@ -260,8 +330,33 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     String initialComingValue = get(KEY_INITIAL_COMING_VALUE);
     assertThat("Initial Coming value", initialComingValue, not(isEmptyOrNullString()));
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
-    assertThat("Actual Coming Value", dsPage.driversTable().getComingStatus(1),
-        not(equalToIgnoringCase(initialComingValue)));
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
+      assertThat("Actual Coming Value", dsPage.driversTable().getComingStatus(1),
+          not(equalToIgnoringCase(initialComingValue)));
+    });
   }
+
+  @Then("^Operator load all data for driver on Driver Strength Page$")
+  public void operatorLoadAllData() {
+    final String loadSelectionXpath = "//button[span[text()='Load Selection']]";
+    dsPage.inFrame(() -> {
+      pause2s();
+      dsPage.waitUntilVisibilityOfElementLocated(loadSelectionXpath);
+      dsPage.click(loadSelectionXpath);
+    });
+  }
+
+  @When("Operator click Submit button in Add Driver dialog")
+  public void clickSubmitButton() {
+    dsPage.inFrame(() -> {
+      dsPage.addDriverDialog.submit.click();
+    });
+  }
+
+  @When("Operator wait until table loaded")
+  public void waitForTableToLoad() {
+    dsPage.inFrame(() -> dsPage.waitUntilTableLoaded());
+  }
+
 }

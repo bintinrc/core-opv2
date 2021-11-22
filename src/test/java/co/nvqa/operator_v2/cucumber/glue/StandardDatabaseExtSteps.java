@@ -54,6 +54,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,35 +101,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertNotNull("Actual waypoint from DB should not be null.", actualWaypoint);
       assertEquals("Latitude", jaroScore.getLatitude(), actualWaypoint.getLatitude(), 0);
       assertEquals("Longitude", jaroScore.getLongitude(), actualWaypoint.getLongitude(), 0);
-    });
-  }
-
-  @Then("^DB Operator verify Jaro Scores of the created order after cancel$")
-  public void dbOperatorVerifyJaroScoresAfterCancel() {
-    Order order = get(KEY_ORDER_DETAILS);
-    String trackingId = order.getTrackingId();
-
-    List<Transaction> transactions = order.getTransactions();
-
-    ImmutableList.of(TRANSACTION_TYPE_PICKUP, TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
-    {
-      Optional<Transaction> transactionOptional = transactions.stream()
-          .filter(t -> transactionType.equals(t.getType())).findFirst();
-
-      if (transactionOptional.isPresent()) {
-        Transaction transaction = transactionOptional.get();
-        Long waypointId = transaction.getWaypointId();
-        if (waypointId != null) {
-          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          assertEquals("Number of rows in DB", 1, jaroScores.size());
-          jaroScores.forEach(jaroScore ->
-              Assert.assertEquals(
-                  f("order jaro score is archived for the %s waypoint ", transactionType),
-                  new Integer(1), jaroScore.getArchived()));
-        }
-      } else {
-        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-      }
     });
   }
 
@@ -218,23 +191,24 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Order order = get(KEY_ORDER_DETAILS);
     String trackingId = order.getTrackingId();
 
-    List<Transaction> transactions = order.getTransactions();
+    Transaction transaction = StringUtils.equalsIgnoreCase(transactionType, "delivery") ?
+        order.getLastDeliveryTransaction() :
+        order.getLastPickupTransaction();
 
-    Optional<Transaction> transactionOptional = transactions.stream()
-        .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst();
-
-    if (transactionOptional.isPresent()) {
-      Transaction transaction = transactionOptional.get();
+    if (transaction != null) {
       Long waypointId = transaction.getWaypointId();
-      Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+      Assertions.assertThat(waypointId)
+          .as("%s waypoint Id", transactionType)
+          .isNotNull();
       put(KEY_WAYPOINT_ID, waypointId);
       put(KEY_TRANSACTION_ID, transaction.getId());
 
       Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
 
       if (data.containsKey("status")) {
-        assertThat(f("%s waypoint [%d] status", transactionType, waypointId),
-            actualWaypoint.getStatus(), Matchers.equalToIgnoringCase(data.get("status")));
+        Assertions.assertThat(actualWaypoint.getStatus())
+            .as("%s waypoint [%d] status", transactionType, waypointId)
+            .isEqualToIgnoringCase(data.get("status"));
       }
     } else {
       fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
@@ -277,13 +251,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyDeliveryWaypointRecordUpdated() {
     String transactionType = "Delivery";
     Order order = get(KEY_CREATED_ORDER);
-    List<Transaction> transactions = order.getTransactions();
-
-    Transaction transaction = transactions.stream()
-        .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst()
-        .orElseThrow(() -> new AssertionFailedError(
-            f("%s transaction not found for order ID = '%s'.", transactionType, order.getId())));
-
+    Transaction transaction = order.getLastDeliveryTransaction();
     validateDeliveryInWaypointRecord(order, transactionType, transaction.getWaypointId());
   }
 
@@ -488,6 +456,24 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         DateUtil.displayDateTime(entityEndDateTime));
   }
 
+  @Then("^DB Operator verify the last (Pickup|Delivery) transaction record of the created order:$")
+  public void dbOperatorVerifyPickupTransactionRecordUpdatedForTheCreatedOrder(String tranType,
+      Map<String, String> data) {
+    TransactionEntity expected = new TransactionEntity(resolveKeyValues(data));
+    Order order = get(KEY_CREATED_ORDER);
+    String type = tranType.equalsIgnoreCase("Pickup") ? "PP" : "DD";
+    List<TransactionEntity> transactions = getCoreJdbc()
+        .findTransactionByOrderIdAndType(order.getId(), type);
+
+    Assertions.assertThat(transactions)
+        .as("List of %s transactions of the %s order", tranType, order.getId())
+        .isNotEmpty();
+
+    TransactionEntity actual = transactions.get(transactions.size() - 1);
+    expected.compareWithActual(actual);
+    put(KEY_WAYPOINT_ID, actual.getWaypointId());
+  }
+
   @Then("^DB Operator verify Delivery transaction record is updated for the created order$")
   public void dbOperatorVerifyDeliveryTransactionRecordUpdatedForTheCreatedOrder() {
     Order order = get(KEY_CREATED_ORDER);
@@ -522,9 +508,33 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             .format(order.getDeliveryTimeslot().getStartTime()),
         DateUtil.displayDateTime(entityStartDateTime));
     assertEquals("Delivery end date/time",
-        order.getDeliveryDate() + " " + TIME_FORMATTER_1
+        order.getDeliveryEndDate() + " " + TIME_FORMATTER_1
             .format(order.getDeliveryTimeslot().getEndTime()),
         DateUtil.displayDateTime(entityEndDateTime));
+  }
+
+  @Then("DB Operator verify {word} transaction record of order {string}:")
+  public void dbOperatorVerifyTransactionRecord(String typeStr, String orderIdStr,
+      Map<String, String> data) {
+    String type = StringUtils.equalsIgnoreCase(typeStr, "Delivery") ? "DD" : "PP";
+    Long orderId = resolveValue(orderIdStr);
+    TransactionEntity expected = new TransactionEntity(resolveKeyValues(data));
+
+    List<TransactionEntity> transactions = getCoreJdbc()
+        .findTransactionByOrderIdAndType(orderId, type);
+    assertThat(f("There is more than 1 %s transaction for orderId %d", type, orderId),
+        transactions, hasSize(1));
+    TransactionEntity actual = transactions.get(0);
+
+    expected.compareWithActual(actual, "startTime", "endTime");
+
+    SoftAssertions assertions = new SoftAssertions();
+    assertions.assertThat(actual.getDisplayedStartTime())
+        .as("Start Time")
+        .isEqualTo(expected.getStartTime());
+    assertions.assertThat(actual.getDisplayedEndTime())
+        .as("End Time")
+        .isEqualTo(expected.getEndTime());
   }
 
   @Then("^DB Operator verify next Delivery transaction values are updated for the created order:$")
@@ -1068,8 +1078,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         order.getFromAddress2(), StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
     assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId),
         order.getFromPostcode(), StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
-    assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
-        order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
+    //TODO need to clarify source of timewindow_id
+//    assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
+//        order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
   }
 
   private void validateDeliveryInWaypointRecord(Order order, String transactionType,

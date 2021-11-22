@@ -227,7 +227,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         refreshPage();
         fail("Data still not loaded");
       }
-    }, String.format("Active script found "));
+    }, String.format("Active script found "), 100, 10);
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Drafts Table is empty. Cannot find script.");
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
@@ -33,6 +32,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_ARCHIVE_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_BULK_EDIT_DETAILS;
@@ -54,6 +55,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN
 @ScenarioScoped
 public class RouteLogsSteps extends AbstractSteps {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(RouteLogsSteps.class);
   private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
 
   private RouteLogsPage routeLogsPage;
@@ -447,12 +449,13 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-        assertTrue("Route " + routeId + " was deleted", routeLogsPage.routesTable.isEmpty());
+        Assertions.assertThat(routeLogsPage.routesTable.isEmpty())
+            .as("Route " + routeId + " was deleted").isTrue();
       });
     });
   }
 
-  @When("^Operator set filter using data below and click 'Load Selection'$")
+  @When("Operator set filter using data below and click 'Load Selection'")
   public void loadSelection(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
@@ -463,16 +466,18 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator set filters on Route Logs page:")
+  @When("Operator set filters on Route Logs page:")
   public void setFilters(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
 
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
       if (finalData.containsKey("routeDateFrom")) {
+        pause1s();
         routeLogsPage.routeDateFilter.setFrom(finalData.get("routeDateFrom"));
       }
       if (finalData.containsKey("routeDateTo")) {
+        pause1s();
         routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
       }
       if (finalData.containsKey("hub")) {
@@ -673,7 +678,8 @@ public class RouteLogsSteps extends AbstractSteps {
           .findFirst()
           .orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
+    Assertions.assertThat(toastInfo != null).as("Toast " + finalData.toString() + " is displayed")
+        .isTrue();
     if (waitUntilInvisible) {
       toastInfo.waitUntilInvisible();
     }
@@ -979,8 +985,8 @@ public class RouteLogsSteps extends AbstractSteps {
           .findFirst()
           .orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
-    if (toastInfo != null && waitUntilInvisible) {
+    Assertions.assertThat(toastInfo).as("Toast " + finalData + " is displayed").isNotNull();
+    if (waitUntilInvisible) {
       toastInfo.waitUntilInvisible();
     }
   }
@@ -998,7 +1004,7 @@ public class RouteLogsSteps extends AbstractSteps {
         toastInfo = routeLogsPage.noticeNotifications.stream()
             .filter(toast -> {
               String actualTop = toast.message.getNormalizedText();
-              NvLogger.info("Found notification: " + actualTop);
+              LOGGER.info("Found notification: " + actualTop);
               String value = finalData.get("top");
               if (StringUtils.isNotBlank(value)) {
                 if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
@@ -1014,7 +1020,8 @@ public class RouteLogsSteps extends AbstractSteps {
             .findFirst()
             .orElse(null);
       } while (toastInfo == null && new Date().getTime() - start < 20000);
-      assertTrue("Toast " + finalData.toString() + " is displayed", toastInfo != null);
+      Assertions.assertThat(toastInfo != null).as("Toast " + finalData.toString() + " is displayed")
+          .isTrue();
       if (toastInfo != null && waitUntilInvisible) {
         toastInfo.waitUntilInvisible();
       }
@@ -1046,7 +1053,7 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       });
     } while (!found && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", found);
+    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
   }
 
   @And("Operator verifies that warning toast displayed:")
@@ -1074,7 +1081,7 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       });
     } while (!found && new Date().getTime() - start < 20000);
-    assertTrue("Toast " + finalData.toString() + " is displayed", found);
+    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
   }
 
   @Then("^Operator verify the route is started after van inbounding using data below:$")
@@ -1115,7 +1122,7 @@ public class RouteLogsSteps extends AbstractSteps {
             break;
           }
         }
-        assertTrue(f("Route %s found", routeId), routeIndex >= 0);
+        Assertions.assertThat(routeIndex >= 0).as(f("Route %s found", routeId)).isTrue();
         assertEquals(f("Reason for route %s", routeId), reason,
             routeLogsPage.selectionErrorDialog.reasons.get(i).getText());
       }

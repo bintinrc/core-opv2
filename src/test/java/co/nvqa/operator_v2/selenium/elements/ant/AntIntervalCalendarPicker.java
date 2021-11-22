@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,9 @@ import static co.nvqa.commons.support.DateUtil.DATE_FORMATTER_SNS_1;
  * @author Sergey Mishanin
  */
 public class AntIntervalCalendarPicker extends PageElement {
+
+  private static final SimpleDateFormat DATE_CELL_FORMAT = new SimpleDateFormat("MMMMM d, yyyy");
+  private static final String DATE_CELL_LOCATOR = "//td[@role='gridcell'][@title='%s']";
 
   public AntIntervalCalendarPicker(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
@@ -50,10 +55,14 @@ public class AntIntervalCalendarPicker extends PageElement {
   public TextBox inputTo;
 
   public void setFrom(String from) {
-    valueFrom.click();
-    inputFrom.waitUntilVisible();
-    inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
-    inputFrom.waitUntilInvisible();
+    if (!StringUtils.equals(from, getValueFrom())) {
+      if (!inputFrom.isDisplayedFast()) {
+        valueFrom.click();
+        inputFrom.waitUntilVisible();
+      }
+      inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER);
+      inputFrom.waitUntilInvisible();
+    }
   }
 
   public void setFrom(Date from) {
@@ -61,11 +70,15 @@ public class AntIntervalCalendarPicker extends PageElement {
   }
 
   public void setTo(String to) {
-    valueFrom.click();
-    inputTo.waitUntilVisible();
-    inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
-    inputFrom.sendKeys(Keys.ENTER);
-    inputTo.waitUntilInvisible();
+    if (!StringUtils.equals(to, getValueTo())) {
+      if (!inputTo.isDisplayedFast()) {
+        valueFrom.click();
+        inputTo.waitUntilVisible();
+      }
+      inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+      valueFrom.jsClick();
+      inputTo.waitUntilInvisible();
+    }
   }
 
   public void setTo(Date to) {
@@ -73,17 +86,42 @@ public class AntIntervalCalendarPicker extends PageElement {
   }
 
   public void setInterval(String from, String to) {
-    valueFrom.click();
-    inputFrom.waitUntilVisible();
-    inputFrom.jsSetValue(from);
-    inputTo.jsSetValue(to);
-    valueFrom.jsClick();
-    inputTo.waitUntilInvisible();
+    String currentFrom = getValueFrom();
+    String currentTo = getValueTo();
+    if (!StringUtils.equals(from, currentFrom) || !StringUtils.equals(to, currentTo)) {
+      if (!inputFrom.isDisplayedFast()) {
+        valueFrom.click();
+        inputFrom.waitUntilVisible();
+      }
+      if (!StringUtils.equals(from, currentFrom)) {
+        inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from);
+      }
+      if (!StringUtils.equals(to, currentTo)) {
+        inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
+      }
+      valueFrom.jsClick();
+      inputTo.waitUntilInvisible();
+    }
   }
 
   public void setInterval(Date from, Date to) {
     setInterval(DATE_FORMATTER_SNS_1.format(DateUtil.getDate(from.toInstant())),
         DATE_FORMATTER_SNS_1.format(DateUtil.getDate(to.toInstant())));
+  }
+
+  public void fairSetInterval(Date from, Date to) {
+    if (!inputFrom.isDisplayedFast()) {
+      valueFrom.click();
+      inputFrom.waitUntilVisible();
+    }
+    String xpath = f(DATE_CELL_LOCATOR, DATE_CELL_FORMAT.format(from));
+    new PageElement(getWebDriver(), xpath).click();
+    xpath = f(DATE_CELL_LOCATOR, DATE_CELL_FORMAT.format(to));
+    new PageElement(getWebDriver(), xpath).click();
+  }
+
+  public void fairSetInterval(String from, String to) {
+    fairSetInterval(DataEntity.toDateTime(from), DataEntity.toDateTime(to));
   }
 
   public String getValueFrom() {

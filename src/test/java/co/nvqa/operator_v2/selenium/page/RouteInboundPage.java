@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
@@ -179,6 +180,12 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
   @FindBy(css = "[aria-label='Remove route from driver app']")
   public MdCheckbox removeRouteFromDriverApp;
+
+  @FindBy(css = "[aria-label='Submit']")
+  public PageElement submit;
+
+  @FindBy(css = "[aria-label='Reason']")
+  public MdSelect reason;
 
   public RouteInboundPage(WebDriver webDriver) {
     super(webDriver);
@@ -398,19 +405,19 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   }
 
   public void openC2CReturnPickupsDialog() {
-    c2cReturnPickups.moveAndClick();
+    c2cReturnPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("C2C / Return Pickups");
     waitUntilLoaded();
   }
 
   public void openPendingC2CReturnPickupsDialog() {
-    pendingC2cReturnPickups.moveAndClick();
+    pendingC2cReturnPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("Pending C2C / Return Pickups");
     waitUntilLoaded();
   }
 
   public void openReservationPickupsDialog() {
-    reservationPickups.moveAndClick();
+    reservationPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("Reservation Pickups");
     waitUntilLoaded();
   }

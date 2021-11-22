@@ -28,6 +28,9 @@ Feature: Failed Delivery Management
       | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
       | deliveryDate  | {{next-1-day-yyyy-MM-dd}}                                                 |
       | timeSlot      | <timeslot>                                                                |
+    Then Operator verifies that info toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "<status>" on Edit Order page
     And Operator verify order granular status is "<granularStatus>" on Edit Order page
@@ -205,7 +208,7 @@ Feature: Failed Delivery Management
       | Return | uid:bde7997d-8de5-4936-9197-d9c93dbaa498 | Return    | true             |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Find Failed Delivery Order on Failed Delivery Management Page (<hiptest-uid>)
+  Scenario Outline: Operator Find Failed Delivery Order on Failed Delivery Management Page - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |

@@ -28,7 +28,9 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   protected String getTextOnTable(int rowNumber, String columnDataClass) {
-    String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, columnDataClass);
+    String xpath = columnDataClass.startsWith("/") ?
+        f(columnDataClass, rowNumber) :
+        f(CELL_LOCATOR_PATTERN, rowNumber, columnDataClass);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
@@ -60,6 +62,9 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public void selectRow(int rowNumber) {
     String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
     click(xpath);
   }
 
@@ -92,6 +97,24 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       sendKeys(xpath, value);
     }
     return this;
+  }
+
+  public void clearColumnFilters() {
+    getColumnLocators().values().forEach(value -> {
+      String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, value);
+      if (StringUtils.isNotBlank(tableLocator)) {
+        xpath = tableLocator + xpath;
+      }
+      String currentValue = getValue(xpath);
+      if (StringUtils.isNotEmpty(currentValue)) {
+        click(xpath);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < currentValue.length(); i++) {
+          sb.append(Keys.BACK_SPACE);
+        }
+        sendKeys(xpath, sb.toString());
+      }
+    });
   }
 
   public AbstractTable<T> filterByColumn(String columnId, Object value) {

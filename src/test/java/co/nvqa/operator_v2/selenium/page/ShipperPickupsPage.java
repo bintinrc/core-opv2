@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -611,11 +610,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
       String reason = String.format("[%d] Suggested Route ID", index);
       assertThat(reason, routeId.get(), greaterThan(0L));
-      Optional<Route> optRoute = validRoutes.stream()
-          .filter(route -> route.getId() == routeId.get()).findFirst();
-      reason = String.format("[%d] Suggested route is not valid", index);
-      assertTrue(reason, optRoute.isPresent());
-      return optRoute.orElse(null);
+      return validRoutes.stream()
+          .filter(validRoute -> validRoute.getId() == routeId.get())
+          .findFirst()
+          .orElseThrow(() -> new AssertionError(
+              f("[%d] Suggested route [%s] is not valid", index, routeId)));
     }
 
     public void submitForm() {

@@ -354,14 +354,18 @@ public class AllShippersPage extends OperatorV2SimplePage {
   }
 
   public void searchShipperByNameOnShipperListPage(String keyword) {
-    getWebDriver().navigate()
-        .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
-            TestConstants.COUNTRY_CODE, keyword));
-    sendKeys(XPATH_SEARCH_SHIPPER_BY_NAME_LIST_PAGE, keyword);
+    retryIfAssertionErrorOccurred(() -> {
+      getWebDriver().navigate()
+          .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
+              TestConstants.COUNTRY_CODE, keyword));
+      assertTrue("Shipper table is empty", !shippersTable.isTableEmpty());
+      assertEquals("Shipper table has more than one row", 1, shippersTable.getRowsCount());
+    }, "Search specific shipper in shipper table", 100, 5);
   }
 
   public void editShipperOnShipperListPage() {
     shippersTable.clickActionButton(1, ACTION_EDIT);
+    pause10ms();
     allShippersCreateEditPage.switchToNewWindow();
     allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
   }
@@ -375,10 +379,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   public void editShipper(Marketplace marketplace) {
     searchShipperByNameOnShipperListPage(getSearchKeyword(marketplace));
-    shippersTable.clickActionButton(1, ACTION_EDIT);
-    pause10ms();
-    allShippersCreateEditPage.switchToNewWindow();
-    allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    editShipperOnShipperListPage();
   }
 
   private String getSearchKeyword(Shipper shipper) {

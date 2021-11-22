@@ -5,13 +5,12 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Sergey Mishanin
@@ -39,11 +38,7 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
         List<Order> ordersDetails = get(KEY_LIST_OF_ORDER_DETAILS);
         ordersDetails.forEach(od ->
         {
-          List<Transaction> deliveryTransactions =
-              od.getTransactions().stream()
-                  .filter(transaction -> "delivery".equalsIgnoreCase(transaction.getType()))
-                  .collect(Collectors.toList());
-          Transaction transaction = deliveryTransactions.get(deliveryTransactions.size() - 1);
+          Transaction transaction = od.getLastDeliveryTransaction();
           JaroScore jaroScore = new JaroScore();
           jaroScore.setWaypointId(transaction.getWaypointId());
           jaroScore.setVerifiedAddressId("BULK_VERIFY");

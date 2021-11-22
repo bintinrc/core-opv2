@@ -8,6 +8,8 @@ import java.util.Map;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Soewandi Wirjawan
@@ -15,6 +17,7 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class MainPage extends OperatorV2SimplePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(MainPage.class);
   private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
   private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
 
@@ -60,6 +63,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Trang quản lý trạm", "station-homepage");
     MAP_OF_END_URL.put("Beranda Manajemen Stasiun", "station-homepage");
     MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
+    MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
   }
 
   public MainPage(WebDriver webDriver) {
@@ -89,14 +93,14 @@ public class MainPage extends OperatorV2SimplePage {
     waitUntil(() ->
     {
       String currentUrl = getCurrentUrl();
-      NvLogger
-          .infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]",
+      LOGGER
+          .trace("verifyTheMainPageIsLoaded: Current URL = [{}] - Expected URL Ends With = [{}]",
               currentUrl, mainDashboardUrl);
       return currentUrl.endsWith(mainDashboardUrl);
     }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
     waitUntilPageLoaded();
-    NvLogger.infof("Waiting until Welcome message toast disappear.");
+    LOGGER.trace("Waiting until Welcome message toast disappear.");
     waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD,
         TestConstants.VERY_LONG_WAIT_FOR_TOAST);
 
@@ -172,8 +176,8 @@ public class MainPage extends OperatorV2SimplePage {
     {
       boolean result;
       String currentUrl = getCurrentUrl();
-      NvLogger
-          .infof("clickNavigation: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl,
+      LOGGER
+          .info("clickNavigation: Current URL = [{}] - Expected URL Ends With = [{}]", currentUrl,
               urlPart);
 
       if ("linehaul".equals(urlPart)) {

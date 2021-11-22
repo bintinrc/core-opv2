@@ -2,9 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
   @When("^Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample$")
   public void operatorClickOnDownloadSampleCSVFile() {
-    changeDeliveryTimingsPage.downloadSampleCSVFile();
+    changeDeliveryTimingsPage.downloadSampleCsv.click();
   }
 
   @Then("^Operator verify CSV file of Change Delivery Timings' sample$")
@@ -61,7 +62,12 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     List<ChangeDeliveryTiming> listOfChangeDeliveryTimings = new ArrayList<>();
     listOfChangeDeliveryTimings.add(changeDeliveryTiming);
 
-    changeDeliveryTimingsPage.uploadCsvCampaignFile(listOfChangeDeliveryTimings);
+    File csvResultFile = changeDeliveryTimingsPage.createDeliveryTimingChanging(
+        listOfChangeDeliveryTimings);
+    changeDeliveryTimingsPage.uploadCsv.click();
+    changeDeliveryTimingsPage.uploadCsvDialog.waitUntilVisible();
+    changeDeliveryTimingsPage.uploadCsvDialog.selectFile.setValue(csvResultFile);
+    changeDeliveryTimingsPage.uploadCsvDialog.upload.clickAndWaitUntilDone();
     put("changeDeliveryTiming", changeDeliveryTiming);
   }
 
