@@ -13,15 +13,14 @@ Feature: Edit Pricing Profiles - ID
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
 
-
-  @DeleteNewlyCreatedShipper @CloseNewWindows
+  @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with 0 Percentage Discount - ID (uid:8fa73f4b-69a1-4ce0-927a-82b2be6ace0c)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discount | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | 0 is not a valid discount value |
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows
+  @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - with none Percentage Discount - ID (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | discount | none |
@@ -33,7 +32,7 @@ Feature: Edit Pricing Profiles - ID
       | type     | Percentage |
       | discount | none       |
 
-  @DeleteNewlyCreatedShipper
+
   Scenario: Edit Pending Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:9f2e8e1f-de51-4475-806a-c63e021f729d)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | insuranceMinFee     | 23 |

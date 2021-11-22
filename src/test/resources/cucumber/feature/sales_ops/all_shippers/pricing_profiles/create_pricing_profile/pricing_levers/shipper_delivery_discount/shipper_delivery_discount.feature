@@ -19,7 +19,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows @HappyPath
+  @CloseNewWindows @HappyPath
   Scenario: Create Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
@@ -40,7 +40,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Then DB Operator fetches pricing profile details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows
+  @CloseNewWindows
   Scenario: Create Pricing Profile - with special characters Discount (uid:4dde3d48-2513-4c84-9b6c-4b848833d3eb)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
@@ -48,7 +48,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | discount     | $#^$^#@                          |
       | errorMessage | Special character is not allowed |
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows @NotInGaia
+  @CloseNewWindows
   Scenario: Create Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile
@@ -71,7 +71,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows  @NotInGaia
+  @CloseNewWindows
   Scenario: Create Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
     Given Operator go to menu Shipper -> All Shippers
     When Operator adds new pricing Profile

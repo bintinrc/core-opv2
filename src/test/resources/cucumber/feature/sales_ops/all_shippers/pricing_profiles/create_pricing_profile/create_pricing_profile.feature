@@ -65,7 +65,7 @@ Feature: Create Pricing Profile
       | industryName                 | {industry-name} |
       | salesPerson                  | {sales-person}  |
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows
+  @CloseNewWindows
   Scenario: Create Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
