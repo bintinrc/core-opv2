@@ -22,8 +22,8 @@ Feature: Create Pricing Profile - ID
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
-    Given API Operator create new normal shipper
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
     Then Operator adds pricing script with invalid discount and verifies the error message
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 0                                               |

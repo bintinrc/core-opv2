@@ -1490,9 +1490,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       String expectedErrorMessage) {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
-      tabs.selectTab("Pricing and Billing");
-      pricingAndBillingForm.addNewProfile.click();
-      newPricingProfileDialog.waitUntilVisible();
+//      tabs.selectTab("Pricing and Billing");
+//      pricingAndBillingForm.addNewProfile.click();
+//      newPricingProfileDialog.waitUntilVisible();
       fillPricingProfileDetails(pricing);
       assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
       pause3s();

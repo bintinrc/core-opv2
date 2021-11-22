@@ -1116,7 +1116,8 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private Shipper setShipperPricingProfile(Map<String, String> mapOfData) {
-    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    Shipper shipper =
+        Objects.nonNull(get(KEY_CREATED_SHIPPER)) ? get(KEY_CREATED_SHIPPER) : new Shipper();
     Pricing pricing = new Pricing();
     try {
       String pricingScriptName = mapOfData.get("pricingScriptName");

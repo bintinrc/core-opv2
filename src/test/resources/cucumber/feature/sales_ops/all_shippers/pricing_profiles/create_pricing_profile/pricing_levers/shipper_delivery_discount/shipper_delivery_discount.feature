@@ -21,8 +21,8 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   @DeleteNewlyCreatedShipper @CloseNewWindows @HappyPath
   Scenario: Create Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
-    Given API Operator create new normal shipper
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | 0                               |
       | errorMessage | 0 is not a valid discount value |
@@ -42,16 +42,16 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with special characters Discount (uid:4dde3d48-2513-4c84-9b6c-4b848833d3eb)
-    Given API Operator create new normal shipper
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | $#^$^#@                          |
       | errorMessage | Special character is not allowed |
 
   @DeleteNewlyCreatedShipper @CloseNewWindows @NotInGaia
   Scenario: Create Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
-    Given API Operator create new normal shipper
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | 20.54321                              |
       | comments     | This is an invalid discount           |
@@ -73,8 +73,8 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   @DeleteNewlyCreatedShipper @CloseNewWindows  @NotInGaia
   Scenario: Create Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
-    Given API Operator create new normal shipper
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
     Then Operator adds pricing script with invalid discount and verifies the error message
       | discount     | 10000000                           |
       | comments     | This is an invalid discount        |
