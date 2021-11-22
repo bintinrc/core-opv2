@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Insurance
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Insurance @NormalShipper
 Feature: Edit Pricing Profiles - Normal Shippers - Insurance
 
   Background: Login to Operator Portal V2 and set up shipper for testing

@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfiles @CreatePricingProfiles @DeliveryDiscount
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfiles @CreatePricingProfiles @DeliveryDiscount @NormalShipper
 Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   Background: Login to Operator Portal V2

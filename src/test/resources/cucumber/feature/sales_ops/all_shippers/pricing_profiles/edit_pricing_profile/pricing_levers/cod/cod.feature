@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Cod
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Cod @NormalShipper
 Feature: Edit Pricing Profiles - Normal Shippers - COD
 
   Background: Login to Operator Portal V2 and set up shipper for testing

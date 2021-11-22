@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Cod @CreatePricingProfiles @Corporate
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Cod @CreatePricingProfiles @CorporateShipper
 Feature:  Create Pricing Profile - Corporate Shippers - COD
 
   Background: Login to Operator Portal V2

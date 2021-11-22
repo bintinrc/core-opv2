@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Cod @CreatePricingProfiles @Marketplace
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Cod @CreatePricingProfiles @MarketplaceShipper
 Feature:  Create Pricing Profile - Marketplace Shippers - COD
 
   Background: Login to Operator Portal V2

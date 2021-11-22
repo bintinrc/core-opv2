@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles @Basic
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles @Basic @NormalShipper
 Feature: Edit Pricing Profile - Normal Shippers
 
   Background: Login to Operator Portal V2
