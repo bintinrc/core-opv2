@@ -84,6 +84,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
+
     retryIfAssertionErrorOccurred(() ->
     {
       searchTableDraftsByScriptName(script.getName());
@@ -418,7 +419,8 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     switch (tabItemText) {
       case TAB_DRAFTS:
         waitUntilPageLoaded("pricing-scripts-v2/drafts");
-        waitUntilVisibilityOfElementLocated("//nv-table[@param='ctrl.draftScriptsTableParam']");
+        waitUntilVisibilityOfElementLocated("//nv-table[@param='ctrl.draftScriptsTableParam']",
+            120);
         break;
       case TAB_ACTIVE_SCRIPTS:
         waitUntilPageLoaded("pricing-scripts-v2/active-scripts");
