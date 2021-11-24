@@ -84,7 +84,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
-
     retryIfAssertionErrorOccurred(() ->
     {
       searchTableDraftsByScriptName(script.getName());

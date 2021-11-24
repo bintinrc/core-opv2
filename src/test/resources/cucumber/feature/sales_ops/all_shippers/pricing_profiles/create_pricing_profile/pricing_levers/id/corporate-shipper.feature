@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfilesID @PricingLevers @CreatePricingProfilesID @CorporateID
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfilesID @PricingLevers @CreatePricingProfilesID @CorporateShipperID
 Feature:  Corporate Shipper
 
   Background: Login to Operator Portal V2

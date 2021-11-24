@@ -335,7 +335,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
       basicSettingsForm.marketplace.selectValue("No");
       basicSettingsForm.marketplaceInternational.selectValue("No");
-//      basicSettingsForm.marketplaceSort.selectValue("No");
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       basicSettingsForm.corporate.selectValue("No");
