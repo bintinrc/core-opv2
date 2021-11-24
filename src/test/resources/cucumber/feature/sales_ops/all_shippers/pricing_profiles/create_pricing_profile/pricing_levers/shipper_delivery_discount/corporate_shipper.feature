@@ -6,8 +6,8 @@ Feature:  Corporate Shipper
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And DB Operator deletes "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}" shipper's pricing profiles
-@test
-@CloseNewWindows
+
+  @CloseNewWindows
   Scenario: Create a new Corporate Shipper - Create Pricing Profile (uid:73b9a005-9f6d-4248-b054-341b0f3ae575)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

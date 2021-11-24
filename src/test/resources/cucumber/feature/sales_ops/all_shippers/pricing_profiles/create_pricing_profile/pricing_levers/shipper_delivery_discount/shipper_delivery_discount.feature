@@ -3,7 +3,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-@test
+
 @CloseNewWindows @DeletePricingProfile @HappyPath
   Scenario: Create Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
   And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
@@ -80,10 +80,11 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
       | comments     | This is an invalid discount        |
       | errorMessage | Discounts cannot exceed 6 figures. |
 
-  @test
+
   @DeleteNewlyCreatedShipper
   Scenario: Create Pricing Profile - with Int Discount (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
     Given API Operator create new normal shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |

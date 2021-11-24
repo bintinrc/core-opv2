@@ -137,8 +137,8 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
       | insurancePercentage | test |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
-@test
-@CloseNewWindows
+
+  @CloseNewWindows
   Scenario: Edit Pricing Profile with “Int” Insurance Threshold (uid:e8863180-8961-4908-8a6d-3b3870823cc4)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | insuranceThreshold | 80 |
@@ -149,7 +149,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceThreshold | 80 |
 
-  @test
+
   @CloseNewWindows
   Scenario: Edit Pricing Profile with “Decimal” Insurance Threshold (uid:0b3845ea-aabc-4a56-9797-9e8896580b41)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
