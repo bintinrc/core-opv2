@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles @DeliveryDiscount
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @UpdatePricingProfiles @DeliveryDiscount @NormalShipper
 Feature: Edit Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   Background: Login to Operator Portal V2

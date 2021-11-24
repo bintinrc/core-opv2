@@ -137,8 +137,8 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
       | insurancePercentage | test |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
-
-  @CloseNewWindows
+@test
+@CloseNewWindows
   Scenario: Edit Pricing Profile with “Int” Insurance Threshold (uid:e8863180-8961-4908-8a6d-3b3870823cc4)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | insuranceThreshold | 80 |
@@ -148,13 +148,8 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceThreshold | 80 |
-    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And DB Operator fetches pricing profile and shipper discount details
-    Then Operator verifies the pricing profile and shipper discount details are correct
-    And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details in the database
 
+  @test
   @CloseNewWindows
   Scenario: Edit Pricing Profile with “Decimal” Insurance Threshold (uid:0b3845ea-aabc-4a56-9797-9e8896580b41)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
@@ -165,12 +160,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | insuranceThreshold | 99.9 |
-    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    And DB Operator fetches pricing profile and shipper discount details
-    Then Operator verifies the pricing profile and shipper discount details are correct
-    And DB Operator fetches pricing lever details
-    Then Operator verifies the pricing lever details in the database
 
   @CloseNewWindows
   Scenario: Edit Pricing Profile with with “More than 2 integer after decimal” Insurance Threshold (uid:38e171e8-31d1-492a-8bdc-c450cb3974b3)
