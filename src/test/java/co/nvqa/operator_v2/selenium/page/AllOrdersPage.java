@@ -922,10 +922,11 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     filterTableOrderByTrackingId(trackingId);
     selectAllShown();
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
-    moveToElementWithXpath("//button[@aria-label = 'Action']");
-    click("//button[@aria-label = 'Action']");
-    moveToElementWithXpath("//button[@aria-label = 'Regular Pickup']");
-    click("//button[@aria-label = 'Regular Pickup']");
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath("//button[@aria-label = 'Action']"));
+    pause2s();
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath("//button[@aria-label = 'Regular Pickup']"));
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
   }
 
