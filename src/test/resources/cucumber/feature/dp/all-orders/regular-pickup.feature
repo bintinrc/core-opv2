@@ -1,11 +1,9 @@
-@CWF
 Feature: Regular Pickup
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-    @RT
   Scenario: Regular Pickup - Success Create Reservation - Pickup Reservations isn't Exist - Download CSV - Normal Dps
     Given Operator go to menu Order -> All Orders
     #Given API Shipper create V4 order using data below:
