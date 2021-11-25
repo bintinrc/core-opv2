@@ -1,7 +1,15 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.event.Events;
+import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectDPJobsAndJobOrders;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNotificationEvents;
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.page.DpTaggingPage;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
@@ -99,5 +107,26 @@ public class DpTaggingSteps extends AbstractSteps {
   @When("^Operator verify invalid DP Tagging CSV is not uploaded successfully$")
   public void operatorVerifyInvalidDpTaggingCsvIsNotUploadedSuccessfully() {
     dpTaggingPage.verifyInvalidDpTaggingCsvIsNotUploadedSuccessfully();
+  }
+
+  @When("Operator verifies that all the details for Confirmed Status are right")
+  public void operatorVerifiesThatAllTheDetailsForConfirmedStatusAreRight() {
+    DatabaseCheckingNinjaCollectConfirmed dbCheckingResult = get(
+        KEY_DATABASE_CHECKING_NINJA_COLLECT_CONFIRMED);
+    DpDetailsResponse dpDetails = get(KEY_DP_DETAILS);
+    String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
+    Events orderEvent = get(KEY_ORDER_EVENTS);
+    dpTaggingPage
+            .verifiesDetailsRightConfirmedOptTag(dbCheckingResult, dpDetails, orderEvent, barcode);
+  }
+
+  @Then("Operator verifies that all the details for ninja collect driver drop off confirmed status are right")
+  public void OperatorVerifiesThatAllTheDetailsForNinjaCollectDriverDropOffConfirmedStatusAreRight() {
+    DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus dbCheckingResult = get(
+        KEY_DATABASE_CHECKING_NINJA_COLLECT_DRIVER_DROP_OFF_CONFIRMED);
+    String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
+
+    dpTaggingPage
+        .verifiesDetailsForDriverDropOffConfirmedStatus(dbCheckingResult, barcode);
   }
 }

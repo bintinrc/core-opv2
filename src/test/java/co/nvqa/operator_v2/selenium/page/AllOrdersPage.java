@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -650,7 +651,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     RESUME_SELECTED("Resume Selected"),
     MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
     PULL_FROM_ROUTE("Pull Selected from Route"),
-    ADD_TO_ROUTE("Add Selected to Route");
+    ADD_TO_ROUTE("Add Selected to Route"),
+    REGULAR_PICKUP("Regular Pickup");
 
     private final String name;
 
@@ -909,6 +911,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     profile.click();
     settings.click();
     Assert.assertTrue("Assert that the settings page has loaded", settingsHeader.size() > 0);
+  }
+
+  public void clearAllSelectionsAndLoadSelection() {
+    clickButtonByAriaLabel("Clear All Selections");
+    clickButtonByAriaLabel("Load Selection");
+  }
+
+  public void applyAction(String trackingId) {
+    filterTableOrderByTrackingId(trackingId);
+    selectAllShown();
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
+    moveToElementWithXpath("//button[@aria-label = 'Action']");
+    click("//button[@aria-label = 'Action']");
+    moveToElementWithXpath("//button[@aria-label = 'Regular Pickup']");
+    click("//button[@aria-label = 'Regular Pickup']");
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
   }
 
 }
