@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfiles @CreatePricingProfiles @Basic
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @CreatePricingProfiles @Basic @NormalShipper
 Feature: Create Pricing Profile
 
   Background: Login to Operator Portal V2
@@ -67,33 +67,17 @@ Feature: Create Pricing Profile
 
   @CloseNewWindows
   Scenario: Create Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id}} |
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     Then Operator adds new Shipper's Pricing Profile
-      | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
+      | startDate         | {gradle-next-2-day-yyyy-MM-dd}                  |
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20                                              |
       | comments          | This is a test pricing script                   |
       | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
-    Then Operator verifies that Pricing Script is "Pending" and "Active"
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And Operator verifies that Edit Pending Profile is displayed
 
   @CloseNewWindows
@@ -104,8 +88,7 @@ Feature: Create Pricing Profile
 
   @CloseNewWindows
   Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
-    Given Operator go to menu Shipper -> All Shippers
-    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName   | {pricing-script-id} - {pricing-script-name} |
@@ -123,8 +106,7 @@ Feature: Create Pricing Profile
 
   @CloseNewWindows
   Scenario: Create Pricing Profile with Use Country Level COD and Insurance (uid:0bee7a3c-9c6c-4260-bd68-21d110d4c40e)
-    Given Operator go to menu Shipper -> All Shippers
-    And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
