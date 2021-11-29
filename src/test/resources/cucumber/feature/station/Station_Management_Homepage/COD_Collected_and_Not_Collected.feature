@@ -1,7 +1,7 @@
 @StationManagement @COD
 Feature: COD Collected and Not Collected
 
-  @LaunchBrowser @ShouldAlwaysRun @Failed-cod
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -505,6 +505,6 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 125.5     | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
-  @KillBrowser @ShouldAlwaysRun @Failed-cod
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
