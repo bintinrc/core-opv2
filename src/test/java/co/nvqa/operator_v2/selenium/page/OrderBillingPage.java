@@ -20,6 +20,7 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX = ".//nv-autocomplete[@item-types='Parent Shipper']//input";
   private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL = "Selected Shippers";
   private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL = "Select by Parent Shipper";
+  private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_LOADING = "//span[text()='Loading']";
   private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//md-input-container[@label = '%s']/md-checkbox";
   private static final String FILTER_UPLOAD_CSV_ARIA_LABEL = "Upload CSV";
   private static final String FILTER_UPLOAD_CSV_NAME = "commons.upload-csv";
@@ -66,6 +67,7 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   public void setParentShipper(String parentShipper) {
     clickButtonByAriaLabelAndWaitUntilDone(
         FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+    waitUntilInvisibilityOfElementLocated(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_LOADING);
     selectValueFromNvAutocompleteByItemTypesAndDismiss(
         FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_NVAUTOCOMPLETE_ITEMTYPES, parentShipper);
   }
