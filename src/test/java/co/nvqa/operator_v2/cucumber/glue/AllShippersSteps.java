@@ -1843,4 +1843,13 @@ public class AllShippersSteps extends AbstractSteps {
     assertEquals("Parent Shipper link mismatch", parentShipperPageURL,
         allShippersPage.getReferParentsProfileLink());
   }
+
+  @Then("Operator search for marketplace sub shipper by shipper name and get sub shipper id")
+  public void operatorSearchForMarketplaceSubShipperByShipperNameAndGetSubShipperId() {
+    Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
+    String legacyId = allShippersPage.allShippersCreateEditPage
+        .searchMarketplaceSubshipperAndGetLegacyId("name",
+            marketplaceSubShipper.getSellerCompanyName());
+    put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+  }
 }

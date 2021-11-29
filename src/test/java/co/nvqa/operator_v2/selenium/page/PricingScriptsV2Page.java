@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -64,9 +65,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     if (!getCurrentUrl().endsWith("pricing-scripts-v2/create?type=normal") && createDraftBtn
         .isEnabled()) {
       createDraftBtn.click();
-    } else {
-      pricingScriptsV2CreateEditDraftPage.createDraft(script);
     }
+    pricingScriptsV2CreateEditDraftPage.createDraft(script);
+
   }
 
   public void checkErrorHeader(String message) {
@@ -270,14 +271,16 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     clickTabItem(TAB_ACTIVE_SCRIPTS);
     retryIfAssertionErrorOccurred(() ->
     {
+      refreshPage();
       searchTableActiveScriptsByScriptName(scriptName);
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
-        refreshPage();
         fail("Data still not loaded");
       }
-    }, String.format("Active script found "));
-    wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
-        "Active Scripts table is empty. Script not found.");
+      Assertions.assertThat(
+          getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_ACTIVE_SCRIPTS))
+          .isEqualTo(scriptName);
+    }, String.format("Active script found "), 10, 5);
+
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
     NvLogger.info("Waiting until Link Shippers Dialog loaded.");
     waitUntilInvisibilityOfElementLocated(
