@@ -36,6 +36,7 @@ public class ProfilePage extends OperatorV2SimplePage {
   }
 
   public String getCurrentCountry() {
+    pause5s();
     return countrySelect.getAttribute("innerText");
   }
 
