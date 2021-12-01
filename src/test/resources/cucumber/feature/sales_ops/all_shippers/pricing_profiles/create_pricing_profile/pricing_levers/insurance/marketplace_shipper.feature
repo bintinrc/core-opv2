@@ -1,9 +1,8 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Insurance @CreatePricingProfiles @Marketplace
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @Insurance @CreatePricingProfiles @MarketplaceShipper
 Feature:  Create Pricing Profile - Marketplace Shippers - Insurance
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-sop-mktpl-v4-dummy-pricing-profile-ins-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-mktpl-v4-dummy-pricing-profile-ins-global-id}" shipper's pricing profiles
 

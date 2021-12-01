@@ -75,6 +75,7 @@ Feature: Station Management Homepage
     Then Operator changes hub as "{hub-name-2}" through the dropdown in header
     And Operator verifies that the url path parameter changes to hub-id:"{hub-id-2}"
 
+
   Scenario Outline: Required to Select Hub When Hub ID in URL is Wrong (uid:d721e257-5455-4e17-ab0e-9885e6f66f38)
     Given Operator loads Operator portal home page
     Given Operator go to menu Station Management Tool -> Station Management Homepage
@@ -88,6 +89,33 @@ Feature: Station Management Homepage
     Examples:
       | HubName      | HubId      | InvalidHubId |
       | {hub-name-1} | {hub-id-1} | 997          |
+
+  Scenario Outline: [TH] Petty Cash Navigation Panel (uid:29ceeb23-3a20-4f5b-9580-bfeca74ce53b)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the following navigation links are displayed under the header:"<Header1>"
+      | Route Engine - Zonal Routing |
+      | Parcel Sweeper Live          |
+      | Shipment Management          |
+      | Shipment Inbound             |
+      | Van Inbound                  |
+      | Route Log                    |
+      | Outbound Monitoring          |
+      | Route Monitoring             |
+      | Route Inbound                |
+      | Recovery                     |
+      | Petty Cash Claims            |
+    And Operator verifies that the following navigation links are displayed under the header:"<Header2>"
+      | Driver Performance Report |
+      | COD Report                |
+    And Operator verifies that the page:"<PageName>" is loaded on new tab on clicking the link:"<LinkName>"
+
+    Examples:
+      | Country  | HubName      | Header1                      | Header2 | PageName              | LinkName          |
+      | Thailand | {hub-name-7} | Standard Operating Procedure | Reports | PCF Management System | Petty Cash Claims |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

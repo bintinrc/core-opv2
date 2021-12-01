@@ -15,8 +15,7 @@ Feature: All Orders
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And API Operator force succeed created order without cod
     And Finance Operator waits for "1" seconds
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verifies pricing information on Edit Order page:
@@ -36,8 +35,7 @@ Feature: All Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","is_rts": true, "from": {"name": "QA-SO-Test-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "From Address1","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "To Address1","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 90,"insured_value": 120, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     And Finance Operator waits for "1" seconds
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verifies pricing information on Edit Order page:

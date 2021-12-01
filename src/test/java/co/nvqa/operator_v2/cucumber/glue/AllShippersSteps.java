@@ -439,7 +439,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data) {
     try {
       data = resolveKeyValues(data);
-      Pricing pricing = get(KEY_PRICING_PROFILE);
+      Pricing pricing =
+          Objects.isNull(get(KEY_PRICING_PROFILE)) ? new Pricing() : get(KEY_PRICING_PROFILE);
 
       String value = data.get("startDate");
       if (StringUtils.isNotBlank(value)) {
@@ -1115,7 +1116,8 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private Shipper setShipperPricingProfile(Map<String, String> mapOfData) {
-    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    Shipper shipper =
+        Objects.nonNull(get(KEY_CREATED_SHIPPER)) ? get(KEY_CREATED_SHIPPER) : new Shipper();
     Pricing pricing = new Pricing();
     try {
       String pricingScriptName = mapOfData.get("pricingScriptName");
@@ -1840,5 +1842,14 @@ public class AllShippersSteps extends AbstractSteps {
         TestConstants.COUNTRY_CODE, parentShipperLegacyId));
     assertEquals("Parent Shipper link mismatch", parentShipperPageURL,
         allShippersPage.getReferParentsProfileLink());
+  }
+
+  @Then("Operator search for marketplace sub shipper by shipper name and get sub shipper id")
+  public void operatorSearchForMarketplaceSubShipperByShipperNameAndGetSubShipperId() {
+    Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
+    String legacyId = allShippersPage.allShippersCreateEditPage
+        .searchMarketplaceSubshipperAndGetLegacyId("name",
+            marketplaceSubShipper.getSellerCompanyName());
+    put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
   }
 }

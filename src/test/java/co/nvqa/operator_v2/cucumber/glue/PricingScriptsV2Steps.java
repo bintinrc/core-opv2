@@ -36,7 +36,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("^Operator create new Draft Script using data below:$")
   public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
-    String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String dateUniqueString = generateDateUniqueString();
 
     String createdDate = CREATED_DATE_SDF.format(new Date());
@@ -231,6 +230,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("^Operator link Script to Shipper with ID and Name = \"([^\"]*)\"$")
   public void operatorLinkShipperWithIdAndNameToTheScript(String shipperIdAndName) {
+    shipperIdAndName = resolveValue(shipperIdAndName);
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
     Shipper shipper = new Shipper();

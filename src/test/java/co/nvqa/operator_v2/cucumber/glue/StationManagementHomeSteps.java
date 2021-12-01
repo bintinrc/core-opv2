@@ -236,7 +236,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.loadOperatorPortal();
     }
 
-
     @Then("Operator verifies that the toast message {string} is displayed")
     public void operator_verifies_that_the_toast_message_is_displayed(String message) {
         stationManagementHomePage.verifyHubNotFoundToast(message);
@@ -379,4 +378,59 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.verifyEditOrderScreenURL(trackingId,orderId);
     }
 
+    @Then("Operator verifies that the modal: {string} is displayed and can be closed")
+    public void operator_verifies_that_the_modal_is_displayed_and_can_be_closed(String modalName) {
+        stationManagementHomePage.verifyModalPopupByName(modalName);
+    }
+
+    @When("Operator closes the modal: {string} if it is displayed on the page")
+    public void operator_closes_the_modal_if_it_is_displayed_on_the_page(String modalName) {
+        stationManagementHomePage.closeIfModalDisplay(modalName);
+    }
+
+    @When("Operator get sfld ticket count for the priority parcels")
+    public void operator_get_the_sfld_ticket_count_for_the_priority_parcels() {
+        int beforeOrder = stationManagementHomePage.getSfldParcelCount();
+        put(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB, beforeOrder);
+        takesScreenshot();
+    }
+
+    @Then("Operator verifies that the sfld ticket count has increased by {int}")
+    public void operator_verifies_that_the_sfld_ticket_count_has_increased_by(Integer totOrder) {
+        stationManagementHomePage.closeIfModalDisplay("Please Confirm ETA of FSR Parcels to Proceed");
+        int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
+        int afterOrder = stationManagementHomePage.getSfldParcelCount();
+        takesScreenshot();
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }
+
+    @When("Operator clicks the alarm button to view parcels with sfld tickets")
+    public void operator_clicks_the_alarm_button_to_view_parcels_with_sfld_tickets() {
+        stationManagementHomePage.openOrdersWithUnconfirmedTickets();
+    }
+
+    @Then("Operator confirms that station confirmed eta field is empty")
+    public void operator_confirms_that_station_confirmed_eta_field_is_empty() {
+        stationManagementHomePage.stationConfirmedEtaEmpty();
+    }
+
+    @Then("Operator verifies that save and confirm button is disabled")
+    public void operator_verifies_that_save_and_confirm_button_is_disabled() {
+        stationManagementHomePage.confirmSaveAndConfirmDisabled();
+    }
+
+    @Then("Operator confirms that no checkbox displayed for sfld parcels when eta has passed")
+    public void operator_confirms_that_no_checkbox_displayed_for_sfld_parcels_when_eta_has_passed() {
+        stationManagementHomePage.confirmCheckboxDisplayed();
+    }
+
+    @Then("Operator verifies that the text: {string} and count are matching for fsr parcels in urgent tasks banner")
+    public void operator_verifies_that_the_text_and_count_are_matching_for_fsr_parcels_in_urgent_tasks_banner(String fsrText) {
+        stationManagementHomePage.verifyFsrInUrgentTasks(fsrText);
+    }
+
+    @When("Operator opens the modal: {string} by clicking arrow beside the text: {string}")
+    public void operator_opens_the_modal_by_clicking_arrow_beside_the_text(String modalName, String fsrText) {
+        stationManagementHomePage.openModalByClickingArrow(modalName,fsrText);
+    }
 }

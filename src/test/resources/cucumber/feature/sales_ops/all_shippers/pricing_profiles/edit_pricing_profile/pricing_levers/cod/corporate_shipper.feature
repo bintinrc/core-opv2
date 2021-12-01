@@ -1,13 +1,11 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Cod @Corporate
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfiles @PricingLevers @UpdatePricingProfiles @Cod @CorporateShipper
 Feature: Edit Pricing Profiles - Corporate Shippers - COD
 
   Background: Login to Operator Portal V2
     # Using the same corporate shipper used in 'Create Pricing Profile' scenarios
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator go to menu Shipper -> All Shippers
     And DB Operator deletes "{shipper-sop-corp-v4-dummy-pricing-profile-cod-global-id}" shipper's pricing profiles
     And DB Operator deletes "{sub-shipper-sop-corp-v4-dummy-pricing-profile-cod-global-id}" shipper's pricing profiles
-
 
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' COD Min Fee and 'Int' COD Percentage - Corporate Sub Shipper who Reference Parent's Pricing Profile is Exists (uid:b22ccb61-e64c-4f85-8a2e-9c8cb5ddfe72)
        #Add new pricing profile and verify - corporate shipper

@@ -162,6 +162,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
   public static final String XPATH_ADD_NEW_PRICING_PROFILE = "//button[@aria-label='Add New Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
+  public static final String XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB = "//th[@nv-table-filter='%s']//input";
+  public static final String XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB_LEGACY_ID = "//td[contains(text(),'%s')]//preceding-sibling::td[@nv-table-highlight='filter.id']";
 
   public final B2bManagementPage b2bManagementPage;
 
@@ -335,7 +337,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Corporate HQ")) {
       basicSettingsForm.marketplace.selectValue("No");
       basicSettingsForm.marketplaceInternational.selectValue("No");
-      basicSettingsForm.marketplaceSort.selectValue("No");
     }
     if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace")) {
       basicSettingsForm.corporate.selectValue("No");
@@ -1490,9 +1491,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       String expectedErrorMessage) {
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
-      tabs.selectTab("Pricing and Billing");
-      pricingAndBillingForm.addNewProfile.click();
-      newPricingProfileDialog.waitUntilVisible();
+//      tabs.selectTab("Pricing and Billing");
+//      pricingAndBillingForm.addNewProfile.click();
+//      newPricingProfileDialog.waitUntilVisible();
       fillPricingProfileDetails(pricing);
       assertFalse("Save Button is enabled", isElementEnabled(XPATH_SAVE_CHANGES_PRICING_SCRIPT));
       pause3s();
@@ -1861,5 +1862,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public PricingAndBillingForm(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+  }
+
+  public String searchMarketplaceSubshipperAndGetLegacyId(String searchKey, String searchValue) {
+    sendKeysAndEnter(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB, searchKey), searchValue);
+    return getText(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB_LEGACY_ID, searchValue));
   }
 }
