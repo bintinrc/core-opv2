@@ -61,7 +61,7 @@ Feature: Create Pricing Profile - ID
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
 
-  @CloseNewWindows
+  @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with 'Int' COD Min Fee and 'Int' COD Percentage - ID (uid:eb8347c5-468c-4909-9dcd-d0f37f395f7c)
     Given API Operator create new normal shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
@@ -72,6 +72,23 @@ Feature: Create Pricing Profile - ID
       | discount          | 20                                              |
       | codMinFee         | 3000                                            |
       | codPercentage     | 1                                               |
+      | comments          | This is a test pricing script                   |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing profile and shipper discount details
+    Then Operator verifies the pricing profile and shipper discount details are correct
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
+
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Pricing Profile - RTS Charge, Surcharge - ID (uid:4d044c16-5a84-437a-a2e6-fe792f815a93)
+    Given API Operator create new normal shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | type              | PERCENTAGE                                      |
+      | discount          | 20                                              |
+      | rtsChargeType     | Surcharge                                       |
+      | rtsChargeValue    | 30                                              |
       | comments          | This is a test pricing script                   |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing profile and shipper discount details

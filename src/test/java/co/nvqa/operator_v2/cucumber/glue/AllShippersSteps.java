@@ -1131,6 +1131,8 @@ public class AllShippersSteps extends AbstractSteps {
       String insuranceThreshold = mapOfData.get("insuranceThreshold");
       String startDate = mapOfData.get("startDate");
       String endDate = mapOfData.get("endDate");
+      String rtsChargeType = mapOfData.get("rtsChargeType");
+      String rtsChargeValue = mapOfData.get("rtsChargeValue");
 
       pricing.setComments(comments);
       pricing.setScriptName(pricingScriptName);
@@ -1141,6 +1143,8 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsThreshold(insuranceThreshold);
       pricing.setInsPercentage(insurancePercentage);
       pricing.setInsMin(insuranceMinFee);
+      pricing.setRtsChargeType(rtsChargeType);
+      pricing.setRtsChargeValue(rtsChargeValue);
       pricing.setEffectiveDate(
           Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
       pricing.setContractEndDate(
@@ -1811,6 +1815,16 @@ public class AllShippersSteps extends AbstractSteps {
       assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
           NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()));
     }
+    if (Objects.nonNull(pricingProfile.getRtsChargeType())) {
+      String rtsChargeOpv2 = pricingProfile.getRtsChargeType();
+      Double rtsChargeDb = pricingLeversFromDb.getRtsCharge();
+      if (rtsChargeOpv2.equalsIgnoreCase("Discount")) {
+        assertTrue("RTS charge is not the same", rtsChargeDb <= 0);
+      }
+      if (rtsChargeOpv2.equalsIgnoreCase("Surcharge")) {
+        assertTrue("RTS charge is not the same", rtsChargeDb >= 0);
+      }
+    }
   }
 
   @And("Operator verifies the pricing profile details are like below:")
@@ -1851,5 +1865,16 @@ public class AllShippersSteps extends AbstractSteps {
         .searchMarketplaceSubshipperAndGetLegacyId("name",
             marketplaceSubShipper.getSellerCompanyName());
     put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+  }
+
+  @Then("Operator verifies country default text is displayed like below")
+  public void operatorVerifiesCountryDefaultTextIsDisplayedLikeBelow(
+      Map<String, String> dataTableAsMap) {
+    String actualText;
+    if (dataTableAsMap.containsKey("rtsCharge")) {
+      actualText = allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.rtsCountryDefaultText
+          .getText();
+      assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"), actualText);
+    }
   }
 }
