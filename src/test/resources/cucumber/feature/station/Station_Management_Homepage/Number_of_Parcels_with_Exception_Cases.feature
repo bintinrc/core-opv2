@@ -1,7 +1,7 @@
 @StationManagement @RecoveryTickets @ExceptionCases
 Feature: Number of Parcels with Exception Cases
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Test
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -783,7 +783,7 @@ Feature: Number of Parcels with Exception Cases
     Examples:
       | HubName      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
       | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
-
+  @Test
   Scenario Outline: View Order Details of Exception Cases Parcels (uid:36f6ec17-4e1d-4bcb-b99a-fd754118bf06)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -902,6 +902,6 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | TicketType | TileName                               | ModalName                    |
       | {hub-name-3} | DAMAGED    | Number of parcels with exception cases | Parcels with Exception Cases |
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @Test
   Scenario: Kill Browser
     Given no-op

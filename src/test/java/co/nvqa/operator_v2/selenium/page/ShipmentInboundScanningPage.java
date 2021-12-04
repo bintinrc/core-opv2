@@ -63,11 +63,20 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
+  @FindBy(css = "div.scan-state-text h2")
+  public PageElement scannedState;
+
+  @FindBy(css = "md-card-content h1")
+  public PageElement scannedMessage;
+
+  @FindBy(css = "div.scanned-shipping-id")
+  public PageElement scannedShipmentId;
+
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void inboundScanning(Long shipmentId, String label, String hub) {
+  public void inboundScanning(long shipmentId, String label, String hub) {
     pause2s();
     inboundHub.searchAndSelectValue(hub);
     click(grabXpathButton(label));

@@ -220,9 +220,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
     moveToElement(hamburger);
     hamburger.click();
-    waitWhilePageIsLoading();
+    waitUntilVisibilityOfElementLocated(titleXpath);
     WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
-    waitUntilVisibilityOfElementLocated(modalContent, 15);
+    //waitUntilVisibilityOfElementLocated(modalContent, 15);
     Assert.assertTrue("Assert that modal pop-up is opened",
         modalContent.isDisplayed());
   }
@@ -321,13 +321,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void waitUntilTileDollarValueMatches(String tileName, double expected) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 60);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
     wdWait.until(driver -> {
       NvLogger.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();
       waitUntilPageLoaded();
       double actual = getDollarValueFromTile(tileName);
-      return (actual == expected) ? true : false;
+      return actual == expected;
     });
   }
 
