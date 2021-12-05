@@ -217,11 +217,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
     String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
-    moveToElement(hamburger);
+    scrollIntoView(hamburger);
     hamburger.click();
     waitUntilVisibilityOfElementLocated(titleXpath);
     WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
-    //waitUntilVisibilityOfElementLocated(modalContent, 15);
     Assert.assertTrue("Assert that modal pop-up is opened",
         modalContent.isDisplayed());
   }
@@ -232,7 +231,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
     List<WebElement> modalContent = getWebDriver().findElements(By.xpath(titleXpath));
     waitUntilVisibilityOfElementLocated(modalContent.get(0), 15);
-    Assert.assertTrue(f("Assert that modal pop-up %s is displayed", modalTitle),
+    Assert.assertTrue(f("Assert that the modal pop-up %s is displayed", modalTitle),
         modalContent.size() > 0);
     modalCloseIcon.click();
   }
