@@ -34,6 +34,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void operator_selects_the_hub_as_and_proceed(String hubName) {
         hubName = resolveValue(hubName);
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        takesScreenshot();
         stationManagementHomePage.selectHubAndProceed(hubName);
     }
 

@@ -67,6 +67,8 @@ public class VanInboundPage extends OperatorV2SimplePage {
   }
 
   public void startRoute(String trackingId) {
+    waitUntilVisibilityOfElementLocated("//*[starts-with(@id, 'tracking-id-scan')]");
+    pause3s();
     sendKeysById("tracking-id-scan", trackingId);
     pause1s();
     clickButtonByAriaLabelAndWaitUntilDone("Route Start");
