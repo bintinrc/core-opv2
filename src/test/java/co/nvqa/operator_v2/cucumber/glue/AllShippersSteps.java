@@ -426,6 +426,30 @@ public class AllShippersSteps extends AbstractSteps {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
               .getAttribute("aria-checked").equalsIgnoreCase("true"));
     }
+    value = data.get("isDefaultRts");
+    if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+      assertTrue("Default Rts",
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox
+              .getAttribute("aria-checked").equalsIgnoreCase("true"));
+    }
+    value = data.get("rtsChargeType");
+    if (StringUtils.isNotBlank(value)) {
+      if (value.equalsIgnoreCase("Surcharge")) {
+        String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsSurcharge
+            .getAttribute("class");
+        assertThat("RTS Surcharge", attributeValue, Matchers.containsString("raised"));
+      }
+      if (value.equalsIgnoreCase("Discount")) {
+        String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount
+            .getAttribute("class");
+        assertThat("RTS Discount", attributeValue, Matchers.containsString("raised"));
+      }
+    }
+    value = data.get("rtsChargeValue");
+    if (StringUtils.isNotBlank(value)) {
+      assertEquals("Rts Value", value,
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.getValue());
+    }
   }
 
   @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
@@ -556,6 +580,37 @@ public class AllShippersSteps extends AbstractSteps {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
             .check();
       }
+      value = data.get("isDefaultRts");
+      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox
+            .check();
+      }
+      value = data.get("rtsChargeType");
+      if (StringUtils.isNotBlank(value)) {
+        // need to uncheck Country Default Checkbox before changing RTS charge
+        if (!allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount
+            .isDisplayed()) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox
+              .uncheck();
+        }
+        if (value.equalsIgnoreCase("Surcharge")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsSurcharge.click();
+        }
+        if (value.equalsIgnoreCase("Discount")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount.click();
+        }
+      }
+      value = data.get("rtsChargeValue");
+      if (StringUtils.isNotBlank(value)) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.clear();
+        if (value.equalsIgnoreCase("none")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue
+              .sendKeys(Keys.TAB);
+        } else {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue
+              .sendKeys(value);
+        }
+      }
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
@@ -625,7 +680,6 @@ public class AllShippersSteps extends AbstractSteps {
     }
   }
 
-
   @And("Operator gets pricing profile values")
   public void operatorGetsPricingProfileValues() {
     try {
@@ -637,7 +691,6 @@ public class AllShippersSteps extends AbstractSteps {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
   }
-
 
   @Then("^Operator go back to Shipper List page")
   public void operatorGoBackToShipperListPage() {
@@ -820,7 +873,8 @@ public class AllShippersSteps extends AbstractSteps {
     distributionPoint.setAllowReturnsOnVault(true);
     distributionPoint.setVaultLogoUrl("https://vaultlogo" + dateUniqueString + ".com");
     distributionPoint.setAllowReturnsOnShipperLite(true);
-    distributionPoint.setShipperLiteLogoUrl("https://shipperlitelogo" + dateUniqueString + ".com");
+    distributionPoint
+        .setShipperLiteLogoUrl("https://shipperlitelogo" + dateUniqueString + ".com");
     shipper.setDistributionPoints(distributionPoint);
 
     allShippersPage.updateShipperDistributionPointSettings(shipper);
@@ -900,8 +954,9 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   @When("^Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:$")
-  public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(
-      Map<String, String> mapOfData) {
+  public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow
+      (
+          Map<String, String> mapOfData) {
     String reservationDays = mapOfData.get("reservationDays");
     String autoReservationReadyTime = mapOfData.get("autoReservationReadyTime");
     String autoReservationLatestTime = mapOfData.get("autoReservationLatestTime");
@@ -944,7 +999,8 @@ public class AllShippersSteps extends AbstractSteps {
     reservation.setAllowedTypes(listOfAllowedTypes);
 
     allShippersPage
-        .enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper, createdAddress,
+        .enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper,
+            createdAddress,
             reservation);
     put(KEY_CREATED_ADDRESS, createdAddress);
   }
@@ -1131,6 +1187,8 @@ public class AllShippersSteps extends AbstractSteps {
       String insuranceThreshold = mapOfData.get("insuranceThreshold");
       String startDate = mapOfData.get("startDate");
       String endDate = mapOfData.get("endDate");
+      String rtsChargeType = mapOfData.get("rtsChargeType");
+      String rtsChargeValue = mapOfData.get("rtsChargeValue");
 
       pricing.setComments(comments);
       pricing.setScriptName(pricingScriptName);
@@ -1141,6 +1199,8 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsThreshold(insuranceThreshold);
       pricing.setInsPercentage(insurancePercentage);
       pricing.setInsMin(insuranceMinFee);
+      pricing.setRtsChargeType(rtsChargeType);
+      pricing.setRtsChargeValue(rtsChargeValue);
       pricing.setEffectiveDate(
           Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
       pricing.setContractEndDate(
@@ -1364,7 +1424,8 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator verifies toast {string} displayed on edit shipper page")
   public void verifiesToast(String msg) {
-    String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
+    String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message
+        .getText();
     assertThat("Error message", actualMsg, Matchers.containsString(resolveValue(msg)));
   }
 
@@ -1458,7 +1519,8 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page -> {
       List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
-      boolean isExist = actualSubShipper.stream().allMatch(s -> s.getName().contains(shipperName));
+      boolean isExist = actualSubShipper.stream()
+          .allMatch(s -> s.getName().contains(shipperName));
       assertTrue(f("Check shippers name contain %s", shipperName), isExist);
     });
   }
@@ -1559,7 +1621,8 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   @When("Operator bulk create corporate sub shippers with data below:")
-  public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws IOException {
+  public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws
+      IOException {
     uploadFileBulkCreateCorporateSubShipper(data);
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       page.createSubShipperAccount.click();
@@ -1670,7 +1733,6 @@ public class AllShippersSteps extends AbstractSteps {
       throw new AssertionError("Subshipper with branch id [" + branchId + "] was not found");
     });
   }
-
 
   @When("Operator set shipper on this page as newly created shipper")
   public void setShipperAsNewlyCreatedShipper() {
@@ -1811,6 +1873,16 @@ public class AllShippersSteps extends AbstractSteps {
       assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
           NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()));
     }
+    if (Objects.nonNull(pricingProfile.getRtsChargeType())) {
+      String rtsChargeOpv2 = pricingProfile.getRtsChargeType();
+      Double rtsChargeDb = pricingLeversFromDb.getRtsCharge();
+      if (rtsChargeOpv2.equalsIgnoreCase("Discount")) {
+        assertTrue("RTS charge is not the same", rtsChargeDb <= 0);
+      }
+      if (rtsChargeOpv2.equalsIgnoreCase("Surcharge")) {
+        assertTrue("RTS charge is not the same", rtsChargeDb >= 0);
+      }
+    }
   }
 
   @And("Operator verifies the pricing profile details are like below:")
@@ -1825,7 +1897,8 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies shipper type is {string} on Edit Shipper page")
   public void verifyShipperType(String expected) {
     assertEquals("Shipper type", resolveValue(expected),
-        allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly.getValue());
+        allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly
+            .getValue());
   }
 
   @And("Operator verifies the pricing profile is referred to parent shipper {string}")
@@ -1851,5 +1924,17 @@ public class AllShippersSteps extends AbstractSteps {
         .searchMarketplaceSubshipperAndGetLegacyId("name",
             marketplaceSubShipper.getSellerCompanyName());
     put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+  }
+
+  @Then("Operator verifies country default text is displayed like below")
+  public void operatorVerifiesCountryDefaultTextIsDisplayedLikeBelow(
+      Map<String, String> dataTableAsMap) {
+    String actualText;
+    if (dataTableAsMap.containsKey("rtsCharge")) {
+      actualText = allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.rtsCountryDefaultText
+          .getText();
+      assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"),
+          actualText);
+    }
   }
 }
