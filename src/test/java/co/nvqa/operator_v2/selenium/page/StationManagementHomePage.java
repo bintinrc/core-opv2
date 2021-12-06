@@ -441,6 +441,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     trackingIdLink.click();
     switchToNewWindow();
     waitWhilePageIsLoading();
+    pause3s();
     String actualTrackingId = editOrderTrackingId.getText().trim();
     closeAllWindows(windowHandle);
     pause3s();

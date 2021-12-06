@@ -1,4 +1,4 @@
-@Van-Inbound
+@StationManagement @Van-Inbound
 Feature: Van Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -332,7 +332,7 @@ Feature: Van Inbound
       | status | IN_PROGRESS            |
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | Country |Comments  |
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | GENERATED |
 
   Scenario Outline: Van Inbound Parcels in Cancelled Shipment (uid:9973ea31-d21f-4787-9a19-b800d97f4355)
@@ -375,7 +375,7 @@ Feature: Van Inbound
       | status | IN_PROGRESS            |
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | Country |Comments  |
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | GENERATED |
 
   Scenario Outline: Van Inbound Parcels Not in Any Shipment (uid:c9292f60-eb4a-485c-8004-3711b20f3a71)
