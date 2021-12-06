@@ -56,13 +56,11 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
 
   Scenario: Edit Pending Pricing Profile - Corporate Shipper - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - Corporate Sub Shipper who has their own Pricing Profile is Exists (uid:835aa273-b9be-45ef-ac50-835cdf12fab2)
     # create a pending pricing profile for corporate shipper
-    And Operator edits shipper "{shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     # create a pending pricing profile for corporate sub shipper
-    And Operator edits shipper "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-legacy-id}"
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"

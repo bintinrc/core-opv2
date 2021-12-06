@@ -27,6 +27,7 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdBooleanSwitch;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -1664,11 +1665,23 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(id = "cod-percent")
     public TextBox codPercent;
 
+    @FindBy(css = "button[aria-label='Surcharge']")
+    public Button rtsSurcharge;
+
+    @FindBy(css = "button[aria-label='Discount']")
+    public Button rtsDiscount;
+
+    @FindBy(id = "rts-charge")
+    public TextBox rtsValue;
+
     @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
     public CheckBox codCountryDefaultCheckbox;
 
     @FindBy(xpath = "//md-input-container[contains(@label,'Insured Value')]/md-checkbox")
     public CheckBox insuranceCountryDefaultCheckbox;
+
+    @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
+    public MdCheckbox rtsCountryDefaultCheckbox;
 
     @FindBy(name = "Save Changes")
     public NvApiTextButton saveChanges;

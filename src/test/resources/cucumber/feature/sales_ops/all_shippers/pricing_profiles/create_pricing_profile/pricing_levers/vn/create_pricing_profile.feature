@@ -5,7 +5,6 @@ Feature: Create Pricing Profile - VN
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator changes the country to "Vietnam"
 
-  @nadeera
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - RTS Charge, Discount - VN (uid:c8fb9448-d947-4e37-9fe0-345825368133)
     Given API Operator create new normal shipper

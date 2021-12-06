@@ -135,8 +135,6 @@ Feature: Pricing Levers - RTS Charge
     When Operator adds new Shipper's Pricing Profile
       | pricingScriptName | {pricing-script-id} - {pricing-script-name} |
       | comments          | This is a test pricing script               |
-#    Then Operator verifies country default text is displayed like below
-#      | rtsCharge | Use Country Default: 0% RTS Fee |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
