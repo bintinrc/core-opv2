@@ -234,7 +234,7 @@ Feature: Number of Parcels In Hub
       | HubName      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                         | OrderStatus |
       | {hub-name-1} | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - UNDECLARED | Transit     |
 
-  Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - Response - Undeclared (uid:e1957051-c693-420f-8650-073a9bcb023b)
+  Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Declared (uid:e1957051-c693-420f-8650-073a9bcb023b)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
