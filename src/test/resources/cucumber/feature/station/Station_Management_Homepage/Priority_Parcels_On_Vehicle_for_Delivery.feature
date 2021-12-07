@@ -51,7 +51,7 @@ Feature: Priority Parcels On Vehicle for Delivery
       | HubName      | HubId      | TileName                                 | ModalName                   |
       | {hub-name-5} | {hub-id-5} | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
-  Scenario Outline: Number of Priority Parcel on Vehicle for Delivery is Decreasing After Parcel Completed (uid:01b34681-796b-432a-af31-33fb8c2cf930)
+  Scenario Outline: Priority Parcel on Vehicle for Delivery Number is Decreased (uid:01b34681-796b-432a-af31-33fb8c2cf930)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
