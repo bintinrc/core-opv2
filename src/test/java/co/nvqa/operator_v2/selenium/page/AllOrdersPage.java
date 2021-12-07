@@ -1,7 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -914,8 +917,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void clearAllSelectionsAndLoadSelection() {
-    clickButtonByAriaLabel("Clear All Selections");
-    clickButtonByAriaLabel("Load Selection");
+    click("//button[contains(@aria-label,'clear-all-selections')]");
+    click("//button[contains(@aria-label,'load-selection')]");
   }
 
   public void applyAction(String trackingId) {
@@ -927,7 +930,19 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     pause2s();
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
         findElementByXpath("//button[@aria-label = 'Regular Pickup']"));
+    pause2s();
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath("//button[@aria-label = 'Submit']"));
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
+  }
+
+  public void verifyDownloadedCsv(String trackingId, String message) {
+    String downloadedFile = getLatestDownloadedFilename("pickup_reservations");
+    verifyFileDownloadedSuccessfully(downloadedFile);
+    String pathName = StandardTestConstants.TEMP_DIR + downloadedFile;
+    List<RegularPickup> reg = DataEntity.fromCsvFile(RegularPickup.class, pathName, true);
+    assertTrue(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId));
+    assertTrue(reg.get(0).getErrorMessage().contains(message));
   }
 
 }

@@ -813,7 +813,13 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @And("Operator apply Regular pickup action")
   public void operatorApplyRegularPickupAction() {
-    String trackingId = "NVSGCARTG000013559";
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.applyAction(trackingId);
+  }
+
+  @Then("Downloaded csv file contains correct orders and message {string}")
+  public void downloadedCsvFileContainsCorrectOrdersAndMessage(String message) {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.verifyDownloadedCsv(trackingId, message);
   }
 }
