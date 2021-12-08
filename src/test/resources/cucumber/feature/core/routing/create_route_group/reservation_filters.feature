@@ -1,5 +1,5 @@
-@OperatorV2 @Core @Routing @CreateRouteGroups
-Feature: Create Route Groups
+@OperatorV2 @Core @Routing @RoutingJob2 @CreateRouteGroups
+Feature: Create Route Groups - Reservation Filters
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
