@@ -5,11 +5,6 @@ Feature: Priority Levels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be Able to Download All Sample CSV File on Priority Levels Page (uid:b1912952-f664-472f-814b-df9ae4232d5b)
-    Given Operator go to menu Order -> All Orders
-    And Operator go to menu New Features -> Priority Levels
-    Then Operator verifies "Reservations Sample CSV" is downloaded successfully and correct
-
   Scenario: Operator Update Reservation Priority Level by CSV upload (uid:eb88c7d6-ef21-4226-9ffb-f171ce65716a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
