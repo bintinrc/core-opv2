@@ -15,8 +15,6 @@ Feature: Pricing Scripts V2
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
-    And Operator refresh page
-    And Operator verify the script is saved successfully
 
   @HappyPath
   Scenario: Link Script to Shipper - Script is Already Linked To Shipper (uid:736caea8-5b80-401c-a1ae-3d9400fd4569)
@@ -28,9 +26,9 @@ Feature: Pricing Scripts V2
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
-    And Operator refresh page
-    And Operator verify the script is saved successfully
-    When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-pricing-profile-ins-legacy-id}-{shipper-v4-dummy-pricing-profile-ins-name}"
+    # create new shipper
+    And API Operator create new normal shipper
+    When Operator link Script to Shipper with ID and Name = "{KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
 
