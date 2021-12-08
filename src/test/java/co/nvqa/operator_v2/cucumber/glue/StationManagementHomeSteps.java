@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
@@ -194,6 +195,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.applyFilters(filter, 1);
     }
 
+    @When("Operator selects the following values in the modal pop up")
+    public void operator_selects_the_following_values_in_the_modal_pop_up(Map<String, String> selectFilters) {
+        Map<String, String> filter = resolveKeyValues(selectFilters);
+        stationManagementHomePage.selectFilterValue(filter);
+    }
+
     @When("Operator expects no results when searching for the orders by applying the following filters:")
     public void operator_expects_no_results_when_searching_for_the_orders_by_applying_the_following_filters(DataTable searchParameters) {
         List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
@@ -382,6 +389,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("Operator verifies that the modal: {string} is displayed and can be closed")
     public void operator_verifies_that_the_modal_is_displayed_and_can_be_closed(String modalName) {
         stationManagementHomePage.verifyModalPopupByName(modalName);
+        stationManagementHomePage.closeIfModalDisplay(modalName);
+    }
+
+    @Then("Operator verifies that the modal: {string} is displayed")
+    public void operator_verifies_that_the_modal_is_displayed(String modalName) {
+        stationManagementHomePage.verifyModalPopupByName(modalName);
     }
 
     @When("Operator closes the modal: {string} if it is displayed on the page")
@@ -433,5 +446,21 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @When("Operator opens the modal: {string} by clicking arrow beside the text: {string}")
     public void operator_opens_the_modal_by_clicking_arrow_beside_the_text(String modalName, String fsrText) {
         stationManagementHomePage.openModalByClickingArrow(modalName,fsrText);
+    }
+
+    @When("Operator saves to address used in the parcel in the key")
+    public void operator_saves_to_address_used_in_the_parcel_in_the_key() {
+        Order order = get(KEY_CREATED_ORDER);
+        String addressLn1 = order.getToAddress1();
+        String addressLn2 = order.getToAddress2();
+        String postCode = order.getToPostcode();
+        String formattedToAddress = f("%s, %s, %s", addressLn1, addressLn2, postCode);
+        put(KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS, formattedToAddress);
+    }
+
+    @Then("Operators sorts and verifies that the column:{string} is in ascending order")
+    public void operators_sorts_and_verifies_that_the_column_is_in_ascending_order(String columnName) {
+        stationManagementHomePage.sortColumn(columnName, "ASCENDING_ORDER");
+        stationManagementHomePage.getRecordsAndValidateSorting(columnName);
     }
 }

@@ -5,11 +5,16 @@ import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
+import com.google.common.collect.Comparators;
+import com.google.common.collect.Ordering;
+import java.util.Comparator;
+import java.util.Locale;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -36,6 +41,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
+  private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
+  private static final String MODAL_TABLE_HEADER_XPATH = "//div[contains(@class,'th')]";
+  private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
   private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
@@ -114,6 +122,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   @FindBy(css = "li:last-child .count")
   public PageElement fsrCount;
+
+  @FindBy(css = "div[class*='footer-row']")
+  private PageElement footerRow;
 
   public void switchToStationHomeFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -233,7 +244,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(modalContent.get(0), 15);
     Assert.assertTrue(f("Assert that the modal pop-up %s is displayed", modalTitle),
         modalContent.size() > 0);
-    modalCloseIcon.click();
   }
 
   public void closeIfModalDisplay(String modalTitle) {
@@ -413,6 +423,23 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         f("Assert that the search should have %s records as expected after applying filters",
             resultsCount),
         results.size() == resultsCount);
+  }
+
+  public void selectFilterValue(Map<String, String> filters) {
+    waitWhilePageIsLoading();
+    for (Map.Entry<String, String> filter : filters.entrySet()) {
+      String comboFilterXpath = f(MODAL_TABLE_COMBO_FILTER_XPATH, filter.getKey());
+      scrollIntoView(comboFilterXpath);
+      List<WebElement> filterFields = getWebDriver().findElements(By.xpath(comboFilterXpath));
+      if (filterFields.size() > 0) {
+        filterFields.get(0).click();
+        new AntSelect2(getWebDriver(), filterFields.get(0)).selectValue(filter.getValue());
+      }
+    }
+    waitWhilePageIsLoading();
+    Assert.assertTrue(
+        f("Assert that the search should have at-least one record as expected after applying filters"),
+        results.size() > 0);
   }
 
   public void applyFilters(String tableName, Map<String, String> filters, int resultSize) {
@@ -658,4 +685,50 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         modalContent.isDisplayed());
   }
 
+  public void sortColumn(String columnName, String sortingOrder) {
+    waitWhilePageIsLoading();
+    String sortColumnXpath = f(MODAL_TABLE_FILTER_SORT_XPATH, columnName);
+    scrollIntoView(sortColumnXpath);
+    List<WebElement> sortFields = getWebDriver().findElements(By.xpath(sortColumnXpath));
+    if (sortFields.size() == 0) {
+      Assert.assertTrue(
+          f("Assert that the column %s to be sorted is displayed on the screen", columnName),
+          results.size() > 0);
+    }
+    sortFields.get(0).click();
+    waitWhilePageIsLoading();
+    if(sortingOrder.equalsIgnoreCase("DESCENDING_ORDER")){
+      sortFields.get(0).click();
+      waitWhilePageIsLoading();
+    }
+  }
+
+  public void getRecordsAndValidateSorting(String columnName) {
+    int columnIndex = 0;
+    List<String> colData = new ArrayList<String>();
+    waitWhilePageIsLoading();
+    String headerXpath = f(MODAL_TABLE_HEADER_XPATH);
+    List<WebElement> headerFields = getWebDriver().findElements(By.xpath(headerXpath));
+    if (headerFields.size() == 0) {
+      Assert.assertTrue(
+          f("Assert that the column %s to be sorted is displayed on the screen", columnName),
+          results.size() > 0);
+    }
+    for(WebElement header : headerFields){
+      String headerName = header.getText().trim().toLowerCase();
+      columnIndex++;
+      if(headerName.contains(columnName.toLowerCase())){
+        break;
+      }
+    }
+    scrollIntoView(footerRow.getWebElement());
+    List<WebElement> colElements = getWebDriver().findElements(
+        By.cssSelector(f("[role='row'] [role='gridcell']:nth-child(%d)", columnIndex)));
+    colElements.forEach(element -> {
+      colData.add(element.getText().trim());
+    });
+    Assert.assertTrue(
+        f("Assert that the column values %s are sorted as expected", columnName),
+        Comparators.isInOrder(colData, Comparator.naturalOrder()));
+  }
 }
