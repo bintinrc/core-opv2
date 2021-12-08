@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
@@ -803,5 +804,22 @@ public class AllOrdersSteps extends AbstractSteps {
       allOrdersPage.halfCircleSpinner.waitUntilInvisible();
     }
     pause1s();
+  }
+
+  @When("Operator clicks Clear All Selections and Load Selection button on All Orders Page")
+  public void operatorClicksClearAllSelectionsOnAllOrdersPage() {
+    allOrdersPage.clearAllSelectionsAndLoadSelection();
+  }
+
+  @And("Operator apply Regular pickup action")
+  public void operatorApplyRegularPickupAction() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.applyAction(trackingId);
+  }
+
+  @Then("Downloaded csv file contains correct orders and message {string}")
+  public void downloadedCsvFileContainsCorrectOrdersAndMessage(String message) {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.verifyDownloadedCsv(trackingId, message);
   }
 }
