@@ -148,6 +148,34 @@ Feature: Create Route Groups
     And Operator download CSV file on Create Route Group page
     Then Operator verify Transactions/Reservations CSV file on Create Route Group page
 
+  Scenario: Operator Filter Master Shipper on Create Route Group (uid:8003a82c-866f-45e4-abbd-bcaac26dc9aa)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper set Shipper V4 using data below:
+      | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
+    And API Shipper create V4 order using data below:
+      | v4OrderRequest | {"service_type": "Marketplace","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": true,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time  | Today                              |
+      | Master Shipper | {shipper-v4-marketplace-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+      | status     | Pending Pickup                                             |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+      | status     | Pending Pickup                                           |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

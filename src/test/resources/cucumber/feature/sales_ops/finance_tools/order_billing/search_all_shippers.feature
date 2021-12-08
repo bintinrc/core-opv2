@@ -43,7 +43,6 @@ Feature: Order Billing
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully
-    Given API Operator force succeed created order
     Given Operator go to menu Finance Tools -> Order Billing
     When Operator generates success billings using data below:
       | startDate       | {gradle-current-date-yyyy-MM-dd}                          |

@@ -5,7 +5,6 @@ Feature: Edit Pricing Profiles - Normal Shippers - COD
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And DB Operator deletes "{shipper-v4-dummy-pricing-profile-cod-2-global-id}" shipper's pricing profiles
       # create a pending pricing profile for shipper
-    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-cod-2-legacy-id}"
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-cod-2-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-cod-2-global-id}"

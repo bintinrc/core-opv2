@@ -1,5 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.event.Events;
+import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -11,7 +15,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -168,5 +175,57 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
     String nextDay = listOfDropOffDates.get(listOfDropOffDates.size() - 1);
     return nextDay;
+  }
+
+  public void verifiesDetailsRightConfirmedOptTag(DatabaseCheckingNinjaCollectConfirmed result,
+      DpDetailsResponse dpDetails, Events orderEvent, String barcode) {
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+    assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
+    assertEquals("DP ID is not the same : ", result.getDpId(), dpDetails.getId());
+    assertEquals("Status is not the same : ", result.getStatus(), "CONFIRMED");
+    assertEquals("Source is not the same : ", result.getSource(), "OPERATOR");
+    assertEquals("Drop Off On is not the same : ", result.getDropOffOn().toString(),
+        formatter.format(today));
+    assertEquals("Start Date is not the same : ", result.getStartDate().toString(),
+        formatter.format(today));
+    assertEquals("Collect Start Date is not the same : ", result.getCollectStartDate().toString(),
+        formatter.format(today.plusDays(1)));
+    assertEquals("DP Reservation Event Name is not the same : ", result.getName(),
+        "OPERATOR_CONFIRMED");
+    assertTrue("Order Event - ASSIGNED_TO_DP - is published: ",
+        isOrderEventPublished(orderEvent, "ASSIGNED_TO_DP"));
+    assertEquals("DP Reservation SMS Notification is not the same : ",
+        result.getSmsNotificationStatus(), "NA");
+    assertEquals("DP Reservation Email Notification is not the same : ",
+        result.getEmailNotificationStatus(), "NA");
+  }
+
+  public boolean isOrderEventPublished(Events orderEvent, String expectedOrderEvent) {
+    boolean isOrderEventPublished = false;
+    for (int i = 0; i < orderEvent.getData().size(); i++) {
+      if (orderEvent.getData().get(i).getType().equalsIgnoreCase(expectedOrderEvent)) {
+        isOrderEventPublished = true;
+        break;
+      }
+    }
+    return isOrderEventPublished;
+  }
+
+  public void verifiesDetailsForDriverDropOffConfirmedStatus(
+      DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus result, String barcode) {
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+    assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
+    assertEquals("Received From is not the same : ", result.getReceivedFrom(), "DRIVER");
+    assertEquals("DP Reservation Status is not the same : ", result.getDpReservationStatus(),
+        "CONFIRMED");
+    assertTrue("Received At is not the same : ",
+        result.getReceivedAt().toString().contains(formatter.format(today)));
+    assertEquals("DP Reservation Event Name is not the same : ",
+        result.getDpReservationEventName(), "DRIVER_DROPPED_OFF");
+    assertEquals("DP Job Order Status is not the same : ", result.getDpJobOrderStatus(), "SUCCESS");
   }
 }

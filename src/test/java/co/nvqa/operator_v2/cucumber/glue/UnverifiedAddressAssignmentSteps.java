@@ -21,7 +21,7 @@ public class UnverifiedAddressAssignmentSteps extends AbstractSteps {
 
   @And("Operator clicks Load Selection on Unverified Address Assignment page")
   public void operatorClicksLoadSelection() {
-    page.loadSelection.clickAndWaitUntilDone();
+    page.loadSelection.clickAndWaitUntilDone(60);
   }
 
   @Then("Operator verifies address on Unverified Address Assignment page:")
