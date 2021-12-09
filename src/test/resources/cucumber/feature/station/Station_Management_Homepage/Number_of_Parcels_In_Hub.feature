@@ -339,7 +339,6 @@ Feature: Number of Parcels In Hub
     And verifies that the parcel count for "<LowerSize>" is decreased by 1 in the table: "<TableName>"
     And verifies that the parcel count for "<UpperSize>" is increased by 1 in the table: "<TableName>"
     And verifies that the size is also updated as "<UpperSize>" in station database
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubName      | TileName                 | ModalName      | TableName      | LowerSize | UpperSize |
@@ -370,7 +369,6 @@ Feature: Number of Parcels In Hub
     And verifies that the parcel count for "<UpperSize>" is decreased by 1 in the table: "<TableName>"
     And verifies that the parcel count for "<LowerSize>" is increased by 1 in the table: "<TableName>"
     And verifies that the size is also updated as "<LowerSize>" in station database
-    And reloads operator portal to reset the test state
 
     Examples:
       | HubName      | TileName                 | ModalName      | TableName      | UpperSize | LowerSize |

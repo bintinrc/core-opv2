@@ -4,8 +4,10 @@ import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +18,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Tristania Siagian
  */
 public class VanInboundPage extends OperatorV2SimplePage {
+
 
   @FindBy(id = "route-id")
   public TextBox routeId;
@@ -31,6 +34,18 @@ public class VanInboundPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public ScannedParcelsDialog scannedParcelsDialog;
+
+  @FindBy(css = "button[aria-label='Route Start']")
+  public PageElement routeStart;
+
+  @FindBy(xpath = "//md-dialog-content[//*[.='Route  is started']]")
+  public List<PageElement> routeStartedModal;
+
+  @FindBy(css = "[aria-label*='Back to Route Input Screen']")
+  public PageElement backToRouteInputScreen;
+
+  @FindBy(css = "md-content[class^='nv-van-inbound']")
+  public List<PageElement> vanInboundHomePage;
 
   public VanInboundPage(WebDriver webDriver) {
     super(webDriver);
@@ -52,6 +67,8 @@ public class VanInboundPage extends OperatorV2SimplePage {
   }
 
   public void startRoute(String trackingId) {
+    waitUntilVisibilityOfElementLocated("//*[starts-with(@id, 'tracking-id-scan')]");
+    pause3s();
     sendKeysById("tracking-id-scan", trackingId);
     pause1s();
     clickButtonByAriaLabelAndWaitUntilDone("Route Start");
@@ -166,4 +183,39 @@ public class VanInboundPage extends OperatorV2SimplePage {
       }
     }
   }
+
+
+  @FindBy(css = "md-dialog")
+  public ShipmentInboundDialog shipmentInboundDialog;
+
+  public static class ShipmentInboundDialog extends MdDialog{
+
+    public ShipmentInboundDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "h4")
+    public PageElement dialogHeader;
+
+    @FindBy(css = "b")
+    public PageElement parcelNo;
+
+    @FindBy(css = "td.tracking-id")
+    public PageElement trackingId;
+
+    @FindBy(css = "p b")
+    public PageElement trackingIdInModal;
+
+    @FindBy(css = "[aria-label='Proceed without Hub Inbounding']")
+    public PageElement proceedWithoutInbounding;
+
+    @FindBy(css = "[aria-label='Hub Inbound Shipment']")
+    public PageElement hubInboundShipment;
+
+  }
+
+
+
+
+
 }

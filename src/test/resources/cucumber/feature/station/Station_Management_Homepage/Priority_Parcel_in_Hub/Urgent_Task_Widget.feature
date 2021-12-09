@@ -1,4 +1,4 @@
-@StationManagement @StationHome @UrgentTask
+@StationManagement @StationHome @SfldTickets @UrgentTask
 Feature: Urgent Task Widget
 
   @LaunchBrowser @ShouldAlwaysRun

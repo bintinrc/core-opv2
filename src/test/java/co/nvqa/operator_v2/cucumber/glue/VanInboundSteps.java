@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 
 /**
@@ -121,4 +122,71 @@ public class VanInboundSteps extends AbstractSteps {
   public void verifyTrackingIdEmpty() {
     vanInboundPage.verifyTrackingIdEmpty();
   }
+
+  @Then("Operator confirms that the modal: {string} is displayed and has {int} parcels")
+  public void operator_confirms_that_the_modal_is_displayed_and_has_parcels(String modalName, Integer parcelNo) {
+    vanInboundPage.waitUntilPageLoaded(60);
+    String actualDialogHeader = vanInboundPage.shipmentInboundDialog.dialogHeader.getText().trim();
+    String actualCount = vanInboundPage.shipmentInboundDialog.parcelNo.getText().trim();
+    Assertions.assertThat(actualDialogHeader)
+        .as(f("Assert that the dialog header displayed is %s", modalName))
+        .isEqualTo(actualDialogHeader.trim());
+    Assertions.assertThat(actualCount)
+        .as(f("Assert that the number of parcels is %d", parcelNo))
+        .isEqualTo(f("%d Parcels", parcelNo));
+  }
+
+  @Then("Operator verifies that tracking id is displayed and proceeds without hub inbounding")
+  public void operator_verifies_that_tracking_id_is_displayed_and_proceeds_without_hub_inbounding() {
+    String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String actualTrackingId = vanInboundPage.shipmentInboundDialog.trackingId.getText().trim();
+    Assertions.assertThat(actualTrackingId)
+        .as(f("Assert that the tracking id : %s is displayed", expectedTrackingId))
+        .isEqualTo(f("1. %s", expectedTrackingId));
+    vanInboundPage.shipmentInboundDialog.proceedWithoutInbounding.click();
+  }
+
+  @Then("Operator verifies that tracking id is displayed and proceeds with hub inbounding")
+  public void operator_verifies_that_tracking_id_is_displayed_and_proceeds_with_hub_inbounding() {
+    String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String actualTrackingId = vanInboundPage.shipmentInboundDialog.trackingId.getText().trim();
+    Assertions.assertThat(actualTrackingId)
+        .as(f("Assert that the tracking id : %s is displayed", expectedTrackingId))
+        .isEqualTo(f("1. %s", expectedTrackingId));
+    vanInboundPage.shipmentInboundDialog.hubInboundShipment.click();
+  }
+
+  @Then("Operator confirms that the modal: {string} is displayed and has tracking id displayed")
+  public void operator_confirms_that_the_modal_is_displayed_and_has_tracking_id_displayed(String modalName) {
+    String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String actualDialogHeader = vanInboundPage.shipmentInboundDialog.dialogHeader.getText().trim();
+    String actualTrackingId = vanInboundPage.shipmentInboundDialog.trackingIdInModal.getText().trim();
+    Assertions.assertThat(actualDialogHeader)
+        .as(f("Assert that the dialog header displayed is %s", modalName))
+        .isEqualTo(actualDialogHeader.trim());
+    Assertions.assertThat(actualTrackingId)
+        .as(f("Assert that the tracking id: %s is shown in the modal", expectedTrackingId))
+        .isEqualTo(expectedTrackingId);
+    vanInboundPage.shipmentInboundDialog.proceedWithoutInbounding.click();
+  }
+
+  @Then("Operator verifies the route is started on clicking route start button")
+  public void operator_verifies_the_route_is_started_on_clicking_route_start_button() {
+    vanInboundPage.waitUntilPageLoaded(60);
+    pause3s();
+    vanInboundPage.routeStart.click();
+    vanInboundPage.waitUntilPageLoaded();
+    Assert.assertTrue("Assert that the route is started modal has been displayed!",
+        vanInboundPage.routeStartedModal.size() > 0);
+  }
+
+  @Then("Operator verifies that van inbound page is displayed after clicking back to route input screen")
+  public void operator_verifies_that_van_inbound_page_is_displayed_after_clicking_back_to_route_input_screen() {
+    pause2s();
+    vanInboundPage.backToRouteInputScreen.click();
+    Assert.assertTrue("Assert that the van inbound main page is displayed "
+            + "on clicking back to route input screen",
+      vanInboundPage.vanInboundHomePage.size() > 0);
+  }
+
 }

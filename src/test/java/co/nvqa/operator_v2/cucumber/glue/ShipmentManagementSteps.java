@@ -745,4 +745,11 @@ public class ShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyItHighlightSelectedShipmentAndItCanSelectAnotherShipment() {
     shipmentManagementPage.selectAnotherShipmentAndVerifyCount();
   }
+
+  @And("^Operator cancels the created shipment on Shipment Management page$")
+  public void operator_cancels_the_created_shipment_on_shipment_management_page() {
+    int shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+    shipmentManagementPage.cancelShipment(Long.valueOf(shipmentId));
+  }
+
 }

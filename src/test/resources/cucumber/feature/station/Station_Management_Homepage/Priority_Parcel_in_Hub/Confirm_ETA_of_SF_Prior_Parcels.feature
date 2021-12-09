@@ -1,4 +1,4 @@
-@StationManagement @StationHome @SfldPriorParcelEta
+@StationManagement @StationHome @SfldTickets @SfldPriorParcelEta
 Feature: Confirm ETA of SF Prior Parcels
 
   @LaunchBrowser @ShouldAlwaysRun

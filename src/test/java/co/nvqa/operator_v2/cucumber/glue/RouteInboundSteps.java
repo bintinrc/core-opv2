@@ -451,6 +451,7 @@ public class RouteInboundSteps extends AbstractSteps {
 
   @When("^Operator click 'Continue To Inbound' button on Route Inbound page$")
   public void operatorClickContinueToInboundButtonOnRouteInboundPage() {
+    routeInboundPage.continueToInbound.waitUntilVisible();
     routeInboundPage.continueToInbound.click();
   }
 

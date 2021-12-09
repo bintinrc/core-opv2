@@ -542,7 +542,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilGranularStatusChange(String expectedGranularStatus) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(),30);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(),60);
     wdWait.until((WebDriver driver) -> {
       driver.navigate().refresh();
       String status = granular.getText().trim();
