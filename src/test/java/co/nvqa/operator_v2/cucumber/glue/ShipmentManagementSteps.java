@@ -748,7 +748,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @And("^Operator cancels the created shipment on Shipment Management page$")
   public void operator_cancels_the_created_shipment_on_shipment_management_page() {
-    Long shipmentId = Long.parseLong(Integer.toString(get(KEY_CREATED_SHIPMENT_ID)));
+    int shipmentId = get(KEY_CREATED_SHIPMENT_ID);
     shipmentManagementPage.cancelShipment(Long.valueOf(shipmentId));
   }
 
