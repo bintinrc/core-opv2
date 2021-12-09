@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @happy-path @CWF
+@OperatorV2 @Core @Routing @RouteLogs @happy-path
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun

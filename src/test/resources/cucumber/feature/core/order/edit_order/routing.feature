@@ -195,7 +195,7 @@ Feature: Routing
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
       | Return - Pickup   | uid:0c1c44ce-9fce-46e7-9016-f73613eef833 | Return    | Pickup    |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Suggest Route on Edit Order Page - Delivery, Suggested Route Found (uid:9df8ffd8-1adb-4752-9769-14d3d03393ff)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -223,7 +223,7 @@ Feature: Routing
     And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
     Then Operator verify Route value is "{KEY_CREATED_ROUTE_ID}" in Add To Route dialog on Edit Order Page
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Suggest Route on Edit Order Page - Pickup, Suggested Route Found (uid:236f2423-0404-4db1-a4aa-79ef4ed3655f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -247,7 +247,7 @@ Feature: Routing
     And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
     Then Operator verify Route value is "{KEY_CREATED_ROUTE_ID}" in Add To Route dialog on Edit Order Page
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Suggest Route on Edit Order Page - Delivery, No Suggested Route Found (uid:4fc900dd-1ce2-4362-801c-63c2053ac0d1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -270,7 +270,7 @@ Feature: Routing
       | bottom | No waypoints to suggest after filtering! |
     And Operator verify Route value is "" in Add To Route dialog on Edit Order Page
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Suggest Route on Edit Order Page - Pickup, No Suggested Route Found (uid:c3b9d6c1-c600-4d0d-aa24-c06476e2e32b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

@@ -1,14 +1,15 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.BatchOrderInfo;
 import co.nvqa.operator_v2.selenium.page.BatchOrderPage;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.When;
+import java.util.List;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 
 /**
- * @author Niko Susanto
+ * @author Sergey Mishanin
  */
 @SuppressWarnings("unused")
 @ScenarioScoped
@@ -24,46 +25,37 @@ public class BatchOrderSteps extends AbstractSteps {
     batchOrdersPage = new BatchOrderPage(getWebDriver());
   }
 
-  @When("^Operator search for created Batch Order on Batch Orders page$")
-  public void operatorSearchForCreatedBatchId() {
-    batchOrdersPage.searchBatchId(get(KEY_CREATED_BATCH_ORDER_ID));
+  @When("Operator search for {value} batch on Batch Orders page")
+  public void operatorSearchForCreatedBatchId(String batchId) {
+    batchOrdersPage.batchId.setValue(batchId);
+    batchOrdersPage.search.clickAndWaitUntilDone();
   }
 
-  @When("^Operator verify the list of orders are correct$")
-  public void operatorVerifyListOfOrders() {
-    BatchOrderInfo expectedBatchOrderInfo = get(KEY_CREATED_BATCH_ORDER_INFO);
-
-    batchOrdersPage.verifyOrderInfoOnTableOrderIsCorrect(expectedBatchOrderInfo.getOrders().get(0));
+  @When("Operator click rollback button on Batch Orders page")
+  public void operatorClickRollback() {
+    batchOrdersPage.rollback.click();
   }
 
-  @When("^Operator search invalid batch ID on Batch Orders page$")
-  public void operatorSearchInvalidBatchId() {
-    batchOrdersPage.searchBatchId("1234567890");
+  @When("Operator rollback orders on Batch Orders page")
+  public void rollbackOrders() {
+    batchOrdersPage.rollback.click();
+    batchOrdersPage.rollbackDialog.waitUntilVisible();
+    batchOrdersPage.rollbackDialog.password.setValue("1234567890");
+    batchOrdersPage.rollbackDialog.rollback.clickAndWaitUntilDone();
   }
 
-  @Then("^Operator verify the invalid batch ID error toast is shown$")
-  public void operatorVerifyTheInvalidBatchIdToast() {
-    batchOrdersPage.verifyTheInvalidBatchIdToast("1234567890");
+  @When("Operator verifies orders info on Batch Orders page:")
+  public void operatorVerifiesBatchOrders(List<Map<String, String>> data) {
+    data.forEach(map -> {
+      BatchOrderPage.BatchOrderInfo expected = new BatchOrderPage.BatchOrderInfo(
+          resolveKeyValues(map));
+      batchOrdersPage.ordersTable.filterByColumn("trackingId", expected.getTrackingId());
+      Assertions.assertThat(batchOrdersPage.ordersTable.isEmpty())
+          .as("Orders table is empty")
+          .isFalse();
+      BatchOrderPage.BatchOrderInfo actual = batchOrdersPage.ordersTable.readEntity(1);
+      expected.compareWithActual(actual);
+    });
   }
 
-  @When("^Operator rollback the batch order$")
-  public void operatorRollbackTheBatchOrder() {
-    batchOrdersPage.rollbackBatchOrder();
-  }
-
-  @When("^Get created batch order$")
-  public void getCreatedBatchOrder() {
-    BatchOrderInfo expectedBatchOrderInfo = get(KEY_CREATED_BATCH_ORDER_INFO);
-
-    Long orderId = expectedBatchOrderInfo.getOrders().get(0).getId();
-    put(KEY_CREATED_ORDER_ID, orderId);
-  }
-
-  @Then("^Operator verify the invalid order status error toast is shown$")
-  public void operatorVerifyTheInvalidOrderStatus() {
-    BatchOrderInfo expectedBatchOrderInfo = get(KEY_CREATED_BATCH_ORDER_INFO);
-
-    String trackingId = expectedBatchOrderInfo.getOrders().get(0).getTrackingId();
-    batchOrdersPage.verifyTheInvalidStatusToast(trackingId);
-  }
 }

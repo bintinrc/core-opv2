@@ -123,28 +123,6 @@ Feature: Resume Order
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
-  Scenario: Operator Resume a Cancelled Order on Edit Order page - Normal Pickup Fail (uid:013d274e-ed52-4026-be99-ffe8707268ea)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator update order granular status to = "Pickup Fail"
-    And API Operator cancel created order
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
-    When Operator resume order on Edit Order page
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    Then DB Operator verify the last Pickup transaction record of the created order:
-      | status | Pending |
-      | dnrId  | 0       |
-    And DB Operator verify the last Delivery transaction record of the created order:
-      | status | Pending |
-      | dnrId  | 0       |
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And Operator verify order event on Edit order page using data below:
-      | name | RESUME |
-
   @DeleteOrArchiveRoute
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled (uid:9f299d69-54b1-4049-93ee-bc9bdaf50476)
     Given Operator go to menu Shipper Support -> Blocked Dates
