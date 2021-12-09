@@ -16,7 +16,7 @@ Feature: Pricing Scripts V2
     And Operator refresh page
     Then Operator verify the Script is linked successfully
 
-  @HappyPath
+  @HappyPath @DeleteNewlyCreatedShipper
   Scenario: Link Script to Shipper - Script is Already Linked To Shipper (uid:736caea8-5b80-401c-a1ae-3d9400fd4569)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
