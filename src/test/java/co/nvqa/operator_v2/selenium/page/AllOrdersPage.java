@@ -498,7 +498,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void addToRoute(List<String> listOfExpectedTrackingId, String routeId, String tag) {
     fillAddToRouteFormUsingSetToAll(listOfExpectedTrackingId, routeId, tag);
     addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
-    addToRouteDialog.waitUntilInvisible();
   }
 
   public void fillAddToRouteFormUsingSetToAll(List<String> listOfExpectedTrackingId, String routeId,

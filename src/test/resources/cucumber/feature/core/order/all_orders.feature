@@ -1071,6 +1071,57 @@ Feature: All Orders
       | name        | FORCED SUCCESS                                                                                                                                                                                                                              |
       | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page (uid:aa8e8606-e1a6-4c07-afa5-d17a01028bb9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    When Operator add multiple orders to route on All Orders page:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verifies error messages in dialog on All Orders page:
+      | 1.{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And Operator verifies that warning toast displayed:
+      | top    | 1 order(s) failed to update |
+      | bottom | Add To Route                |
+    Then Operator verifies that info toast displayed:
+      | top    | 1 order(s) updated |
+      | bottom | Add To Route       |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE                      |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | PENDING                           |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order event on Edit order page using data below:
+      | name    | ADD TO ROUTE                      |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | PENDING                           |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    When API Operator get order details
+    Then DB Operator verify Delivery waypoint of the created order using data below:
+      | status | ROUTED |
+    And DB Operator verifies transaction routed to new route id
+    And DB Operator verifies waypoint status is "ROUTED"
+    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies route_monitoring_data record
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
