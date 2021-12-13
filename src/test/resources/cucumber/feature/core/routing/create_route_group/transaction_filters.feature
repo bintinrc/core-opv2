@@ -436,7 +436,7 @@ Feature: Create Route Groups - Transaction Filters
       | Small       | S    | uid:20988608-803f-4479-b50d-d928c4feefc8 |
       | Extra Small | XS   | uid:10a6796a-66e3-4801-a1d2-78684e848054 |
 
-  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - <parcelSize> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - <timeslots> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
