@@ -37,7 +37,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        int shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
 
         scanningPage.inboundScanning(shipmentId, label, finalHub);
@@ -261,4 +261,16 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     String resolvedShipmentId = resolveValue(errorShipmentId);
     scanningPage.checkSessionScanResult(Long.valueOf(resolvedShipmentId), condition);
   }
+
+  @Then("Operator verifies that the following messages display on the card after inbounding")
+  public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(Map<String, String> messages) {
+    messages = resolveKeyValues(messages);
+    assertThat(f("Assert that scanned state is %s", messages.get("scanState")), scanningPage.scannedState
+        .getText(), equalTo(messages.get("scanState")));
+    assertThat(f("Assert that scanned message is %s", messages.get("scanMessage")), scanningPage.scannedMessage
+        .getText(), equalTo(messages.get("scanMessage")));
+    assertThat(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")), scanningPage.scannedShipmentId
+        .getText(), containsString(messages.get("scannedShipmentId")));
+  }
+
 }

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @Zones
+@OperatorV2 @Core @Routing @RoutingJob1 @Zones
 Feature: Zones
 
   @LaunchBrowser @ShouldAlwaysRun

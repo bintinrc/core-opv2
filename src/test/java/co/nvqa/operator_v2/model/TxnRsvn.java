@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import co.nvqa.commons.support.DateUtil;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
@@ -169,6 +170,14 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
 
   public void setWaypointId(String waypointId) {
     this.waypointId = waypointId;
+  }
+
+  public String getLocalizedStartDatetime() {
+    return DateUtil.getDefaultDateTimeFromUTC(getStartDateTime());
+  }
+
+  public String getLocalizedEndDatetime() {
+    return DateUtil.getDefaultDateTimeFromUTC(getEndDateTime());
   }
 
   @Override

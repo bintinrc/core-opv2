@@ -34,8 +34,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
   private static final String TILE_VALUE_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//div[@class='value']";
   private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
-  private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[.='%s']]";
-  //private static final String MODAL_CONTENT_XPATH = "//span[contains(text(),'%s')]//ancestor::div//*[@class='ant-modal-content']";
+  private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
@@ -218,11 +217,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
     String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
-    moveToElement(hamburger);
+    scrollIntoView(hamburger);
     hamburger.click();
-    waitWhilePageIsLoading();
+    waitUntilVisibilityOfElementLocated(titleXpath);
     WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
-    waitUntilVisibilityOfElementLocated(modalContent, 15);
     Assert.assertTrue("Assert that modal pop-up is opened",
         modalContent.isDisplayed());
   }
@@ -233,7 +231,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
     List<WebElement> modalContent = getWebDriver().findElements(By.xpath(titleXpath));
     waitUntilVisibilityOfElementLocated(modalContent.get(0), 15);
-    Assert.assertTrue(f("Assert that modal pop-up %s is displayed", modalTitle),
+    Assert.assertTrue(f("Assert that the modal pop-up %s is displayed", modalTitle),
         modalContent.size() > 0);
     modalCloseIcon.click();
   }
@@ -321,13 +319,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void waitUntilTileDollarValueMatches(String tileName, double expected) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 60);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
     wdWait.until(driver -> {
       NvLogger.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();
       waitUntilPageLoaded();
       double actual = getDollarValueFromTile(tileName);
-      return (actual == expected) ? true : false;
+      return actual == expected;
     });
   }
 
@@ -443,6 +441,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     trackingIdLink.click();
     switchToNewWindow();
     waitWhilePageIsLoading();
+    pause3s();
     String actualTrackingId = editOrderTrackingId.getText().trim();
     closeAllWindows(windowHandle);
     pause3s();

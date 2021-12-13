@@ -387,7 +387,7 @@ Feature: COD Collected and Not Collected
     Examples:
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 1500         | 1000       | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
-  @Failed-cod
+
   Scenario Outline: Driver Collects x COP and Route Inbound y (y > x) (uid:61f1d829-45f7-469d-ad43-57fe6f1ef392)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -445,7 +445,7 @@ Feature: COD Collected and Not Collected
     Examples:
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 3000         | -500       | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
-  @Failed-cod
+
   Scenario Outline: Driver Collects x COP and Route Inbound x (uid:47a4a0db-44b0-4231-abe6-8073d7ed40e2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

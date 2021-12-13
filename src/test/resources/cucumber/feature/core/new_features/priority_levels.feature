@@ -5,26 +5,35 @@ Feature: Priority Levels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be Able to Download All Sample CSV File on Priority Levels Page (uid:b1912952-f664-472f-814b-df9ae4232d5b)
-    Given Operator go to menu Order -> All Orders
-    And Operator go to menu New Features -> Priority Levels
-    Then Operator verifies "Orders Sample CSV" is downloaded successfully and correct
-    Then Operator verifies "Reservations Sample CSV" is downloaded successfully and correct
-
-  Scenario: Operator Update Orders Priority Level by CSV upload (uid:1528790a-a26b-4b30-a61f-13bd89798fb7)
-    Given Operator go to menu Order -> All Orders
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+  Scenario: Operator Update Reservation Priority Level by CSV upload (uid:eb88c7d6-ef21-4226-9ffb-f171ce65716a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu New Features -> Priority Levels
-    And Operator uploads "Order CSV" using next priority levels for orders:
-      | order | priorityLevel |
-      | 1     | 10            |
-      | 2     | 10            |
-    Then Operator verifies order's priority is changed
+    And Operator uploads "Order CSV" using next priority levels for reservations:
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | 10 |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | 10 |
+    Then Operator verifies reservations info in Bulk Priority Edit dialog:
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | 10 |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | 10 |
+    When Operator clicks Save Changes in Bulk Priority Edit dialog
+    Then Operator verifies that success toast displayed:
+      | top                | 2 of 2 updated successfully |
+      | waitUntilInvisible | true                        |
+    And DB Operator verifies reservation:
+      | id            | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | priorityLevel | 10                                       |
+    And DB Operator verifies reservation:
+      | id            | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} |
+      | priorityLevel | 10                                       |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

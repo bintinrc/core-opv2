@@ -1510,6 +1510,7 @@ public class EditOrderSteps extends AbstractSteps {
     if (data.containsKey("keepCurrentOrderOutcome")) {
       editOrderPage.chooseCurrentOrderOutcome(data.get("keepCurrentOrderOutcome"));
     }
+    pause5s();
     if (data.containsKey("outcome")) {
       editOrderPage.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
     }

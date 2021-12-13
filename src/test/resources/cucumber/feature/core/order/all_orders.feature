@@ -346,7 +346,7 @@ Feature: All Orders
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
   Scenario: Operator Bulk Suggest Route on Multiple Orders from All Orders Page - Delivery, Suggested Route Found for All Waypoints (uid:b9215b2a-4ef6-4076-a3f1-6fabeec16c9c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -381,7 +381,7 @@ Feature: All Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_CREATED_ROUTE_ID} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {KEY_CREATED_ROUTE_ID} |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
   Scenario: Operator Bulk Suggest Route on Multiple Orders from All Orders Page - Delivery, Suggested Route Found for Partial Waypoint (uid:0319ce57-7d5d-4d0f-b02e-9cb682e070e0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     #Create Order and add to route
@@ -429,7 +429,7 @@ Feature: All Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_CREATED_ROUTE_ID} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |                        |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
   Scenario: Operator Bulk Suggest Route on Multiple Orders from All Orders Page - Delivery, No Suggested Route Found (uid:483e367c-927f-4c72-8679-9cc3badf06ec)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
@@ -460,7 +460,7 @@ Feature: All Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
   Scenario: Operator Bulk Suggest Route on Multiple Orders from All Orders Page - Pickup, Suggested Route Found for All Waypoints (uid:1f7eb099-3337-45dc-a8d5-30e2dd92f954)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -492,7 +492,7 @@ Feature: All Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_CREATED_ROUTE_ID} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {KEY_CREATED_ROUTE_ID} |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
   Scenario: Operator Bulk Suggest Route on Multiple Orders from All Orders Page - Pickup, Suggested Route Found for Partial Waypoint (uid:fc3ae755-e9e2-4f44-98ab-626c4af6594a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     #Create Order and add to route
@@ -534,7 +534,7 @@ Feature: All Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_CREATED_ROUTE_ID} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |                        |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags
+  @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
   Scenario: Operator Bulk Suggest Route on Multiple Orders from All Orders Page - Pickup, No Suggested Route Found (uid:06e5d86f-adf3-4a4f-8fa6-e998185449f9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:

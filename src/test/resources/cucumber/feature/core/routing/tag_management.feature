@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @TagManagement
+@OperatorV2 @Core @Routing @RoutingJob1 @TagManagement
 Feature: Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun

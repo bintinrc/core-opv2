@@ -1,81 +1,164 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Order;
-import java.util.Date;
+import co.nvqa.commons.model.DataEntity;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 
 /**
- * @author Niko Susanto
+ * @author Sergey Mishanin
  */
-@SuppressWarnings("WeakerAccess")
 public class BatchOrderPage extends OperatorV2SimplePage {
 
-  private static final String MD_VIRTUAL_REPEAT_TABLE_ORDER = "order in getTableData()";
+  @FindBy(id = "input-number-batch-id")
+  public TextBox batchId;
 
-  public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
-  public static final String COLUMN_CLASS_DATA_TYPE = "type";
-  public static final String COLUMN_CLASS_DATA_FROM = "c_from";
-  public static final String COLUMN_CLASS_DATA_TO = "c_to";
-  public static final String COLUMN_CLASS_DATA_STATUS = "status";
-  public static final String COLUMN_CLASS_DATA_CREATED_AT = "c_created_at";
-  private static final String ERROR_TOAST_INVALID_BATCH_ID_XPATH = "//div[contains(@class,'toast-error')]//strong[text()='Order batch with batch id %s not found!']";
-  private static final String ERROR_TOAST_INVALID_ORDER_STATUS_XPATH = "//div[contains(@class,'toast-error')]//strong[contains(text(),'delete order %s in Cancelled state. Order can only be deleted if in the following states : [Staging, Pending Pickup, Van en-route to pickup, Pickup fail]')]";
-  private static final String ROLLBACK_BUTTON_XPATH = "//md-dialog-actions//button[@aria-label='Rollback']";
+  @FindBy(name = "commons.search")
+  public NvApiTextButton search;
+
+  @FindBy(name = "commons.rollback")
+  public NvIconTextButton rollback;
+
+  @FindBy(css = "md-dialog")
+  public RollbackDialog rollbackDialog;
+
+  public OrdersTable ordersTable;
 
   public BatchOrderPage(WebDriver webDriver) {
     super(webDriver);
+    ordersTable = new OrdersTable(webDriver);
   }
 
-  public void searchBatchId(String batchId) {
-    sendKeysToMdInputContainerByModel("ctrl.formBatchId", batchId);
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
+  public static class BatchOrderInfo extends DataEntity<BatchOrderInfo> {
+
+    private String trackingId;
+    private String type;
+    private String fromName;
+    private String fromAddress;
+    private String toName;
+    private String toAddress;
+    private String status;
+    private String granularStatus;
+    private String createdAt;
+
+    public BatchOrderInfo() {
+    }
+
+    public BatchOrderInfo(Map<String, ?> data) {
+      super(data);
+    }
+
+    public String getTrackingId() {
+      return trackingId;
+    }
+
+    public void setTrackingId(String trackingId) {
+      this.trackingId = trackingId;
+    }
+
+    public String getType() {
+      return type;
+    }
+
+    public void setType(String type) {
+      this.type = type;
+    }
+
+    public String getFromName() {
+      return fromName;
+    }
+
+    public void setFromName(String fromName) {
+      this.fromName = fromName;
+    }
+
+    public String getFromAddress() {
+      return fromAddress;
+    }
+
+    public void setFromAddress(String fromAddress) {
+      this.fromAddress = fromAddress;
+    }
+
+    public String getToName() {
+      return toName;
+    }
+
+    public void setToName(String toName) {
+      this.toName = toName;
+    }
+
+    public String getToAddress() {
+      return toAddress;
+    }
+
+    public void setToAddress(String toAddress) {
+      this.toAddress = toAddress;
+    }
+
+    public String getStatus() {
+      return status;
+    }
+
+    public void setStatus(String status) {
+      this.status = status;
+    }
+
+    public String getGranularStatus() {
+      return granularStatus;
+    }
+
+    public void setGranularStatus(String granularStatus) {
+      this.granularStatus = granularStatus;
+    }
+
+    public String getCreatedAt() {
+      return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+      this.createdAt = createdAt;
+    }
   }
 
-  public String getTextOnTableOrder(String columnDataClass) {
-    return getTextOnTableWithMdVirtualRepeat(1, columnDataClass, MD_VIRTUAL_REPEAT_TABLE_ORDER);
+  public static class OrdersTable extends MdVirtualRepeatTable<BatchOrderInfo> {
+
+    private OrdersTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("trackingId", "tracking_id")
+          .put("type", "type")
+          .put("fromName", "//tr[%d]/td[@class='c_from']/div[@class='name']")
+          .put("fromAddress", "//tr[%d]/td[@class='c_from']/div[@class='address']")
+          .put("toName", "//tr[%d]/td[@class='c_to']/div[@class='name']")
+          .put("toAddress", "//tr[%d]/td[@class='c_to']/div[@class='address']")
+          .put("status", "//tr[%d]/td[@class='status']/div[1]")
+          .put("granularStatus", "//tr[%d]/td[@class='status']/div[2]")
+          .put("createdAt", "c_created-at")
+          .build()
+      );
+      setEntityClass(BatchOrderInfo.class);
+      setMdVirtualRepeat("order in getTableData()");
+    }
   }
 
-  public void verifyOrderInfoOnTableOrderIsCorrect(Order order) {
-    String trackingId = order.getTrackingId();
-    String expectedType = order.getType();
-    String expectedFrom =
-        order.getFromName() + System.lineSeparator() + order.getFromAddress1() + " " + order
-            .getFromAddress2() + " " + order.getFromCountry() + " " + order.getFromPostcode();
-    expectedFrom = expectedFrom.replaceAll("( )+", " ");
-    String expectedTo =
-        order.getToName() + System.lineSeparator() + order.getToAddress1() + " " + order
-            .getToAddress2() + " " + order.getToCountry() + " " + order.getToPostcode();
-    expectedTo = expectedTo.replaceAll("( )+", " ");
-    String expectedStatus = order.getStatus() + System.lineSeparator() + order.getGranularStatus();
-    Date expectedCreatedAt = order.getCreatedAt();
+  public static class RollbackDialog extends MdDialog {
 
-    String actualTrackingId = getTextOnTableOrder(COLUMN_CLASS_DATA_TRACKING_ID);
-    String actualType = getTextOnTableOrder(COLUMN_CLASS_DATA_TYPE);
-    String actualFrom = getTextOnTableOrder(COLUMN_CLASS_DATA_FROM);
-    String actualTo = getTextOnTableOrder(COLUMN_CLASS_DATA_TO);
-    String actualStatus = getTextOnTableOrder(COLUMN_CLASS_DATA_STATUS);
-    String actualCreatedAt = getTextOnTableOrder(COLUMN_CLASS_DATA_CREATED_AT);
+    @FindBy(id = "password")
+    public TextBox password;
 
-    assertEquals("Tracking ID", trackingId, actualTrackingId);
-    assertEquals("Type", expectedType, actualType);
-    assertEquals("From", expectedFrom, actualFrom);
-    assertEquals("To", expectedTo, actualTo);
-    assertEquals("Status", expectedStatus, actualStatus);
-    assertEquals("Created At", actualCreatedAt, expectedCreatedAt);
-  }
+    @FindBy(name = "commons.rollback")
+    public NvApiTextButton rollback;
 
-  public void verifyTheInvalidBatchIdToast(String batchId) {
-    waitUntilVisibilityOfElementLocated(ERROR_TOAST_INVALID_BATCH_ID_XPATH, batchId);
-  }
-
-  public void rollbackBatchOrder() {
-    clickButtonByAriaLabel("Rollback");
-    sendKeysByAriaLabel("Password", "1234567890");
-    click(ROLLBACK_BUTTON_XPATH);
-  }
-
-  public void verifyTheInvalidStatusToast(String trackingId) {
-    waitUntilVisibilityOfElementLocated(ERROR_TOAST_INVALID_ORDER_STATUS_XPATH, trackingId);
+    public RollbackDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }
