@@ -402,6 +402,244 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      | uid:e3b28ae3-5cc2-4a69-b5da-0c8a5f3c3a56 |
       | Van en-route to pickup               | Parcel      | uid:e5c5048d-2823-4521-a054-4b81033c1d72 |
 
+  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - <parcelSize> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"dimensions":{"size":"<size>","volume":1.0,"weight":4.0},"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | parcelSize | <parcelSize> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+    Examples:
+      | parcelSize  | size | hiptest-uid                              |
+      | Bulky (XXL) | XXL  | uid:9a233818-0771-4c81-bbe4-0588cf30f7bc |
+      | Extra Large | XL   | uid:2df4a63c-59d9-4885-805f-ec8d3c054c92 |
+      | Large       | L    | uid:5cfd610b-b390-453c-8a62-ee4ae8856bc4 |
+      | Medium      | M    | uid:f9a63c13-9da9-479c-9c7e-d089e64b9601 |
+      | Small       | S    | uid:20988608-803f-4479-b50d-d928c4feefc8 |
+      | Extra Small | XS   | uid:10a6796a-66e3-4801-a1d2-78684e848054 |
+
+  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - <timeslots> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"<startTime>","end_time":"<endTime>"}}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | timeslots | <timeslots> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+    Examples:
+      | timeslots | startTime | endTime | hiptest-uid                              |
+      | 12-3pm    | 12:00     | 15:00   | uid:ebdfe3a8-108d-437d-80d8-4833ddf6ca70 |
+      | 3-6pm     | 15:00     | 18:00   | uid:9de49540-44bb-4764-a560-fd4379ae001e |
+      | 6-10pm    | 18:00     | 22:00   | uid:f5ec2f7e-18c4-47dd-96ed-e85ae16997a1 |
+      | 9-12pm    | 09:00     | 12:00   | uid:b34c1af0-64b0-4747-81fb-9b784b167741 |
+      | Anytime   | 09:00     | 21:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
+      | Day       | 09:00     | 18:00   | uid:a408168d-f299-4366-a703-3e179b996d63 |
+      | Night     | 18:00     | 22:00   | uid:90816330-9865-4f8c-9e22-5530c56e9668 |
+
+  Scenario: Operator Filter Transaction Status on Create Route Group - Transaction Status = Cancelled - Transaction Filters (uid:b39eed67-342c-4738-a779-42437223eb82)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator cancel created order
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | transactionStatus | Cancelled |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+
+  Scenario: Operator Filter Transaction Status on Create Route Group - Transaction Status = Fail - Transaction Filters (uid:30d2add1-35fd-4152-91cd-89696fa31a75)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | Pending Reschedule                |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+      | granularStatus | Pickup fail                       |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | transactionStatus | Fail |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+      | status     | Pending Reschedule                                       |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[2].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[2].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} |
+      | status     | Pickup fail                                                |
+
+  Scenario: Operator Filter Transaction Status on Create Route Group - Transaction Status = Success - Transaction Filters (uid:a9b5e800-f2fc-4f6d-9d05-45bc7931ca76)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator force succeed created order
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | transactionStatus | Success |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+      | status     | Completed                                                  |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+      | status     | Completed                                                |
+
+  Scenario: Operator Filter Transaction Status on Create Route Group - Transaction Status = Pending - Transaction Filters (uid:4a5cc769-9638-471a-be6c-6a1b6eb5fdca)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | transactionStatus | Pending |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+      | status     | Pending Pickup                                             |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+      | status     | Pending Pickup                                           |
+
+  Scenario: Operator Filter Transaction Status on Create Route Group - Transaction Status = Staging - Transaction Filters (uid:9a76e1ec-aec6-4c2f-a2a7-b76a6ba0f474)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","is_staged":true,"parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | transactionStatus | Staging |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
+      | type       | PICKUP Transaction                                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+      | status     | Staging                                                    |
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+      | type       | DELIVERY Transaction                                     |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+      | status     | Staging                                                  |
+
+  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - <ppDdLeg> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
+    Given Operator add following filters on Transactions Filters section on Create Route Group page:
+      | ppDdLeg | <ppDdLeg> |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Transaction record on Create Route Group page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} |
+      | type       | <type> Transaction                        |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}   |
+      | address    | <address>                                 |
+      | status     | Pending Pickup                            |
+    Examples:
+      | ppDdLeg | type     | address                                                    | hiptest-uid                              |
+      | PP      | PICKUP   | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
+      | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | uid:a11f812d-673d-4215-991b-db42b3e7daa1 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
