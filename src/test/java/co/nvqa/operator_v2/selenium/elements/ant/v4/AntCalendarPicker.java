@@ -3,7 +3,8 @@ package co.nvqa.operator_v2.selenium.elements.ant.v4;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import org.openqa.selenium.Keys;
+import java.util.Date;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,7 +18,7 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class AntCalendarPicker extends PageElement {
 
-  private static final String CAL_ITEM_XPATH= "//div[not(contains(@class, 'ant-picker-dropdown-hidden'))][contains(@class,'ant-picker-dropdown')]//td[@title='%s']";
+  private static final String CAL_ITEM_XPATH = "//div[not(contains(@class, 'ant-picker-dropdown-hidden'))][contains(@class,'ant-picker-dropdown')]//td[@title='%s']";
   private static final String CLEAR_XPATH = ".//span[contains(@class,'ant-picker-clear')]";
 
   public AntCalendarPicker(WebDriver webDriver, SearchContext searchContext,
@@ -44,5 +45,9 @@ public class AntCalendarPicker extends PageElement {
     pickerInput.sendKeys(value);
     pause1s();
     clickf(CAL_ITEM_XPATH, value);
+  }
+
+  public void setValue(Date date) {
+    sendDate(DateFormatUtils.format(date, "yyyy-MM-dd"));
   }
 }
