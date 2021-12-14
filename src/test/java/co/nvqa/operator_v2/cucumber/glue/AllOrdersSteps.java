@@ -266,7 +266,7 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorAddMultipleOrdersUsingTagFilterToRouteOnAllOrdersPage(
       Map<String, String> data) {
     data = resolveKeyValues(data);
-    List<String> listOfTrackingIds = null;
+    List<String> listOfTrackingIds;
     String trackingIds = data.get("trackingIds");
     if (StringUtils.isNotBlank(trackingIds)) {
       listOfTrackingIds = splitAndNormalize(trackingIds);

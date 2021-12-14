@@ -1081,7 +1081,7 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       });
     } while (!found && new Date().getTime() - start < 20000);
-    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
+    Assertions.assertThat(found).as("Toast " + finalData + " is displayed").isTrue();
   }
 
   @Then("^Operator verify the route is started after van inbounding using data below:$")

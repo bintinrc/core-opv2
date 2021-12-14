@@ -538,6 +538,60 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertions.assertThat(actual.getDisplayedEndTime())
         .as("End Time")
         .isEqualTo(expected.getEndTime());
+    assertions.assertAll();
+  }
+
+  @Then("DB Operator verifies core_qa_sg.transactions record:")
+  public void verifyTransaction(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    TransactionEntity expected = new TransactionEntity(data);
+
+    List<TransactionEntity> transactions = getCoreJdbc()
+        .findTransactionByOrderIdAndType(expected.getOrderId(), expected.getType());
+    if (expected.getWaypointId() != null) {
+      TransactionEntity actual = transactions.stream()
+          .filter(t -> Objects.equals(t.getWaypointId(), expected.getWaypointId()))
+          .findFirst()
+          .orElseThrow(() ->
+              new AssertionError(
+                  "Transaction with waypointId = " + expected.getWaypointId() + " was not found")
+          );
+      assertTransaction(expected, actual, data);
+    } else {
+      Map<String, String> finalData = data;
+      transactions.stream()
+          .filter(t -> {
+            try {
+              assertTransaction(expected, t, finalData);
+              return true;
+            } catch (AssertionError e) {
+              return false;
+            }
+          })
+          .findFirst()
+          .orElseThrow(() ->
+              new AssertionError(
+                  "Transaction " + finalData + " was not found")
+          );
+    }
+  }
+
+  private void assertTransaction(TransactionEntity expected, TransactionEntity actual,
+      Map<String, String> data) {
+    expected.compareWithActual(actual, data, "startTime", "endTime");
+
+    SoftAssertions assertions = new SoftAssertions();
+    if (StringUtils.isNotBlank(expected.getStartTime())) {
+      assertions.assertThat(actual.getDisplayedStartTime())
+          .as("Start Time")
+          .isEqualTo(expected.getStartTime());
+    }
+    if (StringUtils.isNotBlank(expected.getEndTime())) {
+      assertions.assertThat(actual.getDisplayedEndTime())
+          .as("End Time")
+          .isEqualTo(expected.getEndTime());
+    }
+    assertions.assertAll();
   }
 
   @Then("^DB Operator verify next Delivery transaction values are updated for the created order:$")

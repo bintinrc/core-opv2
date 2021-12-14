@@ -547,6 +547,21 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
 
+  Scenario: Operator Not Allowed to Manually Update Normal Order Granular Status - Pickup Fail (uid:e515270b-6d35-4bf1-a282-d75e2112e836)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update order status on Edit order page using data below:
+      | granularStatus | Pickup fail                         |
+      | changeReason   | Status updated for testing purposes |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                              |
+      | bottom | ^.*Error Message: "Pickup fail status is only for return orders".* |
+    When Operator refresh page
+    And Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
