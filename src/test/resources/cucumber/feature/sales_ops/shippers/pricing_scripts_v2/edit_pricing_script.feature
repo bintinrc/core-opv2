@@ -5,7 +5,7 @@ Feature: Edit Pricing Script
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePricingScript
-  Scenario: Edit and Check Script - Legacy Order Fields (uid:f0be1f72-282c-4b41-9286-a4fd4100d449)
+  Scenario: Edit and Check Script - Legacy Order Fields - NORMAL, STANDARD (uid:f0be1f72-282c-4b41-9286-a4fd4100d449)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.order_type == "NORMAL") {result.delivery_fee += 1.1;}if (params.order_type == "RETURN") {result.delivery_fee += 2.2;}if (params.order_type == "C2C") {result.delivery_fee += 3.3;}if (params.order_type == "CASH") {result.delivery_fee += 9.9;}if (params.delivery_type == "STANDARD") {result.delivery_fee += 5.5;}if (params.delivery_type == "EXPRESS") {result.delivery_fee += 6.6;}if (params.delivery_type == "SAME_DAY") {result.delivery_fee += 7.7;}if (params.delivery_type == "NEXT_DAY") {result.delivery_fee += 8.8;}return result;} |
@@ -37,7 +37,7 @@ Feature: Edit Pricing Script
     Then Operator verify the script is saved successfully
 
   @DeletePricingScript
-  Scenario: Edit and Check Script - New Order Fields (uid:961bb5af-09b9-4e55-a7a6-ad84f486ee7b)
+  Scenario: Edit and Check Script - New Order Fields - Document, SAMEDAY (uid:961bb5af-09b9-4e55-a7a6-ad84f486ee7b)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
