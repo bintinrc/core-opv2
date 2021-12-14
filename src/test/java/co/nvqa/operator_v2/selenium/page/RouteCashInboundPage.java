@@ -4,8 +4,8 @@ import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
-import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
@@ -17,20 +17,20 @@ import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashIn
 /**
  * @author Sergey Mishanin
  */
-public class RouteCashInboundPage extends SimpleReactPage {
+public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> {
 
   private static final String CSV_FILENAME = "cods.csv";
 
-  @FindBy(css = ".date-picker-container:nth-of-type(1)")
+  @FindBy(xpath = "//div[contains(@class,'ant-picker')][1]")
   public AntCalendarPicker fromDateFilter;
 
-  @FindBy(css = ".date-picker-container:nth-of-type(2)")
+  @FindBy(xpath = "//div[contains(@class,'ant-picker')][2]")
   public AntCalendarPicker toDateFilter;
 
   @FindBy(xpath = "//button[.='Fetch COD']")
   public Button fetchCod;
 
-  @FindBy(css = "div.cod-top-button-row > button")
+  @FindBy(css = "button[data-testid='cod.create']")
   public Button addCod;
 
   @FindBy(xpath = "//button[.='Download CSV File']")
@@ -143,13 +143,13 @@ public class RouteCashInboundPage extends SimpleReactPage {
 
   public static class AddCodDialog extends AntModal {
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Route ID']]//input")
+    @FindBy(css = "input[placeholder='Route ID']")
     public TextBox routeId;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Amount Collected']]//input")
+    @FindBy(css = "input[type='number']:nth-child(2)")
     public TextBox amountCollected;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Receipt Number']]//input")
+    @FindBy(css = "input[placeholder='Receipt Number']")
     public TextBox receiptNumber;
 
     @FindBy(xpath = ".//button[.='Submit']")
@@ -162,13 +162,13 @@ public class RouteCashInboundPage extends SimpleReactPage {
 
   public static class EditCodDialog extends AntModal {
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Route ID']]//input")
+    @FindBy(css = "input[placeholder='Route ID']")
     public TextBox routeId;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Amount Collected']]//input")
+    @FindBy(css = "input[type='number']:nth-child(2)")
     public TextBox amountCollected;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][./div[text()='Receipt Number']]//input")
+    @FindBy(css = "input[placeholder='Receipt Number']")
     public TextBox receiptNumber;
 
     @FindBy(xpath = ".//button[.='Submit']")

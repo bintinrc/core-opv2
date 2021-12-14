@@ -88,10 +88,10 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(css = "div[data-datakey='tags'] div.ant-dropdown-trigger")
   public AntMultiselect selectTag;
 
-  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Route Date')]]")
+  @FindBy(xpath = "//div[./label[@for='routeDate']]/div")
   public AntIntervalCalendarPicker routeDateFilter;
 
-  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Hub')]]")
+  @FindBy(xpath = "//div[./div/label[@for='hub']]//div[2]")
   public AntFilterSelect hubFilter;
 
   @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Driver')]]")

@@ -307,6 +307,7 @@ Feature: Force Success
     Then Operator verifies that success toast displayed:
       | top                | ^Ticket ID : .* updated |
       | waitUntilInvisible | true                    |
+    When Operator refresh page
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
