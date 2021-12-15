@@ -95,8 +95,6 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubName      | TileName                | ModalName                                    | SlackMessageContent | FSRParcelText                              |
       | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | FSR parcels' ETA that need to be confirmed |
 
-   #From Here
-
   Scenario Outline: Search SFLD Parcel by Tracking ID (uid:8f3a521c-9404-4785-af3a-c26535dc3141)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
