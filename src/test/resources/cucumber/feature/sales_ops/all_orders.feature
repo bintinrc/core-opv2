@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @SalesOps
+@OperatorV2 @OperatorV2Part1 @SalesOps @AllOrdersFees
 Feature: All Orders
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
