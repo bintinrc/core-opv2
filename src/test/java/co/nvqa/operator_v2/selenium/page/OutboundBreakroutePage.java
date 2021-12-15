@@ -96,7 +96,7 @@ public class OutboundBreakroutePage extends OperatorV2SimplePage {
 
     public ParcelsNotInOutboundScansTable(WebDriver webDriver) {
       super(webDriver);
-      setNgRepeat("order in ctrl.orders");
+      setNgRepeat("order in ctrl.missingOutbounds");
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put("trackingId", "tracking-id")
           .put("info", "info-column")

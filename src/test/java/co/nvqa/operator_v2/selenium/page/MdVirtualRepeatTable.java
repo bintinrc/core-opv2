@@ -46,8 +46,13 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
   @Override
   protected String getTextOnTable(int rowNumber, String columnDataClass) {
-    return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat,
-        nvTableParam);
+    if (StringUtils.startsWithAny(columnDataClass, "/", "./")) {
+      String xpath = f(columnDataClass, rowNumber);
+      return getText(xpath);
+    } else {
+      return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat,
+          nvTableParam);
+    }
   }
 
   @Override

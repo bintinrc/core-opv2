@@ -1,7 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -27,6 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -494,7 +498,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void addToRoute(List<String> listOfExpectedTrackingId, String routeId, String tag) {
     fillAddToRouteFormUsingSetToAll(listOfExpectedTrackingId, routeId, tag);
     addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
-    addToRouteDialog.waitUntilInvisible();
   }
 
   public void fillAddToRouteFormUsingSetToAll(List<String> listOfExpectedTrackingId, String routeId,
@@ -650,7 +653,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     RESUME_SELECTED("Resume Selected"),
     MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
     PULL_FROM_ROUTE("Pull Selected from Route"),
-    ADD_TO_ROUTE("Add Selected to Route");
+    ADD_TO_ROUTE("Add Selected to Route"),
+    REGULAR_PICKUP("Regular Pickup");
 
     private final String name;
 
@@ -909,6 +913,35 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     profile.click();
     settings.click();
     Assert.assertTrue("Assert that the settings page has loaded", settingsHeader.size() > 0);
+  }
+
+  public void clearAllSelectionsAndLoadSelection() {
+    click("//button[contains(@aria-label,'clear-all-selections')]");
+    click("//button[contains(@aria-label,'load-selection')]");
+  }
+
+  public void applyAction(String trackingId) {
+    filterTableOrderByTrackingId(trackingId);
+    selectAllShown();
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath("//button[@aria-label = 'Action']"));
+    pause2s();
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath("//button[@aria-label = 'Regular Pickup']"));
+    pause2s();
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath("//button[@aria-label = 'Submit']"));
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
+  }
+
+  public void verifyDownloadedCsv(String trackingId, String message) {
+    String downloadedFile = getLatestDownloadedFilename("pickup_reservations");
+    verifyFileDownloadedSuccessfully(downloadedFile);
+    String pathName = StandardTestConstants.TEMP_DIR + downloadedFile;
+    List<RegularPickup> reg = DataEntity.fromCsvFile(RegularPickup.class, pathName, true);
+    assertTrue(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId));
+    assertTrue(reg.get(0).getErrorMessage().contains(message));
   }
 
 }

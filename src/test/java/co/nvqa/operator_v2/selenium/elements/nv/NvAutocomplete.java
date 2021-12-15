@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import java.util.Locale;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -41,8 +42,9 @@ public class NvAutocomplete extends PageElement {
         String suggestionsId = inputElement.getAttribute("aria-owns");
         String menuXpath = f("//ul[@id='%s']", suggestionsId);
         String itemXpath =
-            menuXpath + f("//li//span[contains(.,'%s') and not(contains(.,'No  matching'))]",
-                value);
+            menuXpath + f(
+                "//li//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'%s') and not(contains(.,'No  matching'))]",
+                value.toLowerCase(Locale.ROOT));
         int count = 0;
         while (!isElementVisible(itemXpath, 1) && count < 5) {
           String lastItemXpath = menuXpath + "//li[last()]";

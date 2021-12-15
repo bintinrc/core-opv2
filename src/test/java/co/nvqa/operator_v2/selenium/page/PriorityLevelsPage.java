@@ -1,26 +1,20 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import java.io.File;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class PriorityLevelsPage extends OperatorV2SimplePage {
 
-  private static final String SAMPLE_CSV_ORDERS_FILENAME = "priority_sample_orders.csv";
-  private static final String SAMPLE_CSV_ORDERS_FILENAME_PATTERN = "priority_sample_orders-%s.csv";
   private static final String SAMPLE_CSV_RESERVATIONS_FILENAME = "priority_sample_reservations.csv";
-
-  private static final String SAMPLE_CSV_ORDERS_EXPECTED_TEXT = "Transaction ID,Priority Level";
-  private static final String SAMPLE_CSV_RESERVATIONS_EXPECTED_TEXT = "Reservation ID,Priority Level";
-
-  @FindBy(css = "nv-icon-text-button[on-click*='selectCsv'][on-click*='csvType.ORDER']")
-  public NvIconTextButton uploadCsvOrders;
-
-  @FindBy(css = "nv-icon-text-button[on-click*='download'][on-click*='csvType.ORDER']")
-  public NvIconTextButton downloadSimpleCsvOrders;
+  public static final String SAMPLE_CSV_RESERVATIONS_FILENAME_PATTERN = "priority_sample_reservations-%s.csv";
+  public static final String SAMPLE_CSV_RESERVATIONS_EXPECTED_TEXT = "Reservation ID,Priority Level";
 
   @FindBy(css = "nv-icon-text-button[on-click*='selectCsv'][on-click*='csvType.RSVN']")
   public NvIconTextButton uploadCsvReservations;
@@ -31,12 +25,11 @@ public class PriorityLevelsPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public UploadFileDialog uploadCsvDialog;
 
+  @FindBy(css = "md-dialog")
+  public BulkPriorityEditDialog bulkPriorityEditDialog;
+
   public PriorityLevelsPage(WebDriver webDriver) {
     super(webDriver);
-  }
-
-  public void verifyDownloadedSampleCsvOrders() {
-    verifyFileDownloadedSuccessfully(SAMPLE_CSV_ORDERS_FILENAME, SAMPLE_CSV_ORDERS_EXPECTED_TEXT);
   }
 
   public void verifyDownloadedSampleCsvReservations() {
@@ -44,19 +37,19 @@ public class PriorityLevelsPage extends OperatorV2SimplePage {
         SAMPLE_CSV_RESERVATIONS_EXPECTED_TEXT);
   }
 
-  public void uploadUpdateViaCsvOrders(Map<String, String> transactionToPriorityLevel) {
-    uploadCsvOrders.click();
-    String csvContent = SAMPLE_CSV_ORDERS_EXPECTED_TEXT + "\n" +
-        transactionToPriorityLevel.entrySet().stream()
-            .map(entry -> entry.getKey() + "," + entry.getValue())
-            .collect(Collectors.joining("\n"));
-    File csvFile = createFile(f(SAMPLE_CSV_ORDERS_FILENAME_PATTERN, generateDateUniqueString()),
-        csvContent);
-    uploadCsvDialog.uploadFile(csvFile);
-  }
+  public static class BulkPriorityEditDialog extends MdDialog {
 
-  public void clickBulkUpdateButton() {
-    clickButtonByAriaLabelAndWaitUntilDone("Bulk Update");
-    waitUntilInvisibilityOfToast("Update by CSV success");
+    @FindBy(xpath = ".//tr[@ng-repeat='data in ctrl.data.reservations']/td[1]")
+    public List<PageElement> reservationIds;
+
+    @FindBy(id = "Priority Level")
+    public List<TextBox> priorityLevels;
+
+    @FindBy(name = "commons.save-changes")
+    public NvApiTextButton saveChanges;
+
+    public BulkPriorityEditDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }
