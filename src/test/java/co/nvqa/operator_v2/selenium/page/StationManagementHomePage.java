@@ -6,15 +6,16 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.Comparators;
-import com.google.common.collect.Ordering;
+import io.cucumber.java.sl.In;
+import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Locale;
+import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
   private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
+  private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
 
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
@@ -94,7 +96,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private PageElement tileValueLoadIcon;
 
   @FindBy(css = "i[class$='modal-close-icon']")
-  private PageElement modalCloseIcon;
+  private List<PageElement> modalCloseIcon;
 
   @FindBy(css = "div[class$='badge-count']")
   private List<PageElement> sfldTicketCount;
@@ -104,6 +106,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[@disabled]//*[text()='Save & Proceed']")
   private List<PageElement> disabledSaveAndProceed;
+
+  @FindBy(xpath = "//button[.//*[text()='Save & Proceed']]")
+  private PageElement saveAndProceed;
 
   @FindBy(css = "div[class*='eta-calculated'] div[class$='selected-value']")
   private List<PageElement> selectedEta;
@@ -137,6 +142,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
     waitUntilVisibilityOfElementLocated("(//div[text()='Search or Select'])[2]", 60);
     hubs.enterSearchTerm(hubName);
+    pause5s();
     hubDropdownValues.click();
     proceedBtn.click();
     waitWhilePageIsLoading();
@@ -227,6 +233,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     pause3s();
     String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName);
     String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
+    closeIfModalDisplay();
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
     scrollIntoView(hamburger);
     hamburger.click();
@@ -248,14 +255,27 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public void closeIfModalDisplay(String modalTitle) {
     waitWhilePageIsLoading();
+    if (pageFrame.size() > 0) {
+      switchToStationHomeFrame();
+    }
     pause3s();
     String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
     List<WebElement> modalContent = getWebDriver().findElements(By.xpath(titleXpath));
     if (modalContent.size() > 0) {
-      modalCloseIcon.click();
+      modalCloseIcon.get(0).click();
     }
   }
 
+  public void closeIfModalDisplay() {
+    waitWhilePageIsLoading();
+    if (pageFrame.size() > 0) {
+      switchToStationHomeFrame();
+    }
+    pause3s();
+    if (modalCloseIcon.size() > 0) {
+      modalCloseIcon.get(0).click();
+    }
+  }
   public void validateHubURLPath(String hubId) {
     String expectedURLPath = f(STATION_HUB_URL_PATH, hubId);
     Assert.assertTrue("Assert that URL path is updated on selecting the hub",
@@ -414,6 +434,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       scrollIntoView(filterXpath);
       List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterXpath));
       if (filterFields.size() > 0) {
+        waitWhilePageIsLoading();
         filterFields.get(0).click();
         filterFields.get(0).sendKeys(filter.getValue());
       }
@@ -721,14 +742,49 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         break;
       }
     }
-    scrollIntoView(footerRow.getWebElement());
+
     List<WebElement> colElements = getWebDriver().findElements(
-        By.cssSelector(f("[role='row'] [role='gridcell']:nth-child(%d)", columnIndex)));
+        By.cssSelector(f(TABLE_COLUMN_VALUES_BY_INDEX_CSS, columnIndex)));
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    scrollIntoView(footerRow.getWebElement());
+    pause5s();
+    colElements = getWebDriver().findElements(
+        By.cssSelector(f(TABLE_COLUMN_VALUES_BY_INDEX_CSS, columnIndex)));
+    colElements.forEach(element -> {
+      colData.add(element.getText().trim());
+    });
+    if("Time in Hub".contentEquals(columnName)){
+      List<Double> columnValue = new ArrayList<Double>();
+      colData.forEach(value -> {
+        value = value.replaceAll(" hrs ",".").replaceAll("mins","");
+        columnValue.add(Double.parseDouble(value));
+      });
+      Assert.assertTrue(
+          f("Assert that the column values %s are sorted as expected", columnName),
+          Comparators.isInOrder(columnValue, Comparator.reverseOrder()));
+      return;
+    }
+
     Assert.assertTrue(
         f("Assert that the column values %s are sorted as expected", columnName),
         Comparators.isInOrder(colData, Comparator.naturalOrder()));
   }
+
+  @FindBy(xpath = "//div[@*='suggestedEtas']//*[@role='combobox']")
+  public AntSelect2 suggestedEtas;
+
+  public void selectSuggestedEtaAndProceed(String suggestedEta){
+    waitWhilePageIsLoading();
+    suggestedEtas.selectValue(suggestedEta);
+    saveAndProceed.click();
+  }
+
+  public void verifyToastMessage(String message){
+    waitUntilVisibilityOfElementLocated(toastMessage.getWebElement());
+    String toastMsg = toastMessage.getText().trim();
+    Assert.assertTrue(f("Assert that the toast message %s is displayed as expected! ", message), toastMsg.contentEquals(message));
+  }
+
 }

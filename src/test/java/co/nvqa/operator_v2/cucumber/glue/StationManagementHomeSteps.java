@@ -75,6 +75,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
         takesScreenshot();
         stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
+        stationManagementHomePage.closeIfModalDisplay();
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -418,6 +419,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
+    @Then("Operator verifies that the sfld ticket count has decreased by {int}")
+    public void operator_verifies_that_the_sfld_ticket_count_has_decreased_by(Integer totOrder) {
+        totOrder = -totOrder;
+        stationManagementHomePage.closeIfModalDisplay();
+        int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
+        int afterOrder = stationManagementHomePage.getSfldParcelCount();
+        takesScreenshot();
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }
+
     @When("Operator clicks the alarm button to view parcels with sfld tickets")
     public void operator_clicks_the_alarm_button_to_view_parcels_with_sfld_tickets() {
         stationManagementHomePage.openOrdersWithUnconfirmedTickets();
@@ -463,4 +474,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.sortColumn(columnName, "ASCENDING_ORDER");
         stationManagementHomePage.getRecordsAndValidateSorting(columnName);
     }
+
+    @When("Operators chooses the date:{string} as station confirmed eta and proceed")
+    public void operators_chooses_the_date_as_station_confirmed_eta_and_proceed(String etaToChoose) {
+        stationManagementHomePage.selectSuggestedEtaAndProceed(etaToChoose);
+    }
+
+    @Then("Operators verifies that the toast message: {string} has displayed")
+    public void operators_verifies_that_the_toast_has_displayed(String toastMessage) {
+        stationManagementHomePage.verifyToastMessage(toastMessage);
+    }
+
+
 }
