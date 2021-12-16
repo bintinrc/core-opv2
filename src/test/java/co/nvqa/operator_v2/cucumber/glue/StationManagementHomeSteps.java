@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
@@ -74,6 +75,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
         takesScreenshot();
         stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
+        stationManagementHomePage.closeIfModalDisplay();
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -192,6 +194,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
         List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
         Map<String, String> filter = resolveKeyValues(filters.get(0));
         stationManagementHomePage.applyFilters(filter, 1);
+    }
+
+    @When("Operator selects the following values in the modal pop up")
+    public void operator_selects_the_following_values_in_the_modal_pop_up(Map<String, String> selectFilters) {
+        Map<String, String> filter = resolveKeyValues(selectFilters);
+        stationManagementHomePage.selectFilterValue(filter);
     }
 
     @When("Operator expects no results when searching for the orders by applying the following filters:")
@@ -382,6 +390,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("Operator verifies that the modal: {string} is displayed and can be closed")
     public void operator_verifies_that_the_modal_is_displayed_and_can_be_closed(String modalName) {
         stationManagementHomePage.verifyModalPopupByName(modalName);
+        stationManagementHomePage.closeIfModalDisplay(modalName);
+    }
+
+    @Then("Operator verifies that the modal: {string} is displayed")
+    public void operator_verifies_that_the_modal_is_displayed(String modalName) {
+        stationManagementHomePage.verifyModalPopupByName(modalName);
     }
 
     @When("Operator closes the modal: {string} if it is displayed on the page")
@@ -399,6 +413,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("Operator verifies that the sfld ticket count has increased by {int}")
     public void operator_verifies_that_the_sfld_ticket_count_has_increased_by(Integer totOrder) {
         stationManagementHomePage.closeIfModalDisplay("Please Confirm ETA of FSR Parcels to Proceed");
+        int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
+        int afterOrder = stationManagementHomePage.getSfldParcelCount();
+        takesScreenshot();
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }
+
+    @Then("Operator verifies that the sfld ticket count has decreased by {int}")
+    public void operator_verifies_that_the_sfld_ticket_count_has_decreased_by(Integer totOrder) {
+        totOrder = -totOrder;
+        stationManagementHomePage.closeIfModalDisplay();
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
         int afterOrder = stationManagementHomePage.getSfldParcelCount();
         takesScreenshot();
@@ -434,4 +458,32 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void operator_opens_the_modal_by_clicking_arrow_beside_the_text(String modalName, String fsrText) {
         stationManagementHomePage.openModalByClickingArrow(modalName,fsrText);
     }
+
+    @When("Operator saves to address used in the parcel in the key")
+    public void operator_saves_to_address_used_in_the_parcel_in_the_key() {
+        Order order = get(KEY_CREATED_ORDER);
+        String addressLn1 = order.getToAddress1();
+        String addressLn2 = order.getToAddress2();
+        String postCode = order.getToPostcode();
+        String formattedToAddress = f("%s, %s, %s", addressLn1, addressLn2, postCode);
+        put(KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS, formattedToAddress);
+    }
+
+    @Then("Operators sorts and verifies that the column:{string} is in ascending order")
+    public void operators_sorts_and_verifies_that_the_column_is_in_ascending_order(String columnName) {
+        stationManagementHomePage.sortColumn(columnName, "ASCENDING_ORDER");
+        stationManagementHomePage.getRecordsAndValidateSorting(columnName);
+    }
+
+    @When("Operators chooses the date:{string} as station confirmed eta and proceed")
+    public void operators_chooses_the_date_as_station_confirmed_eta_and_proceed(String etaToChoose) {
+        stationManagementHomePage.selectSuggestedEtaAndProceed(etaToChoose);
+    }
+
+    @Then("Operators verifies that the toast message: {string} has displayed")
+    public void operators_verifies_that_the_toast_has_displayed(String toastMessage) {
+        stationManagementHomePage.verifyToastMessage(toastMessage);
+    }
+
+
 }

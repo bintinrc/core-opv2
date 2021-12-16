@@ -6,7 +6,8 @@ import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("unused")
-public interface ScenarioStorageKeys extends StandardScenarioStorageKeys {
+public interface
+ScenarioStorageKeys extends StandardScenarioStorageKeys {
 
   String KEY_MAIN_WINDOW_HANDLE = "KEY_MAIN_WINDOW_HANDLE";
   String KEY_PICKUP_INSTRUCTION = "KEY_PICKUP_INSTRUCTION";
@@ -37,4 +38,5 @@ public interface ScenarioStorageKeys extends StandardScenarioStorageKeys {
   String KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB = "KEY_COD_DOLLAR_AMOUNT_NOT_COLLECTED_IN_HUB";
   String KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB = "KEY_COD_DOLLAR_AMOUNT_COLLECTED_IN_HUB";
   String KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB = "KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB";
+  String KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS = "KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS";
 }
