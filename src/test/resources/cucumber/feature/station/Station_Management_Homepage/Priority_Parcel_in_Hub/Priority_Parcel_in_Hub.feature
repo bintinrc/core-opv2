@@ -40,7 +40,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName      | TileName                | ModalName               |
-      | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub |
+      | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub |
 
   Scenario Outline: Search Priority Parcel in Hub by Tracking ID (uid:0b167e79-c711-4a02-a135-ca97ac6b6ac9)
     Given Operator loads Operator portal home page

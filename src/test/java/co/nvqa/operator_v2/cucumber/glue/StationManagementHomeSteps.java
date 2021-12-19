@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("unused")
 @ScenarioScoped
 public class StationManagementHomeSteps extends AbstractSteps {
+    public static final String CSV_FILENAME_PATTERN = "Failure_Reasons";
+    public static final String SFLD_ACK_FAILURE_MSG = "SFLD ticket acknowledgement failed because ticket is not of UNCONFIRMED status or other parameters are wrong.";
 
     private StationManagementHomePage stationManagementHomePage;
 
@@ -422,9 +424,10 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("Operator verifies that the sfld ticket count has decreased by {int}")
     public void operator_verifies_that_the_sfld_ticket_count_has_decreased_by(Integer totOrder) {
         totOrder = -totOrder;
-        stationManagementHomePage.closeIfModalDisplay();
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
         int afterOrder = stationManagementHomePage.getSfldParcelCount();
+        stationManagementHomePage.refreshPage_v1();
+        stationManagementHomePage.closeIfModalDisplay();
         takesScreenshot();
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
@@ -485,5 +488,30 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.verifyToastMessage(toastMessage);
     }
 
+    @When("Operator selects {int} records that have same eta calculated from the modal")
+    public void operator_selects_records_that_have_same_eta_calculated_from_the_modal(Integer recordCt) {
+        stationManagementHomePage.selectMultipleRecordsToConfirmEta(recordCt);
+    }
 
+    @Then("Operator verifies that the text: {string} is displayed")
+    public void operator_verifies_that_the_text_is_displayed(String expectedMsg) {
+        stationManagementHomePage.verifySfldAlertMessage(expectedMsg);
+    }
+
+    @Then("Operator confirms the common eta as:{string} and proceed")
+    public void operator_confirms_the_common_eta_as_and_proceed(String etaDate) {
+        stationManagementHomePage.selectCommonSuggestedEtaAndProceed(etaDate);
+    }
+
+    @When("Operator downloads the records with failed etas by clicking the download button")
+    public void operator_downloads_the_records_with_failed_etas_by_clicking_the_download_button() {
+        stationManagementHomePage.downloadFailedEtas();
+    }
+
+    @Then("Operator verifies that the valid error message is updated on the downloaded file")
+    public void operator_verifies_that_the_valid_error_message_is_updated_on_the_downloaded_file() {
+        String downloadedCsvFile = stationManagementHomePage.getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
+        stationManagementHomePage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
+            SFLD_ACK_FAILURE_MSG, true);
+    }
 }
