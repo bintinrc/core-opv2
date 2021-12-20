@@ -306,8 +306,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         tableAfterChange.forEach((key,value) -> {
             String formattedKey = key.replace("-","").toUpperCase();
             if(formattedKey.contentEquals(regularSize)){
-                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key));
-                int sizeAfterChange = Integer.parseInt(value);
+                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",",""));
+                int sizeAfterChange = Integer.parseInt(value.replaceAll(",",""));
                 Assert.assertTrue(f("Assert that the number of parcel count is decreased for the size %s",size),
                         sizeAfterChange == (sizeBeforeChange - delta));
                 asserts.set(true);
@@ -329,8 +329,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         tableAfterChange.forEach((key,value) -> {
             String formattedKey = key.replace("-","").toUpperCase();
             if(formattedKey.contentEquals(regularSize)){
-                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key));
-                int sizeAfterChange = Integer.parseInt(value);
+                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",",""));
+                int sizeAfterChange = Integer.parseInt(value.replaceAll(",",""));
                 Assert.assertTrue(f("Assert that number of parcel count is increased for the size %s",size),
                         sizeAfterChange == (sizeBeforeChange + delta));
                 asserts.set(true);
