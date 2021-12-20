@@ -336,17 +336,17 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       @FindBy(xpath = "./following-sibling::div//textarea[contains(@id,'comment')]")
       public TextBox comment;
 
-      public String scheduleOriginHubId = "schedules_[i]_originHub";
-      public String scheduleDestinationHubId = "schedules_[i]_destinationHub";
-      public String scheduleMovementTypeId = "schedules_[i]_movementType";
-      public String scheduleStartTimeId = "schedules_[i]_startTime";
-      public String scheduleDepartureTimeXpath = "//div[@class='ant-picker-content']//ul[hourtime]//div[text()= 'value']";
-      public String scheduleDurationDayId = "schedules_[i]_durationDay";
-      public String scheduleDurationTimeId = "schedules_[i]_durationTime";
-      public String scheduleDurationTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[hourtime]//div[text()= 'value']";
-      public String scheduleDaysId = "schedules_[i]_days";
-      public String scheduleDriversId = "schedules_[i]_drivers";
-      public String scheduleCommentId = "schedules_[i]_comment";
+      public String scheduleOriginHubId = "schedules_%s_originHub";
+      public String scheduleDestinationHubId = "schedules_%s_destinationHub";
+      public String scheduleMovementTypeId = "schedules_%s_movementType";
+      public String scheduleStartTimeId = "schedules_%s_startTime";
+      public String scheduleDepartureTimeXpath = "//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
+      public String scheduleDurationDayId = "schedules_%s_durationDay";
+      public String scheduleDurationTimeId = "schedules_%s_durationTime";
+      public String scheduleDurationTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[%s]//div[text()= '%s']";
+      public String scheduleDaysId = "schedules_%s_days";
+      public String scheduleDriversId = "schedules_%s_drivers";
+      public String scheduleCommentId = "schedules_%s_comment";
 
       public void callJavaScriptExecutor(String argument, WebElement element){
         JavascriptExecutor jse = ((JavascriptExecutor)getWebDriver());
@@ -367,23 +367,19 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
       public void fill(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (StringUtils.isNotBlank(schedule.getOriginHub())) {
-          scheduleOriginHubId = scheduleOriginHubId.replaceAll("\\[i\\]", scheduleNo+"");
-          sendKeysAndEnterById(scheduleOriginHubId, schedule.getOriginHub());
+          sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.getOriginHub());
         }
         if (StringUtils.isNotBlank(schedule.getDestinationHub())) {
-          scheduleDestinationHubId = scheduleDestinationHubId.replaceAll("\\[i\\]", scheduleNo+"");
-          sendKeysAndEnterById(scheduleDestinationHubId, schedule.getDestinationHub());
+          sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), schedule.getDestinationHub());
         }
         if (StringUtils.isNotBlank(schedule.getMovementType())) {
-          scheduleMovementTypeId = scheduleMovementTypeId.replaceAll("\\[i\\]", scheduleNo+"");
-          sendKeysAndEnterById(scheduleMovementTypeId, schedule.getMovementType());
+          sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), schedule.getMovementType());
         }
         if (StringUtils.isNotBlank(schedule.getDepartureTime())) {
           String[] hourtime = schedule.getDepartureTime().split(":");
-          scheduleStartTimeId = scheduleStartTimeId.replaceAll("\\[i\\]", scheduleNo+"");
-          findElementAndClick(scheduleStartTimeId, "id");
-          String hour = scheduleDepartureTimeXpath.replaceAll("hourtime", "1").replaceAll("value", hourtime[0]);
-          String time = scheduleDepartureTimeXpath.replaceAll("hourtime", "2").replaceAll("value", hourtime[1]);
+          findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id");
+          String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
+          String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
           moveToElementWithXpath("//div[@class='ant-picker-content']//ul[1]");
           findElementAndClick(hour, "xpath");
           moveToElementWithXpath("//div[@class='ant-picker-content']//ul[2]");
@@ -391,16 +387,14 @@ public class MovementManagementPage extends OperatorV2SimplePage {
           findElementAndClick("ant-picker-ok", "class");
         }
         if (schedule.getDurationDays() != null) {
-          scheduleDurationDayId = scheduleDurationDayId.replaceAll("\\[i\\]", scheduleNo+"");
-          findElementAndClick(scheduleDurationDayId, "id");
+          findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id");
           findElementAndClick("//div[@title='"+schedule.getDurationDays()+"']", "xpath");
         }
         if (StringUtils.isNotBlank(schedule.getDurationTime())) {
           String[] hourtime = schedule.getDurationTime().split(":");
-          scheduleDurationTimeId = scheduleDurationTimeId.replaceAll("\\[i\\]", scheduleNo+"");
-          findElementAndClick(scheduleDurationTimeId, "id");
-          String hour = scheduleDurationTimeXpath.replaceAll("hourtime", "1").replaceAll("value", hourtime[0]);
-          String time = scheduleDurationTimeXpath.replaceAll("hourtime", "2").replaceAll("value", hourtime[1]);
+          findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id");
+          String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
+          String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
           moveToElementWithXpath(hour);
           findElementAndClick(hour, "xpath");
           moveToElementWithXpath(time);
@@ -411,8 +405,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
           setDaysOfWeek(schedule.getDaysOfWeek());
         }
         if (StringUtils.isNotBlank(schedule.getComment())) {
-          scheduleCommentId = scheduleCommentId.replaceAll("\\[i\\]", scheduleNo+"");
-          WebElement element = getWebDriver().findElement(By.id(scheduleCommentId));
+          WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
           element.sendKeys(schedule.getComment());
         }
       }
