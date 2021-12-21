@@ -40,7 +40,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName      | TileName                | ModalName               |
-      | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub |
+      | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub |
 
   Scenario Outline: Search Priority Parcel in Hub by Tracking ID (uid:0b167e79-c711-4a02-a135-ca97ac6b6ac9)
     Given Operator loads Operator portal home page
@@ -571,6 +571,154 @@ Feature: Priority Parcel in Hub
     Examples:
       | HubName      | TileName                | ModalName               | ColumnName |
       | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Size       |
+
+  Scenario Outline: Can Not View Untagged Priority Parcel in Hub (uid:059c175f-842b-4f9a-bea0-0d7b02039fb6)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | <TagId> |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator get the count from the tile: "<TileName>"
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Committed ETA | - |
+    When API Operator delete order tag with id: <TagId> from the created order
+    Then Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has decreased by 1
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName>"
+    And Operator expects no results when searching for the orders by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName      | TileName                | TagId | ModalName1                                   | ModalName2              | SlackMessageContent |
+      | {hub-name-8} | Priority parcels in hub | 5570  | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
+
+  Scenario Outline: View Priority Parcel in Hub of Unacknowledged SLFD Parcel (uid:f748e580-5089-4003-bdee-b9cfaa06e8ff)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Committed ETA | - |
+    And Operator verifies that Edit Order page is opened on clicking tracking id
+
+    Examples:
+      | HubName      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent |
+      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
+
+  Scenario Outline: View Priority Parcel in Hub of Acknowledged SLFD Parcel (uid:1d024335-8032-4efb-b82a-c9b6bf14e387)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID                     |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd}  |
+    And Operator confirms that station confirmed eta field is empty
+    And Operators chooses the date:"{gradle-next-2-day-yyyy-MM-dd}" as station confirmed eta and proceed
+    And Operators verifies that the toast message: "<ToastMessage>" has displayed
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Committed ETA | {gradle-next-2-day-yyyy-MM-dd} |
+    And Operator verifies that Edit Order page is opened on clicking tracking id
+
+    Examples:
+      | HubName      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
+      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           | Successfully confirmed 1 ETA(s)! |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
