@@ -73,6 +73,8 @@ Feature: Shipper Pickups
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    Then Verify that waypoints are shown on driver list route correctly
 
   @DeleteOrArchiveRoute
   Scenario: Operator Assign Reservation to a Driver Route with Priority Level (uid:5830302f-c452-49c4-bc59-28bb130e20ae)

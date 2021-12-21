@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_ORIGIN_HUB;
@@ -101,7 +103,7 @@ public class MovementManagementSteps extends AbstractSteps {
       try {
         operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
         operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("Create");
+        operatorClickButtonOnAddMovementScheduleDialog("OK");
         pause6s();
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
@@ -308,7 +310,7 @@ public class MovementManagementSteps extends AbstractSteps {
   @And("Operator click {string} button on Add Movement Schedule dialog")
   public void operatorClickButtonOnAddMovementScheduleDialog(String buttonName) {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
-      case "create":
+      case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
         break;
       case "cancel":
