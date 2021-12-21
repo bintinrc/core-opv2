@@ -94,7 +94,7 @@ Feature: All Orders
     When Operator pull out multiple orders from route on All Orders page
     Then API Operator verify multiple orders is pulled out from route
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Add Multiple Orders to Route on All Orders Page (uid:1e20a4ff-0254-47c8-8453-948097da2946)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -113,6 +113,16 @@ Feature: All Orders
       | top    | 3 order(s) updated |
       | bottom | add to route       |
     And API Operator verify multiple delivery orders is added to route
+    When Operator get multiple "Delivery" transactions with status "Pending"
+    And DB Operator verifies all transactions routed to new route id
+    And DB Operator verifies all route_waypoint records
+    And DB Operator verifies all waypoints status is "ROUTED"
+    And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
+    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+    And DB Operator verifies all route_monitoring_data records
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And Verify that waypoints are shown on driver list route correctly
 
   Scenario: Operator Print Waybill for Single Order on All Orders Page and Verify the Downloaded PDF Contains Correct Info (uid:4989c98b-9a7d-4f87-8bc3-d7b3692ce279)
     Given Operator go to menu Shipper Support -> Blocked Dates

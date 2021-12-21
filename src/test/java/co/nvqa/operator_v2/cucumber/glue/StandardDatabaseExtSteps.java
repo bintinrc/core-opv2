@@ -204,7 +204,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .as("%s waypoint Id", transactionType)
           .isNotNull();
       put(KEY_WAYPOINT_ID, waypointId);
+      putInList(KEY_LIST_OF_WAYPOINT_IDS, waypointId);
       put(KEY_TRANSACTION_ID, transaction.getId());
+      putInMap(KEY_MAP_OF_WAYPOINT_IDS_ORDER, waypointId, trackingId);
 
       Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
 

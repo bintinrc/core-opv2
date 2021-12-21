@@ -37,54 +37,6 @@ Feature: Edit Order
       | verification method | NO_VERIFICATION         |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Create Recovery Ticket For Return Pickup (uid:a0dc605d-7a22-43db-929c-d38311720b52)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Van en-route to Pickup" on Edit Order page
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | PENDING |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | PENDING |
-    When Operator create new recovery ticket on Edit Order page:
-      | entrySource                   | CUSTOMER COMPLAINT |
-      | investigatingDepartment       | Recovery           |
-      | investigatingHub              | {hub-name}         |
-      | ticketType                    | PARCEL EXCEPTION   |
-      | ticketSubType                 | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    When Operator refresh page
-    Then Operator verify order status is "On Hold" on Edit Order page
-    And Operator verify order granular status is "On Hold" on Edit Order page
-    And Operator verify order events on Edit order page using data below:
-      | name           |
-      | TICKET CREATED |
-      | UPDATE STATUS  |
-      | RESCHEDULE     |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | PICKUP |
-      | status | FAIL   |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | PICKUP  |
-      | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY |
-      | status | PENDING  |
-
-  @DeleteOrArchiveRoute
   Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
