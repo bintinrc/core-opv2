@@ -36,6 +36,8 @@ Feature: Add Order To Route
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    Then Verify that waypoints are shown on driver list route correctly
 
   @DeleteOrArchiveRoute
   Scenario: Add Order to a Route - Invalid Tracking ID, With Prefix (uid:ce2a5e6b-f06d-4c6d-9f9c-656ac605b3bb)
@@ -81,6 +83,8 @@ Feature: Add Order To Route
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    Then Verify that waypoints are shown on driver list route correctly
 
   @DeleteOrArchiveRoute
   Scenario: Add Order to a Route - Invalid Tracking ID, No Prefix (uid:e09d356e-d21f-462a-b26f-a2631203662e)
@@ -132,6 +136,8 @@ Feature: Add Order To Route
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    Then Verify that waypoints are shown on driver list route correctly
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Marketplace Sort Order To Route via Add Order To Route Page - RTS = 0
