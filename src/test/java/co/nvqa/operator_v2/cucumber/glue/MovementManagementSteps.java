@@ -168,8 +168,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.relationsTable.rows.get(0).editRelations.click();
         movementManagementPage.editStationRelationsModal.waitUntilVisible();
         retryIfRuntimeExceptionOccurred(() ->
-                movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
-            2);
+                movementManagementPage.editStationRelationsModal.fill(crossdockHub),2);
         movementManagementPage.editStationRelationsModal.save.click();
         movementManagementPage.successCreateRelation.waitUntilVisible();
         movementManagementPage.successCreateRelation.waitUntilInvisible();
