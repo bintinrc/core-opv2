@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -411,5 +412,25 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       script.setSource(source);
     }
     return script;
+  }
+
+  @Then("Operator clicks Create Draft button")
+  public void operatorClicksCreateDraftButton() {
+    pricingScriptsV2Page.createDraftBtn.click();
+  }
+
+  @Then("Operator verifies that error toast is displayed on Pricing Scripts V2 page:")
+  public void operatorVerifiesThatErrorToastIsDisplayedOnPricingScriptsVPage(
+      Map<String, String> mapOfData) {
+    pricingScriptsV2Page.getWebDriver().switchTo().defaultContent();
+    if (mapOfData.containsKey("top")) {
+      Assertions.assertThat(pricingScriptsV2Page.toastErrorTopText.getText())
+          .as("Error top text is correct")
+          .isEqualTo(mapOfData.get("top"));
+    }
+    if (mapOfData.containsKey("bottom")) {
+      Assertions.assertThat(pricingScriptsV2Page.toastErrorBottomText.getText())
+          .as("Error bottom text is correct").contains(mapOfData.get("bottom"));
+    }
   }
 }
