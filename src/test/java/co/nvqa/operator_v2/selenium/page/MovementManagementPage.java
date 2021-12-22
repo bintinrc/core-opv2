@@ -444,66 +444,15 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       element.click();
     }
 
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='1']")
-    public CheckBox monday;
-
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='2']")
-    public CheckBox tuesday;
-
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='3']")
-    public CheckBox wednesday;
-
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='4']")
-    public CheckBox thursday;
-
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='5']")
-    public CheckBox friday;
-
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='6']")
-    public CheckBox saturday;
-
-    @FindBy(xpath = "//div[@id='schedules_0_days']//input[@type='checkbox'][@value='7']")
-    public CheckBox sunday;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='1']")
-    public CheckBox mondaySecond;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='2']")
-    public CheckBox tuesdaySecond;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='3']")
-    public CheckBox wednesdaySecond;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='4']")
-    public CheckBox thursdaySecond;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='5']")
-    public CheckBox fridaySecond;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='6']")
-    public CheckBox saturdaySecond;
-
-    @FindBy(xpath = "//div[@id='schedules_1_days']//input[@type='checkbox'][@value='7']")
-    public CheckBox sundaySecond;
-
-    public void setDaysOfWeek(Set<String> daysOfWeek) {
-      monday.setValue(daysOfWeek.contains("monday"));
-      tuesday.setValue(daysOfWeek.contains("tuesday"));
-      wednesday.setValue(daysOfWeek.contains("wednesday"));
-      thursday.setValue(daysOfWeek.contains("thursday"));
-      friday.setValue(daysOfWeek.contains("friday"));
-      saturday.setValue(daysOfWeek.contains("saturday"));
-      sunday.setValue(daysOfWeek.contains("sunday"));
-    }
-
-    public void setDaysOfWeekSecond(Set<String> daysOfWeek) {
-      mondaySecond.setValue(daysOfWeek.contains("monday"));
-      tuesdaySecond.setValue(daysOfWeek.contains("tuesday"));
-      wednesdaySecond.setValue(daysOfWeek.contains("wednesday"));
-      thursdaySecond.setValue(daysOfWeek.contains("thursday"));
-      fridaySecond.setValue(daysOfWeek.contains("friday"));
-      saturdaySecond.setValue(daysOfWeek.contains("saturday"));
-      sundaySecond.setValue(daysOfWeek.contains("sunday"));
+    public String weekdaysXpath = "//div[@id='schedules_%s_days']//input[@type='checkbox'][@value='%s']";
+    public void setDaysOfWeek(Set<String> daysOfWeek, String id) {
+      if (daysOfWeek.contains("monday")) findElementAndClick(f(weekdaysXpath, id, 1), "xpath");
+      if (daysOfWeek.contains("tuesday")) findElementAndClick(f(weekdaysXpath, id, 2), "xpath");
+      if (daysOfWeek.contains("wednesday")) findElementAndClick(f(weekdaysXpath, id, 3), "xpath");
+      if (daysOfWeek.contains("thursday")) findElementAndClick(f(weekdaysXpath, id, 4), "xpath");
+      if (daysOfWeek.contains("friday")) findElementAndClick(f(weekdaysXpath, id, 5), "xpath");
+      if (daysOfWeek.contains("saturday")) findElementAndClick(f(weekdaysXpath, id, 6), "xpath");
+      if (daysOfWeek.contains("sunday")) findElementAndClick(f(weekdaysXpath, id, 7), "xpath");
     }
 
     public String scheduleOriginHubId = "schedules_%s_originHub";
@@ -542,18 +491,20 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = ".//button[.='Cancel']")
     public Button cancel;
 
-    public void fill(StationMovementSchedule stationMovementSchedule) {
-      Optional.ofNullable(stationMovementSchedule.getCrossdockHub()).ifPresent(value -> sendKeysAndEnterById(crossdockHub, value));
+    public void fill(StationMovementSchedule stationMovementSchedule, String scheduleNo) {
+      if(scheduleNo.equals("0")){
+        Optional.ofNullable(stationMovementSchedule.getCrossdockHub()).ifPresent(value -> sendKeysAndEnterById(crossdockHub, value));
+      }
 
-      Optional.ofNullable(stationMovementSchedule.getOriginHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, 0), value));
+      Optional.ofNullable(stationMovementSchedule.getOriginHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), value));
 
-      Optional.ofNullable(stationMovementSchedule.getDestinationHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleDestinationHubId, 0), value));
+      Optional.ofNullable(stationMovementSchedule.getDestinationHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), value));
 
-      Optional.ofNullable(stationMovementSchedule.getMovementType()).ifPresent(value -> sendKeysAndEnterById(f(scheduleMovementTypeId, 0), value));
+      Optional.ofNullable(stationMovementSchedule.getMovementType()).ifPresent(value -> sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), value));
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getDepartureTime())) {
         String[] hourtime = stationMovementSchedule.getDepartureTime().split(":");
-        findElementAndClick(f(scheduleStartTimeId, 0), "id");
+        findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id");
         String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
         String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
         moveToElementWithXpath(hour);
@@ -564,13 +515,13 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       }
 
       if (stationMovementSchedule.getDuration() != null) {
-        findElementAndClick(f(scheduleDurationDayId, 0), "id");
+        findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id");
         findElementAndClick("//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath");
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
         String[] hourtime = stationMovementSchedule.getEndTime().split(":");
-        findElementAndClick(f(scheduleDurationTimeId, 0), "id");
+        findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id");
         String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
         String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
         moveToElementWithXpath(hour);
@@ -581,18 +532,16 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       }
 
       if (CollectionUtils.isNotEmpty(stationMovementSchedule.getDaysOfWeek())) {
-        setDaysOfWeek(stationMovementSchedule.getDaysOfWeek());
+        setDaysOfWeek(stationMovementSchedule.getDaysOfWeek(), scheduleNo);
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getComment())) {
-        WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, 0)));
+        WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
         element.sendKeys(stationMovementSchedule.getComment());
       }
     }
 
-    public void fillAnother(StationMovementSchedule stationMovementSchedule) {
-      String scheduleNo = "1";
-
+    public void fillAnother(StationMovementSchedule stationMovementSchedule, String scheduleNo) {
       Optional.ofNullable(stationMovementSchedule.getOriginHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), value));
 
       Optional.ofNullable(stationMovementSchedule.getDestinationHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), value));
@@ -629,7 +578,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       }
 
       if (CollectionUtils.isNotEmpty(stationMovementSchedule.getDaysOfWeek())) {
-        setDaysOfWeekSecond(stationMovementSchedule.getDaysOfWeek());
+        setDaysOfWeek(stationMovementSchedule.getDaysOfWeek(), scheduleNo);
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getComment())) {

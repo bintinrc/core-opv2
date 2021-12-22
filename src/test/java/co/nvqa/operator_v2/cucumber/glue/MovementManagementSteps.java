@@ -233,15 +233,14 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.stationsTab.click();
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-    movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
+    movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
     putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
     if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
       movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
       StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
           finalData);
       secondStationMovementSchedule.setDepartureTime("21:15");
-      movementManagementPage.addStationMovementScheduleModal
-          .fillAnother(secondStationMovementSchedule);
+      movementManagementPage.addStationMovementScheduleModal.fillAnother(secondStationMovementSchedule, "1");
       putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
     }
     movementManagementPage.addStationMovementScheduleModal.create.click();
