@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
@@ -19,6 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("unused")
 @ScenarioScoped
 public class StationManagementHomeSteps extends AbstractSteps {
+    public static final String CSV_FILENAME_PATTERN = "Failure_Reasons";
+    public static final String SFLD_ACK_FAILURE_MSG = "SFLD ticket acknowledgement failed because ticket is not of UNCONFIRMED status or other parameters are wrong.";
 
     private StationManagementHomePage stationManagementHomePage;
 
@@ -74,6 +77,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
         takesScreenshot();
         stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder+totOrder));
+        stationManagementHomePage.closeIfModalDisplay();
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
 
@@ -194,6 +198,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.applyFilters(filter, 1);
     }
 
+    @When("Operator selects the following values in the modal pop up")
+    public void operator_selects_the_following_values_in_the_modal_pop_up(Map<String, String> selectFilters) {
+        Map<String, String> filter = resolveKeyValues(selectFilters);
+        stationManagementHomePage.selectFilterValue(filter);
+    }
+
     @When("Operator expects no results when searching for the orders by applying the following filters:")
     public void operator_expects_no_results_when_searching_for_the_orders_by_applying_the_following_filters(DataTable searchParameters) {
         List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
@@ -296,8 +306,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         tableAfterChange.forEach((key,value) -> {
             String formattedKey = key.replace("-","").toUpperCase();
             if(formattedKey.contentEquals(regularSize)){
-                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key));
-                int sizeAfterChange = Integer.parseInt(value);
+                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",",""));
+                int sizeAfterChange = Integer.parseInt(value.replaceAll(",",""));
                 Assert.assertTrue(f("Assert that the number of parcel count is decreased for the size %s",size),
                         sizeAfterChange == (sizeBeforeChange - delta));
                 asserts.set(true);
@@ -319,8 +329,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
         tableAfterChange.forEach((key,value) -> {
             String formattedKey = key.replace("-","").toUpperCase();
             if(formattedKey.contentEquals(regularSize)){
-                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key));
-                int sizeAfterChange = Integer.parseInt(value);
+                int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",",""));
+                int sizeAfterChange = Integer.parseInt(value.replaceAll(",",""));
                 Assert.assertTrue(f("Assert that number of parcel count is increased for the size %s",size),
                         sizeAfterChange == (sizeBeforeChange + delta));
                 asserts.set(true);
@@ -382,6 +392,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @Then("Operator verifies that the modal: {string} is displayed and can be closed")
     public void operator_verifies_that_the_modal_is_displayed_and_can_be_closed(String modalName) {
         stationManagementHomePage.verifyModalPopupByName(modalName);
+        stationManagementHomePage.closeIfModalDisplay(modalName);
+    }
+
+    @Then("Operator verifies that the modal: {string} is displayed")
+    public void operator_verifies_that_the_modal_is_displayed(String modalName) {
+        stationManagementHomePage.verifyModalPopupByName(modalName);
     }
 
     @When("Operator closes the modal: {string} if it is displayed on the page")
@@ -401,6 +417,17 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.closeIfModalDisplay("Please Confirm ETA of FSR Parcels to Proceed");
         int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
         int afterOrder = stationManagementHomePage.getSfldParcelCount();
+        takesScreenshot();
+        stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }
+
+    @Then("Operator verifies that the sfld ticket count has decreased by {int}")
+    public void operator_verifies_that_the_sfld_ticket_count_has_decreased_by(Integer totOrder) {
+        totOrder = -totOrder;
+        int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_SFLD_TICKETS_IN_HUB));
+        int afterOrder = stationManagementHomePage.getSfldParcelCount();
+        stationManagementHomePage.refreshPage_v1();
+        stationManagementHomePage.closeIfModalDisplay();
         takesScreenshot();
         stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
     }
@@ -433,5 +460,58 @@ public class StationManagementHomeSteps extends AbstractSteps {
     @When("Operator opens the modal: {string} by clicking arrow beside the text: {string}")
     public void operator_opens_the_modal_by_clicking_arrow_beside_the_text(String modalName, String fsrText) {
         stationManagementHomePage.openModalByClickingArrow(modalName,fsrText);
+    }
+
+    @When("Operator saves to address used in the parcel in the key")
+    public void operator_saves_to_address_used_in_the_parcel_in_the_key() {
+        Order order = get(KEY_CREATED_ORDER);
+        String addressLn1 = order.getToAddress1();
+        String addressLn2 = order.getToAddress2();
+        String postCode = order.getToPostcode();
+        String formattedToAddress = f("%s, %s, %s", addressLn1, addressLn2, postCode);
+        put(KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS, formattedToAddress);
+    }
+
+    @Then("Operators sorts and verifies that the column:{string} is in ascending order")
+    public void operators_sorts_and_verifies_that_the_column_is_in_ascending_order(String columnName) {
+        stationManagementHomePage.sortColumn(columnName, "ASCENDING_ORDER");
+        stationManagementHomePage.getRecordsAndValidateSorting(columnName);
+    }
+
+    @When("Operators chooses the date:{string} as station confirmed eta and proceed")
+    public void operators_chooses_the_date_as_station_confirmed_eta_and_proceed(String etaToChoose) {
+        stationManagementHomePage.selectSuggestedEtaAndProceed(etaToChoose);
+    }
+
+    @Then("Operators verifies that the toast message: {string} has displayed")
+    public void operators_verifies_that_the_toast_has_displayed(String toastMessage) {
+        stationManagementHomePage.verifyToastMessage(toastMessage);
+    }
+
+    @When("Operator selects {int} records that have same eta calculated from the modal")
+    public void operator_selects_records_that_have_same_eta_calculated_from_the_modal(Integer recordCt) {
+        stationManagementHomePage.selectMultipleRecordsToConfirmEta(recordCt);
+    }
+
+    @Then("Operator verifies that the text: {string} is displayed")
+    public void operator_verifies_that_the_text_is_displayed(String expectedMsg) {
+        stationManagementHomePage.verifySfldAlertMessage(expectedMsg);
+    }
+
+    @Then("Operator confirms the common eta as:{string} and proceed")
+    public void operator_confirms_the_common_eta_as_and_proceed(String etaDate) {
+        stationManagementHomePage.selectCommonSuggestedEtaAndProceed(etaDate);
+    }
+
+    @When("Operator downloads the records with failed etas by clicking the download button")
+    public void operator_downloads_the_records_with_failed_etas_by_clicking_the_download_button() {
+        stationManagementHomePage.downloadFailedEtas();
+    }
+
+    @Then("Operator verifies that the valid error message is updated on the downloaded file")
+    public void operator_verifies_that_the_valid_error_message_is_updated_on_the_downloaded_file() {
+        String downloadedCsvFile = stationManagementHomePage.getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
+        stationManagementHomePage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
+            SFLD_ACK_FAILURE_MSG, true);
     }
 }
