@@ -67,18 +67,20 @@ Feature: Station to Station Under Different Crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
+      | daysOfWeek     | all                                |
     And Operator adds new Station Movement Schedule on Movement Management page using data below:
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
+      | daysOfWeek     | all                                |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
