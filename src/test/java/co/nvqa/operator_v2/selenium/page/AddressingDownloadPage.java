@@ -20,11 +20,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AddressingDownloadPage extends OperatorV2SimplePage {
 
@@ -153,14 +156,19 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
   // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
   private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
-          .getTimezone()));
+      .getTimezone()));
   private static final String DATE_TIME = ZONED_DATE_TIME.format(DATE_FORMAT);
   private static final String CSV_FILENAME_FORMAT = "av-addresses_";
 
-  private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
+  private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern(
+      "yyyy/MM/dd hh:mm");
 
+  public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
   public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
+  public final String SYS_ID = "Asia/Jakarta";
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadPage.class);
 
   public AddressingDownloadPage(WebDriver webDriver) {
     super(webDriver);
@@ -385,8 +393,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     setPresetCreationTimeDatepicker(currentTimeRange);
   }
 
-  public LocalDateTime getUTC(Date date) {
-    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+  public LocalDateTime resolveLocalDateTime(Date date, String timezone) {
+    int offsetInMinutes =
+        TimeZone.getTimeZone(timezone).getOffset(new Date().getTime()) / 1000 / 60;
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        .plus(Duration.of(offsetInMinutes, ChronoUnit.MINUTES));
   }
 
   public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
@@ -557,7 +568,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     List<WebElement> latitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "latitude")));
     List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
-    LocalDateTime adjustedOCCreatedAt = getUTC(order.getCreatedAt());
+    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(), SYS_ID);
 
     String ocTrackingID = order.getTrackingId();
     String ocAddressOne = order.getToAddress1();
@@ -646,7 +657,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
-    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+    LocalDateTime orderCreationTimestamp = resolveLocalDateTime(order.getCreatedAt(), SYS_ID);
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());

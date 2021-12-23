@@ -279,6 +279,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on Load Address button")
   public void operatorClicksOnLoadAddressButton() {
+    addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
+        addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
     addressingDownloadPage.loadAddresses.click();
   }
 
@@ -314,7 +316,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
       return;
     }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
+    LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
+        createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
     NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
     NvLogger.infof("Order creation time: %s", orderCreationTimestamp);
 
