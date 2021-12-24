@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -319,9 +320,23 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void openShipmentDetailsPage(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     pause3s();
-    shipmentsTable.clickActionButton(1, ACTION_DETAILS);
+    //shipmentsTable.clickActionButton(1, ACTION_DETAILS);
+    findElementAndClick("//tr["+1+"]//td//nv-icon-button[@name='"+ACTION_DETAILS+"']", "xpath");
     pause100ms();
     switchToOtherWindow();
+  }
+
+
+  public void findElementAndClick(String elementString, String locator){
+    WebElement element = null;
+    if(locator.equals("id")){
+      element = getWebDriver().findElement(By.id(elementString));
+    }else if(locator.equals("xpath")){
+      element = getWebDriver().findElement(By.xpath(elementString));
+    }else if(locator.equals("class")){
+      element = getWebDriver().findElement(By.className(elementString));
+    }
+    element.click();
   }
 
   public void forceSuccessShipment(Long shipmentId) {
