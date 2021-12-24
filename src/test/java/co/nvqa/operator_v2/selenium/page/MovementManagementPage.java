@@ -370,9 +370,11 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
       public void fill(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (StringUtils.isNotBlank(schedule.getOriginHub())) {
+          System.out.println("Origin hub:"+ schedule.getOriginHub());
           sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.getOriginHub());
         }
         if (StringUtils.isNotBlank(schedule.getDestinationHub())) {
+          System.out.println("Destination hub:"+ schedule.getDestinationHub());
           sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), schedule.getDestinationHub());
         }
         if (StringUtils.isNotBlank(schedule.getMovementType())) {
@@ -470,20 +472,20 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
     public String crossdockHub = "crossdockHubAddModal";
 
-    @FindBy(css = "[id*='movement_type']")
-    public AntSelect movementType;
+    //@FindBy(css = "[id*='movement_type']")
+    //public AntSelect movementType;
 
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
-    public AntTimePicker departureTime;
+    //@FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
+    //public AntTimePicker departureTime;
 
-    @FindBy(css = "input[id*='duration_day']")
-    public TextBox duration;
+    //@FindBy(css = "input[id*='duration_day']")
+    //public TextBox duration;
 
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
-    public AntTimePicker endTime;
+    //@FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
+    //public AntTimePicker endTime;
 
-    @FindBy(css = "input[id*='comment']")
-    public TextBox comment;
+    //@FindBy(css = "input[id*='comment']")
+    //public TextBox comment;
 
     @FindBy(xpath = ".//button[.='OK']")
     public Button create;
