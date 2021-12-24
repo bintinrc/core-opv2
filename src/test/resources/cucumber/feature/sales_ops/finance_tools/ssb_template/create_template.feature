@@ -2,7 +2,7 @@
 
 Feature: Create SSB Template
 
-  Background: Login to Operator Portal V2  and go to Order Billing Page
+  Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteSsbTemplate
