@@ -91,6 +91,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("Movement Management page is loaded")
   public void movementManagementPageIsLoaded() {
+    pause5s();
     movementManagementPage.switchTo();
     movementManagementPage.addSchedule.waitUntilClickable(60);
   }
@@ -228,23 +229,37 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
-    final Map<String, String> finalData = resolveKeyValues(data);
-    StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
-    movementManagementPage.stationsTab.click();
-    movementManagementPage.addSchedule.click();
-    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-    movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
-    putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
-    if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
-      movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
-      StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
-          finalData);
-      secondStationMovementSchedule.setDepartureTime("21:15");
-      movementManagementPage.addStationMovementScheduleModal.fillAnother(secondStationMovementSchedule, "1");
-      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
-    }
-    movementManagementPage.addStationMovementScheduleModal.create.click();
-    movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try{
+        final Map<String, String> finalData = resolveKeyValues(data);
+        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+        putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+        if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
+          movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
+          StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
+                  finalData);
+          secondStationMovementSchedule.setDepartureTime("21:15");
+          movementManagementPage.addStationMovementScheduleModal.fillAnother(secondStationMovementSchedule, "1");
+          putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+        }
+        movementManagementPage.addStationMovementScheduleModal.create.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+      }catch (Exception ex){
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addSchedule.waitUntilClickable(60);
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 2);
+
   }
 
   @And("Operator load schedules on Movement Management page using data below:")
@@ -310,6 +325,7 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
+        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
