@@ -2,7 +2,7 @@
 
 Feature: Generate Success Billing Report - Legacy Template
 
-  Background: Login to Operator Portal V2  and go to Order Billing Page
+  Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - Use Legacy Template - start date > 1 May (uid:432a59ca-7248-4194-b906-14175d3ca5a9)
