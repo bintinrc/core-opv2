@@ -37,7 +37,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        //System.out.println(""+getScenarioStorage().get(KEY_CREATED_SHIPMENT_ID));
         Long shipmentId = (Long)getScenarioStorage().get(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
         scanningPage.inboundScanning(shipmentId, label, finalHub);
