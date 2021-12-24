@@ -40,17 +40,25 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
   public ShipmentInfo(Shipments shipments) {
     setShipmentType(shipments.getShipment().getShipmentType());
     setId(shipments.getShipment().getId());
-    setCreatedAt(normalisedDate(shipments.getShipment().getCreatedAt()));
-    setTransitAt(normalisedDate(shipments.getShipment().getTransitAt()));
+    setCreatedAt(formatShipmentDates(shipments.getShipment().getCreatedAt()));
+    setTransitAt(formatShipmentDates(shipments.getShipment().getTransitAt()));
     setStatus(shipments.getShipment().getStatus());
     setOrigHubName(shipments.getShipment().getOrigHubName());
     setCurrHubName(shipments.getShipment().getCurrHubName());
     setDestHubName(shipments.getShipment().getDestHubName());
-    setArrivalDatetime(normalisedDate(shipments.getShipment().getArrivalDatetime()));
-    setCompletedAt(normalisedDate(shipments.getShipment().getCompletedAt()));
+    setArrivalDatetime(formatShipmentDates(shipments.getShipment().getArrivalDatetime()));
+    setCompletedAt(formatShipmentDates(shipments.getShipment().getCompletedAt()));
     setOrdersCount((shipments.getShipment().getOrdersCount()));
     setComments(shipments.getShipment().getComments());
     setMawb(shipments.getShipment().getMawb());
+  }
+
+  public String formatShipmentDates(String originDate){
+    if(originDate == null){
+      return null;
+    }
+    originDate = originDate.substring(0,10) + " " + originDate.substring(11,19);
+    return originDate;
   }
 
   private String normalisedDate(String originDate) {
