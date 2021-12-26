@@ -53,6 +53,12 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   @FindBy(name = "container.pricing-scripts.create-draft")
   public NvIconTextButton createDraftBtn;
 
+  @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div")
+  public PageElement toastErrorTopText;
+
+  @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']")
+  public PageElement toastErrorBottomText;
+
 
   public PricingScriptsV2Page(WebDriver webDriver) {
     super(webDriver);

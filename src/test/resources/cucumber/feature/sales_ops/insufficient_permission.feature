@@ -48,3 +48,22 @@ Feature: All test cases related to insufficient permission for Finance related p
     And Operator clicks Search Invoiced Order button
     Then Operator verifies that error toast is displayed on Invoiced Orders Search page:
       | access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
+
+  @KillBrowser @User1 @DeleteNewlyCreatedShipper
+  Scenario: Search by Shipper who has Ledger -  Ledger Status is Ready - Insufficient Permissions (uid:d6b1f517-7da1-4a0d-86eb-f5b0c706d09c)
+    Then Operator waits for 2 seconds
+    Given Operator go to menu Finance Tools -> Financial Batch
+    When Operator selects financial batch data as below
+      | shipper | test |
+    Then Operator verifies that error toast is displayed on Financial Batch page:
+      | top    | Network Request Error                                                                                                                    |
+      | bottom | Error Message: Access denied. Insufficient Permissions. Required any one of the scopes : SHIPPER_GET_SHIPPER,ALL_ACCESS,INTERNAL_SERVICE |
+
+  @KillBrowser @User1
+  Scenario: Search by Uploading CSV file - Insufficient Permissions (uid:1bf9760d-8c0f-4579-bf47-914c2d97deda)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    Then Operator waits for 2 seconds
+    Then Operator clicks Create Draft button
+    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
+      | top    | Network Request Error                                                                                                                                               |
+      | bottom | Access denied. Insufficient Permissions. Required any one of the scopes : OPERATOR_ADMIN,ADDRESSING_ADMIN,ADDRESSING_VIEW_PRICING_ZONES,ALL_ACCESS,INTERNAL_SERVICE |

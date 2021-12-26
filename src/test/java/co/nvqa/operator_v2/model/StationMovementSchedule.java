@@ -1,7 +1,12 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class StationMovementSchedule extends DataEntity<StationMovementSchedule> {
 
@@ -12,6 +17,7 @@ public class StationMovementSchedule extends DataEntity<StationMovementSchedule>
   private String departureTime;
   private Integer duration;
   private String endTime;
+  private Set<String> daysOfWeek;
   private String comment;
 
   public StationMovementSchedule() {
@@ -79,6 +85,23 @@ public class StationMovementSchedule extends DataEntity<StationMovementSchedule>
 
   public void setEndTime(String endTime) {
     this.endTime = endTime;
+  }
+
+  public Set<String> getDaysOfWeek() {
+    return daysOfWeek;
+  }
+
+  public void setDaysOfWeek(Set<String> daysOfWeek) {
+    this.daysOfWeek = daysOfWeek;
+  }
+
+  public void setDaysOfWeek(String daysOfWeek) {
+    if (StringUtils.equalsAnyIgnoreCase(daysOfWeek, "all")) {
+      daysOfWeek = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
+    }
+    String[] days = daysOfWeek.split(",");
+    setDaysOfWeek(
+            Arrays.stream(days).map(day -> day.trim().toLowerCase()).collect(Collectors.toSet()));
   }
 
   public String getComment() {
