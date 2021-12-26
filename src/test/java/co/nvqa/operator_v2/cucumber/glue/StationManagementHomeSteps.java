@@ -514,4 +514,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
             SFLD_ACK_FAILURE_MSG, true);
     }
+
+    @When("Operator applies filter as {string} from quick filters option")
+    public void operator_applies_filter_as_from_quick_filters_option(String filter) {
+        stationManagementHomePage.applyQuickFilter(filter);
+    }
 }

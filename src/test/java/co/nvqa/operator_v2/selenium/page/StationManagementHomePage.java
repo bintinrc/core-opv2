@@ -51,6 +51,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
   private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
+  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[@class='filter-row']//div[text()='%s']";
 
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
@@ -151,6 +152,15 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   @FindAll(@FindBy(css = "div[class*='base-row'] span[class*='checked']"))
   private List<PageElement> checkboxChecked;
+
+  @FindAll(@FindBy(css = "div[class*='-checked'][class$='filter']"))
+  private List<PageElement> filterApplied;
+
+  @FindBy(css = "div.sfld-alert")
+  public PageElement sfldAlert;
+
+  @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
+  public PageElement downloadFailedEtas;
 
   public void switchToStationHomeFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -813,9 +823,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         .isEqualTo(checkboxChecked.size());
   }
 
-  @FindBy(css = "div.sfld-alert")
-  public PageElement sfldAlert;
-
   public void verifySfldAlertMessage(String expectedMsg){
     sfldAlert.waitUntilVisible();
     String actualMsg = sfldAlert.getText();
@@ -830,8 +837,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     saveAndProceed.click();
   }
 
-  @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
-  public PageElement downloadFailedEtas;
 
   public void downloadFailedEtas() {
     waitWhilePageIsLoading();
@@ -839,4 +844,14 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     downloadFailedEtas.click();
   }
 
+  public void applyQuickFilter(String filter) {
+    waitWhilePageIsLoading();
+    String filterXpath = f(QUICK_FILTER_BY_TEXT_XPATH, filter);
+    WebElement quickFilter = getWebDriver().findElement(
+        By.xpath(filterXpath));
+    quickFilter.click();
+    pause2s();
+    Assert.assertTrue(f("Assert that the filter %s is applied", filter),
+        filterApplied.size() > 0 );
+  }
 }
