@@ -9,10 +9,10 @@ import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage;
 import com.google.common.collect.ImmutableList;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -144,8 +144,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Granular Order Status is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter
+                    .getSelectedValues())
             .as("Granular Order Status")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("granularOrderStatus")));
@@ -157,8 +157,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Order Service Type is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter
+                    .getSelectedValues())
             .as("Order Service Type")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("orderServiceType")));
@@ -170,8 +170,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Zone is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.zoneFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.zoneFilter
+                    .getSelectedValues())
             .as("Zone")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("zone")));
@@ -183,8 +183,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Order Type is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter
+                    .getSelectedValues())
             .as("Order Type")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("orderType")));
@@ -196,8 +196,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("PP/DD Leg is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter
+                    .getSelectedValues())
             .as("PP/DD Leg")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("ppDdLeg")));
@@ -210,8 +210,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Transaction Status is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter
+                    .getSelectedValues())
             .as("Transaction Status")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("transactionStatus")));
@@ -223,7 +223,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Transaction Status is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.rtsFilter.getValue())
+                createRouteGroupsPage.transactionsFiltersForm.rtsFilter.getValue())
             .as("Transaction Status")
             .isEqualTo(data.get("rts"));
       }
@@ -234,8 +234,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Parcel Size is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter
+                    .getSelectedValues())
             .as("Parcel Size")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("parcelSize")));
@@ -247,8 +247,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Timeslots is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter
+                    .getSelectedValues())
             .as("Timeslots")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("timeslots")));
@@ -260,8 +260,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Delivery Type is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter
+                    .getSelectedValues())
             .as("Delivery Type")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("deliveryType")));
@@ -273,8 +273,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("DNR Group is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.dnrGroupFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.dnrGroupFilter
+                    .getSelectedValues())
             .as("DNR Group")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("dnrGroup")));
@@ -286,8 +286,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Bulky Types is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.transactionsFiltersForm.bulkyTypesFilter
-                .getSelectedValues())
+                createRouteGroupsPage.transactionsFiltersForm.bulkyTypesFilter
+                    .getSelectedValues())
             .as("Bulky Types")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("bulkyTypes")));
@@ -423,6 +423,22 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       createRouteGroupsPage.transactionsFiltersForm.bulkyTypesFilter
           .selectFilter(splitAndNormalize(value));
     }
+
+    value = data.get("weight");
+    if (StringUtils.isNotBlank(value)) {
+      if (!createRouteGroupsPage.transactionsFiltersForm.weightFilter.isDisplayedFast()) {
+        createRouteGroupsPage.transactionsFiltersForm.addFilter.selectValue("Weight");
+      }
+      createRouteGroupsPage.transactionsFiltersForm.weightFilter.selectFilter(value);
+    }
+
+    value = data.get("priorityLevel");
+    if (StringUtils.isNotBlank(value)) {
+      if (!createRouteGroupsPage.transactionsFiltersForm.priorityLevelFilter.isDisplayedFast()) {
+        createRouteGroupsPage.transactionsFiltersForm.addFilter.selectValue("Priority Level");
+      }
+      createRouteGroupsPage.transactionsFiltersForm.priorityLevelFilter.selectFilter(value);
+    }
   }
 
   @Given("^Operator add following filters on Reservation Filters section on Create Route Group page:$")
@@ -475,8 +491,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Pick Up Size is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter
-                .getSelectedValues())
+                createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter
+                    .getSelectedValues())
             .as("Pick Up Size")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("pickUpSize")));
@@ -489,8 +505,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Reservation Type is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter
-                .getSelectedValues())
+                createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter
+                    .getSelectedValues())
             .as("Reservation Type")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("reservationType")));
@@ -503,8 +519,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Reservation Status is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter
-                .getSelectedValues())
+                createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter
+                    .getSelectedValues())
             .as("Reservation Status")
             .containsExactlyInAnyOrderElementsOf(
                 splitAndNormalize(data.get("reservationStatus")));
@@ -782,13 +798,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       } else {
         if (data.containsKey("startDateTimeFrom")) {
           assertions.assertThat(
-              createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.fromDate.getValue())
+                  createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.fromDate.getValue())
               .as("Start Datetime from")
               .isEqualTo(data.get("startDateTimeFrom"));
         }
         if (data.containsKey("startDateTimeTo")) {
           assertions.assertThat(
-              createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.toDate.getValue())
+                  createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.toDate.getValue())
               .as("Start Datetime to")
               .isEqualTo(data.get("startDateTimeTo"));
         }
@@ -801,13 +817,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       } else {
         if (data.containsKey("endDateTimeFrom")) {
           assertions.assertThat(
-              createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.fromDate.getValue())
+                  createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.fromDate.getValue())
               .as("End Datetime from")
               .isEqualTo(data.get("endDateTimeFrom"));
         }
         if (data.containsKey("endDateTimeTo")) {
           assertions.assertThat(
-              createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.toDate.getValue())
+                  createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.toDate.getValue())
               .as("End Datetime to")
               .isEqualTo(data.get("endDateTimeTo"));
         }
@@ -821,7 +837,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Creation Time is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.generalFiltersForm.creationTimeFilter.fromDate.getValue())
+                createRouteGroupsPage.generalFiltersForm.creationTimeFilter.fromDate.getValue())
             .as("Creation Time from")
             .isEqualTo(data.get("creationTimeFrom"));
       }
@@ -834,7 +850,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Creation Time is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.generalFiltersForm.creationTimeFilter.toDate.getValue())
+                createRouteGroupsPage.generalFiltersForm.creationTimeFilter.toDate.getValue())
             .as("Creation Time to")
             .isEqualTo(data.get("creationTimeTo"));
       }
@@ -873,7 +889,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Route Grouping is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.getSelectedValues())
+                createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.getSelectedValues())
             .as("Route Grouping")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("routeGrouping")));
       }
@@ -897,7 +913,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Master Shipper is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.generalFiltersForm.masterShipperFilter.getSelectedValues())
+                createRouteGroupsPage.generalFiltersForm.masterShipperFilter.getSelectedValues())
             .as("Master Shipper")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("masterShipper")));
       }
@@ -1100,13 +1116,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       } else {
         if (data.containsKey("shipmentDateFrom")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.fromDate.getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.fromDate.getValue())
               .as("Shipment Date from")
               .isEqualTo(data.get("shipmentDateFrom"));
         }
         if (data.containsKey("shipmentDateTo")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.toDate.getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.toDate.getValue())
               .as("Shipment Date to")
               .isEqualTo(data.get("shipmentDateTo"));
         }
@@ -1119,13 +1135,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       } else {
         if (data.containsKey("etaDateTimeFrom")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.fromDate.getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.fromDate.getValue())
               .as("ETA (Date Time) from")
               .isEqualTo(data.get("etaDateTimeFrom"));
         }
         if (data.containsKey("etaDateTimeTo")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.toDate.getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.toDate.getValue())
               .as("ETA (Date Time) to")
               .isEqualTo(data.get("etaDateTimeTo"));
         }
@@ -1140,15 +1156,15 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       } else {
         if (data.containsKey("shipmentCompletionDateTimeFrom")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.fromDate
-                  .getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.fromDate
+                      .getValue())
               .as("Shipment Completion Date Time from")
               .isEqualTo(data.get("shipmentCompletionDateTimeFrom"));
         }
         if (data.containsKey("shipmentCompletionDateTimeTo")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.toDate
-                  .getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.toDate
+                      .getValue())
               .as("Shipment Completion Date Time to")
               .isEqualTo(data.get("shipmentCompletionDateTimeTo"));
         }
@@ -1161,13 +1177,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       } else {
         if (data.containsKey("transitDateTimeFrom")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.fromDate.getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.fromDate.getValue())
               .as("Transit Date Time from")
               .isEqualTo(data.get("transitDateTimeFrom"));
         }
         if (data.containsKey("transitDateTimeTo")) {
           assertions.assertThat(
-              createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.toDate.getValue())
+                  createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.toDate.getValue())
               .as("Transit Date Time to")
               .isEqualTo(data.get("transitDateTimeTo"));
         }
@@ -1179,7 +1195,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Start Hub is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.shipmentFiltersForm.startHubFilter.getSelectedValues())
+                createRouteGroupsPage.shipmentFiltersForm.startHubFilter.getSelectedValues())
             .as("Start Hub")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("startHub")));
       }
@@ -1190,7 +1206,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("End Hub is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.shipmentFiltersForm.endHubFilter.getSelectedValues())
+                createRouteGroupsPage.shipmentFiltersForm.endHubFilter.getSelectedValues())
             .as("End Hub")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("endHub")));
       }
@@ -1201,7 +1217,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Last Inbound Hub is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter.getSelectedValues())
+                createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter.getSelectedValues())
             .as("Last Inbound Hub")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("lastInboundHub")));
       }
@@ -1212,7 +1228,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("MAWB is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.shipmentFiltersForm.mawbFilter.getValue())
+                createRouteGroupsPage.shipmentFiltersForm.mawbFilter.getValue())
             .as("MAWB")
             .isEqualToIgnoringCase(data.get("mawb"));
       }
@@ -1223,7 +1239,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Shipment Status is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.getSelectedValues())
+                createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.getSelectedValues())
             .as("Shipment Status")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipmentStatus")));
       }
@@ -1234,7 +1250,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         assertions.fail("Shipment Type is not displayed");
       } else {
         assertions.assertThat(
-            createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.getSelectedValues())
+                createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.getSelectedValues())
             .as("Shipment Type")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipmentType")));
       }

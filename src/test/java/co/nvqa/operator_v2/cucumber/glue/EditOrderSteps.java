@@ -598,6 +598,20 @@ public class EditOrderSteps extends AbstractSteps {
     });
   }
 
+  @Then("^Operator verify order events are not presented on Edit order page:$")
+  public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
+    List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+    data = resolveValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    data.forEach(expected ->
+        assertions.assertThat(
+                events.stream().anyMatch(e -> StringUtils.equalsIgnoreCase(e.getName(), expected)))
+            .as("%s event was found")
+            .isFalse()
+    );
+    assertions.assertAll();
+  }
+
   @Then("^Operator verify Delivery details on Edit order page using data below:$")
   public void verifyDeliveryDetails(Map<String, String> expectedData) throws ParseException {
     expectedData = resolveKeyValues(expectedData);

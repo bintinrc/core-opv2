@@ -94,6 +94,115 @@ Feature: Van Inbound
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].toContact} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | Arrived at Sorting Hub  | Transit |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {KEY_LIST_OF_CREATED_ORDER[3].toName} | {KEY_LIST_OF_CREATED_ORDER[3].toContact} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | Pending Pickup          | Pending |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | En-route to Sorting Hub           |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+      | granularStatus | Pickup Fail                       |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
+      | granularStatus | Pending Pickup                    |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" tracking ID on Van Inbound Page
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" tracking ID on Van Inbound Page
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]}" tracking ID on Van Inbound Page
+    And Operator verifies the route is started on clicking route start button
+    And Operator verifies that van inbound page is displayed after clicking back to route input screen
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order events are not presented on Edit order page:
+      | DRIVER START ROUTE  |
+      | DRIVER INBOUND SCAN |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    And Operator verify order status is "Pickup fail" on Edit Order page
+    And Operator verify order granular status is "Pickup Fail" on Edit Order page
+    And Operator verify order events are not presented on Edit order page:
+      | DRIVER START ROUTE  |
+      | DRIVER INBOUND SCAN |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[3]}"
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Van en-route to pickup" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER START ROUTE     |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order events are not presented on Edit order page:
+      | DRIVER INBOUND SCAN |
+    And Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
+    And Operator verify route details on Route Logs page using data below:
+      | id     | {KEY_CREATED_ROUTE_ID} |
+      | status | IN_PROGRESS            |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | Completed                         |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+      | granularStatus | Pending Reschedule                |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
+      | granularStatus | Arrived At Sorting Hub            |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" tracking ID on Van Inbound Page
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" tracking ID on Van Inbound Page
+    When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]}" tracking ID on Van Inbound Page
+    And Operator verifies the route is started on clicking route start button
+    And Operator verifies that van inbound page is displayed after clicking back to route input screen
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify order events are not presented on Edit order page:
+      | DRIVER START ROUTE |
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER INBOUND SCAN    |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Delivery Fail" on Edit Order page
+    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
+    And Operator verify order events are not presented on Edit order page:
+      | DRIVER START ROUTE |
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER INBOUND SCAN    |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[3]}"
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER START ROUTE     |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER INBOUND SCAN    |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
+    And Operator verify route details on Route Logs page using data below:
+      | id     | {KEY_CREATED_ROUTE_ID} |
+      | status | IN_PROGRESS            |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
