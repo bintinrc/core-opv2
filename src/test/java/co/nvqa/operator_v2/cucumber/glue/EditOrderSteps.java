@@ -1318,6 +1318,27 @@ public class EditOrderSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       editOrderPage.editRtsDetailsDialog.timeslot.searchAndSelectValue(value);
     }
+    value = data.get("country");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.changeAddress.click();
+      editOrderPage.editRtsDetailsDialog.country.setValue(value);
+    }
+    value = data.get("city");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.city.setValue(value);
+    }
+    value = data.get("address1");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.address1.setValue(value);
+    }
+    value = data.get("address2");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.address2.setValue(value);
+    }
+    value = data.get("postalCode");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.postcode.setValue(value);
+    }
     editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
   }
