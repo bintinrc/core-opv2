@@ -95,7 +95,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("Movement Management page is loaded")
   public void movementManagementPageIsLoaded() {
-    pause5s();
+    movementManagementPage.addSchedule.waitUntilVisible(10);
     movementManagementPage.switchTo();
     movementManagementPage.addSchedule.waitUntilClickable(60);
   }
