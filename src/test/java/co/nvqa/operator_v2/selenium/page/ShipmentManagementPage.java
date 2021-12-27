@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipment;
@@ -21,6 +22,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -320,23 +322,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void openShipmentDetailsPage(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     pause3s();
-    //shipmentsTable.clickActionButton(1, ACTION_DETAILS);
-    findElementAndClick("//tr["+1+"]//td//nv-icon-button[@name='"+ACTION_DETAILS+"']", "xpath");
+    TestUtils.findElementAndClick(f(ACTION_DETAILS, 1), "xpath", getWebDriver());
     pause100ms();
     switchToOtherWindow();
-  }
-
-
-  public void findElementAndClick(String elementString, String locator){
-    WebElement element = null;
-    if(locator.equals("id")){
-      element = getWebDriver().findElement(By.id(elementString));
-    }else if(locator.equals("xpath")){
-      element = getWebDriver().findElement(By.xpath(elementString));
-    }else if(locator.equals("class")){
-      element = getWebDriver().findElement(By.className(elementString));
-    }
-    element.click();
   }
 
   public void forceSuccessShipment(Long shipmentId) {
@@ -962,7 +950,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String COLUMN_COMMENTS = "comments";
     public static final String COLUMN_MAWB = "mawb";
     public static final String ACTION_EDIT = "Edit";
-    public static final String ACTION_DETAILS = "Details";
+    public static final String ACTION_DETAILS = "//tr[%s]//td//nv-icon-button[@name='Details']";
     public static final String ACTION_FORCE = "Force";
     public static final String ACTION_PRINT = "Print";
     public static final String ACTION_CANCEL = "Cancel";

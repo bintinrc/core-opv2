@@ -11,7 +11,10 @@ import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * @author Soewandi Wirjawan
@@ -157,5 +160,17 @@ public class TestUtils extends CommonSeleniumTestUtils {
     }
 
     return fileText.toString();
+  }
+
+  public static void findElementAndClick(String elementString, String locator, WebDriver webDriver){
+    WebElement element = null;
+    if(locator.equals("id")){
+      element = webDriver.findElement(By.id(elementString));
+    }else if(locator.equals("xpath")){
+      element = webDriver.findElement(By.xpath(elementString));
+    }else if(locator.equals("class")){
+      element = webDriver.findElement(By.className(elementString));
+    }
+    element.click();
   }
 }
