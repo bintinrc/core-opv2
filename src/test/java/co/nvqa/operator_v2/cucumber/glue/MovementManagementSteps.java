@@ -26,6 +26,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_ORIGIN_HUB;
 
@@ -35,6 +38,7 @@ import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.Schedules
 @ScenarioScoped
 public class MovementManagementSteps extends AbstractSteps {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(MovementManagementSteps.class);
   private MovementManagementPage movementManagementPage;
   private static final String HUB_CD_CD = "CD->CD";
   private static final String HUB_CD_ITS_ST = "CD->its ST";
@@ -250,8 +254,8 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addStationMovementScheduleModal.create.click();
         movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
       }catch (Exception ex){
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         movementManagementPage.stationsTab.click();
         movementManagementPage.addSchedule.click();
