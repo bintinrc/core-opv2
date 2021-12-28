@@ -40,14 +40,14 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
   public ShipmentInfo(Shipments shipments) {
     setShipmentType(shipments.getShipment().getShipmentType());
     setId(shipments.getShipment().getId());
-    setCreatedAt(formatShipmentDates(shipments.getShipment().getCreatedAt()));
-    setTransitAt(formatShipmentDates(shipments.getShipment().getTransitAt()));
+    setCreatedAt(normalisedDate(shipments.getShipment().getCreatedAt()));
+    setTransitAt(normalisedDate(shipments.getShipment().getTransitAt()));
     setStatus(shipments.getShipment().getStatus());
     setOrigHubName(shipments.getShipment().getOrigHubName());
     setCurrHubName(shipments.getShipment().getCurrHubName());
     setDestHubName(shipments.getShipment().getDestHubName());
-    setArrivalDatetime(formatShipmentDates(shipments.getShipment().getArrivalDatetime()));
-    setCompletedAt(formatShipmentDates(shipments.getShipment().getCompletedAt()));
+    setArrivalDatetime(normalisedDate(shipments.getShipment().getArrivalDatetime()));
+    setCompletedAt(normalisedDate(shipments.getShipment().getCompletedAt()));
     setOrdersCount((shipments.getShipment().getOrdersCount()));
     setComments(shipments.getShipment().getComments());
     setMawb(shipments.getShipment().getMawb());
