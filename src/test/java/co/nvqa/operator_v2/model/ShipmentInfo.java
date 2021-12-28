@@ -53,14 +53,6 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
     setMawb(shipments.getShipment().getMawb());
   }
 
-  public String formatShipmentDates(String originDate){
-    if(originDate == null){
-      return null;
-    }
-    originDate = originDate.substring(0,10) + " " + originDate.substring(11,19);
-    return originDate;
-  }
-
   private String normalisedDate(String originDate) {
     if (originDate == null) {
       return null;
