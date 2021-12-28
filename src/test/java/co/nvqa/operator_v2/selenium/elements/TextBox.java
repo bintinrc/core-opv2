@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -32,7 +33,12 @@ public class TextBox extends PageElement {
 
   public void setValue(String value) {
     if (value != null) {
-      clearAndSendKeys(value);
+      try {
+        clearAndSendKeys(value);
+      } catch (InvalidElementStateException ex) {
+        click();
+        clearAndSendKeys(value);
+      }
     }
   }
 

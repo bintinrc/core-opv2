@@ -139,6 +139,9 @@ public class RouteManifestSteps extends AbstractSteps {
   public void operatorOpenRouteManifestPage(String routeId) {
     routeId = resolveValue(routeId);
     routeManifestPage.openPage(Long.parseLong(StringUtils.trim(routeId)));
+    if (routeManifestPage.loadMoreData.waitUntilVisible(2)) {
+      routeManifestPage.loadMoreData.waitUntilInvisible();
+    }
   }
 
   @When("Operator verifies route details on Route Manifest page:")

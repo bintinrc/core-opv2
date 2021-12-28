@@ -39,7 +39,7 @@ public class AntCalendarPicker extends PageElement {
   public PageElement clear;
 
   public void sendDate(String value) {
-    if (isElementExist(CLEAR_XPATH)) {
+    if (clear.isDisplayedFast()) {
       clear.click();
     }
     pickerInput.sendKeys(value);

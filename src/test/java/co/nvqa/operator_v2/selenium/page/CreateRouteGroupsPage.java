@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvDecimalFilterNumberBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
@@ -19,6 +20,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIntFilterNumberBox;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.text.SimpleDateFormat;
@@ -392,6 +394,12 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
 
     @FindBy(css = "nv-filter-box[item-types='Bulky Types']")
     public NvFilterBox bulkyTypesFilter;
+
+    @FindBy(css = "nv-filter-number-box[main-title='Weight']")
+    public NvDecimalFilterNumberBox weightFilter;
+
+    @FindBy(css = "nv-filter-number-box[main-title='Priority Level']")
+    public NvIntFilterNumberBox priorityLevelFilter;
 
     public TransactionsFiltersForm(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

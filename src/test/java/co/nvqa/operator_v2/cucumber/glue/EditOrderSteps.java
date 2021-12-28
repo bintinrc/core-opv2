@@ -598,6 +598,20 @@ public class EditOrderSteps extends AbstractSteps {
     });
   }
 
+  @Then("^Operator verify order events are not presented on Edit order page:$")
+  public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
+    List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+    data = resolveValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    data.forEach(expected ->
+        assertions.assertThat(
+                events.stream().anyMatch(e -> StringUtils.equalsIgnoreCase(e.getName(), expected)))
+            .as("%s event was found")
+            .isFalse()
+    );
+    assertions.assertAll();
+  }
+
   @Then("^Operator verify Delivery details on Edit order page using data below:$")
   public void verifyDeliveryDetails(Map<String, String> expectedData) throws ParseException {
     expectedData = resolveKeyValues(expectedData);
@@ -1303,6 +1317,27 @@ public class EditOrderSteps extends AbstractSteps {
     value = data.get("timeslot");
     if (StringUtils.isNotBlank(value)) {
       editOrderPage.editRtsDetailsDialog.timeslot.searchAndSelectValue(value);
+    }
+    value = data.get("country");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.changeAddress.click();
+      editOrderPage.editRtsDetailsDialog.country.setValue(value);
+    }
+    value = data.get("city");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.city.setValue(value);
+    }
+    value = data.get("address1");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.address1.setValue(value);
+    }
+    value = data.get("address2");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.address2.setValue(value);
+    }
+    value = data.get("postalCode");
+    if (StringUtils.isNotBlank(value)) {
+      editOrderPage.editRtsDetailsDialog.postcode.setValue(value);
     }
     editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
