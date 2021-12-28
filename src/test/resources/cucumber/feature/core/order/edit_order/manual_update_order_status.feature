@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @ManualUpdateOrderStatus @current1
+@OperatorV2 @Core @Order @EditOrder @ManualUpdateOrderStatus
 Feature: Manual Update Order Status
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -418,7 +418,6 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
 
-  @wip
   Scenario: Operator Manually Update Order Granular Status - On Vehicle for Delivery , Latest Delivery is Unrouted (uid:af550420-08b8-46af-bddf-bce1b9dd2f02)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -494,22 +493,20 @@ Feature: Manual Update Order Status
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator update order status on Edit order page using data below:
-      | granularStatus | Pending Pickup                      |
-      | changeReason   | Status updated for testing purposes |
-    Then Operator verifies that success toast displayed:
-      | top                | Status Updated |
-      | waitUntilInvisible | true           |
-    And Operator verify order status is "Pending" on Edit Order page
+    When API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | Pending Pickup                    |
+    And Operator refresh page
+    Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator verify Pickup transaction on Edit order page using data below:
       | status | PENDING |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | PENDING |
     And Operator verify order events on Edit order page using data below:
-      | tags          | name             | description                                                                                                                                                                                                                                                                                          |
-      | MANUAL ACTION | REVERT COMPLETED |                                                                                                                                                                                                                                                                                                      |
-      | MANUAL ACTION | UPDATE STATUS    | Old Pickup Status: Success\nNew Pickup Status: Pending\n\nOld Delivery Status: Success\nNew Delivery Status: Pending\n\nOld Granular Status: Completed\nNew Granular Status: Pending Pickup\n\nOld Order Status: Completed\nNew Order Status: Pending\n\nReason: Status updated for testing purposes |
+      | tags          | name             | description                                                                                                                                                                                                                                                                                   |
+      | MANUAL ACTION | REVERT COMPLETED |                                                                                                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS    | Old Pickup Status: Success\nNew Pickup Status: Pending\n\nOld Delivery Status: Success\nNew Delivery Status: Pending\n\nOld Granular Status: Completed\nNew Granular Status: Pending Pickup\n\nOld Order Status: Completed\nNew Order Status: Pending\n\nReason: update order granular status |
     When API Operator get order details
     Then DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
