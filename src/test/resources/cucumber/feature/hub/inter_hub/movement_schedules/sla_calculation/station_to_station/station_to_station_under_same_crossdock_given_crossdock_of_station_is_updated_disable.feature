@@ -49,10 +49,11 @@ Feature: Station to Station Under Same Crossdock Given Crossdock of Station is U
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     And API Operator updates Hub using data below:
       | id           | {KEY_LIST_OF_CREATED_HUBS[3].id} |
       | facilityType | STATION                          |
@@ -68,7 +69,7 @@ Feature: Station to Station Under Same Crossdock Given Crossdock of Station is U
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
@@ -120,10 +121,11 @@ Feature: Station to Station Under Same Crossdock Given Crossdock of Station is U
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When API Operator disable hub with ID "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     And API Operator does the "van-inbound" scan for the shipment
     And Operator go to menu Inter-Hub -> Shipment Management
@@ -137,7 +139,7 @@ Feature: Station to Station Under Same Crossdock Given Crossdock of Station is U
       | sla         | -                                  |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator verify movement event on Shipment Details page using data below:

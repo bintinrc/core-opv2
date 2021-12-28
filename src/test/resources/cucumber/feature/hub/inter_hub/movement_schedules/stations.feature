@@ -144,6 +144,7 @@ Feature: Stations
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:15                              |
+      | daysOfWeek     | all                                |
     Then Operator verify all station schedules are correct from UI
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
@@ -180,6 +181,7 @@ Feature: Stations
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:15                              |
+      | daysOfWeek     | all                                |
     When Operator refresh page
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -193,6 +195,7 @@ Feature: Stations
       | departureTime  | 21:15                              |
       | duration       | 0                                  |
       | endTime        | 00:15                              |
+      | daysOfWeek     | all                                |
     Then Operator verify all station schedules are correct from UI
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
@@ -231,6 +234,7 @@ Feature: Stations
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:15                              |
+      | daysOfWeek     | all                                |
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
