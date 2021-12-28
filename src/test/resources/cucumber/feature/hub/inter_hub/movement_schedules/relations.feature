@@ -63,6 +63,7 @@ Feature: Relations
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -22,8 +22,12 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
 
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 
 public class AddressingDownloadSteps extends AbstractSteps {
 
@@ -32,6 +36,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   private static final String TIME_BRACKET_ALL_DAY = "ALL_DAY";
   private static final String TIME_BRACKET_DAY_SLOT = "DAY_SLOT";
   private static final String TIME_BRACKET_NIGHT_SLOT = "NIGHT_SLOT";
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadSteps.class);
 
   public AddressingDownloadSteps() {
   }
@@ -78,8 +83,10 @@ public class AddressingDownloadSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() -> {
           addressingDownloadPage.filterButton.click();
           pause1s();
-              addressingDownloadPage.selectPresetFilter(filterType);
-              assertTrue(addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH));
+          addressingDownloadPage.selectPresetFilter(filterType);
+          Assertions.assertThat(
+                  addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
+              .isTrue();
         },
         "Clicking Filter for Preset");
 
@@ -274,12 +281,19 @@ public class AddressingDownloadSteps extends AbstractSteps {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     addressingDownloadPage.trackingIdtextArea.sendKeys("," + trackingId);
     String trackingIdsListed = addressingDownloadPage.trackingIdtextArea.getText();
-    assertTrue(!(trackingIdsListed.contains("," + trackingId)));
+    Assertions.assertThat(!(trackingIdsListed.contains("," + trackingId))).isTrue();
   }
 
   @When("Operator clicks on Load Address button")
   public void operatorClicksOnLoadAddressButton() {
-    addressingDownloadPage.loadAddresses.click();
+    retryIfAssertionErrorOccurred(() -> {
+      addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
+          addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
+      addressingDownloadPage.loadAddresses.click();
+      Assertions.assertThat(addressingDownloadPage.addressDownloadTableResult.isDisplayed())
+          .as("Result table is displayed.")
+          .isTrue();
+    }, "Clicking Load Addresses button until table is showing...");
   }
 
   @When("Operator selects preset {string}")
@@ -310,15 +324,18 @@ public class AddressingDownloadSteps extends AbstractSteps {
     Order createdOrder = get(KEY_ORDER_DETAILS);
 
     if (createdOrder == null) {
-      assertTrue(f("Order hasn't been created"), true);
+      LOGGER.error("Order hasn't been created", new NullPointerException());
       return;
     }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.getUTC(createdOrder.getCreatedAt());
-    NvLogger.infof("Order tracking ID: %s", createdOrder.getTrackingId());
-    NvLogger.infof("Order creation time: %s", orderCreationTimestamp);
+    LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
+        createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
+    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
+        orderCreationTimestamp, 30);
 
-    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(orderCreationTimestamp);
+    LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
+    LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
+    LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
     addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
   }
@@ -334,13 +351,16 @@ public class AddressingDownloadSteps extends AbstractSteps {
       boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(createdOrder, waypoint);
 
       if (latencyExists) {
-          LocalDateTime adjustedOCCreatedAt = createdOrder.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(1, ChronoUnit.MINUTES));
-          Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
-        NvLogger.info("There had been creation time latency");
-        NvLogger.infof("Initial crated at: %s", createdOrder.getCreatedAt().toString());
-          createdOrder.setCreatedAt(newCreatedAt);
+        LocalDateTime adjustedOCCreatedAt = addressingDownloadPage.resolveLocalDateTime(
+            createdOrder.getCreatedAt(), "UTC").plus(Duration.of(1, ChronoUnit.MINUTES));
+        Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
+
+        LOGGER.debug("!! There had been creation time latency !!");
+        LOGGER.debug("Creation time is sets from {} to {}", createdOrder.getCreatedAt().toString(),
+            newCreatedAt);
+
+        createdOrder.setCreatedAt(newCreatedAt);
         put(KEY_ORDER_DETAILS, createdOrder);
-        NvLogger.infof("Creation time is adjusted to: %s", createdOrder.getCreatedAt().toString());
       }
   }
 
@@ -381,8 +401,10 @@ public class AddressingDownloadSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() -> {
               addressingDownloadPage.filterButton.click();
               pause1s();
-              addressingDownloadPage.selectPresetFilter(filterType);
-              assertTrue(addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH));
+          addressingDownloadPage.selectPresetFilter(filterType);
+          Assertions.assertThat(
+                  addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
+              .isTrue();
             },
             "Clicking Filter for Preset");
 
@@ -429,8 +451,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
         assertFalse("Invalid time bracket given.", true);
     }
 
-    NvLogger.infof("timeRange: %s", timeRange);
-
     String[] timeRangePoints = timeRange.split("-");
     String startTimeString = timeRangePoints[0];
     String endTimeString = timeRangePoints[1];
@@ -445,10 +465,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
     timeRangeMap.put("end_hour", endTimes[0]);
     timeRangeMap.put("end_minute", endTimes[1]);
 
-    NvLogger.infof("start_hour: %s", timeRangeMap.get("start_hour"));
-    NvLogger.infof("start_minute: %s", timeRangeMap.get("start_minute"));
-    NvLogger.infof("end_hour: %s", timeRangeMap.get("end_hour"));
-    NvLogger.infof("end_minute: %s", timeRangeMap.get("end_minute"));
+    LOGGER.debug("Mapped Time Range: {}", timeRangeMap);
+
     addressingDownloadPage.setPresetCreationTimeDatepicker(timeRangeMap);
     put(KEY_ADDRESSING_CREATION_TIME_FILTER, timeRange);
   }
@@ -459,6 +477,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     boolean isTimeMatch = addressingDownloadPage.compareUpdatedCreationTimeValue(newCreationTime);
 
-    assertTrue("The creation time value is updated.", isTimeMatch);
+    Assertions.assertThat(isTimeMatch).as("The creation time value is updated.").isTrue();
   }
 }

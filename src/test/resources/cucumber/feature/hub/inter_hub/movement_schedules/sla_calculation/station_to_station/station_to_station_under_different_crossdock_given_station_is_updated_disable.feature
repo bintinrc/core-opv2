@@ -78,7 +78,7 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
       | sla         | -                                  |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator verify movement event on Shipment Details page using data below:

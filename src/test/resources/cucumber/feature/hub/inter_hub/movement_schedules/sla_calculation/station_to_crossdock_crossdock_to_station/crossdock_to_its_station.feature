@@ -41,6 +41,7 @@ Feature: Crossdock to it's Station
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     And Operator select "Relations" tab on Movement Management page
     Then Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab
     And Operator verify "Pending" tab is selected on 'Relations' tab

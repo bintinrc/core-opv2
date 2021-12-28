@@ -1,10 +1,11 @@
-@OperatorV2 @OperatorV2Part1 @SalesOps @AllOrdersFees
+@OperatorV2 @OperatorV2Part1 @LaunchBrowser @SalesOps @AllOrdersFees
 Feature: All Orders
 
-  Background: Login to Operator Portal V2  and go to Order Billing Page
+  Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Check Parcel Fees and Total Tax in Edit Order Page - Order is RTS (uid:9f792f94-bbd4-413e-a6e3-41ae93e66544)
+    Given Operator go to menu Shipper -> All Shippers
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-v4-rts-discount-30-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-sop-v4-rts-discount-30-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |

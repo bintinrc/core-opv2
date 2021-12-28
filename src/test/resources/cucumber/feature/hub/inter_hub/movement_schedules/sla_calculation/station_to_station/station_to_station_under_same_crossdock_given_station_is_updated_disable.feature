@@ -53,6 +53,7 @@ Feature: Station to Station Under Same Crossdock Given Station is Updated/Disabl
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When API Operator updates Hub using data below:
       | id           | {KEY_LIST_OF_CREATED_HUBS[1].id} |
       | facilityType | CROSSDOCK                        |
@@ -68,7 +69,7 @@ Feature: Station to Station Under Same Crossdock Given Station is Updated/Disabl
       | sla         | -                                  |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator verify movement event on Shipment Details page using data below:
@@ -125,6 +126,7 @@ Feature: Station to Station Under Same Crossdock Given Station is Updated/Disabl
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When API Operator disable hub with ID "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     And API Operator reloads hubs cache
     And Operator refresh page

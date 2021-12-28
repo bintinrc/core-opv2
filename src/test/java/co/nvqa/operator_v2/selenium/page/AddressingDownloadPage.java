@@ -20,11 +20,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AddressingDownloadPage extends OperatorV2SimplePage {
 
@@ -153,14 +157,19 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
   // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
   private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
-          .getTimezone()));
+      .getTimezone()));
   private static final String DATE_TIME = ZONED_DATE_TIME.format(DATE_FORMAT);
   private static final String CSV_FILENAME_FORMAT = "av-addresses_";
 
-  private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
+  private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern(
+      "yyyy/MM/dd hh:mm");
 
+  public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
   public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
+  public final String SYS_ID = "UTC";
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadPage.class);
 
   public AddressingDownloadPage(WebDriver webDriver) {
     super(webDriver);
@@ -298,7 +307,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(f(PRESET_TO_BE_SELECTED_XPATH, presetName));
-    assertTrue("Preset is Existed", isElementExist(f(PRESET_TO_BE_SELECTED_XPATH, presetName)));
+    Assertions.assertThat(isElementExist(f(PRESET_TO_BE_SELECTED_XPATH, presetName)))
+        .as("Preset is Existed").isTrue();
   }
 
   public void verifiesPresetIsNotExisted(String presetName) {
@@ -308,12 +318,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
-    assertTrue("Preset is Deleted", isElementExist(PRESET_NOT_FOUND_XPATH));
+    Assertions.assertThat(isElementExist(PRESET_NOT_FOUND_XPATH)).as("Preset is Deleted").isTrue();
   }
 
   public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders, String csvTimestamp) {
     String csvContainedFileName = CSV_FILENAME_FORMAT + csvTimestamp;
-    NvLogger.infof("Looking for CSV with Name contained %s", csvContainedFileName);
+    LOGGER.debug("Looking for CSV with Name contained {}", csvContainedFileName);
     String csvFileName = retryIfAssertionErrorOccurred(() ->
                     getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
             "Getting Exact File Name");
@@ -336,7 +346,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         break;
       }
     }
-    assertTrue(f("Tracking ID %s is found", trackingId), isTrackingIdFound);
+
+    Assertions.assertThat(isTrackingIdFound).as(f("Tracking ID %s is found", trackingId)).isTrue();
   }
 
   public void addressUiChecking(String address1, String address2) {
@@ -361,8 +372,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       }
     }
 
-    assertTrue(f("Address 1 %s is found", address1), isAddress1Found);
-    assertTrue(f("Address 2 %s is found", address2), isAddress2Found);
+    Assertions.assertThat(isAddress1Found).as(f("Address 1 %s is found", address1)).isTrue();
+    Assertions.assertThat(isAddress2Found).as(f("Address 2 %s is found", address2)).isTrue();
   }
 
   public void rtsOrderIsIdentified() {
@@ -377,19 +388,30 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         break;
       }
     }
-    assertTrue("RTS Order Identified", isRtsFound);
+
+    Assertions.assertThat(isRtsFound).as("RTS Order Identified").isTrue();
   }
 
   public void setCreatedAtFilter() {
-    Map<String, String> currentTimeRange = generateDateTimeRange(LocalDateTime.now());
+    LocalDateTime currentDateTimeInLocale = new Date().toInstant().atZone(ZoneId.of(SYS_ID))
+        .toLocalDateTime();
+    Map<String, String> currentTimeRange = generateDateTimeRange(currentDateTimeInLocale, 30);
+
+    LOGGER.debug("Preset creation set time to: {}", currentDateTimeInLocale);
+    LOGGER.debug("Preset creation map time to: {}", currentTimeRange);
+
     setPresetCreationTimeDatepicker(currentTimeRange);
   }
 
-  public LocalDateTime getUTC(Date date) {
-    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+  public LocalDateTime resolveLocalDateTime(Date date, String timezone) {
+    int offsetInMinutes =
+        TimeZone.getTimeZone(timezone).getOffset(new Date().getTime()) / 1000 / 60;
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        .plus(Duration.of(offsetInMinutes, ChronoUnit.MINUTES));
   }
 
-  public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime) {
+  public Map<String, String> generateDateTimeRange(LocalDateTime orderCreationLocalDateTime,
+      int rangeInMinutes) {
     /*
      * Returns:
      * - The same value for start date and end date
@@ -417,8 +439,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     String currentMinuteFlooredAsString = currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
     String currentHourAsString = currentHour < 10 ? f("0%d", currentHour) : f("%d", currentHour);
 
-    LocalTime startTime = LocalTime.parse(f("%s:%s", currentHourAsString, currentMinuteFlooredAsString), timeFormatter);
-    LocalTime endTime = startTime.plus(Duration.of(30, ChronoUnit.MINUTES));
+    LocalTime startTime = LocalTime.parse(
+        f("%s:%s", currentHourAsString, currentMinuteFlooredAsString), timeFormatter);
+    LocalTime endTime = startTime.plus(Duration.of(rangeInMinutes, ChronoUnit.MINUTES));
 
     Map<String, String> dateTimeRange = new HashMap<>();
 
@@ -433,7 +456,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     dateTimeRange.put("end_hour", hourFormatter.format(endTime));
     dateTimeRange.put("end_minute", minuteFormatter.format(endTime));
 
-    NvLogger.infof("Set time range to creation time filter to %s:%s - %s:%s", dateTimeRange.get("start_hour"), dateTimeRange.get("start_minute"), dateTimeRange.get("end_hour"), dateTimeRange.get("end_minute"));
+    LOGGER.debug("Set time range to creation time filter to {}:{} - {}:{}",
+        dateTimeRange.get("start_hour"), dateTimeRange.get("start_minute"),
+        dateTimeRange.get("end_hour"), dateTimeRange.get("end_minute"));
 
     return dateTimeRange;
   }
@@ -456,22 +481,18 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
 
     // Select start hour
-    NvLogger.info(startHourPickerXpath);
     click(startHourPickerXpath);
 
     // Select start minute
-    NvLogger.info(startMinutePickerXpath);
     click(startMinutePickerXpath);
 
     click(endTimepickerFieldXpath);
     pause400ms(); // wait for the focus change
 
     // Select end hour
-    NvLogger.info(endHourPickerXpath);
     click(endHourPickerXpath);
 
     // Select end minute
-    NvLogger.info(endMinutePickerXpath);
     click(endMinutePickerXpath);
 
     // Click Ok
@@ -492,6 +513,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     String startMinuteVal = selectedDate.get("start_minute");
     String endHourVal = selectedDate.get("end_hour");
     String endMinuteVal = selectedDate.get("end_minute");
+    LOGGER.debug("Submitting mapped time to datepicker: {}:{} - {}:{}", startHourVal,
+        startMinuteVal, endHourVal, endMinuteVal);
 
     String startYearPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_YEAR, startYearVal);
     String startMonthPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_MONTH, startYearVal, startMonthVal);
@@ -547,17 +570,55 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     waitUntilInvisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
   }
 
-  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
-    List<WebElement> trackingIDEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "tracking_number")));
-    List<WebElement> addressOneEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_one")));
-    List<WebElement> addressTwoEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "address_two")));
-    List<WebElement> createdAtEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "created_at")));
-    List<WebElement> postcodeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "postcode")));
-    List<WebElement> waypointIDEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "waypoint_id")));
-    List<WebElement> latitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "latitude")));
-    List<WebElement> longitudeEl = webDriver.findElements(By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
+  public int getAddressDownloadResultCount() {
+    WebElement resultsTextEl = webDriver.findElement(By.xpath(
+        "//div[contains(@class, 'ant-card-body')]/span/span[contains(text(), 'Showing')]"));
+    String resultText = resultsTextEl.getText();
 
-    LocalDateTime adjustedOCCreatedAt = getUTC(order.getCreatedAt());
+    return Integer.parseInt(resultText.split(" ")[1]);
+  }
+
+  public boolean expandTimeRangeAndReloadAddress(LocalDateTime time) {
+    LocalDateTime shiftedTime = time.plus(Duration.of(-10, ChronoUnit.MINUTES));
+    Map<String, String> expandedTimeRange = generateDateTimeRange(shiftedTime, 60);
+    LOGGER.debug("Time is temporarily set from {} to {}", time, shiftedTime);
+    LOGGER.debug("Mapped expanded time range: {}", expandedTimeRange);
+    setCreationTimeDatepicker(expandedTimeRange);
+    waitUntilInvisibilityOfElementLocated(LOAD_ADDRESS_BUTTON_LOADING_ICON);
+    loadAddresses.click();
+
+    return getAddressDownloadResultCount() > 0;
+  }
+
+  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
+    int resultsCount = getAddressDownloadResultCount();
+    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(), SYS_ID);
+
+    if (resultsCount == 0) {
+      LOGGER.debug(
+          "!! Order's creation time might be in 30 minutes interval. Expanding time range. !!");
+      Assertions.assertThat(expandTimeRangeAndReloadAddress(adjustedOCCreatedAt))
+          .as("Addresses are shown after expanding time range.")
+          .isTrue();
+      resultsCount = getAddressDownloadResultCount();
+    }
+
+    List<WebElement> trackingIDEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "tracking_number")));
+    List<WebElement> addressOneEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "address_one")));
+    List<WebElement> addressTwoEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "address_two")));
+    List<WebElement> createdAtEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "created_at")));
+    List<WebElement> postcodeEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "postcode")));
+    List<WebElement> waypointIDEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "waypoint_id")));
+    List<WebElement> latitudeEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "latitude")));
+    List<WebElement> longitudeEl = webDriver.findElements(
+        By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
 
     String ocTrackingID = order.getTrackingId();
     String ocAddressOne = order.getToAddress1();
@@ -578,32 +639,32 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     verifyChecklist.put(ORDER_LATITUDE_EXISTS, false);
     verifyChecklist.put(ORDER_LONGITUDE_EXISTS, false);
 
-    WebElement resultsTextEl = webDriver.findElement(By.xpath("//div[contains(@class, 'ant-card-body')]/span/span[contains(text(), 'Showing')]"));
-    String resultText = resultsTextEl.getText();
-    int resultsCount = Integer.parseInt(resultText.split(" ")[1]);
     boolean creationTimeLatencyExists = false;
-
     for (int i = 0; i < resultsCount; i++) {
       verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, trackingIDEl.get(i).getText().equals(ocTrackingID));
 
       if (verifyChecklist.get(ORDER_TRACKING_ID_EXISTS)) {
-        verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, addressOneEl.get(i).getText().equals(ocAddressOne));
-        verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, addressTwoEl.get(i).getText().equals(ocAddressTwo));
+        verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS,
+            addressOneEl.get(i).getText().equals(ocAddressOne));
+        verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS,
+            addressTwoEl.get(i).getText().equals(ocAddressTwo));
+        verifyChecklist.put(ORDER_CREATED_AT_EXISTS,
+            createdAtEl.get(i).getText().equals(ocCreatedAt));
 
-        NvLogger.infof("Creation time shown in OpV2: %s", createdAtEl.get(i).getText());
-        NvLogger.infof("Creation time from order creation: %s", ocCreatedAt);
-
-        verifyChecklist.put(ORDER_CREATED_AT_EXISTS, createdAtEl.get(i).getText().equals(ocCreatedAt));
+        LOGGER.debug("Created at from HTML element: {}", createdAtEl.get(i).getText());
+        LOGGER.debug("Created at from formatted order: {}", ocCreatedAt);
 
         // Tolerate creation time latency because the sources are different and sometimes there are time difference
         if (!verifyChecklist.get(ORDER_CREATED_AT_EXISTS)) {
-          LocalDateTime toleratedCreatedAt = adjustedOCCreatedAt.plus(Duration.of(1, ChronoUnit.MINUTES));
+          LocalDateTime toleratedCreatedAt = adjustedOCCreatedAt.plus(
+              Duration.of(1, ChronoUnit.MINUTES));
           String toleratedCreatedAtStr = ADDRESS_DOWNLOAD_DATE_FORMAT.format(toleratedCreatedAt);
           creationTimeLatencyExists = createdAtEl.get(i).getText().equals(toleratedCreatedAtStr);
           verifyChecklist.put(ORDER_CREATED_AT_EXISTS, creationTimeLatencyExists);
         }
 
-        verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
+        verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS,
+            Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
         verifyChecklist.put(ORDER_POSTCODE_EXISTS, postcodeEl.get(i).getText().equals(ocPostcode));
         verifyChecklist.put(ORDER_LATITUDE_EXISTS, Double.parseDouble(latitudeEl.get(i).getText()) == ocLatitude);
         verifyChecklist.put(ORDER_LONGITUDE_EXISTS, Double.parseDouble(longitudeEl.get(i).getText()) == ocLongitude);
@@ -624,11 +685,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
               .collect(Collectors.toMap(map -> map.getKey(), map -> false));
 
       for (String key : verificationFailed.keySet()) {
-        NvLogger.infof("%s checking result is FAILED", key);
+        LOGGER.debug("{} checking result is FAILED", key);
       }
     }
 
-    assertTrue("All data are correct", verificationsPassed == verifyChecklist.size());
+    Assertions.assertThat(verificationsPassed).as("All data are correct")
+        .isEqualTo(verifyChecklist.size());
 
     /*
      * Inform the step that there is latency adjustment to creation time
@@ -637,16 +699,22 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     return creationTimeLatencyExists;
   }
 
-  public void csvDownloadSuccessfullyAndContainsBasicData(Order order, Waypoint waypoint, String preset) {
-    String csvContainedFileName = preset;
-    NvLogger.infof("Looking for CSV with Name contained %s", csvContainedFileName);
+  public String resolveLatLongStringValue(Double latLong) {
+    String stringifiedLatLong = latLong.toString();
+    return (stringifiedLatLong.endsWith(".0")) ? String.valueOf(Math.round(latLong))
+        : stringifiedLatLong;
+  }
+
+  public void csvDownloadSuccessfullyAndContainsBasicData(Order order, Waypoint waypoint,
+      String preset) {
+    LOGGER.debug("Looking for CSV with Name containing {}", preset);
     String csvFileName = retryIfAssertionErrorOccurred(() ->
-                    getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
-            "Getting Exact File Name");
+            getContainedFileNameDownloadedSuccessfully(preset),
+        "Getting Exact File Name");
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
 
-    LocalDateTime orderCreationTimestamp = getUTC(order.getCreatedAt());
+    LocalDateTime orderCreationTimestamp = resolveLocalDateTime(order.getCreatedAt(), SYS_ID);
 
     verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
     verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
@@ -654,8 +722,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     verifyFileDownloadedSuccessfully(csvFileName, dtf.format(orderCreationTimestamp));
     verifyFileDownloadedSuccessfully(csvFileName, order.getToPostcode());
     verifyFileDownloadedSuccessfully(csvFileName, waypoint.getId().toString());
-    verifyFileDownloadedSuccessfully(csvFileName, waypoint.getLatitude().toString());
-    verifyFileDownloadedSuccessfully(csvFileName, waypoint.getLongitude().toString());
+    verifyFileDownloadedSuccessfully(csvFileName,
+        resolveLatLongStringValue(waypoint.getLatitude()));
+    verifyFileDownloadedSuccessfully(csvFileName,
+        resolveLatLongStringValue(waypoint.getLongitude()));
   }
 
   public void setNewShipperOnShipperFilter(String newShipper) {

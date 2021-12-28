@@ -22,7 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_ORIGIN_HUB;
@@ -33,6 +38,7 @@ import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.Schedules
 @ScenarioScoped
 public class MovementManagementSteps extends AbstractSteps {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(MovementManagementSteps.class);
   private MovementManagementPage movementManagementPage;
   private static final String HUB_CD_CD = "CD->CD";
   private static final String HUB_CD_ITS_ST = "CD->its ST";
@@ -89,6 +95,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("Movement Management page is loaded")
   public void movementManagementPageIsLoaded() {
+    movementManagementPage.addSchedule.waitUntilVisible(10);
     movementManagementPage.switchTo();
     movementManagementPage.addSchedule.waitUntilClickable(60);
   }
@@ -101,7 +108,7 @@ public class MovementManagementSteps extends AbstractSteps {
       try {
         operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
         operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("Create");
+        operatorClickButtonOnAddMovementScheduleDialog("OK");
         pause6s();
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
@@ -166,8 +173,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.relationsTable.rows.get(0).editRelations.click();
         movementManagementPage.editStationRelationsModal.waitUntilVisible();
         retryIfRuntimeExceptionOccurred(() ->
-                movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
-            2);
+                movementManagementPage.editStationRelationsModal.fill(crossdockHub),2);
         movementManagementPage.editStationRelationsModal.save.click();
         movementManagementPage.successCreateRelation.waitUntilVisible();
         movementManagementPage.successCreateRelation.waitUntilInvisible();
@@ -227,24 +233,37 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
-    final Map<String, String> finalData = resolveKeyValues(data);
-    StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
-    movementManagementPage.stationsTab.click();
-    movementManagementPage.addSchedule.click();
-    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-    movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
-    putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
-    if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
-      movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
-      StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
-          finalData);
-      secondStationMovementSchedule.setDepartureTime("21:15");
-      movementManagementPage.addStationMovementScheduleModal
-          .fillAnother(secondStationMovementSchedule);
-      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
-    }
-    movementManagementPage.addStationMovementScheduleModal.create.click();
-    movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try{
+        final Map<String, String> finalData = resolveKeyValues(data);
+        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+        putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+        if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
+          movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
+          StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
+                  finalData);
+          secondStationMovementSchedule.setDepartureTime("21:15");
+          movementManagementPage.addStationMovementScheduleModal.fillAnother(secondStationMovementSchedule, "1");
+          putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+        }
+        movementManagementPage.addStationMovementScheduleModal.create.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+      }catch (Exception ex){
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addSchedule.waitUntilClickable(60);
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 2);
+
   }
 
   @And("Operator load schedules on Movement Management page using data below:")
@@ -308,8 +327,9 @@ public class MovementManagementSteps extends AbstractSteps {
   @And("Operator click {string} button on Add Movement Schedule dialog")
   public void operatorClickButtonOnAddMovementScheduleDialog(String buttonName) {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
-      case "create":
+      case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
+        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();

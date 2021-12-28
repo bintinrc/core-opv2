@@ -59,6 +59,7 @@ Feature: Crossdock to other station belong to another crossdock
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When Operator select "Stations" tab on Movement Management page
     And Operator load schedules on Movement Management page using data below:
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
@@ -151,6 +152,7 @@ Feature: Crossdock to other station belong to another crossdock
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -222,6 +224,7 @@ Feature: Crossdock to other station belong to another crossdock
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management

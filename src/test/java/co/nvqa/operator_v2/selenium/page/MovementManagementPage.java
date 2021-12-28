@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -13,22 +14,16 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextWithLabel;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-
 /**
  * @author Sergey Mishanin
  */
@@ -73,7 +68,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Edit Filters']")
   public Button editFilters;
 
-  @FindBy(xpath = "//div[contains(@class,'StationMovementTableContainer')]//table")
+  @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<RelationRow> relationsTable;
 
   @FindBy(xpath = "(//th//input)[1]")
@@ -252,8 +247,11 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(id = "crossdockHubId")
-    public AntSelect crossdockHub;
+    public String crossdockHub = "crossdock_hub_id";
+
+    public void fill(String value) {
+      sendKeysAndEnterById(crossdockHub, value);
+    }
 
     @FindBy(xpath = "//button[.='Save']")
     public Button save;
@@ -266,10 +264,10 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(xpath = ".//button[.='Add Another Schedule']")
+    @FindBy(xpath = ".//button[.='Add another schedule']")
     public Button addAnotherSchedule;
 
-    @FindBy(xpath = ".//button[.='Create']")
+    @FindBy(xpath = ".//button[.='OK']")
     public Button create;
 
     @FindBy(css = "div.has-error")
@@ -281,7 +279,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     public void fill(MovementSchedule schedule) {
       for (int i = 1; i <= schedule.getSchedules().size(); i++) {
         ScheduleForm scheduleForm = getScheduleForm(i);
-        scheduleForm.fill(schedule.getSchedules().get(i - 1));
+        scheduleForm.fill(schedule.getSchedules().get(i - 1), i-1);
         if (i < schedule.getSchedules().size()) {
           addAnotherSchedule.click();
         }
@@ -319,54 +317,89 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       @FindBy(xpath = "(./following-sibling::div//span[@class='ant-time-picker'])[2]")
       public AntTimePicker durationTime;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='1']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='1']")
       public CheckBox monday;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='2']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='2']")
       public CheckBox tuesday;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='3']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='3']")
       public CheckBox wednesday;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='4']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='4']")
       public CheckBox thursday;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='5']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='5']")
       public CheckBox friday;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='6']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='6']")
       public CheckBox saturday;
 
-      @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='7']")
+      @FindBy(xpath = "//div//input[@type='checkbox'][@value='7']")
       public CheckBox sunday;
 
       @FindBy(xpath = "./following-sibling::div//textarea[contains(@id,'comment')]")
       public TextBox comment;
 
-      public void fill(MovementSchedule.Schedule schedule) {
+      public String scheduleOriginHubId = "schedules_%s_originHub";
+      public String scheduleDestinationHubId = "schedules_%s_destinationHub";
+      public String scheduleMovementTypeId = "schedules_%s_movementType";
+      public String scheduleStartTimeId = "schedules_%s_startTime";
+      public String scheduleDepartureTimeXpath = "//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
+      public String scheduleDurationDayId = "schedules_%s_durationDay";
+      public String scheduleDurationTimeId = "schedules_%s_durationTime";
+      public String scheduleDurationTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[%s]//div[text()= '%s']";
+      public String scheduleDaysId = "schedules_%s_days";
+      public String scheduleDriversId = "schedules_%s_drivers";
+      public String scheduleCommentId = "schedules_%s_comment";
+
+      public void callJavaScriptExecutor(String argument, WebElement element){
+        JavascriptExecutor jse = ((JavascriptExecutor)getWebDriver());
+        jse.executeScript(argument, element);
+      }
+
+      public void fill(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (StringUtils.isNotBlank(schedule.getOriginHub())) {
-          originHub.selectValue(schedule.getOriginHub());
+          sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.getOriginHub());
         }
         if (StringUtils.isNotBlank(schedule.getDestinationHub())) {
-          destinationHub.selectValue(schedule.getDestinationHub());
+          sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), schedule.getDestinationHub());
         }
         if (StringUtils.isNotBlank(schedule.getMovementType())) {
-          movementType.selectValue(schedule.getMovementType());
+          sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), schedule.getMovementType());
         }
         if (StringUtils.isNotBlank(schedule.getDepartureTime())) {
-          departureTime.setValue(schedule.getDepartureTime());
+          String[] hourtime = schedule.getDepartureTime().split(":");
+          TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+          String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
+          String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
+          moveToElementWithXpath("//div[@class='ant-picker-content']//ul[1]");
+          TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+          moveToElementWithXpath("//div[@class='ant-picker-content']//ul[2]");
+          TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+          TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
         }
         if (schedule.getDurationDays() != null) {
-          durationDays.setValue(schedule.getDurationDays());
+          TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+          TestUtils.findElementAndClick("//div[@title='"+schedule.getDurationDays()+"']", "xpath", getWebDriver());
         }
         if (StringUtils.isNotBlank(schedule.getDurationTime())) {
-          durationTime.setValue(schedule.getDurationTime());
+          String[] hourtime = schedule.getDurationTime().split(":");
+          TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
+          String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
+          String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
+          moveToElementWithXpath(hour);
+          TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+          moveToElementWithXpath(time);
+          TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+          TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
         }
         if (CollectionUtils.isNotEmpty(schedule.getDaysOfWeek())) {
           setDaysOfWeek(schedule.getDaysOfWeek());
         }
         if (StringUtils.isNotBlank(schedule.getComment())) {
-          comment.setValue(schedule.getComment());
+          WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
+          element.sendKeys(schedule.getComment());
         }
       }
 
@@ -383,100 +416,138 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   }
 
   public static class AddStationMovementScheduleModal extends AntModal {
-
+    private AbstractTable abstractUtilities;
     public AddStationMovementScheduleModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(xpath = ".//button[.='Add Another Schedule']")
+    public String weekdaysXpath = "//div[@id='schedules_%s_days']//input[@type='checkbox'][@value='%s']";
+    public void setDaysOfWeek(Set<String> daysOfWeek, String id) {
+      if (daysOfWeek.contains("monday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 1), "xpath", getWebDriver());
+      if (daysOfWeek.contains("tuesday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 2), "xpath", getWebDriver());
+      if (daysOfWeek.contains("wednesday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 3), "xpath", getWebDriver());
+      if (daysOfWeek.contains("thursday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 4), "xpath", getWebDriver());
+      if (daysOfWeek.contains("friday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 5), "xpath", getWebDriver());
+      if (daysOfWeek.contains("saturday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 6), "xpath", getWebDriver());
+      if (daysOfWeek.contains("sunday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 7), "xpath", getWebDriver());
+    }
+
+    public String scheduleOriginHubId = "schedules_%s_originHub";
+    public String scheduleDestinationHubId = "schedules_%s_destinationHub";
+    public String scheduleMovementTypeId = "schedules_%s_movementType";
+    public String scheduleStartTimeId = "schedules_%s_startTime";
+    public String scheduleDepartureTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[%s]//div[text()= '%s']";//"//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
+    public String scheduleDurationDayId = "schedules_%s_durationDay";
+    public String scheduleDurationTimeId = "schedules_%s_durationTime";
+    public String scheduleDurationTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[%s]//div[text()= '%s']";
+    public String scheduleCommentId = "schedules_%s_comment";
+
+    @FindBy(xpath = ".//button[.='Add another schedule']")
     public Button addAnotherSchedule;
 
-    @FindBy(id = "crossdock_id")
-    public AntSelect crossdockHub;
+    public String crossdockHub = "crossdockHubAddModal";
 
-    @FindBy(css = "[id*='origin_hub_id']")
-    public AntSelect originHub;
-
-    @FindBy(css = "[id*='destination_hub_id']")
-    public AntSelect destinationHub;
-
-    @FindBy(css = "[id*='movement_type']")
-    public AntSelect movementType;
-
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
-    public AntTimePicker departureTime;
-
-    @FindBy(css = "input[id*='duration_day']")
-    public TextBox duration;
-
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
-    public AntTimePicker endTime;
-
-    @FindBy(css = "input[id*='comment']")
-    public TextBox comment;
-
-    @FindBy(xpath = ".//button[.='Create']")
+    @FindBy(xpath = ".//button[.='OK']")
     public Button create;
 
     @FindBy(xpath = ".//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "(.//div[contains(@id,'origin_hub')])[2]")
-    public AntSelect originHubSecond;
+    public void fill(StationMovementSchedule stationMovementSchedule, String scheduleNo) {
+      if(scheduleNo.equals("0")){
+        Optional.ofNullable(stationMovementSchedule.getCrossdockHub()).ifPresent(value -> sendKeysAndEnterById(crossdockHub, value));
+      }
 
-    @FindBy(xpath = "(.//div[contains(@id,'destination_hub')])[2]")
-    public AntSelect destinationHubSecond;
+      Optional.ofNullable(stationMovementSchedule.getOriginHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), value));
 
-    @FindBy(xpath = "(.//div[contains(@id,'movement_type')])[2]")
-    public AntSelect movementTypeSecond;
+      Optional.ofNullable(stationMovementSchedule.getDestinationHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), value));
 
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[3]")
-    public AntTimePicker departureTimeSecond;
+      Optional.ofNullable(stationMovementSchedule.getMovementType()).ifPresent(value -> sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), value));
 
-    @FindBy(xpath = "(.//span//input[contains(@id,'duration_day')])[2]")
-    public TextBox durationSecond;
+      if (StringUtils.isNotBlank(stationMovementSchedule.getDepartureTime())) {
+        String[] hourtime = stationMovementSchedule.getDepartureTime().split(":");
+        TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+        String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
+        String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
+        moveToElementWithXpath(hour);
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+        moveToElementWithXpath(time);
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
+      }
 
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[4]")
-    public AntTimePicker endTimeSecond;
+      if (stationMovementSchedule.getDuration() != null) {
+        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+        TestUtils.findElementAndClick("//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath", getWebDriver());
+      }
 
-    @FindBy(xpath = "(.//textarea[contains(@id,comment)])[2]")
-    public TextBox commentSecond;
+      if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
+        String[] hourtime = stationMovementSchedule.getEndTime().split(":");
+        TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
+        String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
+        String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
+        moveToElementWithXpath(hour);
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+        moveToElementWithXpath(time);
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
+      }
 
-    public void fill(StationMovementSchedule stationMovementSchedule) {
-      Optional.ofNullable(stationMovementSchedule.getCrossdockHub())
-          .ifPresent(value -> crossdockHub.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getOriginHub())
-          .ifPresent(value -> originHub.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getDestinationHub())
-          .ifPresent(value -> destinationHub.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getMovementType())
-          .ifPresent(value -> movementType.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getDepartureTime())
-          .ifPresent(value -> departureTime.setValue(value));
-      Optional.ofNullable(stationMovementSchedule.getDuration())
-          .ifPresent(value -> duration.setValue(value));
-      Optional.ofNullable(stationMovementSchedule.getEndTime())
-          .ifPresent(value -> endTime.setValue(value));
-      Optional.ofNullable(stationMovementSchedule.getComment())
-          .ifPresent(value -> comment.setValue(value));
+      if (CollectionUtils.isNotEmpty(stationMovementSchedule.getDaysOfWeek())) {
+        setDaysOfWeek(stationMovementSchedule.getDaysOfWeek(), scheduleNo);
+      }
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.getComment())) {
+        WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
+        element.sendKeys(stationMovementSchedule.getComment());
+      }
     }
 
-    public void fillAnother(StationMovementSchedule stationMovementSchedule) {
-      Optional.ofNullable(stationMovementSchedule.getOriginHub())
-          .ifPresent(value -> originHubSecond.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getDestinationHub())
-          .ifPresent(value -> destinationHubSecond.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getMovementType())
-          .ifPresent(value -> movementTypeSecond.selectValue(value));
-      Optional.ofNullable(stationMovementSchedule.getDepartureTime())
-          .ifPresent(value -> departureTimeSecond.setValue(value));
-      Optional.ofNullable(stationMovementSchedule.getDuration())
-          .ifPresent(value -> durationSecond.setValue(value));
-      Optional.ofNullable(stationMovementSchedule.getEndTime())
-          .ifPresent(value -> endTimeSecond.setValue(value));
-      Optional.ofNullable(stationMovementSchedule.getComment())
-          .ifPresent(value -> commentSecond.setValue(value));
+    public void fillAnother(StationMovementSchedule stationMovementSchedule, String scheduleNo) {
+      Optional.ofNullable(stationMovementSchedule.getOriginHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), value));
+
+      Optional.ofNullable(stationMovementSchedule.getDestinationHub()).ifPresent(value -> sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), value));
+
+      Optional.ofNullable(stationMovementSchedule.getMovementType()).ifPresent(value -> sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), value));
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.getDepartureTime())) {
+        String[] hourtime = stationMovementSchedule.getDepartureTime().split(":");
+        TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+        String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
+        String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
+        moveToElementWithXpath(hour);
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+        moveToElementWithXpath(time);
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
+      }
+
+      if (stationMovementSchedule.getDuration() != null) {
+        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath", getWebDriver());
+      }
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
+        String[] hourtime = stationMovementSchedule.getEndTime().split(":");
+        TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
+        String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
+        String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
+        moveToElementWithXpath(hour);
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+        moveToElementWithXpath(time);
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
+      }
+
+      if (CollectionUtils.isNotEmpty(stationMovementSchedule.getDaysOfWeek())) {
+        setDaysOfWeek(stationMovementSchedule.getDaysOfWeek(), scheduleNo);
+      }
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.getComment())) {
+        WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
+        element.sendKeys(stationMovementSchedule.getComment());
+      }
     }
   }
 
@@ -498,7 +569,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "crossdockHubName")
     public PageElement crossdock;
 
-    @FindBy(css = "td.actions a")
+    @FindBy(xpath = "//td//button[.='Edit Relations']")
     public PageElement editRelations;
   }
 

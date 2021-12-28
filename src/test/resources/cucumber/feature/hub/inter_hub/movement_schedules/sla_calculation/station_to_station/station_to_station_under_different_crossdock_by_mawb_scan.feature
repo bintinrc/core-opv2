@@ -78,6 +78,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
+      | daysOfWeek     | all                                |
     And Operator adds new Station Movement Schedule on Movement Management page using data below:
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[4].name} |
@@ -86,6 +87,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | departureTime  | 20:15                              |
       | duration       | 0                                  |
       | endTime        | 00:30                              |
+      | daysOfWeek     | all                                |
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:
       | label      | Into Van                         |
@@ -103,7 +105,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | sla         | {{next-3-days-yyyy-MM-dd}} 20:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
@@ -183,7 +185,7 @@ Feature: Station to Station Under Different Crossdock by MAWB Scan
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:

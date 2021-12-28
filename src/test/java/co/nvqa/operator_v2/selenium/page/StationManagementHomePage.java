@@ -6,11 +6,8 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.Comparators;
-import io.cucumber.java.sl.In;
-import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindAll;
@@ -54,6 +51,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
   private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
+  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[@class='filter-row']//div[text()='%s']";
 
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
@@ -110,8 +108,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[text()='Save & Proceed']]")
   private PageElement saveAndProceed;
 
-  @FindBy(css = "div[class*='eta-calculated'] div[class$='selected-value']")
-  private List<PageElement> selectedEta;
+  @FindBy(xpath = "//div[@*='suggestedEtas']//div[contains(@class,'selected-value')]")
+  private List<PageElement> confirmedEtas;
 
   @FindBy(css = "div[class$='base-row'] input[type='checkbox']")
   private List<PageElement> checkboxInRow;
@@ -130,6 +128,39 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   @FindBy(css = "div[class*='footer-row']")
   private PageElement footerRow;
+
+  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+  private List<PageElement> columnNames;
+
+  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+  private List<PageElement> columnValues;
+
+  @FindBy(css = "div[class*='selected-value']")
+  private PageElement headerHubValue;
+
+  @FindBy(css = "div.ant-notification-notice-message")
+  private PageElement toastMessage;
+
+  @FindBy(xpath = "//div[@*='suggestedEtas']//*[@role='combobox']")
+  public AntSelect2 suggestedEtas;
+
+  @FindBy(css = "div[class*='common-date'] [role='combobox']")
+  public AntSelect2 commonSuggestedEtas;
+
+  @FindAll(@FindBy(css = "div[class*='base-row'] input[type='checkbox']"))
+  private List<PageElement> modalCheckboxes;
+
+  @FindAll(@FindBy(css = "div[class*='base-row'] span[class*='checked']"))
+  private List<PageElement> checkboxChecked;
+
+  @FindAll(@FindBy(css = "div[class*='-checked'][class$='filter']"))
+  private List<PageElement> filterApplied;
+
+  @FindBy(css = "div.sfld-alert")
+  public PageElement sfldAlert;
+
+  @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
+  public PageElement downloadFailedEtas;
 
   public void switchToStationHomeFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -197,11 +228,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     waitWhilePageIsLoading();
     pause5s();
     try {
-        if (sfldTicketCount.size() > 0) {
-            actualCount = Integer.parseInt(sfldTicketCount.get(0).getText().trim());
-        } else {
-            actualCount = 0;
-        }
+      if (sfldTicketCount.size() > 0) {
+        actualCount = Integer.parseInt(sfldTicketCount.get(0).getText().trim());
+      } else {
+        actualCount = 0;
+      }
       return actualCount;
     } catch (Exception e) {
       return -1;
@@ -276,6 +307,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       modalCloseIcon.get(0).click();
     }
   }
+
   public void validateHubURLPath(String hubId) {
     String expectedURLPath = f(STATION_HUB_URL_PATH, hubId);
     Assert.assertTrue("Assert that URL path is updated on selecting the hub",
@@ -359,9 +391,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     });
   }
 
-  @FindBy(css = "div.ant-notification-notice-message")
-  private PageElement toastMessage;
-
   public void verifyHubNotFoundToast(String message) {
     if (pageFrame.size() > 0) {
       switchToStationHomeFrame();
@@ -369,9 +398,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(hubs.getWebElement());
     waitUntilVisibilityOfToastReact(message);
   }
-
-  @FindBy(css = "div[class*='selected-value']")
-  private PageElement headerHubValue;
 
   public void validateHeaderHubValue(String expectedHub) {
     refreshPage_v1();
@@ -584,7 +610,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
 
-
   public void verifyPagePollingTimeInfo(StationLanguage.PollingTimeText language) {
     if (pageFrame.size() > 0) {
       switchToStationHomeFrame();
@@ -624,12 +649,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     return tabContent;
   }
 
-  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
-  private List<PageElement> columnNames;
-
-  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
-  private List<PageElement> columnValues;
-
   public Map<String, String> getResultGridContent() {
     Map<String, String> gridContent = new HashMap<String, String>();
     String columnName, columnValue;
@@ -661,28 +680,29 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     return gridContent;
   }
 
-  public void openOrdersWithUnconfirmedTickets(){
+  public void openOrdersWithUnconfirmedTickets() {
     waitWhilePageIsLoading();
     alarmBell.click();
   }
 
-  public void stationConfirmedEtaEmpty(){
+  public void stationConfirmedEtaEmpty() {
     waitWhilePageIsLoading();
-    Assert.assertTrue("Assert that ETA Calculated field is empty", selectedEta.size() == 0);
+    Assert.assertTrue("Assert that ETA Calculated field is empty", confirmedEtas.size() == 0);
   }
 
-  public void confirmSaveAndConfirmDisabled(){
+  public void confirmSaveAndConfirmDisabled() {
     waitWhilePageIsLoading();
-    Assert.assertTrue("Assert that Save and Continue button is disabled", disabledSaveAndProceed.size() > 0);
+    Assert.assertTrue("Assert that Save and Continue button is disabled",
+        disabledSaveAndProceed.size() > 0);
   }
 
-  public void confirmCheckboxDisplayed(){
+  public void confirmCheckboxDisplayed() {
     waitWhilePageIsLoading();
     Assert.assertTrue("Assert that there is no checkbox for sfld parcels when eta has passed"
         , checkboxInRow.size() == 0);
   }
 
-  public void verifyFsrInUrgentTasks(String expectedText){
+  public void verifyFsrInUrgentTasks(String expectedText) {
     waitWhilePageIsLoading();
     String actualText = fsrText.getText().trim();
     String actualCount = fsrCount.getText().trim();
@@ -690,11 +710,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         , expectedText.contentEquals(actualText));
     int alarmCount = getSfldParcelCount();
     int actualBannerCount = Integer.parseInt(actualCount);
-    Assert.assertTrue(f("Assert that no of fsr parcels's eta that needs to be confirmed matches ", expectedText)
+    Assert.assertTrue(
+        f("Assert that no of fsr parcels's eta that needs to be confirmed matches ", expectedText)
         , alarmCount == actualBannerCount);
   }
 
-  public void openModalByClickingArrow(String modalName, String arrowText){
+  public void openModalByClickingArrow(String modalName, String arrowText) {
     waitWhilePageIsLoading();
     String titleXpath = f(MODAL_CONTENT_XPATH, modalName);
     WebElement arrow = getWebDriver().findElement(
@@ -718,7 +739,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
     sortFields.get(0).click();
     waitWhilePageIsLoading();
-    if(sortingOrder.equalsIgnoreCase("DESCENDING_ORDER")){
+    if (sortingOrder.equalsIgnoreCase("DESCENDING_ORDER")) {
       sortFields.get(0).click();
       waitWhilePageIsLoading();
     }
@@ -735,10 +756,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
           f("Assert that the column %s to be sorted is displayed on the screen", columnName),
           results.size() > 0);
     }
-    for(WebElement header : headerFields){
+    for (WebElement header : headerFields) {
       String headerName = header.getText().trim().toLowerCase();
       columnIndex++;
-      if(headerName.contains(columnName.toLowerCase())){
+      if (headerName.contains(columnName.toLowerCase())) {
         break;
       }
     }
@@ -755,10 +776,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
-    if("Time in Hub".contentEquals(columnName)){
+    if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
-        value = value.replaceAll(" hrs ",".").replaceAll("mins","");
+        value = value.replaceAll(" hrs ", ".").replaceAll("mins", "");
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(
@@ -772,19 +793,65 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         Comparators.isInOrder(colData, Comparator.naturalOrder()));
   }
 
-  @FindBy(xpath = "//div[@*='suggestedEtas']//*[@role='combobox']")
-  public AntSelect2 suggestedEtas;
 
-  public void selectSuggestedEtaAndProceed(String suggestedEta){
+  public void selectSuggestedEtaAndProceed(String suggestedEta) {
     waitWhilePageIsLoading();
     suggestedEtas.selectValue(suggestedEta);
     saveAndProceed.click();
   }
 
-  public void verifyToastMessage(String message){
+  public void verifyToastMessage(String message) {
     waitUntilVisibilityOfElementLocated(toastMessage.getWebElement());
     String toastMsg = toastMessage.getText().trim();
-    Assert.assertTrue(f("Assert that the toast message %s is displayed as expected! ", message), toastMsg.contentEquals(message));
+    Assert.assertTrue(f("Assert that the toast message %s is displayed as expected! ", message),
+        toastMsg.contentEquals(message));
   }
 
+  public void selectMultipleRecordsToConfirmEta(int countToSelect) {
+    scrollIntoView(footerRow.getWebElement());
+    pause3s();
+    int iterator = countToSelect;
+    int index = modalCheckboxes.size()-countToSelect;
+    while(iterator > 0){
+      pause2s();
+      modalCheckboxes.get(index).click();
+      index++;
+      iterator--;
+    }
+    Assertions.assertThat(countToSelect)
+        .as("Assert that the number of records selected is equal to the expected!")
+        .isEqualTo(checkboxChecked.size());
+  }
+
+  public void verifySfldAlertMessage(String expectedMsg){
+    sfldAlert.waitUntilVisible();
+    String actualMsg = sfldAlert.getText();
+    Assertions.assertThat(expectedMsg)
+        .as("Assert that the number of records selected is equal to the expected!")
+        .isEqualTo(actualMsg);
+  }
+
+  public void selectCommonSuggestedEtaAndProceed(String suggestedEta) {
+    waitWhilePageIsLoading();
+    commonSuggestedEtas.selectValue(suggestedEta);
+    saveAndProceed.click();
+  }
+
+
+  public void downloadFailedEtas() {
+    waitWhilePageIsLoading();
+    pause2s();
+    downloadFailedEtas.click();
+  }
+
+  public void applyQuickFilter(String filter) {
+    waitWhilePageIsLoading();
+    String filterXpath = f(QUICK_FILTER_BY_TEXT_XPATH, filter);
+    WebElement quickFilter = getWebDriver().findElement(
+        By.xpath(filterXpath));
+    quickFilter.click();
+    pause2s();
+    Assert.assertTrue(f("Assert that the filter %s is applied", filter),
+        filterApplied.size() > 0 );
+  }
 }

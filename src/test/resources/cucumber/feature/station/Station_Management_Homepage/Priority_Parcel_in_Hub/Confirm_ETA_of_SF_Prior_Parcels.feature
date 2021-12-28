@@ -341,6 +341,142 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubName      | TileName                | ModalName                                    | SlackMessageContent | ColumnName     |
       | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | ETA Calculated |
 
+  Scenario Outline: Update Confirmed ETA for Unacknowledged SFLD Parcel (uid:1ed56a8f-fb7d-482d-b4ee-67fb63d8028f)
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
+    And Operator get the count from the tile: "<TileName>"
+    And Operator get sfld ticket count for the priority parcels
+    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
+    And Operator clicks the alarm button to view parcels with sfld tickets
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID           |
+      | Address               |
+      | ETA Calculated        |
+      | Station Confirmed ETA |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID                     |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd}  |
+    And Operator confirms that station confirmed eta field is empty
+    And Operators chooses the date:"{gradle-next-2-day-yyyy-MM-dd}" as station confirmed eta and proceed
+    And Operators verifies that the toast message: "<ToastMessage>" has displayed
+    And Operator verifies that the sfld ticket count has decreased by 1
+    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
+    And DB Operator verifies that the following details are displaying in sfld_tickets table in station db:
+      | status             | MANUAL_CONFIRMED                 |
+      | confirmed_eta      | {gradle-next-2-day-yyyy-MM-dd}   |
+      | confirmation_time  | {gradle-current-date-yyyy-MM-dd} |
+      | acknowledger_email | {operator-portal-uid}            |
+
+    Examples:
+      | HubName      | TileName                | ModalName                                    | SlackMessageContent | FSRParcelText                              | ToastMessage                     |
+      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | FSR parcels' ETA that need to be confirmed | Successfully confirmed 1 ETA(s)! |
+
+  Scenario Outline: Bulk Update Confirmed ETA for Multiple Unacknowledged SFLD Parcel (uid:d395ac0f-61f5-464d-b2ce-3de3d0668273)
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
+    And Operator get the count from the tile: "<TileName>"
+    And Operator get sfld ticket count for the priority parcels
+    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
+    And Operator clicks the alarm button to view parcels with sfld tickets
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID           |
+      | Address               |
+      | ETA Calculated        |
+      | Station Confirmed ETA |
+    And Operator selects the following values in the modal pop up
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator verifies that the following details are displayed on the modal
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator confirms that station confirmed eta field is empty
+    And Operator selects <NoOfRecords> records that have same eta calculated from the modal
+    And Operator verifies that the text: "Confirm the ETA for the <NoOfRecords> parcel(s) selected" is displayed
+    And Operator confirms the common eta as:"{gradle-next-1-day-yyyy-MM-dd}" and proceed
+    And Operators verifies that the toast message: "Successfully confirmed <NoOfRecords> ETA(s)!" has displayed
+    And Operator verifies that the sfld ticket count has decreased by <NoOfRecords>
+    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
+    And DB Operator verifies that the following details are displaying in sfld_tickets table in station db:
+      | status             | MANUAL_CONFIRMED                 |
+      | confirmed_eta      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | confirmation_time  | {gradle-current-date-yyyy-MM-dd} |
+      | acknowledger_email | {operator-portal-uid}            |
+
+    Examples:
+      | HubName      | TileName                | ModalName                                    | SlackMessageContent | NoOfRecords | FSRParcelText                              |
+      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 2           | FSR parcels' ETA that need to be confirmed |
+
+  Scenario Outline: Partial Success Upon Bulk Update Confirmed ETA for Unacknowledged SFLD Parcel (uid:27d29f5d-9948-47f9-8bee-984174e922bc)
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
+    And Operator get the count from the tile: "<TileName>"
+    And Operator get sfld ticket count for the priority parcels
+    And Operator clicks the alarm button to view parcels with sfld tickets
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID           |
+      | Address               |
+      | ETA Calculated        |
+      | Station Confirmed ETA |
+    And Operator selects the following values in the modal pop up
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator verifies that the following details are displayed on the modal
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator confirms that station confirmed eta field is empty
+    And Operator selects <NoOfRecords> records that have same eta calculated from the modal
+    And Operator verifies that the text: "Confirm the ETA for the <NoOfRecords> parcel(s) selected" is displayed
+    And DB Operator updates the status of sfld ticket as "<Status>" for the created order directly
+    And Operator confirms the common eta as:"{gradle-next-1-day-yyyy-MM-dd}" and proceed
+    And Operator verifies that the modal: "<FailureModal>" is displayed
+    And Operator downloads the records with failed etas by clicking the download button
+    And Operator verifies that the valid error message is updated on the downloaded file
+    And Operator verifies that the sfld ticket count has decreased by <NoOfRecords>
+    And DB Operator verifies that the following details are displaying in sfld_tickets table in station db:
+      | status | MANUAL_CONFIRMED |
+
+    Examples:
+      | HubName      | TileName                | ModalName                                    | SlackMessageContent | NoOfRecords | Status           | FailureModal                     |
+      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 2           | MANUAL_CONFIRMED | Some Parcels failed to save ETAs |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
