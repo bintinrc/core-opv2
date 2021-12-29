@@ -17,7 +17,7 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
   private static final DateTimeFormatter FE_FORMATTER = DateTimeFormatter
       .ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
   private static final DateTimeFormatter BE_FORMATTER = DateTimeFormatter
-      .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+      .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
 
   private String shipmentType;
   private Long id;
