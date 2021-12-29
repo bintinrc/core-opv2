@@ -47,7 +47,7 @@ Feature: Station to it's Crossdock
     And Operator verify "Pending" tab is selected on 'Relations' tab
     And Operator verify all Crossdock Hub in Pending tab have "Unfilled" value
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
-    When Operator select "Completed" tab on Movement Management page
+    When Operator select "Complete" tab on Movement Management page
     And Operator verify all Crossdock Hub of all listed Stations already defined
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
     When Operator select "Stations" tab on Movement Management page

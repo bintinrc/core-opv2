@@ -512,7 +512,7 @@ public class MovementManagementSteps extends AbstractSteps {
       case "pending":
         movementManagementPage.pendingTab.click();
         break;
-      case "completed":
+      case "complete":
         movementManagementPage.completedTab.click();
         break;
       case "all":
@@ -527,7 +527,7 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorVerifyTabsAreDisplayedOnRelationsTab() {
     assertTrue("All tab is displayed", movementManagementPage.allTab.isDisplayedFast());
     assertTrue("Pending tab is displayed", movementManagementPage.pendingTab.isDisplayedFast());
-    assertTrue("Completed tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
+    assertTrue("Complete tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
   }
 
   @When("^Operator verify \"(.+)\" tab is selected on 'Relations' tab$")
