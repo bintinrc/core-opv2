@@ -39,10 +39,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[contains(@class,'dropdown-trigger')]")
   public PageElement ellipses;
 
-  @FindBy(xpath = "//*[local-name()='svg' and @data-icon='plus']")
+  @FindBy(xpath = "//li[contains(@data-testid, 'create-new-preset')]")
   public PageElement createNewPreset;
 
-  @FindBy(xpath = "//*[local-name()='svg' and @data-icon='pen']")
+  @FindBy(xpath = "//li[contains(@data-testid, 'edit-preset')]")
   public PageElement editPreset;
 
   @FindBy(xpath = "//label[text()='Name']/following-sibling::input")
