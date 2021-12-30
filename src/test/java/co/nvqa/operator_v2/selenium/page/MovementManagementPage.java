@@ -89,7 +89,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[starts-with(.,'All')]")
   public PageElement allTab;
 
-  @FindBy(xpath = "//label[starts-with(.,'Completed')]")
+  @FindBy(xpath = "//label[starts-with(.,'Complete')]")
   public PageElement completedTab;
 
   @FindBy(xpath = "//label[starts-with(.,'Pending')]")
