@@ -41,12 +41,13 @@ Feature: Station to it's Crossdock
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     And Operator select "Relations" tab on Movement Management page
     Then Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab
     And Operator verify "Pending" tab is selected on 'Relations' tab
     And Operator verify all Crossdock Hub in Pending tab have "Unfilled" value
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
-    When Operator select "Completed" tab on Movement Management page
+    When Operator select "Complete" tab on Movement Management page
     And Operator verify all Crossdock Hub of all listed Stations already defined
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
     When Operator select "Stations" tab on Movement Management page

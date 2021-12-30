@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -13,6 +14,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextWithLabel;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -87,7 +89,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[starts-with(.,'All')]")
   public PageElement allTab;
 
-  @FindBy(xpath = "//label[starts-with(.,'Completed')]")
+  @FindBy(xpath = "//label[starts-with(.,'Complete')]")
   public PageElement completedTab;
 
   @FindBy(xpath = "//label[starts-with(.,'Pending')]")
@@ -356,18 +358,6 @@ public class MovementManagementPage extends OperatorV2SimplePage {
         jse.executeScript(argument, element);
       }
 
-      public void findElementAndClick(String elementString, String locator){
-        WebElement element = null;
-        if(locator.equals("id")){
-          element = getWebDriver().findElement(By.id(elementString));
-        }else if(locator.equals("xpath")){
-          element = getWebDriver().findElement(By.xpath(elementString));
-        }else if(locator.equals("class")){
-          element = getWebDriver().findElement(By.className(elementString));
-        }
-        element.click();
-      }
-
       public void fill(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (StringUtils.isNotBlank(schedule.getOriginHub())) {
           sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.getOriginHub());
@@ -380,29 +370,29 @@ public class MovementManagementPage extends OperatorV2SimplePage {
         }
         if (StringUtils.isNotBlank(schedule.getDepartureTime())) {
           String[] hourtime = schedule.getDepartureTime().split(":");
-          findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id");
+          TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
           String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
           String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
           moveToElementWithXpath("//div[@class='ant-picker-content']//ul[1]");
-          findElementAndClick(hour, "xpath");
+          TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
           moveToElementWithXpath("//div[@class='ant-picker-content']//ul[2]");
-          findElementAndClick(time, "xpath");
-          findElementAndClick("ant-picker-ok", "class");
+          TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+          TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
         }
         if (schedule.getDurationDays() != null) {
-          findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id");
-          findElementAndClick("//div[@title='"+schedule.getDurationDays()+"']", "xpath");
+          TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+          TestUtils.findElementAndClick("//div[@title='"+schedule.getDurationDays()+"']", "xpath", getWebDriver());
         }
         if (StringUtils.isNotBlank(schedule.getDurationTime())) {
           String[] hourtime = schedule.getDurationTime().split(":");
-          findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id");
+          TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
           String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
           String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
           moveToElementWithXpath(hour);
-          findElementAndClick(hour, "xpath");
+          TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
           moveToElementWithXpath(time);
-          findElementAndClick(time, "xpath");
-          findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath");
+          TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+          TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
         }
         if (CollectionUtils.isNotEmpty(schedule.getDaysOfWeek())) {
           setDaysOfWeek(schedule.getDaysOfWeek());
@@ -426,33 +416,21 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   }
 
   public static class AddStationMovementScheduleModal extends AntModal {
-
+    private AbstractTable abstractUtilities;
     public AddStationMovementScheduleModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public void findElementAndClick(String elementString, String locator){
-      WebElement element = null;
-      if(locator.equals("id")){
-        element = getWebDriver().findElement(By.id(elementString));
-      }else if(locator.equals("xpath")){
-        element = getWebDriver().findElement(By.xpath(elementString));
-      }else if(locator.equals("class")){
-        element = getWebDriver().findElement(By.className(elementString));
-      }
-      element.click();
-    }
-
     public String weekdaysXpath = "//div[@id='schedules_%s_days']//input[@type='checkbox'][@value='%s']";
     public void setDaysOfWeek(Set<String> daysOfWeek, String id) {
-      if (daysOfWeek.contains("monday")) findElementAndClick(f(weekdaysXpath, id, 1), "xpath");
-      if (daysOfWeek.contains("tuesday")) findElementAndClick(f(weekdaysXpath, id, 2), "xpath");
-      if (daysOfWeek.contains("wednesday")) findElementAndClick(f(weekdaysXpath, id, 3), "xpath");
-      if (daysOfWeek.contains("thursday")) findElementAndClick(f(weekdaysXpath, id, 4), "xpath");
-      if (daysOfWeek.contains("friday")) findElementAndClick(f(weekdaysXpath, id, 5), "xpath");
-      if (daysOfWeek.contains("saturday")) findElementAndClick(f(weekdaysXpath, id, 6), "xpath");
-      if (daysOfWeek.contains("sunday")) findElementAndClick(f(weekdaysXpath, id, 7), "xpath");
+      if (daysOfWeek.contains("monday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 1), "xpath", getWebDriver());
+      if (daysOfWeek.contains("tuesday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 2), "xpath", getWebDriver());
+      if (daysOfWeek.contains("wednesday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 3), "xpath", getWebDriver());
+      if (daysOfWeek.contains("thursday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 4), "xpath", getWebDriver());
+      if (daysOfWeek.contains("friday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 5), "xpath", getWebDriver());
+      if (daysOfWeek.contains("saturday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 6), "xpath", getWebDriver());
+      if (daysOfWeek.contains("sunday")) TestUtils.findElementAndClick(f(weekdaysXpath, id, 7), "xpath", getWebDriver());
     }
 
     public String scheduleOriginHubId = "schedules_%s_originHub";
@@ -469,21 +447,6 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     public Button addAnotherSchedule;
 
     public String crossdockHub = "crossdockHubAddModal";
-
-    @FindBy(css = "[id*='movement_type']")
-    public AntSelect movementType;
-
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
-    public AntTimePicker departureTime;
-
-    @FindBy(css = "input[id*='duration_day']")
-    public TextBox duration;
-
-    @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
-    public AntTimePicker endTime;
-
-    @FindBy(css = "input[id*='comment']")
-    public TextBox comment;
 
     @FindBy(xpath = ".//button[.='OK']")
     public Button create;
@@ -504,31 +467,31 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getDepartureTime())) {
         String[] hourtime = stationMovementSchedule.getDepartureTime().split(":");
-        findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id");
+        TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
         String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
         String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
         moveToElementWithXpath(hour);
-        findElementAndClick(hour, "xpath");
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
         moveToElementWithXpath(time);
-        findElementAndClick(time, "xpath");
-        findElementAndClick("ant-picker-ok", "class");
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
       }
 
       if (stationMovementSchedule.getDuration() != null) {
-        findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id");
-        findElementAndClick("//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath");
+        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+        TestUtils.findElementAndClick("//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath", getWebDriver());
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
         String[] hourtime = stationMovementSchedule.getEndTime().split(":");
-        findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id");
+        TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
         String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
         String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
         moveToElementWithXpath(hour);
-        findElementAndClick(hour, "xpath");
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
         moveToElementWithXpath(time);
-        findElementAndClick(time, "xpath");
-        findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath");
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
       }
 
       if (CollectionUtils.isNotEmpty(stationMovementSchedule.getDaysOfWeek())) {
@@ -550,31 +513,31 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getDepartureTime())) {
         String[] hourtime = stationMovementSchedule.getDepartureTime().split(":");
-        findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id");
+        TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
         String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
         String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
         moveToElementWithXpath(hour);
-        findElementAndClick(hour, "xpath");
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
         moveToElementWithXpath(time);
-        findElementAndClick(time, "xpath");
-        findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath");
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
       }
 
       if (stationMovementSchedule.getDuration() != null) {
-        findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id");
-        findElementAndClick("//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath");
+        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"+stationMovementSchedule.getDuration()+"']", "xpath", getWebDriver());
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
         String[] hourtime = stationMovementSchedule.getEndTime().split(":");
-        findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id");
+        TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
         String hour = f(scheduleDurationTimeXpath, 1, hourtime[0]);
         String time = f(scheduleDurationTimeXpath, 2, hourtime[1]);
         moveToElementWithXpath(hour);
-        findElementAndClick(hour, "xpath");
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
         moveToElementWithXpath(time);
-        findElementAndClick(time, "xpath");
-        findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath");
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick("//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']", "xpath", getWebDriver());
       }
 
       if (CollectionUtils.isNotEmpty(stationMovementSchedule.getDaysOfWeek())) {

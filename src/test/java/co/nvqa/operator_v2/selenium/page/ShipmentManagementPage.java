@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipment;
@@ -21,6 +22,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -319,7 +322,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void openShipmentDetailsPage(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     pause3s();
-    shipmentsTable.clickActionButton(1, ACTION_DETAILS);
+    TestUtils.findElementAndClick(f(ACTION_DETAILS, 1), "xpath", getWebDriver());
     pause100ms();
     switchToOtherWindow();
   }
@@ -947,7 +950,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String COLUMN_COMMENTS = "comments";
     public static final String COLUMN_MAWB = "mawb";
     public static final String ACTION_EDIT = "Edit";
-    public static final String ACTION_DETAILS = "Details";
+    public static final String ACTION_DETAILS = "//tr[%s]//td//nv-icon-button[@name='Details']";
     public static final String ACTION_FORCE = "Force";
     public static final String ACTION_PRINT = "Print";
     public static final String ACTION_CANCEL = "Cancel";

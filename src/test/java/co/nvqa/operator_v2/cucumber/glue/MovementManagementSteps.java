@@ -26,6 +26,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_ORIGIN_HUB;
 
@@ -35,6 +38,7 @@ import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.Schedules
 @ScenarioScoped
 public class MovementManagementSteps extends AbstractSteps {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(MovementManagementSteps.class);
   private MovementManagementPage movementManagementPage;
   private static final String HUB_CD_CD = "CD->CD";
   private static final String HUB_CD_ITS_ST = "CD->its ST";
@@ -91,6 +95,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("Movement Management page is loaded")
   public void movementManagementPageIsLoaded() {
+    movementManagementPage.addSchedule.waitUntilVisible(10);
     movementManagementPage.switchTo();
     movementManagementPage.addSchedule.waitUntilClickable(60);
   }
@@ -228,23 +233,37 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
-    final Map<String, String> finalData = resolveKeyValues(data);
-    StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
-    movementManagementPage.stationsTab.click();
-    movementManagementPage.addSchedule.click();
-    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-    movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
-    putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
-    if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
-      movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
-      StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
-          finalData);
-      secondStationMovementSchedule.setDepartureTime("21:15");
-      movementManagementPage.addStationMovementScheduleModal.fillAnother(secondStationMovementSchedule, "1");
-      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
-    }
-    movementManagementPage.addStationMovementScheduleModal.create.click();
-    movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try{
+        final Map<String, String> finalData = resolveKeyValues(data);
+        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+        putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+        if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
+          movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
+          StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
+                  finalData);
+          secondStationMovementSchedule.setDepartureTime("21:15");
+          movementManagementPage.addStationMovementScheduleModal.fillAnother(secondStationMovementSchedule, "1");
+          putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+        }
+        movementManagementPage.addStationMovementScheduleModal.create.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+      }catch (Exception ex){
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addSchedule.waitUntilClickable(60);
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 2);
+
   }
 
   @And("Operator load schedules on Movement Management page using data below:")
@@ -310,6 +329,7 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
+        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
@@ -492,7 +512,7 @@ public class MovementManagementSteps extends AbstractSteps {
       case "pending":
         movementManagementPage.pendingTab.click();
         break;
-      case "completed":
+      case "complete":
         movementManagementPage.completedTab.click();
         break;
       case "all":
@@ -507,7 +527,7 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorVerifyTabsAreDisplayedOnRelationsTab() {
     assertTrue("All tab is displayed", movementManagementPage.allTab.isDisplayedFast());
     assertTrue("Pending tab is displayed", movementManagementPage.pendingTab.isDisplayedFast());
-    assertTrue("Completed tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
+    assertTrue("Complete tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
   }
 
   @When("^Operator verify \"(.+)\" tab is selected on 'Relations' tab$")

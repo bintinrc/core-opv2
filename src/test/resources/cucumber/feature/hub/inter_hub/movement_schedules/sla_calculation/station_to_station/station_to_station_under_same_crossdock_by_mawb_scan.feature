@@ -46,6 +46,10 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:
       | label      | Into Van                         |
@@ -63,7 +67,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | sla         | {{next-2-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
@@ -93,6 +97,9 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | crossdockHub   | {hub-relation-destination-hub-name} |
       | stationId      | {hub-id-2}                          |
       | crossdockHubId | {hub-relation-destination-hub-id}   |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:
       | label      | Into Van                  |
@@ -110,13 +117,13 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | sla         | -                         |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND |
+      | source | SHIPMENT_VAN_INBOUND(OpV2) |
       | result | Transit              |
       | hub    | {hub-name}           |
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                        |
       | status   | FAILED                                                                 |
-      | comments | found no path from origin {hub-id} (sg) to destination {hub-id-2} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

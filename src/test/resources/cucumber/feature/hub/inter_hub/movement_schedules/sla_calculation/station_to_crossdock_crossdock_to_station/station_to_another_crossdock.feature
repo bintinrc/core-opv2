@@ -51,6 +51,7 @@ Feature: Station to another Crossdock
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     When Operator select "Crossdock Hubs" tab on Movement Management page
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
@@ -129,6 +130,7 @@ Feature: Station to another Crossdock
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
+      | daysOfWeek     | all                                |
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning

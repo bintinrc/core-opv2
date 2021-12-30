@@ -46,6 +46,8 @@ public class OperatorV2SimplePage extends SimplePage {
 
   @FindBy(css = "div.md-half-circle")
   public PageElement halfCircleSpinner;
+  @FindBy(css = "div.load-more-data")
+  public PageElement loadMoreData;
 
   public OperatorV2SimplePage(WebDriver webDriver) {
     super(webDriver);
