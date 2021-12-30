@@ -1,11 +1,11 @@
 @Sort @AddressDownload
 Feature: Address Download
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @wip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Successfully Load Valid Tracking IDs (uid:a5e2eac1-f24e-4ccf-8464-65d034fd875f)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -21,7 +21,7 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Commas (uid:420276d9-29d3-43ab-a440-e72cb03d0ee8)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -37,7 +37,7 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Load Multiple Invalid and Valid Tracking IDs Successfully (uid:3194cdf4-7627-45fd-b10d-e8ad17e0bd66)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -54,7 +54,7 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Space (uid:1c7830b6-56ae-4e99-b679-5a6bfd8b68a4)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -70,7 +70,7 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By New Lines (uid:fb00a761-c7e7-46c3-a51d-64514c8527f1)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -87,7 +87,7 @@ Feature: Address Download
     Then Operator verifies that the downloaded csv file details of Address Download is right
 
   # For specific this Scenario, ideally, please create orders with number of 2n + 1
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Combination Of Commas, Space and New Line (uid:a9635341-30bb-4067-b842-464346c97246)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -103,7 +103,7 @@ Feature: Address Download
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @wip
   Scenario: Successfully Load RTS and Non RTS Tracking IDs (uid:5e838353-f1a5-4f12-9711-818207d62d48)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -126,6 +126,7 @@ Feature: Address Download
     Then Operator verifies that the Address Download Table Result is shown up
     And Operator verifies that the RTS order is identified
 
+  @wip
   Scenario: Successfully Load 100 Valid Tracking IDs (uid:ff4e6e2f-0c5f-42dc-a5f4-f6d740115fd1)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
@@ -136,6 +137,7 @@ Feature: Address Download
     And Operator clicks on Next Button on Address Download Load Tracking ID modal
     Then Operator verifies that the Address Download Table Result for bulk tracking ids is shown up
 
+  @wip
   Scenario: Entering More Than 100 Tracking IDs will be restricted (uid:bbabea60-61aa-4e43-9d43-26a741895bdf)
     Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
