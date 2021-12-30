@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -167,7 +168,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
   public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
-  public final String SYS_ID = "UTC";
+  public final String SYS_ID = "Asia/Jakarta";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadPage.class);
 
@@ -404,6 +405,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public LocalDateTime resolveLocalDateTime(Date date, String timezone) {
+    // Only accepts UTC date
     int offsetInMinutes =
         TimeZone.getTimeZone(timezone).getOffset(new Date().getTime()) / 1000 / 60;
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
@@ -477,8 +479,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
     String endMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, endMinuteVal);
 
-    click(startTimepickerFieldXpath);
-    waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
+    retryIfAssertionErrorOccurred(() -> {
+      click(startTimepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("Start timepicker is displayed")
+          .isTrue();
+    }, "Clicking timepicker field until it's showing...");
 
     // Select start hour
     click(startHourPickerXpath);
@@ -486,7 +492,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Select start minute
     click(startMinutePickerXpath);
 
-    click(endTimepickerFieldXpath);
+    retryIfAssertionErrorOccurred(() -> {
+      click(endTimepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("End timepicker is displayed")
+          .isTrue();
+    }, "Clicking timepicker field until it's showing...");
     pause400ms(); // wait for the focus change
 
     // Select end hour
@@ -497,6 +508,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     // Click Ok
     click(CREATION_TIME_FILTER_OK);
+
+    // Wait until timepicker disappear
+    waitUntilInvisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
   }
 
   public void setCreationTimeDatepicker(Map<String, String> selectedDate) {
@@ -518,7 +532,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     String startYearPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_YEAR, startYearVal);
     String startMonthPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_MONTH, startYearVal, startMonthVal);
-    String startDayPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_DAY, startYearVal, startMonthVal, startDayVal);
+    String startDayPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_DAY, startYearVal, startMonthVal,
+        startDayVal);
     String startHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, startHourVal);
     String startMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, startMinuteVal);
     String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
@@ -528,8 +543,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(startDatepickerFieldXpath);
 
     // Click on datepicker field
-    click(startDatepickerFieldXpath);
-    waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
+    retryIfAssertionErrorOccurred(() -> {
+      click(startDatepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("Start datepicker is displayed")
+          .isTrue();
+    }, "Clicking datepicker field until it's showing...");
 
     // Select start year
     click(selectYearButtonXpath);
@@ -552,7 +571,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Select start minute
     click(startMinutePickerXpath);
 
-    click(endDatepickerFieldXpath);
+    retryIfAssertionErrorOccurred(() -> {
+      click(endDatepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("End datepicker is displayed")
+          .isTrue();
+    }, "Clicking datepicker field until it's showing...");
     pause400ms(); // wait for the focus change
 
     // Select end day (same as start day)
@@ -567,6 +591,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Click ok only when submitting end datetime
     click(CREATION_TIME_FILTER_OK);
 
+    // Wait until datepicker disappear
     waitUntilInvisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
   }
 
