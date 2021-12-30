@@ -310,6 +310,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
       presetName = preset;
     }
 
+    addressingDownloadPage.selectPresetLoadAddresses.waitUntilVisible();
     String presetNameFieldValue = addressingDownloadPage.selectPresetLoadAddresses.getValue();
 
     if (presetNameFieldValue.equals("")) {

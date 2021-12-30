@@ -305,6 +305,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     getWebDriver().navigate().refresh();
     switchToIframe();
     verifiesPageIsFullyLoaded();
+    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(f(PRESET_TO_BE_SELECTED_XPATH, presetName));
@@ -316,6 +317,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     getWebDriver().navigate().refresh();
     switchToIframe();
     verifiesPageIsFullyLoaded();
+    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
