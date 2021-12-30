@@ -168,7 +168,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
   public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
-  public final String SYS_ID = "Asia/Jakarta";
+  public final String SYS_ID = "UTC";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadPage.class);
 
