@@ -7,8 +7,8 @@ Feature: Address Download
 
   @ForceSuccessOrder @wip
   Scenario: Successfully Load Valid Tracking IDs (uid:a5e2eac1-f24e-4ccf-8464-65d034fd875f)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -23,8 +23,8 @@ Feature: Address Download
 
   @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Commas (uid:420276d9-29d3-43ab-a440-e72cb03d0ee8)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -39,8 +39,8 @@ Feature: Address Download
 
   @ForceSuccessOrder @wip
   Scenario: Load Multiple Invalid and Valid Tracking IDs Successfully (uid:3194cdf4-7627-45fd-b10d-e8ad17e0bd66)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -56,8 +56,8 @@ Feature: Address Download
 
   @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Space (uid:1c7830b6-56ae-4e99-b679-5a6bfd8b68a4)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -72,8 +72,8 @@ Feature: Address Download
 
   @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By New Lines (uid:fb00a761-c7e7-46c3-a51d-64514c8527f1)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -89,8 +89,8 @@ Feature: Address Download
   # For specific this Scenario, ideally, please create orders with number of 2n + 1
   @ForceSuccessOrder @wip
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Combination Of Commas, Space and New Line (uid:a9635341-30bb-4067-b842-464346c97246)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
@@ -116,8 +116,8 @@ Feature: Address Download
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on Load Tracking IDs Button
     And Operator fills the "valid" Tracking ID textbox with "new_line" separation
@@ -128,8 +128,8 @@ Feature: Address Download
 
   @wip
   Scenario: Successfully Load 100 Valid Tracking IDs (uid:ff4e6e2f-0c5f-42dc-a5f4-f6d740115fd1)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When DB Operator searched "100" Orders with "Pending" Status and "Pending Pickup" Granular Status
     When Operator clicks on Load Tracking IDs Button
@@ -139,8 +139,8 @@ Feature: Address Download
 
   @wip
   Scenario: Entering More Than 100 Tracking IDs will be restricted (uid:bbabea60-61aa-4e43-9d43-26a741895bdf)
-    Given Operator refresh page v1
     Given Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When DB Operator searched "100" Orders with "Pending" Status and "Pending Pickup" Granular Status
     When Operator clicks on Load Tracking IDs Button
