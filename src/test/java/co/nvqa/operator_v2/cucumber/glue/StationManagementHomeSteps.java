@@ -519,4 +519,15 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void operator_applies_filter_as_from_quick_filters_option(String filter) {
         stationManagementHomePage.applyQuickFilter(filter);
     }
+
+    @When("Operator selects the checkbox on the created orders that are to be confirmed with the eta")
+    public void operator_selects_the_checkbox_on_the_created_orders_that_are_to_be_confirmed_with_the_eta() {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        stationManagementHomePage.selectCheckboxByTrackingId(trackingIds);
+    }
+
+    @Then("Operator verifies that the station confirmed eta is disabled and cannot be updated")
+    public void operator_verifies_that_the_station_confirmed_eta_is_disabled_and_cannot_be_updated() {
+        stationManagementHomePage.verifyStationConfirmedEtaDisabled();
+    }
 }
