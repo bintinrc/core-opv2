@@ -269,7 +269,7 @@ Feature: Station COD Report
       | Language | PageHeader         | HubName      | TransStatus   |
       | English  | Station COD Report | {hub-name-2} | DD - Delivery |
 
-  @default-sg
+  @ArchiveRoute @default-sg
   Scenario Outline: [SG, MY, TH, PH] View COD Amount in Detail Tab (uid:5acdcfa0-f03b-4f8d-adc7-b4f4c0eff567)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -320,7 +320,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-  @default-id
+  @ArchiveRoute @default-id
   Scenario Outline: [ID, VN] View COD Amount in Detail Tab (uid:f163c350-3f78-4a28-b16f-84c5bc7b33f4)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -374,7 +374,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-  @default-sg
+  @ArchiveRoute @default-sg
   Scenario Outline: [SG, MY, TH, PH] View COD Collected in Summary Tab (uid:bad20f02-1d6e-4014-a9fc-226b21a0b8cb)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -426,7 +426,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery |
 
-  @default-id
+  @ArchiveRoute @default-id
   Scenario Outline: [ID, VN] View COD Collected in Summary Tab (uid:623d8469-1bea-4fdd-a7d7-721683628256)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -481,7 +481,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | DD - Delivery |
 
-  @default-sg
+  @ArchiveRoute @default-sg
   Scenario Outline: [SG, MY, PH] Transaction End Date Should Match Country's Timezone UTC+8 (uid:6522d856-e82f-4eb4-8d1d-d82344eea5d7)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -532,7 +532,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-  @default-id
+  @ArchiveRoute @default-id
   Scenario Outline: [ID, TH, VN] Transaction End Date Should Match Country's Timezone UTC+7 (uid:31fc432f-6be1-43ab-9764-f520c98920a0)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -586,6 +586,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
+  @ArchiveRoute
   Scenario Outline: View Updated Driver Name (uid:3f3c7bfc-ee27-403d-b613-93a4621ecac0)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -599,7 +600,6 @@ Feature: Station COD Report
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
@@ -643,6 +643,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery |
 
+  @ArchiveRoute
   Scenario Outline: Download CSV of COD Report Detail (uid:69ca23d3-f0f9-4929-89e9-089321d3b5b7)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -682,6 +683,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   | TabName |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery | Details |
 
+  @ArchiveRoute
   Scenario Outline: Download CSV of COD Report Summary (uid:e732bb2b-c198-4406-bc0c-1c34450e7d97)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |

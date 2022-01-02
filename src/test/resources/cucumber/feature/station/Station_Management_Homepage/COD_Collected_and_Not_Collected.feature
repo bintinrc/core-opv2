@@ -5,6 +5,7 @@ Feature: COD Collected and Not Collected
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COD but Not Route Inbound x (uid:009c3453-5bed-446a-a8ba-d684a7f9ab93)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -52,6 +53,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COD and Route Inbound y (x > y) (uid:5fb4c4d3-638d-4c28-8138-032d14fe75e6)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -117,6 +119,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 1500         | 1000       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COD and Route Inbound y (y > x) (uid:2ed21c73-2097-4afd-b29f-edb5a7d17514)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -181,6 +184,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 3000         | -500       | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COD and Route Inbound x (uid:093c7728-d38e-42d1-9e62-1db53fab1585)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -246,6 +250,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | ChangeReason | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: View Route Manifest Page (uid:ec35f255-6e77-4eaf-a457-7dedc4366690)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -288,6 +293,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | ChangeReason | TileName                            | ModalName                           |
       | {hub-id-4} | {hub-name-4} | 1755.5    | GENERATED    | COD not collected yet from couriers | COD not collected yet from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COP but Not Route Inbound x (uid:aaec869d-7120-4b52-85c8-083a129054d7)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -329,6 +335,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 125.5     | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COP and Route Inbound y (x > y) (uid:b35e0575-c1b3-4238-a9c3-79a298feefb6)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -388,6 +395,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 1500         | 1000       | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COP and Route Inbound y (y > x) (uid:61f1d829-45f7-469d-ad43-57fe6f1ef392)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -446,6 +454,7 @@ Feature: COD Collected and Not Collected
       | HubId      | HubName      | CODAmount | CODToCollect | CODBalance | OrderStatus             | TileName1                           | ModalName                           | TileName2                   |
       | {hub-id-4} | {hub-name-4} | 2500      | 3000         | -500       | En-route to Sorting Hub | COD not collected yet from couriers | COD not collected yet from couriers | COD collected from couriers |
 
+  @ArchiveRoute
   Scenario Outline: Driver Collects x COP and Route Inbound x (uid:47a4a0db-44b0-4231-abe6-8073d7ed40e2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
