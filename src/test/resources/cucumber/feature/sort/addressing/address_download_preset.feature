@@ -7,6 +7,7 @@ Feature: Address Download
 
   Scenario: Create New Filter Preset With Address Status Filter Successfully - Verified (uid:40a315d1-a519-476a-8010-766cde6e215d)
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -19,6 +20,7 @@ Feature: Address Download
 
   Scenario: Create New Filter Preset With Address Status Filter Successfully - Unverified (uid:6ad12dbf-3b6d-44ff-abcb-60267f96e8b9)
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -30,8 +32,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Create New Filter Preset With Shipper Filter Successfully (uid:f12b234a-92cd-40a4-962a-58fc1c456633)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -43,8 +45,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Create New Filter Preset With Master Shipper Filter Successfully (uid:13485982-b5e3-46e9-8ff4-959737c7fe69)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -56,8 +58,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Create New Filter Preset With Zone Filter Successfully (uid:c4008989-7412-48af-b00a-44f8893543e1)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -69,8 +71,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Create New Filter Preset With Destination Hub Filter Successfully (uid:b5c68510-b791-4dc1-8b24-aad229aced28)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -82,8 +84,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Create New Filter Preset With RTS Filter Successfully - RTS No (uid:2d0c6714-6451-4d5e-b92b-33b03489742e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -95,8 +97,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Create New Filter Preset With RTS Filter Successfully - RTS Yes (uid:3cafa693-247b-49c5-91dc-b3b0e25f3664)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -108,8 +110,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Search Filter Preset (uid:b00356ed-c52a-4279-9850-00a4c779c0da)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -121,8 +123,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Update Filter Successfully (uid:e6828599-7d51-4702-9994-488275d2047f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -138,8 +140,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Delete Filter Successfully (uid:12a4de1c-9954-4d13-afcf-194405309dd8)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -158,6 +160,7 @@ Feature: Address Download
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     And Operator verifies that the page is fully loaded
     When Operator selects preset "DEFAULT"
     And DB operator gets order details
@@ -176,8 +179,8 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -207,8 +210,8 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -240,8 +243,8 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -272,8 +275,8 @@ Feature: Address Download
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
+    And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
@@ -299,8 +302,8 @@ Feature: Address Download
     And Operator verifies that the created preset is deleted
 
   Scenario: Download Address by Created Time on Existing Preset - Update Creation Time value (uid:1b799ba2-de9a-44d4-871c-26ad8a5350e8)
-    Given Operator refresh page v1
     When Operator go to menu Addressing -> Address Download
+    Given Operator refresh page v1
     Then Operator verifies that the page is fully loaded
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page

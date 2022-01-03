@@ -35,13 +35,13 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//iframe[contains(@src,'address-download')]")
   private PageElement pageFrame;
 
-  @FindBy(xpath = "//button[contains(@class,'dropdown-trigger')]")
+  @FindBy(xpath = "//div[contains(@class, 'select-preset-holder')]/button[contains(@data-testid, 'menu-button')]")
   public PageElement ellipses;
 
-  @FindBy(xpath = "//*[local-name()='svg' and @data-icon='plus']")
+  @FindBy(xpath = "//li[contains(@data-testid, 'create-new-preset')]")
   public PageElement createNewPreset;
 
-  @FindBy(xpath = "//*[local-name()='svg' and @data-icon='pen']")
+  @FindBy(xpath = "//li[contains(@data-testid, 'edit-preset')]")
   public PageElement editPreset;
 
   @FindBy(xpath = "//label[text()='Name']/following-sibling::input")
@@ -108,7 +108,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='select-preset-holder']/button[contains(@class, 'ant-btn-primary')]")
   public Button loadAddresses;
 
-  private static final String EXISTED_PRESET_SELECTION_XPATH = "//div[contains(@class,'address')]//input[contains(@id,'rc_select')]";
+  private static final String EXISTED_PRESET_SELECTION_XPATH = "//div[contains(@class,'select-preset')]//input[contains(@id,'rc_select')]";
   private static final String DROP_DOWN_PRESET_XPATH = "//ul[contains(@class,'dropdown-menu-root')]";
   private static final String DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
   private static final String PRESET_SELECTION_XPATH = "//li[contains(@data-testid,'%s')]";
@@ -167,7 +167,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
   public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
-  public final String SYS_ID = "UTC";
+  public final String SYS_ID = "UTC"; // UTC, Asia/Jakarta
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadPage.class);
 
@@ -304,6 +304,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     getWebDriver().navigate().refresh();
     switchToIframe();
     verifiesPageIsFullyLoaded();
+    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(f(PRESET_TO_BE_SELECTED_XPATH, presetName));
@@ -315,6 +316,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     getWebDriver().navigate().refresh();
     switchToIframe();
     verifiesPageIsFullyLoaded();
+    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
@@ -359,6 +361,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     address2Element = webDriver.findElements(By.xpath(TO_ADDRESS_2_COLUMN_XPATH));
 
     for (WebElement weAdd1 : address1Element) {
+      LOGGER.debug("Checking Address 1 for we == addr: {} == {} ?", weAdd1.getText(), address1);
       if (address1.equalsIgnoreCase(weAdd1.getText())) {
         isAddress1Found = true;
         break;
@@ -366,6 +369,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     }
 
     for (WebElement weAdd2 : address2Element) {
+      LOGGER.debug("Checking Address 2 for we == addr: {} == {} ?", weAdd2.getText(), address2);
       if (address2.equalsIgnoreCase(weAdd2.getText())) {
         isAddress2Found = true;
         break;
@@ -404,6 +408,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public LocalDateTime resolveLocalDateTime(Date date, String timezone) {
+    // Only accepts UTC date
     int offsetInMinutes =
         TimeZone.getTimeZone(timezone).getOffset(new Date().getTime()) / 1000 / 60;
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
@@ -477,8 +482,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
     String endMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, endMinuteVal);
 
-    click(startTimepickerFieldXpath);
-    waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
+    retryIfAssertionErrorOccurred(() -> {
+      click(startTimepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("Start timepicker is displayed")
+          .isTrue();
+    }, "Clicking timepicker field until it's showing...");
 
     // Select start hour
     click(startHourPickerXpath);
@@ -486,7 +495,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Select start minute
     click(startMinutePickerXpath);
 
-    click(endTimepickerFieldXpath);
+    retryIfAssertionErrorOccurred(() -> {
+      click(endTimepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("End timepicker is displayed")
+          .isTrue();
+    }, "Clicking timepicker field until it's showing...");
     pause400ms(); // wait for the focus change
 
     // Select end hour
@@ -497,6 +511,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     // Click Ok
     click(CREATION_TIME_FILTER_OK);
+
+    // Wait until timepicker disappear
+    waitUntilInvisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
   }
 
   public void setCreationTimeDatepicker(Map<String, String> selectedDate) {
@@ -518,7 +535,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     String startYearPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_YEAR, startYearVal);
     String startMonthPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_MONTH, startYearVal, startMonthVal);
-    String startDayPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_DAY, startYearVal, startMonthVal, startDayVal);
+    String startDayPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_DAY, startYearVal, startMonthVal,
+        startDayVal);
     String startHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, startHourVal);
     String startMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, startMinuteVal);
     String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
@@ -528,8 +546,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(startDatepickerFieldXpath);
 
     // Click on datepicker field
-    click(startDatepickerFieldXpath);
-    waitUntilVisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
+    retryIfAssertionErrorOccurred(() -> {
+      click(startDatepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("Start datepicker is displayed")
+          .isTrue();
+    }, "Clicking datepicker field until it's showing...");
 
     // Select start year
     click(selectYearButtonXpath);
@@ -552,7 +574,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Select start minute
     click(startMinutePickerXpath);
 
-    click(endDatepickerFieldXpath);
+    retryIfAssertionErrorOccurred(() -> {
+      click(endDatepickerFieldXpath);
+      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+          .as("End datepicker is displayed")
+          .isTrue();
+    }, "Clicking datepicker field until it's showing...");
     pause400ms(); // wait for the focus change
 
     // Select end day (same as start day)
@@ -567,6 +594,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Click ok only when submitting end datetime
     click(CREATION_TIME_FILTER_OK);
 
+    // Wait until datepicker disappear
     waitUntilInvisibilityOfElementLocated(CREATION_TIME_FILTER_DROPDOWN);
   }
 
