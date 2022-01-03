@@ -218,7 +218,7 @@ public class MovementManagementSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     Optional.ofNullable(data.get("station"))
         .ifPresent(value -> assertEquals("Station", value,
-            movementManagementPage.relationsTable.rows.get(0).sation.getText()));
+            movementManagementPage.relationsTable.rows.get(0).station.getText()));
     Optional.ofNullable(data.get("crossdockHub"))
         .ifPresent(value -> assertEquals("Crossdock Hub", value,
             movementManagementPage.relationsTable.rows.get(0).crossdock.getText()));

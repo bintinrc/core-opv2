@@ -565,7 +565,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     }
 
     @FindBy(xpath = "//td[contains(@class,'ant-table-cell hub-name')]")
-    public PageElement sation;
+    public PageElement station;
 
     @FindBy(xpath = "//td[contains(@class,'ant-table-cell crossdock-hub-name')]")
     public PageElement crossdock;
