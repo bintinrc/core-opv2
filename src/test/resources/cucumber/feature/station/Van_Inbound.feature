@@ -5,6 +5,7 @@ Feature: Van Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @ArchiveRoute
   Scenario Outline: Proceed without Hub Inbounding Parcels in Pending Shipment (uid:11f153b1-8e54-4ddf-9823-f67987815814)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -46,6 +47,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Proceed without Hub Inbounding Parcels in Transit Shipment (uid:7712631d-b091-4aa7-ab7e-99ba57be85ac)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -92,6 +94,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Proceed without Hub Inbounding Parcels at Transit Hub Shipment (uid:2cbbb2e5-0f48-4d82-8256-835ad3896824)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -138,6 +141,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | TransHubId | Country | ModalName1                                        | ModalName2                   | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-id-0} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Proceed without Hub Inbounding Parcels in Closed Shipment (uid:c693992e-ba1e-4533-b89e-95e4bc9ca174)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -181,6 +185,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Complete Shipment Before Scan Parcel to Van Inbound (uid:a244ba55-96d4-417d-af81-42549ea00786)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -236,6 +241,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | DestHubName  | Country | ModalName1                                        | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-name-9} | sg      | List of parcels that have yet to shipment inbound | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Proceed without Hub Inbounding Parcels in Incomplete Latest Shipment (uid:d4b0564e-b745-4121-a348-0992ed169598)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -292,6 +298,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Van Inbound Parcels in Completed Shipment (uid:6fba8e5f-55b7-4402-925d-ca00660a8746)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -335,6 +342,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Van Inbound Parcels in Cancelled Shipment (uid:9973ea31-d21f-4787-9a19-b800d97f4355)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -378,6 +386,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | GENERATED |
 
+  @ArchiveRoute
   Scenario Outline: Van Inbound Parcels Not in Any Shipment (uid:c9292f60-eb4a-485c-8004-3711b20f3a71)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
