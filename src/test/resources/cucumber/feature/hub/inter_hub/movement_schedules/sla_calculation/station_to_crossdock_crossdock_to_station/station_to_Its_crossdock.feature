@@ -43,7 +43,7 @@ Feature: Station to it's Crossdock
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
     And Operator select "Relations" tab on Movement Management page
-    Then Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab
+    Then Operator verify 'All' 'Pending' and 'Complete' tabs are displayed on 'Relations' tab
     And Operator verify "Pending" tab is selected on 'Relations' tab
     And Operator verify all Crossdock Hub in Pending tab have "Unfilled" value
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
