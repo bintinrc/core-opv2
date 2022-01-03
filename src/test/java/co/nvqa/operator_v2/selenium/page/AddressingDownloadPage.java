@@ -10,7 +10,6 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -168,7 +167,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
   public final String FILTER_SHOWN_XPATH = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show') or contains(@class, 'ant-picker-range')]";
-  public final String SYS_ID = "Asia/Jakarta";
+  public final String SYS_ID = "UTC"; // UTC, Asia/Jakarta
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressingDownloadPage.class);
 
@@ -362,6 +361,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     address2Element = webDriver.findElements(By.xpath(TO_ADDRESS_2_COLUMN_XPATH));
 
     for (WebElement weAdd1 : address1Element) {
+      LOGGER.debug("Checking Address 1 for we == addr: {} == {} ?", weAdd1.getText(), address1);
       if (address1.equalsIgnoreCase(weAdd1.getText())) {
         isAddress1Found = true;
         break;
@@ -369,6 +369,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     }
 
     for (WebElement weAdd2 : address2Element) {
+      LOGGER.debug("Checking Address 2 for we == addr: {} == {} ?", weAdd2.getText(), address2);
       if (address2.equalsIgnoreCase(weAdd2.getText())) {
         isAddress2Found = true;
         break;

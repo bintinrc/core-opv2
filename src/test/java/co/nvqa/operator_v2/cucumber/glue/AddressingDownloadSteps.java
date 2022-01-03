@@ -55,6 +55,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on the ellipses")
   public void operatorClicksOnTheEllipses() {
+    addressingDownloadPage.ellipses.waitUntilVisible();
     addressingDownloadPage.ellipses.click();
     addressingDownloadPage.verifiesOptionIsShown();
   }
