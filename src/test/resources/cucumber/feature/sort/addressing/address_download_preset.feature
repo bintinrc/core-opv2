@@ -24,7 +24,6 @@ Feature: Address Download
     Given Operator go to menu Addressing -> Address Download
     And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
-    And Operator refresh page v1
     When Operator clicks on the ellipses
     And Operator clicks on "create" Preset Option on the Address Download Page
     And Operator creates a preset using "address_status_unverified" filter
