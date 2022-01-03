@@ -523,7 +523,7 @@ public class MovementManagementSteps extends AbstractSteps {
     }
   }
 
-  @When("Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab")
+  @When("Operator verify 'All' 'Pending' and 'Complete' tabs are displayed on 'Relations' tab")
   public void operatorVerifyTabsAreDisplayedOnRelationsTab() {
     assertTrue("All tab is displayed", movementManagementPage.allTab.isDisplayedFast());
     assertTrue("Pending tab is displayed", movementManagementPage.pendingTab.isDisplayedFast());
