@@ -5,7 +5,6 @@ Feature: Address Download
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   Scenario: Create New Filter Preset With Address Status Filter Successfully - Verified (uid:40a315d1-a519-476a-8010-766cde6e215d)
     Given Operator go to menu Addressing -> Address Download
     And Operator refresh page v1
@@ -18,7 +17,6 @@ Feature: Address Download
     When Operator deletes the created preset
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
-
 
   Scenario: Create New Filter Preset With Address Status Filter Successfully - Unverified (uid:6ad12dbf-3b6d-44ff-abcb-60267f96e8b9)
     Given Operator go to menu Addressing -> Address Download
