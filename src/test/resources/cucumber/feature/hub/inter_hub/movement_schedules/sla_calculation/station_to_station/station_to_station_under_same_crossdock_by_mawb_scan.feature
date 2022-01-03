@@ -1,7 +1,7 @@
 @MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToStation @StationToStationUnderDifferentCrossdock
 Feature: Station to Station Under Same Crossdock by MAWB Scan
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @1 @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -74,7 +74,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
+  @1 @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to Station Under Same Crossdock by MAWB Scan - Station Movement Found but there is no available schedule (uid:08df57d8-f3a5-4bc7-9418-c310c9031201)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
@@ -98,7 +98,7 @@ Feature: Station to Station Under Same Crossdock by MAWB Scan
       | stationId      | {hub-id-2}                          |
       | crossdockHubId | {hub-relation-destination-hub-id}   |
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    When Operator add to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:
