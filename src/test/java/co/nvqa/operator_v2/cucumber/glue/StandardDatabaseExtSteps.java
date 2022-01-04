@@ -2003,4 +2003,11 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .as("ocreate_qa_gl.reserve_tracking_ids record for tracking_id=%s", trackingId)
         .isNull();
   }
+
+  @Given("DB Operator gets {int} existed DP IDs")
+  public void dbOperatorGetsExistedDPIDs(int dpIdsNeeded) {
+    List<Long> dpIds = getNonNull(() -> getDpJdbc().getExistedDpId(dpIdsNeeded),
+        f("Get %d Existed DP IDs", dpIdsNeeded));
+    put(KEY_LIST_OF_DP_IDS, dpIds);
+  }
 }
