@@ -44,6 +44,10 @@ public final class TestConstants extends CommonSeleniumTestConstants {
   public static final String ADDRESSING_PRESET_NAME;
   public static final String ADDRESSING_SHIPPER_NAME;
 
+  public static final long OPV2_DP_DP_ID;
+  public static final long OPV2_DP_BULK_UPDATE_SAME_PARTNER_ID;
+  public static final long OPV2_DP_BULK_UPDATE_INACTIVE_ID;
+
   static {
     String apiBase = NvSystemProperties
         .getString(NV_API_BASE, getString("operator-portal-base-url"));
@@ -81,6 +85,10 @@ public final class TestConstants extends CommonSeleniumTestConstants {
 
     ADDRESSING_PRESET_NAME = getString("addressing-preset-name");
     ADDRESSING_SHIPPER_NAME = getString("addressing-shipper-v4-name");
+
+    OPV2_DP_DP_ID = getLong("opv2-dp-dp-id");
+    OPV2_DP_BULK_UPDATE_SAME_PARTNER_ID = getLong("opv2-dp-bulk-update-same-partner-id");
+    OPV2_DP_BULK_UPDATE_INACTIVE_ID = getLong("opv2-dp-bulk-update-inactive-id");
   }
 
   private TestConstants() {
