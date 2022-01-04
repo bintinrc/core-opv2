@@ -50,7 +50,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(id = "originHubId")
   public AntSelect originCrossdockHub;
 
-  @FindBy(id = "orig_station_hub")
+  @FindBy(id = "originHub")
   public AntSelect originStationHub;
 
   @FindBy(id = "crossdockHub")
@@ -59,7 +59,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(id = "destinationHubId")
   public AntSelect destinationCrossdockHub;
 
-  @FindBy(id = "dest_station_hub")
+  @FindBy(id = "destinationHub")
   public AntSelect destinationStationHub;
 
   @FindBy(xpath = "//button[.='Load Schedules']")
@@ -187,16 +187,15 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     }
 
     if (StringUtils.isNotBlank(crossdockHubValue)) {
-      sendKeysAndEnterById(stationsCrossdockHub, crossdockHubValue);
-      //this.crossdockHub.selectValue(crossdockHub);
+      this.crossdockHub.selectValue(crossdockHubValue, crossdockHub.getWebElement());
       pause2s();
 
       if (StringUtils.isNotBlank(originHub)) {
-        originStationHub.selectValue(originHub);
+        originStationHub.selectValue(originHub, originStationHub.getWebElement());
       }
 
       if (StringUtils.isNotBlank(destinationHub)) {
-        destinationStationHub.selectValue(destinationHub);
+        destinationStationHub.selectValue(destinationHub, destinationStationHub.getWebElement());
       }
     } else {
       if (StringUtils.isNotBlank(originHub)) {
