@@ -1,11 +1,11 @@
 @MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToCrossdock @CrossdockToItsStation
 Feature: Crossdock to it's Station
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @11 @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @11 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to its Station - Station Movement Found and there is available schedule (uid:4be9aa9e-813f-4c02-8d92-5af401b4a6f4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -43,11 +43,11 @@ Feature: Crossdock to it's Station
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
     And Operator select "Relations" tab on Movement Management page
-    Then Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab
+    Then Operator verify 'All' 'Pending' and 'Complete' tabs are displayed on 'Relations' tab
     And Operator verify "Pending" tab is selected on 'Relations' tab
     And Operator verify all Crossdock Hub in Pending tab have "Unfilled" value
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
-    When Operator select "Completed" tab on Movement Management page
+    When Operator select "Complete" tab on Movement Management page
     And Operator verify all Crossdock Hub of all listed Stations already defined
     And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
     When Operator select "Stations" tab on Movement Management page
