@@ -12,8 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AntSelect extends PageElement {
 
-  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][contains(normalize-space(text()), '%s')]";
-  public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
+  public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@data-rowindex='%d']";
 
   public AntSelect(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
@@ -32,7 +32,7 @@ public class AntSelect extends PageElement {
   @FindBy(className = "ant-select-selection-selected-value")
   public PageElement selectValueElement;
 
-  @FindBy(css = "input.ant-select-search__field,input.ant-select-selection-search-input")
+  @FindBy(xpath = "//input[contains(@class,'ant-select-search__field') or contains(@class,'ant-select-selection-search-input')]")
   public PageElement searchInput;
 
   @FindBy(className = "ant-select-clear-icon")
@@ -40,6 +40,11 @@ public class AntSelect extends PageElement {
 
   public void selectValue(String value) {
     enterSearchTerm(value);
+    clickMenuItem(value);
+  }
+
+  public void selectValue(String value, WebElement element) {
+    enterSearchTerm(value, element);
     clickMenuItem(value);
   }
 
@@ -78,6 +83,12 @@ public class AntSelect extends PageElement {
   public void enterSearchTerm(String value) {
     openMenu();
     searchInput.sendKeys(value);
+    pause1s();
+  }
+
+  public void enterSearchTerm(String value, WebElement element) {
+    openMenu();
+    element.sendKeys(value);
     pause1s();
   }
 
