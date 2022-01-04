@@ -1,7 +1,7 @@
 @MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToCrossdock @StationToItsCrossdock
 Feature: Station to it's Crossdock
 
-  @1 @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -77,7 +77,7 @@ Feature: Station to it's Crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @1 @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
+  @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule (uid:be4d5366-99e4-432d-879f-7647efbf7d6b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-id} to hub id = {hub-relation-destination-hub-id}
@@ -100,13 +100,13 @@ Feature: Station to it's Crossdock
       | sla         | -                                   |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2) |
+      | source | SHIPMENT_VAN_INBOUND(MMDA) |
       | result | Transit              |
       | hub    | {hub-name}           |
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                               |
       | status   | FAILED                                                                                        |
-      | comments | found no path from origin {hub-id} (sg) to destination {hub-relation-destination-hub-id} (sg) |
+      | comments | No path found between {hub-name} (sg) and {hub-relation-destination-hub-name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock - Station Movement not found (uid:034368e1-26d9-43fc-9aec-6a8f6cb8f3eb)
@@ -150,7 +150,7 @@ Feature: Station to it's Crossdock
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
