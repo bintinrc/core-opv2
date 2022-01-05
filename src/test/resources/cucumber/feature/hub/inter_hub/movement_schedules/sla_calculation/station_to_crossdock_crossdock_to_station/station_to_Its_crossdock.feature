@@ -111,7 +111,7 @@ Feature: Station to it's Crossdock
       | status   | FAILED                                                                                        |
       | comments | No path found between {hub-name} (sg) and {hub-relation-destination-hub-name} (sg). Please ask your manager to check the schedule. |
 
-  @1 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock - Station Movement not found (uid:034368e1-26d9-43fc-9aec-6a8f6cb8f3eb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
