@@ -126,6 +126,9 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
   public PageElement successCreateRelation;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation updated']")
+  public PageElement successUpdateRelation;
+
   @FindBy(xpath = "//tr[1]//td[1]//input")
   public CheckBox rowCheckBox;
 

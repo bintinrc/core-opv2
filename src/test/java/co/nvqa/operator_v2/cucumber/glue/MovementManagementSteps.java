@@ -167,7 +167,7 @@ public class MovementManagementSteps extends AbstractSteps {
           putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_CROSSDOCK_ID, Long.valueOf(crossdockId));
         }
         operatorSelectTabOnMovementManagementPage("Relations");
-        operatorSelectTabOnMovementManagementPage("Pending");
+        operatorSelectTabOnMovementManagementPage((finalData.get("tabName")!=null) ? "All" : "Pending");
         movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
         movementManagementPage.relationsTable.rows.get(0).editRelations.click();
@@ -175,8 +175,13 @@ public class MovementManagementSteps extends AbstractSteps {
         retryIfRuntimeExceptionOccurred(() ->
                 movementManagementPage.editStationRelationsModal.fill(crossdockHub),2);
         movementManagementPage.editStationRelationsModal.save.click();
-        movementManagementPage.successCreateRelation.waitUntilVisible();
-        movementManagementPage.successCreateRelation.waitUntilInvisible();
+        if(finalData.get("tabName")!=null){
+          movementManagementPage.successUpdateRelation.waitUntilVisible();
+          movementManagementPage.successUpdateRelation.waitUntilInvisible();
+        }else{
+          movementManagementPage.successCreateRelation.waitUntilVisible();
+          movementManagementPage.successCreateRelation.waitUntilInvisible();
+        }
         movementManagementPage.editStationRelationsModal.waitUntilInvisible();
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
