@@ -69,6 +69,9 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator load schedules on Movement Management page using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -82,7 +85,7 @@ Feature: Crossdock to other station belong to another crossdock
       | sla         | {{next-4-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:

@@ -47,7 +47,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-modal")
   public EditStationRelationsModal editStationRelationsModal;
 
-  @FindBy(id = "originHubId")
+  @FindBy(id = "originHub")
   public AntSelect originCrossdockHub;
 
   @FindBy(id = "originHub")
@@ -56,7 +56,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(id = "crossdockHub")
   public AntSelect crossdockHub;
 
-  @FindBy(id = "destinationHubId")
+  @FindBy(id = "destinationHub")
   public AntSelect destinationCrossdockHub;
 
   @FindBy(id = "destinationHub")
@@ -202,11 +202,11 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       }
     } else {
       if (StringUtils.isNotBlank(originHub)) {
-        originCrossdockHub.selectValue(originHub);
+        originCrossdockHub.selectValue(originHub, originCrossdockHub.getWebElement());
       }
 
       if (StringUtils.isNotBlank(destinationHub)) {
-        destinationCrossdockHub.selectValue(destinationHub);
+        destinationCrossdockHub.selectValue(destinationHub,destinationCrossdockHub.getWebElement());
       }
     }
 
