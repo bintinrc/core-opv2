@@ -88,6 +88,9 @@ Feature: Station to it's Crossdock
       | crossdockHub   | {hub-relation-destination-hub-name} |
       | stationId      | {hub-id}                            |
       | crossdockHubId | {hub-relation-destination-hub-id}   |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {hub-name} to hub id = {hub-relation-destination-hub-name}
+    And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -108,7 +111,7 @@ Feature: Station to it's Crossdock
       | status   | FAILED                                                                                        |
       | comments | No path found between {hub-name} (sg) and {hub-relation-destination-hub-name} (sg). Please ask your manager to check the schedule. |
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @1 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock - Station Movement not found (uid:034368e1-26d9-43fc-9aec-6a8f6cb8f3eb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -132,6 +135,9 @@ Feature: Station to it's Crossdock
     And API Operator reloads hubs cache
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -144,7 +150,7 @@ Feature: Station to it's Crossdock
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)               |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)          |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
