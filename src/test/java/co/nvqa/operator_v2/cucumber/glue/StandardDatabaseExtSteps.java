@@ -518,15 +518,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         DateUtil.displayDateTime(entityEndDateTime));
   }
 
-  @Then("DB Operator verify {word} transaction record of order {string}:")
+  @Then("DB Operator verify {word} transaction record of order {value}:")
   public void dbOperatorVerifyTransactionRecord(String typeStr, String orderIdStr,
       Map<String, String> data) {
     String type = StringUtils.equalsIgnoreCase(typeStr, "Delivery") ? "DD" : "PP";
-    Long orderId = resolveValue(orderIdStr);
+    long orderId = Long.parseLong(orderIdStr);
     TransactionEntity expected = new TransactionEntity(resolveKeyValues(data));
 
-    List<TransactionEntity> transactions = getCoreJdbc()
-        .findTransactionByOrderIdAndType(orderId, type);
+    List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(orderId,
+        type);
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, orderId),
         transactions, hasSize(1));
     TransactionEntity actual = transactions.get(0);
@@ -576,6 +576,17 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
                   "Transaction " + finalData + " was not found")
           );
     }
+  }
+
+  @Then("DB Operator verifies core_qa_sg.waypoints record:")
+  public void verifyWaypoint(Map<String, String> data) {
+    Waypoint expected = new Waypoint(resolveKeyValues(data));
+
+    Waypoint actual = getCoreJdbc().findWaypointById(expected.getId());
+    Assertions.assertThat(actual)
+        .as("Waypoint with id=%s", expected.getId())
+        .isNotNull();
+    expected.compareWithActual(actual);
   }
 
   private void assertTransaction(TransactionEntity expected, TransactionEntity actual,
@@ -1944,8 +1955,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     SoftAssertions assertions = new SoftAssertions();
     waypointIds.forEach(w -> {
-      Long id = getCoreJdbc().findWaypointById(w);
-      assertions.assertThat(id)
+      Waypoint waypoint = getCoreJdbc().findWaypointById(w);
+      assertions.assertThat(waypoint)
           .as("core_qa_sg.waypoints record for id=%s", w)
           .isNull();
     });
@@ -1991,5 +2002,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(reservedTrackingId)
         .as("ocreate_qa_gl.reserve_tracking_ids record for tracking_id=%s", trackingId)
         .isNull();
+  }
+
+  @Given("DB Operator gets {int} existed DP IDs")
+  public void dbOperatorGetsExistedDPIDs(int dpIdsNeeded) {
+    List<Long> dpIds = getNonNull(() -> getDpJdbc().getExistedDpId(dpIdsNeeded),
+        f("Get %d Existed DP IDs", dpIdsNeeded));
+    put(KEY_LIST_OF_DP_IDS, dpIds);
   }
 }

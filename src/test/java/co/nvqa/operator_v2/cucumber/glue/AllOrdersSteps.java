@@ -210,6 +210,19 @@ public class AllOrdersSteps extends AbstractSteps {
     pause2s();
   }
 
+  @When("Operator Manually Complete orders on All Orders page:")
+  public void operatorForceSuccessOrdersOnAllOrdersPage(List<String> data) {
+    data = resolveValues(data);
+    allOrdersPage.findOrdersWithCsv(data);
+    allOrdersPage.clearFilterTableOrderByTrackingId();
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
+    allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    pause2s();
+  }
+
   @When("^Operator verifies error messages in dialog on All Orders page:$")
   public void operatorVerifyErrorMessagesDialog(List<String> data) {
     data = resolveValues(data);

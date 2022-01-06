@@ -89,6 +89,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     dp.setId(Long.parseLong(responseBody.get("id").toString()));
     dp.setDpmsId(Long.parseLong(responseBody.get("dpms_id").toString()));
     put(KEY_DISTRIBUTION_POINT, dp);
+    put(KEY_NEWLY_CREATED_DP_ID, dp.getId());
   }
 
   @When("^API Operator add new DP User for the created DP with the following attributes:$")

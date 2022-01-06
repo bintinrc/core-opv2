@@ -14,6 +14,7 @@ import io.cucumber.java.en.When;
 
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -54,6 +55,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on the ellipses")
   public void operatorClicksOnTheEllipses() {
+    addressingDownloadPage.ellipses.waitUntilVisible();
     addressingDownloadPage.ellipses.click();
     addressingDownloadPage.verifiesOptionIsShown();
   }
@@ -243,7 +245,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     addressingDownloadPage.downloadCsv.click();
 
-    LocalDateTime formattedDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime().minus(Duration.of(8, ChronoUnit.HOURS));
+    LocalDateTime formattedDateTime = Instant.now().atZone(ZoneId.of(addressingDownloadPage.SYS_ID))
+        .toLocalDateTime();
     String csvTimestamp = AddressingDownloadPage.DATE_FORMAT.format(formattedDateTime);
 
     // Get the file timestamp ASAP to reduce time latency
@@ -308,6 +311,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
       presetName = preset;
     }
 
+    addressingDownloadPage.selectPresetLoadAddresses.waitUntilVisible();
     String presetNameFieldValue = addressingDownloadPage.selectPresetLoadAddresses.getValue();
 
     if (presetNameFieldValue.equals("")) {

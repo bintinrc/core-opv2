@@ -66,6 +66,9 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
     When API Operator updates Hub using data below:
       | id           | {KEY_LIST_OF_CREATED_HUBS[1].id} |
       | facilityType | CROSSDOCK                        |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -84,7 +87,7 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
     And Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock Given Station is Updated/Disable - Station is Disable (uid:b78d02b4-1e05-4655-a8c1-ad43e6d9971b)

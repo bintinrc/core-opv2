@@ -167,7 +167,7 @@ public class MovementManagementSteps extends AbstractSteps {
           putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_CROSSDOCK_ID, Long.valueOf(crossdockId));
         }
         operatorSelectTabOnMovementManagementPage("Relations");
-        operatorSelectTabOnMovementManagementPage("Pending");
+        operatorSelectTabOnMovementManagementPage((finalData.get("tabName")!=null) ? "All" : "Pending");
         movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
         movementManagementPage.relationsTable.rows.get(0).editRelations.click();
@@ -175,8 +175,13 @@ public class MovementManagementSteps extends AbstractSteps {
         retryIfRuntimeExceptionOccurred(() ->
                 movementManagementPage.editStationRelationsModal.fill(crossdockHub),2);
         movementManagementPage.editStationRelationsModal.save.click();
-        movementManagementPage.successCreateRelation.waitUntilVisible();
-        movementManagementPage.successCreateRelation.waitUntilInvisible();
+        if(finalData.get("tabName")!=null){
+          movementManagementPage.successUpdateRelation.waitUntilVisible();
+          movementManagementPage.successUpdateRelation.waitUntilInvisible();
+        }else{
+          movementManagementPage.successCreateRelation.waitUntilVisible();
+          movementManagementPage.successCreateRelation.waitUntilInvisible();
+        }
         movementManagementPage.editStationRelationsModal.waitUntilInvisible();
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
@@ -218,7 +223,7 @@ public class MovementManagementSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     Optional.ofNullable(data.get("station"))
         .ifPresent(value -> assertEquals("Station", value,
-            movementManagementPage.relationsTable.rows.get(0).sation.getText()));
+            movementManagementPage.relationsTable.rows.get(0).station.getText()));
     Optional.ofNullable(data.get("crossdockHub"))
         .ifPresent(value -> assertEquals("Crossdock Hub", value,
             movementManagementPage.relationsTable.rows.get(0).crossdock.getText()));
@@ -512,7 +517,7 @@ public class MovementManagementSteps extends AbstractSteps {
       case "pending":
         movementManagementPage.pendingTab.click();
         break;
-      case "completed":
+      case "complete":
         movementManagementPage.completedTab.click();
         break;
       case "all":
@@ -523,11 +528,11 @@ public class MovementManagementSteps extends AbstractSteps {
     }
   }
 
-  @When("Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab")
+  @When("Operator verify 'All' 'Pending' and 'Complete' tabs are displayed on 'Relations' tab")
   public void operatorVerifyTabsAreDisplayedOnRelationsTab() {
     assertTrue("All tab is displayed", movementManagementPage.allTab.isDisplayedFast());
     assertTrue("Pending tab is displayed", movementManagementPage.pendingTab.isDisplayedFast());
-    assertTrue("Completed tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
+    assertTrue("Complete tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
   }
 
   @When("^Operator verify \"(.+)\" tab is selected on 'Relations' tab$")

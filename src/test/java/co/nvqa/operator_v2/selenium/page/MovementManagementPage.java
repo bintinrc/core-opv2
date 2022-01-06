@@ -10,7 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextWithLabel;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
@@ -47,19 +47,19 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-modal")
   public EditStationRelationsModal editStationRelationsModal;
 
-  @FindBy(id = "originHubId")
+  @FindBy(id = "originHub")
   public AntSelect originCrossdockHub;
 
-  @FindBy(id = "orig_station_hub")
+  @FindBy(id = "originHub")
   public AntSelect originStationHub;
 
-  @FindBy(id = "crossdock_hub")
+  @FindBy(id = "crossdockHub")
   public AntSelect crossdockHub;
 
-  @FindBy(id = "destinationHubId")
+  @FindBy(id = "destinationHub")
   public AntSelect destinationCrossdockHub;
 
-  @FindBy(id = "dest_station_hub")
+  @FindBy(id = "destinationHub")
   public AntSelect destinationStationHub;
 
   @FindBy(xpath = "//button[.='Load Schedules']")
@@ -89,7 +89,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[starts-with(.,'All')]")
   public PageElement allTab;
 
-  @FindBy(xpath = "//label[starts-with(.,'Completed')]")
+  @FindBy(xpath = "//label[starts-with(.,'Complete')]")
   public PageElement completedTab;
 
   @FindBy(xpath = "//label[starts-with(.,'Pending')]")
@@ -125,6 +125,9 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
   public PageElement successCreateRelation;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation updated']")
+  public PageElement successUpdateRelation;
 
   @FindBy(xpath = "//tr[1]//td[1]//input")
   public CheckBox rowCheckBox;
@@ -165,7 +168,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//td[@class='comment']")
   public List<TextBox> comments;
   //endregion
-
+  public String stationsCrossdockHub = "crossdockHub";
   public SchedulesTable schedulesTable;
   public HubRelationSchedulesTable hubRelationScheduleTable;
   public StationMovementSchedulesTable stationMovementSchedulesTable;
@@ -181,29 +184,29 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
-  public void loadSchedules(String crossdockHub, String originHub, String destinationHub) {
+  public void loadSchedules(String crossdockHubValue, String originHub, String destinationHub) {
     if (editFilters.isDisplayedFast()) {
       editFilters.click();
     }
 
-    if (StringUtils.isNotBlank(crossdockHub)) {
-      this.crossdockHub.selectValue(crossdockHub);
+    if (StringUtils.isNotBlank(crossdockHubValue)) {
+      this.crossdockHub.selectValue(crossdockHubValue, crossdockHub.getWebElement());
       pause2s();
 
       if (StringUtils.isNotBlank(originHub)) {
-        originStationHub.selectValue(originHub);
+        originStationHub.selectValue(originHub, originStationHub.getWebElement());
       }
 
       if (StringUtils.isNotBlank(destinationHub)) {
-        destinationStationHub.selectValue(destinationHub);
+        destinationStationHub.selectValue(destinationHub, destinationStationHub.getWebElement());
       }
     } else {
       if (StringUtils.isNotBlank(originHub)) {
-        originCrossdockHub.selectValue(originHub);
+        originCrossdockHub.selectValue(originHub, originCrossdockHub.getWebElement());
       }
 
       if (StringUtils.isNotBlank(destinationHub)) {
-        destinationCrossdockHub.selectValue(destinationHub);
+        destinationCrossdockHub.selectValue(destinationHub,destinationCrossdockHub.getWebElement());
       }
     }
 
@@ -563,10 +566,10 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(className = "hubName")
-    public PageElement sation;
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell hub-name')]")
+    public PageElement station;
 
-    @FindBy(className = "crossdockHubName")
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell crossdock-hub-name')]")
     public PageElement crossdock;
 
     @FindBy(xpath = "//td//button[.='Edit Relations']")

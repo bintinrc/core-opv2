@@ -52,6 +52,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[@class='filter-row']//div[text()='%s']";
+  private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
 
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
@@ -479,7 +480,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       scrollIntoView(comboFilterXpath);
       List<WebElement> filterFields = getWebDriver().findElements(By.xpath(comboFilterXpath));
       if (filterFields.size() > 0) {
+        pause2s();
         filterFields.get(0).click();
+        pause2s();
         new AntSelect2(getWebDriver(), filterFields.get(0)).selectValue(filter.getValue());
       }
     }
@@ -853,5 +856,26 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     pause2s();
     Assert.assertTrue(f("Assert that the filter %s is applied", filter),
         filterApplied.size() > 0 );
+  }
+
+  public void selectCheckboxByTrackingId(List<String> trackingIds) {
+    waitWhilePageIsLoading();
+    scrollIntoView(footerRow.getWebElement());
+    for(String trackingId : trackingIds){
+      String checkboxByTrackingId = f(RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH, trackingId);
+      scrollIntoView(checkboxByTrackingId);
+      pause2s();
+      WebElement checkbox = getWebDriver().findElement(
+          By.xpath(checkboxByTrackingId));
+      checkbox.click();
+    }
+    Assert.assertTrue(f("Assert that the checkbox is selected for all given tracking id"),
+        trackingIds.size() > 0 );
+  }
+
+  public void verifyStationConfirmedEtaDisabled() {
+    waitWhilePageIsLoading();
+    Assert.assertTrue(f("Assert that the station confirmed eta is disabled"),
+        commonSuggestedEtas.isEnabled());
   }
 }

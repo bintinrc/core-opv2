@@ -2059,6 +2059,21 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
+
+    @FindBy(css = "[id^='commons.country']")
+    public TextBox country;
+
+    @FindBy(css = "[id^='commons.city']")
+    public TextBox city;
+
+    @FindBy(css = "[id^='commons.address1']")
+    public TextBox address1;
+
+    @FindBy(css = "[id^='commons.address2']")
+    public TextBox address2;
+
+    @FindBy(css = "[id^='commons.postcode']")
+    public TextBox postcode;
   }
 
   public static class ResumeOrderDialog extends MdDialog {

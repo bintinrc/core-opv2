@@ -54,6 +54,9 @@ Feature: Station to Station Under Same Crossdock
       | duration       | 1                                  |
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -90,6 +93,9 @@ Feature: Station to Station Under Same Crossdock
       | crossdockHub   | {hub-relation-destination-hub-name} |
       | stationId      | {hub-id-2}                          |
       | crossdockHubId | {hub-relation-destination-hub-id}   |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {hub-name} to hub id = {hub-name-2}
+    And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -108,7 +114,7 @@ Feature: Station to Station Under Same Crossdock
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                        |
       | status   | FAILED                                                                 |
-      | comments | found no path from origin {hub-id} (sg) to destination {hub-id-2} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Same Crossdock - Station Movement not found (uid:819bcd3c-2da6-4a3c-8e96-20a9558567b1)
@@ -142,6 +148,9 @@ Feature: Station to Station Under Same Crossdock
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
     And Operator refresh page
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -161,7 +170,7 @@ Feature: Station to Station Under Same Crossdock
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
