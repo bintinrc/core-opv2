@@ -62,6 +62,9 @@ Feature: Station to another Crossdock
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -77,7 +80,7 @@ Feature: Station to another Crossdock
       | sla         | {{next-4-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
     Then Operator verify movement event on Shipment Details page using data below:
@@ -131,6 +134,9 @@ Feature: Station to another Crossdock
       | duration       | 1                                  |
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -148,7 +154,7 @@ Feature: Station to another Crossdock
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[3].id} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[3].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Another Crossdock - Crossdock Movement not Found (uid:4e3c6d81-f4a5-45a5-894f-3668dd973811)
@@ -182,6 +188,9 @@ Feature: Station to another Crossdock
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -197,13 +206,13 @@ Feature: Station to another Crossdock
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[3].id} (sg) |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[3].name} (sg). Please ask your manager to check the schedule. |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
