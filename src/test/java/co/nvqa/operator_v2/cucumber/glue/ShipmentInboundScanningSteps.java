@@ -93,7 +93,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
   }
 
-  @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB")
+  @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB$")
   public void operatorInboundScanningShipmentIntoVanInHubHubNameOnShipmentInboundScanningPageUsingMAWB(
       String label, String hub) {
     Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
