@@ -80,6 +80,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
         shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
         shipmentScanningPage.clickSelectShipment();
+        shipmentScanningPage.waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']");
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Searched element is not found, retrying after 2 seconds...");
