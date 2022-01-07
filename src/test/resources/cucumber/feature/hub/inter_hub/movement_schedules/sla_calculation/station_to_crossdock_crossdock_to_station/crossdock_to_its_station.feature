@@ -89,7 +89,6 @@ Feature: Crossdock to it's Station
       | crossdockHub   | {hub-relation-destination-hub-name} |
       | stationId      | {hub-id}                            |
       | crossdockHubId | {hub-relation-destination-hub-id}   |
-      | tabName        | All                                 |
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator add to shipment in hub {hub-relation-destination-hub-name} to hub id = {hub-name}
     And Operator close the shipment which has been created
