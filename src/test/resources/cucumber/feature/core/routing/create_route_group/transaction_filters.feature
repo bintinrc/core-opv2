@@ -355,7 +355,7 @@ Feature: Create Route Groups - Transaction Filters
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
 
-  Scenario Outline: Operator Filter Granular Order Status on Create Route Group - Transaction Filters - <granularStatus> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Granular Order Status on Create Route Group - Transaction Filters - Granular Order Status = <granularStatus> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
@@ -402,7 +402,7 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      | uid:e3b28ae3-5cc2-4a69-b5da-0c8a5f3c3a56 |
       | Van en-route to pickup               | Parcel      | uid:e5c5048d-2823-4521-a054-4b81033c1d72 |
 
-  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - <parcelSize> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - Parcel Size = <parcelSize> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
@@ -436,7 +436,7 @@ Feature: Create Route Groups - Transaction Filters
       | Small       | S    | uid:20988608-803f-4479-b50d-d928c4feefc8 |
       | Extra Small | XS   | uid:10a6796a-66e3-4801-a1d2-78684e848054 |
 
-  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - <timeslots> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - Timeslot = <timeslots> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -614,7 +614,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Staging                                                  |
 
-  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - <ppDdLeg> (<hiptest-uid>)
+  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - PP/DD Leg = <ppDdLeg> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
