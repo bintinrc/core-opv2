@@ -516,6 +516,7 @@ Feature: Create Route Groups - Transaction Filters
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Fail |
+    And Operator click Load Selection on Create Route Group page
     Then Operator verifies Transaction record on Create Route Group page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
