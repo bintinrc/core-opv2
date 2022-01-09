@@ -1247,7 +1247,7 @@ Feature: Shipper Pickups
       | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}                                   |
       | reservationTypes    | Hyperlocal                                                       |
       | waypointStatus      | ROUTED                                                           |
-      | shipper             | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
+      | shipper             | {shipper-v4-legacy-id}                                           |
       | masterShipper       | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator selects "Save Current as Preset" preset action on Shipper Pickups page
     Then Operator verifies Save Preset dialog on Shipper Pickups page contains filters:

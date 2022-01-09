@@ -148,7 +148,7 @@ Feature: Create Route Groups - Reservation Filters
       | id                           | type        | shipper                    | address                                                     | status | startDateTime                                       | endDateTime                                          |
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | FAIL   | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
-  Scenario Outline: Operator Filter Pickup Size Create Route Group - Reservation Filters - <pickupSize> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Pickup Size Create Route Group - Reservation Filters - Pickup Size = <pickupSize> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |

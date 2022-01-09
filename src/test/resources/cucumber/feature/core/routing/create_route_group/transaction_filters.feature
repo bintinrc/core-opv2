@@ -355,7 +355,7 @@ Feature: Create Route Groups - Transaction Filters
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
 
-  Scenario Outline: Operator Filter Granular Order Status on Create Route Group - Transaction Filters - <granularStatus> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Granular Order Status on Create Route Group - Transaction Filters - Granular Order Status = <granularStatus> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
@@ -402,7 +402,7 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      | uid:e3b28ae3-5cc2-4a69-b5da-0c8a5f3c3a56 |
       | Van en-route to pickup               | Parcel      | uid:e5c5048d-2823-4521-a054-4b81033c1d72 |
 
-  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - <parcelSize> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - Parcel Size = <parcelSize> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
@@ -436,7 +436,7 @@ Feature: Create Route Groups - Transaction Filters
       | Small       | S    | uid:20988608-803f-4479-b50d-d928c4feefc8 |
       | Extra Small | XS   | uid:10a6796a-66e3-4801-a1d2-78684e848054 |
 
-  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - <timeslots> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - Timeslot = <timeslots> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -462,7 +462,7 @@ Feature: Create Route Groups - Transaction Filters
       | 3-6pm     | 15:00     | 18:00   | uid:9de49540-44bb-4764-a560-fd4379ae001e |
       | 6-10pm    | 18:00     | 22:00   | uid:f5ec2f7e-18c4-47dd-96ed-e85ae16997a1 |
       | 9-12pm    | 09:00     | 12:00   | uid:b34c1af0-64b0-4747-81fb-9b784b167741 |
-      | Anytime   | 09:00     | 21:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
+      | Anytime   | 09:00     | 22:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
       | Day       | 09:00     | 18:00   | uid:a408168d-f299-4366-a703-3e179b996d63 |
       | Night     | 18:00     | 22:00   | uid:90816330-9865-4f8c-9e22-5530c56e9668 |
 
@@ -516,6 +516,7 @@ Feature: Create Route Groups - Transaction Filters
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Fail |
+    And Operator click Load Selection on Create Route Group page
     Then Operator verifies Transaction record on Create Route Group page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
@@ -614,7 +615,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Staging                                                  |
 
-  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - <ppDdLeg> (<hiptest-uid>)
+  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - PP/DD Leg = <ppDdLeg> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
