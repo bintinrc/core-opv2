@@ -462,7 +462,7 @@ Feature: Create Route Groups - Transaction Filters
       | 3-6pm     | 15:00     | 18:00   | uid:9de49540-44bb-4764-a560-fd4379ae001e |
       | 6-10pm    | 18:00     | 22:00   | uid:f5ec2f7e-18c4-47dd-96ed-e85ae16997a1 |
       | 9-12pm    | 09:00     | 12:00   | uid:b34c1af0-64b0-4747-81fb-9b784b167741 |
-      | Anytime   | 09:00     | 21:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
+      | Anytime   | 09:00     | 22:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
       | Day       | 09:00     | 18:00   | uid:a408168d-f299-4366-a703-3e179b996d63 |
       | Night     | 18:00     | 22:00   | uid:90816330-9865-4f8c-9e22-5530c56e9668 |
 
