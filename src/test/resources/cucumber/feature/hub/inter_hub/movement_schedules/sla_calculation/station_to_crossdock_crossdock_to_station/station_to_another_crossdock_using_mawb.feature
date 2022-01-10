@@ -1,11 +1,11 @@
 @MiddleMile @Hub @InterHub @SlaCalculation @StationToCrossdock @StationToAnotherCrossdockUsingMawb
 Feature: Station to another Crossdock using MAWB
 
-  @1 @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @1 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to another Crossdock using MAWB - Station Movement Found and there is available schedule (uid:bba7604d-9881-42c3-babd-820ec94c7b6a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
