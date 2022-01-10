@@ -7,7 +7,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage;
+import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsV15Page;
 import com.google.common.collect.ImmutableList;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
@@ -29,30 +29,30 @@ import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTab
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TYPE;
 
 /**
- * @author Daniel Joi Partogi Hutapea
+ * @author Sergey Mishanin
  */
 @ScenarioScoped
-public class CreateRouteGroupsSteps extends AbstractSteps {
+public class CreateRouteGroupsV15Steps extends AbstractSteps {
 
   public static final String LIST_OF_TXN_RSVN = "LIST_OF_TXN_RSVN";
   public static final String CSV_FILE_NAME = "create_route_group.csv";
 
-  private CreateRouteGroupsPage createRouteGroupsPage;
+  private CreateRouteGroupsV15Page createRouteGroupsPage;
 
-  public CreateRouteGroupsSteps() {
+  public CreateRouteGroupsV15Steps() {
   }
 
   @Override
   public void init() {
-    createRouteGroupsPage = new CreateRouteGroupsPage(getWebDriver());
+    createRouteGroupsPage = new CreateRouteGroupsV15Page(getWebDriver());
   }
 
-  @When("^Operator wait until 'Create Route Group' page is loaded$")
+  @When("^Operator wait until 'Create Route Group V1.5' page is loaded$")
   public void waitUntilCreateRouteGroupIsLoaded() {
     createRouteGroupsPage.waitUntilRouteGroupPageIsLoaded();
   }
 
-  @When("^Operator V2 add created Transaction to Route Group$")
+  @When("^Operator V2 add created Transaction to Route Group on Create Route Group V1.5 page$")
   public void addCreatedTransactionToRouteGroup() {
     String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
@@ -72,7 +72,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     pause1s();
   }
 
-  @When("Operator adds following transactions to new Route Group {string}:")
+  @When("Operator adds following transactions to new Route Group {string} on Create Route Group V1.5 page:")
   public void addTransactionsToNewRouteGroup(String groupName, List<Map<String, String>> data) {
     groupName = resolveValue(groupName);
     data.forEach(entry -> {
@@ -96,7 +96,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
   }
 
-  @When("Operator adds following reservations to new Route Group {string}:")
+  @When("Operator adds following reservations to new Route Group {string} on Create Route Group V1.5 page:")
   public void addReservationsToNewRouteGroup(String groupName, List<Map<String, String>> data) {
     groupName = resolveValue(groupName);
     data.forEach(entry -> {
@@ -116,7 +116,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
   }
 
-  @When("Operator adds following transactions to Route Group {string}:")
+  @When("Operator adds following transactions to Route Group {string} on Create Route Group V1.5:")
   public void addTransactionsToRouteGroup(String groupName, List<Map<String, String>> data) {
     groupName = resolveValue(groupName);
     data.forEach(entry -> {
@@ -136,23 +136,23 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.clickAndWaitUntilDone();
   }
 
-  @Given("^Operator removes all General Filters except following: \"([^\"]*)\"$")
+  @Given("^Operator removes all General Filters except following on Create Route Group V1.5 page: \"([^\"]*)\"$")
   public void operatorRemovesAllGeneralFiltersExceptFollowingCreationTime(String filtersAsString) {
     List<String> filters = Arrays.asList(filtersAsString.replaceAll(", ", ",").split(","));
     createRouteGroupsPage.removeAllFilterExceptGiven(filters);
   }
 
-  @Given("^Operator choose \"([^\"]*)\" on Transaction Filters section on Create Route Group page$")
+  @Given("^Operator choose \"([^\"]*)\" on Transaction Filters section on Create Route Group V1.5 page$")
   public void operatorChooseOnTransactionFiltersSectionOnCreateRouteGroupPage(String value) {
     createRouteGroupsPage.selectTransactionFiltersMode(value);
   }
 
-  @Given("^Operator choose \"([^\"]*)\" on Reservation Filters section on Create Route Group page$")
+  @Given("^Operator choose \"([^\"]*)\" on Reservation Filters section on Create Route Group V1.5 page$")
   public void operatorChooseOnReservationFiltersSectionOnCreateRouteGroupPage(String value) {
     createRouteGroupsPage.selectReservationFiltersMode(value);
   }
 
-  @When("^Operator verifies selected Transactions Filters on Create Route Group page:$")
+  @When("^Operator verifies selected Transactions Filters on Create Route Group V1.5 page:$")
   public void operatorVerifiesSelectedTransactionFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -315,7 +315,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @Given("^Operator add following filters on Transactions Filters section on Create Route Group page:$")
+  @Given("^Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:$")
   public void operatorAddFollowingFiltersOnTransactionsFiltersSectionOnCreateRouteGroupPage(
       Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -461,7 +461,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @Given("^Operator add following filters on Reservation Filters section on Create Route Group page:$")
+  @Given("^Operator add following filters on Reservation Filters section on Create Route Group V1.5 page:$")
   public void operatorAddFollowingFiltersOnReservationFiltersSectionOnCreateRouteGroupPage(
       Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -499,7 +499,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator verifies selected Reservation Filters on Create Route Group page:$")
+  @When("^Operator verifies selected Reservation Filters on Create Route Group V1.5 page:$")
   public void operatorVerifiesSelectedReservationFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -548,13 +548,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @Given("^Operator add following filters on General Filters section on Create Route Group page:$")
+  @Given("^Operator add following filters on General Filters section on Create Route Group V1.5 page:$")
   public void operatorAddFollowingFiltersOnGeneralFiltersSectionOnCreateRouteGroupPage(
       Map<String, String> mapOfData) {
     createRouteGroupsPage.addGeneralFilters(resolveKeyValues(mapOfData));
   }
 
-  @Given("^Operator set General Filters on Create Route Group page:$")
+  @Given("^Operator set General Filters on Create Route Group V1.5 page:$")
   public void operatorSetGeneralFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -687,7 +687,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @Given("^Operator updates General Filters on Create Route Group page:$")
+  @Given("^Operator updates General Filters on Create Route Group V1.5 page:$")
   public void operatorUpdatesGeneralFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -806,7 +806,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator verifies selected General Filters on Create Route Group page:$")
+  @When("^Operator verifies selected General Filters on Create Route Group V1.5 page:$")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -942,7 +942,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     assertions.assertAll();
   }
 
-  @Given("^Operator set Shipment Filters on Create Route Group page:$")
+  @Given("^Operator set Shipment Filters on Create Route Group V1.5 page:$")
   public void operatorSetShipmentFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -1124,7 +1124,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
   }
 
-  @When("^Operator verifies selected Shipment Filters on Create Route Group page:$")
+  @When("^Operator verifies selected Shipment Filters on Create Route Group V1.5 page:$")
   public void operatorVerifiesSelectedShipmentFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -1277,29 +1277,29 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @Given("^Operator click Load Selection on Create Route Group page$")
+  @Given("^Operator click Load Selection on Create Route Group V1.5 page$")
   public void operatorClickLoadSelectionOnCreateRouteGroupPage() {
     createRouteGroupsPage.loadSelection.clickAndWaitUntilDone();
   }
 
-  @Given("^Operator sort Transactions/Reservations table by Tracking ID on Create Route Group page$")
+  @Given("^Operator sort Transactions/Reservations table by Tracking ID on Create Route Group V1.5 page$")
   public void operatorSortTableOnCreateRouteGroupPage() {
     createRouteGroupsPage.txnRsvnTable.sortColumn(COLUMN_TRACKING_ID, true);
   }
 
-  @Given("^Operator save records from Transactions/Reservations table on Create Route Group page$")
+  @Given("^Operator save records from Transactions/Reservations table on Create Route Group V1.5 page$")
   public void operatorSaveTableOnCreateRouteGroupPage() {
     List<TxnRsvn> records = createRouteGroupsPage.txnRsvnTable.readAllEntities("sequence");
     put(LIST_OF_TXN_RSVN, records);
   }
 
-  @Given("^Operator download CSV file on Create Route Group page$")
+  @Given("^Operator download CSV file on Create Route Group V1.5 page$")
   public void operatorDownloadCsvFileOnCreateRouteGroupPage() {
     createRouteGroupsPage.downloadCsvFile.click();
     createRouteGroupsPage.verifyFileDownloadedSuccessfully(CSV_FILE_NAME);
   }
 
-  @Given("^Operator verify Transactions/Reservations CSV file on Create Route Group page$")
+  @Given("^Operator verify Transactions/Reservations CSV file on Create Route Group V1.5 page$")
   public void operatorVerifyCsvFile() {
     List<TxnRsvn> expected = get(LIST_OF_TXN_RSVN);
     String fileName = createRouteGroupsPage.getLatestDownloadedFilename(CSV_FILE_NAME);
@@ -1312,14 +1312,14 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator verifies Transaction record on Create Route Group page using data below:$")
+  @Then("^Operator verifies Transaction record on Create Route Group V1.5 page using data below:$")
   public void operatorVerifyTransactionReservationRecordOnCreateRouteGroupPageUsingDataBelow(
       Map<String, String> data) {
     operatorVerifyTransactionRecordOnCreateRouteGroupPageUsingDataBelow(
         ImmutableList.of(data));
   }
 
-  @Then("^Operator verifies Transaction records on Create Route Group page using data below:$")
+  @Then("^Operator verifies Transaction records on Create Route Group V1.5 page using data below:$")
   public void operatorVerifyTransactionRecordOnCreateRouteGroupPageUsingDataBelow(
       List<Map<String, String>> data) {
     data.forEach(entry -> {
@@ -1367,7 +1367,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verifies Reservation records on Create Route Group page using data below:$")
+  @Then("^Operator verifies Reservation records on Create Route Group V1.5 page using data below:$")
   public void operatorVerifyReservationRecordOnCreateRouteGroupPageUsingDataBelow(
       List<Map<String, String>> data) {
     data.forEach(entry -> {
@@ -1386,18 +1386,18 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator selects {string} preset action on Create Route Group page")
+  @When("Operator selects {string} preset action on Create Route Group V1.5 page")
   public void selectPresetAction(String action) {
     createRouteGroupsPage.presetActions.selectOption(resolveValue(action));
   }
 
-  @When("Operator selects {string} shipments preset action on Create Route Group page")
+  @When("Operator selects {string} shipments preset action on Create Route Group V1.5 page")
   public void selectShippersPresetAction(String action) {
     createRouteGroupsPage.includeShipments.click();
     createRouteGroupsPage.shippersPresetActions.selectOption(resolveValue(action));
   }
 
-  @When("Operator verifies Save Preset dialog on Create Route Group page contains filters:")
+  @When("Operator verifies Save Preset dialog on Create Route Group V1.5 page contains filters:")
   public void verifySelectedFiltersForPreset(List<String> expected) {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     List<String> actual = createRouteGroupsPage.savePresetDialog.selectedFilters.stream()
@@ -1408,7 +1408,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .containsExactlyInAnyOrderElementsOf(expected);
   }
 
-  @When("Operator verifies Preset Name field in Save Preset dialog on Create Route Group page is required")
+  @When("Operator verifies Preset Name field in Save Preset dialog on Create Route Group V1.5 page is required")
   public void verifyPresetNameIsRequired() {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     Assertions
@@ -1417,7 +1417,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isEqualTo("required");
   }
 
-  @When("Operator verifies help text {string} is displayed in Save Preset dialog on Create Route Group page")
+  @When("Operator verifies help text {string} is displayed in Save Preset dialog on Create Route Group V1.5 page")
   public void verifyHelpTextInSavePreset(String expected) {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.savePresetDialog.helpText.getNormalizedText())
@@ -1425,7 +1425,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isEqualTo(resolveValue(expected));
   }
 
-  @When("Operator verifies Cancel button in Save Preset dialog on Create Route Group page is enabled")
+  @When("Operator verifies Cancel button in Save Preset dialog on Create Route Group V1.5 page is enabled")
   public void verifyCancelIsEnabled() {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.savePresetDialog.cancel.isEnabled())
@@ -1433,7 +1433,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isTrue();
   }
 
-  @When("Operator verifies Save button in Save Preset dialog on Create Route Group page is enabled")
+  @When("Operator verifies Save button in Save Preset dialog on Create Route Group V1.5 page is enabled")
   public void verifySaveIsEnabled() {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.savePresetDialog.save.isEnabled())
@@ -1441,17 +1441,17 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isTrue();
   }
 
-  @When("Operator clicks Save button in Save Preset dialog on Create Route Group page")
+  @When("Operator clicks Save button in Save Preset dialog on Create Route Group V1.5 page")
   public void clickSaveInSavePresetDialog() {
     createRouteGroupsPage.savePresetDialog.save.click();
   }
 
-  @When("Operator clicks Update button in Save Preset dialog on Create Route Group page")
+  @When("Operator clicks Update button in Save Preset dialog on Create Route Group V1.5 page")
   public void clickUpdateInSavePresetDialog() {
     createRouteGroupsPage.savePresetDialog.update.click();
   }
 
-  @When("Operator verifies Save button in Save Preset dialog on Create Route Group page is disabled")
+  @When("Operator verifies Save button in Save Preset dialog on Create Route Group V1.5 page is disabled")
   public void verifySaveIsDisabled() {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.savePresetDialog.save.isEnabled())
@@ -1459,7 +1459,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isFalse();
   }
 
-  @When("Operator verifies Cancel button in Delete Preset dialog on Create Route Group page is enabled")
+  @When("Operator verifies Cancel button in Delete Preset dialog on Create Route Group V1.5 page is enabled")
   public void verifyCancelIsEnabledInDeletePreset() {
     createRouteGroupsPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.deletePresetDialog.cancel.isEnabled())
@@ -1467,7 +1467,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isTrue();
   }
 
-  @When("Operator verifies Delete button in Delete Preset dialog on Create Route Group page is enabled")
+  @When("Operator verifies Delete button in Delete Preset dialog on Create Route Group V1.5 page is enabled")
   public void verifyDeleteIsEnabled() {
     createRouteGroupsPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.deletePresetDialog.delete.isEnabled())
@@ -1475,18 +1475,18 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isTrue();
   }
 
-  @When("Operator selects {string} preset in Delete Preset dialog on Create Route Group page")
+  @When("Operator selects {string} preset in Delete Preset dialog on Create Route Group V1.5 page")
   public void selectPresetInDeletePresets(String value) {
     createRouteGroupsPage.deletePresetDialog.waitUntilVisible();
     createRouteGroupsPage.deletePresetDialog.preset.searchAndSelectValue(resolveValue(value));
   }
 
-  @When("Operator clicks Delete button in Delete Preset dialog on Create Route Group page")
+  @When("Operator clicks Delete button in Delete Preset dialog on Create Route Group V1.5 page")
   public void clickDeleteInDeletePresetDialog() {
     createRouteGroupsPage.deletePresetDialog.delete.click();
   }
 
-  @When("Operator verifies Delete button in Delete Preset dialog on Create Route Group page is disabled")
+  @When("Operator verifies Delete button in Delete Preset dialog on Create Route Group V1.5 page is disabled")
   public void verifyDeleteIsDisabled() {
     createRouteGroupsPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.deletePresetDialog.delete.isEnabled())
@@ -1494,7 +1494,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isFalse();
   }
 
-  @When("Operator verifies {string} message is displayed in Delete Preset dialog on Create Route Group page")
+  @When("Operator verifies {string} message is displayed in Delete Preset dialog on Create Route Group V1.5 page")
   public void verifyMessageInDeletePreset(String expected) {
     createRouteGroupsPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(createRouteGroupsPage.deletePresetDialog.message.getNormalizedText())
@@ -1502,7 +1502,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .isEqualTo(resolveValue(expected));
   }
 
-  @When("Operator enters {string} Preset Name in Save Preset dialog on Create Route Group page")
+  @When("Operator enters {string} Preset Name in Save Preset dialog on Create Route Group V1.5 page")
   public void enterPresetNameIsRequired(String presetName) {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
     presetName = resolveValue(presetName);
@@ -1510,14 +1510,14 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, presetName);
   }
 
-  @When("Operator verifies Preset Name field in Save Preset dialog on Create Route Group page has green checkmark on it")
+  @When("Operator verifies Preset Name field in Save Preset dialog on Create Route Group V1.5 page has green checkmark on it")
   public void verifyPresetNameIsValidated() {
     Assertions.assertThat(createRouteGroupsPage.savePresetDialog.confirmedIcon.isDisplayed())
         .as("Preset Name checkmark")
         .isTrue();
   }
 
-  @When("Operator verifies selected Filter Preset name is {string} on Create Route Group page")
+  @When("Operator verifies selected Filter Preset name is {string} on Create Route Group V1.5 page")
   public void verifySelectedPresetName(String expected) {
     expected = resolveValue(expected);
     String actual = StringUtils.trim(createRouteGroupsPage.filterPreset.getValue());
@@ -1534,7 +1534,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID, presetId);
   }
 
-  @When("Operator verifies selected shippers Filter Preset name is {string} on Create Route Group page")
+  @When("Operator verifies selected shippers Filter Preset name is {string} on Create Route Group V1.5 page")
   public void verifySelectedShippersPresetName(String expected) {
     expected = resolveValue(expected);
     String actual = StringUtils.trim(createRouteGroupsPage.shippersFilterPreset.getValue());
@@ -1551,7 +1551,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     put(KEY_SHIPMENTS_FILTERS_PRESET_ID, presetId);
   }
 
-  @When("Operator selects {string} Filter Preset on Create Route Group page")
+  @When("Operator selects {string} Filter Preset on Create Route Group V1.5 page")
   public void selectPresetName(String value) {
     createRouteGroupsPage.filterPreset.searchAndSelectValue(resolveValue(value));
     if (createRouteGroupsPage.halfCircleSpinner.waitUntilVisible(3)) {
@@ -1560,7 +1560,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     pause1s();
   }
 
-  @When("Operator selects {string} shipments Filter Preset on Create Route Group page")
+  @When("Operator selects {string} shipments Filter Preset on Create Route Group V1.5 page")
   public void selectShippersPresetName(String value) {
     createRouteGroupsPage.includeShipments.click();
     createRouteGroupsPage.shippersFilterPreset.searchAndSelectValue(resolveValue(value));

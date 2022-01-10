@@ -15,6 +15,10 @@ public class TextBox extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
+  public TextBox(WebDriver webDriver, String xpath) {
+    super(webDriver, xpath);
+  }
+
   public TextBox(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
     super(webDriver, searchContext, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
