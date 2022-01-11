@@ -31,7 +31,7 @@ public class FinancialBatchSteps extends AbstractSteps {
       if (value.equalsIgnoreCase("clear")) {
         financialBatchPage.clearDate();
       } else {
-        financialBatchPage.selectDate(mapOfData.get("date"));
+        financialBatchPage.selectDate(value);
       }
     }
     financialBatchPage.clickSearchBtn();
