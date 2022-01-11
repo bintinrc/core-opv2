@@ -148,6 +148,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     }
     if (isElementExistFast(xpath + "//a")) {
       click(xpath + "//a");
+    } else if (isElementExistWait0Second(xpath + "//input")) {
+      click(xpath + "//input");
     } else {
       click(xpath);
     }

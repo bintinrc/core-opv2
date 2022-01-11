@@ -7,15 +7,16 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
-import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSwitch;
-import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntMultiselect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -79,20 +80,20 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(css = "div.ant-modal")
   public SelectionErrorDialog selectionErrorDialog;
 
+  @FindBy(css = "div.ant-modal")
+  public EditTagsDialog editTagsDialog;
+
   @FindBy(css = "input[placeholder='Search for route ID']")
   public TextBox routeIdInput;
 
   @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
   public AntMenu actionsMenu;
 
-  @FindBy(css = "div[data-datakey='tags'] div.ant-dropdown-trigger")
-  public AntMultiselect selectTag;
-
   @FindBy(xpath = "//div[./label[@for='routeDate']]/div")
-  public AntIntervalCalendarPicker routeDateFilter;
+  public AntRangePicker routeDateFilter;
 
-  @FindBy(xpath = "//div[./div/label[@for='hub']]//div[2]")
-  public AntFilterSelect hubFilter;
+  @FindBy(xpath = "//div[./div/label[@for='hub']]/div[2]")
+  public AntSelect3 hubFilter;
 
   @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Driver')]]")
   public AntFilterSelect driverFilter;
@@ -151,7 +152,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     String expectedStatus = f("%1$d of %1$d route(s) completed", sizeOfListOfCreateRouteParams);
     waitUntil(() -> StringUtils.equalsIgnoreCase(
         bulkRouteOptimisationDialog.optimizedRoutesStatus.getText(),
-        expectedStatus), 10000);
+        expectedStatus), 10000, "Did not get message: " + expectedStatus);
     pause2s();
 
     for (int i = 0; i < sizeOfListOfCreateRouteParams; i++) {
@@ -195,17 +196,18 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   }
 
   public void setFilterAndLoadSelection(Date routeDateFrom, Date routeDateTo, String hubName) {
-      waitUntilLoaded();
-      routeDateFilter.setInterval(routeDateFrom, routeDateTo);
-      if (StringUtils.isNotBlank(hubName)) {
-        hubFilter.selectFilter(hubName);
-      }
-      loadSelection.clickAndWaitUntilDone();
+    waitUntilLoaded();
+    routeDateFilter.setInterval(routeDateFrom, routeDateTo);
+    if (StringUtils.isNotBlank(hubName)) {
+      hubFilter.clearValue();
+      hubFilter.selectValue(hubName);
+    }
+    loadSelection.clickAndWaitUntilDone();
   }
 
   @Override
   public void waitUntilLoaded() {
-    super.waitUntilLoaded(3);
+    super.waitUntilLoaded(10);
     clearAllFilters.waitUntilClickable();
   }
 
@@ -244,25 +246,25 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
           .put("zone", "zone_name")
           .put("driverTypeName", "driver_type")
           .put("comments", "comments")
-          .put(COLUMN_TAGS, "tags")
+          .put(COLUMN_TAGS, "tagNames")
           .build()
       );
       setEntityClass(RouteLogsParams.class);
       setColumnReaders(ImmutableMap.of(COLUMN_TAGS, this::getTags));
       setActionButtonsLocators(ImmutableMap.of(
           ACTION_EDIT_DETAILS,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-edit')]",
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='Edit Detail']",
           ACTION_EDIT_ROUTE,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-stock')]",
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='Edit Route']",
           ACTION_OPTIMIZE_ROUTE,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-deployment-unit')]",
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='Optimise Route']",
           ACTION_VERIFY_ADDRESS,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[contains(@class,'anticon-reload')]"));
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='Address Verify Route']"));
     }
 
     public String getTags(int rowIndex) {
       String xpath = f(
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tags']//div[contains(@class,'SelectTag')]",
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='tagNames']//span[contains(@class,'ant-select-selection-item-content')]",
           rowIndex);
       return isElementExistFast(xpath) ? StringUtils.join(getTextOfElements(xpath), ",") : null;
     }
@@ -290,26 +292,26 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class BulkEditDetailsDialog extends AntModal {
 
-    @FindBy(css = ".ant-calendar-picker")
-    public AntCalendarPicker routeDate;
+    @FindBy(css = "div.route-date")
+    public AntPicker routeDate;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[contains(text(),'Route Tags')]]//div[contains(@class,'ant-dropdown-trigger')]")
-    public AntMultiselect routeTags;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Route Tags']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 routeTags;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Zone']]//div[contains(@class,'ant-select')]")
-    public AntSelect2 zone;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Zone']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 zone;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Hub']]//div[contains(@class,'ant-select')]")
-    public AntSelect2 hub;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Hub']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 hub;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
-    public AntSelect2 assignedDriver;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 assignedDriver;
 
-    @FindBy(xpath = ".//div[contains(@class,'ant-select-selection')][.//div[.='Vehicle']]")
-    public AntSelect2 vehicle;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Vehicle']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 vehicle;
 
-    @FindBy(css = "[placeholder='Comment']")
-    public TextBox comments;
+    @FindBy(xpath = ".//span[./input[@placeholder='Comment']]")
+    public AntTextBox comments;
 
     @FindBy(css = "button[data-testid='create-button']")
     public AntButton saveChanges;
@@ -331,26 +333,26 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class EditDetailsDialog extends AntModal {
 
-    @FindBy(css = ".ant-calendar-picker")
-    public AntCalendarPicker routeDate;
+    @FindBy(css = "div.route-date")
+    public AntPicker routeDate;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[contains(text(),'Route Tags')]]//div[contains(@class,'ant-dropdown-trigger')]")
-    public AntMultiselect routeTags;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Route Tags']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 routeTags;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Zone']]//div[contains(@class,'ant-select')]")
-    public AntSelect2 zone;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Zone']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 zone;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Hub']]//div[contains(@class,'ant-select')]")
-    public AntSelect2 hub;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Hub']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 hub;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
-    public AntSelect2 assignedDriver;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 assignedDriver;
 
-    @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][4]//div[contains(@class,'ant-select')]")
-    public AntSelect2 vehicle;
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Vehicle']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 vehicle;
 
-    @FindBy(css = "[placeholder='Comment']")
-    public TextBox comments;
+    @FindBy(xpath = ".//span[./input[@placeholder='Comment']]")
+    public AntTextBox comments;
 
     @FindBy(xpath = ".//button[.='Delete']")
     public AntButton delete;
@@ -380,26 +382,26 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
     public static class RouteDetailsForm extends PageElement {
 
-      @FindBy(css = ".ant-calendar-picker")
-      public AntCalendarPicker routeDate;
+      @FindBy(css = "div.route-date")
+      public AntPicker routeDate;
 
-      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[contains(text(),'Route Tags')]]//div[contains(@class,'ant-dropdown-trigger')]")
-      public AntMultiselect routeTags;
+      @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Route Tags']]//div[contains(@class,'ant-select')]")
+      public AntSelect3 routeTags;
 
-      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Zone']]//div[contains(@class,'ant-select')]")
-      public AntSelect2 zone;
+      @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Zone']]//div[contains(@class,'ant-select')]")
+      public AntSelect3 zone;
 
-      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Hub']]//div[contains(@class,'ant-select')]")
-      public AntSelect2 hub;
+      @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Hub']]//div[contains(@class,'ant-select')]")
+      public AntSelect3 hub;
 
-      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][.//div[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
-      public AntSelect2 assignedDriver;
+      @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
+      public AntSelect3 assignedDriver;
 
-      @FindBy(xpath = ".//div[contains(@class,'nv-input-field')][4]//div[contains(@class,'ant-select')]")
-      public AntSelect2 vehicle;
+      @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Vehicle']]//div[contains(@class,'ant-select')]")
+      public AntSelect3 vehicle;
 
-      @FindBy(css = "[placeholder='Comment']")
-      public TextBox comments;
+      @FindBy(xpath = ".//span[./input[@placeholder='Comment']]")
+      public AntTextBox comments;
 
       public RouteDetailsForm(WebDriver webDriver, SearchContext searchContext,
           WebElement webElement) {
@@ -410,7 +412,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class BulkRouteOptimisationDialog extends AntModal {
 
-    @FindBy(css = "div[class*='OptimiseSelected'] > h4 + div")
+    @FindBy(xpath = ".//div[./span[.='Optimised Routes']]/span[2]")
     public PageElement optimizedRoutesStatus;
 
     @FindBy(xpath = "(.//div[@class='BaseTable__body'])[1]//div[@role='row']/div[@role='gridcell'][1]")
@@ -422,7 +424,6 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     public BulkRouteOptimisationDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
-
   }
 
   public static class DeleteRoutesDialog extends AntModal {
@@ -523,6 +524,22 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     public Button optimizeRoute;
 
     public OptimizeSelectedRouteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class EditTagsDialog extends AntModal {
+
+    @FindBy(css = "div.ant-select")
+    public AntSelect3 tags;
+
+    @FindBy(xpath = ".//button[.='Cancel']")
+    public Button cancel;
+
+    @FindBy(xpath = ".//button[.='Update Tags']")
+    public Button updateTags;
+
+    public EditTagsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
