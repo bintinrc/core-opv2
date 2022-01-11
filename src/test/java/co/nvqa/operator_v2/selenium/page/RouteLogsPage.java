@@ -438,13 +438,13 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class SelectionErrorDialog extends AntModal {
 
-    @FindBy(xpath = ".//div[./div[.='Process']]")
+    @FindBy(xpath = ".//div[./div[.='Process:']]/div[2]")
     public PageElement process;
 
-    @FindBy(xpath = ".//table[@data-testid='simple-table']//tr[position() > 1]/td[1]")
+    @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][1]")
     public List<PageElement> routeIds;
 
-    @FindBy(xpath = ".//table[@data-testid='simple-table']//tr[position() > 1]/td[2]")
+    @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][2]")
     public List<PageElement> reasons;
 
     @FindBy(xpath = ".//button[.='Continue']")

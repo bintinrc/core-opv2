@@ -1114,11 +1114,13 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifySelectionErrors(String process, List<Map<String, String>> data) {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.selectionErrorDialog.waitUntilVisible();
-      assertEquals("Process", resolveValue(process),
-          routeLogsPage.selectionErrorDialog.process.getText().replace("Process", "").trim());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText())
+          .as("Process")
+          .isEqualTo(resolveValue(process));
 
-      assertEquals("Number Of routes", data.size(),
-          routeLogsPage.selectionErrorDialog.routeIds.size());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds.size())
+          .as("Number Of routes")
+          .isEqualTo(data.size());
 
       for (int i = 0; i < data.size(); i++) {
         Map<String, String> expected = resolveKeyValues(data.get(i));
