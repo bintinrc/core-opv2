@@ -39,6 +39,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
+  private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
   private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
@@ -471,6 +472,25 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         f("Assert that the search should have %s records as expected after applying filters",
             resultsCount),
         results.size() == resultsCount);
+  }
+
+  public void applyFilters(String columnName, String filterName) {
+    waitWhilePageIsLoading();
+    String filterColumnXpath = f(MODAL_TABLE_FILTER_XPATH, columnName);
+    String filterXpath = f(MODAL_TABLE_MULTIPLE_FILTER_XPATH, filterName);
+    scrollIntoView(filterColumnXpath);
+    List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterColumnXpath));
+    if (filterFields.size() > 0) {
+      waitWhilePageIsLoading();
+      filterFields.get(0).click();
+      pause2s();
+      getWebDriver().findElement(By.xpath(filterXpath)).click();
+    }
+    waitWhilePageIsLoading();
+    Assert.assertTrue(
+        f("Assert that the search should have %s column as expected to apply filter",
+            columnName),
+        filterFields.size() > 0);
   }
 
   public void selectFilterValue(Map<String, String> filters) {

@@ -198,6 +198,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
         stationManagementHomePage.applyFilters(filter, 1);
     }
 
+    @When("Operator selects following filter criteria for the table column: {string}")
+    public void operator_selects_following_filter_criteria_for_the_table_column(String columnName, List<String> filterValues) {
+        for(String filterValue: filterValues){
+            stationManagementHomePage.applyFilters(columnName, filterValue);
+        }
+    }
+
     @When("Operator selects the following values in the modal pop up")
     public void operator_selects_the_following_values_in_the_modal_pop_up(Map<String, String> selectFilters) {
         Map<String, String> filter = resolveKeyValues(selectFilters);
