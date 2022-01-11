@@ -162,20 +162,25 @@ public class MovementManagementSteps extends AbstractSteps {
         String crossdockHub = finalData.get("crossdockHub");
         String stationId = finalData.get("stationId");
         String crossdockId = finalData.get("crossdockHubId");
+        String tabName = "Pending";
         if (stationId != null && crossdockId != null) {
           putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_STATION_ID, Long.valueOf(stationId));
           putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_CROSSDOCK_ID, Long.valueOf(crossdockId));
         }
         operatorSelectTabOnMovementManagementPage("Relations");
-        operatorSelectTabOnMovementManagementPage((finalData.get("tabName")!=null) ? "All" : "Pending");
+        operatorSelectTabOnMovementManagementPage(tabName);
         movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
+        if(!movementManagementPage.relationsTable.rows.get(0).editRelations.isDisplayed()){
+          tabName = "All";
+          operatorSelectTabOnMovementManagementPage(tabName);
+        }
         movementManagementPage.relationsTable.rows.get(0).editRelations.click();
         movementManagementPage.editStationRelationsModal.waitUntilVisible();
         retryIfRuntimeExceptionOccurred(() ->
                 movementManagementPage.editStationRelationsModal.fill(crossdockHub),2);
         movementManagementPage.editStationRelationsModal.save.click();
-        if(finalData.get("tabName")!=null){
+        if(tabName.equals("All")){
           movementManagementPage.successUpdateRelation.waitUntilVisible();
           movementManagementPage.successUpdateRelation.waitUntilInvisible();
         }else{
