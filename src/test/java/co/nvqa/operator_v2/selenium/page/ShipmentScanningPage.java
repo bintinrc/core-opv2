@@ -214,10 +214,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         "//div[contains(@class,'ant-modal-content')]");
     click("//button[contains(@class,'ant-btn-primary')]//span[.='Close Shipment']");
 
-    String toastMessage = getToastTopText();
+    String toastMessage = getAntTopText();
     assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
         allOf(containsString("Shipment"), containsString("closed")));
-    waitUntilInvisibilityOfToast();
+    waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
   }
 
   public void closeShipmentWithData(String originHubName, String destinationHubName,
