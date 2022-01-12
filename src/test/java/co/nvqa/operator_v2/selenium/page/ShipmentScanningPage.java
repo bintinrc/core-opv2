@@ -40,8 +40,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
   public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment']";
-  public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
-  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//input[@id='scan_barcode_input_remove']";
+  public static final String XPATH_BARCODE_SCAN = "//input[@id='toAddTrackingId']";
+  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//input[@id='toRemoveTrackingId']";
   //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
   public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
   public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
@@ -208,10 +208,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipment() {
     pause300ms();
-    click(
-        "//button[.='Close Shipment']");
-    waitUntilVisibilityOfElementLocated(
-        "//div[contains(@class,'ant-modal-content')]");
+    click("//button[.='Close Shipment']");
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
     click("//button[contains(@class,'ant-btn-primary')]//span[.='Close Shipment']");
 
     String toastMessage = getAntTopText();
@@ -292,7 +290,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void removeAllOrdersFromShipment() {
     pause1s();
-    click("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']");
+    click("//button//span[.='Remove All']");
     removeAllParcelsDialog.waitUntilVisible();
     removeAllParcelsDialog.remove.waitUntilClickable();
     removeAllParcelsDialog.remove.click();
