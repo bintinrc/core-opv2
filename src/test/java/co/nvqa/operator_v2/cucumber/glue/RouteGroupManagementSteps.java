@@ -247,6 +247,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
   @Then("Operator apply filters on Route Group Management page:")
   public void applyFilters(Map<String, String> data) {
     routeGroupManagementPage.inFrame(page -> {
+      page.waitUntilLoaded();
       Map<String, String> resolvedData = resolveKeyValues(data);
       page.creationDate.fairSetInterval(resolvedData.get("fromDate"), resolvedData.get("toDate"));
     });

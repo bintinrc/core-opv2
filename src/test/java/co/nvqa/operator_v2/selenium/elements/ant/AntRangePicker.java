@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +23,9 @@ import static co.nvqa.commons.support.DateUtil.DATE_FORMATTER_SNS_1;
  * @author Sergey Mishanin
  */
 public class AntRangePicker extends PageElement {
+
+  private static final SimpleDateFormat DATE_CELL_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+  private static final String DATE_CELL_LOCATOR = "//td[contains(@class,'ant-picker-cell-in-view')][@title='%s']";
 
   public AntRangePicker(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
@@ -74,6 +79,18 @@ public class AntRangePicker extends PageElement {
   public void setInterval(Date from, Date to) {
     setFrom(from);
     setTo(to);
+  }
+
+  public void fairSetInterval(Date from, Date to) {
+    valueFrom.click();
+    String xpath = f(DATE_CELL_LOCATOR, DATE_CELL_FORMAT.format(from));
+    new PageElement(getWebDriver(), xpath).click();
+    xpath = f(DATE_CELL_LOCATOR, DATE_CELL_FORMAT.format(to));
+    new PageElement(getWebDriver(), xpath).click();
+  }
+
+  public void fairSetInterval(String from, String to) {
+    fairSetInterval(DataEntity.toDateTime(from), DataEntity.toDateTime(to));
   }
 
   public String getValueFrom() {

@@ -3,10 +3,9 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -17,8 +16,8 @@ import org.openqa.selenium.support.PageFactory;
 public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private static final String CELL_LOCATOR_PATTERN = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
-  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='actions']//button[.//*[@data-icon='%s']]";
-  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//input";
+  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='%s']";
+  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input]";
   private static final String COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'ant-select')]";
 
   @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
@@ -95,18 +94,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
-      TextBox input = new TextBox(getWebDriver(), xpath);
-      String currentValue = input.getValue();
-      if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < currentValue.length(); i++) {
-          sb.append(Keys.BACK_SPACE);
-        }
-        sb.append(value);
-        input.setValue(sb.toString());
-      } else if (StringUtils.isEmpty(currentValue)) {
-        input.setValue(value);
-      }
+      AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+      input.setValue(value);
     }
     return this;
   }
@@ -118,15 +107,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
         xpath = tableLocator + xpath;
       }
       if (isElementExistWait0Second(xpath)) {
-        String currentValue = getValue(xpath);
-        if (StringUtils.isNotEmpty(currentValue)) {
-          click(xpath);
-          StringBuilder sb = new StringBuilder();
-          for (int i = 0; i < currentValue.length(); i++) {
-            sb.append(Keys.BACK_SPACE);
-          }
-          sendKeys(xpath, sb.toString());
-        }
+        AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+        input.clear();
       }
     });
   }

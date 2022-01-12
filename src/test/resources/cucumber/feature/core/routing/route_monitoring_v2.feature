@@ -1,5 +1,5 @@
 @OperatorV2 @Core @Routing @RoutingJob2 @RouteMonitoringV2
-Feature: Route Monitoring
+Feature: Route Monitoring V2
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

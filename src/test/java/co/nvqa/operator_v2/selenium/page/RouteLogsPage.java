@@ -7,14 +7,13 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
-import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -95,23 +94,23 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(xpath = "//div[./div/label[@for='hub']]/div[2]")
   public AntSelect3 hubFilter;
 
-  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Driver')]]")
-  public AntFilterSelect driverFilter;
+  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Driver')]]")
+  public AntFilterSelect3 driverFilter;
 
-  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Zone')]]")
-  public AntFilterSelect zoneFilter;
+  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Zone')]]")
+  public AntFilterSelect3 zoneFilter;
 
-  @FindBy(xpath = "//div[contains(@class,'StyledFilterWrapper')][.//div[contains(.,'Archived Routes')]]")
+  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Archived Routes')]]")
   public AntFilterSwitch archivedRoutesFilter;
 
   @FindBy(id = "crossdock_hub")
   public AntSelect crossdockHub;
 
-  @FindBy(xpath = "//div[text()='Add Filter']//div[@role='combobox']")
-  public AntSelect2 addFilter;
+  @FindBy(xpath = "//div[text()='Add Filter']//div[contains(@class,'ant-select')]")
+  public AntSelect3 addFilter;
 
-  @FindBy(css = "div.preset-select div[role='combobox']")
-  public AntSelect2 filterPreset;
+  @FindBy(css = "div.preset-select div.ant-select")
+  public AntSelect3 filterPreset;
 
   @FindBy(xpath = "//button[normalize-space(.)='Preset Actions']")
   public AntMenu presetActions;
@@ -457,13 +456,13 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class SavePresetDialog extends AntModal {
 
-    @FindBy(css = "div.description-row")
+    @FindBy(xpath = "(.//div[contains(@class,'FilterPresetSaveDialogue')])[2]/div")
     public List<PageElement> selectedFilters;
 
     @FindBy(css = "input.ant-input")
     public TextBox presetName;
 
-    @FindBy(css = "div.nv-input-field-wrapper > span[class*='FieldWrapper']")
+    @FindBy(css = "span.ant-typography")
     public PageElement helpText;
 
     @FindBy(css = "svg[data-icon='check-circle']")
@@ -473,7 +472,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     public Button cancel;
 
     @FindBy(xpath = ".//button[.='Save']")
-    public AntButton save;
+    public Button save;
 
     @FindBy(xpath = "//button[.='Update']")
     public Button update;
@@ -486,9 +485,9 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   public static class DeletePresetDialog extends AntModal {
 
     @FindBy(css = "div.ant-select")
-    public AntSelect preset;
+    public AntSelect3 preset;
 
-    @FindBy(css = "div.ant-typography")
+    @FindBy(css = "div[class*='NvAlert'] > div:nth-of-type(2)")
     public PageElement message;
 
     @FindBy(xpath = ".//button[.='Cancel']")

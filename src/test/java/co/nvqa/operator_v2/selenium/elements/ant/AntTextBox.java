@@ -32,7 +32,11 @@ public class AntTextBox extends TextBox {
   public void clear() {
     if (StringUtils.isNotEmpty(getValue())) {
       click();
-      clearIcon.click();
+      if (clearIcon.isDisplayedFast()) {
+        clearIcon.click();
+      } else {
+        input.forceClear();
+      }
     }
   }
 

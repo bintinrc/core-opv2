@@ -526,7 +526,7 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.archivedRoutesFilter.selectFilter(finalData.get("archivedRoutes"));
       } else {
         if (routeLogsPage.archivedRoutesFilter.isDisplayedFast()) {
-          routeLogsPage.archivedRoutesFilter.deleteFilter();
+          routeLogsPage.archivedRoutesFilter.removeFilter();
         }
       }
     });
@@ -765,7 +765,7 @@ public class RouteLogsSteps extends AbstractSteps {
       if (finalData.containsKey("zone")) {
         boolean isDisplayed = routeLogsPage.zoneFilter.isDisplayedFast();
         if (!isDisplayed) {
-          assertions.fail("Driver filter is not displayed");
+          assertions.fail("Zone filter is not displayed");
         } else {
           assertions.assertThat(routeLogsPage.zoneFilter.getSelectedValues())
               .as("Zone items")
@@ -775,10 +775,10 @@ public class RouteLogsSteps extends AbstractSteps {
       if (finalData.containsKey("archivedRoutes")) {
         boolean isDisplayed = routeLogsPage.archivedRoutesFilter.isDisplayedFast();
         if (!isDisplayed) {
-          assertions.fail("Driver filter is not displayed");
+          assertions.fail("Archived Routes filter is not displayed");
         } else {
           assertions.assertThat(routeLogsPage.archivedRoutesFilter.getSelectedValue())
-              .as("Zone items")
+              .as("Archived Routes state")
               .isEqualTo(Boolean.parseBoolean(data.get("archivedRoutes")));
         }
       }

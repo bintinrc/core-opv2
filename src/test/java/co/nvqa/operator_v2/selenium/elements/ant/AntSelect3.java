@@ -37,6 +37,9 @@ public class AntSelect3 extends PageElement {
   public List<PageElement> selectedValues;
 
   @FindBy(css = ".ant-select-selection-item")
+  public PageElement selectedValue;
+
+  @FindBy(css = ".ant-select-selection-item")
   public List<SelectedItem> selectedItems;
 
   @FindBy(css = ".ant-select-selection-search-input")
@@ -46,8 +49,10 @@ public class AntSelect3 extends PageElement {
   public PageElement clearIcon;
 
   public void selectValue(String value) {
-    enterSearchTerm(value);
-    clickMenuItem(value);
+    if (!StringUtils.equals(value, getValue())) {
+      enterSearchTerm(value);
+      clickMenuItem(value);
+    }
   }
 
   public void selectValues(Iterable<String> values) {
@@ -83,6 +88,8 @@ public class AntSelect3 extends PageElement {
     openMenu();
     if (clearIcon.isDisplayedFast()) {
       clearIcon.click();
+    } else {
+      searchInput.forceClear();
     }
   }
 
@@ -127,8 +134,9 @@ public class AntSelect3 extends PageElement {
   }
 
   public String getValue() {
-    List<String> values = getValues();
-    return values.isEmpty() ? null : values.get(0);
+    return selectedValue.isDisplayedFast() ?
+        selectedValue.getAttribute("title") :
+        null;
   }
 
   public List<String> getValues() {

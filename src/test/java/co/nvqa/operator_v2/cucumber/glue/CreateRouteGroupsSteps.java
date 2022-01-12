@@ -401,7 +401,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
       createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter.clearAll();
       createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter
-          .selectFilter(splitAndNormalize(value));
+          .strictlySelectFilter(splitAndNormalize(value));
     }
 
     value = data.get("timeslots");
@@ -411,7 +411,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
       createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter.clearAll();
       createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter
-          .selectFilter(splitAndNormalize(value));
+          .strictlySelectFilter(splitAndNormalize(value));
     }
 
     value = data.get("deliveryType");
