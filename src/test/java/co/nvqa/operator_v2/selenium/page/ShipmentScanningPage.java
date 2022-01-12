@@ -220,31 +220,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipmentWithData(String originHubName, String destinationHubName,
       String shipmentType, String shipmentId) {
-    waitUntilVisibilityOfElementLocated("//div[@class='hub-selection']//nv-autocomplete");
-    selectOriginHub.waitUntilVisible();
-    selectOriginHub.selectValue(originHubName);
-
-    selectDestinationHub.waitUntilVisible();
-    selectDestinationHub.selectValue(destinationHubName);
-
-    selectShipmentType.waitUntilVisible();
-    selectShipmentType.click();
-    selectShipmentType.selectValue("Air Haul");
-
-    selectShipmentFilter.waitUntilVisible();
-    selectShipmentFilter.selectValue(shipmentId);
-
-    selectShipmentButton.waitUntilClickable();
-    selectShipmentButton.click();
-
-    closeShipmentButton.waitUntilVisible();
-    closeShipmentButton.waitUntilClickable();
-    closeShipmentButton.click();
-
-    closeShipmentDialog.waitUntilVisible();
-    closeShipmentDialog.closeShipmentButton.waitUntilClickable();
-    closeShipmentDialog.closeShipmentButton.click();
-
+    switchTo();
+    selectHub(originHubName);
+    selectDestinationHub(destinationHubName);
+    selectShipmentType(shipmentType);
+    waitUntilElementIsClickable("//input[@id='shipment_id']");
+    selectShipmentId(Long.parseLong(shipmentId));
+    clickSelectShipment();
+    waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+    closeShipment();
   }
 
   public void removeOrderFromShipment(String firstTrackingId) {
