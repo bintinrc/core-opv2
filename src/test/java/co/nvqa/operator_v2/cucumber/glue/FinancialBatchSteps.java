@@ -27,7 +27,12 @@ public class FinancialBatchSteps extends AbstractSteps {
       financialBatchPage.selectShipper(mapOfData.get("shipper"));
     }
     if (mapOfData.containsKey("date")) {
-      financialBatchPage.selectDate(mapOfData.get("date"));
+      String value = mapOfData.get("date");
+      if (value.equalsIgnoreCase("clear")) {
+        financialBatchPage.clearDate();
+      } else {
+        financialBatchPage.selectDate(value);
+      }
     }
     financialBatchPage.clickSearchBtn();
   }

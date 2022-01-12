@@ -3,8 +3,6 @@ Feature: Check Pricing Script
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And Operator changes the country to "Indonesia"
-
 
   Scenario: Check Script Successfully - ID (uid:4ae78f1e-a1e1-4bc6-acff-33c458f5b37e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -22,9 +20,9 @@ Feature: Check Pricing Script
       | originPricingZone      | ID_A00007_01 |
       | destinationPricingZone | ID_B00001_01 |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 71710 |
-      | gst          | 710   |
-      | deliveryFee  | 71000 |
+      | grandTotal   | 66660 |
+      | gst          | 660   |
+      | deliveryFee  | 66660 |
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
