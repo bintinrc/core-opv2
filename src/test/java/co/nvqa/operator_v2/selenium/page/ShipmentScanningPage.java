@@ -39,7 +39,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
-  public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[@aria-label='Select Shipment']";
+  public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment']";
   public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
   public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//input[@id='scan_barcode_input_remove']";
   //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
@@ -143,34 +143,25 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Force Complete Trip']")
   public Button forceCompleteButton;
 
+  @FindBy(tagName = "iframe")
+  private PageElement pageFrame;
+
   public ShipmentScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void selectHub(String hubName) {
-    sendKeys("//nv-autocomplete[@item-types='hub']//input", hubName);
-    pause1s();
-    clickf("//li//span[text()='%s']", hubName);
+    sendKeysAndEnterById("orig_hub", hubName);
     pause50ms();
   }
 
   public void selectDestinationHub(String destHub) {
-    sendKeys("//nv-autocomplete[contains(@search-text,'destinationHub')]//input", destHub);
-    pause1s();
-    try {
-      clickf("//li//span[text()='%s']", destHub);
-    } catch (Exception e) {
-      clickf("(//li//span[text()='%s'])[2]", destHub);
-    }
+    sendKeysAndEnterById("dest_hub", destHub);
     pause50ms();
   }
 
   public void selectShipmentId(Long shipmentId) {
-    sendKeys("//nv-autocomplete[@item-types='shipment']//input", shipmentId.toString());
-    pause2s();
-    waitUntilVisibilityOfElementLocated(
-        f("//li//span[starts-with(text(),'%s')]", shipmentId.toString()));
-    clickf("//li//span[starts-with(text(),'%s')]", shipmentId.toString());
+    sendKeysAndEnterById("shipment_id", shipmentId.toString());
     pause50ms();
   }
 
@@ -182,11 +173,23 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickSelectShipment() {
-    clickNvApiTextButtonByNameAndWaitUntilDone("container.shipment-scanning.select-shipment");
+    TestUtils.findElementAndClick(XPATH_SELECT_SHIPMENT_BUTTON, "xpath", getWebDriver());
   }
 
   public void selectShipmentType(String shipmentType) {
-    selectValueFromMdSelectById("container.shipment-scanning.shipment-type", shipmentType);
+    TestUtils.findElementAndClick("shipment_type", "id", getWebDriver());
+    if(shipmentType.equals("AIR_HAUL")){
+      shipmentType = "Air Haul";
+    }else if(shipmentType.equals("SEA_HAUL")){
+      shipmentType = "Sea Haul";
+    }else if(shipmentType.equals("LAND_HAUL")){
+      shipmentType = "Land Haul";
+    }else if(shipmentType.equals("OTHERS")){
+      shipmentType = "Others";
+    }else if(shipmentType.equals("ALL")){
+      shipmentType = "All";
+    }
+    TestUtils.findElementAndClick("//div[.='"+shipmentType+"']", "xpath", getWebDriver());
   }
 
   public void scanBarcode(String trackingId) {
@@ -206,15 +209,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void closeShipment() {
     pause300ms();
     click(
-        "//nv-icon-text-button[contains(@name,'close-shipment')]/button[contains(@class,'close-shipment')]");
+        "//button[.='Close Shipment']");
     waitUntilVisibilityOfElementLocated(
-        "//md-dialog[md-dialog-content[contains(@id,'dialogContent')]]");
-    click("//button[contains(@class,'md-primary') and @aria-label='Close Shipment']");
+        "//div[contains(@class,'ant-modal-content')]");
+    click("//button[contains(@class,'ant-btn-primary')]//span[.='Close Shipment']");
 
-    String toastMessage = getToastTopText();
+    String toastMessage = getAntTopText();
     assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
         allOf(containsString("Shipment"), containsString("closed")));
-    waitUntilInvisibilityOfToast();
+    waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
   }
 
   public void closeShipmentWithData(String originHubName, String destinationHubName,
@@ -789,5 +792,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     @FindBy(className = "result")
     public PageElement result;
+  }
+
+  public void switchTo() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 }

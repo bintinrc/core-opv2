@@ -56,6 +56,10 @@ public class FinancialBatchPage extends SimpleReactPage<FinancialBatchPage> {
     searchDate.sendDate(date);
   }
 
+  public void clearDate() {
+    searchDate.clear.click();
+  }
+
   public void clickSearchBtn() {
     searchBtn.click();
   }
