@@ -47,11 +47,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
             ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
+        shipmentScanningPage.switchTo();
         shipmentScanningPage.selectHub(resolveValue(hub));
         shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
         shipmentScanningPage.selectShipmentType(shipmentType);
-        shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
-        shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
+        shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
+        shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.scanBarcode(trackingId);
         shipmentScanningPage.checkOrderInShipment(trackingId);
@@ -99,11 +100,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
     {
       try {
         Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+        shipmentScanningPage.switchTo();
         shipmentScanningPage.selectHub(resolveValue(hub));
         shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
         shipmentScanningPage.selectShipmentType(shipmentType);
-        shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
-        shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
+        shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
+        shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
@@ -141,11 +143,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
         String resolvedDestHub = resolveValue(destHub);
+        shipmentScanningPage.switchTo();
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectDestinationHub(resolvedDestHub);
         shipmentScanningPage.selectShipmentType(shipmentType);
-        shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
-        shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
+        shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
+        shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
 
         for (String trackingId : trackingIds) {
