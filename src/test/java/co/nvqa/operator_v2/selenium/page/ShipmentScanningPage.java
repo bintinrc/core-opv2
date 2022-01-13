@@ -25,6 +25,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.Matchers.allOf;
 
@@ -36,6 +38,7 @@ import static org.hamcrest.Matchers.allOf;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentScanningPage extends OperatorV2SimplePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentScanningPage.class);
   public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
@@ -208,11 +211,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipment() {
     pause300ms();
-    click("//button[.='Close Shipment']");
+    click("//div[@class='ant-card-head-wrapper']//button//span[.='Close Shipment']");
     waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
-    click("//button[contains(@class,'ant-btn-primary')]//span[.='Close Shipment']");
+    click("//div[@class='ant-modal-content']//button[.='Close Shipment']");
 
     String toastMessage = getAntTopText();
+    LOGGER.info(toastMessage);
     assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
         allOf(containsString("Shipment"), containsString("closed")));
     waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
