@@ -58,11 +58,13 @@ Feature: Edit Pricing Profiles - Corporate Shippers - Insurance
     # create a pending pricing profile for corporate shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     # create a pending pricing profile for corporate sub shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-ins-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
       # edit pending pricing profile for corporate shipper
