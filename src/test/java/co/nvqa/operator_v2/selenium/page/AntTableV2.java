@@ -95,6 +95,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
         xpath = tableLocator + xpath;
       }
       AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+      input.scrollIntoView();
       input.setValue(value);
     }
     return this;

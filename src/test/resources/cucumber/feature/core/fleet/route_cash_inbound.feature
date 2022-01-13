@@ -28,7 +28,8 @@ Feature: Route Cash Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Update COD on Route Cash Inbound Page (uid:17a49e4e-1886-47d6-832d-054cb52f7872)
-    Given API Shipper create V4 order using data below:
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -49,7 +50,8 @@ Feature: Route Cash Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete COD on Route Cash Inbound Page (uid:0379802a-7b41-4cd2-8c2b-26d0490b310e)
-    Given API Shipper create V4 order using data below:
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -71,7 +73,7 @@ Feature: Route Cash Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Fetch COD Inbound with Date Range Filter (uid:9c7561eb-7a6b-4ab2-85eb-a8953a1846a9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -95,7 +97,7 @@ Feature: Route Cash Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Download and Verify Cash Inbound CSV File (uid:e45f5794-4c75-4d55-adbb-faacc380e54f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
