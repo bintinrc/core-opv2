@@ -478,12 +478,12 @@ Feature: Reschedule & RTS
       | UPDATE AV      |
     When API Operator get order details
     And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}              |
       | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
       | type       | PP                                  |
       | status     | Fail                                |
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | PP                                 |
@@ -497,10 +497,10 @@ Feature: Reschedule & RTS
       | name       | test sender name                   |
       | email      | test@mail.com                      |
       | contact    | +9727894434                        |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION_BEFORE.waypointId} |
       | status | Fail                                |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id       | {KEY_TRANSACTION_AFTER.waypointId} |
       | status   | Pending                            |
       | routeId  | null                               |
@@ -559,12 +559,12 @@ Feature: Reschedule & RTS
       | UPDATE AV      |
     When API Operator get order details
     And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}              |
       | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
       | type       | DD                                  |
       | status     | Fail                                |
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | DD                                 |
@@ -578,10 +578,10 @@ Feature: Reschedule & RTS
       | name       | test recipient name                |
       | email      | test@mail.com                      |
       | contact    | +9727894434                        |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION_BEFORE.waypointId} |
       | status | Fail                                |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id       | {KEY_TRANSACTION_AFTER.waypointId} |
       | status   | Pending                            |
       | routeId  | null                               |
@@ -627,7 +627,7 @@ Feature: Reschedule & RTS
       | rts | 1 |
     When API Operator get order details
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | id         | {KEY_TRANSACTION_BEFORE.id}        |
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
@@ -639,7 +639,7 @@ Feature: Reschedule & RTS
       | postcode   | 308402                             |
       | city       | Singapore                          |
       | country    | Singapore                          |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id       | {KEY_TRANSACTION_AFTER.waypointId} |
       | status   | Pending                            |
       | routeId  | null                               |
@@ -690,12 +690,12 @@ Feature: Reschedule & RTS
       | rts | 1 |
     When API Operator get order details
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}              |
       | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
       | type       | DD                                  |
       | status     | Fail                                |
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | DD                                 |
@@ -706,10 +706,10 @@ Feature: Reschedule & RTS
       | postcode   | 308402                             |
       | city       | Singapore                          |
       | country    | Singapore                          |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION_BEFORE.waypointId} |
       | status | Routed                              |
-    And DB Operator verifies core_qa_sg.waypoints record:
+    And DB Operator verifies waypoints record:
       | id       | {KEY_TRANSACTION_AFTER.waypointId} |
       | status   | Pending                            |
       | routeId  | null                               |

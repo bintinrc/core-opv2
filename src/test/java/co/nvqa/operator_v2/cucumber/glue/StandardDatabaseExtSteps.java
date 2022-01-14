@@ -543,7 +543,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertions.assertAll();
   }
 
-  @Then("DB Operator verifies core_qa_sg.transactions record:")
+  @Then("DB Operator verifies transactions record:")
   public void verifyTransaction(Map<String, String> data) {
     data = resolveKeyValues(data);
     TransactionEntity expected = new TransactionEntity(data);
@@ -578,7 +578,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @Then("DB Operator verifies core_qa_sg.waypoints record:")
+  @Then("DB Operator verifies waypoints record:")
   public void verifyWaypoint(Map<String, String> data) {
     Waypoint expected = new Waypoint(resolveKeyValues(data));
 
@@ -1208,7 +1208,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         reservationWaypoint, routeWaypoint), reservationWaypoint, routeWaypoint);
   }
 
-  @Then("^DB Operator verify the orders are deleted in core_qa_sg.order_batch_items DB$")
+  @Then("^DB Operator verify the orders are deleted in order_batch_items DB$")
   public void dbOperatorVerifyBatchIdIsDeleted() throws SQLException, ClassNotFoundException {
     Long batchId = get(KEY_CREATED_BATCH_ID);
     Long result = getCoreJdbc().getBatchId(batchId);
@@ -1909,38 +1909,38 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, trackingIds);
   }
 
-  @When("DB Operator verifies orders records are hard-deleted in core_qa_sg.orders table:")
+  @When("DB Operator verifies orders records are hard-deleted in orders table:")
   public void verifyOrdersAreHardDeleted(List<String> orderIds) {
     resolveValues(orderIds).forEach(this::verifyOrderIsHardDeleted);
   }
 
-  @When("DB Operator verifies {value} order record is hard-deleted in core_qa_sg.orders table")
+  @When("DB Operator verifies {value} order record is hard-deleted in orders table")
   public void verifyOrderIsHardDeleted(String orderId) {
     List<Long> orderIds = getCoreJdbc().findOrderRecordByOrderId(Long.valueOf(orderId));
     Assertions.assertThat(orderIds)
-        .as("List of core_qa_sg.orders records for id=%s", orderId)
+        .as("List of orders records for id=%s", orderId)
         .isEmpty();
   }
 
-  @When("DB Operator verifies orders records are hard-deleted in core_qa_sg.transactions table:")
+  @When("DB Operator verifies orders records are hard-deleted in transactions table:")
   public void verifyOrdersTransactionsAreHardDeleted(List<String> orderIds) {
     resolveValues(orderIds).forEach(this::verifyOrderTransactionsAreHardDeleted);
   }
 
-  @When("DB Operator verifies {value} order records are hard-deleted in core_qa_sg.transactions table")
+  @When("DB Operator verifies {value} order records are hard-deleted in transactions table")
   public void verifyOrderTransactionsAreHardDeleted(String orderId) {
     List<Long> orderIds = getCoreJdbc().findTransactionsRecordByOrderId(Long.valueOf(orderId));
     Assertions.assertThat(orderIds)
-        .as("List of core_qa_sg.transactions records for order_id=%s", orderId)
+        .as("List of transactions records for order_id=%s", orderId)
         .isEmpty();
   }
 
-  @When("DB Operator verifies orders records are hard-deleted in core_qa_sg.waypoints table:")
+  @When("DB Operator verifies orders records are hard-deleted in waypoints table:")
   public void verifyOrdersWaypointsAreHardDeleted(List<String> orderIds) {
     resolveValues(orderIds).forEach(this::verifyOrderWaypointsAreHardDeleted);
   }
 
-  @When("DB Operator verifies {value} order records are hard-deleted in core_qa_sg.waypoints table")
+  @When("DB Operator verifies {value} order records are hard-deleted in waypoints table")
   public void verifyOrderWaypointsAreHardDeleted(String orderId) {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
     Order order = orders.stream()
@@ -1957,50 +1957,50 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     waypointIds.forEach(w -> {
       Waypoint waypoint = getCoreJdbc().findWaypointById(w);
       assertions.assertThat(waypoint)
-          .as("core_qa_sg.waypoints record for id=%s", w)
+          .as("waypoints record for id=%s", w)
           .isNull();
     });
     assertions.assertAll();
   }
 
-  @When("DB Operator verifies orders records are hard-deleted in core_qa_sg.order_details table:")
+  @When("DB Operator verifies orders records are hard-deleted in order_details table:")
   public void verifyOrderDetailsAreHardDeleted(List<String> orderIds) {
     resolveValues(orderIds).forEach(this::verifyOrderDetailsAreHardDeleted);
   }
 
-  @When("DB Operator verifies {value} order record is hard-deleted in core_qa_sg.order_details table")
+  @When("DB Operator verifies {value} order record is hard-deleted in order_details table")
   public void verifyOrderDetailsAreHardDeleted(String orderId) {
     String serviceType = getCoreJdbc().getOrderServiceType(Long.parseLong(orderId));
     Assertions.assertThat(serviceType)
-        .as("core_qa_sg.order_details record for order_id=%s", orderId)
+        .as("order_details record for order_id=%s", orderId)
         .isNull();
   }
 
-  @When("DB Operator verifies orders records are hard-deleted in core_qa_sg.order_delivery_verifications table:")
+  @When("DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:")
   public void verifyOrderDeliveryVerificationsAreHardDeleted(List<String> orderIds) {
     resolveValues(orderIds).forEach(this::verifyOrderDeliveryVerificationsAreHardDeleted);
   }
 
-  @When("DB Operator verifies {value} order record is hard-deleted in core_qa_sg.order_delivery_verifications table")
+  @When("DB Operator verifies {value} order record is hard-deleted in order_delivery_verifications table")
   public void verifyOrderDeliveryVerificationsAreHardDeleted(String orderId) {
     ShipperRefMetadata shipperRefMetadata = getCoreJdbc().getOrderDeliveryVerifications(
         Long.parseLong(orderId));
     Assertions.assertThat(shipperRefMetadata)
-        .as("core_qa_sg.order_delivery_verifications record for order_id=%s", orderId)
+        .as("order_delivery_verifications record for order_id=%s", orderId)
         .isNull();
   }
 
-  @When("DB Operator verifies orders records are hard-deleted in ocreate_qa_gl.reserve_tracking_ids table:")
+  @When("DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:")
   public void verifyReserveTrackingIdIsHardDeleted(List<String> trackingIds) {
     resolveValues(trackingIds).forEach(this::verifyReserveTrackingIdIsHardDeleted);
   }
 
-  @When("DB Operator verifies {value} order record is hard-deleted in ocreate_qa_gl.reserve_tracking_ids table")
+  @When("DB Operator verifies {value} order record is hard-deleted in reserve_tracking_ids table")
   public void verifyReserveTrackingIdIsHardDeleted(String trackingId) {
     ReserveTrackingIdEntity reservedTrackingId = getOrderCreateJdbc().rawFindReservedTrackingId(
         trackingId);
     Assertions.assertThat(reservedTrackingId)
-        .as("ocreate_qa_gl.reserve_tracking_ids record for tracking_id=%s", trackingId)
+        .as("reserve_tracking_ids record for tracking_id=%s", trackingId)
         .isNull();
   }
 
