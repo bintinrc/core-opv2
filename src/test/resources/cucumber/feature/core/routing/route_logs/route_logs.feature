@@ -32,7 +32,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute | 2                                |
@@ -53,7 +53,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -79,10 +79,9 @@ Feature: Route Logs
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
 
-
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Multiple Routes from Route Logs Page (uid:03e47864-aa13-4dc3-8775-27f07257320b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -105,7 +104,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Print Passwords of Multiple Routes from Route Logs Page (uid:25552c52-3a03-4110-8b33-628b65785b37)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -123,7 +122,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Print Multiple Routes Details from Route Logs Page (uid:1a53a8cd-1499-4135-9171-5435bf397469)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -140,7 +139,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Multiple Routes from Route Logs Page (uid:8839e88d-7873-4bb8-8143-8de7de657624)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -162,7 +161,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
@@ -192,7 +191,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Tag to a Single Route on Route Logs Page (uid:47e4dfc2-b5e3-470a-a832-b99c85905f8a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
@@ -210,7 +209,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete a Single Route on Route Logs Page (uid:9d2ef35c-fceb-466b-ab93-13cd9d98807b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
@@ -227,7 +226,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Redirected to Edit Route Page from Route Logs - Load Waypoints of Selected Route(s) only (uid:f07cd3bd-e0a4-4117-a92f-e4005e3d5c6a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
@@ -240,7 +239,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Route by Route Id on Route Logs Page (uid:273b5063-c85e-47a1-bada-f50d3f755541)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
@@ -256,7 +255,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Remove Tag of a Single Route on Route Logs Page (uid:54eb6cae-5061-4559-994d-cead31ef5d1f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator set tags of the new created route to [{route-tag-id},{route-tag-id-2}]
@@ -272,7 +271,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Address Verify Route on Route Logs Page (uid:1e689de9-9f65-4447-8532-a775abbd9574)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
@@ -300,7 +299,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note> (<hiptest-uid >)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -330,7 +329,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Single Route from Route Logs Page (uid:9f9943a6-918d-4388-a19a-7650cdbcba18)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create multiple V4 orders using data below:
@@ -358,7 +357,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Redirected to Route Manifest from Route Logs Page (uid:dba06f34-649b-4314-a089-7c13acde1234)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs

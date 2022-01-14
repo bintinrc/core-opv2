@@ -7,7 +7,6 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Create Route Groups Page - All Search Filters (uid:3da5f28e-4c54-4988-9848-f8955fe15ed3)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Group page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}                                   |
@@ -25,13 +24,12 @@ Feature: Create Route Groups - Preset Filters
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
-      | transactionStatus   | Forced Success         |
+      | transactionStatus   | Success                |
       | rts                 | Show                   |
       | parcelSize          | Extra Large            |
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -43,7 +41,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -63,13 +61,12 @@ Feature: Create Route Groups - Preset Filters
       | Zone: {zone-name}                                                                                                 |
       | Order Type: Normal                                                                                                |
       | PP/DD Leg: DD                                                                                                     |
-      | Transaction Status: Forced Success                                                                                |
+      | Transaction Status: Success                                                                                       |
       | RTS: Show                                                                                                         |
       | Parcel Size: Extra Large                                                                                          |
       | Timeslots: Day                                                                                                    |
       | Delivery Type: (13) C2C 1 Day - Anytime                                                                           |
       | DNR Group: 9 - SAME DAY                                                                                           |
-      | Bulky Types: Regular                                                                                              |
       | Pick Up Size: Less than 10 Parcels                                                                                |
       | Reservation Type: Hyperlocal                                                                                      |
       | Reservation Status: Success                                                                                       |
@@ -77,7 +74,7 @@ Feature: Create Route Groups - Preset Filters
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
       | Start Hub: {hub-name}                                                                                             |
       | End Hub: {hub-name-2}                                                                                             |
-      | Last Inbound Hub: {hub-name}                                                                                      |
+      | Last Inbound Hub: {hub-name-3}                                                                                    |
       | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00 |
       | Shipment Status: At Transit Hub                                                                                   |
       | Shipment Type: Air Haul                                                                                           |
@@ -118,13 +115,12 @@ Feature: Create Route Groups - Preset Filters
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
-      | transactionStatus   | Forced Success         |
+      | transactionStatus   | Success                |
       | rts                 | Show                   |
       | parcelSize          | Extra Large            |
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator verifies selected Reservation Filters on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -136,7 +132,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -146,7 +142,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Create Route Groups Page - All Search Filters (uid:42c4c74c-291e-4bcf-9c8e-c9348d86ff89)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -163,7 +159,6 @@ Feature: Create Route Groups - Preset Filters
       | value.timeslotIds             | -2                                           |
       | value.deliveryTypeIds         | 13                                           |
       | value.dnrIds                  | 9                                            |
-      | value.bulkyTypes              | REGULAR                                      |
       | value.approxVolumeValues      | Less than 10 Parcels                         |
       | value.reservationTypeIds      | 2                                            |
       | value.reservationStatusIds    | 1                                            |
@@ -192,7 +187,6 @@ Feature: Create Route Groups - Preset Filters
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator verifies selected Reservation Filters on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -206,7 +200,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on Create Route Groups Page - All Search Filters (uid:411451e2-5825-4678-a1b2-c56ad91d65b7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -220,7 +214,6 @@ Feature: Create Route Groups - Preset Filters
       | value.timeslotIds             | -2                                           |
       | value.deliveryTypeIds         | 13                                           |
       | value.dnrIds                  | 9                                            |
-      | value.bulkyTypes              | REGULAR                                      |
       | value.approxVolumeValues      | Less than 10 Parcels                         |
       | value.reservationTypeIds      | 2                                            |
       | value.reservationStatusIds    | 1                                            |
@@ -244,7 +237,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page - All Search Filters (uid:349131bc-d3e5-48b4-b0fa-249323f70073)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -253,11 +246,10 @@ Feature: Create Route Groups - Preset Filters
       | value.orderDetailServiceTypes | CORPORATE_DOCUMENT                           |
       | value.zoneIds                 | {zone-id}                                    |
       | value.isRts                   | true                                         |
-      | value.bulkyTypes              | REGULAR                                      |
       | value.approxVolumeValues      | Less than 10 Parcels                         |
       | value.origHub                 | {hub-id}                                     |
       | value.destHub                 | {hub-id-2}                                   |
-      | value.currHub                 | {hub-id}                                     |
+      | value.currHub                 | {hub-id-3}                                   |
       | value.showTransaction         | true                                         |
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -278,13 +270,12 @@ Feature: Create Route Groups - Preset Filters
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
-      | transactionStatus   | Forced Success         |
+      | transactionStatus   | Success                |
       | rts                 | Show                   |
       | parcelSize          | Extra Large            |
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -296,7 +287,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -316,13 +307,12 @@ Feature: Create Route Groups - Preset Filters
       | Zone: {zone-name}                                                                                                 |
       | Order Type: Normal                                                                                                |
       | PP/DD Leg: DD                                                                                                     |
-      | Transaction Status: Forced Success                                                                                |
+      | Transaction Status: Success                                                                                       |
       | RTS: Show                                                                                                         |
       | Parcel Size: Extra Large                                                                                          |
       | Timeslots: Day                                                                                                    |
       | Delivery Type: (13) C2C 1 Day - Anytime                                                                           |
       | DNR Group: 9 - SAME DAY                                                                                           |
-      | Bulky Types: Regular                                                                                              |
       | Pick Up Size: Less than 10 Parcels                                                                                |
       | Reservation Type: Hyperlocal                                                                                      |
       | Reservation Status: Success                                                                                       |
@@ -330,7 +320,7 @@ Feature: Create Route Groups - Preset Filters
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
       | Start Hub: {hub-name}                                                                                             |
       | End Hub: {hub-name-2}                                                                                             |
-      | Last Inbound Hub: {hub-name}                                                                                      |
+      | Last Inbound Hub: {hub-name-3}                                                                                    |
       | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00 |
       | Shipment Status: At Transit Hub                                                                                   |
       | Shipment Type: Air Haul                                                                                           |
@@ -368,7 +358,6 @@ Feature: Create Route Groups - Preset Filters
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator verifies selected Reservation Filters on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -390,7 +379,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - All Search Filters (uid:58afae4b-3775-4daa-bfe9-5aceb1543986)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -399,11 +388,10 @@ Feature: Create Route Groups - Preset Filters
       | value.orderDetailServiceTypes | CORPORATE_DOCUMENT                           |
       | value.zoneIds                 | {zone-id}                                    |
       | value.isRts                   | true                                         |
-      | value.bulkyTypes              | REGULAR                                      |
       | value.approxVolumeValues      | Less than 10 Parcels                         |
       | value.origHub                 | {hub-id}                                     |
       | value.destHub                 | {hub-id-2}                                   |
-      | value.currHub                 | {hub-id}                                     |
+      | value.currHub                 | {hub-id-3}                                   |
       | value.showTransaction         | true                                         |
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -424,13 +412,12 @@ Feature: Create Route Groups - Preset Filters
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
-      | transactionStatus   | Forced Success         |
+      | transactionStatus   | Success                |
       | rts                 | Show                   |
       | parcelSize          | Extra Large            |
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -442,7 +429,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -472,13 +459,12 @@ Feature: Create Route Groups - Preset Filters
       | zone                | {zone-name}            |
       | orderType           | Normal                 |
       | ppDdLeg             | DD                     |
-      | transactionStatus   | Forced Success         |
+      | transactionStatus   | Success                |
       | rts                 | Show                   |
       | parcelSize          | Extra Large            |
       | timeslots           | Day                    |
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME DAY               |
-      | bulkyTypes          | Regular                |
     And Operator verifies selected Reservation Filters on Create Route Group page:
       | pickUpSize        | Less than 10 Parcels |
       | reservationType   | Hyperlocal           |
@@ -490,7 +476,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -500,7 +486,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Create Route Groups Page - Shipment Filters (uid:a1be140c-623f-4d2a-9ec8-2afc56d2ac93)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set Shipment Filters on Create Route Group page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
@@ -509,7 +495,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -522,7 +508,7 @@ Feature: Create Route Groups - Preset Filters
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
       | Start Hub: {hub-name}                                                                                             |
       | End Hub: {hub-name-2}                                                                                             |
-      | Last Inbound Hub: {hub-name}                                                                                      |
+      | Last Inbound Hub: {hub-name-3}                                                                                    |
       | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00 |
       | Shipment Status: At Transit Hub                                                                                   |
       | Shipment Type: Air Haul                                                                                           |
@@ -552,7 +538,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -562,12 +548,12 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Create Route Groups Page - Shipment Filters (uid:76592ef5-4801-49a6-8429-7224a6896a5b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Shipments Filter Template using data below:
       | name                 | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.origHub        | {hub-id}                                     |
       | value.destHub        | {hub-id-2}                                   |
-      | value.currHub        | {hub-id}                                     |
+      | value.currHub        | {hub-id-3}                                   |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
       | value.shipmentType   | AIR_HAUL                                     |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -575,18 +561,18 @@ Feature: Create Route Groups - Preset Filters
     And Operator verifies selected Shipment Filters on Create Route Group page:
       | startHub       | {hub-name}     |
       | endHub         | {hub-name-2}   |
-      | lastInboundHub | {hub-name}     |
+      | lastInboundHub | {hub-name-3}   |
       | shipmentStatus | At Transit Hub |
       | shipmentType   | Air Haul       |
 
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on Create Route Groups Page - Shipment Filters (uid:67fd041a-384e-419e-a965-e95e04da545f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Shipments Filter Template using data below:
       | name                 | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.origHub        | {hub-id}                                     |
       | value.destHub        | {hub-id-2}                                   |
-      | value.currHub        | {hub-id}                                     |
+      | value.currHub        | {hub-id-3}                                   |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
       | value.shipmentType   | AIR_HAUL                                     |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -603,7 +589,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page - Shipment Filters (uid:12b0df82-823a-4f7d-ad8b-03a397c81394)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Shipments Filter Template using data below:
       | name                 | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
@@ -617,7 +603,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -630,7 +616,7 @@ Feature: Create Route Groups - Preset Filters
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
       | Start Hub: {hub-name}                                                                                             |
       | End Hub: {hub-name-2}                                                                                             |
-      | Last Inbound Hub: {hub-name}                                                                                      |
+      | Last Inbound Hub: {hub-name-3}                                                                                    |
       | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00 |
       | Shipment Status: At Transit Hub                                                                                   |
       | Shipment Type: Air Haul                                                                                           |
@@ -651,7 +637,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -661,7 +647,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - Shipment Filters (uid:8ea83f47-8df7-40af-af0f-1dd27283cd15)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Shipments Filter Template using data below:
       | name                 | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
@@ -675,7 +661,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -696,7 +682,7 @@ Feature: Create Route Groups - Preset Filters
       | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
-      | lastInboundHub                 | {hub-name}                     |
+      | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
@@ -706,7 +692,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteRouteGroups @DeleteFilterTemplate
   Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset (uid:677056fa-a044-487e-8b10-f95739f8578b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -737,7 +723,7 @@ Feature: Create Route Groups - Preset Filters
 
   @DeleteRouteGroups @DeleteFilterTemplate
   Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset (uid:77c4ed63-51df-4998-a131-cb5cac5de236)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

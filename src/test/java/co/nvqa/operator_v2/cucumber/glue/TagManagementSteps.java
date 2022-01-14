@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Tag;
+import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
@@ -31,6 +32,11 @@ public class TagManagementSteps extends AbstractSteps {
   }
 
 
+  @When("^Tag Management page is loaded$")
+  public void pageIsLoaded() {
+    tagManagementPage.inFrame(SimpleReactPage::waitUntilLoaded);
+  }
+
   @When("^Operator create new route tag on Tag Management page:$")
   public void createNewTag(Map<String, String> data) {
     tagManagementPage.inFrame(page -> {
@@ -46,8 +52,6 @@ public class TagManagementSteps extends AbstractSteps {
       page.addTagDialog.description.setValue(newTag.getDescription());
       page.addTagDialog.submit.click();
       page.addTagDialog.waitUntilInvisible();
-      String id = page.noticeNotifications.get(0).message.getText();
-      newTag.setId(Long.valueOf(id.split(" ")[1].trim()));
     });
   }
 
@@ -70,6 +74,7 @@ public class TagManagementSteps extends AbstractSteps {
     String column = data.get("column");
     String value = data.get("value");
     tagManagementPage.inFrame(page -> {
+      page.tagsTable.clearColumnFilters();
       page.tagsTable.filterByColumn(column, value);
     });
   }

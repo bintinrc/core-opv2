@@ -3,9 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ShipperInfo;
 import co.nvqa.operator_v2.selenium.page.AddShipperToPresetPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -91,6 +91,11 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     addShipperToPresetPage.waitUntilUpdated();
   }
 
+  @When("^Operator clear column filters on Add Shipper To Preset page$")
+  public void operatorResetFilter() {
+    addShipperToPresetPage.shippersTable.clearColumnFilters();
+  }
+
   @When("Operator verify records on Add Shipper To Preset page using data below:")
   public void operatorVerifyRecords(List<Map<String, String>> listOfData) {
     List<ShipperInfo> actual = addShipperToPresetPage.shippersTable.readAllEntities();
@@ -136,10 +141,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
       addShipperToPresetPage.shippersTable
           .filterByColumn(AddShipperToPresetPage.ShippersTable.COLUMN_SHIPPER_NAME, shipperName);
     }
-    int rowsCount = addShipperToPresetPage.shippersTable.getRowsCount();
-    for (int i = 1; i <= rowsCount; i++) {
-      addShipperToPresetPage.shippersTable.selectRow(i);
-    }
+    operatorClicksSelectAllShown();
     addShipperToPresetPage.addToPreset.click();
     String presetName = data.get("presetName");
     addShipperToPresetPage.presetSelector.sendKeys(presetName + Keys.ENTER);
