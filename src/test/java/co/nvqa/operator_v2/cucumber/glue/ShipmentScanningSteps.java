@@ -150,8 +150,10 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
 
         for (String trackingId : trackingIds) {
+          pause1s();
           shipmentScanningPage.scanBarcode(trackingId);
         }
       } catch (Throwable ex) {

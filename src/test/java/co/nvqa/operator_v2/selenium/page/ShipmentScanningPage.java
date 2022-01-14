@@ -25,6 +25,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.Matchers.allOf;
 
@@ -36,6 +38,7 @@ import static org.hamcrest.Matchers.allOf;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentScanningPage extends OperatorV2SimplePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentScanningPage.class);
   public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
@@ -208,11 +211,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipment() {
     pause300ms();
-    click("//button[.='Close Shipment']");
+    click("//div[@class='ant-card-head-wrapper']//button//span[.='Close Shipment']");
     waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
-    click("//button[contains(@class,'ant-btn-primary')]//span[.='Close Shipment']");
-
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath("//div[@class='ant-modal-content']//button[.='Close Shipment']")),
+            getWebDriver());
     String toastMessage = getAntTopText();
+    LOGGER.info(toastMessage);
     assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
         allOf(containsString("Shipment"), containsString("closed")));
     waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
@@ -275,15 +280,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void removeAllOrdersFromShipment() {
     pause1s();
     click("//button//span[.='Remove All']");
-    removeAllParcelsDialog.waitUntilVisible();
-    removeAllParcelsDialog.remove.waitUntilClickable();
-    removeAllParcelsDialog.remove.click();
-    removeAllParcelsDialog.waitUntilInvisible();
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath("//button[.='Remove']")), getWebDriver());
+    waitUntilInvisibilityOfElementLocated("//div[contains(@class,'ant-modal-title')][.='Removing all']");
   }
 
   public void verifyTheSumOfOrderIsZero() {
     String actualSumOfOrder = getText(
-        "//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5")
+        "//ul[@class='ant-card-actions']//h4")
         .substring(0, 1);
     int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
     assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
@@ -736,10 +741,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public static class RemoveAllParcelsDialog extends MdDialog {
 
-    @FindBy(css = "[aria-label='Cancel']")
+    @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(css = "[aria-label='Remove']")
+    @FindBy(xpath = "//button[.='Remove']")
     public Button remove;
 
     public RemoveAllParcelsDialog(WebDriver webDriver, WebElement webElement) {
