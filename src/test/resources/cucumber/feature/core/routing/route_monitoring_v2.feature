@@ -986,7 +986,7 @@ Feature: Route Monitoring
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 3 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
@@ -1019,7 +1019,7 @@ Feature: Route Monitoring
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 3 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
@@ -1044,9 +1044,9 @@ Feature: Route Monitoring
     And API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "+6595557073 ","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "+6595557073 ","email": "binti@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcels to the route using data below:
       | orderId                           | addParcelToRouteRequest |
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} | { "type":"DD" }         |
@@ -1064,8 +1064,8 @@ Feature: Route Monitoring
     And API Operator verifies that each "Pickup" transaction of orders has the same waypoint_id:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
-    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 2 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 4 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
@@ -1081,8 +1081,8 @@ Feature: Route Monitoring
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalParcels  | 4                      |
-      | totalWaypoint | 1                      |
-      | pendingCount  | 1                      |
+      | totalWaypoint | 2                      |
+      | pendingCount  | 2                      |
 
 
   @KillBrowser @ShouldAlwaysRun

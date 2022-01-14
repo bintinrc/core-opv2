@@ -156,6 +156,9 @@ Feature: Crossdock to other station belong to another crossdock
       | duration       | 1                                  |
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -165,13 +168,13 @@ Feature: Crossdock to other station belong to another crossdock
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | status      | Pending                            |
+      | status      | Closed                             |
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
-      | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+    Then Operator verify movement event on Shipment Details page using data below:
+      | source   | SLA_CALCULATION                                                                               |
+      | status   | FAILED                                                                                        |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[3].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement not found (uid:dd887208-e154-43b0-913b-6d8e59ccdeb1)
@@ -228,6 +231,9 @@ Feature: Crossdock to other station belong to another crossdock
       | duration       | 1                                  |
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -237,13 +243,14 @@ Feature: Crossdock to other station belong to another crossdock
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | status      | Pending                            |
+      | status      | Closed                            |
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
-      | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+    Then Operator verify movement event on Shipment Details page using data below:
+      | source   | SLA_CALCULATION                                                                               |
+      | status   | FAILED                                                                                        |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[3].name} (sg). Please ask your manager to check the schedule. |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

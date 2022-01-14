@@ -629,7 +629,7 @@ Feature: Reschedule & RTS
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
     Then DB Operator verifies core_qa_sg.transactions record:
       | id         | {KEY_TRANSACTION_BEFORE.id}        |
-      | orderId    | null                               |
+      | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | DD                                 |
       | status     | Pending                            |
