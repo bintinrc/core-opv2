@@ -21,47 +21,47 @@ public class DpSteps extends AbstractSteps {
     dpPage = new DpPage(getWebDriver());
   }
 
-  @When("^download button in ([^\"]*) is clicked$")
+  @When("download button in {string} is clicked")
   public void downloadFile(String type) {
     dpPage.downloadFile(type);
   }
 
-  @Then("^file ([^\"]*) should exist$")
+  @Then("file {string} should exist")
   public void verifyDownloadedFile(String type) {
     dpPage.verifyDownloadedFile(type);
   }
 
-  @When("^searching for ([^\"]*)$")
+  @When("searching for {string}")
   public void search(String type) {
     dpPage.search(type);
   }
 
-  @When("^add ([^\"]*) button is clicked$")
+  @When("add {string} button is clicked")
   public void clickAddBtn(String type) {
     dpPage.clickAddBtn(type);
   }
 
-  @When("^enter default value of ([^\"]*)$")
+  @When("enter default value of {string}")
   public void enterDefaultValue(String type) {
     dpPage.enterDefaultValue(type);
   }
 
-  @Then("^verify result ([^\"]*)$")
+  @Then("verify result {string}")
   public void verifyResult(String type) {
     dpPage.verifyResult(type);
   }
 
-  @When("^edit ([^\"]*) button is clicked$")
+  @When("edit {string} button is clicked")
   public void clickEditBtn(String type) {
     dpPage.clickEditBtn(type);
   }
 
-  @When("^view ([^\"]*) button is clicked$")
+  @When("view {string} button is clicked")
   public void clickViewBtn(String type) {
     dpPage.clickViewBtn(type);
   }
 
-  @Then("^verify page ([^\"]*)$")
+  @Then("verify page {string}")
   public void verifyPage(String type) {
     dpPage.verifyPage(type);
   }

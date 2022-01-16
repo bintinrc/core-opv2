@@ -37,6 +37,7 @@ public class DpBulkUpdateSteps extends AbstractSteps {
   public void operatorVerifiesThatTheDPBulkUpdateIsLoadedCompletely() {
     dpBulkUpdatePage.switchToIframe();
     dpBulkUpdatePage.checkPageIsFullyLoaded();
+    takesScreenshot();
   }
 
   @When("Operator clicks on Select DP ID Button")
@@ -142,6 +143,7 @@ public class DpBulkUpdateSteps extends AbstractSteps {
   @Then("Operator verifies that the toast of {string} will be shown")
   public void operatorVerifiesThatTheErrorToastOfWillBeShown(String toastMessage) {
     dpBulkUpdatePage.errorToastVerification(toastMessage);
+    takesScreenshot();
   }
 
   @Then("Operator verifies error toast with invalid error message is shown")

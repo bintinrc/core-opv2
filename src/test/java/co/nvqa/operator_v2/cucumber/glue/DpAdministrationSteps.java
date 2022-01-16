@@ -35,7 +35,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage = new DpAdministrationPage(getWebDriver());
   }
 
-  @Given("^Operator add new DP Partner on DP Administration page with the following attributes:$")
+  @Given("Operator add new DP Partner on DP Administration page with the following attributes:")
   public void operatorAddNewDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
       Map<String, String> data) {
     DpPartner dpPartner = new DpPartner(data);
@@ -43,24 +43,25 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(KEY_DP_PARTNER, dpPartner);
   }
 
-  @Then("^Operator verify new DP Partner params$")
+  @Then("Operator verify new DP Partner params")
   public void operatorVerifyNewDpPartnerParams() {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
     dpAdminPage.verifyDpPartnerParams(dpPartner);
+    takesScreenshot();
   }
 
-  @When("^Operator get all DP Partners params on DP Administration page$")
+  @When("Operator get all DP Partners params on DP Administration page")
   public void operatorGetAllDpPartnersParamsOnDriverTypeManagementPage() {
     List<DpPartner> dpPartnersParams = dpAdminPage.dpPartnersTable().readAllEntities();
     put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
   }
 
-  @When("^Operator click on Download CSV File button on DP Administration page$")
+  @When("Operator click on Download CSV File button on DP Administration page")
   public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationPage() {
     dpAdminPage.downloadCsvFile();
   }
 
-  @Then("^Downloaded CSV file contains correct DP Partners data$")
+  @Then("Downloaded CSV file contains correct DP Partners data")
   public void downloadedCsvFileContainsCorrectDpPartnersData() {
     List<DpPartner> dpPartnersParams = get(KEY_LIST_OF_DP_PARTNERS);
     dpAdminPage.verifyDownloadedFileContent(dpPartnersParams);
@@ -72,7 +73,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
   }
 
-  @When("^Operator update created DP Partner on DP Administration page with the following attributes:$")
+  @When("Operator update created DP Partner on DP Administration page with the following attributes:")
   public void operatorUpdateCreatedDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
       Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
@@ -81,7 +82,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage.editPartner(partnerName, dpPartner);
   }
 
-  @When("^Operator add new DP for the DP Partner on DP Administration page with the following attributes:$")
+  @When("Operator add new DP for the DP Partner on DP Administration page with the following attributes:")
   public void operatorAddNewDpForTheDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
       Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
@@ -173,37 +174,37 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage.editDpUser(username, newPdUserParams);
   }
 
-  @Then("^Operator verify new DP User params$")
+  @Then("Operator verify new DP User params")
   public void operatorVerifyNewDpUserParams() {
     DpUser dpUser = get(KEY_DP_USER);
     dpAdminPage.verifyDpUserParams(dpUser);
   }
 
-  @When("^Operator get all DP Users params on DP Administration page$")
+  @When("Operator get all DP Users params on DP Administration page")
   public void operatorGetAllDpUsersParamsOnDpAdministrationPage() {
     List<DpUser> dpUsers = dpAdminPage.dpUsersTable().readAllEntities();
     put(KEY_LIST_OF_DP_USERS, dpUsers);
   }
 
-  @Then("^Downloaded CSV file contains correct DP Users data$")
+  @Then("Downloaded CSV file contains correct DP Users data")
   public void downloadedCsvFileContainsCorrectDpUsersData() {
     List<DpUser> dpUsers = get(KEY_LIST_OF_DP_USERS);
     dpAdminPage.verifyDownloadedDpUsersFileContent(dpUsers);
   }
 
-  @And("^Operator select View DPs action for created DP partner on DP Administration page$")
+  @And("Operator select View DPs action for created DP partner on DP Administration page")
   public void operatorSelectViewDpsForCreatedDpPartnerOnDpAdministrationPage() {
     Partner dpPartner = get(KEY_DP_PARTNER);
     dpAdminPage.openViewDpsScreen(dpPartner.getName());
   }
 
-  @And("^Operator select View Users action for created DP on DP Administration page$")
+  @And("Operator select View Users action for created DP on DP Administration page")
   public void operatorSelectViewUsersForCreatedDpOnDpAdministrationPage() {
     Dp dp = get(KEY_DISTRIBUTION_POINT);
     dpAdminPage.openViewUsersScreen(dp.getName());
   }
 
-  @Then("^Operator verifies dp Params with database")
+  @Then("Operator verifies dp Params with database")
   public void operatorVerifiesDpParamsWithDatabase() {
     DpDetailsResponse dbDpParams = get(KEY_DP_DB_DETAILS);
     DpDetailsResponse apiDpParams = get(KEY_DP_DETAILS);
@@ -214,17 +215,20 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorVerifiesTheCutOffTimeIs(String expectedCutOffTime) {
     String actualCutOffTime = get(KEY_DP_SETTING_DP_CUT_OFF_TIME);
     dpAdminPage.verifyCutOffTime(expectedCutOffTime, actualCutOffTime);
+    takesScreenshot();
   }
 
   @Then("Operator verifies the error message for duplicate {string}")
   public void operatorVerifiesTheErrorMessageForDuplicate(String field) {
     dpAdminPage.verifyErrorMessageForDpCreation(field);
+    takesScreenshot();
   }
 
   @Then("Operator verifies the image is {string}")
   public void operatorVerifiesTheImageIs(String status) {
     String image = get(KEY_DP_SETTING_DP_IMAGE);
     dpAdminPage.verifyImageIsPresent(image, status);
+    takesScreenshot();
   }
 
   @When("Operator deletes the dp image and {string}")
