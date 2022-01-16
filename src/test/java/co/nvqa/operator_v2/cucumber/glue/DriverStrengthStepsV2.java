@@ -207,7 +207,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @When("Operator filter driver strength by {string} zone$")
+  @When("Operator filter driver strength by {string} zone")
   public void operatorFilterDriverStrengthByZone(String zone) {
     if ("GET_FROM_CREATED_DRIVER".equalsIgnoreCase(zone)) {
       DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
