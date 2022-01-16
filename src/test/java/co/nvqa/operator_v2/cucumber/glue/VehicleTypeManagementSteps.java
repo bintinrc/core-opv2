@@ -31,13 +31,14 @@ public class VehicleTypeManagementSteps extends AbstractSteps {
     put(KEY_CREATED_VEHICLE_TYPE, vehicleType);
   }
 
-  @Then("^Operator verify vehicle type$")
+  @Then("Operator verify vehicle type")
   public void operatorVerifyNewVehicleIsCreated() {
     VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
     vehicleTypeManagementPage.verifyVehicleType(vehicleType);
+    takesScreenshot();
   }
 
-  @When("^Operator edit the vehicle type name$")
+  @When("Operator edit the vehicle type name")
   public void operatorEditVehicleType() {
     VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
     String oldName = vehicleType.getName();
@@ -48,13 +49,14 @@ public class VehicleTypeManagementSteps extends AbstractSteps {
     put(KEY_CREATED_VEHICLE_TYPE_EDITED, editedVehicleType);
   }
 
-  @Then("^Operator verify the edited vehicle type name is existed$")
+  @Then("Operator verify the edited vehicle type name is existed")
   public void verifyEditedVehicleType() {
     VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE_EDITED);
     vehicleTypeManagementPage.verifyVehicleType(vehicleType);
+    takesScreenshot();
   }
 
-  @When("^Operator delete the vehicle type name$")
+  @When("Operator delete the vehicle type name")
   public void operatorDeleteVehicleTypeName() {
     VehicleType vehicleType =
         containsKey(KEY_CREATED_VEHICLE_TYPE_EDITED) ? get(KEY_CREATED_VEHICLE_TYPE_EDITED)
@@ -62,24 +64,26 @@ public class VehicleTypeManagementSteps extends AbstractSteps {
     vehicleTypeManagementPage.deleteVehicleType(vehicleType.getName());
   }
 
-  @Then("^Operator verify vehicle type name is deleted$")
+  @Then("Operator verify vehicle type name is deleted")
   public void operatorVerifyVehicleTypeNameIsDeleted() {
     VehicleType vehicleType =
         containsKey(KEY_CREATED_VEHICLE_TYPE_EDITED) ? get(KEY_CREATED_VEHICLE_TYPE_EDITED)
             : get(KEY_CREATED_VEHICLE_TYPE);
     vehicleTypeManagementPage.verifyVehicleTypeNotExist(vehicleType.getName());
+    takesScreenshot();
   }
 
-  @When("^Operator click on download CSV file button$")
+  @When("Operator click on download CSV file button")
   public void downloadCSVFile() {
     vehicleTypeManagementPage.csvDownload();
   }
 
-  @Then("^Operator verify the CSV file$")
+  @Then("Operator verify the CSV file")
   public void operatorVerifyCsvFile() {
     VehicleType vehicleType =
         containsKey(KEY_CREATED_VEHICLE_TYPE_EDITED) ? get(KEY_CREATED_VEHICLE_TYPE_EDITED)
             : get(KEY_CREATED_VEHICLE_TYPE);
     vehicleTypeManagementPage.csvDownloadSuccessful(vehicleType.getName());
+    takesScreenshot();
   }
 }

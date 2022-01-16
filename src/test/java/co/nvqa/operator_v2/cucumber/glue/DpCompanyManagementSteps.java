@@ -26,7 +26,7 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     dpCompanyAgentPage = new DpCompanyAgentPage(getWebDriver());
   }
 
-  @When("^Operator create new DP Company$")
+  @When("Operator create new DP Company")
   public void operatorCreateDpCompany() {
     String uniqueCode = generateDateUniqueString();
     DpCompany dpCompany = new DpCompany();
@@ -40,13 +40,14 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     put("dpCompany", dpCompany);
   }
 
-  @Then("^Operator verify the new DP Company is created successfully$")
+  @Then("Operator verify the new DP Company is created successfully")
   public void operatorVerifyDpCompanyIsCreatedSuccessfully() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpCompany);
+    takesScreenshot();
   }
 
-  @When("^Operator update the new DP Company$")
+  @When("Operator update the new DP Company")
   public void operatorUpdateDpCompany() {
     DpCompany dpCompany = get("dpCompany");
 
@@ -67,36 +68,39 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     dpCompanyManagementPage.verifyDpCompanyIsUpdatedSuccessfully(dpCompanyEdited);
   }
 
-  @When("^Operator delete the new DP Company$")
+  @When("Operator delete the new DP Company")
   public void operatorDeleteDpCompany() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.deleteDpCompany(dpCompany);
   }
 
-  @Then("^Operator verify the new DP Company is deleted successfully$")
+  @Then("Operator verify the new DP Company is deleted successfully")
   public void operatorVerifyDpCompanyIsDeletedSuccessfully() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.verifyDpCompanyIsDeletedSuccessfully(dpCompany);
+    takesScreenshot();
   }
 
-  @Then("^Operator check all filters on DP Company Management page work fine$")
+  @Then("Operator check all filters on DP Company Management page work fine")
   public void operatorCheckAllFiltersOnDpCompanyManagementPageWork() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.verifyAllFiltersWorkFine(dpCompany);
+    takesScreenshot();
   }
 
-  @When("^Operator download DP Company CSV file$")
+  @When("Operator download DP Company CSV file")
   public void operatorDownloadDpCompanyCsvFile() {
     dpCompanyManagementPage.downloadCsvFile();
   }
 
-  @When("^Operator verify DP Company CSV file downloaded successfully$")
+  @When("Operator verify DP Company CSV file downloaded successfully")
   public void operatorVerifyDpCompanyCsvFileDownloadSuccessfully() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.verifyCsvFileDownloadedSuccessfully(dpCompany);
+    takesScreenshot();
   }
 
-  @When("^Operator create new Agent for the new DP Company$")
+  @When("Operator create new Agent for the new DP Company")
   public void operatorCreateNewAgentForTheNewDpCompany() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.clickSeeVault(dpCompany);
@@ -132,25 +136,26 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     put("dpCompanyAgentEdited", dpCompanyAgentEdited);
   }
 
-  @Then("^Operator verify the new Agent for the new DP Company is updated successfully$")
+  @Then("Operator verify the new Agent for the new DP Company is updated successfully")
   public void operatorVerifyTheNewAgentForTheNewDpCompanyIsUpdatedSuccessfully() {
     DpCompanyAgent dpCompanyAgentEdited = get("dpCompanyAgentEdited");
     dpCompanyAgentPage.verifyDpCompanyAgentIsUpdatedSuccessfully(dpCompanyAgentEdited);
+    takesScreenshot();
   }
 
-  @When("^Operator delete the new Agent for the new DP Company$")
+  @When("Operator delete the new Agent for the new DP Company")
   public void operatorDeleteTheNewAgentForTheNewDpCompany() {
     DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
     dpCompanyAgentPage.deleteDpCompanyAgent(dpCompanyAgent);
   }
 
-  @Then("^Operator verify the new Agent for the new DP Company is deleted successfully$")
+  @Then("Operator verify the new Agent for the new DP Company is deleted successfully")
   public void operatorVerifyTheNewAgentForTheNewDpCompanyIsDeletedSuccessfully() {
     DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
     dpCompanyAgentPage.verifyDpCompanyAgentIsDeletedSuccessfully(dpCompanyAgent);
   }
 
-  @When("^Operator back to DP Company Management page$")
+  @When("Operator back to DP Company Management page")
   public void operatorBackToDpCompanyManagementPage() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyAgentPage.backToDpCompanyManagementPage(dpCompany);

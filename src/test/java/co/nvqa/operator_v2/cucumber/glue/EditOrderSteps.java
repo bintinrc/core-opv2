@@ -43,6 +43,8 @@ import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static org.hamcrest.Matchers.blankOrNullString;
@@ -53,6 +55,7 @@ import static org.hamcrest.Matchers.blankOrNullString;
 @ScenarioScoped
 public class EditOrderSteps extends AbstractSteps {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(EditOrderSteps.class);
   public static final String KEY_CHAT_MESSAGE = "KEY_CHAT_MESSAGE";
   public static final String KEY_CHAT_MESSAGE_ID = "KEY_CHAT_MESSAGE_ID";
 
@@ -66,12 +69,12 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage = new EditOrderPage(getWebDriver());
   }
 
-  @When("^Operator click ([^\"]*) -> ([^\"]*) on Edit Order page$")
+  @When("Operator click {string} -> {string} on Edit Order page")
   public void operatorClickMenuOnEditOrderPage(String parentMenuName, String childMenuName) {
     editOrderPage.clickMenu(parentMenuName, childMenuName);
   }
 
-  @When("^Operator Edit Order Details on Edit Order page$")
+  @When("Operator Edit Order Details on Edit Order page")
   public void operatorEditOrderDetailsOnEditOrderPage() {
     Order order = get(KEY_CREATED_ORDER);
     Order orderEdited = SerializationUtils.clone(order);
@@ -87,10 +90,11 @@ public class EditOrderSteps extends AbstractSteps {
     put("orderEdited", orderEdited);
   }
 
-  @Then("^Operator Edit Order Details on Edit Order page successfully$")
+  @Then("Operator Edit Order Details on Edit Order page successfully")
   public void operatorEditOrderDetailsOnEditOrderPageSuccessfully() {
     Order orderEdited = get("orderEdited");
     editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited);
+    takesScreenshot();
   }
 
   @When("updates parcel size from {string} to {string} for the order")
@@ -117,6 +121,7 @@ public class EditOrderSteps extends AbstractSteps {
           .as("Parcel weight")
           .isEqualTo(Double.parseDouble(expected));
     }
+    takesScreenshot();
     softAssertions.assertAll();
   }
 
@@ -171,7 +176,7 @@ public class EditOrderSteps extends AbstractSteps {
   }
 
 
-  @When("^Operator enter Order Instructions on Edit Order page:$")
+  @When("Operator enter Order Instructions on Edit Order page:")
   public void operatorEnterOrderInstructionsOnEditOrderPage(Map<String, String> data) {
     String pickupInstruction = data.get("pickupInstruction");
 
@@ -188,7 +193,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.editOrderInstructions(pickupInstruction, deliveryInstruction);
   }
 
-  @When("^Operator verify Order Instructions are updated on Edit Order Page$")
+  @When("Operator verify Order Instructions are updated on Edit Order Page")
   public void operatorVerifyOrderInstructionsAreUpdatedOnEditOrderPage() {
     Order order = get(KEY_CREATED_ORDER);
     String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
@@ -204,6 +209,7 @@ public class EditOrderSteps extends AbstractSteps {
     }
 
     editOrderPage.verifyOrderInstructions(pickupInstruction, deliveryInstruction);
+    takesScreenshot();
   }
 
   @When("^Operator confirm manually complete order on Edit Order page$")
@@ -212,7 +218,7 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
-  @When("^Operator verify 'COD Collected' checkbox is disabled on Edit Order page$")
+  @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order page")
   public void verifyCodCollectedIsDisabled() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     assertFalse("COD Collected checkbox is enabled",
@@ -220,7 +226,7 @@ public class EditOrderSteps extends AbstractSteps {
 
   }
 
-  @When("^Operator confirm manually complete order with COD on Edit Order page$")
+  @When("Operator confirm manually complete order with COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
@@ -255,6 +261,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage() {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
+    takesScreenshot();
   }
 
   @When("^Operator change Priority Level to \"(\\d+)\" on Edit Order page$")
@@ -297,14 +304,16 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
   }
 
-  @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
+  @Then("Operator verify the order is added to the {string} route on Edit Order page")
   public void operatorVerifyTheOrderIsAddedToTheRouteOnEditOrderPage(String type) {
     switch (type.toUpperCase()) {
       case "DELIVERY":
         editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE));
+        takesScreenshot();
         break;
       case "PICKUP":
         editOrderPage.verifyPickupRouteInfo(get(KEY_CREATED_ROUTE));
+        takesScreenshot();
         break;
       default:
         throw new IllegalArgumentException("Unknown route type: " + type);
@@ -327,7 +336,7 @@ public class EditOrderSteps extends AbstractSteps {
         editOrderPage.verifyDeliveryEndDateTime(endDateTime);
       }
     } catch (AssertionError | RuntimeException ex) {
-      NvLogger.warn("Skip delivery start date & end date verification because it's to complicated.",
+      LOGGER.warn("Skip delivery start date & end date verification because it's to complicated.",
           ex);
     }
   }
@@ -461,10 +470,11 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.updateStatusDialog.saveChanges.clickAndWaitUntilDone();
   }
 
-  @Then("^Operator verify the created order info is correct on Edit Order page$")
+  @Then("Operator verify the created order info is correct on Edit Order page")
   public void operatorVerifyOrderInfoOnEditOrderPage() {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyOrderInfoIsCorrect(order);
+    takesScreenshot();
   }
 
   @Then("^Operator verify color of order header on Edit Order page is \"(.+)\"$")
@@ -478,6 +488,7 @@ public class EditOrderSteps extends AbstractSteps {
         break;
     }
     editOrderPage.verifyOrderHeaderColor(color);
+    takesScreenshot();
   }
 
   @Then("Operator verifies event is present for order id {string} on Edit order page")
@@ -503,6 +514,7 @@ public class EditOrderSteps extends AbstractSteps {
         return;
       }
     }
+    takesScreenshot();
   }
 
   @Then("^Operator verifies event is present for order on Edit order page$")
@@ -525,6 +537,7 @@ public class EditOrderSteps extends AbstractSteps {
       }
       editOrderPage.verifyEvent(order, hubName, hubId, event, "Scanned");
     });
+    takesScreenshot();
   }
 
   @Then("^Operator cancel order on Edit order page using data below:$")

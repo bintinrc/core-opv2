@@ -129,6 +129,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     String expectedPriorityLevelColorAsHex = mapOfData.get("priorityLevelColorAsHex");
     globalInboundPage
         .verifiesPriorityLevelInfoIsCorrect(expectedPriorityLevel, expectedPriorityLevelColorAsHex);
+    takesScreenshot();
   }
 
   @Then("Operator global inbound and verify the ticket's type of {string} shown in the Global Inbound Page with data:")
@@ -139,6 +140,7 @@ public class GlobalInboundSteps extends AbstractSteps {
 
     globalInboundPage.verifyPetsGlobalInbound(globalInboundParams, ticketType);
     put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
+    takesScreenshot();
   }
 
   @Then("Operator verify info on Global Inbound page using data below:")
@@ -178,7 +180,7 @@ public class GlobalInboundSteps extends AbstractSteps {
           globalInboundPage.getCssValue(globalInboundPage.XPATH_CONTAINER, "background-color"));
       assertEquals("Expected another color for Route ID background", expected, actualColor.asHex());
     }
-
+    takesScreenshot();
     pause3s();
   }
 
@@ -196,6 +198,7 @@ public class GlobalInboundSteps extends AbstractSteps {
   @Then("Operator verifies tags on Global Inbound page")
   public void operatorVerifiesTagsOnGlobalInboundPage(List<String> expectedOrderTags) {
     globalInboundPage.verifiesTagsOnOrder(expectedOrderTags);
+    takesScreenshot();
   }
 
   @Then("Operator global inbounds {string} ticket using data below:")
@@ -207,19 +210,21 @@ public class GlobalInboundSteps extends AbstractSteps {
     put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
   }
 
-  @When("^Operator verifies DP tag is displayed$")
+  @When("Operator verifies DP tag is displayed")
   public void OperatorVerifiesDpTagIsDisplayed() {
     globalInboundPage.verifiesDpTag();
+    takesScreenshot();
   }
 
-  @And("^Operator add the order tags$")
+  @And("Operator add the order tags")
   public void operatorTagsOrderWith(List<String> orderTag) {
     globalInboundPage.addTag(orderTag);
   }
 
-  @Then("^Operator verify failed tagging error toast is shown$")
+  @Then("Operator verify failed tagging error toast is shown")
   public void operatorVerifyFailedTaggingToast() {
     globalInboundPage.verifyFailedTaggingToast("Tagging Failed: Order exceed 4 tags limit");
+    takesScreenshot();
   }
 
   @When("^Operator verifies prior tag is displayed$")
@@ -266,5 +271,6 @@ public class GlobalInboundSteps extends AbstractSteps {
 
     assertTrue("Order weight is overridden",
         orderWeightAsString.contains(actualOrderWeightAsString));
+    takesScreenshot();
   }
 }

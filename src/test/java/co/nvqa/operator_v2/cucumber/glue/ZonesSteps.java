@@ -3,13 +3,14 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
@@ -40,7 +41,7 @@ public class ZonesSteps extends AbstractSteps {
     zonesSelectedPolygonsPage = new ZonesSelectedPolygonsPage(getWebDriver());
   }
 
-  @When("^Operator create new Zone using Hub \"([^\"]*)\"$")
+  @When("Operator create new Zone using Hub {string}")
   public void operatorCreateZone(String hubName) {
     operatorCreateNewZone(hubName, false);
   }
@@ -54,7 +55,7 @@ public class ZonesSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator verify the new Zone is created successfully$")
+  @Then("Operator verify the new Zone is created successfully")
   public void operatorVerifyTheNewZoneIsCreatedSuccessfully() {
     Zone expected = get(KEY_CREATED_ZONE);
     zonesPage.findZone(expected);
@@ -62,6 +63,7 @@ public class ZonesSteps extends AbstractSteps {
     expected.compareWithActual(actual);
     put(KEY_CREATED_ZONE_ID, actual.getId());
     putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the newly created {string} zone's details are right")
@@ -73,9 +75,10 @@ public class ZonesSteps extends AbstractSteps {
     } else if (NORMAL.equalsIgnoreCase(zoneType)) {
       assertEquals("Zone Type is right", "-", actualRtsValue);
     }
+    takesScreenshot();
   }
 
-  @When("^Operator update the new Zone$")
+  @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
     Zone zone = get(KEY_CREATED_ZONE);
 
@@ -131,15 +134,16 @@ public class ZonesSteps extends AbstractSteps {
     put(KEY_CREATED_ZONE, zoneEdited);
   }
 
-  @Then("^Operator verify the new Zone is updated successfully$")
+  @Then("Operator verify the new Zone is updated successfully")
   public void operatorVerifyTheNewZoneIsUpdatedSuccessfully() {
     Zone expected = get("zoneEdited");
     zonesPage.findZone(expected);
     Zone actual = zonesPage.zonesTable.readEntity(1);
     expected.compareWithActual(actual);
+    takesScreenshot();
   }
 
-  @When("^Operator delete the new Zone$")
+  @When("Operator delete the new Zone")
   public void operatorDeleteTheNewZone() {
     Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
     zonesPage.waitUntilPageLoaded();
@@ -155,10 +159,12 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.clickRefreshCache();
     zonesPage.refreshPage();
     zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
-    assertTrue("Zone " + zone.getName() + " were deleted", zonesPage.zonesTable.isTableEmpty());
+    Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
+        .as("Zone " + zone.getName() + " were deleted").isTrue();
+    takesScreenshot();
   }
 
-  @Then("^Operator check all filters on Zones page work fine$")
+  @Then("Operator check all filters on Zones page work fine")
   public void operatorCheckAllFiltersOnZonesPageWork() {
     Zone zone = get(KEY_CREATED_ZONE);
 
@@ -176,6 +182,7 @@ public class ZonesSteps extends AbstractSteps {
     values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
     assertThat("Hub Name filter results", values,
         Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+    takesScreenshot();
   }
 
   @When("Operator download Zone CSV file")
@@ -187,6 +194,7 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
     Zone zone = get(KEY_CREATED_ZONE);
     zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
+    takesScreenshot();
   }
 
   @Then("^Operator click View Selected Polygons for zone id \"([^\"]*)\"$")
