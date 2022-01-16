@@ -1,4 +1,4 @@
-@StationManagement @StationHome @PriorityParcelInHub
+@StationManagement @PriorityParcelInHub
 Feature: Priority Parcel in Hub
 
   @LaunchBrowser @ShouldAlwaysRun
