@@ -377,7 +377,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String expectedTextShipmentDetails = f("Shipment ID : %d", shipmentId);
     String actualTextShipmentDetails = getText(
         "//md-content[contains(@class,'nv-shipment-details')]//h3");
-    assertEquals("Shipment ID is not the same: ", expectedTextShipmentDetails,
+    assertEquals("Shipment ID is same: ", expectedTextShipmentDetails,
         actualTextShipmentDetails);
     isElementExist(f("//td[contains(text(),'%s')]", trackingId));
     getWebDriver().close();

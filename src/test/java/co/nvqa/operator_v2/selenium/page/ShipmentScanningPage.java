@@ -260,10 +260,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
     pause1s();
-    sendKeysAndEnterByAriaLabel("scan_barcode_remove", firstTrackingId);
-
+    sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
     pause1s();
-    String statusCardText = findElementByXpath("//div[contains(@class,'status-card')]").getText();
+    String statusCardText = findElementByXpath("//div[contains(@class,'vkbq6g-0 daBITT')]").getText();
     assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
     assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
         containsString("not in shipment"));
