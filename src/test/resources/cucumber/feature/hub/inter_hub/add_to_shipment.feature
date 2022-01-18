@@ -293,7 +293,7 @@ Feature: Add To Shipment
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Recovery           |
       | damageDescription       | GENERATED          |
       | orderOutcomeDamaged     | NV LIABLE - FULL   |
       | custZendeskId           | 1                  |
