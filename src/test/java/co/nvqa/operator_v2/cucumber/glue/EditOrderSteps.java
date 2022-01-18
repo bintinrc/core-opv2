@@ -69,7 +69,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage = new EditOrderPage(getWebDriver());
   }
 
-  @When("Operator click {string} -> {string} on Edit Order page")
+  @When("^Operator click ([^\"]*) -> ([^\"]*) on Edit Order page$")
   public void operatorClickMenuOnEditOrderPage(String parentMenuName, String childMenuName) {
     editOrderPage.clickMenu(parentMenuName, childMenuName);
   }
