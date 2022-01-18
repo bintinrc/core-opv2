@@ -7,7 +7,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger Status is Open (uid:74164c51-0c87-496d-8088-3b9768394fd9)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -35,7 +35,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who doesn't have Ledger and Shipper Account (uid:a9f8aa2b-114a-42fb-ab48-57ff67797090)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     Given Operator go to menu Finance Tools -> Financial Batch
@@ -48,7 +48,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who doesn't have Ledger but has Shipper Account (uid:8f388ed1-4113-48b4-b5a8-39d1c3bc7e3e)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And DB operator inserts below data to billing_qa_gl.shipper_accounts table
@@ -67,7 +67,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger And Shipper Account -  Ledger Status is Ready - Ledger has Origin Balance less than 0 - Overall Balance is < -1000 (uid:c679ca84-cb91-4b5a-9969-e38684380fcf)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -104,7 +104,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger and Shipper Account -  Ledger Status is Ready - Ledger has Origin Balance more than 0 - Overall Balance is > 1000 (uid:03a4c18c-c26b-4a4b-ab40-2d2742149cdf)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -142,7 +142,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger and Shipper Account -  Ledger Status is In Progress - Ledger has Origin Balance less than 0 - Overall Balance is < -1000 (uid:73529832-c3e3-4b45-8034-035803842480)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -182,7 +182,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger and Shipper Account -  Ledger Status is Completed - Ledger has Origin Balance more than 0 - Overall Balance is 0 (uid:a9f626db-c000-4b1b-83a6-f2c283cbf6ef)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -222,7 +222,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger -  Ledger Status is Ready - Ledger has Multiple 'Adjustment' Journals (uid:6ac3d80a-1bf0-4236-a87f-0404291655df)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -264,7 +264,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger -  Ledger Status is Ready - Ledger has Multiple 'Reversion' Journals (uid:02e9a900-bb55-4e6f-be88-c6437cf755a4)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -306,7 +306,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger -  Ledger Status is In Progress - Ledger has Multiple 'Adjustment' and 'Reversion' Journals (uid:fa343c88-a788-4767-ab9a-04e59dbfc6d9)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -350,7 +350,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger -  Ledger Status is Completed - Ledger has Multiple 'Adjustment' and 'Reversion' Journals (uid:ba602b4b-8a1c-4e4b-9d8c-97c65df2ad97)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -403,7 +403,7 @@ Feature: Financial Batch
 
   @DeleteNewlyCreatedShipper
   Scenario: Search Financial Batch - Empty Date (uid:0956ec7e-8ed3-434f-a06d-642d41d30fdb)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     Given Operator go to menu Finance Tools -> Financial Batch

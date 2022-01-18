@@ -4,7 +4,7 @@ Feature: Edit Pricing Profiles - PH
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Philippines"
-    And API Operator create new normal shipper
+    And API Operator create new 'normal' shipper
     # add active pricing profile
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |

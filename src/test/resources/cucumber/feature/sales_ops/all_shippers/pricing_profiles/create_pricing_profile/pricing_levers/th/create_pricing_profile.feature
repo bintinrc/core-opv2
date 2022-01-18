@@ -8,7 +8,7 @@ Feature: Create Pricing Profile - TH
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - RTS Charge, Surcharge - TH (uid:fc7e368e-9e64-45a1-9815-989e26584ce2)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator adds new Shipper's Pricing Profile
       | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all} |
