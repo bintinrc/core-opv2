@@ -43,7 +43,7 @@ public class NvAutocomplete extends PageElement {
         String menuXpath = f("//ul[@id='%s']", suggestionsId);
         String itemXpath =
             menuXpath + f(
-                "//li//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'%s') and not(contains(.,'No  matching'))]",
+                "//li//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'%s') and not(starts-with(normalize-space(.),'No') and contains(.,'matching'))]",
                 value.toLowerCase(Locale.ROOT));
         int count = 0;
         while (!isElementVisible(itemXpath, 1) && count < 5) {

@@ -21,6 +21,10 @@ public class AntSelect2 extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
+  public AntSelect2(WebDriver webDriver, String xpath) {
+    super(webDriver, xpath);
+  }
+
   public AntSelect2(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
     super(webDriver, searchContext, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);

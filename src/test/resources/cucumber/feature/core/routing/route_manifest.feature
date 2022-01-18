@@ -425,7 +425,7 @@ Feature: Route Manifest
       | driverId          | {ninja-driver-id} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest -  Collect COD
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -454,6 +454,7 @@ Feature: Route Manifest
       | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verify Delivery transaction on Edit order page using data below:
@@ -464,11 +465,14 @@ Feature: Route Manifest
       | FORCED SUCCESS |
     When Operator get "Delivery" transaction with status "Success"
     Then DB Operator verifies waypoint status is "Success"
-    And DB Operator verify the collected sum stored in cod_collections using data below:
-      | transactionMode   | DELIVERY                      |
-      | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
-      | driverId          | {ninja-driver-id}             |
-
+    And API Operator get order details
+    And DB Operator verify core_qa_sg/cod_collections record is NOT created:
+      | driverId        | {ninja-driver-id} |
+      | transactionMode | DELIVERY          |
+    And API Operator verify order pricing details:
+      | orderId      | {KEY_CREATED_ORDER_ID} |
+      | codValue     | 23.57                  |
+      | codCollected | 0                      |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

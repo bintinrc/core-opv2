@@ -209,9 +209,9 @@ Feature: Shipper Pickups
       | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd}         |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}           |
-      | shipperName | {shipper-v4-legacy-id}-{shipper-v4-name} |
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-legacy-id}           |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
       | routeTagName | {route-tag-name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
@@ -498,7 +498,7 @@ Feature: Shipper Pickups
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | type        | Premium Scheduled                |
-      | shipperName | {KEY_CREATED_SHIPPER.name}       |
+      | shipperName | {KEY_CREATED_SHIPPER.legacyId}   |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName  | {KEY_CREATED_SHIPPER.name}         |
       | approxVolume | Less than 10 Parcels               |
@@ -1243,12 +1243,12 @@ Feature: Shipper Pickups
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator selects filters on Shipper Pickups page:
-      | reservationDateFrom | {gradle-next-0-day-yyyy-MM-dd}                                   |
-      | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | reservationTypes    | Hyperlocal                                                       |
-      | waypointStatus      | ROUTED                                                           |
-      | shipper             | {shipper-v4-legacy-id}                                           |
-      | masterShipper       | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | reservationDateFrom | {gradle-next-0-day-yyyy-MM-dd}     |
+      | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}     |
+      | reservationTypes    | Hyperlocal                         |
+      | waypointStatus      | ROUTED                             |
+      | shipper             | {shipper-v4-legacy-id}             |
+      | masterShipper       | {shipper-v4-marketplace-legacy-id} |
     And Operator selects "Save Current as Preset" preset action on Shipper Pickups page
     Then Operator verifies Save Preset dialog on Shipper Pickups page contains filters:
       | Reservation Date: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd} |

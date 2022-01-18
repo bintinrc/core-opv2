@@ -133,8 +133,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | current hour                             |
-      | Shipper       | {shipper-v4-legacy-id}-{shipper-v4-name} |
+      | Creation Time | current hour           |
+      | Shipper       | {shipper-v4-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderType | Normal,Return |
@@ -175,6 +175,41 @@ Feature: Create Route Groups
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
+
+  @DeleteRouteGroups
+  Scenario: Operator Add Reservation to Route Group
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator wait until 'Create Route Group' page is loaded
+    And Operator removes all General Filters except following: "Creation Time, Shipper"
+    And Operator add following filters on General Filters section on Create Route Group page:
+      | Creation Time | Today                  |
+      | Shipper       | {shipper-v4-legacy-id} |
+    And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
+    And Operator add following filters on Reservation Filters section on Create Route Group page:
+      | reservationType | Normal |
+    And Operator click Load Selection on Create Route Group page
+    Then Operator verifies Reservation records on Create Route Group page using data below:
+      | id                           | type        | shipper                    | address                                                     | status  | startDateTime                                       | endDateTime                                          |
+      | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
+    And Operator adds following reservations to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
+      | id                           |
+      | {KEY_CREATED_RESERVATION.id} |
+    Then Operator verifies that success toast displayed:
+      | top | Added successfully |
+    When Operator go to menu Routing -> 2. Route Group Management
+    Then Operator verify route group on Route Groups Management page:
+      | name                 | {KEY_CREATED_ROUTE_GROUP.name}      |
+      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.* |
+      | noTransactions       | 0                                   |
+      | noRoutedTransactions | 0                                   |
+      | noReservations       | 1                                   |
+      | noRoutedReservations | 0                                   |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

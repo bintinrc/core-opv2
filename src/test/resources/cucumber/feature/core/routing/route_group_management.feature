@@ -24,7 +24,7 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Operator Updates Route Group Details (uid:1eed4c03-b980-47b2-9816-8530890a996e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -50,7 +50,7 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Operator Deletes Route Group (uid:b26dcd98-2fb0-418a-8903-ffcdf911c416)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -64,16 +64,17 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Delete Transactions From Route Group (uid:92fed5ab-78c7-4fc8-95d3-5ea1e19f6580)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator V2 add created Transaction to Route Group
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator delete delivery transaction from route group:
       | name       | {KEY_CREATED_ROUTE_GROUP.name}  |
@@ -84,7 +85,7 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Bulk Delete Route Groups (uid:de12c7a6-b147-4303-92c2-5b4f3f9bfa0f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -104,7 +105,7 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Delete A Route Group From Edit Route Group Modal (uid:ec48ee39-3763-4341-86a7-c243b8626028)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -118,7 +119,7 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Clear Transaction of Route Groups (uid:e88279e4-1a62-4306-ae40-8ddfca8584c5)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -127,19 +128,13 @@ Feature: Route Group Management
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator removes all General Filters except following: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-    And Operator click Load Selection on Create Route Group page
-    When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
+    And API Operator create new Route Group:
+      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
-    Then Operator verifies that success toast displayed:
-      | top | Added successfully |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator clear selected route groups on Route Group Management page:
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
@@ -150,7 +145,7 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Filter Route Groups Based on Creation Date (uid:bd08ae06-107e-4b82-8863-56a0d77105d6)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -162,28 +157,22 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Download CSV File of Transactions of a Route Group (uid:5ba4b6f7-7af1-4bf0-8e70-d7b472870676)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
+    And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Shipper create V4 order using data below:
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator removes all General Filters except following: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-    And Operator click Load Selection on Create Route Group page
-    When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}":
+    And API Operator create new Route Group:
+      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
-    Then Operator verifies that success toast displayed:
-      | top | Added successfully |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator download jobs of "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group on Edit Route Group modal on Route Group Management page
     Then Operator verify route group jobs CSV file on Route Group Management page

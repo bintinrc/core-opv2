@@ -2,9 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Tag;
 import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,11 +29,11 @@ public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
 
   public static class AddTagDialog extends AntModal {
 
-    @FindBy(css = "input[placeholder='Tag Name']")
-    public TextBox tagName;
+    @FindBy(xpath = ".//span[./input[@placeholder='Tag Name']]")
+    public AntTextBox tagName;
 
-    @FindBy(css = "input[placeholder='Description']")
-    public TextBox description;
+    @FindBy(xpath = ".//span[./input[@placeholder='Description']]")
+    public AntTextBox description;
 
     @FindBy(xpath = ".//button[.='Create Tag']")
     public Button submit;
@@ -59,7 +58,7 @@ public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
           .put("description", "description")
           .build()
       );
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "edit"));
+      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit Tag"));
       setEntityClass(Tag.class);
     }
   }

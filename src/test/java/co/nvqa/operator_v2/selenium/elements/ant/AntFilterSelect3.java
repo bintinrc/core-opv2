@@ -2,36 +2,41 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import org.openqa.selenium.SearchContext;
+import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class AntFilterSwitch extends PageElement {
+public class AntFilterSelect3 extends PageElement {
 
-  public AntFilterSwitch(WebDriver webDriver, WebElement webElement) {
+  public AntFilterSelect3(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
   }
 
-  public AntFilterSwitch(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
-    super(webDriver, searchContext, webElement);
-  }
-
-  @FindBy(css = "button[role='switch']")
-  public AntSwitch switchButton;
+  @FindBy(css = ".ant-select")
+  public AntSelect3 selector;
 
   @FindBy(css = "label > svg")
   public Button removeFilter;
 
+  public void clearAll() {
+    selector.clearValue();
+  }
+
   public void selectFilter(String value) {
-    switchButton.setValue(value);
+    selector.selectValue(value);
+  }
+
+  public void selectFilter(Iterable<String> values) {
+    selector.selectValues(values);
   }
 
   public void removeFilter() {
     removeFilter.click();
   }
 
-  public boolean getSelectedValue() {
-    return switchButton.isChecked();
+  public List<String> getSelectedValues() {
+    return selector.getValues();
   }
+
 }
