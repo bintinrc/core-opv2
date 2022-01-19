@@ -55,8 +55,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[contains(@class,'scan-barcode-container')]//small";
-  public static final String XPATH_STATUS_CARD_BOX = "//div[contains(@class,'status-card')]";
-  public static final String XPATH_ZONE_CARD_BOX = "//div[contains(@class,'zone-card')]";
+  public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
+  public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
 
 
   @FindBy(xpath = "//div[span[.='Driver']]//p")
@@ -260,10 +260,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
     pause1s();
-    sendKeysAndEnterByAriaLabel("scan_barcode_remove", firstTrackingId);
-
+    sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
     pause1s();
-    String statusCardText = findElementByXpath("//div[contains(@class,'status-card')]").getText();
+    String statusCardText = findElementByXpath("//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']").getText();
     assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
     assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
         containsString("not in shipment"));

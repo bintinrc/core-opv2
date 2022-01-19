@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -377,8 +378,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String expectedTextShipmentDetails = f("Shipment ID : %d", shipmentId);
     String actualTextShipmentDetails = getText(
         "//md-content[contains(@class,'nv-shipment-details')]//h3");
-    assertEquals("Shipment ID is not the same: ", expectedTextShipmentDetails,
-        actualTextShipmentDetails);
+    Assertions.assertThat(actualTextShipmentDetails).as("Shipment ID is same: ", expectedTextShipmentDetails);
     isElementExist(f("//td[contains(text(),'%s')]", trackingId));
     getWebDriver().close();
   }
