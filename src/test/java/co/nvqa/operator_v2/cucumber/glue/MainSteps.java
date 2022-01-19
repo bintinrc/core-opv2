@@ -29,6 +29,7 @@ public class MainSteps extends AbstractSteps {
   @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
   public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName) {
     operatorGoToMenu(parentMenuName, childMenuName);
+    takesScreenshot();
   }
 
   @Given("^Operator go to this URL \"([^\"]*)\"$")

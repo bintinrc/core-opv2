@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -503,10 +504,14 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
     for (DpPartner expectedDpPartner : expectedDpPartners) {
       DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
-      assertEquals("DP Partner ID", expectedDpPartner.getId(), actualDpPartner.getId());
-      assertEquals("DP Partner Name", expectedDpPartner.getName(), actualDpPartner.getName());
-      assertEquals("POC Name", expectedDpPartner.getPocName(), actualDpPartner.getPocName());
-      assertEquals("POC No.", expectedDpPartner.getPocTel(), actualDpPartner.getPocTel());
+      Assertions.assertThat(actualDpPartner.getId()).as("DP Partner ID")
+          .isEqualTo(expectedDpPartner.getId());
+      Assertions.assertThat(actualDpPartner.getName()).as("DP Partner Name")
+          .isEqualTo(expectedDpPartner.getName());
+      Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
+          .isEqualTo(expectedDpPartner.getPocName());
+      Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No.")
+          .isEqualTo(expectedDpPartner.getPocTel());
       assertEquals("POC Email", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
           actualDpPartner.getPocEmail());
       assertEquals("Restrictions",
@@ -531,24 +536,28 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     ));
 
     for (Dp expectedDp : expectedDpParams) {
-      Dp actualDp = actualMap.get(expectedDp.getId());
+      final Dp actualDp = actualMap.get(expectedDp.getId());
 
-      assertEquals("DP ID", expectedDp.getId(), actualDp.getId());
-      assertEquals("DP Name", expectedDp.getName(), actualDp.getName());
-      assertEquals("DP Short Name", expectedDp.getShortName(), actualDp.getShortName());
+      Assertions.assertThat(actualDp.getId()).as("DP ID").isEqualTo(expectedDp.getId());
+      Assertions.assertThat(actualDp.getName()).as("DP Name").isEqualTo(expectedDp.getName());
+      Assertions.assertThat(actualDp.getShortName()).as("DP Short Name")
+          .isEqualTo(expectedDp.getShortName());
       assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""),
           actualDp.getHub());
-      assertEquals("DP Address", expectedDp.getAddress(), actualDp.getAddress());
-      assertEquals("DP Directions", expectedDp.getDirections(), actualDp.getDirections());
-      assertEquals("DP Activity", expectedDp.getActivity(), actualDp.getActivity());
+      Assertions.assertThat(actualDp.getAddress()).as("DP Address")
+          .isEqualTo(expectedDp.getAddress());
+      Assertions.assertThat(actualDp.getDirections()).as("DP Directions")
+          .isEqualTo(expectedDp.getDirections());
+      Assertions.assertThat(actualDp.getActivity()).as("DP Activity")
+          .isEqualTo(expectedDp.getActivity());
     }
   }
 
   public void verifyDownloadedDpUsersFileContent(List<DpUser> expectedDpUsersParams) {
-    String fileName = getLatestDownloadedFilename(CSV_DP_USERS_FILENAME_PATTERN);
+    final String fileName = getLatestDownloadedFilename(CSV_DP_USERS_FILENAME_PATTERN);
     verifyFileDownloadedSuccessfully(fileName);
-    String pathName = StandardTestConstants.TEMP_DIR + fileName;
-    List<DpUser> actualDpUsersParams = DpUser.fromCsvFile(DpUser.class, pathName, true);
+    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    final List<DpUser> actualDpUsersParams = DpUser.fromCsvFile(DpUser.class, pathName, true);
 
     assertThat("Unexpected number of lines in CSV file", actualDpUsersParams.size(),
         greaterThanOrEqualTo(expectedDpUsersParams.size()));
@@ -563,26 +572,33 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
       assertThat("DP with Username " + expectedDpUserParams.getClientId(), actualDpUser,
           notNullValue());
-      assertEquals("DP User First Name", expectedDpUserParams.getFirstName(),
-          actualDpUser.getFirstName());
-      assertEquals("DP User Last Name", expectedDpUserParams.getLastName(),
-          actualDpUser.getLastName());
-      assertEquals("DP User Email", expectedDpUserParams.getEmailId(), actualDpUser.getEmailId());
-      assertEquals("DP User Contact No.", expectedDpUserParams.getContactNo(),
-          actualDpUser.getContactNo());
+      Assertions.assertThat(actualDpUser.getFirstName()).as("DP User first name is correct")
+          .isEqualTo(expectedDpUserParams.getFirstName());
+      Assertions.assertThat(actualDpUser.getLastName()).as("DP User last name is correct")
+          .isEqualTo(expectedDpUserParams.getLastName());
+      Assertions.assertThat(actualDpUser.getEmailId()).as("DP user email is correct")
+          .isEqualTo(expectedDpUserParams.getEmailId());
+      Assertions.assertThat(actualDpUser.getContactNo()).as("DP User contact no. is correct")
+          .isEqualTo(expectedDpUserParams.getContactNo());
     }
   }
 
   public void verifyDpParamsWithDB(DpDetailsResponse dbParams, DpDetailsResponse apiParams) {
-    assertEquals("DP ID", dbParams.getId(), apiParams.getId());
-    assertEquals("DP NAME", dbParams.getName(), apiParams.getName());
-    assertEquals("DPMS ID", dbParams.getDpmsId(), apiParams.getDpmsId());
-    assertEquals("DP COUNTRY", dbParams.getCountry(), apiParams.getCountry());
-    assertEquals("DP CITY", dbParams.getCity(), apiParams.getCity());
-    assertEquals("DP ADDRESS 1", dbParams.getAddress1(), apiParams.getAddress1());
-    assertEquals("DP ADDRESS 2", dbParams.getAddress2(), apiParams.getAddress2());
-    assertEquals("Service Type is Corrrect: ", dbParams.getDpServiceType(),
-        apiParams.getDpServiceType());
+    Assertions.assertThat(apiParams.getId()).as("DP ID is correct").isEqualTo(dbParams.getId());
+    Assertions.assertThat(apiParams.getName()).as("DP name is correct")
+        .isEqualTo(dbParams.getName());
+    Assertions.assertThat(apiParams.getDpmsId()).as("DPMS ID is correct")
+        .isEqualTo(dbParams.getDpmsId());
+    Assertions.assertThat(apiParams.getCountry()).as("DP country is correct")
+        .isEqualTo(dbParams.getCountry());
+    Assertions.assertThat(apiParams.getCity()).as("DP city is correct")
+        .isEqualTo(dbParams.getCity());
+    Assertions.assertThat(apiParams.getAddress1()).as("DP address 1 is correct")
+        .isEqualTo(dbParams.getAddress1());
+    Assertions.assertThat(apiParams.getAddress2()).as("DP address 2 is correct")
+        .isEqualTo(dbParams.getAddress2());
+    Assertions.assertThat(apiParams.getDpServiceType()).as("Service Type is correct: ")
+        .isEqualTo(dbParams.getDpServiceType());
   }
 
   public void verifyCutOffTime(String expectedCutOffTime, String actualCutOffTime) {
@@ -723,7 +739,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   public void verifySuccessPasswordChangeMessage() {
     String expectedText = "New Password Saved!";
     String actualText = getText(XPATH_SUCCESS_PASSWORD_MESSAGE);
-    assertEquals("New password is saved: ", expectedText.toLowerCase(), actualText.toLowerCase());
+    Assertions.assertThat(actualText.toLowerCase()).as("New password is saved: ")
+        .isEqualTo(expectedText.toLowerCase());
   }
 
   public void loginNinjaPoint(String username, String password) {

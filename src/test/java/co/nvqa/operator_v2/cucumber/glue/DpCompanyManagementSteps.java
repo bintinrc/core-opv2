@@ -59,6 +59,7 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     dpCompanyEdited.setCollectWebhookUrl(dpCompany.getCollectWebhookUrl() + ".sg");
     dpCompanyEdited.setIntegrated(Boolean.TRUE);
     dpCompanyManagementPage.editDpCompany(dpCompanyEdited);
+    takesScreenshot();
     put("dpCompanyEdited", dpCompanyEdited);
   }
 
@@ -116,13 +117,13 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     put("dpCompanyAgent", dpCompanyAgent);
   }
 
-  @Then("^Operator verify the new Agent for the new DP Company is created successfully$")
+  @Then("Operator verify the new Agent for the new DP Company is created successfully")
   public void operatorVerifyTheNewAgentForTheNewDpCompanyIsCreatedSuccessfully() {
     DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
     dpCompanyAgentPage.verifyDpCompanyAgentIsCreatedSuccessfully(dpCompanyAgent);
   }
 
-  @When("^Operator update the new Agent for the new DP Company$")
+  @When("Operator update the new Agent for the new DP Company")
   public void operatorUpdateTheNewAgentForTheNewDpCompany() {
     DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
 
@@ -153,11 +154,13 @@ public class DpCompanyManagementSteps extends AbstractSteps {
   public void operatorVerifyTheNewAgentForTheNewDpCompanyIsDeletedSuccessfully() {
     DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
     dpCompanyAgentPage.verifyDpCompanyAgentIsDeletedSuccessfully(dpCompanyAgent);
+    takesScreenshot();
   }
 
   @When("Operator back to DP Company Management page")
   public void operatorBackToDpCompanyManagementPage() {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyAgentPage.backToDpCompanyManagementPage(dpCompany);
+    takesScreenshot();
   }
 }
