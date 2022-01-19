@@ -87,6 +87,7 @@ public class EditOrderSteps extends AbstractSteps {
     dimension.setWeight(Optional.ofNullable(dimension.getWeight()).orElse(0.0) + 1.0);
 
     editOrderPage.editOrderDetails(orderEdited);
+    takesScreenshot();
     put("orderEdited", orderEdited);
   }
 
@@ -103,6 +104,7 @@ public class EditOrderSteps extends AbstractSteps {
     Dimension.Size parcelSize = Dimension.Size.fromString(toSize);
     order.setParcelSize(parcelSize.getRegular());
     editOrderPage.editOrderDetails(order);
+    takesScreenshot();
   }
 
   @Then("^Operator verifies dimensions information on Edit Order page:$")
@@ -244,20 +246,22 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
     editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
-  @When("^Operator confirm manually complete order without collecting COD on Edit Order page$")
+  @When("Operator confirm manually complete order without collecting COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
+    takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
-  @Then("^Operator verify the order completed successfully on Edit Order page$")
+  @Then("Operator verify the order completed successfully on Edit Order page")
   public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage() {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
@@ -267,6 +271,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("^Operator change Priority Level to \"(\\d+)\" on Edit Order page$")
   public void operatorChangePriorityLevelToOnEditOrderPage(int priorityLevel) {
     editOrderPage.editPriorityLevel(priorityLevel);
+    takesScreenshot();
   }
 
   @Then("^Operator verify (.+) Priority Level is \"(\\d+)\" on Edit Order page$")
@@ -275,12 +280,12 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.verifyPriorityLevel(txnType, expectedPriorityLevel);
   }
 
-  @When("^Operator print Airway Bill on Edit Order page$")
+  @When("Operator print Airway Bill on Edit Order page")
   public void operatorPrintAirwayBillOnEditOrderPage() {
     editOrderPage.printAirwayBill();
   }
 
-  @Then("^Operator verify the printed Airway bill for single order on Edit Orders page contains correct info$")
+  @Then("Operator verify the printed Airway bill for single order on Edit Orders page contains correct info")
   public void operatorVerifyThePrintedAirwayBillForSingleOrderOnEditOrdersPageContainsCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyAirwayBillContentsIsCorrect(order);
@@ -291,7 +296,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.addToRoute(get(KEY_CREATED_ROUTE_ID), type);
   }
 
-  @When("^Operator add created order route on Edit Order page using data below:$")
+  @When("Operator add created order route on Edit Order page using data below:")
   public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String type = data.getOrDefault("type", "Delivery");
@@ -301,6 +306,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.addToRouteDialog.waitUntilVisible();
     editOrderPage.addToRouteDialog.route.setValue(routeId);
     editOrderPage.addToRouteDialog.type.selectValue(type);
+    takesScreenshot();
     editOrderPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
   }
 
@@ -320,7 +326,7 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
-  @And("^Operator verify Delivery dates:$")
+  @And("Operator verify Delivery dates:")
   public void operatorVerifyDeliveryStartDateTimeValueIs(Map<String, String> mapOfData) {
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData);
     String startDateTime = mapOfData.get("startDateTime");
@@ -408,9 +414,10 @@ public class EditOrderSteps extends AbstractSteps {
       assertThat("End Time", orderEvent.getDescription(),
           Matchers.containsString("End Time: " + value));
     }
+    takesScreenshot();
   }
 
-  @Then("^Operator verifies orders are tagged on Edit order page$")
+  @Then("Operator verifies orders are tagged on Edit order page")
   public void operatorVerifiesOrdersAreTaggedOnEditOrderPage() {
     String tagLabel = get(KEY_ORDER_TAG);
     List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
@@ -421,6 +428,7 @@ public class EditOrderSteps extends AbstractSteps {
           f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE,
               order.getId()));
       String actualTagName = editOrderPage.getTag();
+      takesScreenshot();
       assertEquals(
           f("Order tag is not equal to tag set on Order Level Tag Management page for order Id - %s",
               order.getId()), tagLabel, actualTagName);
@@ -517,7 +525,7 @@ public class EditOrderSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("^Operator verifies event is present for order on Edit order page$")
+  @Then("Operator verifies event is present for order on Edit order page")
   public void operatorVerifiesEventIsPresentOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> map = resolveKeyValues(mapOfData);
     String event = map.get("eventName");
@@ -535,9 +543,9 @@ public class EditOrderSteps extends AbstractSteps {
         editOrderPage.verifyEvent(order, hubName, hubId, event, descriptionString);
         return;
       }
+      takesScreenshot();
       editOrderPage.verifyEvent(order, hubName, hubId, event, "Scanned");
     });
-    takesScreenshot();
   }
 
   @Then("^Operator cancel order on Edit order page using data below:$")
@@ -572,6 +580,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorSuggestRouteFromTheRouteFinder(String routeTag) {
     editOrderPage.addToRouteDialog.waitUntilVisible();
     editOrderPage.addToRouteDialog.routeTags.selectValues(ImmutableList.of(resolveValue(routeTag)));
+    takesScreenshot();
     editOrderPage.addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
   }
 
@@ -611,7 +620,7 @@ public class EditOrderSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify order events are not presented on Edit order page:$")
+  @Then("Operator verify order events are not presented on Edit order page:")
   public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
     List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
     data = resolveValues(data);
@@ -623,6 +632,7 @@ public class EditOrderSteps extends AbstractSteps {
             .isFalse()
     );
     assertions.assertAll();
+    takesScreenshot();
   }
 
   @Then("^Operator verify Delivery details on Edit order page using data below:$")
@@ -672,9 +682,10 @@ public class EditOrderSteps extends AbstractSteps {
       Assert.assertThat("Delivery Details - End Date / Time",
           actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
     }
+    takesScreenshot();
   }
 
-  @Then("^Operator verify Pickup details on Edit order page using data below:$")
+  @Then("Operator verify Pickup details on Edit order page using data below:")
   public void verifyPickupDetails(Map<String, String> expectedData) throws ParseException {
     expectedData = resolveKeyValues(expectedData);
 
@@ -739,18 +750,19 @@ public class EditOrderSteps extends AbstractSteps {
       Assert.assertThat("Delivery Details - Last Service End",
           actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
     }
+    takesScreenshot();
   }
 
   @Then("^Operator verify (Pickup|Delivery) \"(.+)\" order event description on Edit order page$")
   public void operatorVerifyOrderEventOnEditOrderPage(String type, String expectedEventName) {
-    Order order = get(KEY_CREATED_ORDER);
-    List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
-    OrderEvent actualEvent = events.stream()
+    final Order order = get(KEY_CREATED_ORDER);
+    final List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+    final OrderEvent actualEvent = events.stream()
         .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEventName))
         .findFirst()
         .orElseThrow(() -> new AssertionError(
             f("There is no [%s] event on Edit Order page", expectedEventName)));
-    String eventDescription = actualEvent.getDescription();
+    final String eventDescription = actualEvent.getDescription();
     if (StringUtils.equalsIgnoreCase(type, "Pickup")) {
       if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
         editOrderPage.eventsTable()
@@ -787,6 +799,7 @@ public class EditOrderSteps extends AbstractSteps {
             .verifyHubInboundWithDeviceIdEventDescription(order, eventDescription);
       }
     }
+    takesScreenshot();
   }
 
   @Then("^Operator verify (.+) transaction on Edit order page using data below:$")
@@ -805,12 +818,14 @@ public class EditOrderSteps extends AbstractSteps {
       assertEquals(f("%s transaction Route Id", transactionType),
           StringUtils.trimToNull(mapOfData.get("routeId")), actual.getRouteId());
     }
+    takesScreenshot();
   }
 
   @Then("Operator verify transaction on Edit order page using data below:")
   public void operatorVerifyTransactionOnEditOrderPage(Map<String, String> data) {
-    TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
-    List<TransactionInfo> transactions = editOrderPage.transactionsTable.readAllEntities();
+    final TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
+    final List<TransactionInfo> transactions = editOrderPage.transactionsTable.readAllEntities();
+    takesScreenshot();
     transactions.stream()
         .filter(actual -> {
           try {
@@ -825,26 +840,29 @@ public class EditOrderSteps extends AbstractSteps {
             () -> new AssertionError("Transaction " + expected.toMap() + " was not found"));
   }
 
-  @Then("^Operator verify order summary on Edit order page using data below:$")
+  @Then("Operator verify order summary on Edit order page using data below:")
   public void operatorVerifyOrderSummaryOnEditOrderPage(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
-    Order expectedOrder = new Order();
+    final Order expectedOrder = new Order();
 
     if (mapOfData.containsKey("comments")) {
       expectedOrder.setComments(mapOfData.get("comments"));
     }
 
     editOrderPage.verifyOrderSummary(expectedOrder);
+    takesScreenshot();
   }
 
   @Then("Operator verifies the status of the order will be Completed")
   public void operatorVerifiesTheStatusOfTheOrderWillBeCompleted() {
     editOrderPage.verifyOrderStatus("Completed");
+    takesScreenshot();
   }
 
   @Then("Operator verifies the route is tagged to the order")
   public void operatorVerifiesTheRouteIsTaggedToTheOrder() {
     editOrderPage.verifiesOrderIsTaggedToTheRecommendedRouteId();
+    takesScreenshot();
   }
 
   @Then("^Operator verify menu item \"(.+)\" > \"(.+)\" is disabled on Edit order page$")
@@ -854,11 +872,12 @@ public class EditOrderSteps extends AbstractSteps {
         editOrderPage.isMenuItemEnabled(parentMenuItem, childMenuItem));
   }
 
-  @Then("^Operator update Pickup Details on Edit Order Page$")
+  @Then("Operator update Pickup Details on Edit Order Page")
   public void operatorUpdatePickupDetailsOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = createDefaultTokens();
     mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.updatePickupDetails(mapOfData);
+    takesScreenshot();
     Order order = get(KEY_CREATED_ORDER);
     String senderName = mapOfData.get("senderName");
     String senderContact = mapOfData.get("senderContact");
@@ -906,11 +925,12 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_CREATED_ORDER, order);
   }
 
-  @Then("^Operator update Delivery Details on Edit Order Page$")
+  @Then("Operator update Delivery Details on Edit Order Page")
   public void operatorUpdateDeliveryDetailsOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = createDefaultTokens();
     mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.updateDeliveryDetails(mapOfData);
+    takesScreenshot();
     Order order = get(KEY_CREATED_ORDER);
     String recipientName = mapOfData.get("recipientName");
     String recipientContact = mapOfData.get("recipientContact");
@@ -959,16 +979,18 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_CREATED_ORDER, order);
   }
 
-  @Then("^Operator verifies Pickup Details are updated on Edit Order Page$")
+  @Then("Operator verifies Pickup Details are updated on Edit Order Page")
   public void operatorVerifiesPickupDetailsUpdated() {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyPickupInfo(order);
+    takesScreenshot();
   }
 
-  @Then("^Operator verifies Delivery Details are updated on Edit Order Page$")
+  @Then("Operator verifies Delivery Details are updated on Edit Order Page")
   public void operatorVerifiesDeliveryDetailsUpdated() {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyDeliveryInfo(order);
+    takesScreenshot();
   }
 
   @Then("^Operator verifies (Pickup|Delivery) Transaction is updated on Edit Order Page$")
@@ -979,6 +1001,7 @@ public class EditOrderSteps extends AbstractSteps {
     } else {
       editOrderPage.verifyDeliveryDetailsInTransaction(order, txnType);
     }
+    takesScreenshot();
   }
 
   @Then("^Operator tags order to \"(.+)\" DP on Edit Order Page$")
@@ -986,7 +1009,7 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.tagOrderToDP(dpId);
   }
 
-  @Then("^Operator untags order from DP on Edit Order Page$")
+  @Then("Operator untags order from DP on Edit Order Page")
   public void operatorUnTagOrderFromDP() {
     editOrderPage.dpDropOffSettingDialog.waitUntilVisible();
     editOrderPage.dpDropOffSettingDialog.clearSelected.click();
@@ -1006,16 +1029,17 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator delete order on Edit Order Page$")
+  @Then("Operator delete order on Edit Order Page")
   public void operatorDeleteOrder() {
     editOrderPage.deleteOrder();
   }
 
-  @Then("^Operator reschedule Pickup on Edit Order Page$")
+  @Then("Operator reschedule Pickup on Edit Order Page")
   public void operatorReschedulePickupOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = createDefaultTokens();
     mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.reschedulePickup(mapOfData);
+    takesScreenshot();
     Order order = get(KEY_CREATED_ORDER);
     String senderName = mapOfData.get("senderName");
     String senderContact = mapOfData.get("senderContact");
@@ -1061,11 +1085,12 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_CREATED_ORDER, order);
   }
 
-  @Then("^Operator reschedule Delivery on Edit Order Page$")
+  @Then("Operator reschedule Delivery on Edit Order Page")
   public void operatorRescheduleDeliveryOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = createDefaultTokens();
     mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.rescheduleDelivery(mapOfData);
+    takesScreenshot();
     Order order = get(KEY_CREATED_ORDER);
     String recipientName = mapOfData.get("recipientName");
     String recipientContact = mapOfData.get("recipientContact");
@@ -1115,6 +1140,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorPullsOrderFromRouteOnEditOrderPage(String txnType) {
     editOrderPage.pullFromRouteDialog.waitUntilVisible();
     editOrderPage.pullFromRouteDialog.toPull.check();
+    takesScreenshot();
     editOrderPage.pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
   }
 
@@ -1360,6 +1386,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorResumeOrder() {
     editOrderPage.clickMenu("Order Settings", "Resume Order");
     editOrderPage.resumeOrderDialog.waitUntilVisible();
+    takesScreenshot();
     editOrderPage.resumeOrderDialog.resumeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("1 order(s) resumed", true);
   }
@@ -1381,18 +1408,19 @@ public class EditOrderSteps extends AbstractSteps {
             order.getId()), normalizedExpectedList, normalizedActualList);
   }
 
-  @And("^Operator verifies no tags shown on Edit Order page$")
+  @And("Operator verifies no tags shown on Edit Order page")
   public void operatorVerifyNoTagsShownOnEditOrderPage() {
     List<String> actualOrderTags = editOrderPage.getTags();
     assertThat("List of displayed order tags", actualOrderTags, Matchers.empty());
+    takesScreenshot();
   }
 
-  @When("^Operator click Chat With Driver on Edit Order page$")
+  @When("Operator click Chat With Driver on Edit Order page")
   public void clickChatWithDriver() {
     editOrderPage.chatWithDriver.click();
   }
 
-  @When("^Chat With Driver dialog is displayed on Edit Order page$")
+  @When("Chat With Driver dialog is displayed on Edit Order page")
   public void verifyChatWithDriverDialogDisplayed() {
     pause5s();
     editOrderPage.chatWithDriverDialog.waitUntilVisible();
@@ -1483,6 +1511,7 @@ public class EditOrderSteps extends AbstractSteps {
     // open the pod details view
     podDetailsDialog.getPodDetailTable().clickView(1);
     podDetailsDialog.scrollToBottom();
+    takesScreenshot();
 
     final String expectedTransactionText = f("TRANSACTION (%d)",
         order.getLastDeliveryTransaction().getId());
@@ -1513,8 +1542,8 @@ public class EditOrderSteps extends AbstractSteps {
 
   @When("Operator opens and verifies the downloaded airway bill pdf")
   public void operatorOpensTheDownloadedAirwayBillPdf() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    String fileName = f("awb_%s.pdf", trackingId);
+    final String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    final String fileName = f("awb_%s.pdf", trackingId);
     String actualSortCode;
 
     if (get(KEY_CREATED_SORT_CODE) != null) {
@@ -1526,6 +1555,7 @@ public class EditOrderSteps extends AbstractSteps {
 
     // verifies the file is existed
     editOrderPage.verifyFileDownloadedSuccessfully(fileName);
+    takesScreenshot();
 
     String pathname = StandardTestConstants.TEMP_DIR + fileName;
     try {
@@ -1654,6 +1684,7 @@ public class EditOrderSteps extends AbstractSteps {
 
     editOrderPage.clickMenu("Order Settings", "Create Recovery Ticket");
     editOrderPage.createTicket(recoveryTicket);
+    takesScreenshot();
     put("recoveryTicket", recoveryTicket);
   }
 }
