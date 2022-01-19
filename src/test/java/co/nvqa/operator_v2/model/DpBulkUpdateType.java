@@ -12,7 +12,8 @@ public enum DpBulkUpdateType {
   MORE_THAN_30("more_than_30"),
   VALID_INVALID("valid_invalid"),
   SPECIAL_CHAR("special_char"),
-  BLANK("blank");
+  BLANK("blank"),
+  SAME_PARTNER_3_DPS("same_partner_3_dps");
 
   final String val;
 
