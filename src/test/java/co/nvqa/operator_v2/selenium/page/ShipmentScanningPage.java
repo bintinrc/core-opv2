@@ -239,24 +239,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void removeOrderFromShipment(String firstTrackingId) {
-    /*pause1s();
-    sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
-    //sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
-    pause1s();
-    String statusCardText = findElementByXpath("//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']").getText();
-    assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
-    assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
-            containsString("not in shipment"));*/
     pause1s();
     sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
 
     pause1s();
-    waitUntilVisibilityOfElementLocated(
-        "//tr[@data-row-key='"+firstTrackingId+"']//button");
-    waitUntilElementIsClickable(
-            "//tr[@data-row-key='"+firstTrackingId+"']//button");
-    click(
-            "//tr[@data-row-key='"+firstTrackingId+"']//button");
+    waitUntilVisibilityOfElementLocated("//tr[@data-row-key='"+firstTrackingId+"']//button");
+    waitUntilElementIsClickable("//tr[@data-row-key='"+firstTrackingId+"']//button");
+    click("//tr[@data-row-key='"+firstTrackingId+"']//button");
 
     pause1s();
     waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
