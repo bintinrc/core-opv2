@@ -20,9 +20,9 @@ Feature: Check Pricing Script
       | originPricingZone      | ID_A00007_01 |
       | destinationPricingZone | ID_B00001_01 |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 66000 |
+      | grandTotal   | 66660 |
       | gst          | 660   |
-      | deliveryFee  | 66000 |
+      | deliveryFee  | 66660 |
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
