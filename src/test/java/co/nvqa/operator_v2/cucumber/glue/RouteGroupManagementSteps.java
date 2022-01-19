@@ -70,6 +70,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
   public void verifyNewRouteGroupCreatedSuccessfully(Map<String, String> data) {
     RouteGroupInfo expected = new RouteGroupInfo(resolveKeyValues(data));
     routeGroupManagementPage.inFrame(page -> {
+      page.waitUntilLoaded(1);
       page.routeGroupsTable.filterByColumn(COLUMN_NAME, expected.getName());
       Assertions.assertThat(page.routeGroupsTable.isEmpty())
           .as("Route Groups table is empty")
@@ -77,6 +78,11 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       RouteGroupInfo actual = page.routeGroupsTable.readEntity(1);
       expected.compareWithActual(actual);
     });
+  }
+
+  @Then("^Route Groups Management page is loaded$")
+  public void routeGroupManagementPageIsLoaded() {
+    routeGroupManagementPage.inFrame(page -> page.waitUntilLoaded(10));
   }
 
   @When("^Operator update created route group on Route Group Management page:$")
@@ -241,6 +247,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
   @Then("Operator apply filters on Route Group Management page:")
   public void applyFilters(Map<String, String> data) {
     routeGroupManagementPage.inFrame(page -> {
+      page.waitUntilLoaded();
       Map<String, String> resolvedData = resolveKeyValues(data);
       page.creationDate.fairSetInterval(resolvedData.get("fromDate"), resolvedData.get("toDate"));
     });

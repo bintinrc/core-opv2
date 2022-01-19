@@ -48,6 +48,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_OPTIMIZE_ROUTE;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_VERIFY_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_ROUTE_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_TAGS;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -84,6 +85,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.waitUntilLoaded();
       routeLogsPage.createRouteReact.click();
       routeLogsPage.createRouteDialog.waitUntilVisible();
+      routeLogsPage.waitUntilLoaded();
 
       CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
           .get(0);
@@ -485,8 +487,8 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
       }
       if (finalData.containsKey("hub")) {
-        routeLogsPage.hubFilter.clearAll();
-        routeLogsPage.hubFilter.selectFilter(splitAndNormalize(finalData.get("hub")));
+        routeLogsPage.hubFilter.clearValue();
+        routeLogsPage.hubFilter.selectValues(splitAndNormalize(finalData.get("hub")));
       }
       if (finalData.containsKey("driver")) {
         if (!routeLogsPage.driverFilter.isDisplayedFast()) {
@@ -528,7 +530,7 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.archivedRoutesFilter.selectFilter(finalData.get("archivedRoutes"));
       } else {
         if (routeLogsPage.archivedRoutesFilter.isDisplayedFast()) {
-          routeLogsPage.archivedRoutesFilter.deleteFilter();
+          routeLogsPage.archivedRoutesFilter.removeFilter();
         }
       }
     });
@@ -757,7 +759,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Hub filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.hubFilter.getSelectedValues())
+          assertions.assertThat(routeLogsPage.hubFilter.getValues())
               .as("Hub items")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hub")));
         }
@@ -775,7 +777,7 @@ public class RouteLogsSteps extends AbstractSteps {
       if (finalData.containsKey("zone")) {
         boolean isDisplayed = routeLogsPage.zoneFilter.isDisplayedFast();
         if (!isDisplayed) {
-          assertions.fail("Driver filter is not displayed");
+          assertions.fail("Zone filter is not displayed");
         } else {
           assertions.assertThat(routeLogsPage.zoneFilter.getSelectedValues())
               .as("Zone items")
@@ -785,10 +787,10 @@ public class RouteLogsSteps extends AbstractSteps {
       if (finalData.containsKey("archivedRoutes")) {
         boolean isDisplayed = routeLogsPage.archivedRoutesFilter.isDisplayedFast();
         if (!isDisplayed) {
-          assertions.fail("Driver filter is not displayed");
+          assertions.fail("Archived Routes filter is not displayed");
         } else {
           assertions.assertThat(routeLogsPage.archivedRoutesFilter.getSelectedValue())
-              .as("Zone items")
+              .as("Archived Routes state")
               .isEqualTo(Boolean.parseBoolean(data.get("archivedRoutes")));
         }
       }
@@ -908,8 +910,11 @@ public class RouteLogsSteps extends AbstractSteps {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
     routeLogsPage.inFrame(() -> {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.selectTag.selectValue(resolveValue(newTag));
-      routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
+      routeLogsPage.routesTable.clickColumn(1, COLUMN_TAGS);
+      routeLogsPage.editTagsDialog.waitUntilVisible();
+      routeLogsPage.editTagsDialog.tags.selectValue(newTag);
+      routeLogsPage.editTagsDialog.updateTags.click();
+      routeLogsPage.waitUntilLoaded(3);
     });
   }
 
@@ -918,8 +923,11 @@ public class RouteLogsSteps extends AbstractSteps {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
     routeLogsPage.inFrame(() -> {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.selectTag.selectValue(resolveValue(tag));
-      routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
+      routeLogsPage.routesTable.clickColumn(1, COLUMN_TAGS);
+      routeLogsPage.editTagsDialog.waitUntilVisible();
+      routeLogsPage.editTagsDialog.tags.removeSelected(tag);
+      routeLogsPage.editTagsDialog.updateTags.click();
+      routeLogsPage.waitUntilLoaded(3);
     });
   }
 
@@ -948,6 +956,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
     routeLogsPage.waitUntilPageLoaded();
+    pause2s();
   }
 
   @And("Operator filters route by {string} Route ID on Route Logs page")
@@ -965,6 +974,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams expected = new RouteLogsParams(resolveKeyValues(data));
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, expected.getId());
+      pause2s();
       RouteLogsParams actual = routeLogsPage.routesTable.readEntity(1);
       expected.compareWithActual(actual);
     });
@@ -1119,11 +1129,13 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifySelectionErrors(String process, List<Map<String, String>> data) {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.selectionErrorDialog.waitUntilVisible();
-      assertEquals("Process", resolveValue(process),
-          routeLogsPage.selectionErrorDialog.process.getText().replace("Process", "").trim());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText())
+          .as("Process")
+          .isEqualTo(resolveValue(process));
 
-      assertEquals("Number Of routes", data.size(),
-          routeLogsPage.selectionErrorDialog.routeIds.size());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds.size())
+          .as("Number Of routes")
+          .isEqualTo(data.size());
 
       for (int i = 0; i < data.size(); i++) {
         Map<String, String> expected = resolveKeyValues(data.get(i));

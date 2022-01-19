@@ -15,6 +15,10 @@ public class TextBox extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
+  public TextBox(WebDriver webDriver, String xpath) {
+    super(webDriver, xpath);
+  }
+
   public TextBox(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
     super(webDriver, searchContext, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -24,6 +28,7 @@ public class TextBox extends PageElement {
     String currentValue = getValue();
     if (StringUtils.isNotEmpty(currentValue)) {
       StringBuilder sb = new StringBuilder();
+      sb.append(Keys.END);
       for (int i = 0; i < currentValue.length(); i++) {
         sb.append(Keys.BACK_SPACE);
       }

@@ -252,6 +252,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
         dsPage.clickResignedOption(data.get("resigned"));
       }
 
+      takesScreenshot();
       dsPage.loadSelection();
       pause2s();
     });
@@ -266,6 +267,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     final String exp = expectedZone;
     dsPage.inFrame(() -> {
       List<String> actualZones = dsPage.driversTable().readFirstRowsInColumn(COLUMN_ZONE, 10);
+      takesScreenshot();
       assertThat("Driver Strength records list", actualZones, not(empty()));
       assertThat("Zone values", actualZones, Matchers.everyItem(containsString(exp)));
     });
@@ -280,13 +282,14 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     final String exp = expectedDriverType;
     dsPage.inFrame(() -> {
       List<String> actualDriverTypes = dsPage.driversTable().readFirstRowsInColumn(COLUMN_TYPE, 10);
+      takesScreenshot();
       assertThat("Driver Strength records list", actualDriverTypes, not(empty()));
       assertThat("Type values", actualDriverTypes,
           Matchers.everyItem(containsString(exp)));
     });
   }
 
-  @Then("^Operator verify driver strength is filtered by \"([^\"]*)\" resigned")
+  @Then("Operator verify driver strength is filtered by {string} resigned")
   public void operatorVerifyDriverStrengthIsFilteredByResigned(String expected) {
     dsPage.inFrame(() -> {
       List<String> actualDriverTypes = dsPage.driversTable()
@@ -325,25 +328,27 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
         dsPage.click("//button[span[text()='Load Selection']]");
       }
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
+      takesScreenshot();
       put(KEY_INITIAL_COMING_VALUE, dsPage.driversTable().getComingStatus(1));
       dsPage.driversTable().toggleComingStatus(1);
     });
   }
 
-  @Then("^Operator verify Coming value for created driver has been changed on Driver Strength page$")
+  @Then("Operator verify Coming value for created driver has been changed on Driver Strength page")
   public void operatorVerifyComingValueForCreatedDriverHasBeenChangedOnDriverStrengthPage() {
     String initialComingValue = get(KEY_INITIAL_COMING_VALUE);
     assertThat("Initial Coming value", initialComingValue, not(isEmptyOrNullString()));
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
+      takesScreenshot();
       assertThat("Actual Coming Value", dsPage.driversTable().getComingStatus(1),
           not(equalToIgnoringCase(initialComingValue)));
     });
     takesScreenshot();
   }
 
-  @Then("^Operator load all data for driver on Driver Strength Page$")
+  @Then("Operator load all data for driver on Driver Strength Page")
   public void operatorLoadAllData() {
     final String loadSelectionXpath = "//button[span[text()='Load Selection']]";
     dsPage.inFrame(() -> {

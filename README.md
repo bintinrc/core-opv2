@@ -81,18 +81,24 @@ from intellij gradle runner:
 
 QA environment :
 ```
--Penvironment=${service-name}-qa-sg
--Ptags=@opv2
--PdbHost="10.80.0.33"
+clean runCucumber
+-Penvironment=core-qa-sg
+-Ptags="@CWF and (@RT or @ShouldAlwaysRun)"
+-PdbHost="mysql-6333.qa.db.nv"
 -PdbPort=6333
 -PdbUser=qa_automation
 -PdbPass=Jz43S0xG852hcxmG3BAbrs7YWml6x5c4
 -PdbEnvironment=qa
 -PapiBaseUrl="https://api-qa.ninjavan.co"
 -PsystemId=sg
+-PdbQaHost="mysql-6333.qa.db.nv"
+-PdbQaPort=6333
+-PdbQaSchema=qa_automation
+-PdbQaUser=qa_automation
+-PdbQaPass=Jz43S0xG852hcxmG3BAbrs7YWml6x5c4
 -PseleniumDriver=CHROME
--PseleniumDriverVersion=89
--PseleniumHeadless=true
+-PseleniumDriverVersion="97.0"
+-PseleniumHeadless=false
 ```
 
 GAIA environment :
@@ -112,7 +118,7 @@ GAIA environment :
 -PseleniumHeadless=true
 ```
 
-further read: [confluence](https://confluence.ninjavan.co/display/NVQA/E+-+Run+Automation+Project)
+further read: [confluence](https://confluence.ninjavan.co/display/NVQA/Run+an+automation+project)
 
 feature's structure:
 
