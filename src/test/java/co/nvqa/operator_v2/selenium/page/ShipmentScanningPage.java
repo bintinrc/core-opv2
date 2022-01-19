@@ -17,6 +17,8 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -237,25 +239,35 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void removeOrderFromShipment(String firstTrackingId) {
+    /*pause1s();
+    sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
+    //sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
     pause1s();
-    sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
+    String statusCardText = findElementByXpath("//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']").getText();
+    assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
+    assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
+            containsString("not in shipment"));*/
+    pause1s();
+    sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
 
     pause1s();
     waitUntilVisibilityOfElementLocated(
-        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+        "//tr[@data-row-key='"+firstTrackingId+"']//button");
     waitUntilElementIsClickable(
-        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+            "//tr[@data-row-key='"+firstTrackingId+"']//button");
     click(
-        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+            "//tr[@data-row-key='"+firstTrackingId+"']//button");
 
     pause1s();
-    waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
-    waitUntilElementIsClickable("//button[@aria-label='Delete']");
-    click("//button[@aria-label='Delete']");
-    waitUntilInvisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
-
-    waitUntilVisibilityOfToast(f("Success delete order tracking ID %s", firstTrackingId));
-    waitUntilInvisibilityOfToast();
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath("//button[.='Confirm Remove']")), getWebDriver());
+    String toastMessage = getAntTopText();
+    LOGGER.info(toastMessage);
+    Assertions.assertThat(toastMessage)
+            .as("Success Delete Order tracking ID "+firstTrackingId)
+            .isEqualTo("Success Delete Order tracking ID "+firstTrackingId);
+    waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
   }
 
   public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
