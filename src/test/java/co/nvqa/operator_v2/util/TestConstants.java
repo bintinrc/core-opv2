@@ -47,6 +47,9 @@ public final class TestConstants extends CommonSeleniumTestConstants {
   public static final long OPV2_DP_DP_ID;
   public static final long OPV2_DP_BULK_UPDATE_SAME_PARTNER_ID;
   public static final long OPV2_DP_BULK_UPDATE_INACTIVE_ID;
+  public static final long SAME_PARTNER_BULK_UPDATE_OPV2_DP_1_ID;
+  public static final long SAME_PARTNER_BULK_UPDATE_OPV2_DP_2_ID;
+  public static final long SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID;
 
   static {
     String apiBase = NvSystemProperties
@@ -89,6 +92,9 @@ public final class TestConstants extends CommonSeleniumTestConstants {
     OPV2_DP_DP_ID = getLong("opv2-dp-dp-id");
     OPV2_DP_BULK_UPDATE_SAME_PARTNER_ID = getLong("opv2-dp-bulk-update-same-partner-id");
     OPV2_DP_BULK_UPDATE_INACTIVE_ID = getLong("opv2-dp-bulk-update-inactive-id");
+    SAME_PARTNER_BULK_UPDATE_OPV2_DP_1_ID = getLong("same-partner-bulk-update-opv2-dp-1-id");
+    SAME_PARTNER_BULK_UPDATE_OPV2_DP_2_ID = getLong("same-partner-bulk-update-opv2-dp-2-id");
+    SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID = getLong("same-partner-bulk-update-opv2-dp-3-id");
   }
 
   private TestConstants() {

@@ -123,6 +123,15 @@ public class DpBulkUpdateSteps extends AbstractSteps {
         dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(" ");
         break;
 
+      case SAME_PARTNER_3_DPS:
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_1_ID);
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_2_ID);
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID);
+        for (Long dpId : dpIds) {
+          dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + "\n");
+        }
+        break;
+
       default:
         LOGGER.warn("DP Bulk Update Type is not valid!");
     }
@@ -166,5 +175,52 @@ public class DpBulkUpdateSteps extends AbstractSteps {
     dpBulkUpdatePage.bufferCapacity.sendKeys(10000000);
     pause1s();
     dpBulkUpdatePage.saveButton.click();
+  }
+
+  @And("Operator edits the capacity and enable customer collect of DP via DP Bulk Update Page")
+  public void operatorEditsTheCapacityAndEnableCustomerCollectOfDPViaDPBulkUpdatePage() {
+    dpBulkUpdatePage.canCustomerCollectEnable.click();
+    dpBulkUpdatePage.maxCapacity.sendKeys(65);
+    dpBulkUpdatePage.bufferCapacity.sendKeys(90);
+    pause1s();
+    dpBulkUpdatePage.saveButton.click();
+  }
+
+  @And("Operator edits the {string} capacity to {long} of DP via DP Bulk Update Page")
+  public void operatorEditsTheCapacityToOfDPViaDPBulkUpdatePage(String column, long capacity) {
+    if("Max Capacity".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.maxCapacity.sendKeys(capacity);
+    } else {
+      dpBulkUpdatePage.bufferCapacity.sendKeys(capacity);
+    }
+    pause1s();
+  }
+
+  @And("Operator enables {string} of DP via DP Bulk Update Page")
+  public void operatorEditsTheToOfDPViaDPBulkUpdatePage(String column) {
+    if("can_customer_collect".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.canCustomerCollectEnable.click();
+    } else if("allow_customer_return".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.canCustomerReturnEnable.click();
+    } else if("disable_shipper_send".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.allowShipperSendDisable.click();
+    }
+    pause1s();
+  }
+
+  @And("Operator saves the updated settings via DP Bulk Update Page")
+  public void OperatorSavesTheUpdatedSettingsViaDpBulkUpdatePage() {
+    dpBulkUpdatePage.saveButton.click();
+  }
+
+  @Then("Operator download CSV for bulk update")
+  public void operatorDownloadCSVForBulkUpdate() {
+    pause2s();
+    dpBulkUpdatePage.downloadButton.click();
+  }
+
+  @Then("Operator verifies data is correct in downloaded csv file")
+  public void operatorVerifiesDataIsCorrectInDownloadedCsvFile() {
+    dpBulkUpdatePage.verifyDownloadedCsvFile();
   }
 }
