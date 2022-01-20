@@ -225,6 +225,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void deleteFiltersPreset(String presetName) {
+    pause2s();
     clickButtonByAriaLabel("Action");
     clickButtonByAriaLabel("Delete Preset");
     waitUntilVisibilityOfMdDialogByTitle("Delete Preset");
