@@ -265,7 +265,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
   public void setCapacityAndParcelStayCreateDpForm(String maxCapacity, String bufferCapacity,
       Long maxParcelStay) {
-    String maxParcelStayAsString = maxParcelStay.toString();
+    final String maxParcelStayAsString = maxParcelStay.toString();
     sendKeys(XPATH_MAXIMUM_CAPACITY, maxCapacity);
     sendKeys(XPATH_BUFFER_CAPACITY, bufferCapacity);
     sendKeys(XPATH_MAXIMUM_PARCEL_STAY, maxParcelStayAsString);
@@ -310,9 +310,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void fillCreateDpForm(Dp dpParams, File file) {
-    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
+
     setNameCreateDpForm(dpParams.getName());
     setShortNameCreateDpForm(dpParams.getShortName());
     setContactNumberCreateDpForm(dpParams.getContactNo());
@@ -339,7 +340,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     isActiveCreateDpForm();
     isPublicCreateDpForm();
     if (dpParams.getIsAutoReservation() != null) {
-      if (dpParams.getIsAutoReservation() == true) {
+      if (dpParams.getIsAutoReservation()) {
         clickIsAutoReservation();
       }
     }
@@ -353,9 +354,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void assertInvalidImageErrorMessage() {
-    assertTrue("Error Message is displayed: ",
-        getErrorMessageForUploadInvalidDpImage().toLowerCase()
-            .equalsIgnoreCase("Unable to upload photo as it exceeds 2MB limit"));
+    Assertions.assertThat(getErrorMessageForUploadInvalidDpImage().toLowerCase())
+        .as("Error Message is displayed correctly")
+        .isEqualToIgnoringCase("Unable to upload photo as it exceeds 2MB limit");
   }
 
   public String getErrorMessageForUploadInvalidDpImage() {
@@ -400,7 +401,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void fillEditDpForm(Dp dpParams) {
-    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
     if (dpParams.getExternalStoreId() != null) {
@@ -420,13 +421,14 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     setDirectionsCreateDpForm(dpParams.getDirections());
     canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
     if (dpParams.getIsAutoReservation() != null) {
-      Boolean value = Boolean.parseBoolean(getValue(XPATH_AUTO_RESERVATION_ENABLED));
+      final boolean value = Boolean.parseBoolean(getValue(XPATH_AUTO_RESERVATION_ENABLED));
       if (!dpParams.getIsAutoReservation() && value) {
         clickIsAutoReservation();
       }
     }
     //assert PUDO Type is disabled while Editing
-    assertFalse("PUDO Type is disabled", isElementEnabled(XPATH_RETAIL_POINT_NETWORK));
+    Assertions.assertThat(isElementEnabled(XPATH_RETAIL_POINT_NETWORK)).as("PUDO Type is disabled")
+        .isFalse();
     if (dpParams.getCutOffTime() != null) {
       setCutOffTime(dpParams.getCutOffTime());
     }
@@ -454,49 +456,51 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void verifyDpParams(Dp expectedDpParams) {
+    pause5s();
     dpTable.filterByColumn("name", expectedDpParams.getName());
-    Dp actualDpParams = dpTable.readEntity(1);
-    assertThatIfExpectedValueNotNull("DP ID", expectedDpParams.getId(), actualDpParams.getId(),
-        equalTo(expectedDpParams.getId()));
-    assertThatIfExpectedValueNotNull("DP Name", expectedDpParams.getName(),
-        actualDpParams.getName(), equalTo(expectedDpParams.getName()));
-    assertThatIfExpectedValueNotNull("DP Short Name", expectedDpParams.getShortName(),
-        actualDpParams.getShortName(), equalTo(expectedDpParams.getShortName()));
-    assertThatIfExpectedValueNotNull("DP Hub", expectedDpParams.getHub(), actualDpParams.getHub(),
-        containsString(expectedDpParams.getHub()));
-    assertThatIfExpectedValueNotNull("DP Directions", expectedDpParams.getDirections(),
-        actualDpParams.getDirections(), equalTo(expectedDpParams.getDirections()));
-    assertThatIfExpectedValueNotNull("DP Activity", expectedDpParams.getActivity(),
-        actualDpParams.getDirections(), equalTo(expectedDpParams.getActivity()));
+    final Dp actualDpParams = dpTable.readEntity(1);
+    Assertions.assertThat(actualDpParams.getId()).as("DP ID").isEqualTo(expectedDpParams.getId());
+    Assertions.assertThat(actualDpParams.getName()).as("DP name is the same")
+        .isEqualToIgnoringCase(expectedDpParams.getName());
+    Assertions.assertThat(actualDpParams.getShortName()).as("DP Short Name is the same")
+        .containsIgnoringCase(expectedDpParams.getShortName());
+    Assertions.assertThat(actualDpParams.getHub()).as("DP Hub is the same")
+        .containsIgnoringCase(expectedDpParams.getHub());
+    Assertions.assertThat(actualDpParams.getDirections()).as("DP Directions is the same")
+        .containsIgnoringCase(expectedDpParams.getDirections());
+    Assertions.assertThat(actualDpParams.getActivity()).as("DP Activity is the same")
+        .containsIgnoringCase(expectedDpParams.getActivity());
+
     expectedDpParams.setId(actualDpParams.getId());
   }
 
   public void verifyDpUserParams(DpUser expectedDpUserParams) {
+    pause5s();
     dpUsersTable.filterByColumn(DpUsersTable.COLUMN_USERNAME, expectedDpUserParams.getClientId());
-    DpUser actualDpUserParams = dpUsersTable.readEntity(1);
+    final DpUser actualDpUserParams = dpUsersTable.readEntity(1);
 
-    assertThatIfExpectedValueNotNull("DP User Username", expectedDpUserParams.getClientId(),
-        actualDpUserParams.getClientId(), equalTo(expectedDpUserParams.getClientId()));
-    assertThatIfExpectedValueNotNull("DP User First Name", expectedDpUserParams.getFirstName(),
-        actualDpUserParams.getFirstName(), equalTo(expectedDpUserParams.getFirstName()));
-    assertThatIfExpectedValueNotNull("DP User Last Name", expectedDpUserParams.getLastName(),
-        actualDpUserParams.getLastName(), equalTo(expectedDpUserParams.getLastName()));
-    assertThatIfExpectedValueNotNull("DP User Email", expectedDpUserParams.getEmailId(),
-        actualDpUserParams.getEmailId(), equalTo(expectedDpUserParams.getEmailId()));
-    assertThatIfExpectedValueNotNull("DP User Contact No", expectedDpUserParams.getContactNo(),
-        actualDpUserParams.getContactNo(), equalTo(expectedDpUserParams.getContactNo()));
+    Assertions.assertThat(actualDpUserParams.getClientId()).as("DP user username is the same")
+        .containsIgnoringCase(expectedDpUserParams.getClientId());
+    Assertions.assertThat(actualDpUserParams.getFirstName()).as("DP user first name is the same")
+        .containsIgnoringCase(expectedDpUserParams.getFirstName());
+    Assertions.assertThat(actualDpUserParams.getLastName()).as("DP user last name is the same")
+        .containsIgnoringCase(expectedDpUserParams.getLastName());
+    Assertions.assertThat(actualDpUserParams.getEmailId()).as("DP user email is the same")
+        .containsIgnoringCase(expectedDpUserParams.getEmailId());
+    Assertions.assertThat(actualDpUserParams.getContactNo()).as("DP user contact no is the same")
+        .containsIgnoringCase(expectedDpUserParams.getContactNo());
   }
 
   public void verifyDownloadedFileContent(List<DpPartner> expectedDpPartners) {
-    String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
+    final String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
     verifyFileDownloadedSuccessfully(fileName);
-    String pathName = StandardTestConstants.TEMP_DIR + fileName;
-    List<DpPartner> actualDpPartners = DpPartner.fromCsvFile(DpPartner.class, pathName, true);
+    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    final List<DpPartner> actualDpPartners = DpPartner.fromCsvFile(DpPartner.class, pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualDpPartners.size(),
-        greaterThanOrEqualTo(expectedDpPartners.size()));
+    Assertions.assertThat(actualDpPartners).as("Unexpected number of lines in CSV file")
+        .hasSizeGreaterThanOrEqualTo(expectedDpPartners.size());
 
-    Map<Long, DpPartner> actualMap = actualDpPartners.stream().collect(Collectors.toMap(
+    final Map<Long, DpPartner> actualMap = actualDpPartners.stream().collect(Collectors.toMap(
         DpPartner::getId,
         params -> params,
         (params1, params2) -> params1
@@ -526,10 +530,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<Dp> actualDpParams = Dp.fromCsvFile(Dp.class, pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualDpParams.size(),
-        greaterThanOrEqualTo(expectedDpParams.size()));
+    Assertions.assertThat(actualDpParams)
+        .as(f("Number of lines in CSV file is equal or greater than %d", expectedDpParams.size()))
+        .hasSizeGreaterThanOrEqualTo(expectedDpParams.size());
 
-    Map<Long, Dp> actualMap = actualDpParams.stream().collect(Collectors.toMap(
+    final Map<Long, Dp> actualMap = actualDpParams.stream().collect(Collectors.toMap(
         Dp::getId,
         params -> params,
         (params1, params2) -> params1
@@ -538,17 +543,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     for (Dp expectedDp : expectedDpParams) {
       final Dp actualDp = actualMap.get(expectedDp.getId());
 
-      Assertions.assertThat(actualDp.getId()).as("DP ID").isEqualTo(expectedDp.getId());
-      Assertions.assertThat(actualDp.getName()).as("DP Name").isEqualTo(expectedDp.getName());
-      Assertions.assertThat(actualDp.getShortName()).as("DP Short Name")
+      Assertions.assertThat(actualDp.getId()).as("DP ID is correct").isEqualTo(expectedDp.getId());
+      Assertions.assertThat(actualDp.getName()).as("DP Name is correct")
+          .isEqualTo(expectedDp.getName());
+      Assertions.assertThat(actualDp.getShortName()).as("DP Short Name is correct")
           .isEqualTo(expectedDp.getShortName());
-      assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""),
-          actualDp.getHub());
-      Assertions.assertThat(actualDp.getAddress()).as("DP Address")
+      Assertions.assertThat(actualDp.getHub()).as("DP hub is correct")
+          .isEqualToIgnoringCase(Optional.ofNullable(expectedDp.getHub()).orElse(""));
+      Assertions.assertThat(actualDp.getAddress()).as("DP Address is correct")
           .isEqualTo(expectedDp.getAddress());
-      Assertions.assertThat(actualDp.getDirections()).as("DP Directions")
+      Assertions.assertThat(actualDp.getDirections()).as("DP Directions is correct")
           .isEqualTo(expectedDp.getDirections());
-      Assertions.assertThat(actualDp.getActivity()).as("DP Activity")
+      Assertions.assertThat(actualDp.getActivity()).as("DP Activity is correct")
           .isEqualTo(expectedDp.getActivity());
     }
   }
@@ -570,8 +576,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     for (DpUser expectedDpUserParams : expectedDpUsersParams) {
       DpUser actualDpUser = actualMap.get(expectedDpUserParams.getClientId());
 
-      assertThat("DP with Username " + expectedDpUserParams.getClientId(), actualDpUser,
-          notNullValue());
+      Assertions.assertThat(actualDpUser.getClientId())
+          .as(f("DP username is %s", expectedDpUserParams.getClientId()))
+          .isEqualTo(expectedDpUserParams.getClientId());
       Assertions.assertThat(actualDpUser.getFirstName()).as("DP User first name is correct")
           .isEqualTo(expectedDpUserParams.getFirstName());
       Assertions.assertThat(actualDpUser.getLastName()).as("DP User last name is correct")
@@ -607,38 +614,38 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
   public void verifyErrorMessageForDpCreation(String field) {
     if ("".equalsIgnoreCase(field)) {
-      assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase()
-          .contains("Dp with external_store_id TESTING-NewDP already exists".toLowerCase()));
-      assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase()
-          .contains("Dp with short_name TEST-DP already exists".toLowerCase()));
+      Assertions.assertThat(getErrorMessage().toLowerCase()).as("Error Message is correct")
+          .containsIgnoringCase("Dp with external_store_id TESTING-NewDP already exists");
+      Assertions.assertThat(getErrorMessage().toLowerCase()).as("Error Message is correct")
+          .containsIgnoringCase("Dp with short_name TEST-DP already exists");
     } else {
-      assertTrue("Error Message is correct: ", getErrorMessage().toLowerCase()
-          .contains(f("Dp with %s already exists", field).toLowerCase()));
+      Assertions.assertThat(getErrorMessage().toLowerCase()).as("Error Message is correct")
+          .containsIgnoringCase(f("Dp with %s already exists", field).toLowerCase());
     }
   }
 
   public String getErrorMessage() {
     waitUntilVisibilityOfElementLocated(XPATH_PUDO_POINT_IFRAME);
-    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
-    String errorMessage = getText(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
+    final String errorMessage = getText(XPATH_CONTENT_ERROR_MESSAGE_DP_CREATION);
     getWebDriver().switchTo().defaultContent();
     return errorMessage;
   }
 
   public void verifyImageIsPresent(String image, String status) {
     if ("Present".equalsIgnoreCase(status)) {
-      assertTrue(image.toLowerCase().contains("png"));
+      Assertions.assertThat(image).as("image is present").containsIgnoringCase("png");
     } else {
-      assertFalse(image.toLowerCase().contains("png"));
+      Assertions.assertThat(image).as("image is not present").doesNotContainIgnoringCase("png");
     }
   }
 
   public void deleteDpImageAndSaveSettings(String currentDpName, String action) {
     dpTable.filterByColumn("name", currentDpName);
     dpTable.clickActionButton(1, "edit");
-    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
     deleteDpImage();
@@ -662,7 +669,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   public void editDpImageAndSaveSettings(String currentDpName, File file, String status) {
     dpTable.filterByColumn("name", currentDpName);
     dpTable.clickActionButton(1, "edit");
-    WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+    final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
     getWebDriver().switchTo().frame(frame);
     waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
     editDpImage(file, status);
@@ -765,7 +772,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void welcomePageDisplayed() {
-    assertTrue(isElementVisible(XPATH_WELCOME_PAGE_NINJA_POINT));
+    Assertions.assertThat(isElementVisible(XPATH_WELCOME_PAGE_NINJA_POINT))
+        .as("welcome page is displayed").isTrue();
   }
 
   /**
