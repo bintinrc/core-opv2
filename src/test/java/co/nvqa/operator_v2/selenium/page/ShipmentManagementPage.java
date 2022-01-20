@@ -710,11 +710,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
         "//md-dialog[contains(@class,'shipment-upload-order-result')]");
 
     int actualNumberOfOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.uploaded-orders')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.uploaded-orders')]//preceding-sibling::div"));
     int successfulOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.successful')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.successful')]//preceding-sibling::div"));
     int failedOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.failed')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.failed')]//preceding-sibling::div"));
     pause1s();
     if (isValid) {
       if (isDuplicated) {
