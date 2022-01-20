@@ -1,7 +1,7 @@
 @OperatorV2 @DpBulkUpdate @DpAdministrationV2 @DP
 Feature: DP Administration - DP Bulk Update
 
-  @LaunchBrowser @ShouldAlwaysRun @test
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -250,7 +250,6 @@ Feature: DP Administration - DP Bulk Update
       | {same-partner-bulk-update-opv2-dp-2-id} |
       | {same-partner-bulk-update-opv2-dp-3-id} |
 
-    @test
   Scenario: Select DP IDs - Bulk Update DP Information - Disable All Settings - Only Some DPs are Selected
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Distribution Points -> DP Bulk Update
