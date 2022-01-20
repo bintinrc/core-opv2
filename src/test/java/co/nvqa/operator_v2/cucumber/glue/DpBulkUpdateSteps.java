@@ -197,13 +197,45 @@ public class DpBulkUpdateSteps extends AbstractSteps {
   }
 
   @And("Operator enables {string} of DP via DP Bulk Update Page")
-  public void operatorEditsTheToOfDPViaDPBulkUpdatePage(String column) {
+  public void operatorEnablesTheToOfDPViaDPBulkUpdatePage(String column) {
     if("can_customer_collect".equalsIgnoreCase(column)) {
       dpBulkUpdatePage.canCustomerCollectEnable.click();
     } else if("allow_customer_return".equalsIgnoreCase(column)) {
       dpBulkUpdatePage.canCustomerReturnEnable.click();
-    } else if("disable_shipper_send".equalsIgnoreCase(column)) {
+    } else if("shipper_send".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.allowShipperSendEnable.click();
+    } else if("packs_sold_here".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.packsSoldEnable.click();
+    }
+    pause1s();
+  }
+
+  @And("Operator enables all settings of DP via DP Bulk Update Page")
+  public void OperatorEnablesAllSettingsOfDpViaDpBulkUpdatePage() {
+    dpBulkUpdatePage.canCustomerCollectEnable.click();
+    dpBulkUpdatePage.canCustomerReturnEnable.click();
+    dpBulkUpdatePage.allowShipperSendEnable.click();
+    dpBulkUpdatePage.packsSoldEnable.click();
+  }
+
+  @And("Operator disables all settings of DP via DP Bulk Update Page")
+  public void OperatorDisablesAllSettingsOfDpViaDpBulkUpdatePage() {
+    dpBulkUpdatePage.canCustomerCollectDisable.click();
+    dpBulkUpdatePage.canCustomerReturnDisable.click();
+    dpBulkUpdatePage.allowShipperSendDisable.click();
+    dpBulkUpdatePage.packsSoldDisable.click();
+  }
+
+  @And("Operator disables {string} of DP via DP Bulk Update Page")
+  public void operatorDisablesTheToOfDPViaDPBulkUpdatePage(String column) {
+    if("can_customer_collect".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.canCustomerCollectDisable.click();
+    } else if("allow_customer_return".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.canCustomerReturnDisable.click();
+    } else if("shipper_send".equalsIgnoreCase(column)) {
       dpBulkUpdatePage.allowShipperSendDisable.click();
+    } else if("packs_sold_here".equalsIgnoreCase(column)) {
+      dpBulkUpdatePage.packsSoldDisable.click();
     }
     pause1s();
   }

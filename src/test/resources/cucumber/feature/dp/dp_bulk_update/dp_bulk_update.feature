@@ -1,7 +1,7 @@
 @OperatorV2 @DpBulkUpdate @DpAdministrationV2 @DP
 Feature: DP Administration - DP Bulk Update
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @test
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -214,12 +214,63 @@ Feature: DP Administration - DP Bulk Update
     When Operator clicks on Select DP ID Button
     And Operator inputs DP with "same_partner_3_dps" condition into the textbox
     When Operator clicks on Bulk Update on Apply Action Drop Down
-    And Operator enables "disable_shipper_send" of DP via DP Bulk Update Page
+    And Operator disables "shipper_send" of DP via DP Bulk Update Page
     Then Operator saves the updated settings via DP Bulk Update Page
     Then Operator verifies that the toast of "Bulk Update" will be shown
     Then Operator download CSV for bulk update
     Then Operator verifies data is correct in downloaded csv file
     When DB Operator verifies dp details from bulk update for "Disable Shipper Send" and "" and ""
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+
+  Scenario: Select DP IDs - Bulk Update DP Information - Enable All Settings
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Given DB Operator changes all columns available for dp bulk update to 0 for dps:
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "same_partner_3_dps" condition into the textbox
+    When Operator clicks on Bulk Update on Apply Action Drop Down
+    And Operator enables all settings of DP via DP Bulk Update Page
+    And Operator edits the "Max Capacity" capacity to 65 of DP via DP Bulk Update Page
+    And Operator edits the "buffer Capacity" capacity to 90 of DP via DP Bulk Update Page
+    Then Operator saves the updated settings via DP Bulk Update Page
+    Then Operator verifies that the toast of "Bulk Update" will be shown
+    Then Operator download CSV for bulk update
+    Then Operator verifies data is correct in downloaded csv file
+    When DB Operator verifies all dp details from bulk update are "Enabled"
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+
+    @test
+  Scenario: Select DP IDs - Bulk Update DP Information - Disable All Settings - Only Some DPs are Selected
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Given DB Operator changes all columns available for dp bulk update to 1 for dps:
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "same_partner_3_dps" condition into the textbox
+    When Operator clicks on Bulk Update on Apply Action Drop Down
+    And Operator disables all settings of DP via DP Bulk Update Page
+    And Operator edits the "Max Capacity" capacity to 65 of DP via DP Bulk Update Page
+    And Operator edits the "buffer Capacity" capacity to 90 of DP via DP Bulk Update Page
+    Then Operator saves the updated settings via DP Bulk Update Page
+    Then Operator verifies that the toast of "Bulk Update" will be shown
+    Then Operator download CSV for bulk update
+    Then Operator verifies data is correct in downloaded csv file
+    When DB Operator verifies all dp details from bulk update are "Disabled"
       | dpId                                    |
       | {same-partner-bulk-update-opv2-dp-1-id} |
       | {same-partner-bulk-update-opv2-dp-2-id} |
