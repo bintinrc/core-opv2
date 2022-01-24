@@ -228,8 +228,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause2s();
     clickButtonByAriaLabel("Action");
     clickButtonByAriaLabel("Delete Preset");
-    waitUntilVisibilityOfMdDialogByTitle("Delete Preset");
-    TestUtils.findElementAndClick("container.route-logs.select-preset-5", "id", getWebDriver());
+    waitUntilVisibilityOfElementLocated("//md-dialog-content//div[.='Select a preset to delete']");
+    waitUntilElementIsClickable("//md-select[contains(@aria-label,'Select preset')]");
+    TestUtils.findElementAndClick("//md-select[contains(@aria-label,'Select preset')]", "xpath", getWebDriver());
     selectValueFromMdSelectByAriaLabel("Select preset", presetName);
     clickNvIconTextButtonByName("commons.delete");
     waitUntilVisibilityOfToast("1 filter preset deleted");
