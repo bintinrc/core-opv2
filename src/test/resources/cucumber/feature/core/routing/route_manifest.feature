@@ -425,7 +425,7 @@ Feature: Route Manifest
       | driverId          | {ninja-driver-id} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |

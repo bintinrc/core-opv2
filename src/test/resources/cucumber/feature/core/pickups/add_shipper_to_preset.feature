@@ -366,7 +366,7 @@ Feature: Add Shipper To Preset
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
   @DeleteShipper
-  Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Inactive Shipper
+  Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Inactive Shipper (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | false                 |

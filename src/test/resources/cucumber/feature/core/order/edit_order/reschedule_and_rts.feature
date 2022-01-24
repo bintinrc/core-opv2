@@ -435,7 +435,7 @@ Feature: Reschedule & RTS
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Reschedule Fail Pickup - Edit Pickup Address
+  Scenario: Operator Reschedule Fail Pickup - Edit Pickup Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -512,7 +512,7 @@ Feature: Reschedule & RTS
       | country  | Singapore                          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address
+  Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -592,7 +592,7 @@ Feature: Reschedule & RTS
       | city     | Singapore                          |
       | country  | Singapore                          |
 
-  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted - Edit Delivery Address
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted - Edit Delivery Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -651,7 +651,7 @@ Feature: Reschedule & RTS
       | country  | Singapore                          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

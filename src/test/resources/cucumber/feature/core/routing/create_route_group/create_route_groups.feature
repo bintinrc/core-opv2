@@ -177,7 +177,7 @@ Feature: Create Route Groups
       | status     | Pending Pickup                                           |
 
   @DeleteRouteGroups
-  Scenario: Operator Add Reservation to Route Group
+  Scenario: Operator Add Reservation to Route Group (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |

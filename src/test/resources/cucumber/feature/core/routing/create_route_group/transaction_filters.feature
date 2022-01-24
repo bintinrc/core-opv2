@@ -641,7 +641,7 @@ Feature: Create Route Groups - Transaction Filters
       | PP      | PICKUP   | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
       | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | uid:a11f812d-673d-4215-991b-db42b3e7daa1 |
 
-  Scenario: Operator Filter Order Weight on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Weight on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -669,7 +669,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order Priority Level on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Priority Level on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -694,7 +694,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -717,7 +717,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order DNR Group on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order DNR Group on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

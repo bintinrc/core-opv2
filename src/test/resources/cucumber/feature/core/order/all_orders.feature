@@ -1132,7 +1132,7 @@ Feature: All Orders
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies route_monitoring_data record
 
-  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page
+  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page (uid:aa8e8606-e1a6-4c07-afa5-d17a01028bb9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

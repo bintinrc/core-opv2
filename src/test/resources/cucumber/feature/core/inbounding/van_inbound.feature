@@ -95,7 +95,7 @@ Feature: Van Inbound
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {KEY_LIST_OF_CREATED_ORDER[3].toName} | {KEY_LIST_OF_CREATED_ORDER[3].toContact} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | Pending Pickup          | Pending |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route
+  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                               |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -147,7 +147,7 @@ Feature: Van Inbound
       | status | IN_PROGRESS            |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route
+  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
