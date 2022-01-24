@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -224,6 +225,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void deleteFiltersPreset(String presetName) {
+    pause2s();
     clickButtonByAriaLabel("Action");
     clickButtonByAriaLabel("Delete Preset");
     waitUntilVisibilityOfMdDialogByTitle("Delete Preset");
@@ -377,8 +379,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String expectedTextShipmentDetails = f("Shipment ID : %d", shipmentId);
     String actualTextShipmentDetails = getText(
         "//md-content[contains(@class,'nv-shipment-details')]//h3");
-    assertEquals("Shipment ID is not the same: ", expectedTextShipmentDetails,
-        actualTextShipmentDetails);
+    Assertions.assertThat(actualTextShipmentDetails).as("Shipment ID is same: ", expectedTextShipmentDetails);
     isElementExist(f("//td[contains(text(),'%s')]", trackingId));
     getWebDriver().close();
   }
@@ -709,11 +710,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
         "//md-dialog[contains(@class,'shipment-upload-order-result')]");
 
     int actualNumberOfOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.uploaded-orders')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.uploaded-orders')]//preceding-sibling::div"));
     int successfulOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.successful')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.successful')]//preceding-sibling::div"));
     int failedOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.failed')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.failed')]//preceding-sibling::div"));
     pause1s();
     if (isValid) {
       if (isDuplicated) {

@@ -17,6 +17,8 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -25,6 +27,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.Matchers.allOf;
 
@@ -36,6 +40,7 @@ import static org.hamcrest.Matchers.allOf;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentScanningPage extends OperatorV2SimplePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentScanningPage.class);
   public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
@@ -52,8 +57,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[contains(@class,'scan-barcode-container')]//small";
-  public static final String XPATH_STATUS_CARD_BOX = "//div[contains(@class,'status-card')]";
-  public static final String XPATH_ZONE_CARD_BOX = "//div[contains(@class,'zone-card')]";
+  public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
+  public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
 
 
   @FindBy(xpath = "//div[span[.='Driver']]//p")
@@ -208,11 +213,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipment() {
     pause300ms();
-    click("//button[.='Close Shipment']");
+    click("//div[@class='ant-card-head-wrapper']//button//span[.='Close Shipment']");
     waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
-    click("//button[contains(@class,'ant-btn-primary')]//span[.='Close Shipment']");
-
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath("//div[@class='ant-modal-content']//button[.='Close Shipment']")),
+            getWebDriver());
     String toastMessage = getAntTopText();
+    LOGGER.info(toastMessage);
     assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
         allOf(containsString("Shipment"), containsString("closed")));
     waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
@@ -233,32 +240,30 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void removeOrderFromShipment(String firstTrackingId) {
     pause1s();
-    sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
+    sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
 
     pause1s();
-    waitUntilVisibilityOfElementLocated(
-        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
-    waitUntilElementIsClickable(
-        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
-    click(
-        "//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+    waitUntilVisibilityOfElementLocated("//tr[@data-row-key='"+firstTrackingId+"']//button");
+    waitUntilElementIsClickable("//tr[@data-row-key='"+firstTrackingId+"']//button");
+    click("//tr[@data-row-key='"+firstTrackingId+"']//button");
 
     pause1s();
-    waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
-    waitUntilElementIsClickable("//button[@aria-label='Delete']");
-    click("//button[@aria-label='Delete']");
-    waitUntilInvisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
-
-    waitUntilVisibilityOfToast(f("Success delete order tracking ID %s", firstTrackingId));
-    waitUntilInvisibilityOfToast();
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath("//button[.='Confirm Remove']")), getWebDriver());
+    String toastMessage = getAntTopText();
+    LOGGER.info(toastMessage);
+    Assertions.assertThat(toastMessage)
+            .as("Success Delete Order tracking ID "+firstTrackingId)
+            .isEqualTo("Success Delete Order tracking ID "+firstTrackingId);
+    waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
   }
 
   public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
     pause1s();
-    sendKeysAndEnterByAriaLabel("scan_barcode_remove", firstTrackingId);
-
+    sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
     pause1s();
-    String statusCardText = findElementByXpath("//div[contains(@class,'status-card')]").getText();
+    String statusCardText = findElementByXpath("//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']").getText();
     assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
     assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
         containsString("not in shipment"));
@@ -275,15 +280,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void removeAllOrdersFromShipment() {
     pause1s();
     click("//button//span[.='Remove All']");
-    removeAllParcelsDialog.waitUntilVisible();
-    removeAllParcelsDialog.remove.waitUntilClickable();
-    removeAllParcelsDialog.remove.click();
-    removeAllParcelsDialog.waitUntilInvisible();
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath("//button[.='Remove']")), getWebDriver());
+    waitUntilInvisibilityOfElementLocated("//div[contains(@class,'ant-modal-title')][.='Removing all']");
   }
 
   public void verifyTheSumOfOrderIsZero() {
     String actualSumOfOrder = getText(
-        "//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5")
+        "//ul[@class='ant-card-actions']//h4")
         .substring(0, 1);
     int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
     assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
@@ -736,10 +741,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public static class RemoveAllParcelsDialog extends MdDialog {
 
-    @FindBy(css = "[aria-label='Cancel']")
+    @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(css = "[aria-label='Remove']")
+    @FindBy(xpath = "//button[.='Remove']")
     public Button remove;
 
     public RemoveAllParcelsDialog(WebDriver webDriver, WebElement webElement) {

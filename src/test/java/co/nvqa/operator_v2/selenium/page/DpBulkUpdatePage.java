@@ -1,8 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.operator_v2.model.DpBulkUpdateInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -42,8 +45,35 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//input[@placeholder='Buffer']")
   public PageElement bufferCapacity;
 
+  @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  public PageElement canCustomerCollectEnable;
+
+  @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  public PageElement canCustomerCollectDisable;
+
+  @FindBy(xpath = "//span[text()='Customer Return']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  public PageElement canCustomerReturnEnable;
+
+  @FindBy(xpath = "//span[text()='Customer Return']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  public PageElement canCustomerReturnDisable;
+
+  @FindBy(xpath = "//span[text()='Shipper Send']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  public PageElement allowShipperSendEnable;
+
+  @FindBy(xpath = "//span[text()='Shipper Send']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  public PageElement allowShipperSendDisable;
+
+  @FindBy(xpath = "//span[text()='Packs Sold']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  public PageElement packsSoldEnable;
+
+  @FindBy(xpath = "//span[text()='Packs Sold']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  public PageElement packsSoldDisable;
+
   @FindBy(xpath = "//div[contains(@class,'flex')]/button[contains(@class,'ant-btn-primary')]")
   public Button saveButton;
+
+  @FindBy(xpath = "//span[text()='Download CSV']/parent::button")
+  public Button downloadButton;
 
   private static final String DP_ID_XPATH = "//tr[%d]/td[@class='dpId']";
   private static final String DP_NAME_XPATH = "//tr[%d]/td[@class='name']";
@@ -54,6 +84,8 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   private static final String DP_IS_PUBLIC_XPATH = "//tr[%d]/td[@class='isPublic']";
 
   private static final String ERROR_TOAST_WITH_MESSAGE = "//div[contains(@class,'notification-notice') and text()='%s']";
+
+  private static final String DP_BULK_UPDATE_FILENAME_PATTERN = "dp-bulk-update";
 
   public DpBulkUpdatePage(WebDriver webDriver) {
     super(webDriver);
@@ -115,5 +147,15 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
     pause1s();
     Boolean isErrorToastShown = isElementExist(f(ERROR_TOAST_WITH_MESSAGE, errorMessage));
     Assertions.assertThat(isErrorToastShown).as("Error Toast Shown").isTrue();
+  }
+
+  public void verifyDownloadedCsvFile() {
+    String fileName = getLatestDownloadedFilename(DP_BULK_UPDATE_FILENAME_PATTERN);
+    verifyFileDownloadedSuccessfully(fileName);
+    String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    List<DpBulkUpdateInfo> contentsOfCsv = DpBulkUpdateInfo.fromCsvFile(DpBulkUpdateInfo.class, pathName, true);
+    for(DpBulkUpdateInfo dpBulkUpdateInfo: contentsOfCsv) {
+      assertEquals("Status is Success", dpBulkUpdateInfo.getStatus(), "SUCCESS");
+    }
   }
 }

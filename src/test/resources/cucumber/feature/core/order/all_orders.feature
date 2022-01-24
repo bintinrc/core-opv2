@@ -878,11 +878,11 @@ Feature: All Orders
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Order -> All Orders
     And Operator selects filters on All Orders page:
-      | status            | Transit                                                          |
-      | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                   |
-      | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | shipperName       | {shipper-v4-legacy-id}                                           |
-      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | status            | Transit                            |
+      | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}     |
+      | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}     |
+      | shipperName       | {shipper-v4-legacy-id}             |
+      | masterShipperName | {shipper-v4-marketplace-legacy-id} |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:
       | Status: Transit                                                                                   |

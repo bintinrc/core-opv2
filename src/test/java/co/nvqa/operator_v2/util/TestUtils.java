@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -172,5 +173,10 @@ public class TestUtils extends CommonSeleniumTestUtils {
       element = webDriver.findElement(By.className(elementString));
     }
     element.click();
+  }
+
+  public static void callJavaScriptExecutor(String argument, WebElement element, WebDriver webDriver){
+    JavascriptExecutor jse = ((JavascriptExecutor)webDriver);
+    jse.executeScript(argument, element);
   }
 }

@@ -11,12 +11,16 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
 public class LoginPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoginPage.class);
 
   private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
   private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
@@ -34,7 +38,7 @@ public class LoginPage extends OperatorV2SimplePage {
         loaded = true;
       } catch (Exception ex) {
         executeScript("window.open()");
-        String currentWindowHandle = getWebDriver().getWindowHandle();
+        final String currentWindowHandle = getWebDriver().getWindowHandle();
         String newWindowHandle = null;
 
         for (String windowHandle : getWebDriver().getWindowHandles()) {
@@ -51,19 +55,19 @@ public class LoginPage extends OperatorV2SimplePage {
   }
 
   public void forceLogin(String operatorBearerToken) {
-    NvLogger.info("========== FORCE LOGIN BY INJECTING COOKIES TO BROWSER ==========");
+    LOGGER.info("FORCE LOGIN BY INJECTING COOKIES TO BROWSER");
 
     try {
-      String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
-      NvLogger.info("ninja_access_token = " + operatorBearerToken);
-      NvLogger.info("user = " + userCookie);
+      final String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
+      LOGGER.info("ninja_access_token = " + operatorBearerToken);
+      LOGGER.info("user = " + userCookie);
 
       getWebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken,
           TestConstants.OPERATOR_PORTAL_COOKIE_DOMAIN, "/", null));
       getWebDriver().manage().addCookie(
           new Cookie("user", userCookie, TestConstants.OPERATOR_PORTAL_COOKIE_DOMAIN, "/", null));
       executeScript("window.open()");
-      String currentWindowHandle = getWebDriver().getWindowHandle();
+      final String currentWindowHandle = getWebDriver().getWindowHandle();
       String newWindowHandle = null;
 
       for (String windowHandle : getWebDriver().getWindowHandles()) {
@@ -79,7 +83,7 @@ public class LoginPage extends OperatorV2SimplePage {
     } catch (UnsupportedEncodingException ex) {
       throw new NvTestRuntimeException(ex);
     } finally {
-      NvLogger.info("=================================================================");
+      // nothing
     }
   }
 
@@ -99,17 +103,17 @@ public class LoginPage extends OperatorV2SimplePage {
       boolean isExpectedUrlFound = currentUrl.startsWith(GOOGLE_EXPECTED_URL_1) || currentUrl
           .startsWith(GOOGLE_EXPECTED_URL_2);
 
-      NvLogger.info("========== GOOGLE LOGIN PAGE ==========");
-      NvLogger.info("Current URL          : " + currentUrl);
-      NvLogger.info("Expected URL 1       : " + GOOGLE_EXPECTED_URL_1);
-      NvLogger.info("Expected URL 2       : " + GOOGLE_EXPECTED_URL_2);
-      NvLogger.info("Is Expected URL Found: " + isExpectedUrlFound);
-      NvLogger.info("=======================================");
+      LOGGER.info("========== GOOGLE LOGIN PAGE ==========");
+      LOGGER.info("Current URL          : " + currentUrl);
+      LOGGER.info("Expected URL 1       : " + GOOGLE_EXPECTED_URL_1);
+      LOGGER.info("Expected URL 2       : " + GOOGLE_EXPECTED_URL_2);
+      LOGGER.info("Is Expected URL Found: " + isExpectedUrlFound);
+      LOGGER.info("=======================================");
 
       return isExpectedUrlFound;
     }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
-    String googlePageUrl = googlePageUrlSb.toString();
+    final String googlePageUrl = googlePageUrlSb.toString();
 
     if (googlePageUrl.startsWith(GOOGLE_EXPECTED_URL_1)) {
       enterCredentialWithMethod1(username, password);
@@ -129,14 +133,14 @@ public class LoginPage extends OperatorV2SimplePage {
   public void enterCredentialWithMethod2(String username, String password) {
     sendKeys("//input[@id='identifierId'][@name='identifier']", username);
     click("//div[@id='identifierNext']");
-    pause10ms();
+    pause100ms();
     retryIfExpectedExceptionOccurred(() -> sendKeys("//input[@name='password']", password),
         InvalidElementStateException.class);
     click("//div[@id='passwordNext']");
   }
 
   public void checkForGoogleSimpleVerification(String location) {
-    List<WebElement> listOfWebElements = findElementsByXpath(
+    final List<WebElement> listOfWebElements = findElementsByXpath(
         "//span[text()='Enter the city you usually sign in from']");
 
     if (!listOfWebElements.isEmpty()) {

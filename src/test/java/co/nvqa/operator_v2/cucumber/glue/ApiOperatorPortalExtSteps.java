@@ -76,7 +76,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_DP_PARTNER, dpPartner);
   }
 
-  @When("^API Operator add new DP for the created DP Partner with the following attributes:$")
+  @When("API Operator add new DP for the created DP Partner with the following attributes:")
   public void operatorAddNewDpForTheDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
     Partner dpPartner = get(KEY_DP_PARTNER);
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
@@ -92,7 +92,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_NEWLY_CREATED_DP_ID, dp.getId());
   }
 
-  @When("^API Operator add new DP User for the created DP with the following attributes:$")
+  @When("API Operator add new DP User for the created DP with the following attributes:")
   public void operatorAddDpUserForTheCreatedDpWithTheFollowingAttributes(Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
     Dp dp = get(KEY_DISTRIBUTION_POINT);
@@ -121,7 +121,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
-  @When("^API Operator create new Driver using data below:$")
+  @When("API Operator create new Driver using data below:")
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String rawDateUniqueString = TestUtils.generateDateUniqueString();

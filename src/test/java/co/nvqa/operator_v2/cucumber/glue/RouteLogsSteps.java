@@ -69,7 +69,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage = new RouteLogsPage(getWebDriver());
   }
 
-  @When("^Operator create new route using data below:$")
+  @When("Operator create new route using data below:")
   public void operatorCreateNewRouteUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
@@ -215,7 +215,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator bulk edits details of created routes using data below:$")
+  @When("Operator bulk edits details of created routes using data below:")
   public void operatorBulkEditDetailsMultipleRoutesUsingDataBelow(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
@@ -307,7 +307,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator optimise created routes$")
+  @When("Operator optimise created routes")
   public void operatorOptimiseMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded(3);
@@ -358,7 +358,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator print passwords of created routes$")
+  @When("Operator print passwords of created routes")
   public void operatorPrintPasswordsOfMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -370,13 +370,14 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify printed passwords of selected routes info is correct$")
+  @Then("Operator verify printed passwords of selected routes info is correct")
   public void operatorVerifyPrintedPasswordsOfSelectedRoutesInfoIsCorrect() {
     List<RouteLogsParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
     routeLogsPage.verifyPrintedPasswordsOfSelectedRoutesInfoIsCorrect(listOfCreateRouteParams);
+    takesScreenshot();
   }
 
-  @When("^Operator print created routes$")
+  @When("Operator print created routes")
   public void operatorPrintMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -388,14 +389,15 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator verifies created routes are printed successfully$")
+  @When("Operator verifies created routes are printed successfully")
   public void operatorVerifyMultipleRoutesIsPrintedSuccessfully() {
     String latestFilenameOfDownloadedPdf = routeLogsPage.getLatestDownloadedFilename(
         "route_printout");
     routeLogsPage.verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
+    takesScreenshot();
   }
 
-  @When("^Operator archive routes on Route Logs page:$")
+  @When("Operator archive routes on Route Logs page:")
   public void operatorArchiveMultipleRoutes(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -406,9 +408,10 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.archiveSelectedRoutesDialog.waitUntilVisible();
       routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
     });
+    takesScreenshot();
   }
 
-  @When("^Operator delete routes on Route Logs page:$")
+  @When("Operator delete routes on Route Logs page:")
   public void operatorDeleteMultipleRoutes(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -421,7 +424,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator unarchive routes on Route Logs page:$")
+  @When("Operator unarchive routes on Route Logs page:")
   public void operatorUnarchiveMultipleRoutes(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -434,7 +437,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator save data of created routes on Route Logs page$")
+  @When("Operator save data of created routes on Route Logs page")
   public void operatorSaveRouteData() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -446,7 +449,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify routes are deleted successfully:$")
+  @Then("Operator verify routes are deleted successfully:")
   public void operatorVerifyMultipleRoutesIsDeletedSuccessfully(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -455,6 +458,7 @@ public class RouteLogsSteps extends AbstractSteps {
             .as("Route " + routeId + " was deleted").isTrue();
       });
     });
+    takesScreenshot();
   }
 
   @When("Operator set filter using data below and click 'Load Selection'")
@@ -548,6 +552,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("List of selected filters")
           .containsExactlyInAnyOrderElementsOf(expected);
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Preset Name field in Save Preset dialog on Route Logs page is required")
@@ -558,6 +563,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Preset Name error text")
           .isEqualTo("This field is required");
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Cancel button in Save Preset dialog on Route Logs page is enabled")
@@ -568,6 +574,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Cancel button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Save button in Save Preset dialog on Route Logs page is enabled")
@@ -578,6 +585,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Save button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator clicks Save button in Save Preset dialog on Route Logs page")
@@ -593,6 +601,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Cancel button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Delete button in Delete Preset dialog on Route Logs page is enabled")
@@ -603,6 +612,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Delete button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator selects {string} preset in Delete Preset dialog on Route Logs page")
@@ -621,6 +631,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Selected preset")
           .isEqualTo(resolveValue(value));
     });
+    takesScreenshot();
   }
 
   @When("Operator clicks Delete button in Delete Preset dialog on Route Logs page")
@@ -704,6 +715,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .isEqualTo(finalExpected);
       put(KEY_ROUTES_FILTERS_PRESET_ID, presetId);
     });
+    takesScreenshot();
   }
 
   @When("Operator selects {string} Filter Preset on Route Logs page")
@@ -784,6 +796,7 @@ public class RouteLogsSteps extends AbstractSteps {
       }
     });
     assertions.assertAll();
+    takesScreenshot();
   }
 
   @When("Operator verifies Save button in Save Preset dialog on Route Logs page is disabled")
@@ -794,6 +807,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Save button is enabled")
           .isFalse();
     });
+    takesScreenshot();
   }
 
   @When("Operator enters {string} Preset Name in Save Preset dialog on Route Logs page")
@@ -880,6 +894,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
     assertEquals(f("Operator does not redirect to page %s.", redirectUrl), redirectUrl,
         actualCurrentUrl);
+    takesScreenshot();
   }
 
   @When("Operator opens Edit Details dialog for route {string}")

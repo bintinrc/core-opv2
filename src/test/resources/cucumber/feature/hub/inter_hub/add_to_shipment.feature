@@ -293,7 +293,7 @@ Feature: Add To Shipment
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Recovery           |
       | damageDescription       | GENERATED          |
       | orderOutcomeDamaged     | NV LIABLE - FULL   |
       | custZendeskId           | 1                  |
@@ -313,7 +313,6 @@ Feature: Add To Shipment
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | Pending                                  |
       | granular status | Pending Pickup                           |
     And Operator searches and selects orders created first row on Add Tags to Order page
@@ -434,7 +433,6 @@ Feature: Add To Shipment
     And Operator refresh page
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | On Hold                                  |
       | granular status | On Hold                                  |
     And Operator searches and selects orders created first row on Add Tags to Order page
@@ -511,7 +509,6 @@ Feature: Add To Shipment
     And Operator refresh page
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | On Hold                                  |
       | granular status | On Hold                                  |
     And Operator searches and selects orders created first row on Add Tags to Order page

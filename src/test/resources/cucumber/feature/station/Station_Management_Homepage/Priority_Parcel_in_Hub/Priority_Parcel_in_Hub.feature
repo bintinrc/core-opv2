@@ -1,4 +1,4 @@
-@StationManagement @StationHome @PriorityParcelInHub
+@StationManagement @PriorityParcelInHub
 Feature: Priority Parcel in Hub
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1564,6 +1564,685 @@ Feature: Priority Parcel in Hub
     Examples:
       | Country | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
       | Vietnam | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 14:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder
+  Scenario Outline: [SG] Filter Parcels by Late If Inbound Before Cut Off Time (uid:1d34e4c1-2c3c-47af-866d-b7d58fe85bd7)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    Then Operator applies filter as "<Filter>" from quick filters option
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | HubName      | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
+      | {hub-name-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-id
+  Scenario Outline: [ID] Filter Parcels by Late If Inbound Before Cut Off Time (uid:cd42a7e7-4e71-43ca-be0f-cdf2ef57fc46)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 172 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country   | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
+      | Indonesia | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 07:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-my
+  Scenario Outline: [MY] Filter Parcels by Late If Inbound Before Cut Off Time (uid:2e7991a9-d4ca-4ca7-9559-291ca1c243d9)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 2 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country  | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
+      | Malaysia | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 03:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-th
+  Scenario Outline: [TH] Filter Parcels by Late If Inbound Before Cut Off Time (uid:b60ff2f5-07f8-4fd5-a480-40f4f78e7e7a)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-th-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {station-th-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "11/1 Soi Samsen 3 Samsen Road, Wat Samphraya, Phranakhon","address2": "","country": "TH","postcode": "10200"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "10 Soi Siri Ammat, Boonsiri Road San Chao Pho Sua, Phanakon","address2": "","country": "TH","postcode": "10200"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 2 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country  | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
+      | Thailand | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 01:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-ph
+  Scenario Outline: [PH] Filter Parcels by Late If Inbound Before Cut Off Time (uid:45a502fe-157a-49f5-9c9a-d622576bdd46)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-ph-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {station-ph-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "Quezon Ave, Santa Cruz, 4009 Laguna, Philippines","address2": "","country": "PH","postcode": "4009"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "Emilio Aguinaldo Highway, By Pass Road, Tubuan 2, Silang, 4118 Cavite, Philippines","address2": "","country": "PH","postcode": "4118"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 2 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country     | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
+      | Philippines | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 22:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-vn
+  Scenario Outline: [VN] Filter Parcels by Late If Inbound Before Cut Off Time (uid:50f638a2-8642-4664-986e-a052a0b2e8b3)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"parcel_job":{"cash_on_delivery": 40000,"insured_value": 85000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 4 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
+      | Vietnam | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 03:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: [SG] Filter Parcels by Due Today (uid:ea79f9c2-25a6-49e8-a3d6-8e0bfca49c12)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    Then Operator applies filter as "<Filter>" from quick filters option
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | HubName      | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
+      | {hub-name-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-id
+  Scenario Outline: [ID] Filter Parcels by Due Today (uid:00190731-4698-4b3b-835f-e9ee6b464fd3)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 172 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country   | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
+      | Indonesia | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 07:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-my
+  Scenario Outline: [MY] Filter Parcels by Due Today (uid:2b5e4d03-fc2a-41f0-91f4-49ef8d9749a6)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 2 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country  | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
+      | Malaysia | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 03:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-th
+  Scenario Outline: [TH] Filter Parcels by Due Today (uid:90cb14b3-0f39-4b4d-a553-b51a7e114f67)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-th-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {station-th-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "11/1 Soi Samsen 3 Samsen Road, Wat Samphraya, Phranakhon","address2": "","country": "TH","postcode": "10200"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "10 Soi Siri Ammat, Boonsiri Road San Chao Pho Sua, Phanakon","address2": "","country": "TH","postcode": "10200"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 2 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country  | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
+      | Thailand | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 01:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-ph
+  Scenario Outline: [PH] Filter Parcels by Due Today (uid:69f0ed0a-1972-4f90-a0d2-39994dfd8534)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-ph-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {station-ph-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "Quezon Ave, Santa Cruz, 4009 Laguna, Philippines","address2": "","country": "PH","postcode": "4009"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "Emilio Aguinaldo Highway, By Pass Road, Tubuan 2, Silang, 4118 Cavite, Philippines","address2": "","country": "PH","postcode": "4118"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 2 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country     | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                              | FSRModalTitle                                |
+      | Philippines | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-previous-1-day-yyyy-MM-dd} 22:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @SystemIdNotSg @default-vn
+  Scenario Outline: [VN] Filter Parcels by Due Today (uid:99a4a6d8-e64e-4018-a6f7-c3a9eb3599f3)
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"parcel_job":{"cash_on_delivery": 40000,"insured_value": 85000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 4 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator applies filter as "<Filter>" from quick filters option
+    Then Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | Country | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
+      | Vietnam | {hub-name-1} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 03:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder
+  Scenario Outline: Filter Parcels by Post-tagged (uid:3ed01f3c-c5c7-40a9-b683-4fe02ac1d650)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    Then Operator applies filter as "<Filter>" from quick filters option
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+
+    Examples:
+      | HubName      | HubName      | TileName                | ModalName               | Filter      | FSRModalTitle                                |
+      | {hub-name-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder
+  Scenario Outline: Unable to Filter Parcels by Post-tagged (uid:f0f7cddd-1796-4ab2-bf3d-7d1652d4b97f)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName2>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName1>                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName2>                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName2>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    Then Operator applies filter as "<Filter>" from quick filters option
+    And Operator expects no results when searching for the orders by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName1     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
+      | {hub-name-8} | {hub-name-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder
+  Scenario Outline: Unable to Filter Parcels by Post-tagged If Van Inbound in Different Hub (uid:276160f5-17c5-4fa2-980c-b59804c3803c)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName2>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName1>                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId2>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And Operator global inbounds parcel using data below:
+      | hubName    | <HubName2>                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName2>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    Then Operator applies filter as "<Filter>" from quick filters option
+    And Operator expects no results when searching for the orders by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName1     | HubId2     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
+      | {hub-name-8} | {hub-id-9} | {hub-name-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
