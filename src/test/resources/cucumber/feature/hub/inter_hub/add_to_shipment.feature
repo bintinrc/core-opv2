@@ -527,7 +527,7 @@ Feature: Add To Shipment
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status      | Pending |
-      | ordersCount | 1       |
+      | ordersCount | 0       |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
