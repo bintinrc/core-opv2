@@ -534,12 +534,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     expected.compareWithActual(actual, "startTime", "endTime");
 
     SoftAssertions assertions = new SoftAssertions();
-    assertions.assertThat(actual.getDisplayedStartTime())
-        .as("Start Time")
-        .isEqualTo(expected.getStartTime());
-    assertions.assertThat(actual.getDisplayedEndTime())
-        .as("End Time")
-        .isEqualTo(expected.getEndTime());
+    if (expected.getStartTime() != null) {
+      assertions.assertThat(actual.getDisplayedStartTime())
+          .as("Start Time")
+          .isEqualTo(expected.getStartTime());
+    }
+    if (expected.getEndTime() != null) {
+      assertions.assertThat(actual.getDisplayedEndTime())
+          .as("End Time")
+          .isEqualTo(expected.getEndTime());
+    }
     assertions.assertAll();
   }
 
