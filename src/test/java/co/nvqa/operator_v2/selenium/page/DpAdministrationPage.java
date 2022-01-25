@@ -9,12 +9,15 @@ import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
@@ -23,6 +26,8 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
  */
 @SuppressWarnings("WeakerAccess")
 public class DpAdministrationPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationPage.class);
 
   public static final String LOCATOR_SPINNER = "//md-progress-circular";
   private static final String CSV_FILENAME_PATTERN = "data-dp-users";
@@ -462,8 +467,12 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     Assertions.assertThat(actualDpParams.getId()).as("DP ID").isEqualTo(expectedDpParams.getId());
     Assertions.assertThat(actualDpParams.getName()).as("DP name is the same")
         .isEqualToIgnoringCase(expectedDpParams.getName());
-    Assertions.assertThat(actualDpParams.getShortName()).as("DP Short Name is the same")
-        .containsIgnoringCase(expectedDpParams.getShortName());
+    if (Objects.nonNull(actualDpParams.getShortName())) {
+      Assertions.assertThat(actualDpParams.getShortName()).as("DP Short Name is the same")
+          .containsIgnoringCase(expectedDpParams.getShortName());
+    } else {
+      LOGGER.warn("DP Param short name is null!");
+    }
     Assertions.assertThat(actualDpParams.getHub()).as("DP Hub is the same")
         .containsIgnoringCase(expectedDpParams.getHub());
     Assertions.assertThat(actualDpParams.getDirections()).as("DP Directions is the same")
@@ -546,8 +555,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualDp.getId()).as("DP ID is correct").isEqualTo(expectedDp.getId());
       Assertions.assertThat(actualDp.getName()).as("DP Name is correct")
           .isEqualTo(expectedDp.getName());
-      Assertions.assertThat(actualDp.getShortName()).as("DP Short Name is correct")
-          .isEqualTo(expectedDp.getShortName());
+
+      if (Objects.nonNull(actualDp.getShortName())) {
+        Assertions.assertThat(actualDp.getShortName()).as("DP Short Name is the same")
+            .containsIgnoringCase(expectedDp.getShortName());
+      } else {
+        LOGGER.warn("DP Param short name is null!");
+      }
       Assertions.assertThat(actualDp.getHub()).as("DP hub is correct")
           .isEqualToIgnoringCase(Optional.ofNullable(expectedDp.getHub()).orElse(""));
       Assertions.assertThat(actualDp.getAddress()).as("DP Address is correct")
