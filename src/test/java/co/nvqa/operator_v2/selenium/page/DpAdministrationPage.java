@@ -444,17 +444,17 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   public void verifyDpPartnerParams(DpPartner expectedDpPartnerParams) {
     dpPartnersTable.filterByColumn("name", expectedDpPartnerParams.getName());
     DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
-    assertThatIfExpectedValueNotNull("DP Partner ID", expectedDpPartnerParams.getId(),
+    assertThatIfExpectedValueNotNull("DP Partner ID is correct", expectedDpPartnerParams.getId(),
         actualDpPartner.getId(), equalTo(expectedDpPartnerParams.getId()));
-    assertThatIfExpectedValueNotNull("DP Partner Name", expectedDpPartnerParams.getName(),
+    assertThatIfExpectedValueNotNull("DP Partner name is correct", expectedDpPartnerParams.getName(),
         actualDpPartner.getName(), equalTo(expectedDpPartnerParams.getName()));
-    assertThatIfExpectedValueNotNull("DP Partner POC Name", expectedDpPartnerParams.getPocName(),
+    assertThatIfExpectedValueNotNull("DP Partner POC name is correct", expectedDpPartnerParams.getPocName(),
         actualDpPartner.getPocName(), equalTo(expectedDpPartnerParams.getPocName()));
-    assertThatIfExpectedValueNotNull("DP Partner POC No.", expectedDpPartnerParams.getPocTel(),
+    assertThatIfExpectedValueNotNull("DP Partner POC No. is correct", expectedDpPartnerParams.getPocTel(),
         actualDpPartner.getPocTel(), equalTo(expectedDpPartnerParams.getPocTel()));
-    assertThatIfExpectedValueNotNull("DP Partner POC Email", expectedDpPartnerParams.getPocEmail(),
+    assertThatIfExpectedValueNotNull("DP Partner POC email is correct", expectedDpPartnerParams.getPocEmail(),
         actualDpPartner.getPocEmail(), equalTo(expectedDpPartnerParams.getPocEmail()));
-    assertThatIfExpectedValueNotNull("DP Partner POC Restrictions",
+    assertThatIfExpectedValueNotNull("DP Partner POC restrictions is correct",
         expectedDpPartnerParams.getRestrictions(), actualDpPartner.getRestrictions(),
         equalTo(expectedDpPartnerParams.getRestrictions()));
     expectedDpPartnerParams.setId(actualDpPartner.getId());
@@ -464,7 +464,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     pause5s();
     dpTable.filterByColumn("name", expectedDpParams.getName());
     final Dp actualDpParams = dpTable.readEntity(1);
-    Assertions.assertThat(actualDpParams.getId()).as("DP ID").isEqualTo(expectedDpParams.getId());
+    Assertions.assertThat(actualDpParams.getId()).as("DP ID").isNotNull();
     Assertions.assertThat(actualDpParams.getName()).as("DP name is the same")
         .isEqualToIgnoringCase(expectedDpParams.getName());
     if (Objects.nonNull(actualDpParams.getShortName())) {
@@ -517,17 +517,16 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
     for (DpPartner expectedDpPartner : expectedDpPartners) {
       DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
-      Assertions.assertThat(actualDpPartner.getId()).as("DP Partner ID")
-          .isEqualTo(expectedDpPartner.getId());
-      Assertions.assertThat(actualDpPartner.getName()).as("DP Partner Name")
+      Assertions.assertThat(actualDpPartner.getId()).as("DP ID is null").isNotNull();
+      Assertions.assertThat(actualDpPartner.getName()).as("DP Partner Name is correct")
           .isEqualTo(expectedDpPartner.getName());
       Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
           .isEqualTo(expectedDpPartner.getPocName());
-      Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No.")
+      Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
           .isEqualTo(expectedDpPartner.getPocTel());
-      assertEquals("POC Email", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
+      assertEquals("POC Email is correct", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
           actualDpPartner.getPocEmail());
-      assertEquals("Restrictions",
+      assertEquals("Restrictions is correct",
           Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
           actualDpPartner.getRestrictions());
     }

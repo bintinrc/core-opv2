@@ -129,8 +129,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator verify new DP params")
   public void operatorVerifyNewDpParams() {
     final Dp expectedDpParams = get(KEY_DISTRIBUTION_POINT);
-    dpAdminPage.verifyDpParams(expectedDpParams);
     takesScreenshot();
+    dpAdminPage.verifyDpParams(expectedDpParams);
     put(KEY_DISTRIBUTION_POINT_ID, expectedDpParams.getId());
   }
 
