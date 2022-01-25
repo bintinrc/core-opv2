@@ -105,9 +105,9 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper, DP Order"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
-      | DP Order      | {dp-name}              |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
+      | DP Order      | {dp-name}             |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator click Load Selection on Create Route Group page
     Then Operator verifies Transaction records on Create Route Group page using data below:
@@ -133,8 +133,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | current hour           |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | current hour          |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderType | Normal,Return |
@@ -188,8 +188,8 @@ Feature: Create Route Groups
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | reservationType | Normal |
