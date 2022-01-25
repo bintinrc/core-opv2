@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @ForceSuccess @current
+@OperatorV2 @Core @Order @EditOrder @ForceSuccess
 Feature: Force Success
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -281,7 +281,7 @@ Feature: Force Success
     And Operator verify order event on Edit order page using data below:
       | name        | FORCED SUCCESS                                                                                                                                                                                                                              |
       | description | Reason: TICKET_RESOLUTION RTS: false Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
-@wip
+
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - With RTS PETS Ticket (uid:e6f1e484-d16c-4964-ae14-eafcb2a5b6ae)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -302,8 +302,10 @@ Feature: Force Success
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     When Operator updates recovery ticket on Edit Order page:
-      | status                  | RESOLVED |
-      | keepCurrentOrderOutcome | Yes      |
+      | status                  | RESOLVED          |
+      | keepCurrentOrderOutcome | Yes               |
+      | outcome                 | RTS               |
+      | rtsReason               | Nobody at address |
     Then Operator verifies that success toast displayed:
       | top                | ^Ticket ID : .* updated |
       | waitUntilInvisible | true                    |
