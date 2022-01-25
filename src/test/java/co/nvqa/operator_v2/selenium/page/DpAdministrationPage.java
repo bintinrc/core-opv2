@@ -464,7 +464,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     pause5s();
     dpTable.filterByColumn("name", expectedDpParams.getName());
     final Dp actualDpParams = dpTable.readEntity(1);
-    Assertions.assertThat(actualDpParams.getId()).as("DP ID").isNotNull();
+    Assertions.assertThat(actualDpParams.getId()).as("DP ID is not null").isNotNull();
     Assertions.assertThat(actualDpParams.getName()).as("DP name is the same")
         .isEqualToIgnoringCase(expectedDpParams.getName());
     if (Objects.nonNull(actualDpParams.getShortName())) {
@@ -617,7 +617,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         .isEqualTo(dbParams.getAddress1());
     Assertions.assertThat(apiParams.getAddress2()).as("DP address 2 is correct")
         .isEqualTo(dbParams.getAddress2());
-    Assertions.assertThat(apiParams.getDpServiceType()).as("Service Type is correct: ")
+    Assertions.assertThat(apiParams.getDpServiceType()).as("Service Type is correct")
         .isEqualTo(dbParams.getDpServiceType());
   }
 
