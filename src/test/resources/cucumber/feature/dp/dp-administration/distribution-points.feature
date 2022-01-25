@@ -30,6 +30,7 @@ Feature: DP Administration - Distribution Points
       | maxParcelStayDuration | 2                                                         |
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID
@@ -60,6 +61,7 @@ Feature: DP Administration - Distribution Points
       | maxParcelStayDuration | 2                                                         |
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID
@@ -153,6 +155,7 @@ Feature: DP Administration - Distribution Points
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
       | cutOffTime            | 15 h 30 m                                                 |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID
@@ -186,6 +189,7 @@ Feature: DP Administration - Distribution Points
       | maxParcelStayDuration | 2                                                         |
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID
@@ -244,6 +248,7 @@ Feature: DP Administration - Distribution Points
       | maxParcelStayDuration | 2                                                         |
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
+      | activity              | active                                                    |
     Then Operator verifies the error message for duplicate "short_name TEST-DP"
 
   @HardDeleteDp
@@ -271,6 +276,7 @@ Feature: DP Administration - Distribution Points
       | maxParcelStayDuration | 2                                                         |
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
+      | activity              | active                                                    |
     Then Operator verifies the error message for duplicate "external_store_id TESTING-NewDP"
 
   @HardDeleteDp
@@ -298,6 +304,7 @@ Feature: DP Administration - Distribution Points
       | maxParcelStayDuration | 2                                                         |
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
+      | activity              | active                                                    |
     Then Operator verifies the error message for duplicate ""
 
   @HardDeleteDp
@@ -422,6 +429,7 @@ Feature: DP Administration - Distribution Points
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
       | dpPhoto               | valid                                                     |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches image details
     Then Operator verifies the image is "present"
@@ -452,6 +460,7 @@ Feature: DP Administration - Distribution Points
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
       | dpPhoto               | invalid                                                   |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches image details
     Then Operator verifies the image is ""
@@ -482,6 +491,7 @@ Feature: DP Administration - Distribution Points
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
       | dpPhoto               | valid                                                     |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches image details
     Then Operator verifies the image is "present"
@@ -577,6 +587,7 @@ Feature: DP Administration - Distribution Points
       | maxCap                | 1000000                                                   |
       | capBuffer             | 1000000                                                   |
       | isAutoReservation     | false                                                      |
+      | activity              | active                                                    |
     Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID
