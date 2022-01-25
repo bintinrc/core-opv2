@@ -82,7 +82,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
 
-  @FindBy(className = "ant-modal-wrap")
+  @FindBy(className = "ant-modal-content")
   public AssignTripModal assignTripModal;
 
   @FindBy(className = "ant-modal-wrap")
@@ -567,7 +567,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void assignDriver(String driverId) {
-    assignTripModal.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriver(driverId);
     assignTripModal.saveButton.click();
@@ -575,7 +575,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-    assignTripModal.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
     assignTripModal.saveButton.click();
@@ -1106,11 +1106,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "(//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]])[1]")
-    public AntSelect assignPrimaryDriverInput;
-
-    @FindBy(xpath = "(//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]])[2]")
-    public AntSelect assignAdditionalDriverInput;
+    public String assignDriverInput = "assignDriversForm_driverNames_%s";
 
     @FindBy(xpath = "//button[.='Add Another Driver']")
     public Button addAnotherDriver;
@@ -1125,16 +1121,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public Button unassignAllDrivers;
 
     public void assignDriver(String driverName) {
-      assignPrimaryDriverInput.selectValue(driverName);
+      sendKeysAndEnterById(f(assignDriverInput, 0), driverName);
     }
 
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-      assignPrimaryDriverInput.selectValue(primaryDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 0), primaryDriver);
       pause1s();
       addDriver.waitUntilClickable();
       addDriver.click();
       pause1s();
-      assignAdditionalDriverInput.selectValue(additionalDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 1), additionalDriver);
     }
 
     public void clearAssignedDriver() {
@@ -1161,11 +1157,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "(//div[contains(@id,'driver')])[1]")
-    public co.nvqa.operator_v2.selenium.elements.ant.AntSelect assignPrimaryDriverInput;
-
-    @FindBy(xpath = "(//div[contains(@id,'driver')])[2]")
-    public co.nvqa.operator_v2.selenium.elements.ant.AntSelect assignAdditionalDriverInput;
+    public String assignDriverInput = "assignDriversForm_driverNames_%s";
 
     @FindBy(xpath = "//button[.='Add Another Driver']")
     public Button addAnotherDriver;
@@ -1180,16 +1172,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public Button unassignAllDrivers;
 
     public void assignDriver(String driverName) {
-      assignPrimaryDriverInput.selectValue(driverName);
+      sendKeysAndEnterById(f(assignDriverInput, 0), driverName);
     }
 
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-      assignPrimaryDriverInput.selectValue(primaryDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 0), primaryDriver);
       pause1s();
       addDriver.waitUntilClickable();
       addDriver.click();
       pause1s();
-      assignAdditionalDriverInput.selectValue(additionalDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 1), additionalDriver);
     }
 
     public void clearAssignedDriver() {

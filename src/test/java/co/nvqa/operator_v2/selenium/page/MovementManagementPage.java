@@ -117,7 +117,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-modal")
   public AddStationMovementScheduleModal addStationMovementScheduleModal;
 
-  @FindBy(xpath = "//tr[1]//td[contains(@class,'action')]/i[1]")
+  @FindBy(xpath = "//tr[2]//td[last()]//button")
   public PageElement assignDriverButton;
 
   @FindBy(className = "ant-modal-wrap")
@@ -220,7 +220,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
   }
 
   public void assignDriver(String driverId) {
-    assignDriverModal.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignDriverModal.addDriver.click();
     assignDriverModal.assignDriver(driverId);
     assignDriverModal.saveButton.click();
