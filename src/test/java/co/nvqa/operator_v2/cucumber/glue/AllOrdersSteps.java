@@ -482,25 +482,25 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.errorsDialog.downloadFailedUpdates.click();
   }
 
-  @When("Operator verifies invalid selection CSV file on All Orders page:")
-  public void verifyInvalidSelectionCsv(List<String> trackingIds) {
-    allOrdersPage.verifyFileDownloadedSuccessfully(SELECTION_ERROR_CSV_FILENAME);
-    List<String> actual = allOrdersPage.readDownloadedFile(SELECTION_ERROR_CSV_FILENAME);
-    actual.remove(0);
-    Assertions.assertThat(actual)
-        .as("List of invalid tracking ids")
-        .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
-  }
+//  @When("Operator verifies invalid selection CSV file on All Orders page:")
+//  public void verifyInvalidSelectionCsv(List<String> trackingIds) {
+//    allOrdersPage.verifyFileDownloadedSuccessfully(SELECTION_ERROR_CSV_FILENAME);
+//    List<String> actual = allOrdersPage.readDownloadedFile(SELECTION_ERROR_CSV_FILENAME);
+//    actual.remove(0);
+//    Assertions.assertThat(actual)
+//        .as("List of invalid tracking ids")
+//        .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
+//  }
 
-  @When("Operator verifies manually complete errors CSV file on All Orders page:")
-  public void verifyManuallyCompleteErrorCsv(List<String> trackingIds) {
-    allOrdersPage.verifyFileDownloadedSuccessfully(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
-    List<String> actual = allOrdersPage.readDownloadedFile(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
-    actual.remove(0);
-    Assertions.assertThat(actual)
-        .as("List of invalid tracking ids")
-        .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
-  }
+//  @When("Operator verifies manually complete errors CSV file on All Orders page:")
+//  public void verifyManuallyCompleteErrorCsv(List<String> trackingIds) {
+//    allOrdersPage.verifyFileDownloadedSuccessfully(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
+//    List<String> actual = allOrdersPage.readDownloadedFile(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
+//    actual.remove(0);
+//    Assertions.assertThat(actual)
+//        .as("List of invalid tracking ids")
+//        .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
+//  }
 
   @When("Operator verify orders info in Selection Error dialog on All Orders page:")
   public void verifyOrdersInfoInSelectionError(List<Map<String, String>> data) {

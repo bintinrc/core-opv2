@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob2 @CreateRouteGroupsV1.5
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroupsV1.5
 Feature: Create Route Groups V1.5 - Transaction Filters
 
   @LaunchBrowser @ShouldAlwaysRun
