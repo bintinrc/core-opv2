@@ -192,8 +192,8 @@ Feature: Route Inbound Expected Scans
       | failedDeliveriesValidScans | 1 |
       | failedDeliveriesValidTotal | 2 |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |

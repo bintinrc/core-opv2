@@ -100,7 +100,7 @@ Feature: Address Verification
       | {KEY_CREATED_ORDER.buildShortToAddressWithCountryString} |
     When Operator clicks on 'Edit' button for 1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
-      | latitube  | GENERATED |
+      | latitude  | GENERATED |
       | longitude | GENERATED |
     And Operator clicks 'Save' button in Edit Address modal on Address Verification page:
     Then Operator verifies that "Address event created" success notification is displayed
