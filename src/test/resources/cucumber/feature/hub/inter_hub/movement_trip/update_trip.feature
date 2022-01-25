@@ -287,8 +287,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on movement page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive&&{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver  
   Scenario: Register Trip Departure With Invalid Driver Employment and License Status - Main and Additional Driver Employment Status and License Status are Inactive (uid:48ea8cc1-01f0-4d20-87ba-56fa8ee16862)

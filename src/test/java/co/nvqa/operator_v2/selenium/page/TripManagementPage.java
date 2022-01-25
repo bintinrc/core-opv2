@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -139,6 +141,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
+
+  public static String actualToastMessageContent="";
 
   public TripManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -623,18 +627,30 @@ public class TripManagementPage extends OperatorV2SimplePage {
     click(f(SUCCESS_CANCEL_TRIP_TOAST, tripId));
   }
 
-  public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
+  public void readTheToastMessage() {
     retryIfAssertionErrorOccurred(() -> {
       try {
         waitUntilVisibilityOfElementLocated(
-            "//div[contains(@class,'notification-notice-message')]");
+                "//div[contains(@class,'notification-notice-message')]");
         WebElement toast = findElementByXpath(
-            "//div[contains(@class,'notification-notice-message')]");
-        String actualToastMessage = toast.getText();
-        assertThat("Trip Management toast message is the same", actualToastMessage,
-            containsString(expectedToastMessage));
+                "//div[contains(@class,'notification-notice-message')]");
+        actualToastMessageContent = toast.getText();
         waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
         findElementByXpath("//a[@class='ant-notification-notice-close']").click();
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 1000, 5);
+  }
+
+  public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        if(actualToastMessageContent.equals("")){
+          readTheToastMessage();
+        }
+        Assertions.assertThat(actualToastMessageContent).as("Trip Management toast message:").contains(expectedToastMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
