@@ -1255,7 +1255,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     String movementTripEntityUserId = movementTripEventEntity.getUserId().toLowerCase();
     assertEquals("cancelled", movementTripEntityEvent);
     assertEquals("cancelled", movementTripEntityStatus);
-    assertEquals("automation@ninjavan.co", movementTripEntityUserId);
+    assertEquals("qa@ninjavan.co", movementTripEntityUserId);
   }
 
   @Then("DB Operator verify path for shipment {string} appear in shipment_paths table")
