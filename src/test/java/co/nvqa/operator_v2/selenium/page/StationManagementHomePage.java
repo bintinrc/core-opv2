@@ -46,7 +46,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
-  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
+  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div[contains(@class,'link-wrapper')]//a";
   private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
@@ -90,7 +90,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[text()='Route ID']/following-sibling::div")
   private PageElement routeManifestRouteId;
 
-  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
+  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[starts-with(@class,'th')]/*[1]")
   private List<PageElement> modalTableColumns;
 
   @FindBy(css = "div.value svg")
@@ -132,7 +132,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div[class*='footer-row']")
   private PageElement footerRow;
 
-  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+  @FindAll(@FindBy(xpath = "//div[starts-with(@class,'th')]/*[1]"))
   private List<PageElement> columnNames;
 
   @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
@@ -165,6 +165,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
   public PageElement downloadFailedEtas;
 
+  @FindBy(xpath = "//div[@class='ant-modal-body']//div[text()='Search or Select']")
+  public List<PageElement> modalHubSelection;
+
   public void switchToStationHomeFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
   }
@@ -174,7 +177,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       switchToStationHomeFrame();
     }
-    waitUntilVisibilityOfElementLocated("(//div[text()='Search or Select'])[2]", 60);
+    waitWhilePageIsLoading();
+    if(modalHubSelection.size() == 0){
+      refreshPage_v1();
+    }
     hubs.enterSearchTerm(hubName);
     pause5s();
     hubDropdownValues.click();
