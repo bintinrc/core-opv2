@@ -125,7 +125,6 @@ public class TripManagementSteps extends AbstractSteps {
   @When("Operator searches and selects the {string} with value {string}")
   public void operatorSearchesAndSelectsWithValue(final String filterName,
       final String filterValue) {
-    System.out.println(filterName+":"+filterValue);
     final Map<String, String> filterMap = new HashMap<>();
     retryIfRuntimeExceptionOccurred(() ->
     {
