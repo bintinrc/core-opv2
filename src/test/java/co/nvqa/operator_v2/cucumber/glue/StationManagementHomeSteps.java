@@ -537,4 +537,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
     public void operator_verifies_that_the_station_confirmed_eta_is_disabled_and_cannot_be_updated() {
         stationManagementHomePage.verifyStationConfirmedEtaDisabled();
     }
+
+    @When("Operator verifies that the following text is displayed on hover over the tile text: {string}")
+    public void operator_verifies_that_the_following_text_is_displayed_on_hover_over_the_tile_text(String tileTitle, List<String> texts) {
+        stationManagementHomePage.mouseOverToTileTitle(tileTitle);
+        stationManagementHomePage.verifyMouseOverText(texts);
+    }
+
+    @Then("Operator verifies that the mouseover text is not displayed on moving away from the tile title")
+    public void operator_verifies_that_the_mouseover_text_is_not_displayed_on_moving_away_from_the_tile_title() {
+        stationManagementHomePage.mouseOverToHubDropdown();
+    }
+
 }
