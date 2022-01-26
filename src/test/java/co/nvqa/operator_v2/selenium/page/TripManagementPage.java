@@ -26,6 +26,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.model.core.Order.STATUS_CANCELLED;
 import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
@@ -35,6 +37,8 @@ import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
  */
 
 public class TripManagementPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(TripManagementPage.class);
 
   private static final String TRIP_MANAGEMENT_CONTAINER_XPATH = "//div[contains(@class,'TripContainer')]";
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
@@ -630,15 +634,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void readTheToastMessage() {
     retryIfAssertionErrorOccurred(() -> {
       try {
-        waitUntilVisibilityOfElementLocated(
-                "//div[contains(@class,'notification-notice-message')]");
-        WebElement toast = findElementByXpath(
-                "//div[contains(@class,'notification-notice-message')]");
+        waitUntilVisibilityOfElementLocated("//div[contains(@class,'notification-notice-message')]");
+        WebElement toast = findElementByXpath("//div[contains(@class,'notification-notice-message')]");
         actualToastMessageContent = toast.getText();
         waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
         findElementByXpath("//a[@class='ant-notification-notice-close']").click();
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
         throw ex;
       }
     }, getCurrentMethodName(), 1000, 5);
@@ -652,7 +654,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         }
         Assertions.assertThat(actualToastMessageContent).as("Trip Management toast message:").contains(expectedToastMessage);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
         throw ex;
       }
     }, getCurrentMethodName(), 1000, 5);
