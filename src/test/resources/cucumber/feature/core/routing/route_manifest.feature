@@ -188,7 +188,7 @@ Feature: Route Manifest
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @wip
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Show Order Tags in Route Manifest Page (uid:a8166b12-af7e-4d59-88a2-fd14d6181f08)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
