@@ -467,18 +467,26 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     Assertions.assertThat(actualDpParams.getId()).as("DP ID is not null").isNotNull();
     Assertions.assertThat(actualDpParams.getName()).as("DP name is the same")
         .isEqualToIgnoringCase(expectedDpParams.getName());
-    if (Objects.nonNull(actualDpParams.getShortName())) {
+
+    if (Objects.nonNull(expectedDpParams.getShortName())) {
       Assertions.assertThat(actualDpParams.getShortName()).as("DP Short Name is the same")
           .containsIgnoringCase(expectedDpParams.getShortName());
-    } else {
-      LOGGER.warn("DP Param short name is null!");
     }
-    Assertions.assertThat(actualDpParams.getHub()).as("DP Hub is the same")
-        .containsIgnoringCase(expectedDpParams.getHub());
-    Assertions.assertThat(actualDpParams.getDirections()).as("DP Directions is the same")
-        .containsIgnoringCase(expectedDpParams.getDirections());
-    Assertions.assertThat(actualDpParams.getActivity()).as("DP Activity is the same")
-        .containsIgnoringCase(expectedDpParams.getActivity());
+
+    if (Objects.nonNull(expectedDpParams.getHub())) {
+      Assertions.assertThat(actualDpParams.getHub()).as("DP Hub is the same")
+          .containsIgnoringCase(expectedDpParams.getHub());
+    }
+
+    if (Objects.nonNull(expectedDpParams.getDirections())) {
+      Assertions.assertThat(actualDpParams.getDirections()).as("DP Directions is the same")
+          .containsIgnoringCase(expectedDpParams.getDirections());
+    }
+
+    if (Objects.nonNull(expectedDpParams.getActivity())) {
+      Assertions.assertThat(actualDpParams.getActivity()).as("DP Activity is the same")
+          .containsIgnoringCase(expectedDpParams.getActivity());
+    }
 
     expectedDpParams.setId(actualDpParams.getId());
   }
@@ -555,20 +563,30 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualDp.getName()).as("DP Name is correct")
           .isEqualTo(expectedDp.getName());
 
-      if (Objects.nonNull(actualDp.getShortName())) {
+      if (Objects.nonNull(expectedDp.getShortName())) {
         Assertions.assertThat(actualDp.getShortName()).as("DP Short Name is the same")
             .containsIgnoringCase(expectedDp.getShortName());
-      } else {
-        LOGGER.warn("DP Param short name is null!");
       }
-      Assertions.assertThat(actualDp.getHub()).as("DP hub is correct")
-          .isEqualToIgnoringCase(Optional.ofNullable(expectedDp.getHub()).orElse(""));
-      Assertions.assertThat(actualDp.getAddress()).as("DP Address is correct")
-          .isEqualTo(expectedDp.getAddress());
-      Assertions.assertThat(actualDp.getDirections()).as("DP Directions is correct")
-          .isEqualTo(expectedDp.getDirections());
-      Assertions.assertThat(actualDp.getActivity()).as("DP Activity is correct")
-          .isEqualTo(expectedDp.getActivity());
+
+      if (Objects.nonNull(expectedDp.getHub())) {
+        Assertions.assertThat(actualDp.getHub()).as("DP hub is correct")
+            .isEqualToIgnoringCase(Optional.ofNullable(expectedDp.getHub()).orElse(""));
+      }
+
+      if (Objects.nonNull(expectedDp.getAddress())) {
+        Assertions.assertThat(actualDp.getAddress()).as("DP Address is correct")
+            .isEqualTo(expectedDp.getAddress());
+      }
+
+      if (Objects.nonNull(expectedDp.getDirections())) {
+        Assertions.assertThat(actualDp.getDirections()).as("DP Directions is correct")
+            .isEqualTo(expectedDp.getDirections());
+      }
+
+      if (Objects.nonNull(expectedDp.getActivity())) {
+        Assertions.assertThat(actualDp.getActivity()).as("DP Activity is correct")
+            .isEqualTo(expectedDp.getActivity());
+      }
     }
   }
 

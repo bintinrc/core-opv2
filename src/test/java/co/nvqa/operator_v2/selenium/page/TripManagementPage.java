@@ -18,12 +18,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.model.core.Order.STATUS_CANCELLED;
 import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
@@ -33,6 +37,8 @@ import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
  */
 
 public class TripManagementPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(TripManagementPage.class);
 
   private static final String TRIP_MANAGEMENT_CONTAINER_XPATH = "//div[contains(@class,'TripContainer')]";
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
@@ -80,7 +86,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
 
-  @FindBy(className = "ant-modal-wrap")
+  @FindBy(className = "ant-modal-content")
   public AssignTripModal assignTripModal;
 
   @FindBy(className = "ant-modal-wrap")
@@ -139,6 +145,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
+
+  public static String actualToastMessageContent="";
 
   public TripManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -563,7 +571,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void assignDriver(String driverId) {
-    assignTripModal.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriver(driverId);
     assignTripModal.saveButton.click();
@@ -571,7 +579,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-    assignTripModal.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
     assignTripModal.saveButton.click();
@@ -623,20 +631,30 @@ public class TripManagementPage extends OperatorV2SimplePage {
     click(f(SUCCESS_CANCEL_TRIP_TOAST, tripId));
   }
 
-  public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
+  public void readTheToastMessage() {
     retryIfAssertionErrorOccurred(() -> {
       try {
-        waitUntilVisibilityOfElementLocated(
-            "//div[contains(@class,'notification-notice-message')]");
-        WebElement toast = findElementByXpath(
-            "//div[contains(@class,'notification-notice-message')]");
-        String actualToastMessage = toast.getText();
-        assertThat("Trip Management toast message is the same", actualToastMessage,
-            containsString(expectedToastMessage));
+        waitUntilVisibilityOfElementLocated("//div[contains(@class,'notification-notice-message')]");
+        WebElement toast = findElementByXpath("//div[contains(@class,'notification-notice-message')]");
+        actualToastMessageContent = toast.getText();
         waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
         findElementByXpath("//a[@class='ant-notification-notice-close']").click();
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 1000, 5);
+  }
+
+  public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        if(actualToastMessageContent.equals("")){
+          readTheToastMessage();
+        }
+        Assertions.assertThat(actualToastMessageContent).as("Trip Management toast message:").contains(expectedToastMessage);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
         throw ex;
       }
     }, getCurrentMethodName(), 1000, 5);
@@ -1090,11 +1108,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "(//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]])[1]")
-    public AntSelect assignPrimaryDriverInput;
-
-    @FindBy(xpath = "(//div[contains(@class, 'ant-select ')][//input[contains(@id,'assignDriversForm_driverNames')]])[2]")
-    public AntSelect assignAdditionalDriverInput;
+    public String assignDriverInput = "assignDriversForm_driverNames_%s";
 
     @FindBy(xpath = "//button[.='Add Another Driver']")
     public Button addAnotherDriver;
@@ -1109,16 +1123,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public Button unassignAllDrivers;
 
     public void assignDriver(String driverName) {
-      assignPrimaryDriverInput.selectValue(driverName);
+      sendKeysAndEnterById(f(assignDriverInput, 0), driverName);
     }
 
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-      assignPrimaryDriverInput.selectValue(primaryDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 0), primaryDriver);
       pause1s();
       addDriver.waitUntilClickable();
       addDriver.click();
       pause1s();
-      assignAdditionalDriverInput.selectValue(additionalDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 1), additionalDriver);
     }
 
     public void clearAssignedDriver() {
@@ -1145,11 +1159,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = "(//div[contains(@id,'driver')])[1]")
-    public co.nvqa.operator_v2.selenium.elements.ant.AntSelect assignPrimaryDriverInput;
-
-    @FindBy(xpath = "(//div[contains(@id,'driver')])[2]")
-    public co.nvqa.operator_v2.selenium.elements.ant.AntSelect assignAdditionalDriverInput;
+    public String assignDriverInput = "assignDriversForm_driverNames_%s";
 
     @FindBy(xpath = "//button[.='Add Another Driver']")
     public Button addAnotherDriver;
@@ -1164,16 +1174,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public Button unassignAllDrivers;
 
     public void assignDriver(String driverName) {
-      assignPrimaryDriverInput.selectValue(driverName);
+      sendKeysAndEnterById(f(assignDriverInput, 0), driverName);
     }
 
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-      assignPrimaryDriverInput.selectValue(primaryDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 0), primaryDriver);
       pause1s();
       addDriver.waitUntilClickable();
       addDriver.click();
       pause1s();
-      assignAdditionalDriverInput.selectValue(additionalDriver);
+      sendKeysAndEnterById(f(assignDriverInput, 1), additionalDriver);
     }
 
     public void clearAssignedDriver() {
