@@ -313,7 +313,6 @@ Feature: Add To Shipment
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | Pending                                  |
       | granular status | Pending Pickup                           |
     And Operator searches and selects orders created first row on Add Tags to Order page
@@ -434,7 +433,6 @@ Feature: Add To Shipment
     And Operator refresh page
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | On Hold                                  |
       | granular status | On Hold                                  |
     And Operator searches and selects orders created first row on Add Tags to Order page
@@ -511,7 +509,6 @@ Feature: Add To Shipment
     And Operator refresh page
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | On Hold                                  |
       | granular status | On Hold                                  |
     And Operator searches and selects orders created first row on Add Tags to Order page
@@ -530,7 +527,7 @@ Feature: Add To Shipment
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status      | Pending |
-      | ordersCount | 1       |
+      | ordersCount | 0       |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"

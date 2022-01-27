@@ -225,9 +225,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void deleteFiltersPreset(String presetName) {
+    pause2s();
     clickButtonByAriaLabel("Action");
     clickButtonByAriaLabel("Delete Preset");
-    waitUntilVisibilityOfMdDialogByTitle("Delete Preset");
+    waitUntilVisibilityOfElementLocated("//md-dialog-content//div[.='Select a preset to delete']");
+    waitUntilElementIsClickable("//md-select[contains(@aria-label,'Select preset')]");
+    TestUtils.findElementAndClick("//md-select[contains(@aria-label,'Select preset')]", "xpath", getWebDriver());
     selectValueFromMdSelectByAriaLabel("Select preset", presetName);
     clickNvIconTextButtonByName("commons.delete");
     waitUntilVisibilityOfToast("1 filter preset deleted");
@@ -709,11 +712,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
         "//md-dialog[contains(@class,'shipment-upload-order-result')]");
 
     int actualNumberOfOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.uploaded-orders')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.uploaded-orders')]//preceding-sibling::div"));
     int successfulOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.successful')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.successful')]//preceding-sibling::div"));
     int failedOrder = Integer.parseInt(getText(
-        "//input[contains(@id,'container.shipment-management.failed')]/preceding-sibling::div"));
+        "//md-input-container[contains(@label,'container.shipment-management.failed')]//preceding-sibling::div"));
     pause1s();
     if (isValid) {
       if (isDuplicated) {
