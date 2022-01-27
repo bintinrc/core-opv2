@@ -587,7 +587,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void clearAssignedDriver() {
-    assignTripModal.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.clearAssignedDriver();
     assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
