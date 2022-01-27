@@ -36,6 +36,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
   private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
   private static final String TILE_VALUE_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//div[@class='value']";
+  private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "//div[@class='ant-card-body'][.//*[.='%s']]//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
@@ -45,14 +46,14 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//div[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'card')]//div[text()='%s']/parent::div[@class='th']//input";
-  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//div[@class='link']//a | //div[text()='%s']/ancestor::div//div[@class='link-index']//following-sibling::div//a";
+  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div[contains(@class,'link-wrapper')]//a";
   private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
   private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
-  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[@class='filter-row']//div[text()='%s']";
+  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//div[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
 
   public StationManagementHomePage(WebDriver webDriver) {
@@ -89,7 +90,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[text()='Route ID']/following-sibling::div")
   private PageElement routeManifestRouteId;
 
-  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'th')]/*[1]")
+  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[starts-with(@class,'th')]/*[1]")
   private List<PageElement> modalTableColumns;
 
   @FindBy(css = "div.value svg")
@@ -131,7 +132,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div[class*='footer-row']")
   private PageElement footerRow;
 
-  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+  @FindAll(@FindBy(xpath = "//div[starts-with(@class,'th')]/*[1]"))
   private List<PageElement> columnNames;
 
   @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
@@ -164,6 +165,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
   public PageElement downloadFailedEtas;
 
+  @FindBy(xpath = "//div[@class='ant-modal-body']//div[text()='Search or Select']")
+  public List<PageElement> modalHubSelection;
+
   public void switchToStationHomeFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
   }
@@ -173,7 +177,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       switchToStationHomeFrame();
     }
-    waitUntilVisibilityOfElementLocated("(//div[text()='Search or Select'])[2]", 60);
+    waitWhilePageIsLoading();
+    if(modalHubSelection.size() == 0){
+      refreshPage_v1();
+    }
     hubs.enterSearchTerm(hubName);
     pause5s();
     hubDropdownValues.click();
@@ -872,6 +879,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String filterXpath = f(QUICK_FILTER_BY_TEXT_XPATH, filter);
     WebElement quickFilter = getWebDriver().findElement(
         By.xpath(filterXpath));
+    if(filterApplied.size() > 0){
+      return;
+    }
     quickFilter.click();
     pause2s();
     Assert.assertTrue(f("Assert that the filter %s is applied", filter),
@@ -898,4 +908,50 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     Assert.assertTrue(f("Assert that the station confirmed eta is disabled"),
         commonSuggestedEtas.isEnabled());
   }
+
+
+
+  @FindBy(css = "div.ant-tooltip:not([class*='ant-tooltip-hidden'])")
+  public List<PageElement> mouseOverText;
+
+  @FindBy(css = "div.ant-tooltip:not([class*='ant-tooltip-hidden']) li")
+  public List<PageElement> mouseOverTextList;
+
+  public void mouseOverToTileTitle(String title) {
+    waitWhilePageIsLoading();
+    if (pageFrame.size() > 0) {
+      switchToStationHomeFrame();
+    }
+    String titleXpath = f(TILE_TITLE_XPATH, title, title);
+    WebElement tileTitle = getWebDriver().findElement(
+        By.xpath(titleXpath));
+    //scrollIntoView(tileTitle);
+    pause1s();
+    //tileTitle.click();
+    moveToElement(tileTitle);
+    pause1s();
+    Assert.assertTrue(f("Assert that the title %s is displayed", title),
+        mouseOverText.size() > 0);
+  }
+
+  public void verifyMouseOverText(List<String> expectedTexts){
+    List<String> actualTexts = new ArrayList<String>();
+    if(mouseOverTextList.size() == 0){
+      Assertions.assertThat(mouseOverText.get(0).getText().trim()).isEqualTo(expectedTexts.get(0));
+      return;
+    }
+    mouseOverTextList.forEach((element) -> {
+      actualTexts.add(element.getText().trim());
+    });
+    Assertions.assertThat(expectedTexts).isEqualTo(actualTexts);
+  }
+
+  public void mouseOverToHubDropdown() {
+    waitWhilePageIsLoading();
+    moveToElement(headerHub.getWebElement());
+    pause2s();
+    Assert.assertTrue("Assert that the title is not displayed" ,
+        mouseOverText.size() == 0);
+  }
+
 }
