@@ -194,7 +194,7 @@ public class TripManagementSteps extends AbstractSteps {
   @When("Operator selects the date to tomorrow in {string} Tab")
   public void operatorSelectsTheDateToTomorrow(String tabName) {
     ZonedDateTime zdt = DateUtil.getDate().plusDays(1);
-    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     tripManagementPage.selectsDate(tabNameAsEnum, tomorrowDateFormatted);
   }

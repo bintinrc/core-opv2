@@ -144,6 +144,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(id = "movementType")
   public AntSelect movementTypeFilterPage;
 
+  private static String movementType = "//input[@id='movementType']";
+  private static String destinationHub = "//input[@id='destinationHub']";
+
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
 
@@ -195,10 +198,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
     if (filterName.equalsIgnoreCase("originhub")) {
       originHubFilter.selectValue(filterValue);
     } else if (filterName.equalsIgnoreCase("movementtype")) {
-      movementTypeFilterPage.selectValue(filterValue);
+      movementTypeFilterPage.click();
+      sendKeysAndEnter(movementType, filterValue);
     } else if (filterName.equalsIgnoreCase("destinationhub")) {
-      TestUtils.findElementAndClick("//input[@id='destinationHub']", "xpath", getWebDriver());
-      sendKeysAndEnter("//input[@id='destinationHub']", filterValue);
+      TestUtils.findElementAndClick(destinationHub, "xpath", getWebDriver());
+      sendKeysAndEnter(destinationHub, filterValue);
     }
   }
 
