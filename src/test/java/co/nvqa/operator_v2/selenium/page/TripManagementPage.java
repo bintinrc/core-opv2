@@ -19,11 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -31,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.model.core.Order.STATUS_CANCELLED;
 import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
+import static co.nvqa.commons.model.core.hub.trip_management.MovementTripType.ARCHIVE_ARRIVAL_DATE;
+import static co.nvqa.commons.model.core.hub.trip_management.MovementTripType.ARCHIVE_DEPARTURE_DATE;
 
 /**
  * @author Tristania Siagian
@@ -44,15 +44,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
   private static final String FIELD_REQUIRED_ERROR_MESSAGE_XPATH = "//button[contains(@class,'ant-btn-primary')]";
   private static final String FILTER_OPTION_XPATH = "//div[div[div[input[@id='%s']]]]";
+  private static final String SELECT_FILTER_VALUE_XPATH = "//div[not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@class,'ant-select-item-option')]//div[text()= '%s']";
   private static final String TEXT_OPTION_XPATH = "//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']";
   private static final String DESTINATION_HUB_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[1]";
   private static final String ORIGIN_HUB_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[1]";
   private static final String NO_RESULT_XPATH = "//div[contains(@class,'NoResult')]";
-  private static final String DEPARTURE_CALENDAR_XPATH = "//span[@id='departureDate']";
-  private static final String ARRIVAL_CALENDAR_XPATH = "//span[@id='arrivalDate']";
-  private static final String CALENDAR_SELECTED_XPATH = "//td[@title='%s']";
-  private static final String NEXT_MONTH_BUTTON_XPATH = "//a[contains(@class,'next-month')]";
-  private static final String PREV_MONTH_BUTTON_XPATH = "//a[contains(@class,'prev-month')]";
+  private static final String DEPARTURE_CALENDAR_XPATH = "//input[@id='departureDate']";
+  private static final String ARRIVAL_CALENDAR_XPATH = "//input[@id='arrivalDate']";
+  private static final String CALENDAR_SELECTED_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//td[@title='%s']";
+  private static final String NEXT_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-next-icon')]";
+  private static final String PREV_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-prev-icon')]";
   private static final String TAB_XPATH = "//span[.='%s']/preceding-sibling::span";
   private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
   private static final String IN_TABLE_FILTER_INPUT_XPATH = "//tr//th[%d]//input";
@@ -134,14 +135,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Complete']")
   public Button completeTripButton;
 
-  @FindBy(xpath = "//div[label[.='Origin Hub']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
-  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect originHubFilter;
+  @FindBy(xpath = "//input[@id='originHub']")
+  public AntSelect originHubFilter;
 
-  @FindBy(xpath = "//div[label[.='Destination Hub']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
-  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect destinationHubFilter;
+  @FindBy(xpath = "//input[@id='destinationHub']")
+  public AntSelect destinationHubFilter;
 
-  @FindBy(xpath = "//div[label[.='Movement Type']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
-  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect movementTypeFilterPage;
+  @FindBy(id = "movementType")
+  public AntSelect movementTypeFilterPage;
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -196,7 +197,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
     } else if (filterName.equalsIgnoreCase("movementtype")) {
       movementTypeFilterPage.selectValue(filterValue);
     } else if (filterName.equalsIgnoreCase("destinationhub")) {
-      destinationHubFilter.selectValue(filterValue);
+      TestUtils.findElementAndClick("//input[@id='destinationHub']", "xpath", getWebDriver());
+      sendKeysAndEnter("//input[@id='destinationHub']", filterValue);
     }
   }
 
@@ -264,19 +266,20 @@ public class TripManagementPage extends OperatorV2SimplePage {
     while (!isElementExistFast(f(CALENDAR_SELECTED_XPATH, tomorrowDate))) {
       click(NEXT_MONTH_BUTTON_XPATH);
     }
-    click(f(CALENDAR_SELECTED_XPATH, tomorrowDate));
-
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath(f(CALENDAR_SELECTED_XPATH, tomorrowDate))),
+            getWebDriver());
   }
 
   public void selectsDateArchiveTab(MovementTripType movementTripType, String date) {
 
     switch (movementTripType) {
       case ARCHIVE_DEPARTURE_DATE:
-        click(DEPARTURE_CALENDAR_XPATH);
+        TestUtils.findElementAndClick(DEPARTURE_CALENDAR_XPATH,"xpath", getWebDriver());
         break;
 
       case ARCHIVE_ARRIVAL_DATE:
-        click(ARRIVAL_CALENDAR_XPATH);
+        TestUtils.findElementAndClick(ARRIVAL_CALENDAR_XPATH,"xpath", getWebDriver());
         break;
 
       default:
@@ -286,8 +289,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     while (!isElementExistFast(f(CALENDAR_SELECTED_XPATH, date))) {
       click(PREV_MONTH_BUTTON_XPATH);
     }
-    click(f(CALENDAR_SELECTED_XPATH, date));
-
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath(f(CALENDAR_SELECTED_XPATH, date))),
+            getWebDriver());
   }
 
   public void clickTabBasedOnName(String tabName) {

@@ -202,7 +202,7 @@ public class TripManagementSteps extends AbstractSteps {
   @When("Operator selects the date to {int} days early in {string} filter")
   public void operatorSelectsTheDateToTomorrow(int days, String filterName) {
     ZonedDateTime zdt = DateUtil.getDate().minusDays(days);
-    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     MovementTripType tabNameAsEnum = MovementTripType.fromString(filterName);
     tripManagementPage.selectsDateArchiveTab(tabNameAsEnum, tomorrowDateFormatted);
   }
