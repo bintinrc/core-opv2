@@ -37,9 +37,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -47,8 +49,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | CREATED |
 
     Examples:
-      | HubName      | TicketType | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | DAMAGED    | Number of missing or damaged parcels | Missing and Damaged Parcels | Damaged Parcels |
+      | HubName      | TicketType | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | DAMAGED    | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
   Scenario Outline: View Pending Missing Ticket Type (uid:1b0879dc-9af9-428b-9d30-c27f3d772f81)
     Given Operator loads Operator portal home page
@@ -79,9 +81,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -89,8 +93,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | CREATED |
 
     Examples:
-      | HubName      | TicketType | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | Missing parcels | Missing Parcels | Missing Parcels |
 
   Scenario Outline: View In-progress Damage Ticket Type (uid:aaa0d5b4-ce79-44f3-86aa-01c902c0f34e)
     Given Operator loads Operator portal home page
@@ -131,9 +135,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -141,8 +147,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | DAMAGED    | IN PROGRESS     | NV LIABLE - RETURN PARCEL | Nobody at address | Number of missing or damaged parcels | Missing and Damaged Parcels | Damaged Parcels |
+      | HubName      | TicketType | Status      | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | DAMAGED    | IN PROGRESS | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
   Scenario Outline: View on Hold Damage Ticket Type (uid:88925961-4327-4688-9d3e-dd5e304baca3)
     Given Operator loads Operator portal home page
@@ -183,9 +189,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -193,8 +201,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | DAMAGED    | ON HOLD         | NV LIABLE - RETURN PARCEL | Nobody at address | Number of missing or damaged parcels | Missing and Damaged Parcels | Damaged Parcels |
+      | HubName      | TicketType | Status  | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | DAMAGED    | ON HOLD | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
   Scenario Outline: View Pending Shipper of  Damage Ticket Type (uid:189f7c7b-515b-4d04-aba3-7ced3b87e8bf)
     Given Operator loads Operator portal home page
@@ -235,9 +243,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -245,8 +255,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | DAMAGED    | PENDING SHIPPER | NV LIABLE - RETURN PARCEL | Nobody at address | Number of missing or damaged parcels | Missing and Damaged Parcels | Damaged Parcels |
+      | HubName      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | DAMAGED    | PENDING SHIPPER | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
   Scenario Outline: View In-progress Missing Ticket Type (uid:ad02e20f-0bf6-4408-a1b1-afb851693d30)
     Given Operator loads Operator portal home page
@@ -283,9 +293,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -293,8 +305,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome    | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | IN PROGRESS     | LOST - DECLARED | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | Status      | OrderOutcome    | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | IN PROGRESS | LOST - DECLARED | Missing parcels | Missing Parcels | Missing Parcels |
 
   Scenario Outline: View on Hold Missing Ticket Type (uid:32ed909f-4b6e-437a-959b-fc40d047606c)
     Given Operator loads Operator portal home page
@@ -331,9 +343,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -341,8 +355,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome    | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | ON HOLD         | LOST - DECLARED | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | Status  | OrderOutcome    | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | ON HOLD | LOST - DECLARED | Missing parcels | Missing Parcels | Missing Parcels |
 
   Scenario Outline: View Pending Shipper Missing Ticket Type (uid:8c5a1caf-308c-4916-ad93-aaa6137d6bc5)
     Given Operator loads Operator portal home page
@@ -379,9 +393,11 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -389,8 +405,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome    | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | PENDING SHIPPER | LOST - DECLARED | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | Status          | OrderOutcome    | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | PENDING SHIPPER | LOST - DECLARED | Missing parcels | Missing Parcels | Missing Parcels |
 
   Scenario Outline: Resolved Ticket of Damage Type Disappear (uid:ae510579-e438-4a1f-b609-160c93c96a8c)
     Given Operator loads Operator portal home page
@@ -436,16 +452,18 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator expects no results in the modal under the table:"<TableName>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType | Status   | OrderOutcome              | KeepCurrentOrderOutcome | RtsReason         | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | DAMAGED    | RESOLVED | NV LIABLE - RETURN PARCEL | No                      | Nobody at address | Number of missing or damaged parcels | Missing and Damaged Parcels | Damaged Parcels |
+      | HubName      | TicketType | Status   | OrderOutcome              | KeepCurrentOrderOutcome | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | DAMAGED    | RESOLVED | NV LIABLE - RETURN PARCEL | No                      | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
   Scenario Outline: Resolved Ticket of Missing Type Disappear (uid:9366a5d9-5245-4651-a799-146fbcdac30b)
     Given Operator loads Operator portal home page
@@ -487,16 +505,18 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that the table:"<TableName>" is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator expects no results in the modal under the table:"<TableName>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType | Status   | OrderOutcome    | KeepCurrentOrderOutcome | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | RESOLVED | LOST - DECLARED | No                      | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | Status   | OrderOutcome    | KeepCurrentOrderOutcome | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | RESOLVED | LOST - DECLARED | No                      | Missing parcels | Missing Parcels | Missing Parcels |
 
   Scenario Outline: Shipper Issue Ticket Not Appears in Missing or Damaged Cases (uid:eb921d4a-638e-4301-a546-9d97a35986f7)
     Given Operator loads Operator portal home page
@@ -654,8 +674,8 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the url for recovery tickets page is loaded with tracking id
 
     Examples:
-      | HubName      | TicketType | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | Missing parcels | Missing Parcels | Missing Parcels |
 
   Scenario Outline: View Order Details of Missing or Damaged Parcels (uid:a326fa77-c1c0-4271-94fd-cb5debd5c1dd)
     Given Operator loads Operator portal home page
@@ -692,8 +712,8 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the url for edit order page is loaded with order id
 
     Examples:
-      | HubName      | TicketType | TileName                             | ModalName                   | TableName       |
-      | {hub-name-6} | MISSING    | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels |
+      | HubName      | TicketType | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | MISSING    | Missing parcels | Missing Parcels | Missing Parcels |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
