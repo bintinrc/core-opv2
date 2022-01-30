@@ -522,7 +522,7 @@ Feature: Number of Missing or Damaged Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -545,24 +545,26 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
-    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And Operator expects no results in the modal under the table:"<TableName1>" when applying the following filters:
+    Then Operator verifies that the count in tile: "<TileName1>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName1>" through hamburger button for the tile: "<TileName1>"
+    And Operator expects no results in the modal under the table:"<ModalName1>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator expects no results in the modal under the table:"<TableName2>" when applying the following filters:
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName2>"
+    And Operator expects no results in the modal under the table:"<ModalName2>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | TileName                             | ModalName                   | TableName1      | TableName2      |
-      | {hub-name-6} | SHIPPER ISSUE | DUPLICATE PARCEL | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels | Damaged Parcels |
+      | HubName      | TicketType    | TicketSubType    | TileName1       | ModalName1      | TileName2       | ModalName2      |
+      | {hub-name-6} | SHIPPER ISSUE | DUPLICATE PARCEL | Missing parcels | Missing Parcels | Damaged parcels | Damaged Parcels |
 
   Scenario Outline: Parcel on Hold Ticket Not Appears in Missing or Damaged Cases (uid:36429a6f-6d65-466b-9fc0-a6e045da4d5a)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -585,24 +587,26 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
-    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And Operator expects no results in the modal under the table:"<TableName1>" when applying the following filters:
+    Then Operator verifies that the count in tile: "<TileName1>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName1>" through hamburger button for the tile: "<TileName1>"
+    And Operator expects no results in the modal under the table:"<ModalName1>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator expects no results in the modal under the table:"<TableName2>" when applying the following filters:
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName2>"
+    And Operator expects no results in the modal under the table:"<ModalName2>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | TileName                             | ModalName                   | TableName1      | TableName2      |
-      | {hub-name-6} | PARCEL ON HOLD | SHIPPER REQUEST | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels | Damaged Parcels |
+      | HubName      | TicketType     | TicketSubType   |  TileName1       | ModalName1      | TileName2       | ModalName2      |
+      | {hub-name-6} | PARCEL ON HOLD | SHIPPER REQUEST |  Missing parcels | Missing Parcels | Damaged parcels | Damaged Parcels |
 
   Scenario Outline: Parcel Exception Ticket Not Appears in Missing or Damaged Cases (uid:3802bc73-49c3-4d1c-ae0a-a01f24b5a722)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator get the count from the tile: "<TileName>"
+    And Operator get the count from the tile: "<TileName1>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -626,18 +630,20 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verify ticket is created successfully on page Recovery Tickets
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
-    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And Operator expects no results in the modal under the table:"<TableName1>" when applying the following filters:
+    Then Operator verifies that the count in tile: "<TileName1>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName1>" through hamburger button for the tile: "<TileName1>"
+    And Operator expects no results in the modal under the table:"<ModalName1>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator expects no results in the modal under the table:"<TableName2>" when applying the following filters:
+    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName2>"
+    And Operator expects no results in the modal under the table:"<ModalName2>" when applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType       | TicketSubType      | TileName                             | ModalName                   | TableName1      | TableName2      |
-      | {hub-name-6} | PARCEL EXCEPTION | INACCURATE ADDRESS | Number of missing or damaged parcels | Missing and Damaged Parcels | Missing Parcels | Damaged Parcels |
+      | HubName      | TicketType       | TicketSubType      |   TileName1       | ModalName1      | TileName2       | ModalName2      |
+      | {hub-name-6} | PARCEL EXCEPTION | INACCURATE ADDRESS |  Missing parcels   | Missing Parcels | Damaged parcels | Damaged Parcels |
 
   Scenario Outline: View Recovery Ticket  of Missing or Damaged Parcels (uid:c171160e-3740-4852-b44e-3c6bdb2314af)
     Given Operator loads Operator portal home page
