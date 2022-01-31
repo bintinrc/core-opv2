@@ -58,7 +58,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
   private static final String IN_TABLE_FILTER_INPUT_XPATH = "//tr//th[%d]//input";
   private static final String CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH = "//span[text()='%s']/preceding-sibling::label//input";
-  private static final String FIRST_ROW_INPUT_FILTERED_RESULT_XPATH = "//tbody[@class='ant-table-tbody']//tr[contains(@class, 'ant-table-row ')][1]//td[%d]";
+  private static final String FIRST_ROW_INPUT_FILTERED_RESULT_XPATH = "//tbody[@class='ant-table-tbody']//tr[contains(@class, 'ant-table-row ')][1]//td[contains(@class, '%s')]";
   private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[2]/td[contains(@class,'%s')]";
   private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[2]/td[contains(@class,'%s')]";
   private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[2]";
@@ -70,9 +70,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String VIEW_ICON_ARRIVAL_ARCHIVE_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[contains(@class, 'ant-table-cell-fix-right')]//a";
 
   private static final String ID_CLASS = "id";
-  private static final String ORIGIN_HUB_CLASS = "originHub";
+  private static final String ORIGIN_HUB_CLASS = "origin-hub-name";
   private static final String DESTINATION_HUB_CLASS = "destinationHub";
-  private static final String MOVEMENT_TYPE_CLASS = "movementType";
+  private static final String MOVEMENT_TYPE_CLASS = "movement-type";
   private static final String EXPECTED_DEPARTURE_TIME_CLASS = "expected-departure-time";
   private static final String ACTUAL_DEPARTURE_TIME_CLASS = "actual-start-time";
   private static final String EXPECTED_ARRIVAL_TIME_CLASS = "expected-arrival-time";
@@ -106,19 +106,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
-  @FindBy(xpath = "//th[div[.='Movement Type']]")
+  @FindBy(xpath = "//th[contains(@class,'movement-type')]")
   public MovementTypeFilter movementTypeFilter;
 
-  @FindBy(xpath = "//th[div[.='Expected Departure Time']]")
+  @FindBy(xpath = "//th[contains(@class,'expected-departure-time')]")
   public TripTimeFilter expectedDepartTimeFilter;
 
   @FindBy(xpath = "//th[contains(@class,'actual-start-time')]")
   public TripTimeFilter actualDepartTimeFilter;
 
-  @FindBy(xpath = "//th[div[.='Expected Arrival Time']]")
+  @FindBy(xpath = "//th[contains(@class,'expected-arrival-time')]")
   public TripTimeFilter expectedArrivalTimeFilter;
 
-  @FindBy(xpath = "//th[div[.='Actual Arrival Time']]")
+  @FindBy(xpath = "//th[contains(@class,'actual-arrival-time')]")
   public TripTimeFilter actualArrivalTimeFilter;
 
   @FindBy(xpath = LOAD_BUTTON_XPATH)
@@ -336,13 +336,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case ORIGIN_HUB:
         filterValue = tripManagementDetailsData.getData().get(index).getOriginHubName();
         waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS), filterValue);
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS)+"//input", filterValue);
         break;
 
       case TRIP_ID:
         filterValue = tripManagementDetailsData.getData().get(index).getId().toString();
         waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ID_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS), filterValue);
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, ID_CLASS)+"//input", filterValue);
         break;
 
       case MOVEMENT_TYPE:
@@ -375,6 +375,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case EXPECTED_ARRIVAL_TIME:
         ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
+        expectedArrivalTimeFilter.scrollIntoView();
         expectedArrivalTimeFilter.openButton.click();
         expectedArrivalTimeFilter.selectDate(expectedArrivalTime);
         expectedArrivalTimeFilter.selectTime(expectedArrivalTime);
@@ -895,43 +896,45 @@ public class TripManagementPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[1]")
+    public final String hiddenDropdown = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]";
+
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[1]")
     public TextBox firstDateText;
 
     @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[1]")
     public CheckBox firstDate;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[2]")
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")
     public TextBox secondDateText;
 
     @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[2]")
     public CheckBox secondDate;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[3]")
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")
     public TextBox thirdDateText;
 
     @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[3]")
     public CheckBox thirdDate;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[4]")
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")
     public TextBox fourthDateText;
 
     @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[4]")
     public CheckBox fourthDate;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]//li[.='-']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='-']//input")
     public CheckBox none;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]//li[.='00:00 - 06:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='00:00 - 06:00']//input")
     public CheckBox earlyMorning;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]//li[.='06:00 - 12:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='06:00 - 12:00']//input")
     public CheckBox morning;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]//li[.='12:00 - 18:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='12:00 - 18:00']//input")
     public CheckBox afterNoon;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]//li[.='18:00 - 00:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='18:00 - 00:00']//input")
     public CheckBox night;
 
     public void selectDate(ZonedDateTime dateTime) {
@@ -942,19 +945,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
         firstDate.check();
         return;
       }
-      if (isElementExistWait1Second("(.//div[p[.='Date']]//ul//li)[2]")) {
+      if (isElementExistWait1Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")) {
         if (secondDateText.getText().contains(stringDate)) {
           secondDate.check();
           return;
         }
       }
-      if (isElementExistWait0Second("(.//div[p[.='Date']]//ul//li)[3]")) {
+      if (isElementExistWait0Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")) {
         if (thirdDateText.getText().contains(stringDate)) {
           thirdDate.check();
           return;
         }
       }
-      if (isElementExistWait0Second("(.//div[p[.='Date']]//ul//li)[4]")) {
+      if (isElementExistWait0Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")) {
         if (fourthDateText.getText().contains(stringDate)) {
           fourthDate.check();
         }
@@ -1005,10 +1008,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = ".//li[.='Air Haul']//input")
+    @FindBy(xpath = "//li[.='Air Haul']//input")
     public CheckBox airHaul;
 
-    @FindBy(xpath = ".//li[.='Land Haul']//input")
+    @FindBy(xpath = "//li[.='Land Haul']//input")
     public CheckBox landHaul;
 
     public void selectType(String type) {
