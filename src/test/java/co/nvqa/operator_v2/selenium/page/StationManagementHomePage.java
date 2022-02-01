@@ -55,6 +55,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//div[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
+  private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[contains(@class,'NoResult')]";
 
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
@@ -167,6 +168,15 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//div[text()='Search or Select']")
   public List<PageElement> modalHubSelection;
+
+  @FindBy(xpath = "//canvas")
+  public List<PageElement> chart;
+
+  @FindBy(css = "div.ant-tooltip:not([class*='ant-tooltip-hidden'])")
+  public List<PageElement> mouseOverText;
+
+  @FindBy(css = "div.ant-tooltip:not([class*='ant-tooltip-hidden']) li")
+  public List<PageElement> mouseOverTextList;
 
   public void switchToStationHomeFrame() {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -910,13 +920,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
 
-
-  @FindBy(css = "div.ant-tooltip:not([class*='ant-tooltip-hidden'])")
-  public List<PageElement> mouseOverText;
-
-  @FindBy(css = "div.ant-tooltip:not([class*='ant-tooltip-hidden']) li")
-  public List<PageElement> mouseOverTextList;
-
   public void mouseOverToTileTitle(String title) {
     waitWhilePageIsLoading();
     if (pageFrame.size() > 0) {
@@ -925,9 +928,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String titleXpath = f(TILE_TITLE_XPATH, title, title);
     WebElement tileTitle = getWebDriver().findElement(
         By.xpath(titleXpath));
-    //scrollIntoView(tileTitle);
     pause1s();
-    //tileTitle.click();
     moveToElement(tileTitle);
     pause1s();
     Assert.assertTrue(f("Assert that the title %s is displayed", title),
@@ -952,6 +953,27 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     pause2s();
     Assert.assertTrue("Assert that the title is not displayed" ,
         mouseOverText.size() == 0);
+  }
+
+  public void verifyChartIsShown() {
+    waitWhilePageIsLoading();
+    Assertions.assertThat(chart.size()).
+        as("Assert that the chart is displayed on Parcels in incoming shipment").isGreaterThan(0);
+  }
+
+  public void verifyChartIsNotShown() {
+    waitWhilePageIsLoading();
+    Assertions.assertThat(chart.size()).
+        as("Assert that the chart is displayed on Parcels in incoming shipment").isEqualTo(0);
+  }
+
+  public void verifyNoResultsFoundByTableName(String table) {
+    waitWhilePageIsLoading();
+    String noResultsXpath = f(NO_RESULTS_FOUND_TEXT_XPATH, table);
+    List<WebElement> noResults = getWebDriver().findElements(
+        By.xpath(noResultsXpath));
+    Assertions.assertThat(noResults.size()).
+        as(f("Assert that the no results found text is displayed in %s", table)).isGreaterThan(0);
   }
 
 }

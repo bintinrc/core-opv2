@@ -91,6 +91,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
   }
 
+  @Then("Operator verifies that the count in the second tile: {string} has increased by {int}")
+  public void operator_verifies_that_the_count_in__the_second_tile_has_increased_by(String tileName,
+      Integer totOrder) {
+    int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB_TILE_2));
+    int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+    takesScreenshot();
+    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
+    stationManagementHomePage.closeIfModalDisplay();
+    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+  }
 
   @When("Operator get the dollar amount from the tile: {string}")
   public void operator_get_the_dollar_amount_from_the_tile(String tileName) {
@@ -185,6 +195,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_get_the_count_from_the_tile(String tileName) {
     int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
     put(KEY_NUMBER_OF_PARCELS_IN_HUB, beforeOrder);
+    takesScreenshot();
+  }
+
+  @When("Operator get the count from one more tile: {string}")
+  public void operator_get_the_count_from_one_more_tile(String tileName) {
+    int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
+    put(KEY_NUMBER_OF_PARCELS_IN_HUB_TILE_2, beforeOrder);
     takesScreenshot();
   }
 
@@ -596,4 +613,18 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.mouseOverToHubDropdown();
   }
 
+  @Then("Operator verifies that the chart is displayed in incoming shipment modal")
+  public void operator_verifies_that_the_chart_is_displayed_in_incoming_shipment_modal() {
+    stationManagementHomePage.verifyChartIsShown();
+  }
+
+  @Then("Operator verifies that the chart is not displayed in incoming shipment modal")
+  public void operator_verifies_that_the_chart_is_not_displayed_in_incoming_shipment_modal() {
+    stationManagementHomePage.verifyChartIsNotShown();
+  }
+
+  @Then("Operator verifies that no results found text is displayed under the table: {string}")
+  public void operator_verifies_that_no_results_found_text_is_displayed_under_the_table(String table) {
+    stationManagementHomePage.verifyNoResultsFoundByTableName(table);
+  }
 }
