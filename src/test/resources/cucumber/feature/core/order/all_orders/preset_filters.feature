@@ -12,7 +12,7 @@ Feature: All Orders - Preset Filters
       | status            | Transit                            |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}     |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}     |
-      | shipperName       | {shipper-v4-legacy-id}             |
+      | shipperName       | {filter-shipper-name}              |
       | masterShipperName | {shipper-v4-marketplace-legacy-id} |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:

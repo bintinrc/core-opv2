@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest
+@OperatorV2 @Core @Routing @RoutingJob3 @RouteManifest
 Feature: Route Manifest
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
@@ -23,12 +23,7 @@ Feature: Route Manifest
     And API Operator start the route
     And API Driver deliver the created parcel successfully
     And API Operator get order details
-    When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator open Route Manifest of created route from Route Logs page
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     Then Operator verify 1 delivery success at Route Manifest
 
   @DeleteOrArchiveRoute
@@ -212,12 +207,7 @@ Feature: Route Manifest
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator open Route Manifest of created route from Route Logs page
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     Then Operator verify waypoint tags at Route Manifest using data below:
       | {order-tag-name}   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {order-tag-name-2} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
@@ -425,7 +415,7 @@ Feature: Route Manifest
       | driverId          | {ninja-driver-id} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |

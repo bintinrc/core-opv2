@@ -413,7 +413,7 @@ Feature: All Orders - Manually Completed Selected
       | name        | FORCED SUCCESS                                                                                                                                                                                                                              |
       | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
-  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page
+  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page (uid:435ba8e7-bb4b-4b77-8dc8-e3fc66bc0dfc)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
