@@ -18,8 +18,8 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     And Operator wait until 'Create Route Group V1.5' page is loaded
     And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
     And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
       | orderType | Normal,Return |
@@ -72,8 +72,8 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     And Operator wait until 'Create Route Group V1.5' page is loaded
     And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
     Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
       | ppDdLeg | <ppDdLeg> |
@@ -101,8 +101,8 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     And Operator wait until 'Create Route Group V1.5' page is loaded
     And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
     Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
       | granularOrderStatus | <granularStatus> |
