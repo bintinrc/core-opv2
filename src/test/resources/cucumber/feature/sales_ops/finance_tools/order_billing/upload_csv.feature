@@ -310,7 +310,7 @@ Feature: Order Billing
     Then Operator verifies that error toast is displayed on Order Billing page:
       | top | Your selected file has > 1000 shippers - please re-upload in smaller batches. |
     Then Operator verifies Generate Success Billings button is disabled
-    Then Finance Operator waits for '3' seconds
+    Then Finance Operator waits for '4' seconds
     When Operator generates CSV file with 1000 shippers
     When Operator generates success billings using data below:
       | uploadCsv | generatedCsv |
