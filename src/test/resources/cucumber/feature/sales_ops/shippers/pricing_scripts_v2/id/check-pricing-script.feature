@@ -22,7 +22,7 @@ Feature: Check Pricing Script
     Then Operator verify the Run Check Result is correct using data below:
       | grandTotal   | 66660 |
       | gst          | 660   |
-      | deliveryFee  | 66660 |
+      | deliveryFee  | 66000 |
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
