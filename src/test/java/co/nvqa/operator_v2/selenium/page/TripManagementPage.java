@@ -901,25 +901,25 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[1]")
     public TextBox firstDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[1]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[1]//input)")
     public CheckBox firstDate;
 
     @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")
     public TextBox secondDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[2]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[2]//input)")
     public CheckBox secondDate;
 
     @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")
     public TextBox thirdDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[3]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[3]//input)")
     public CheckBox thirdDate;
 
     @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")
     public TextBox fourthDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[4]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[4]//input)")
     public CheckBox fourthDate;
 
     @FindBy(xpath = hiddenDropdown + "//li[.='-']//input")
