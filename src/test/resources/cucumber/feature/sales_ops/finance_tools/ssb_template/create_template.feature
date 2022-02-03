@@ -6,28 +6,6 @@ Feature: Create SSB Template
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteSsbTemplate
-  Scenario: Create New Template - SG (uid:59a23474-1e3b-4c66-af92-f8ce3d900be5)
-    Given Operator go to menu Finance Tools -> SSB Template
-    When SSB Template page is loaded
-    And Operator clicks Create Template button
-    And SSB Report Template Editor page is loaded
-    Then Operator creates SSB template with below data successfully
-      | templateName        | Dummy-Template-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | selectHeaders       | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID          |
-    Then DB Operator gets the template details using template name
-    Then Operator verifies below details in billing_qa_gl.templates table
-      | column                | expected_value                                          |
-      | system_id             | {KEY_COUNTRY}                                           |
-      | description           | {KEY_TEMPLATE.description}                              |
-      | report_type           | {KEY_TEMPLATE.reportType}                               |
-      | configuration         | notNull                                                 |
-      | configuration.headers | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID |
-      | created_at            | {gradle-current-date-yyyy-MM-dd}                        |
-      | updated_at            | {gradle-current-date-yyyy-MM-dd}                        |
-      | deleted_at            | null                                                    |
-
-  @DeleteSsbTemplate
   Scenario: Create New Template - Duplicate Template Found (uid:ca713ddb-c583-4375-a15d-dce0b4449af3)
     Given Operator go to menu Finance Tools -> SSB Template
     When SSB Template page is loaded
@@ -48,28 +26,6 @@ Feature: Create SSB Template
     Then Operator verifies that error toast is displayed on SSB Template page:
       | top    | Network Request Error                    |
       | bottom | Template Name {KEY_TEMPLATE.name} exists |
-
-  @DeleteSsbTemplate
-  Scenario: Create New Template - Both NV Measured and Shipper Provided Dimensions are Included (uid:e5c65da9-632b-472d-af38-3e4256b024c5)
-    Given Operator go to menu Finance Tools -> SSB Template
-    When SSB Template page is loaded
-    And Operator clicks Create Template button
-    And SSB Report Template Editor page is loaded
-    Then Operator creates SSB template with below data successfully
-      | templateName        | Dummy-Template-{gradle-current-date-yyyyMMddHHmmsss}                       |
-      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss}           |
-      | selectHeaders       | NV Measured Weight,NV Measured Height,NV Measured Length,NV Measured Width |
-    Then DB Operator gets the template details using template name
-    Then Operator verifies below details in billing_qa_gl.templates table
-      | column                | expected_value                                                             |
-      | system_id             | {KEY_COUNTRY}                                                              |
-      | description           | {KEY_TEMPLATE.description}                                                 |
-      | report_type           | {KEY_TEMPLATE.reportType}                                                  |
-      | configuration         | notNull                                                                    |
-      | configuration.headers | NV Measured Weight,NV Measured Height,NV Measured Length,NV Measured Width |
-      | created_at            | {gradle-current-date-yyyy-MM-dd}                                           |
-      | updated_at            | {gradle-current-date-yyyy-MM-dd}                                           |
-      | deleted_at            | null                                                                       |
 
   @DeleteSsbTemplate
   Scenario: Create New Template - New Template Has The Same Name as Deleted Template (uid:b3b2b622-b506-4326-8ce5-8d4e974da7a4)
