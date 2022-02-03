@@ -78,6 +78,7 @@ Feature: Movement Trip - Search Trip - Filter - Archived Tab
     When Operator selects the date to 3 days early in "archive_arrival_date" filter
     When Operator searches and selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     When Operator searches and selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
     And API Operator gets the count of the Trip Management with data:
       | movementTripType | archive_all                  |
       | days             | 3                            |
