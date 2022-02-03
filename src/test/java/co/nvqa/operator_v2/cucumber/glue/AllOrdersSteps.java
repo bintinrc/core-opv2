@@ -14,6 +14,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,8 +24,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.NoSuchElementException;
+
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.MANUALLY_COMPLETE_ERROR_CSV_FILENAME;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.SELECTION_ERROR_CSV_FILENAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -228,9 +231,17 @@ public class AllOrdersSteps extends AbstractSteps {
     data = resolveValues(data);
     assertTrue("Errors dialog is displayed", allOrdersPage.errorsDialog.waitUntilVisible(5));
     List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
-        .map(element -> StringUtils.normalizeSpace(element.getNormalizedText()))
+        .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
+            .replaceAll("^\\d{1,2}\\.", ""))
         .collect(Collectors.toList());
-    assertThat("List of error messages", actual, Matchers.contains(data.toArray(new String[0])));
+    Assertions.assertThat(actual)
+        .as("List of error messages")
+        .containsExactlyInAnyOrderElementsOf(data);
+  }
+
+  @When("^Operator close Errors dialog on All Orders page$")
+  public void operatorCloseErrorsDialog() {
+    allOrdersPage.errorsDialog.waitUntilVisible();
     allOrdersPage.errorsDialog.close.click();
   }
 
@@ -442,6 +453,70 @@ public class AllOrdersSteps extends AbstractSteps {
     List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
         .collect(Collectors.toList());
     allOrdersPage.rtsMultipleOrderNextDay(listOfTrackingIds);
+  }
+
+  @When("^Operator select 'Set RTS to Selected' action for found orders on All Orders page$")
+  public void operatorSelectRtsActionForMultipleOrdersOnAllOrdersPage() {
+    allOrdersPage.clearFilterTableOrderByTrackingId();
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption("Set RTS to Selected");
+  }
+
+  @When("Operator verify {value} process in Selection Error dialog on All Orders page")
+  public void verifyProcessInSelectionError(String process) {
+    allOrdersPage.selectionErrorDialog.waitUntilVisible();
+    Assertions.assertThat(allOrdersPage.selectionErrorDialog.process.getText())
+        .as("Process")
+        .isEqualTo(process);
+  }
+
+  @When("Operator clicks 'Download the invalid selection' in Selection Error dialog on All Orders page")
+  public void clickDownloadTheInvalidSelection() {
+    allOrdersPage.selectionErrorDialog.waitUntilVisible();
+    allOrdersPage.selectionErrorDialog.downloadInvalidSelection.click();
+  }
+
+  @When("Operator clicks 'Download the failed updates' in Update Errors dialog on All Orders page")
+  public void clickDownloadTheInvalidUpdates() {
+    allOrdersPage.errorsDialog.waitUntilVisible();
+    allOrdersPage.errorsDialog.downloadFailedUpdates.click();
+  }
+
+  @When("Operator verifies invalid selection CSV file on All Orders page:")
+  public void verifyInvalidSelectionCsv(List<String> trackingIds) {
+    allOrdersPage.verifyFileDownloadedSuccessfully(SELECTION_ERROR_CSV_FILENAME);
+    List<String> actual = allOrdersPage.readDownloadedFile(SELECTION_ERROR_CSV_FILENAME);
+    actual.remove(0);
+    Assertions.assertThat(actual)
+        .as("List of invalid tracking ids")
+        .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
+  }
+
+  @When("Operator verifies manually complete errors CSV file on All Orders page:")
+  public void verifyManuallyCompleteErrorCsv(List<String> trackingIds) {
+    allOrdersPage.verifyFileDownloadedSuccessfully(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
+    List<String> actual = allOrdersPage.readDownloadedFile(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
+    actual.remove(0);
+    Assertions.assertThat(actual)
+        .as("List of invalid tracking ids")
+        .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
+  }
+
+  @When("Operator verify orders info in Selection Error dialog on All Orders page:")
+  public void verifyOrdersInfoInSelectionError(List<Map<String, String>> data) {
+    data = resolveListOfMaps(data);
+    List<Map<String, String>> actual = new ArrayList<>();
+    allOrdersPage.selectionErrorDialog.waitUntilVisible();
+    int count = allOrdersPage.selectionErrorDialog.trackingIds.size();
+    for (int i = 0; i < count; i++) {
+      Map<String, String> row = new HashMap<>();
+      row.put("trackingId", allOrdersPage.selectionErrorDialog.trackingIds.get(i).getText());
+      row.put("reason", allOrdersPage.selectionErrorDialog.reasons.get(i).getText());
+      actual.add(row);
+    }
+    Assertions.assertThat(actual)
+        .as("List of tracing ids and reasons")
+        .containsExactlyInAnyOrderElementsOf(data);
   }
 
   @Then("Operator verifies latest event is {string}")

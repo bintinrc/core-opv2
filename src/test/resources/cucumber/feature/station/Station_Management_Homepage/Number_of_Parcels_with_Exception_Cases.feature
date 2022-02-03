@@ -201,7 +201,7 @@ Feature: Number of Parcels with Exception Cases
       | <TicketSubType> |
     And Operator verifies that the following details are displayed on the modal
       | Ticket Subtype | <TicketSubType> |
-      | Ticket Status  | <Status>         |
+      | Ticket Status  | <Status>        |
     Examples:
       | HubName      | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                               | ModalName                    |
       | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
@@ -362,7 +362,7 @@ Feature: Number of Parcels with Exception Cases
       | <TicketSubType> |
     And Operator verifies that the following details are displayed on the modal
       | Ticket Subtype | <TicketSubType> |
-      | Ticket Status  | <Status>         |
+      | Ticket Status  | <Status>        |
 
     Examples:
       | HubName      | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                               | ModalName                    |
@@ -470,7 +470,7 @@ Feature: Number of Parcels with Exception Cases
       | <TicketSubType> |
     And Operator verifies that the following details are displayed on the modal
       | Ticket Subtype | <TicketSubType> |
-      | Ticket Status  | <Status>         |
+      | Ticket Status  | <Status>        |
 
     Examples:
       | HubName      | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                               | ModalName                    |
@@ -581,7 +581,7 @@ Feature: Number of Parcels with Exception Cases
       | <TicketSubType> |
     And Operator verifies that the following details are displayed on the modal
       | Ticket Subtype | <TicketSubType> |
-      | Ticket Status  | <Status>         |
+      | Ticket Status  | <Status>        |
 
     Examples:
       | HubName      | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                               | ModalName                    |
@@ -636,7 +636,7 @@ Feature: Number of Parcels with Exception Cases
       | <TicketSubType> |
     And Operator verifies that the following details are displayed on the modal
       | Ticket Subtype | <TicketSubType> |
-      | Ticket Status  | <Status>         |
+      | Ticket Status  | <Status>        |
 
     Examples:
       | HubName      | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                               | ModalName                    |
@@ -678,10 +678,12 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Type   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Subtype    |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -727,10 +729,12 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Type   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Subtype    |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -775,10 +779,12 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Type   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Subtype    |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -816,10 +822,12 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Type   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Subtype    |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -859,10 +867,12 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
-      | Tracking ID   |
-      | Ticket Type   |
-      | Ticket Status |
-      | Order Tags    |
+      | Tracking ID       |
+      | Last Scan         |
+      | Last Scanned Time |
+      | Ticket Subtype    |
+      | Ticket Status     |
+      | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |

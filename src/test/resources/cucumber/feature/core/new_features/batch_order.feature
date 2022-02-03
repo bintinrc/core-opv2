@@ -25,22 +25,22 @@ Feature: Batch Order
     Then Operator verifies that success toast displayed:
       | top                | Rollback Successfully |
       | waitUntilInvisible | true                  |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.orders table:
+    And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.transactions table:
+    And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.waypoints table:
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_details table:
+    And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_delivery_verifications table:
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in ocreate_qa_gl.reserve_tracking_ids table:
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
@@ -71,22 +71,22 @@ Feature: Batch Order
     Then Operator verifies that success toast displayed:
       | top                | Rollback Successfully |
       | waitUntilInvisible | true                  |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.orders table:
+    And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.transactions table:
+    And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.waypoints table:
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_details table:
+    And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_delivery_verifications table:
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in ocreate_qa_gl.reserve_tracking_ids table:
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
@@ -120,22 +120,22 @@ Feature: Batch Order
     Then Operator verifies that success toast displayed:
       | top                | Rollback Successfully |
       | waitUntilInvisible | true                  |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.orders table:
+    And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.transactions table:
+    And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.waypoints table:
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_details table:
+    And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_delivery_verifications table:
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in ocreate_qa_gl.reserve_tracking_ids table:
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
@@ -160,22 +160,22 @@ Feature: Batch Order
     Then Operator verifies that success toast displayed:
       | top                | Rollback Successfully |
       | waitUntilInvisible | true                  |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.orders table:
+    And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.transactions table:
+    And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.waypoints table:
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_details table:
+    And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in core_qa_sg.order_delivery_verifications table:
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-    And DB Operator verifies orders records are hard-deleted in ocreate_qa_gl.reserve_tracking_ids table:
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 

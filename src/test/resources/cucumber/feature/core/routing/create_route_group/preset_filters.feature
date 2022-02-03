@@ -15,7 +15,7 @@ Feature: Create Route Groups - Preset Filters
       | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd}                                   |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                   |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | shipper           | {shipper-v4-legacy-id}                                           |
+      | shipper           | {filter-shipper-name}                                           |
       | routed            | Show                                                             |
       | masterShipper     | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator add following filters on Transactions Filters section on Create Route Group page:
@@ -261,7 +261,7 @@ Feature: Create Route Groups - Preset Filters
       | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd}                                   |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                   |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | shipper           | {shipper-v4-legacy-id}                                           |
+      | shipper           | {filter-shipper-name}                                           |
       | routed            | Show                                                             |
       | masterShipper     | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator add following filters on Transactions Filters section on Create Route Group page:
@@ -403,7 +403,7 @@ Feature: Create Route Groups - Preset Filters
       | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd}                                   |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                   |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | shipper           | {shipper-v4-legacy-id}                                           |
+      | shipper           | {filter-shipper-name}                                           |
       | routed            | Show                                                             |
       | masterShipper     | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
     And Operator add following filters on Transactions Filters section on Create Route Group page:

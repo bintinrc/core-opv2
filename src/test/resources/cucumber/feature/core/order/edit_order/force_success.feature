@@ -302,8 +302,10 @@ Feature: Force Success
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     When Operator updates recovery ticket on Edit Order page:
-      | status                  | RESOLVED |
-      | keepCurrentOrderOutcome | Yes      |
+      | status                  | RESOLVED          |
+      | keepCurrentOrderOutcome | Yes               |
+      | outcome                 | RTS               |
+      | rtsReason               | Nobody at address |
     Then Operator verifies that success toast displayed:
       | top                | ^Ticket ID : .* updated |
       | waitUntilInvisible | true                    |
@@ -358,7 +360,7 @@ Feature: Force Success
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                              |
       | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
 
-  Scenario: Disable Force Success On Hold Order with Active PETS Ticket
+  Scenario: Disable Force Success On Hold Order with Active PETS Ticket (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

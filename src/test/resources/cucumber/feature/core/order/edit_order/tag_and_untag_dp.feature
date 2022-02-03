@@ -101,8 +101,6 @@ Feature: Tag & Untag DP
       | name | UNASSIGNED FROM DP |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE ADDRESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE AV |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"

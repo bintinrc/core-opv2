@@ -1359,11 +1359,26 @@ public class CreateRouteGroupsV15Steps extends AbstractSteps {
       createRouteGroupsPage.txnRsvnTable
           .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
       createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_TYPE, expected.getType());
-      assertEquals(
-          f("Number of records for tracking id = %s and type = %s", expected.getTrackingId(),
-              expected.getType()), 1, createRouteGroupsPage.txnRsvnTable.getRowsCount());
-      TxnRsvn actual = createRouteGroupsPage.txnRsvnTable.readEntity(1);
-      expected.compareWithActual(actual);
+      List<TxnRsvn> actual = createRouteGroupsPage.txnRsvnTable.readAllEntities();
+      Assertions.assertThat(actual)
+          .as("List of found transactions")
+          .isNotEmpty();
+      if (actual.size() == 1) {
+        expected.compareWithActual(actual.get(0));
+      } else {
+        actual.stream()
+            .filter(a -> {
+              try {
+                expected.compareWithActual(a);
+                return true;
+              } catch (AssertionError e) {
+                return false;
+              }
+            })
+            .findFirst()
+            .orElseThrow(
+                () -> new AssertionError("Transaction was not found: " + expected.toMap()));
+      }
     });
   }
 

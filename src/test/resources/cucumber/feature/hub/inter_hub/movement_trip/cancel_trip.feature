@@ -76,10 +76,13 @@ Feature: Movement Trip - Cancel Trip
     And Operator searches for Movement Trip based on status "transit"
     When Operator clicks on "cancel" icon on the action column
     And Operator clicks "Cancel Trip" button on cancel trip dialog
-    And Operator verifies that there will be a movement trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" cancelled toast shown
-    And Operator searches for Movement Trip based on status "cancelled"
-    Then Operator verifies movement trip shown has status value "cancelled"
-    And DB Operator verifies movement trip has event with status cancelled
+    Then Operator verifies toast with message "Request failed with status code 400" is shown on movement page
+    And Operator searches for Movement Trip based on status "transit"
+    Then Operator verifies movement trip shown has status value "transit"
+    And DB Operator verifies movement trip has event with status as below
+      | event   | departed        |
+      | status  | transit         |
+      | userId  | qa@ninjavan.co  |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Call Off Cancel Trip - Trip Status Pending (uid:770109ba-1146-459c-8be6-26eba77c303d)

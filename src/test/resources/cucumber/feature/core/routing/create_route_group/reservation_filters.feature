@@ -16,8 +16,8 @@ Feature: Create Route Groups - Reservation Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Group page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
@@ -44,8 +44,8 @@ Feature: Create Route Groups - Reservation Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | reservationStatus | Pending |
@@ -85,8 +85,8 @@ Feature: Create Route Groups - Reservation Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | reservationStatus | Success |
@@ -107,8 +107,8 @@ Feature: Create Route Groups - Reservation Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | reservationStatus | Cancel |
@@ -138,8 +138,8 @@ Feature: Create Route Groups - Reservation Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | reservationStatus | Fail |
@@ -159,8 +159,8 @@ Feature: Create Route Groups - Reservation Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Group page
     And Operator add following filters on Reservation Filters section on Create Route Group page:
       | pickUpSize | <pickupSize> |
