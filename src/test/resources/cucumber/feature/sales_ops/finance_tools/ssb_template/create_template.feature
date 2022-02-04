@@ -68,6 +68,7 @@ Feature: Create SSB Template
       | templateDescription | {KEY_TEMPLATE.description} |
       | selectHeaders       | Legacy Shipper ID          |
 
+
   @DeleteSsbTemplate
   Scenario: Create New Template - All Columns (uid:ccb37c83-1b31-4f0c-9662-49387c30bec0)
     Given Operator go to menu Finance Tools -> SSB Template

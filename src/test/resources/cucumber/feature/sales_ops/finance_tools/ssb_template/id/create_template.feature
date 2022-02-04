@@ -21,8 +21,8 @@ Feature: Create SSB Template
       | system_id             | {KEY_COUNTRY}                        |
       | description           | {KEY_TEMPLATE.description}           |
       | report_type           | {KEY_TEMPLATE.reportType}            |
-      | configuration         | notNull                              |
-      | configuration.headers | {KEY_TEMPLATE.configuration.headers} |
-      | created_at            | {gradle-current-date-yyyy-MM-dd}     |
+      | configuration         | notNull                                                 |
+      | configuration.headers | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID |
+      | created_at            | {gradle-current-date-yyyy-MM-dd}                        |
       | updated_at            | {gradle-current-date-yyyy-MM-dd}     |
       | deleted_at            | null                                 |
