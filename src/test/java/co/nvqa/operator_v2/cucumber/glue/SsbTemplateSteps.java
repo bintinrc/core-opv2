@@ -42,6 +42,7 @@ public class SsbTemplateSteps extends AbstractSteps {
   }
 
   private void setSsbTemplateData(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
     Template template = new Template();
     String templateName = mapOfData.get("templateName");
     String templateDescription = mapOfData.get("templateDescription");
@@ -69,7 +70,6 @@ public class SsbTemplateSteps extends AbstractSteps {
 
   @And("Operator creates SSB template with below data successfully")
   public void operatorCreatesSSBTemplateWithBelowDataSuccessfully(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
     setSsbTemplateData(mapOfData);
     ssbTemplatePage.clickSubmitBtn();
     takesScreenshot();
