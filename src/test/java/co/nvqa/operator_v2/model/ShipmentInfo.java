@@ -53,7 +53,7 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
     setMawb(shipments.getShipment().getMawb());
   }
 
-  private String normalisedDate(String originDate) {
+  public String normalisedDate(String originDate) {
     if (originDate == null) {
       return null;
     }
