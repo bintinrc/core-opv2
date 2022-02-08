@@ -1,7 +1,7 @@
 @OperatorV2 @DpBulkUpdate @DpAdministrationV2 @DP
 Feature: DP Administration - DP Bulk Update
 
-  @LaunchBrowser @ShouldAlwaysRun @test
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
