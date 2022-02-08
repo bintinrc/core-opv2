@@ -35,7 +35,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
   private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
   private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
-  private static final String TILE_VALUE_XPATH = "//div[contains(@class,'title')][.='%s']/following-sibling::div//div[@class='value']";
+  private static final String TILE_VALUE_XPATH = "//*[text()='%s']/ancestor::div[@class='ant-card-body']/descendant::div[@class='value']";
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "//div[contains(@class,'title')][.='%s']/following-sibling::div//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
@@ -378,6 +378,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       NvLogger.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();
       waitUntilPageLoaded();
+      closeIfModalDisplay();
       int actual = getNumberFromTile(tileName);
       return actual == expected;
     });
