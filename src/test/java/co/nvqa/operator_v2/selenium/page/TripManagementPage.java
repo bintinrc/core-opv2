@@ -55,7 +55,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String CALENDAR_SELECTED_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//td[@title='%s']";
   private static final String NEXT_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-next-icon')]";
   private static final String PREV_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-prev-icon')]";
-  private static final String TAB_XPATH = "//span[.='%s']/preceding-sibling::span";
+  private static final String TAB_XPATH = "//span[contains(.,'%s')]/preceding-sibling::span";
   private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
   private static final String IN_TABLE_FILTER_INPUT_XPATH = "//tr//th[%d]//input";
   private static final String CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH = "//span[text()='%s']/preceding-sibling::label//input";
@@ -372,7 +372,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         ZonedDateTime actualDepartureTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
         String normalizedDepartDate = shipmentInfo.normalisedDate(actualDepartureTime.toString().replaceAll("Z", ":00.000Z"));
-        normalizedDepartDate = normalizedDepartDate.replace(" ", "T").replace(":00", ":00.000Z");
+        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + ".000Z";
         actualDepartureTime = ZonedDateTime.parse(normalizedDepartDate, BE_FORMATTER);
         actualDepartTimeFilter.openButton.click();
         actualDepartTimeFilter.selectTime(actualDepartureTime);
@@ -383,7 +383,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
         String normalizedArrivalDate = shipmentInfo.normalisedDate(expectedArrivalTime.toString().replaceAll("Z", ":00.000Z"));
-        normalizedArrivalDate = normalizedArrivalDate.replace(" ", "T").replace(":00", ":00.000Z");
+        normalizedArrivalDate = normalizedArrivalDate.replace(" ", "T") + ".000Z";
         expectedArrivalTime = ZonedDateTime.parse(normalizedArrivalDate, BE_FORMATTER);
         expectedArrivalTimeFilter.scrollIntoView();
         expectedArrivalTimeFilter.openButton.click();
