@@ -75,7 +75,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
   private List<PageElement> columnValues;
 
-  @FindBy(css = "div.cod-summary div.ant-col:nth-child(1)")
+    @FindBy(css = "div.ant-row div.ant-col:nth-child(1)")
   private List<PageElement> summaryColumns;
 
   @FindBy(xpath = "//button//span[text()='Download CSV']")

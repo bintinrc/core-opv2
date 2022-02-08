@@ -106,13 +106,13 @@ Feature: Recovery & Ticketing
       | type   | DELIVERY |
       | status | PENDING  |
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}              |
       | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
       | type       | DD                                  |
       | status     | Fail                                |
       | routeId    | {KEY_CREATED_ROUTE_ID}              |
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | DD                                 |
@@ -168,13 +168,13 @@ Feature: Recovery & Ticketing
       | type   | DELIVERY |
       | status | PENDING  |
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}              |
       | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
       | type       | DD                                  |
       | status     | Fail                                |
       | routeId    | {KEY_CREATED_ROUTE_ID}              |
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | DD                                 |
@@ -226,13 +226,13 @@ Feature: Recovery & Ticketing
       | type   | PICKUP  |
       | status | PENDING |
     When Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}              |
       | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
       | type       | PP                                  |
       | status     | Fail                                |
       | routeId    | {KEY_CREATED_ROUTE_ID}              |
-    Then DB Operator verifies core_qa_sg.transactions record:
+    Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | type       | PP                                 |

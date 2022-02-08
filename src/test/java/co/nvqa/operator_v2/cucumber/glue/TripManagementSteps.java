@@ -62,9 +62,14 @@ public class TripManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies toast with message {string} is shown on movement page")
   public void operatorVerifiesToastWithMessageIsShownOnTripManagementPage(String toastMessage) {
-    toastMessage = toastMessage.replace("#n","\n");
-    String resolvedToastMessage = resolveValue(toastMessage);
-    tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
+    String[] messages = toastMessage.split("&&");
+    tripManagementPage.actualToastMessageContent="";
+    tripManagementPage.readTheToastMessage();
+    for(String message : messages){
+      toastMessage = message.replace("#n","\n");
+      String resolvedToastMessage = resolveValue(toastMessage);
+      tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
+    }
   }
 
   @Then("Operator verifies toast with message {string} is shown on movement page without closing")
@@ -189,7 +194,7 @@ public class TripManagementSteps extends AbstractSteps {
   @When("Operator selects the date to tomorrow in {string} Tab")
   public void operatorSelectsTheDateToTomorrow(String tabName) {
     ZonedDateTime zdt = DateUtil.getDate().plusDays(1);
-    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     tripManagementPage.selectsDate(tabNameAsEnum, tomorrowDateFormatted);
   }
@@ -197,7 +202,7 @@ public class TripManagementSteps extends AbstractSteps {
   @When("Operator selects the date to {int} days early in {string} filter")
   public void operatorSelectsTheDateToTomorrow(int days, String filterName) {
     ZonedDateTime zdt = DateUtil.getDate().minusDays(days);
-    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+    String tomorrowDateFormatted = zdt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     MovementTripType tabNameAsEnum = MovementTripType.fromString(filterName);
     tripManagementPage.selectsDateArchiveTab(tabNameAsEnum, tomorrowDateFormatted);
   }

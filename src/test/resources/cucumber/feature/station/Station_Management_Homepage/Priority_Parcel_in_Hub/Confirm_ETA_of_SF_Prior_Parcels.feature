@@ -399,17 +399,18 @@ Feature: Confirm ETA of SF Prior Parcels
   @ForceSuccessOrder
   Scenario Outline: Bulk Update Confirmed ETA for Multiple Unacknowledged SFLD Parcel (uid:d395ac0f-61f5-464d-b2ce-3de3d0668273)
     Given Operator loads Operator portal home page
-    And API Shipper create V4 order using data below:
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | <NoOfRecords>                                                                                                                                                                                                                                                                                                                    |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":<HubId> } |
     And API Operator tags the parcel as SFLD parcel using below data:
-      | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+      | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDER_ID[1]}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    And API Operator tags the parcel as SFLD parcel using below data:
+      | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDER_ID[2]}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
@@ -440,10 +441,10 @@ Feature: Confirm ETA of SF Prior Parcels
       | acknowledger_email | {operator-portal-uid}            |
 
     Examples:
-      | HubName      | TileName                | ModalName                                    | SlackMessageContent | NoOfRecords | FSRParcelText                              |
-      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 2           | FSR parcels' ETA that need to be confirmed |
+      | HubId      | HubName      | TileName                | ModalName                                    | SlackMessageContent | NoOfRecords | FSRParcelText                              |
+      | {hub-id-8} | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 2           | FSR parcels' ETA that need to be confirmed |
 
-  @ForceSuccessOrder @Check
+  @ForceSuccessOrder
   Scenario Outline: Partial Success Upon Bulk Update Confirmed ETA for Unacknowledged SFLD Parcel (uid:27d29f5d-9948-47f9-8bee-984174e922bc)
     Given Operator loads Operator portal home page
     And API Shipper create multiple V4 orders using data below:
@@ -580,7 +581,6 @@ Feature: Confirm ETA of SF Prior Parcels
     Examples:
       | HubId      | HubName      | ModalName                                    | SlackMessageContent | NoOfRecords | Status           | FailureModal                                                                                                  | FSRParcelText                              |
       | {hub-id-8} | {hub-name-8} | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 3           | MANUAL_CONFIRMED | SFLD ticket acknowledgement failed because ticket is not of UNCONFIRMED status or other parameters are wrong. | FSR parcels' ETA that need to be confirmed |
-
 
   @ForceSuccessOrder
   Scenario Outline: Fail Bulk Update Confirmed ETA for 5 Unacknowledged SFLD Parcels (uid:9553b5c5-21f2-43ba-a2ea-93590233488b)
