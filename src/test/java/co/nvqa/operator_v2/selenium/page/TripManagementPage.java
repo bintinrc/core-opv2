@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
+import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
@@ -54,7 +55,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String CALENDAR_SELECTED_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//td[@title='%s']";
   private static final String NEXT_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-next-icon')]";
   private static final String PREV_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-prev-icon')]";
-  private static final String TAB_XPATH = "//span[.='%s']/preceding-sibling::span";
+  private static final String TAB_XPATH = "//span[contains(.,'%s')]/preceding-sibling::span";
   private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
   private static final String IN_TABLE_FILTER_INPUT_XPATH = "//tr//th[%d]//input";
   private static final String CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH = "//span[text()='%s']/preceding-sibling::label//input";
@@ -84,6 +85,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   private static final String SUCCESS_CANCEL_TRIP_TOAST = "//div[contains(@class,'notification-notice-message') and (contains(text(),'Trip %d cancelled'))]";
   private static final String FIRST_ROW_TRACK = "//tr[2]//td[contains(@class,'track')]";
+
+  private static final DateTimeFormatter BE_FORMATTER = DateTimeFormatter
+          .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
 
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
@@ -313,7 +317,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
       TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
-
+    ShipmentInfo shipmentInfo = new ShipmentInfo();
     // Get the newest record
     int index = tripManagementDetailsData.getData().size() - 1;
 
@@ -367,6 +371,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case ACTUAL_DEPARTURE_TIME:
         ZonedDateTime actualDepartureTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
+        String normalizedDepartDate = shipmentInfo.normalisedDate(actualDepartureTime.toString().replaceAll("Z", ":00.000Z"));
+        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + ".000Z";
+        actualDepartureTime = ZonedDateTime.parse(normalizedDepartDate, BE_FORMATTER);
         actualDepartTimeFilter.openButton.click();
         actualDepartTimeFilter.selectTime(actualDepartureTime);
         actualDepartTimeFilter.ok.click();
@@ -375,6 +382,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case EXPECTED_ARRIVAL_TIME:
         ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
+        String normalizedArrivalDate = shipmentInfo.normalisedDate(expectedArrivalTime.toString().replaceAll("Z", ":00.000Z"));
+        normalizedArrivalDate = normalizedArrivalDate.replace(" ", "T") + ".000Z";
+        expectedArrivalTime = ZonedDateTime.parse(normalizedArrivalDate, BE_FORMATTER);
         expectedArrivalTimeFilter.scrollIntoView();
         expectedArrivalTimeFilter.openButton.click();
         expectedArrivalTimeFilter.selectDate(expectedArrivalTime);
@@ -504,7 +514,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
             tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
         actualValue = getText(
             f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
-        assertTrue("Expected Arrival Time", actualValue.contains(expectedValue));
+        Assertions.assertThat(actualValue).as("Actual Arrival Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
