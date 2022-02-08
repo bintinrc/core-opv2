@@ -132,6 +132,32 @@ public class DpBulkUpdateSteps extends AbstractSteps {
         }
         break;
 
+      case DP_DELETE_LATER:
+        dp = get(KEY_DISTRIBUTION_POINT);
+        dpIds.add(dp.getId());
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_1_ID);
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_2_ID);
+        for (Long dpId : dpIds) {
+          dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + "\n");
+        }
+        break;
+
+      case DP_DELETE_LATER_1:
+        dp = get(KEY_DISTRIBUTION_POINT);
+        dpIds.add(dp.getId());
+        for (Long dpId : dpIds) {
+          dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + "\n");
+        }
+        break;
+
+      case PICK_DP:
+        dpIds.add(TestConstants.IMDA_PICK_BULK_UPDATE_OPV2_DP_1_ID);
+        dpIds.add(TestConstants.IMDA_PICK_BULK_UPDATE_OPV2_DP_2_ID);
+        for (Long dpId : dpIds) {
+          dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + "\n");
+        }
+        break;
+
       default:
         LOGGER.warn("DP Bulk Update Type is not valid!");
     }
@@ -251,8 +277,17 @@ public class DpBulkUpdateSteps extends AbstractSteps {
     dpBulkUpdatePage.downloadButton.click();
   }
 
-  @Then("Operator verifies data is correct in downloaded csv file")
-  public void operatorVerifiesDataIsCorrectInDownloadedCsvFile() {
-    dpBulkUpdatePage.verifyDownloadedCsvFile();
+  @Then("Operator verifies data is correct in downloaded csv file = {string}")
+  public void operatorVerifiesDataIsCorrectInDownloadedCsvFile(String status) {
+    dpBulkUpdatePage.verifyDownloadedCsvFile(status);
+  }
+
+  @Then("Operator edits the Max Capacity of pick DP via DP Bulk Update Page for {string}")
+  public void operatorEditsTheMaxCapacityOfPickDPViaDPBulkUpdatePageFor(String pickDp) {
+    if("XS".equalsIgnoreCase(pickDp)) {
+      dpBulkUpdatePage.maxPickCapacityXs.sendKeys(100L);
+    } else {
+      dpBulkUpdatePage.maxPickCapacityS.sendKeys(100L);
+    }
   }
 }
