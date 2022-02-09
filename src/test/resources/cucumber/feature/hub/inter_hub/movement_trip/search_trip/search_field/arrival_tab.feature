@@ -38,6 +38,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
+  @1
   Scenario: Search Trip on Search Field - Arrival Tab - Search Expected Departure Time (uid:c6b58cec-b1d8-46b8-b417-0396e7104101)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -101,8 +102,8 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     When Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "arrival" Trip Management based on the destination hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And Operator searches for the Trip Management based on its "expected_arrival_time" on arrival tab
-    Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right on arrival tab
+    And Operator searches for the Trip Management based on its "expected_arrival_time"
+    Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
   Scenario: Search Trip on Search Field - Arrival Tab - Search Driver (uid:092ae7a3-2960-4987-862c-b11d68101f50)
     Given Operator go to menu Shipper Support -> Blocked Dates

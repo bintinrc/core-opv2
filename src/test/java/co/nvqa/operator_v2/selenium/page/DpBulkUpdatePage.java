@@ -45,6 +45,12 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//input[@placeholder='Buffer']")
   public PageElement bufferCapacity;
 
+  @FindBy(xpath = "//span[text()='XS']/following-sibling::input")
+  public PageElement maxPickCapacityXs;
+
+  @FindBy(xpath = "//span[text()='S']/following-sibling::input")
+  public PageElement maxPickCapacityS;
+
   @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
   public PageElement canCustomerCollectEnable;
 
@@ -149,13 +155,25 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
     Assertions.assertThat(isErrorToastShown).as("Error Toast Shown").isTrue();
   }
 
-  public void verifyDownloadedCsvFile() {
+  public void verifyDownloadedCsvFile(String status) {
     String fileName = getLatestDownloadedFilename(DP_BULK_UPDATE_FILENAME_PATTERN);
+    boolean flag = false;
     verifyFileDownloadedSuccessfully(fileName);
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<DpBulkUpdateInfo> contentsOfCsv = DpBulkUpdateInfo.fromCsvFile(DpBulkUpdateInfo.class, pathName, true);
-    for(DpBulkUpdateInfo dpBulkUpdateInfo: contentsOfCsv) {
-      assertEquals("Status is Success", dpBulkUpdateInfo.getStatus(), "SUCCESS");
+    if("SUCCESS".equalsIgnoreCase(status)) {
+      for(DpBulkUpdateInfo dpBulkUpdateInfo: contentsOfCsv) {
+        assertEquals("Status is Success", dpBulkUpdateInfo.getStatus(), "SUCCESS");
+      }
+    } else {
+      for(DpBulkUpdateInfo dpBulkUpdateInfo: contentsOfCsv) {
+        if(dpBulkUpdateInfo.getStatus().equalsIgnoreCase("ERROR")) {
+          assertEquals("Status is Error", dpBulkUpdateInfo.getStatus(), "ERROR");
+          flag = true;
+          break;
+        }
+      }
+      assertTrue(flag);
     }
   }
 }

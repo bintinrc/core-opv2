@@ -13,7 +13,10 @@ public enum DpBulkUpdateType {
   VALID_INVALID("valid_invalid"),
   SPECIAL_CHAR("special_char"),
   BLANK("blank"),
-  SAME_PARTNER_3_DPS("same_partner_3_dps");
+  SAME_PARTNER_3_DPS("same_partner_3_dps"),
+  DP_DELETE_LATER("dp_delete_later"),
+  DP_DELETE_LATER_1("dp_delete_later_1"),
+  PICK_DP("pick_dp");
 
   final String val;
 
