@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
+import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
@@ -19,11 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -31,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.model.core.Order.STATUS_CANCELLED;
 import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
+import static co.nvqa.commons.model.core.hub.trip_management.MovementTripType.ARCHIVE_ARRIVAL_DATE;
+import static co.nvqa.commons.model.core.hub.trip_management.MovementTripType.ARCHIVE_DEPARTURE_DATE;
 
 /**
  * @author Tristania Siagian
@@ -44,23 +45,24 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
   private static final String FIELD_REQUIRED_ERROR_MESSAGE_XPATH = "//button[contains(@class,'ant-btn-primary')]";
   private static final String FILTER_OPTION_XPATH = "//div[div[div[input[@id='%s']]]]";
+  private static final String SELECT_FILTER_VALUE_XPATH = "//div[not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@class,'ant-select-item-option')]//div[text()= '%s']";
   private static final String TEXT_OPTION_XPATH = "//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']";
   private static final String DESTINATION_HUB_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[1]";
   private static final String ORIGIN_HUB_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[1]";
   private static final String NO_RESULT_XPATH = "//div[contains(@class,'NoResult')]";
-  private static final String DEPARTURE_CALENDAR_XPATH = "//span[@id='departureDate']";
-  private static final String ARRIVAL_CALENDAR_XPATH = "//span[@id='arrivalDate']";
-  private static final String CALENDAR_SELECTED_XPATH = "//td[@title='%s']";
-  private static final String NEXT_MONTH_BUTTON_XPATH = "//a[contains(@class,'next-month')]";
-  private static final String PREV_MONTH_BUTTON_XPATH = "//a[contains(@class,'prev-month')]";
-  private static final String TAB_XPATH = "//span[.='%s']/preceding-sibling::span";
+  private static final String DEPARTURE_CALENDAR_XPATH = "//input[@id='departureDate']";
+  private static final String ARRIVAL_CALENDAR_XPATH = "//input[@id='arrivalDate']";
+  private static final String CALENDAR_SELECTED_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//td[@title='%s']";
+  private static final String NEXT_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-next-icon')]";
+  private static final String PREV_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-prev-icon')]";
+  private static final String TAB_XPATH = "//span[contains(.,'%s')]/preceding-sibling::span";
   private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
   private static final String IN_TABLE_FILTER_INPUT_XPATH = "//tr//th[%d]//input";
   private static final String CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH = "//span[text()='%s']/preceding-sibling::label//input";
-  private static final String FIRST_ROW_INPUT_FILTERED_RESULT_XPATH = "//tbody[@class='ant-table-tbody']//tr[contains(@class, 'ant-table-row ')][1]//td[%d]";
-  private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]";
-  private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span";
-  private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[1]";
+  private static final String FIRST_ROW_INPUT_FILTERED_RESULT_XPATH = "//tbody[@class='ant-table-tbody']//tr[contains(@class, 'ant-table-row ')][1]//td[contains(@class, '%s')]";
+  private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[2]/td[contains(@class,'%s')]";
+  private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[2]/td[contains(@class,'%s')]";
+  private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[2]";
   private static final String FIRST_ROW_STATUS = "//tr[contains(@class,'ant-table-row')][1]//td[7]";
   private static final String OK_BUTTON_OPTION_TABLE_XPATH = "//button[contains(@class,'btn-primary')]";
   private static final String TRIP_ID_FIRST_ROW_XPATH = "//tr[contains(@class,'ant-table-row')][1]//td[2]";
@@ -69,19 +71,23 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String VIEW_ICON_ARRIVAL_ARCHIVE_XPATH = "//tr[contains(@class, 'ant-table-row')]/td[contains(@class, 'ant-table-cell-fix-right')]//a";
 
   private static final String ID_CLASS = "id";
-  private static final String ORIGIN_HUB_CLASS = "originHub";
+  private static final String ORIGIN_HUB_CLASS = "origin-hub-name";
   private static final String DESTINATION_HUB_CLASS = "destinationHub";
-  private static final String MOVEMENT_TYPE_CLASS = "movementType";
-  private static final String EXPECTED_DEPARTURE_TIME_CLASS = "expectedDepartureTime";
-  private static final String ACTUAL_DEPARTURE_TIME_CLASS = "actualDepartureTime";
-  private static final String EXPECTED_ARRIVAL_TIME_CLASS = "expectedArrivalTime";
-  private static final String ACTUAL_ARRIVAL_TIME_CLASS = "actualArrivalTime";
+  private static final String MOVEMENT_TYPE_CLASS = "movement-type";
+  private static final String EXPECTED_DEPARTURE_TIME_CLASS = "expected-departure-time";
+  private static final String ACTUAL_DEPARTURE_TIME_CLASS = "actual-start-time";
+  private static final String EXPECTED_ARRIVAL_TIME_CLASS = "expected-arrival-time";
+  private static final String ACTUAL_ARRIVAL_TIME_CLASS = "actual-arrival-time";
+  private static final String INPUT_DRIVERS_AREA_LABEL ="//input[@aria-label='input-drivers']";
   private static final String DRIVER_CLASS = "driver";
   private static final String STATUS_CLASS = "status";
   private static final String LAST_STATUS_CLASS = "lastStatus";
 
   private static final String SUCCESS_CANCEL_TRIP_TOAST = "//div[contains(@class,'notification-notice-message') and (contains(text(),'Trip %d cancelled'))]";
-  private static final String FIRST_ROW_TRACK = "//tr[1]//td[contains(@class,'track')]";
+  private static final String FIRST_ROW_TRACK = "//tr[2]//td[contains(@class,'track')]";
+
+  private static final DateTimeFormatter BE_FORMATTER = DateTimeFormatter
+          .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
 
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
@@ -104,19 +110,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
-  @FindBy(xpath = "//th[div[.='Movement Type']]")
+  @FindBy(xpath = "//th[contains(@class,'movement-type')]")
   public MovementTypeFilter movementTypeFilter;
 
-  @FindBy(xpath = "//th[div[.='Expected Departure Time']]")
+  @FindBy(xpath = "//th[contains(@class,'expected-departure-time')]")
   public TripTimeFilter expectedDepartTimeFilter;
 
-  @FindBy(xpath = "//th[div[.='Actual Departure Time']]")
+  @FindBy(xpath = "//th[contains(@class,'actual-start-time')]")
   public TripTimeFilter actualDepartTimeFilter;
 
-  @FindBy(xpath = "//th[div[.='Expected Arrival Time']]")
+  @FindBy(xpath = "//th[contains(@class,'expected-arrival-time')]")
   public TripTimeFilter expectedArrivalTimeFilter;
 
-  @FindBy(xpath = "//th[div[.='Actual Arrival Time']]")
+  @FindBy(xpath = "//th[contains(@class,'actual-arrival-time')]")
   public TripTimeFilter actualArrivalTimeFilter;
 
   @FindBy(xpath = LOAD_BUTTON_XPATH)
@@ -134,14 +140,17 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Complete']")
   public Button completeTripButton;
 
-  @FindBy(xpath = "//div[label[.='Origin Hub']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
-  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect originHubFilter;
+  @FindBy(xpath = "//input[@id='originHub']")
+  public AntSelect originHubFilter;
 
-  @FindBy(xpath = "//div[label[.='Destination Hub']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
-  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect destinationHubFilter;
+  @FindBy(xpath = "//input[@id='destinationHub']")
+  public AntSelect destinationHubFilter;
 
-  @FindBy(xpath = "//div[label[.='Movement Type']]/following-sibling::div//div[contains(@class, 'ant-select ')]")
-  public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect movementTypeFilterPage;
+  @FindBy(id = "movementType")
+  public AntSelect movementTypeFilterPage;
+
+  private static String movementType = "//input[@id='movementType']";
+  private static String destinationHub = "//input[@id='destinationHub']";
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -194,9 +203,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
     if (filterName.equalsIgnoreCase("originhub")) {
       originHubFilter.selectValue(filterValue);
     } else if (filterName.equalsIgnoreCase("movementtype")) {
-      movementTypeFilterPage.selectValue(filterValue);
+      movementTypeFilterPage.click();
+      sendKeysAndEnter(movementType, filterValue);
     } else if (filterName.equalsIgnoreCase("destinationhub")) {
-      destinationHubFilter.selectValue(filterValue);
+      TestUtils.findElementAndClick(destinationHub, "xpath", getWebDriver());
+      sendKeysAndEnter(destinationHub, filterValue);
     }
   }
 
@@ -264,19 +275,20 @@ public class TripManagementPage extends OperatorV2SimplePage {
     while (!isElementExistFast(f(CALENDAR_SELECTED_XPATH, tomorrowDate))) {
       click(NEXT_MONTH_BUTTON_XPATH);
     }
-    click(f(CALENDAR_SELECTED_XPATH, tomorrowDate));
-
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath(f(CALENDAR_SELECTED_XPATH, tomorrowDate))),
+            getWebDriver());
   }
 
   public void selectsDateArchiveTab(MovementTripType movementTripType, String date) {
 
     switch (movementTripType) {
       case ARCHIVE_DEPARTURE_DATE:
-        click(DEPARTURE_CALENDAR_XPATH);
+        TestUtils.findElementAndClick(DEPARTURE_CALENDAR_XPATH,"xpath", getWebDriver());
         break;
 
       case ARCHIVE_ARRIVAL_DATE:
-        click(ARRIVAL_CALENDAR_XPATH);
+        TestUtils.findElementAndClick(ARRIVAL_CALENDAR_XPATH,"xpath", getWebDriver());
         break;
 
       default:
@@ -286,8 +298,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     while (!isElementExistFast(f(CALENDAR_SELECTED_XPATH, date))) {
       click(PREV_MONTH_BUTTON_XPATH);
     }
-    click(f(CALENDAR_SELECTED_XPATH, date));
-
+    TestUtils.callJavaScriptExecutor("arguments[0].click();",
+            getWebDriver().findElement(By.xpath(f(CALENDAR_SELECTED_XPATH, date))),
+            getWebDriver());
   }
 
   public void clickTabBasedOnName(String tabName) {
@@ -304,7 +317,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
       TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
-
+    ShipmentInfo shipmentInfo = new ShipmentInfo();
     // Get the newest record
     int index = tripManagementDetailsData.getData().size() - 1;
 
@@ -327,13 +340,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case ORIGIN_HUB:
         filterValue = tripManagementDetailsData.getData().get(index).getOriginHubName();
         waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS), filterValue);
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS)+"//input", filterValue);
         break;
 
       case TRIP_ID:
         filterValue = tripManagementDetailsData.getData().get(index).getId().toString();
         waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ID_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS), filterValue);
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, ID_CLASS)+"//input", filterValue);
         break;
 
       case MOVEMENT_TYPE:
@@ -358,6 +371,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case ACTUAL_DEPARTURE_TIME:
         ZonedDateTime actualDepartureTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
+        String normalizedDepartDate = shipmentInfo.normalisedDate(actualDepartureTime.toString().replaceAll("Z", ":00.000Z"));
+        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + ".000Z";
+        actualDepartureTime = ZonedDateTime.parse(normalizedDepartDate, BE_FORMATTER);
         actualDepartTimeFilter.openButton.click();
         actualDepartTimeFilter.selectTime(actualDepartureTime);
         actualDepartTimeFilter.ok.click();
@@ -366,6 +382,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case EXPECTED_ARRIVAL_TIME:
         ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
+        String normalizedArrivalDate = shipmentInfo.normalisedDate(expectedArrivalTime.toString().replaceAll("Z", ":00.000Z"));
+        normalizedArrivalDate = normalizedArrivalDate.replace(" ", "T") + ".000Z";
+        expectedArrivalTime = ZonedDateTime.parse(normalizedArrivalDate, BE_FORMATTER);
+        expectedArrivalTimeFilter.scrollIntoView();
         expectedArrivalTimeFilter.openButton.click();
         expectedArrivalTimeFilter.selectDate(expectedArrivalTime);
         expectedArrivalTimeFilter.selectTime(expectedArrivalTime);
@@ -383,8 +403,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case DRIVER:
         filterValue = driverConverted(driverUsername);
-        waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, DRIVER_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DRIVER_CLASS), filterValue);
+        tripStatusFilter.scrollIntoView();
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, DRIVER_CLASS)+INPUT_DRIVERS_AREA_LABEL, filterValue);
         break;
 
       case STATUS:
@@ -477,7 +497,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
             tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
         actualValue = getText(
             f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
-        assertTrue("Expected Departure Time", actualValue.contains(expectedValue));
+        Assertions.assertThat(actualValue).as("Expected Departure Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -485,7 +505,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         expectedValue = expectedValueDateTime(
             tripManagementDetailsData.getData().get(index).getActualStartTime());
         actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
-        assertTrue("Actual Departure Time", actualValue.contains(expectedValue));
+        Assertions.assertThat(actualValue).as("Actual Departure Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -494,7 +514,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
             tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
         actualValue = getText(
             f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
-        assertTrue("Expected Arrival Time", actualValue.contains(expectedValue));
+        Assertions.assertThat(actualValue).as("Actual Arrival Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -509,7 +529,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case DRIVER:
         expectedValue = driverConverted(driverUsername);
         actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DRIVER_CLASS));
-        assertEquals("Driver", expectedValue, actualValue);
+        Assertions.assertThat(actualValue).as("Driver").isEqualTo(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -886,43 +906,45 @@ public class TripManagementPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[1]")
+    public final String hiddenDropdown = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]";
+
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[1]")
     public TextBox firstDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[1]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[1]//input)")
     public CheckBox firstDate;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[2]")
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")
     public TextBox secondDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[2]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[2]//input)")
     public CheckBox secondDate;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[3]")
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")
     public TextBox thirdDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[3]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[3]//input)")
     public CheckBox thirdDate;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[4]")
+    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")
     public TextBox fourthDateText;
 
-    @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[4]")
+    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[4]//input)")
     public CheckBox fourthDate;
 
-    @FindBy(xpath = ".//li[.='-']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='-']//input")
     public CheckBox none;
 
-    @FindBy(xpath = ".//li[.='00:00 - 06:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='00:00 - 06:00']//input")
     public CheckBox earlyMorning;
 
-    @FindBy(xpath = ".//li[.='06:00 - 12:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='06:00 - 12:00']//input")
     public CheckBox morning;
 
-    @FindBy(xpath = ".//li[.='12:00 - 18:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='12:00 - 18:00']//input")
     public CheckBox afterNoon;
 
-    @FindBy(xpath = ".//li[.='18:00 - 00:00']//input")
+    @FindBy(xpath = hiddenDropdown + "//li[.='18:00 - 00:00']//input")
     public CheckBox night;
 
     public void selectDate(ZonedDateTime dateTime) {
@@ -933,19 +955,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
         firstDate.check();
         return;
       }
-      if (isElementExistWait1Second("(.//div[p[.='Date']]//ul//li)[2]")) {
+      if (isElementExistWait1Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")) {
         if (secondDateText.getText().contains(stringDate)) {
           secondDate.check();
           return;
         }
       }
-      if (isElementExistWait0Second("(.//div[p[.='Date']]//ul//li)[3]")) {
+      if (isElementExistWait0Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")) {
         if (thirdDateText.getText().contains(stringDate)) {
           thirdDate.check();
           return;
         }
       }
-      if (isElementExistWait0Second("(.//div[p[.='Date']]//ul//li)[4]")) {
+      if (isElementExistWait0Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")) {
         if (fourthDateText.getText().contains(stringDate)) {
           fourthDate.check();
         }
@@ -996,10 +1018,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = ".//li[.='Air Haul']//input")
+    @FindBy(xpath = "//li[.='Air Haul']//input")
     public CheckBox airHaul;
 
-    @FindBy(xpath = ".//li[.='Land Haul']//input")
+    @FindBy(xpath = "//li[.='Land Haul']//input")
     public CheckBox landHaul;
 
     public void selectType(String type) {
