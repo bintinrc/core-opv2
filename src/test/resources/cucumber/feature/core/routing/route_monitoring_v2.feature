@@ -949,7 +949,7 @@ Feature: Route Monitoring V2
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {shipper-v4-legacy-id}           |
+      | shipperName | {filter-shipper-nam}             |
     And Operator removes the route from the created reservation
     And DB Operator verifies "{KEY_CREATED_RESERVATION.waypointId}" waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL

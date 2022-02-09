@@ -33,8 +33,8 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click View/Print -> View all PODs on Edit Order page
     Then Operator verify delivery POD details is correct on Edit Order page using date below:
-      | driver              | {ninja-driver-username} |
-      | verification method | NO_VERIFICATION         |
+      | driver              | {ninja-driver-name} |
+      | verification method | NO_VERIFICATION     |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
