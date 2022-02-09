@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteLogs
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteLogs @current
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Create a Single Route from Route Logs Page (uid:76362592-6316-4521-a835-dbe10a1b2f12)
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
@@ -30,7 +30,7 @@ Feature: Route Logs
       | tags           | {route-tag-name}                 |
     And DB Operator verifies created dummy waypoints
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Routing -> Route Logs
