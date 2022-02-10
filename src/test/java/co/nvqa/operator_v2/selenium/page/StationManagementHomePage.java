@@ -37,7 +37,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
   private static final String TILE_VALUE_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//div[@class='value']";
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
-  private static final String TILE_HAMBURGER_XPATH = "//div[contains(@class,'title')][.='%s']/following-sibling::div//*[@role='img']";
+  private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
