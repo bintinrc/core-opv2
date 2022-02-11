@@ -51,7 +51,7 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
   }
 
 
-  @And("^Operator verifies tagged order params on View Tagged Orders page:")
+  @And("Operator verifies tagged order params on View Tagged Orders page:")
   public void operatorVerifyTaggedOrderParams(Map<String, String> data) {
     data = resolveKeyValues(data);
     TaggedOrderParams expected = new TaggedOrderParams(data);
@@ -61,6 +61,7 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
         .isFalse();
     TaggedOrderParams actual = viewTaggedOrdersPage.taggedOrdersTable.readEntity(1);
     expected.compareWithActual(actual);
+    takesScreenshot();
   }
 
 }

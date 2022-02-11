@@ -96,6 +96,26 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
   }
 
+  @When("Operator adds following reservations to new Route Group {string}:")
+  public void addReservationsToNewRouteGroup(String groupName, List<Map<String, String>> data) {
+    groupName = resolveValue(groupName);
+    data.forEach(entry -> {
+      entry = resolveKeyValues(entry);
+      String id = entry.get("id");
+      createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_ID, id);
+      createRouteGroupsPage.txnRsvnTable.selectAllShown();
+    });
+    createRouteGroupsPage.addToRouteGroup.click();
+    createRouteGroupsPage.addToRouteGroupDialog.waitUntilVisible();
+    createRouteGroupsPage.addToRouteGroupDialog.createNewRouteGroup.click();
+    createRouteGroupsPage.addToRouteGroupDialog.newRouteGroup.setValue(groupName);
+    createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.clickAndWaitUntilDone();
+    RouteGroup routeGroup = new RouteGroup();
+    routeGroup.setName(groupName);
+    put(KEY_CREATED_ROUTE_GROUP, routeGroup);
+    putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
+  }
+
   @When("Operator adds following transactions to Route Group {string}:")
   public void addTransactionsToRouteGroup(String groupName, List<Map<String, String>> data) {
     groupName = resolveValue(groupName);
@@ -381,7 +401,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
       createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter.clearAll();
       createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter
-          .selectFilter(splitAndNormalize(value));
+          .strictlySelectFilter(splitAndNormalize(value));
     }
 
     value = data.get("timeslots");
@@ -391,7 +411,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
       createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter.clearAll();
       createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter
-          .selectFilter(splitAndNormalize(value));
+          .strictlySelectFilter(splitAndNormalize(value));
     }
 
     value = data.get("deliveryType");

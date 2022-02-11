@@ -4,9 +4,9 @@ import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 
 import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.ACTION_EDIT;
 
@@ -107,6 +107,7 @@ public class RouteCashInboundSteps extends AbstractSteps {
           routeCashInboundPage.editCodDialog.receiptNumber.setValue(
               routeCashInboundCodEdited.getReceiptNumber());
           routeCashInboundPage.editCodDialog.submit.click();
+          routeCashInboundPage.editCodDialog.waitUntilInvisible();
         })
     );
     put(KEY_ROUTE_CASH_INBOUND_COD_EDITED, routeCashInboundCodEdited);

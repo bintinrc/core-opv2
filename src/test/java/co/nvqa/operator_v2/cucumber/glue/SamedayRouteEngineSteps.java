@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -29,6 +31,8 @@ import java.util.TimeZone;
 @SuppressWarnings("WeakerAccess")
 @ScenarioScoped
 public class SamedayRouteEngineSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SamedayRouteEngineSteps.class);
 
   private SamedayRouteEnginePage samedayRouteEnginePage;
   private BulkyTrackingClient bulkyTrackingClient;
@@ -100,9 +104,9 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
 
   @When("^op 'Run Route Engine' without break on Same-Day Route Engine menu using data below:$")
   public void runRouteEngineWithoutBreak(DataTable dataTable) {
-    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
+    final RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
 
-    Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);
+    final Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);
     String hubName = mapOfData.get("hub");
     String routingAlgorithm = mapOfData.get("routingAlgorithm");
     String fleetType1OperatingHoursStart = mapOfData.get("fleetType1OperatingHoursStart");
@@ -142,21 +146,21 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
       String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
       samedayRouteEnginePage.downloadCsvOnWaypointDetails(trackingId);
     } catch (IOException ex) {
-      NvLogger.warnf("Error on method 'downloadWaypointDetail'. Cause: %s", ex.getMessage());
+      LOGGER.warn("Error on method 'downloadWaypointDetail'. Cause: {}", ex.getMessage());
     }
   }
 
-  @When("^op open unrouted detail dialog$")
+  @When("op open unrouted detail dialog")
   public void openUnroutedDetailDialog() {
     samedayRouteEnginePage.openUnroutedDetailDialog();
   }
 
-  @Then("^op verify the unrouted detail dialog$")
+  @Then("op verify the unrouted detail dialog")
   public void verifyUnroutedDetailDialog() {
     samedayRouteEnginePage.verifyUnroutedDetailDialog();
   }
 
-  @When("^op update timeslot on same day route engine$")
+  @When("op update timeslot on same day route engine")
   public void updateTimeslot() {
     Calendar cal = Calendar.getInstance();
     cal.setTimeZone(TimeZone.getTimeZone(
@@ -170,7 +174,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
     put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
   }
 
-  @Then("^op verify the updated timeslot$")
+  @Then("op verify the updated timeslot")
   public void verifyBulkyOrderTimeslotUpdated() {
     String asyncIdString = get(KEY_CREATED_ORDER_ASYNC_ID);
     String suggestedDate = get("new-suggested-date");

@@ -48,6 +48,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_OPTIMIZE_ROUTE;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_VERIFY_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_ROUTE_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_TAGS;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -68,7 +69,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage = new RouteLogsPage(getWebDriver());
   }
 
-  @When("^Operator create new route using data below:$")
+  @When("Operator create new route using data below:")
   public void operatorCreateNewRouteUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
@@ -84,6 +85,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.waitUntilLoaded();
       routeLogsPage.createRouteReact.click();
       routeLogsPage.createRouteDialog.waitUntilVisible();
+      routeLogsPage.waitUntilLoaded();
 
       CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
           .get(0);
@@ -213,7 +215,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator bulk edits details of created routes using data below:$")
+  @When("Operator bulk edits details of created routes using data below:")
   public void operatorBulkEditDetailsMultipleRoutesUsingDataBelow(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
@@ -305,7 +307,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator optimise created routes$")
+  @When("Operator optimise created routes")
   public void operatorOptimiseMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded(3);
@@ -356,7 +358,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator print passwords of created routes$")
+  @When("Operator print passwords of created routes")
   public void operatorPrintPasswordsOfMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -368,13 +370,14 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify printed passwords of selected routes info is correct$")
+  @Then("Operator verify printed passwords of selected routes info is correct")
   public void operatorVerifyPrintedPasswordsOfSelectedRoutesInfoIsCorrect() {
     List<RouteLogsParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
     routeLogsPage.verifyPrintedPasswordsOfSelectedRoutesInfoIsCorrect(listOfCreateRouteParams);
+    takesScreenshot();
   }
 
-  @When("^Operator print created routes$")
+  @When("Operator print created routes")
   public void operatorPrintMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -386,14 +389,15 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator verifies created routes are printed successfully$")
+  @When("Operator verifies created routes are printed successfully")
   public void operatorVerifyMultipleRoutesIsPrintedSuccessfully() {
     String latestFilenameOfDownloadedPdf = routeLogsPage.getLatestDownloadedFilename(
         "route_printout");
     routeLogsPage.verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
+    takesScreenshot();
   }
 
-  @When("^Operator archive routes on Route Logs page:$")
+  @When("Operator archive routes on Route Logs page:")
   public void operatorArchiveMultipleRoutes(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -404,9 +408,10 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.archiveSelectedRoutesDialog.waitUntilVisible();
       routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
     });
+    takesScreenshot();
   }
 
-  @When("^Operator delete routes on Route Logs page:$")
+  @When("Operator delete routes on Route Logs page:")
   public void operatorDeleteMultipleRoutes(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -419,7 +424,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator unarchive routes on Route Logs page:$")
+  @When("Operator unarchive routes on Route Logs page:")
   public void operatorUnarchiveMultipleRoutes(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -432,7 +437,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator save data of created routes on Route Logs page$")
+  @When("Operator save data of created routes on Route Logs page")
   public void operatorSaveRouteData() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -444,7 +449,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify routes are deleted successfully:$")
+  @Then("Operator verify routes are deleted successfully:")
   public void operatorVerifyMultipleRoutesIsDeletedSuccessfully(List<String> routeIds) {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
@@ -453,6 +458,7 @@ public class RouteLogsSteps extends AbstractSteps {
             .as("Route " + routeId + " was deleted").isTrue();
       });
     });
+    takesScreenshot();
   }
 
   @When("Operator set filter using data below and click 'Load Selection'")
@@ -481,8 +487,8 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
       }
       if (finalData.containsKey("hub")) {
-        routeLogsPage.hubFilter.clearAll();
-        routeLogsPage.hubFilter.selectFilter(splitAndNormalize(finalData.get("hub")));
+        routeLogsPage.hubFilter.clearValue();
+        routeLogsPage.hubFilter.selectValues(splitAndNormalize(finalData.get("hub")));
       }
       if (finalData.containsKey("driver")) {
         if (!routeLogsPage.driverFilter.isDisplayedFast()) {
@@ -524,7 +530,7 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.archivedRoutesFilter.selectFilter(finalData.get("archivedRoutes"));
       } else {
         if (routeLogsPage.archivedRoutesFilter.isDisplayedFast()) {
-          routeLogsPage.archivedRoutesFilter.deleteFilter();
+          routeLogsPage.archivedRoutesFilter.removeFilter();
         }
       }
     });
@@ -546,6 +552,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("List of selected filters")
           .containsExactlyInAnyOrderElementsOf(expected);
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Preset Name field in Save Preset dialog on Route Logs page is required")
@@ -556,6 +563,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Preset Name error text")
           .isEqualTo("This field is required");
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Cancel button in Save Preset dialog on Route Logs page is enabled")
@@ -566,6 +574,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Cancel button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Save button in Save Preset dialog on Route Logs page is enabled")
@@ -576,6 +585,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Save button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator clicks Save button in Save Preset dialog on Route Logs page")
@@ -591,6 +601,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Cancel button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator verifies Delete button in Delete Preset dialog on Route Logs page is enabled")
@@ -601,6 +612,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Delete button is enabled")
           .isTrue();
     });
+    takesScreenshot();
   }
 
   @When("Operator selects {string} preset in Delete Preset dialog on Route Logs page")
@@ -619,6 +631,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Selected preset")
           .isEqualTo(resolveValue(value));
     });
+    takesScreenshot();
   }
 
   @When("Operator clicks Delete button in Delete Preset dialog on Route Logs page")
@@ -702,6 +715,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .isEqualTo(finalExpected);
       put(KEY_ROUTES_FILTERS_PRESET_ID, presetId);
     });
+    takesScreenshot();
   }
 
   @When("Operator selects {string} Filter Preset on Route Logs page")
@@ -745,7 +759,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Hub filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.hubFilter.getSelectedValues())
+          assertions.assertThat(routeLogsPage.hubFilter.getValues())
               .as("Hub items")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hub")));
         }
@@ -763,7 +777,7 @@ public class RouteLogsSteps extends AbstractSteps {
       if (finalData.containsKey("zone")) {
         boolean isDisplayed = routeLogsPage.zoneFilter.isDisplayedFast();
         if (!isDisplayed) {
-          assertions.fail("Driver filter is not displayed");
+          assertions.fail("Zone filter is not displayed");
         } else {
           assertions.assertThat(routeLogsPage.zoneFilter.getSelectedValues())
               .as("Zone items")
@@ -773,15 +787,16 @@ public class RouteLogsSteps extends AbstractSteps {
       if (finalData.containsKey("archivedRoutes")) {
         boolean isDisplayed = routeLogsPage.archivedRoutesFilter.isDisplayedFast();
         if (!isDisplayed) {
-          assertions.fail("Driver filter is not displayed");
+          assertions.fail("Archived Routes filter is not displayed");
         } else {
           assertions.assertThat(routeLogsPage.archivedRoutesFilter.getSelectedValue())
-              .as("Zone items")
+              .as("Archived Routes state")
               .isEqualTo(Boolean.parseBoolean(data.get("archivedRoutes")));
         }
       }
     });
     assertions.assertAll();
+    takesScreenshot();
   }
 
   @When("Operator verifies Save button in Save Preset dialog on Route Logs page is disabled")
@@ -792,6 +807,7 @@ public class RouteLogsSteps extends AbstractSteps {
           .as("Save button is enabled")
           .isFalse();
     });
+    takesScreenshot();
   }
 
   @When("Operator enters {string} Preset Name in Save Preset dialog on Route Logs page")
@@ -878,6 +894,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
     assertEquals(f("Operator does not redirect to page %s.", redirectUrl), redirectUrl,
         actualCurrentUrl);
+    takesScreenshot();
   }
 
   @When("Operator opens Edit Details dialog for route {string}")
@@ -893,8 +910,11 @@ public class RouteLogsSteps extends AbstractSteps {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
     routeLogsPage.inFrame(() -> {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.selectTag.selectValue(resolveValue(newTag));
-      routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
+      routeLogsPage.routesTable.clickColumn(1, COLUMN_TAGS);
+      routeLogsPage.editTagsDialog.waitUntilVisible();
+      routeLogsPage.editTagsDialog.tags.selectValue(newTag);
+      routeLogsPage.editTagsDialog.updateTags.click();
+      routeLogsPage.waitUntilLoaded(3);
     });
   }
 
@@ -903,8 +923,11 @@ public class RouteLogsSteps extends AbstractSteps {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
     routeLogsPage.inFrame(() -> {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.selectTag.selectValue(resolveValue(tag));
-      routeLogsPage.click("//div[contains(@class,'DisplayStats')]"); //to close tag selection popup
+      routeLogsPage.routesTable.clickColumn(1, COLUMN_TAGS);
+      routeLogsPage.editTagsDialog.waitUntilVisible();
+      routeLogsPage.editTagsDialog.tags.removeSelected(tag);
+      routeLogsPage.editTagsDialog.updateTags.click();
+      routeLogsPage.waitUntilLoaded(3);
     });
   }
 
@@ -933,6 +956,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
     routeLogsPage.waitUntilPageLoaded();
+    pause2s();
   }
 
   @And("Operator filters route by {string} Route ID on Route Logs page")
@@ -950,6 +974,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams expected = new RouteLogsParams(resolveKeyValues(data));
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, expected.getId());
+      pause2s();
       RouteLogsParams actual = routeLogsPage.routesTable.readEntity(1);
       expected.compareWithActual(actual);
     });
@@ -1104,11 +1129,13 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifySelectionErrors(String process, List<Map<String, String>> data) {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.selectionErrorDialog.waitUntilVisible();
-      assertEquals("Process", resolveValue(process),
-          routeLogsPage.selectionErrorDialog.process.getText().replace("Process", "").trim());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText())
+          .as("Process")
+          .isEqualTo(resolveValue(process));
 
-      assertEquals("Number Of routes", data.size(),
-          routeLogsPage.selectionErrorDialog.routeIds.size());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds.size())
+          .as("Number Of routes")
+          .isEqualTo(data.size());
 
       for (int i = 0; i < data.size(); i++) {
         Map<String, String> expected = resolveKeyValues(data.get(i));

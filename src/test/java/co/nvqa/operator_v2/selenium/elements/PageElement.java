@@ -200,7 +200,7 @@ public class PageElement extends SimplePage {
 
   public boolean waitUntilVisible(int timeout) {
     try {
-      waitUntilVisibilityOfElementLocated(getWebElement(), timeout);
+      waitUntilVisibilityOfElementLocated(webElement, timeout);
       return true;
     } catch (Throwable ex) {
       return false;

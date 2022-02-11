@@ -36,6 +36,12 @@ public class SsbTemplatePage extends SimpleReactPage {
   @FindBy(xpath = "//button[@label='Create New Template']")
   private Button createNewTemplateBtn;
 
+  @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div")
+  public PageElement toastErrorTopText;
+
+  @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']")
+  public PageElement toastErrorBottomText;
+
   private static String XPATH_HEADER_COLUMN = "//div[text()='%s']";
   private static String XPATH_HEADER_COLUMN_DROP_AREA = "//div[@data-testid='selected-drop-area']";
 

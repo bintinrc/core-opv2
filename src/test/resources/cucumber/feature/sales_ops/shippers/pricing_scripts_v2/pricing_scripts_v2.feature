@@ -27,7 +27,7 @@ Feature: Pricing Scripts V2
     And Operator refresh page
     Then Operator verify the Script is linked successfully
     # create new shipper
-    And API Operator create new normal shipper
+    And API Operator create new 'normal' shipper
     When Operator link Script to Shipper with ID and Name = "{KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully

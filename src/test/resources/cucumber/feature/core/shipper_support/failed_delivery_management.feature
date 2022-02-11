@@ -453,7 +453,7 @@ Feature: Failed Delivery Management
       | internalNotes    | Internal notes created by OpV2 automation on {gradle-current-date-yyyy-MM-dd}. |
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd}                                                 |
       | timeSlot         | 3PM - 6PM                                                                      |
-      | address.name     | Compassvale Drive                                                              |
+      | address.name     | BLOCK 212A COMPASSVALE DRIVE                                                   |
       | address.country  | Singapore                                                                      |
       | address.city     | Singapore                                                                      |
       | address.address1 | BLOCK 212A COMPASSVALE DRIVE                                                   |

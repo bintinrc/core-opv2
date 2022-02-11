@@ -12,6 +12,7 @@ Feature: Corporate Shipper
     # create a pending pricing profile for corporate shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     # edit pending pricing profile for corporate shipper
@@ -29,6 +30,7 @@ Feature: Corporate Shipper
     # create a pending pricing profile
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     # edit pending pricing profile
@@ -50,11 +52,14 @@ Feature: Corporate Shipper
      # create a pending pricing profile for corporate shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
      # create a pending pricing profile for corporate sub shipper
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
         # edit pending pricing profile of corporate shipper
@@ -76,11 +81,14 @@ Feature: Corporate Shipper
     # create a pending pricing profile for corporate shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
      # create a pending pricing profile for corporate sub shipper
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
         # edit pending pricing profile of corporate shipper
@@ -101,11 +109,14 @@ Feature: Corporate Shipper
      # create a pending pricing profile for corporate shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
      # create a pending pricing profile for corporate sub shipper
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{sub-shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
         # edit pending pricing profile of corporate sub shipper
@@ -131,6 +142,7 @@ Feature: Corporate Shipper
      # create a pending pricing profile for corporate shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-sop-corp-v4-dummy-pricing-profile-Delivery-Discount-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     # verify pricing profile of corporate sub shipper

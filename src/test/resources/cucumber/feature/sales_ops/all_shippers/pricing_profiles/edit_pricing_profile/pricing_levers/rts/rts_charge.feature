@@ -7,13 +7,14 @@ Feature: Pricing Levers - RTS Charge
       # create a pending pricing profile for shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - RTS Charge, From Surcharge to Discount (uid:0533c03b-3345-4592-8aab-47afc28c4d40)
     # add pending pricing profile for shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2}} |
-    # edit pending pricing profile for shipper
+      # edit pending pricing profile for shipper
     When Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
@@ -47,7 +48,7 @@ Feature: Pricing Levers - RTS Charge
     # add pending pricing profile for shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2}} |
-    # edit pending pricing profile for shipper
+     # edit pending pricing profile for shipper
     When Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
@@ -77,7 +78,7 @@ Feature: Pricing Levers - RTS Charge
     # add pending pricing profile for shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2}} |
-    # edit pending pricing profile for shipper
+      # edit pending pricing profile for shipper
     When Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:

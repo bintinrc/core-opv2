@@ -196,12 +196,14 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
     public static final String COLUMN_SHIPPER_ADDRESS = "address";
     public static final String COLUMN_SHIPPER_NAME = "name";
     public static final String COLUMN_SHIPPER_ID = "legacyId";
+    public static final String COLUMN_IS_ACTIVE = "isActive";
 
     public static final Map<String, String> COLUMN_IDS_BY_NAME = ImmutableMap.of(
         "creation date", COLUMN_CREATION_DATE,
         "shipper address", COLUMN_SHIPPER_ADDRESS,
         "shipper name", COLUMN_SHIPPER_NAME,
-        "shipper id", COLUMN_SHIPPER_ID
+        "shipper id", COLUMN_SHIPPER_ID,
+        "is active", COLUMN_IS_ACTIVE
     );
 
     private static final Map<String, String> DIRECTIONS = ImmutableMap.of(
@@ -217,6 +219,7 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
           .put(COLUMN_SHIPPER_ADDRESS, "address")
           .put(COLUMN_SHIPPER_NAME, "name")
           .put(COLUMN_SHIPPER_ID, "legacyId")
+          .put(COLUMN_IS_ACTIVE, "isActive")
           .build()
       );
       setEntityClass(ShipperInfo.class);

@@ -38,6 +38,7 @@ public class StationCODReportSteps extends AbstractSteps {
     for (String label : labels) {
       stationCODReportPage.verifyFieldInCODReport(label);
     }
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the following buttons are displayed in disabled state")
@@ -47,6 +48,7 @@ public class StationCODReportSteps extends AbstractSteps {
     for (String button : buttons) {
       stationCODReportPage.verifyButtonDisplayedInDisabledState(button);
     }
+    takesScreenshot();
   }
 
   @When("Operator chooses start and end date on transaction end date using the following data:")
@@ -71,6 +73,7 @@ public class StationCODReportSteps extends AbstractSteps {
   @Then("Operator verifies that tabs - Details and Summary are displayed after the search")
   public void operator_verifies_that_tabs_Details_and_Summary_are_displayed_after_the_search() {
     stationCODReportPage.verifyDetailsAndSummaryTabsDisplayed();
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the following columns are displayed under {string} tab")
@@ -78,6 +81,7 @@ public class StationCODReportSteps extends AbstractSteps {
       DataTable columns) {
     List<String> columnNames = columns.asList();
     stationCODReportPage.verifyColumnsInTableDisplayed(tabName, columnNames);
+    takesScreenshot();
   }
 
   @When("Operator navigates to summary tab in the result grid")
@@ -117,6 +121,7 @@ public class StationCODReportSteps extends AbstractSteps {
       expectedDetails.put("COD Amount", codAmt);
     }
     stationCODReportPage.verifyResultGridContent(expectedDetails, actualDetails);
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the COD amount: {string} is separated by comma for thousands and by dot for decimals")
@@ -133,6 +138,7 @@ public class StationCODReportSteps extends AbstractSteps {
     }
     assertTrue("Assert that COD amount displays in the result grid",
         actualDetails.containsKey("COD Amount"));
+    takesScreenshot();
   }
 
 
@@ -151,18 +157,21 @@ public class StationCODReportSteps extends AbstractSteps {
     }
     assertTrue("Assert that COD amount displays in the result grid",
         actualDetails.containsKey("COD Amount"));
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the COD collected amount is separated by comma for thousands and by dot for decimals")
   public void operator_verifies_that_the_COD_collected_amount_is_separated_by_comma_for_thousands_and_by_dot_for_decimals() {
     NvCountry countryCd = NvCountry.fromString(COUNTRY_CODE);
     stationCODReportPage.verifySeparatorsInCashCollected(countryCd);
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the COD collected amount is separated by dot for thousands and by comma for decimals")
   public void operator_verifies_that_the_COD_collected_amount_is_separated_by_dot_for_thousands_and_by_comma_for_decimals() {
     NvCountry countryCd = NvCountry.fromString(COUNTRY_CODE);
     stationCODReportPage.verifySeparatorsInCashCollected(countryCd);
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the following columns are displayed under cash collected table")
@@ -170,6 +179,7 @@ public class StationCODReportSteps extends AbstractSteps {
       DataTable columns) {
     List<String> expectedColumns = columns.asList();
     stationCODReportPage.verifyColumnsInCashCollectedSummary(expectedColumns);
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the (updated )driver name: {string} is displayed in the grid")
@@ -179,6 +189,7 @@ public class StationCODReportSteps extends AbstractSteps {
     Map<String, String> expectedDetails = new HashMap<>();
     expectedDetails.put("Driver Name", resolveValue(driverFirstName));
     stationCODReportPage.verifyResultGridContent(expectedDetails, actualDetails);
+    takesScreenshot();
   }
 
   @When("downloads station cod report in CSV file format")
@@ -205,6 +216,7 @@ public class StationCODReportSteps extends AbstractSteps {
             asserts.get());;
       }
     });
+    takesScreenshot();
   }
 
   @Then("Operator verifies that COD amount is rounded off to two decimal in CSV downloaded from {string} tab")
@@ -220,6 +232,7 @@ public class StationCODReportSteps extends AbstractSteps {
     }
     Assert.assertTrue("Assert that the downloaded CSV contains COD Amount",
         actualDetails.containsKey("COD Amount"));
+    takesScreenshot();
   }
 
 }

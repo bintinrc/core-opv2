@@ -83,9 +83,17 @@ Feature: Edit Order Details
     Then Operator verifies that success toast displayed:
       | top                | Delivery Details Updated |
       | waitUntilInvisible | true                     |
-    Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
-    And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
-#    And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE ADDRESS                                                                                                                                                                                                                       |
+      | description | ^To Address 1.*116 Keng Lee Rd.*To Address 2.*15.*To Postcode changed.*308402.*To City updated.*Singapore.*To Country.*Singapore.*To Latitude changed.*to 1.31401544758955.*To Longitude changed.*103.844767199536.*Is Rts changed.* |
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE CONTACT INFORMATION                                                                                                       |
+      | description | ^To Name changed.*to test sender name.*To Email changed.*to test@mail\.com.*To Contact changed.*\+9727894434.*.*Is Rts changed.* |
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE SLA                                                                                                                        |
+      | description | Delivery End Time changed from {gradle-next-3-working-day-yyyy-MM-dd} 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
     And Operator verifies Delivery Details are updated on Edit Order Page
     And Operator verifies Delivery Transaction is updated on Edit Order Page
     And DB Operator verifies delivery info is updated in order record
@@ -95,16 +103,14 @@ Feature: Edit Order Details
       | 12 |
     And DB Operator verify Delivery '17' order_events record for the created order
     And DB Operator verify Delivery transaction record of order "KEY_CREATED_ORDER_ID":
-      | address1  | {KEY_CREATED_ORDER.toAddress1}                  |
-      | address2  | {KEY_CREATED_ORDER.toAddress2}                  |
-      | postcode  | {KEY_CREATED_ORDER.toPostcode}                  |
-      | city      | {KEY_CREATED_ORDER.toCity}                      |
-      | country   | {KEY_CREATED_ORDER.toCountry}                   |
-      | name      | {KEY_CREATED_ORDER.toName}                      |
-      | email     | {KEY_CREATED_ORDER.toEmail}                     |
-      | contact   | {KEY_CREATED_ORDER.toContact}                   |
-      | startTime | {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 |
-      | endTime   | {gradle-next-4-working-day-yyyy-MM-dd} 12:00:00 |
+      | address1 | {KEY_CREATED_ORDER.toAddress1} |
+      | address2 | {KEY_CREATED_ORDER.toAddress2} |
+      | postcode | {KEY_CREATED_ORDER.toPostcode} |
+      | city     | {KEY_CREATED_ORDER.toCity}     |
+      | country  | {KEY_CREATED_ORDER.toCountry}  |
+      | name     | {KEY_CREATED_ORDER.toName}     |
+      | email    | {KEY_CREATED_ORDER.toEmail}    |
+      | contact  | {KEY_CREATED_ORDER.toContact}  |
     And DB Operator verify Delivery waypoint record is updated
 
   Scenario: Operator Edit Instructions of an Order on Edit Order Page (uid:a5de8db3-f5a2-4bda-8984-96794753d26c)

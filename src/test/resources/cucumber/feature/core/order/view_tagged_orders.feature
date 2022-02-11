@@ -103,27 +103,16 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Staging                         |
 
-  Scenario: View Tagged Orders - On Hold, No Route Id,  No Attempt, No Inbound Days (uid:50e91935-b501-47f7-9877-43cf62e306ea)
+  Scenario: View Tagged Orders - On Hold, No Route Id, No Attempt, No Inbound Days (uid:50e91935-b501-47f7-9877-43cf62e306ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
       | {order-tag-id} |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT                  |
-      | investigatingDepartment | Fleet (First Mile)                  |
-      | investigatingHub        | {hub-name}                          |
-      | ticketType              | DAMAGED                             |
-      | ticketSubType           | IMPROPER PACKAGING                  |
-      | parcelLocation          | DAMAGED RACK                        |
-      | liability               | Shipper                             |
-      | damageDescription       | GENERATED                           |
-      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED |
-      | custZendeskId           | 1                                   |
-      | shipperZendeskId        | 1                                   |
-      | ticketNotes             | GENERATED                           |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | On Hold              |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |

@@ -54,8 +54,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderType | Normal,Return |
@@ -75,8 +75,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <service_type> |
@@ -203,8 +203,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <service_type> |
@@ -255,8 +255,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                                       |
-      | Shipper       | {shipper-v4-corporate-subshipper-legacy-id} |
+      | Creation Time | Today                                      |
+      | Shipper       | {filter-shipper-name-corporate-subshipper} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <serviceType> |
@@ -283,8 +283,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                                       |
-      | Shipper       | {shipper-v4-corporate-subshipper-legacy-id} |
+      | Creation Time | Today                                      |
+      | Shipper       | {filter-shipper-name-corporate-subshipper} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <serviceType> |
@@ -311,8 +311,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                                       |
-      | Shipper       | {shipper-v4-corporate-subshipper-legacy-id} |
+      | Creation Time | Today                                      |
+      | Shipper       | {filter-shipper-name-corporate-subshipper} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | <serviceType> |
@@ -342,8 +342,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                                       |
-      | Shipper       | {shipper-v4-corporate-subshipper-legacy-id} |
+      | Creation Time | Today                                      |
+      | Shipper       | {filter-shipper-name-corporate-subshipper} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | Corporate Manual AWB |
@@ -355,7 +355,7 @@ Feature: Create Route Groups - Transaction Filters
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
 
-  Scenario Outline: Operator Filter Granular Order Status on Create Route Group - Transaction Filters - <granularStatus> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Granular Order Status on Create Route Group - Transaction Filters - Granular Order Status = <granularStatus> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
@@ -367,8 +367,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | granularOrderStatus | <granularStatus> |
@@ -402,8 +402,8 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      | uid:e3b28ae3-5cc2-4a69-b5da-0c8a5f3c3a56 |
       | Van en-route to pickup               | Parcel      | uid:e5c5048d-2823-4521-a054-4b81033c1d72 |
 
-  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - <parcelSize> (<hiptest-uid>)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+  Scenario Outline: Operator Filter Parcel Size on Create Route Group - Transaction Filters - Parcel Size = <parcelSize> (<hiptest-uid>)
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"dimensions":{"size":"<size>","volume":1.0,"weight":4.0},"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -411,8 +411,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | parcelSize | <parcelSize> |
@@ -436,8 +436,8 @@ Feature: Create Route Groups - Transaction Filters
       | Small       | S    | uid:20988608-803f-4479-b50d-d928c4feefc8 |
       | Extra Small | XS   | uid:10a6796a-66e3-4801-a1d2-78684e848054 |
 
-  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - <timeslots> (<hiptest-uid>)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group - Transaction Filters - Timeslot = <timeslots> (<hiptest-uid>)
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"<startTime>","end_time":"<endTime>"}}} |
@@ -445,8 +445,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | timeslots | <timeslots> |
@@ -462,7 +462,7 @@ Feature: Create Route Groups - Transaction Filters
       | 3-6pm     | 15:00     | 18:00   | uid:9de49540-44bb-4764-a560-fd4379ae001e |
       | 6-10pm    | 18:00     | 22:00   | uid:f5ec2f7e-18c4-47dd-96ed-e85ae16997a1 |
       | 9-12pm    | 09:00     | 12:00   | uid:b34c1af0-64b0-4747-81fb-9b784b167741 |
-      | Anytime   | 09:00     | 21:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
+      | Anytime   | 09:00     | 22:00   | uid:5a23b593-47cb-4867-bd09-0eb8c6d9ed91 |
       | Day       | 09:00     | 18:00   | uid:a408168d-f299-4366-a703-3e179b996d63 |
       | Night     | 18:00     | 22:00   | uid:90816330-9865-4f8c-9e22-5530c56e9668 |
 
@@ -476,8 +476,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Cancelled |
@@ -511,11 +511,12 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Fail |
+    And Operator click Load Selection on Create Route Group page
     Then Operator verifies Transaction record on Create Route Group page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
@@ -539,8 +540,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Success |
@@ -567,8 +568,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Pending |
@@ -595,8 +596,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | transactionStatus | Staging |
@@ -614,7 +615,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Staging                                                  |
 
-  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - <ppDdLeg> (<hiptest-uid>)
+  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group - Transaction Filters - PP/DD Leg = <ppDdLeg> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -623,8 +624,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | ppDdLeg | <ppDdLeg> |
@@ -640,7 +641,7 @@ Feature: Create Route Groups - Transaction Filters
       | PP      | PICKUP   | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
       | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | uid:a11f812d-673d-4215-991b-db42b3e7daa1 |
 
-  Scenario: Operator Filter Order Weight on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Weight on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -649,8 +650,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | weight | == 4.0 |
@@ -668,7 +669,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order Priority Level on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Priority Level on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -680,8 +681,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | priorityLevel | == 58 |
@@ -693,7 +694,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -703,8 +704,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | zone | {zone-full-name-3} |
@@ -716,7 +717,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order DNR Group on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order DNR Group on Create Route Group - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -725,8 +726,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today                  |
-      | Shipper       | {shipper-v4-legacy-id} |
+      | Creation Time | Today                 |
+      | Shipper       | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     Given Operator add following filters on Transactions Filters section on Create Route Group page:
       | dnrGroup | Normal |

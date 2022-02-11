@@ -3,8 +3,9 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -15,8 +16,9 @@ import org.openqa.selenium.support.PageFactory;
 public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private static final String CELL_LOCATOR_PATTERN = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
-  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='actions']//button[.//*[@data-icon='%s']]";
-  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//input";
+  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='%s']";
+  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input]";
+  private static final String COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'ant-select')]";
 
   @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
   public PageElement noResultsFound;
@@ -80,21 +82,21 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnId);
+    String xpath = f(COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN, columnId);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    String currentValue = getValue(xpath);
-    click(xpath);
-    if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
-      StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < currentValue.length(); i++) {
-        sb.append(Keys.BACK_SPACE);
+    if (isElementExistWait0Second(xpath)) {
+      AntSelect2 select = new AntSelect2(getWebDriver(), xpath);
+      select.selectValue(value);
+    } else {
+      xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnId);
+      if (StringUtils.isNotBlank(tableLocator)) {
+        xpath = tableLocator + xpath;
       }
-      sb.append(value);
-      sendKeys(xpath, sb.toString());
-    } else if (StringUtils.isEmpty(currentValue)) {
-      sendKeys(xpath, value);
+      AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+      input.scrollIntoView();
+      input.setValue(value);
     }
     return this;
   }
@@ -105,14 +107,9 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
-      String currentValue = getValue(xpath);
-      if (StringUtils.isNotEmpty(currentValue)) {
-        click(xpath);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < currentValue.length(); i++) {
-          sb.append(Keys.BACK_SPACE);
-        }
-        sendKeys(xpath, sb.toString());
+      if (isElementExistWait0Second(xpath)) {
+        AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+        input.clear();
       }
     });
   }
@@ -134,6 +131,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     }
     if (isElementExistFast(xpath + "//a")) {
       click(xpath + "//a");
+    } else if (isElementExistWait0Second(xpath + "//input")) {
+      click(xpath + "//input");
     } else {
       click(xpath);
     }

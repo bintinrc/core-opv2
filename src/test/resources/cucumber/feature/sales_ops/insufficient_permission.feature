@@ -60,10 +60,24 @@ Feature: All test cases related to insufficient permission for Finance related p
       | bottom | Error Message: Access denied. Insufficient Permissions. Required any one of the scopes : SHIPPER_GET_SHIPPER,ALL_ACCESS,INTERNAL_SERVICE |
 
   @KillBrowser @User1
-  Scenario: Search by Uploading CSV file - Insufficient Permissions (uid:1bf9760d-8c0f-4579-bf47-914c2d97deda)
+  Scenario: Create Pricing Script - Insufficient Permissions (uid:88fc357a-d47d-45c8-bac3-6d33f8dc7c12)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     Then Operator waits for 2 seconds
     Then Operator clicks Create Draft button
     Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
-      | top    | Network Request Error                                                                                                                                               |
-      | bottom | Access denied. Insufficient Permissions. Required any one of the scopes : OPERATOR_ADMIN,ADDRESSING_ADMIN,ADDRESSING_VIEW_PRICING_ZONES,ALL_ACCESS,INTERNAL_SERVICE |
+      | top    | Network Request Error                                                                                                                                                       |
+      | bottom | Access token verification failed: insufficient permissions (required scopes: INTERNAL_SERVICE, ADDRESSING_VIEW_PRICING_ZONES, ALL_ACCESS, OPERATOR_ADMIN, ADDRESSING_ADMIN) |
+
+  @KillBrowser @User1
+  Scenario: Create New Template - Insufficient Access (uid:bed23b59-043e-4284-a0a6-5de2bfdca2ab)
+    Given Operator go to menu Finance Tools -> SSB Template
+    When SSB Template page is loaded
+    And Operator clicks Create Template button
+    And SSB Report Template Editor page is loaded
+    Then Operator creates SSB template with below data
+      | templateName        | Dummy-Template-{gradle-current-date-yyyyMMddHHmmsss}             |
+      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss} |
+      | selectHeaders       | Legacy Shipper ID                                                |
+    Then Operator verifies that error toast is displayed on SSB Template page:
+      | top    | Network Request Error                                                                                                                 |
+      | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [FINANCE_ADMIN ALL_ACCESS INTERNAL_SERVICE] |

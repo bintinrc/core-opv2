@@ -7,7 +7,6 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Route Logs Page (uid:f259e5b1-5e98-4672-9b9f-ebf34bd3470f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
@@ -20,12 +19,11 @@ Feature: Route Logs - Preset Filters
       | Route Date: {gradle-previous-1-day-yyyy-MM-dd} to {gradle-current-date-yyyy-MM-dd} |
       | Hub: (1) {hub-name}                                                                |
       | Driver: (1) {ninja-driver-name}                                                    |
-      | Archived Routes: Show                                                              |
+      | Archived Routes: Show archived routes                                              |
     And Operator verifies Preset Name field in Save Preset dialog on Route Logs page is required
     And Operator verifies Cancel button in Save Preset dialog on Route Logs page is enabled
     And Operator verifies Save button in Save Preset dialog on Route Logs page is disabled
     When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Route Logs page
-    Then Operator verifies Preset Name field in Save Preset dialog on Route Logs page has green checkmark on it
     And Operator verifies Save button in Save Preset dialog on Route Logs page is enabled
     When Operator clicks Save button in Save Preset dialog on Route Logs page
     Then Operator verifies that success react notification displayed:
@@ -48,7 +46,7 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Route Logs Page (uid:6707eccc-3717-43d4-8f5f-a582ee833507)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
@@ -69,7 +67,7 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page (uid:d2232710-301a-4be4-ad8c-06c00507ec5b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
@@ -91,7 +89,7 @@ Feature: Route Logs - Preset Filters
       | Route Date: {gradle-previous-2-day-yyyy-MM-dd} to {gradle-previous-1-day-yyyy-MM-dd} |
       | Hub: (1) {hub-name-2}                                                                |
       | Driver: (1) {ninja-driver-2-name}                                                    |
-      | Archived Routes: Show                                                                |
+      | Archived Routes: Show archived routes                                                |
     When Operator enters "{KEY_ROUTES_FILTERS_PRESET_NAME}" Preset Name in Save Preset dialog on Route Logs page
     Then Operator verifies help text "This name is already taken. Click update to overwrite the preset?" is displayed in Save Preset dialog on Route Logs page
     When Operator clicks Update button in Save Preset dialog on Rout Logs page
@@ -110,7 +108,7 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Update Preset button on Route Logs Page (uid:be052c39-d986-4205-8b7f-c3e47005d887)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
@@ -143,7 +141,7 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on Route Logs Page (uid:c5baeef5-610b-4f1c-af63-61206cacd78d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-dd/MM/yyyy}           |
@@ -158,7 +156,7 @@ Feature: Route Logs - Preset Filters
     Then Operator verifies Cancel button in Delete Preset dialog on Route Logs page is enabled
     And Operator verifies Delete button in Delete Preset dialog on Route Logs page is enabled
     When Operator verifies "{KEY_ROUTES_FILTERS_PRESET_NAME}" preset is selected in Delete Preset dialog on Route Logs page
-    Then Operator verifies "Preset {KEY_ROUTES_FILTERS_PRESET_NAME} will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Route Logs page
+    Then Operator verifies "Preset {KEY_ROUTES_FILTERS_PRESET_ID} will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Route Logs page
     When Operator clicks Delete button in Delete Preset dialog on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top    | 1 filter preset deleted            |

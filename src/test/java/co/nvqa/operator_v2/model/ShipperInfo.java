@@ -12,6 +12,7 @@ public class ShipperInfo extends DataEntity<ShipperInfo> {
   private String address;
   private String name;
   private Long legacyId;
+  private String isActive;
 
   public ShipperInfo() {
   }
@@ -56,6 +57,14 @@ public class ShipperInfo extends DataEntity<ShipperInfo> {
     setLegacyId(Long.parseLong(legacyId));
   }
 
+  public String getIsActive() {
+    return isActive;
+  }
+
+  public void setIsActive(String isActive) {
+    this.isActive = isActive;
+  }
+
   @Override
   public void fromCsvLine(String csvLine) {
     String[] values = splitCsvLine(csvLine);
@@ -63,5 +72,6 @@ public class ShipperInfo extends DataEntity<ShipperInfo> {
     setAddress(getValueIfIndexExists(values, 2));
     setName(getValueIfIndexExists(values, 3));
     setLegacyId(getValueIfIndexExists(values, 4));
+    setIsActive(getValueIfIndexExists(values, 5));
   }
 }

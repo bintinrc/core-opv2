@@ -340,6 +340,10 @@ public class OperatorV2SimplePage extends SimplePage {
     return getToastText("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
   }
 
+  public String getAntTopText() {
+    return getToastText("//div[@class='ant-message-notice']//span[2]");
+  }
+
   public WebElement getToastBottom() {
     String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']";
     return waitUntilVisibilityOfElementLocated(xpathExpression);
@@ -1185,12 +1189,10 @@ public class OperatorV2SimplePage extends SimplePage {
   }
 
   public boolean isTableEmpty(String tableXpath) {
-    String xpath = null;
+    String xpath = tableXpath + "//h5[text()='No Results Found']";
 
     try {
-      xpath = tableXpath + "//h5[text()='No Results Found']";
-      WebElement webElement = findElementByXpath(xpath, FAST_WAIT_IN_SECONDS);
-      return webElement != null && webElement.isDisplayed();
+      return isElementVisible(xpath, FAST_WAIT_IN_SECONDS);
     } catch (TimeoutException ex) {
       NvLogger.warnf("Table is not empty. XPath: %s", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(), "Table is not empty. XPath: %s", xpath);

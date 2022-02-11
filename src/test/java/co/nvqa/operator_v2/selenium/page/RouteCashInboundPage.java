@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -136,7 +137,8 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
           COLUMN_AMOUNT_COLLECTED, "amountCollected",
           COLUMN_RECEIPT_NUMBER, "receiptNumber"
       ));
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "edit", ACTION_DELETE, "delete"));
+      setActionButtonsLocators(
+          ImmutableMap.of(ACTION_EDIT, "Edit COD", ACTION_DELETE, "Delete COD"));
       setEntityClass(RouteCashInboundCod.class);
     }
   }
@@ -162,14 +164,14 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
 
   public static class EditCodDialog extends AntModal {
 
-    @FindBy(css = "input[placeholder='Route ID']")
-    public TextBox routeId;
+    @FindBy(xpath = ".//span[./input[@placeholder='Route ID']]")
+    public AntTextBox routeId;
 
-    @FindBy(css = "input[type='number']:nth-child(2)")
-    public TextBox amountCollected;
+    @FindBy(xpath = "(.//span[./input[@type='number']])[2]")
+    public AntTextBox amountCollected;
 
-    @FindBy(css = "input[placeholder='Receipt Number']")
-    public TextBox receiptNumber;
+    @FindBy(xpath = ".//span[./input[@placeholder='Receipt Number']]")
+    public AntTextBox receiptNumber;
 
     @FindBy(xpath = ".//button[.='Submit']")
     public AntButton submit;

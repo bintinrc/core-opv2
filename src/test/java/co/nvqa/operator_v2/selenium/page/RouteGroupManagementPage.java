@@ -6,11 +6,11 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
-import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
-import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import org.openqa.selenium.WebDriver;
@@ -28,8 +28,8 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
   @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
   public AntMenu actionsMenu;
 
-  @FindBy(xpath = "//div[contains(@class,'StyledFilterDateBox')][.//div[.='Creation Date']]")
-  public AntIntervalCalendarPicker creationDate;
+  @FindBy(xpath = "//div[./label[.='Creation Date']]/div")
+  public AntRangePicker creationDate;
 
   @FindBy(css = "div.ant-modal")
   public CreateRouteGroupsDialog createRouteGroupsDialog;
@@ -67,14 +67,14 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     @FindBy(xpath = ".//button[.='Download Selected']")
     public Button downloadSelected;
 
-    @FindBy(css = "input[placeholder='Group Name']")
-    public TextBox groupName;
+    @FindBy(xpath = ".//span[./input[@placeholder='Group Name']]")
+    public AntTextBox groupName;
 
-    @FindBy(css = "input[placeholder='Description']")
-    public TextBox description;
+    @FindBy(xpath = ".//span[./input[@placeholder='Description']]")
+    public AntTextBox description;
 
-    @FindBy(xpath = ".//div[./div[contains(text(),'Hub')]]//div[@role='combobox']")
-    public AntSelect2 hub;
+    @FindBy(xpath = ".//div[.//label[contains(text(),'Hub')]]//div[contains(@class,'ant-select')]")
+    public AntSelect3 hub;
 
     public JobDetailsTable jobDetailsTable;
 
@@ -112,7 +112,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
             .build()
         );
         setEntityClass(RouteGroupJobDetails.class);
-        setTableLocator("//div[contains(@class,'EditRouteGroupFormTable')]");
+        setTableLocator("//div[contains(@class,'edit-route-group-table')]");
       }
     }
   }
@@ -173,14 +173,14 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = ".//div[./div[contains(text(),'Group Name')]]/input")
+    @FindBy(xpath = ".//div[./div/label[contains(text(),'Group Name')]]//input")
     public TextBox groupName;
 
-    @FindBy(xpath = ".//div[./div[contains(text(),'Description')]]/input")
+    @FindBy(xpath = ".//div[./div/label[contains(text(),'Description')]]//input")
     public TextBox description;
 
-    @FindBy(xpath = ".//div[./div[contains(text(),'Hub')]]//div[@role='combobox']")
-    public AntSelect2 hub;
+    @FindBy(xpath = ".//div[.//label[contains(text(),'Hub')]]//div[contains(@class,'ant-select')]")
+    public AntSelect3 hub;
 
     @FindBy(xpath = ".//button[.='Create Route Group & Add Transactions']")
     public Button create;
@@ -215,22 +215,22 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
       ));
       setActionButtonsLocators(ImmutableMap.of(
           ACTION_EDIT,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[@aria-label='icon: edit']",
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='Edit']",
           ACTION_DELETE,
-          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//i[@aria-label='icon: delete']"
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='Delete']"
       ));
     }
 
     public String getName(int rowIndex) {
       String xpath = f(
-          "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='name']/div/div/div[1]",
+          "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='name']/div/div/div",
           rowIndex);
       return isElementExistFast(xpath) ? getText(xpath) : null;
     }
 
     public String getDescription(int rowIndex) {
       String xpath = f(
-          "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='name']/div/div/div[2]",
+          "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='name']/div/div/span",
           rowIndex);
       return isElementExistFast(xpath) ? getText(xpath) : null;
     }

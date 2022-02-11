@@ -462,7 +462,7 @@ Feature: Edit Order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator add created order to the <routeType> route on Edit Order page
     And Operator refresh page
-    Then Operator verify the order is added to the <routeType> route on Edit Order page
+    Then Operator verify the order is added to the "<routeType>" route on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE         |
       | routeId | KEY_CREATED_ROUTE_ID |

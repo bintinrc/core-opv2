@@ -46,6 +46,8 @@ import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.PU
 public class AllOrdersPage extends OperatorV2SimplePage {
 
   private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
+  public static final String SELECTION_ERROR_CSV_FILENAME = "selection-error.csv";
+  public static final String MANUALLY_COMPLETE_ERROR_CSV_FILENAME = "manually-complete-error.csv";
   private static final String MD_VIRTUAL_REPEAT_TABLE_ORDER = "order in getTableData()";
 
   public static final String COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER = "tracking-id";
@@ -123,6 +125,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public DeletePresetDialog deletePresetDialog;
+
+  @FindBy(css = "md-dialog")
+  public SelectionErrorDialog selectionErrorDialog;
 
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
@@ -736,6 +741,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(xpath = ".//div[@ng-repeat='error in ctrl.payload.errors track by $index']")
     public List<PageElement> errorMessage;
 
+    @FindBy(css = "[ng-click='ctrl.payload.errorDescription.onClick()']")
+    public PageElement downloadFailedUpdates;
+
     public ErrorsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -942,6 +950,28 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     List<RegularPickup> reg = DataEntity.fromCsvFile(RegularPickup.class, pathName, true);
     assertTrue(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId));
     assertTrue(reg.get(0).getErrorMessage().contains(message));
+  }
+
+  public static class SelectionErrorDialog extends MdDialog {
+
+    @FindBy(xpath = ".//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[1]")
+    public List<PageElement> trackingIds;
+
+    @FindBy(xpath = ".//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[2]")
+    public List<PageElement> reasons;
+
+    @FindBy(xpath = ".//div[./label[.='Process']]/p")
+    public PageElement process;
+
+    @FindBy(css = "[ng-click='ctrl.downloadTrackingIds()']")
+    public PageElement downloadInvalidSelection;
+
+    @FindBy(name = "commons.continue")
+    public NvIconTextButton continueBtn;
+
+    public SelectionErrorDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 
 }

@@ -31,7 +31,7 @@ Feature: Create Pricing Profile - ID
 
   @DeleteNewlyCreatedShipper @CloseNewWindows @HappyPathID
   Scenario: Create Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
@@ -44,7 +44,7 @@ Feature: Create Pricing Profile - ID
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with 'Int' Insurance Min Fee and 'Int' Insurance Percentage - ID (uid:63d13a1d-cdbb-4a48-bde9-7c962f0101f8)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-2-day-yyyy-MM-dd}                  |
@@ -63,7 +63,7 @@ Feature: Create Pricing Profile - ID
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with 'Int' COD Min Fee and 'Int' COD Percentage - ID (uid:eb8347c5-468c-4909-9dcd-d0f37f395f7c)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-2-day-yyyy-MM-dd}                  |
@@ -81,7 +81,7 @@ Feature: Create Pricing Profile - ID
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - RTS Charge, Surcharge - ID (uid:4d044c16-5a84-437a-a2e6-fe792f815a93)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator adds new Shipper's Pricing Profile
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |

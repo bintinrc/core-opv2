@@ -161,6 +161,7 @@ Feature: Outbound Monitoring
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
@@ -170,8 +171,8 @@ Feature: Outbound Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
-    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
     When Operator clicks Edit button for "{KEY_CREATED_ROUTE_ID}" route on Outbound Monitoring Page
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
       | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -579,6 +580,7 @@ Feature: Outbound Monitoring
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get order details
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
@@ -588,9 +590,9 @@ Feature: Outbound Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
-    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
     And Operator clicks Pull Out button for routes on Outbound Monitoring Page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:

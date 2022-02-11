@@ -27,7 +27,7 @@ public class DriverSeedingSteps extends AbstractSteps {
     driverSeedingPage = new DriverSeedingPage(getWebDriver());
   }
 
-  @When("^Operator selects zones on Driver Seeding page:$")
+  @When("Operator selects zones on Driver Seeding page:")
   public void selectZones(List<String> zones) {
     zones = resolveValues(zones);
     driverSeedingPage.zones.selectValues(zones);
@@ -72,6 +72,7 @@ public class DriverSeedingSteps extends AbstractSteps {
         .collect(Collectors.toList());
     assertThat("Listed Drivers", actual,
         Matchers.containsInAnyOrder(expected.toArray(new String[0])));
+    takesScreenshot();
   }
 
   @Then("Following drivers are displayed on the map on Driver Seeding page:")
@@ -82,5 +83,6 @@ public class DriverSeedingSteps extends AbstractSteps {
         .collect(Collectors.toList());
     assertThat("Drivers on the map", actual,
         Matchers.containsInAnyOrder(expected.toArray(new String[0])));
+    takesScreenshot();
   }
 }

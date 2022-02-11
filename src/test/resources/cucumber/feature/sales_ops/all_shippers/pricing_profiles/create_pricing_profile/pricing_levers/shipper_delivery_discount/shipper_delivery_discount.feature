@@ -29,7 +29,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with none Flat Discount (uid:3895c1e8-58b5-4625-9175-788c133a4b92)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
@@ -59,7 +59,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:5e17e04a-7461-4546-9e3b-20dc2add40e6)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |
@@ -83,7 +83,7 @@ Feature:  Create Pricing Profile - Normal Shippers - Shipper Delivery Discount
 
   @DeleteNewlyCreatedShipper
   Scenario: Create Pricing Profile - with Int Discount (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
-    Given API Operator create new normal shipper
+    Given API Operator create new 'normal' shipper
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     Then Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}                  |

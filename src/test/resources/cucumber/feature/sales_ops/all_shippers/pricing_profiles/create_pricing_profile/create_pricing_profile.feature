@@ -79,6 +79,10 @@ Feature: Create Pricing Profile
     And Operator save changes on Edit Shipper Page
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     And Operator verifies that Edit Pending Profile is displayed
+    Then DB Operator fetches pricing lever details
+    Then Operator verifies below details in script_engine_qa_gl.pricing_levers table
+      | new_weight_logic | not available |
+
 
   @CloseNewWindows
   Scenario: Create Pricing Profile - Validate Start Date (uid:7ddd0223-4822-46c0-b483-aa43109921fc)

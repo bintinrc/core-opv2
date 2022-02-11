@@ -178,7 +178,7 @@ Feature: Routing
     Then Operator verifies that info toast displayed:
       | top | {KEY_CREATED_ORDER_TRACKING_ID} has been added to route {KEY_CREATED_ROUTE_ID} successfully |
     And Operator refresh page
-    Then Operator verify the order is added to the <routeType> route on Edit Order page
+    Then Operator verify the order is added to the "<routeType>" route on Edit Order page
     Then Operator verify Latest Route ID is "{KEY_CREATED_ROUTE_ID}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE         |

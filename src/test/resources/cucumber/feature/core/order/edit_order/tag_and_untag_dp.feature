@@ -82,7 +82,6 @@ Feature: Tag & Untag DP
     And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator pulled out parcel "DELIVERY" from route
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Shipper create V4 order using data below:
@@ -119,7 +118,6 @@ Feature: Tag & Untag DP
     And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator pulled out parcel "DELIVERY" from route
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"

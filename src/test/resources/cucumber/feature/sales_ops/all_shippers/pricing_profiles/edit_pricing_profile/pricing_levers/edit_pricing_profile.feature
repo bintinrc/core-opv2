@@ -7,7 +7,8 @@ Feature: Edit Pricing Profile - Normal Shippers
     # add active pricing profile
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id}} |
-    # add pending pricing profile
+    And Operator waits for 1 seconds
+      # add pending pricing profile
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     And Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
