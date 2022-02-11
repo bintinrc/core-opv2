@@ -39,6 +39,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
 
     put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_USERNAME, TestConstants.NINJA_DRIVER_USERNAME);
     put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_PASSWORD, TestConstants.NINJA_DRIVER_PASSWORD);
+    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_ID, TestConstants.NINJA_DRIVER_ID);
   }
 
   @After("@ResetWindow")
