@@ -137,7 +137,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints Then Verify that waypoints  "{ninja-driver-id}" list ist route correctly
+    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Marketplace Sort Order To Route via Add Order To Route Page - RTS = 0
