@@ -72,7 +72,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   private static final String ID_CLASS = "id";
   private static final String ORIGIN_HUB_CLASS = "origin-hub-name";
-  private static final String DESTINATION_HUB_CLASS = "destinationHub";
+  private static final String DESTINATION_HUB_CLASS = "destination-hub-name";
   private static final String MOVEMENT_TYPE_CLASS = "movement-type";
   private static final String EXPECTED_DEPARTURE_TIME_CLASS = "expected-departure-time";
   private static final String ACTUAL_DEPARTURE_TIME_CLASS = "actual-start-time";
@@ -334,7 +334,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         filterValue = tripManagementDetailsData.getData().get(index).getDestinationHubName();
         waitUntilVisibilityOfElementLocated(
             f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS), filterValue);
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS)+"//input", filterValue);
         break;
 
       case ORIGIN_HUB:
@@ -361,6 +361,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case EXPECTED_DEPARTURE_TIME:
         ZonedDateTime expectedDepartTime = tripManagementDetailsData.getData().get(index)
             .getExpectedDepartureTime();
+        String normalizedExpDepartDate = shipmentInfo.normalisedDate(expectedDepartTime.toString().replaceAll("Z", ":00.000Z"));
+        normalizedExpDepartDate = normalizedExpDepartDate.replace(" ", "T") + ".000Z";
+        expectedDepartTime = ZonedDateTime.parse(normalizedExpDepartDate, BE_FORMATTER);
         expectedDepartTimeFilter.openButton.click();
         expectedDepartTimeFilter.ok.waitUntilClickable();
         expectedDepartTimeFilter.selectDate(expectedDepartTime);
