@@ -476,9 +476,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
       return;
     }
 
-    // Get Newest Record
-    //int index = tripManagementDetailsData.getData().size() - 1;
-
     // Get the newest record for today
     int index = 0;
     for(int loop = tripManagementDetailsData.getData().size()-1; loop>=0; loop--){
