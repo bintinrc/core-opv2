@@ -81,13 +81,13 @@ public class CreateRouteGroupsV15Page extends OperatorV2SimplePage {
   @FindBy(css = "nv-filter-autocomplete[item-types='Excluded Shipper']")
   public NvFilterAutocomplete excludedShipperFilter;
 
-  @FindBy(xpath = "//nv-filter-time-box[.//p[.='Hub Inbound Datetime']]")
+  @FindBy(xpath = "//nv-filter-time-box[.//p[normalize-space(.)='Hub Inbound Datetime']]")
   public NvFilterTimeBox hubInboundDateTimeFilter;
 
   @FindBy(css = "nv-filter-box[item-types='Hub Inbound User']")
   public NvFilterBox hubInboundUserFilter;
 
-  @FindBy(xpath = "//nv-filter-time-box[.//p[.='Orig Trxn End Time']]")
+  @FindBy(xpath = "//nv-filter-time-box[.//p[normalize-space(.)='Orig Trxn End Time']]")
   public NvFilterTimeBox origTrxnEndTimeFilter;
   //endregion
 
