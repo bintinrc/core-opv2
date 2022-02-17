@@ -727,6 +727,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void departTrip() {
+    pause3s();
     departTripButton.waitUntilClickable();
     departTripButton.click();
     tripDepartureArrivalModal.waitUntilVisible();
