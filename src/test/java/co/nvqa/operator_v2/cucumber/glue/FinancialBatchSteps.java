@@ -35,6 +35,7 @@ public class FinancialBatchSteps extends AbstractSteps {
       }
     }
     financialBatchPage.clickSearchBtn();
+    takesScreenshot();
   }
 
 
@@ -59,6 +60,7 @@ public class FinancialBatchSteps extends AbstractSteps {
         financialBatchPage.selectDate(value);
       }
     }
+    takesScreenshot();
   }
 
   @Then("Operator verifies financial batch data as below")

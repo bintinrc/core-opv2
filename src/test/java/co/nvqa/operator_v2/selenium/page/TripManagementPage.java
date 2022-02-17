@@ -14,9 +14,12 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
+
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -72,7 +75,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   private static final String ID_CLASS = "id";
   private static final String ORIGIN_HUB_CLASS = "origin-hub-name";
-  private static final String DESTINATION_HUB_CLASS = "destinationHub";
+  private static final String DESTINATION_HUB_CLASS = "destination-hub-name";
   private static final String MOVEMENT_TYPE_CLASS = "movement-type";
   private static final String EXPECTED_DEPARTURE_TIME_CLASS = "expected-departure-time";
   private static final String ACTUAL_DEPARTURE_TIME_CLASS = "actual-start-time";
@@ -318,8 +321,17 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
       TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
     ShipmentInfo shipmentInfo = new ShipmentInfo();
-    // Get the newest record
-    int index = tripManagementDetailsData.getData().size() - 1;
+
+    // Get the newest record for today
+    int index = 0;
+    for(int loop = tripManagementDetailsData.getData().size()-1; loop>=0; loop--){
+      String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+      String expectedDepartTime = tripManagementDetailsData.getData().get(loop).getExpectedDepartureTime().toString();
+      if(expectedDepartTime.contains(todayDate)){
+        index = loop;
+        break;
+      }
+    }
 
     if (tripManagementDetailsData.getCount() == null || tripManagementDetailsData.getCount() == 0) {
       verifiesNoResult();
@@ -334,7 +346,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         filterValue = tripManagementDetailsData.getData().get(index).getDestinationHubName();
         waitUntilVisibilityOfElementLocated(
             f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
-        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS), filterValue);
+        sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS)+"//input", filterValue);
         break;
 
       case ORIGIN_HUB:
@@ -361,6 +373,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case EXPECTED_DEPARTURE_TIME:
         ZonedDateTime expectedDepartTime = tripManagementDetailsData.getData().get(index)
             .getExpectedDepartureTime();
+        String normalizedExpDepartDate = shipmentInfo.normalisedDate(expectedDepartTime.toString().replaceAll("Z", ":00.000Z"));
+        normalizedExpDepartDate = normalizedExpDepartDate.replace(" ", "T") + ".000Z";
+        expectedDepartTime = ZonedDateTime.parse(normalizedExpDepartDate, BE_FORMATTER);
         expectedDepartTimeFilter.openButton.click();
         expectedDepartTimeFilter.ok.waitUntilClickable();
         expectedDepartTimeFilter.selectDate(expectedDepartTime);
@@ -402,7 +417,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         break;
 
       case DRIVER:
-        filterValue = driverConverted(driverUsername);
+        filterValue = driverConverted(driverUsername).substring(1);
         tripStatusFilter.scrollIntoView();
         sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, DRIVER_CLASS)+INPUT_DRIVERS_AREA_LABEL, filterValue);
         break;
@@ -460,8 +475,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
       return;
     }
 
-    // Get Newest Record
-    int index = tripManagementDetailsData.getData().size() - 1;
+    // Get the newest record for today
+    int index = 0;
+    for(int loop = tripManagementDetailsData.getData().size()-1; loop>=0; loop--){
+      String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+      String expectedDepartTime = tripManagementDetailsData.getData().get(loop).getExpectedDepartureTime().toString();
+      if(expectedDepartTime.contains(todayDate)){
+        index = loop;
+        break;
+      }
+    }
 
     String actualValue;
     String expectedValue;
@@ -529,14 +552,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case DRIVER:
         expectedValue = driverConverted(driverUsername);
         actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DRIVER_CLASS));
-        Assertions.assertThat(actualValue).as("Driver").isEqualTo(expectedValue);
+        Assertions.assertThat(actualValue).as("Driver").contains(expectedValue.substring(1));
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
       case STATUS:
         expectedValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
         actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, STATUS_CLASS));
-        assertEquals("Status", expectedValue, actualValue);
+        Assertions.assertThat(actualValue).as("Status").isEqualToIgnoringCase(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -830,8 +853,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
         statusConverted = "Pending";
         break;
 
-      case "IN_TRANSIT":
-        statusConverted = "In Transit";
+      case "TRANSIT":
+        statusConverted = "Transit";
         break;
 
       case STATUS_COMPLETED:

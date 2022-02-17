@@ -33,6 +33,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     String absolutePath = csvFile.getAbsolutePath();
     NvLogger.info("Path of the created file : " + absolutePath);
     invoicedOrdersSearchPage.uploadFile(absolutePath);
+    takesScreenshot();
   }
 
   @And("Operator clicks Search Invoiced Order button and wait till CSV is uploaded")
@@ -44,6 +45,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   @And("Operator clicks Search Invoiced Order button")
   public void operatorClicksSearchInvoicedOrderButton() {
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
+    takesScreenshot();
   }
 
   @And("Operator verifies below tracking ID\\(s) and creation time is displayed")

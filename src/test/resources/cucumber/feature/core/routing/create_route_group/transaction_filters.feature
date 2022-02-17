@@ -230,8 +230,8 @@ Feature: Create Route Groups - Transaction Filters
     And Operator wait until 'Create Route Group' page is loaded
     And Operator removes all General Filters except following: "Creation Time, Master Shipper"
     And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time  | Today                                   |
-      | Master Shipper | {shipper-v4-marketplace-sort-legacy-id} |
+      | Creation Time  | Today                                  |
+      | Master Shipper | {filter-shipper-name-marketplace-sort} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator add following filters on Transactions Filters section on Create Route Group page:
       | orderServiceType | Marketplace Sort |

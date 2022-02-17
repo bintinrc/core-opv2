@@ -44,6 +44,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     File csvFile = createFile("upload.csv", String.join("\n", trackingIds));
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
+    takesScreenshot();
   }
 
   @And("Operator clicks on Upload New File Button")
