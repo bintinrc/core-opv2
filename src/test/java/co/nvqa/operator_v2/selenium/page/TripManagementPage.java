@@ -253,10 +253,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, 1));
     sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, 1), destinationHubName);
     waitUntilVisibilityOfElementLocated(
-        f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, 1));
+        f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
 
     String actualDestinationHubName = getText(
-        f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, 1));
+        f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
     assertEquals("Destination Hub Name", destinationHubName, actualDestinationHubName);
   }
 
