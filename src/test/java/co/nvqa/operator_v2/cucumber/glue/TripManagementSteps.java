@@ -168,11 +168,10 @@ public class TripManagementSteps extends AbstractSteps {
   public void operatorVerifiesThatTheTripManagementShownIsCorrect(String tabName) {
     TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
     // Get the record counts for today
-    long count = tripManagementDetailsData.getData().stream().filter(
+    Long tripManagementCount = tripManagementDetailsData.getData().stream().filter(
                     (job) -> job.getExpectedDepartureTime().toString().contains(new SimpleDateFormat("yyyy-MM-dd").format(new Date())))
             .count();
 
-    Long tripManagementCount = Long.valueOf(count);
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     if (tripManagementCount != null && tripManagementCount != 0) {
       tripManagementPage.verifiesSumOfTripManagement(tabNameAsEnum, tripManagementCount);
