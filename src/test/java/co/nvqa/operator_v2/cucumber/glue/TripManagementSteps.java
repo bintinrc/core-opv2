@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
+import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetails;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
+import co.nvqa.commons.model.driver.Job;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -168,15 +170,11 @@ public class TripManagementSteps extends AbstractSteps {
   public void operatorVerifiesThatTheTripManagementShownIsCorrect(String tabName) {
     TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
     // Get the record counts for today
-    int index = 0;
-    for(int loop = tripManagementDetailsData.getData().size()-1; loop>=0; loop--){
-      String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-      String expectedDepartTime = tripManagementDetailsData.getData().get(loop).getExpectedDepartureTime().toString();
-      if(expectedDepartTime.contains(todayDate)){
-        index++;
-      }
-    }
-    Long tripManagementCount = Long.valueOf(index);
+    long count = tripManagementDetailsData.getData().stream().filter(
+                    (job) -> job.getExpectedDepartureTime().toString().contains(new SimpleDateFormat("yyyy-MM-dd").format(new Date())))
+            .count();
+    
+    Long tripManagementCount = Long.valueOf(count);
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     if (tripManagementCount != null && tripManagementCount != 0) {
       tripManagementPage.verifiesSumOfTripManagement(tabNameAsEnum, tripManagementCount);
