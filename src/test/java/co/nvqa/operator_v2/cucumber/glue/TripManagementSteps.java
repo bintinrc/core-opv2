@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
-import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetails;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
-import co.nvqa.commons.model.driver.Job;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -173,7 +171,7 @@ public class TripManagementSteps extends AbstractSteps {
     long count = tripManagementDetailsData.getData().stream().filter(
                     (job) -> job.getExpectedDepartureTime().toString().contains(new SimpleDateFormat("yyyy-MM-dd").format(new Date())))
             .count();
-    
+
     Long tripManagementCount = Long.valueOf(count);
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     if (tripManagementCount != null && tripManagementCount != 0) {
