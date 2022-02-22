@@ -140,6 +140,8 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Transit Hub on Shipment Management page
+    When Operator filter Shipment Status = Transit on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
