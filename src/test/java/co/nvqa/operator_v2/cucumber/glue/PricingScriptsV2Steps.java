@@ -417,6 +417,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @Then("Operator clicks Create Draft button")
   public void operatorClicksCreateDraftButton() {
     pricingScriptsV2Page.createDraftBtn.click();
+    takesScreenshot();
   }
 
   @Then("Operator verifies that error toast is displayed on Pricing Scripts V2 page:")

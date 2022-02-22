@@ -3,10 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Map;
@@ -160,6 +160,7 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator clicks Generate Success Billing Button")
   public void operatorClicksGenerateSuccessBillingButton() {
     orderBillingPage.clickGenerateSuccessBillingsButton();
+    takesScreenshot();
   }
 
   @Then("Operator verifies Generate Success Billings button is disabled")

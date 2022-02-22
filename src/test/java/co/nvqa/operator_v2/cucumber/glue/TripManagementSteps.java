@@ -12,12 +12,11 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.openqa.selenium.WebElement;
 
@@ -168,7 +167,11 @@ public class TripManagementSteps extends AbstractSteps {
   @Then("Operator verifies that the trip management shown in {string} tab is correct")
   public void operatorVerifiesThatTheTripManagementShownIsCorrect(String tabName) {
     TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
-    Long tripManagementCount = tripManagementDetailsData.getCount();
+    // Get the record counts for today
+    Long tripManagementCount = tripManagementDetailsData.getData().stream().filter(
+                    (job) -> job.getExpectedDepartureTime().toString().contains(DateUtil.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+            .count();
+
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     if (tripManagementCount != null && tripManagementCount != 0) {
       tripManagementPage.verifiesSumOfTripManagement(tabNameAsEnum, tripManagementCount);

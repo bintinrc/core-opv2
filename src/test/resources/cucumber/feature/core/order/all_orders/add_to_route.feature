@@ -84,7 +84,7 @@ Feature: All Orders - Add To Route
     And DB Operator verifies all route_monitoring_data records
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    And Verify that waypoints are shown on driver list route correctly
+    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page (uid:aa8e8606-e1a6-4c07-afa5-d17a01028bb9)

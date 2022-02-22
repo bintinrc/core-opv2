@@ -1266,7 +1266,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifiesMovementTripHasEventWithStatusDeparted(Map<String, String> data) {
     String tripId = get(KEY_TRIP_ID);
     MovementTripEventEntity movementTripEventEntity = getHubJdbc()
-            .getNewestMovementTripEvent(Long.valueOf(tripId));
+        .getNewestMovementTripEvent(Long.valueOf(tripId));
     String movementTripEntityEvent = movementTripEventEntity.getEvent().toLowerCase();
     String movementTripEntityStatus = movementTripEventEntity.getStatus().toLowerCase();
     String movementTripEntityUserId = movementTripEventEntity.getUserId().toLowerCase();
@@ -2026,5 +2026,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     List<Long> dpIds = getNonNull(() -> getDpJdbc().getExistedDpId(dpIdsNeeded),
         f("Get %d Existed DP IDs", dpIdsNeeded));
     put(KEY_LIST_OF_DP_IDS, dpIds);
+  }
+
+  @Given("DB Operator gets waypoint record")
+  public void dbOperatorGetsWaypointRecord() {
+    final Long waypointId = get(KEY_WAYPOINT_ID);
+    Waypoint waypoint = getCoreJdbc().getWaypoint(waypointId);
+    put(KEY_WAYPOINT_DETAILS, waypoint);
   }
 }

@@ -38,7 +38,6 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
-  @1
   Scenario: Search Trip on Search Field - Arrival Tab - Search Expected Departure Time (uid:c6b58cec-b1d8-46b8-b417-0396e7104101)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
