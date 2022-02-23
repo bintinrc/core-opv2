@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithoutTrip
 Feature: Shipment Van Inbound Without Trip Scanning
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @1 @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -181,13 +181,13 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Transit Hub on Shipment Management page
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Shipment Status = Transit on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
-  @1 @DeleteShipment @ForceSuccessOrder
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Van Inbound Closed Shipment Not In Origin Hub (uid:ad08e9b7-6905-4c45-be60-03f9859d7f0a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -270,7 +270,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
-  @DeleteShipment @ForceSuccessOrder
+  @1 @DeleteShipment @ForceSuccessOrder
   Scenario: Van Inbound Closed MAWB In Origin Hub (uid:b20634af-db8a-4af9-86be-fadfdc68f0a7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -294,11 +294,13 @@ Feature: Shipment Van Inbound Without Trip Scanning
     And Operator close the shipment which has been created
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Closed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
