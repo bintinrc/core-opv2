@@ -85,6 +85,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL = "//md-dialog[contains(@class,'shipment-search-error')]";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
+  private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
 
   public ShipmentsTable shipmentsTable;
   public ShipmentEventsTable shipmentEventsTable;
@@ -177,7 +178,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void addFilter(String filterLabel, String value, boolean isMawb) {
-    selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", filterLabel);
+    if(!isElementExist(f(XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT,filterLabel))){
+      selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", filterLabel);
+    }
     if (!isMawb) {
       selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
     } else {
