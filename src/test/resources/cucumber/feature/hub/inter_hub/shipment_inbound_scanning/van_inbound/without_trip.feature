@@ -334,6 +334,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB with closed shipment alert
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
