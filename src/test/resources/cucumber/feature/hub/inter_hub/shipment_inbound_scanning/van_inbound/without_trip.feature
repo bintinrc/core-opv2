@@ -11,6 +11,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
@@ -23,6 +24,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
@@ -30,11 +32,25 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with Completed alert
 
   @DeleteShipment
+  Scenario: Van Inbound Cancelled Shipment In Origin Hub
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Cancelled on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with Cancelled alert
+
+  @DeleteShipment
   Scenario: Van Inbound Cancelled Shipment Not In Origin Hub (uid:a7c716a4-aa89-4af7-b9d0-8d9e37caf766)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Cancelled"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Cancelled on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
@@ -270,7 +286,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
-  @1 @DeleteShipment @ForceSuccessOrder
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Van Inbound Closed MAWB In Origin Hub (uid:b20634af-db8a-4af9-86be-fadfdc68f0a7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -423,8 +439,8 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
-    When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
