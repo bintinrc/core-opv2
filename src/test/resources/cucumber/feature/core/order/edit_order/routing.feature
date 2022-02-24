@@ -37,7 +37,7 @@ Feature: Routing
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    And Verify that waypoints are shown on driver list route correctly
+    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -193,7 +193,7 @@ Feature: Routing
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    And Verify that waypoints are shown on driver list route correctly
+    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
     Examples:
       | Note              | hiptest-uid                              | orderType | routeType |
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |

@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.addressing.AddressingZone;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
@@ -1322,6 +1322,12 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("Operator verifies Zone is {string} on Edit Order page")
   public void operatorVerifyZone(String value) {
     assertEquals("Zone", resolveValue(value), editOrderPage.zone.getNormalizedText());
+  }
+
+  @Then("Operator verifies Zone is correct after RTS on Edit Order page")
+  public void operatorVerifyZoneAfterRts() {
+    final AddressingZone zone = get(KEY_RTS_ZONE_TYPE);
+    operatorVerifyZone(zone.getShortName());
   }
 
   @Then("Operator RTS order on Edit Order page using data below:")
