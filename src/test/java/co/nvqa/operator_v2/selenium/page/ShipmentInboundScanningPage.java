@@ -9,6 +9,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -198,8 +200,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        assertTrue("Error Message is not the same : ", errorMessage
-            .contains(f("shipment %d is in terminal state: [%s]", shipmentId, condition)));
+        Assertions.assertThat(errorMessage.contains(f("Shipment id %d cannot change status from %s", shipmentId, condition)))
+                .isTrue();
         break;
       case "Pending":
       case "Closed":
@@ -207,15 +209,13 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
             errorMessage.contains(f("shipment %d is [%s]", shipmentId, condition)));
         break;
       case "different country van":
-        assertEquals("Error Message is not the same : ", errorMessage,
-            f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
-                TestConstants.COUNTRY_CODE.toLowerCase()));
+        Assertions.assertThat(f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
+                        TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "different country hub":
-        assertEquals("Error Message is not the same : ", errorMessage,
-            f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
-                TestConstants.COUNTRY_CODE.toLowerCase()));
+        Assertions.assertThat(f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
+                TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "pending shipment":
