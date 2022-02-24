@@ -219,8 +219,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
         break;
 
       case "pending shipment":
-        assertTrue("Error Message is different : ",
-            errorMessage.contains(f("shipment %d is [Pending]", shipmentId)));
+        String expected = f("shipment %d is [Pending]",shipmentId);
+        Assertions.assertThat(errorMessage).as("pending shipment:").contains(expected);
         break;
 
       case "closed shipment":

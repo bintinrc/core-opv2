@@ -247,6 +247,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
