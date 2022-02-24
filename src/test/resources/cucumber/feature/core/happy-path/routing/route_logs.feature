@@ -107,7 +107,7 @@ Feature: Route Logs
       | driverTypeName | {default-driver-type-name}       |
       | comments       | {KEY_CREATED_ROUTE.comments}     |
       | tags           | {route-tag-name}                 |
-    And DB Operator verifies created dummy waypoints
+
 
   @DeleteOrArchiveRoute
   Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page (uid:613d5782-5aa0-4519-ac39-50a59ca0a208)

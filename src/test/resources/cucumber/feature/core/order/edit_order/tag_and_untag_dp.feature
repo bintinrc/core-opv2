@@ -105,7 +105,7 @@ Feature: Tag & Untag DP
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+
     And DB Operator verifies all route_monitoring_data records
 
   @DeleteOrArchiveRoute @routing-refactor
@@ -132,7 +132,7 @@ Feature: Tag & Untag DP
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+
     And DB Operator verifies all route_monitoring_data records
 
   @routing-refactor

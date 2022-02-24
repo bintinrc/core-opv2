@@ -173,7 +173,7 @@ Feature: Update Delivery Address with CSV
       | status | Routed |
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
