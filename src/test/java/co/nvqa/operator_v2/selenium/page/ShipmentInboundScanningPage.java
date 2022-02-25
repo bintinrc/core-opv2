@@ -197,6 +197,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   public void checkAlert(Long shipmentId, String condition) {
     scanAlertMessage.waitUntilVisible();
     String errorMessage = scanAlertMessage.getText();
+    String expected = "";
     switch (condition) {
       case "Completed":
       case "Cancelled":
@@ -219,13 +220,13 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
         break;
 
       case "pending shipment":
-        String expected = f("shipment %d is [Pending]",shipmentId);
+        expected = f("shipment %d is [Pending]",shipmentId);
         Assertions.assertThat(errorMessage).as("pending shipment:").contains(expected);
         break;
 
       case "closed shipment":
-        assertTrue("Error Message is not the same : ",
-            errorMessage.contains(f("shipment %d is [Closed]", shipmentId)));
+        expected = f("shipment %d is [Closed]",shipmentId);
+        Assertions.assertThat(errorMessage).as("closed shipment:").contains(expected);
         break;
 
       case "shipment not found":

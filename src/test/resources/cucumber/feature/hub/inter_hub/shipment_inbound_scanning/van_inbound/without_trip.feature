@@ -240,12 +240,13 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    When Operator click "Load All Selection" on Shipment Management page
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
     When Operator edit Shipment on Shipment Management page including MAWB using data below:
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -268,12 +269,13 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    When Operator click "Load All Selection" on Shipment Management page
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
     When Operator edit Shipment on Shipment Management page including MAWB using data below:
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
