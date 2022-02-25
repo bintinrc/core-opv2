@@ -1,7 +1,7 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithoutTrip @1a
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithoutTrip
 Feature: Shipment Van Inbound Without Trip Scanning
 
-  @1 @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -80,7 +80,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB with Completed alert
 
-  @1 @DeleteShipment
+  @DeleteShipment
   Scenario: Van Inbound Completed MAWB Not In Origin Hub (uid:d024a887-0568-46c9-936b-2201fbf27f84)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
