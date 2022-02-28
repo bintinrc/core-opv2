@@ -66,18 +66,26 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     timeBoundedScriptsPage = new TimeBoundedScriptsPage(webDriver);
   }
 
+  public void createDraftAndSave(Script script) {
+    clickCreateDraftBtn();
+    pricingScriptsV2CreateEditDraftPage.createDraftAndSave(script);
+  }
+
   public void createDraft(Script script) {
+    clickCreateDraftBtn();
+    pricingScriptsV2CreateEditDraftPage.createDraft(script);
+  }
+
+  private void clickCreateDraftBtn() {
     clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
     if (!getCurrentUrl().endsWith("pricing-scripts-v2/create?type=normal") && createDraftBtn
         .isEnabled()) {
       createDraftBtn.click();
     }
-    pricingScriptsV2CreateEditDraftPage.createDraft(script);
-
   }
 
   public void checkErrorHeader(String message) {
-    pricingScriptsV2CreateEditDraftPage.checkErrorHeader(message);
+    pricingScriptsV2CreateEditDraftPage.checkSyntaxHeader(message);
   }
 
   public void editCreatedDraft(Script script) {
