@@ -7,8 +7,10 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
+import co.nvqa.operator_v2.selenium.page.PricingScriptsV2CreateEditDraftPage;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Date;
@@ -26,6 +28,7 @@ import org.assertj.core.api.Assertions;
 public class PricingScriptsV2Steps extends AbstractSteps {
 
   private PricingScriptsV2Page pricingScriptsV2Page;
+  private PricingScriptsV2CreateEditDraftPage pricingScriptsV2CreateEditDraftPage;
 
   public PricingScriptsV2Steps() {
   }
@@ -33,10 +36,26 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @Override
   public void init() {
     pricingScriptsV2Page = new PricingScriptsV2Page(getWebDriver());
+    pricingScriptsV2CreateEditDraftPage = new PricingScriptsV2CreateEditDraftPage(getWebDriver());
   }
 
   @When("^Operator create new Draft Script using data below:$")
   public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
+    Script script = setScriptData(mapOfData);
+    pricingScriptsV2Page.createDraftAndSave(script);
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+    takesScreenshot();
+  }
+
+  @When("^Operator send below data to create new Draft Script:$")
+  public void operatorSendDataToCreateNewDraftScript(Map<String, String> mapOfData) {
+    Script script = setScriptData(mapOfData);
+    pricingScriptsV2Page.createDraft(script);
+    put(KEY_CREATED_PRICING_SCRIPT, script);
+    takesScreenshot();
+  }
+
+  private Script setScriptData(Map<String, String> mapOfData) {
     String dateUniqueString = generateDateUniqueString();
 
     String createdDate = CREATED_DATE_SDF.format(new Date());
@@ -75,9 +94,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
       script.setUpdatedAt(MYSQL_24_SDF.format(new Date()));
     }
-    pricingScriptsV2Page.createDraft(script);
-    put(KEY_CREATED_PRICING_SCRIPT, script);
-    takesScreenshot();
+    return script;
   }
 
   @Then("Operator verify error message in header with {string}")
@@ -93,6 +110,13 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @Then("^Operator edit the created Draft Script using data below:$")
   public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
+    Script script = editCreatedDraftOrActiveScript(mapOfData);
+    pricingScriptsV2Page.editCreatedDraft(script);
+    pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
+  }
+
+  @And("Operator send below data to created Draft Script:")
+  public void operatorSendBelowDataToCreatedDraftScript(Map<String, String> mapOfData) {
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
   }
@@ -181,6 +205,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @Then("Operator validate and release Draft Script")
   public void operatorValidateAndReleaseDraft() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    pricingScriptsV2Page.validateDraftAndReleaseScript(script);
+  }
+
+  @Then("Operator clicks validate and release Draft Script")
+  public void operatorClicksValidateAndReleaseDraft() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.validateDraftAndReleaseScript(script);
   }
@@ -433,5 +463,11 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       Assertions.assertThat(pricingScriptsV2Page.toastErrorBottomText.getText())
           .as("Error bottom text is correct").contains(mapOfData.get("bottom"));
     }
+  }
+
+  @Then("Operator clicks Check Syntax")
+  public void operatorClicksCheckScriptSaveDraft() {
+    pricingScriptsV2CreateEditDraftPage.checkSyntax();
+    takesScreenshot();
   }
 }
