@@ -149,7 +149,6 @@ Feature: Edit Pricing Script
     Then Operator clicks Check Syntax
     Then Operator verify error message in header with "SyntaxError"
 
-  @test
   Scenario: Edit Draft Script - with "const" Syntax Error (uid:4af04ce4-8f1b-4384-92b7-b87780f1ce3e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -162,7 +161,6 @@ Feature: Edit Pricing Script
       | top    | Network Request Error                 |
       | bottom | `const` is not support in the script. |
 
-  @test
   Scenario: Edit Active Script - with "const" Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

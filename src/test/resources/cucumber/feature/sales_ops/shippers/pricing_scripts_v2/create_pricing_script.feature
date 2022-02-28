@@ -470,7 +470,6 @@ Feature: Pricing Scripts V2
       | C2C, NEXT_DAY    | C2C, NEXT_DAY    | NEXT_DAY     | C2C       | 12.947     | 0.847 | 12.1        | 0            | 0      | 0           | OK       | uid:237fffd0-27df-43c2-a12c-2e7b0adc9367 |
       | NORMAL, SAME_DAY | NORMAL, SAME_DAY | SAME_DAY     | NORMAL    | 9.416      | 0.616 | 8.8         | 0            | 0      | 0           | OK       | uid:b829add7-6a3e-4ae8-b1df-4b6d3e65751b |
 
-  @test
   Scenario: Create Script  - with "const" Syntax Error (uid:9dc9ef39-4d5b-4334-b13a-ff8867df1435)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator send below data to create new Draft Script:
