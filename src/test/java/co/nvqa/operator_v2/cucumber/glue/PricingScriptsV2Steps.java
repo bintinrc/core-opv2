@@ -468,5 +468,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @Then("Operator clicks Check Syntax")
   public void operatorClicksCheckScriptSaveDraft() {
     pricingScriptsV2CreateEditDraftPage.checkSyntax();
+    takesScreenshot();
   }
 }
