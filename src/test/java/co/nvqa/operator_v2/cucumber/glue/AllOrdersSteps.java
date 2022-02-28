@@ -910,4 +910,23 @@ public class AllOrdersSteps extends AbstractSteps {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.verifyDownloadedCsv(trackingId, message);
   }
+
+  @Then("Operator apply Early pickup action and chooses {string}")
+  public void operatorChoosesAndClicksSubmit(String action) {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.choosePickupActionAndClickSubmit(trackingId, action);
+  }
+
+  @And("Operator verifies the delivery address is doorstep address {string} and {string}")
+  public void operatorVerifiesTheDeliveryAddressIsDoorstepAddressAnd(String address1, String address2) {
+    pause3s();
+    Order order = get(KEY_CREATED_ORDER);
+    allOrdersPage.verifyCustomerDeliveryAddress(order, address1, address2);
+  }
+
+  @Then("Operator verifies the delivery address is rts")
+  public void operatorVerifiesTheDeliveryAddressIsRts() {
+    Order order = get(KEY_CREATED_ORDER);
+    allOrdersPage.verifyDeliveryAddressIsRts(order);
+  }
 }
