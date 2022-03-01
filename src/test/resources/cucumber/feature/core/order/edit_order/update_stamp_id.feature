@@ -33,17 +33,6 @@ Feature: Update Stamp ID
     Then Operator verify next order info on Edit order page:
       | stampId | - |
 
-  Scenario: Update Stamp ID - Update Stamp ID with Another Order's Tracking ID (uid:f80d5aa7-c010-4855-b405-32c478cb5eb1)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And DB Core Operator gets random trackingId
-    Then Operator unable to change Stamp ID of the created order to "KEY_ANOTHER_ORDER_TRACKING_ID" on Edit order page
-    When Operator refresh page
-    Then Operator verify next order info on Edit order page:
-      | stampId | - |
-
   Scenario: Remove Stamp ID (uid:70f0c0e4-1331-4a92-911e-ca6ac132377c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

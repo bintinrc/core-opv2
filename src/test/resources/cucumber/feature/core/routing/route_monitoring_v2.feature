@@ -986,7 +986,7 @@ Feature: Route Monitoring V2
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 3 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
@@ -1019,7 +1019,7 @@ Feature: Route Monitoring V2
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 3 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
@@ -1065,7 +1065,7 @@ Feature: Route Monitoring V2
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
     And DB Operator verifies there are 2 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies there are 4 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 2 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
@@ -1083,7 +1083,6 @@ Feature: Route Monitoring V2
       | totalParcels  | 4                      |
       | totalWaypoint | 2                      |
       | pendingCount  | 2                      |
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
