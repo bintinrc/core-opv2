@@ -5,7 +5,6 @@ import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -21,6 +20,8 @@ import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.COLUMN_NAME;
@@ -30,6 +31,8 @@ import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.CO
  */
 @SuppressWarnings("WeakerAccess")
 public class AllShippersPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AllShippersPage.class);
 
   @FindBy(name = "searchTerm")
   public TextBox searchTerm;
@@ -385,7 +388,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   private String getSearchKeyword(Shipper shipper) {
     String shipperName = shipper.getName();
     String shipperLegacyId = Objects.toString(shipper.getLegacyId(), null);
-    NvLogger.infof("Created Shipper name : %s ", shipperName);
+    LOGGER.info("Created Shipper name : {} ", shipperName);
     String searchValue;
     if (Objects.isNull(shipperName) && Objects.isNull(shipperLegacyId)) {
       throw new NvTestRuntimeException("Shipper legacy id and/or shipper name not saved");
@@ -402,7 +405,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   private String getSearchKeyword(Marketplace marketplace) {
     String marketplaceSellerId = marketplace.getSellerId();
     String marketplaceSellerCompanyName = marketplace.getSellerCompanyName();
-    NvLogger.infof("Created seller id : %s ", marketplaceSellerId);
+    LOGGER.info("Created seller id : {} ", marketplaceSellerId);
     String searchValue;
     if (Objects.isNull(marketplaceSellerId) && Objects.isNull(marketplaceSellerCompanyName)) {
       throw new NvTestRuntimeException(

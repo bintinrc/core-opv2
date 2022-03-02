@@ -201,8 +201,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        Assertions.assertThat(errorMessage.contains(f("Shipment id %d cannot change status from %s", shipmentId, condition)))
-                .isTrue();
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as(condition+" shipment:").contains(expected);
         break;
       case "Pending":
       case "Closed":

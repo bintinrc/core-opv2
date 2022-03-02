@@ -70,7 +70,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                                       |
     When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -93,9 +93,10 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                                       |
     When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
@@ -116,7 +117,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                                       |
     When API Operator change the status of the shipment into "Cancelled"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -139,7 +140,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                                       |
     When API Operator change the status of the shipment into "Cancelled"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -246,7 +247,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                           |
+      | mawb        | AUTO-{KEY_CREATED_SHIPMENT_ID}                                       |
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -468,6 +469,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When API Operator change the status of the shipment into "Completed"
     When Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
@@ -484,6 +486,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When API Operator change the status of the shipment into "Cancelled"
     When Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Cancelled on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |

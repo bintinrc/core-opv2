@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +8,16 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class PricingScriptsPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PricingScriptsPage.class);
 
   private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
   public static final String COLUMN_CLASS_DATA_NAME = "name";
@@ -216,7 +219,7 @@ public class PricingScriptsPage extends OperatorV2SimplePage {
         }
       }
     } catch (NoSuchElementException | TimeoutException ex) {
-      NvLogger.warn("Failed to find the element.", ex);
+      LOGGER.warn("Failed to find the element.", ex);
     }
 
     return isFound;
