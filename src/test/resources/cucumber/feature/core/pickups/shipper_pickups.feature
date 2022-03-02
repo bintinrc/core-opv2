@@ -152,7 +152,7 @@ Feature: Shipper Pickups
     And Operator duplicates created reservations
     Then Operator verify the duplicated reservations are created successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -168,24 +168,25 @@ Feature: Shipper Pickups
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator retrieve routes using data below:
-      | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
     And Operator use the Route Suggestion to add created reservation to the route using data below:
-      | routeTagName | {route-tag-name} |
+      | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}        |
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Multiple Reservations (uid:e1d9c28e-57d9-48c5-b43d-752165695637)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -202,18 +203,19 @@ Feature: Shipper Pickups
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator retrieve routes using data below:
-      | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
-      | routeTagName | {route-tag-name} |
+      | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}        |
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
@@ -525,7 +527,7 @@ Feature: Shipper Pickups
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, Suggested Route Found (uid:3a7616b6-5402-4cdb-9e10-2440f2fe8605)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -540,22 +542,23 @@ Feature: Shipper Pickups
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator retrieve routes using data below:
-      | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
     And Operator use the Route Suggestion to add created reservation to the route using data below:
-      | routeTagName | {route-tag-name} |
+      | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v4-name}        |
-      | routeId     | {KEY_SUGGESTED_ROUTE.id} |
-      | driverName  | GET_FROM_SUGGESTED_ROUTE |
+      | shipperName | {shipper-v4-name}      |
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
+      | driverName  | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, No Suggested Route Found (uid:f59fc4ef-b127-4fc6-8eac-4f5a53bbf2cf)
@@ -588,7 +591,7 @@ Feature: Shipper Pickups
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
     And Operator verifies no route suggested for selected reservations
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, Suggested Route Found (uid:b4da89d4-6041-4649-9b00-89b54671bcac)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create multiple shipper addresses V2 using data below:
@@ -604,22 +607,23 @@ Feature: Shipper Pickups
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator create new route tag:
+      | name        | GENERATED                          |
+      | description | tag for automated testing purposes |
+    And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator retrieve routes using data below:
-      | tagIds | {route-tag-id} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
-      | routeTagName | {route-tag-name} |
+      | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v4-name}        |
-      | routeId     | GET_FROM_SUGGESTED_ROUTE |
-      | driverName  | GET_FROM_SUGGESTED_ROUTE |
+      | shipperName | {shipper-v4-name}      |
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
+      | driverName  | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute @DeleteRouteTags
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, No Suggested Route Found (uid:4911902f-a1a4-4b4a-9a5b-6705728fcfb6)
