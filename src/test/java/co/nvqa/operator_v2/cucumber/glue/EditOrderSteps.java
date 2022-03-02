@@ -1698,6 +1698,7 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorValidatesEventInTheEditOrderPageAndGetEventTime(String eventName) {
     String lastScannedTime = editOrderPage.getEventTimeByEventName(eventName);
     put(KEY_EVENT_TIME, lastScannedTime);
+    takesScreenshot();
   }
 
 }

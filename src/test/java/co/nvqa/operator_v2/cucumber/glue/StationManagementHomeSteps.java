@@ -240,6 +240,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
       List<String> filterValues) {
     for (String filterValue : filterValues) {
       stationManagementHomePage.applyFilters(columnName, filterValue);
+      takesScreenshot();
     }
   }
 
@@ -434,6 +435,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Assert.assertTrue("Assert that the result grid contains all expected column values",
           value.contentEquals(actualResults.get(key)));
     });
+    takesScreenshot();
   }
 
   @Then("Operator verifies that recovery tickets page is opened on clicking arrow button")
