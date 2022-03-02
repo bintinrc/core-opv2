@@ -103,11 +103,11 @@ Feature: Recovery Tickets
       | COMPLETED ORDER             | completed order      | uid:0       |
       | CUSTOMER REJECTED           | customer rejected    | uid:0       |
       | DISPUTED ORDER INFO         | disputed order info  | uid:0       |
-      | DP OVERSIZED                | dp oversized         | uid: 0      |
-      | INACCURATE ADDRESS          | inaccurate address   | uid: 0      |
-      | MAXIMUM ATTEMPTS (DELIVERY) | max attempt delivery | uid: 0      |
-      | MAXIMUM ATTEMPTS (RTS)      | max attempt rts      | uid: 0      |
-      | RESTRICTED ZONES            | restricted zones     | uid: 0      |
+      | DP OVERSIZED                | dp oversized         | uid:0      |
+      | INACCURATE ADDRESS          | inaccurate address   | uid:0      |
+      | MAXIMUM ATTEMPTS (DELIVERY) | max attempt delivery | uid:0      |
+      | MAXIMUM ATTEMPTS (RTS)      | max attempt rts      | uid:0      |
+      | RESTRICTED ZONES            | restricted zones     | uid:0      |
 
   @DeleteCreatedTickets
   Scenario Outline: Create shipper issue ticket on Recovery Tickets menu - <dataset_name> - (<hiptest_uid>)
