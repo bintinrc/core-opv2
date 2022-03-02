@@ -33,7 +33,7 @@ import org.openqa.selenium.support.PageFactory;
 public class OperatorV2SimplePage extends SimplePage {
 
   private static final String XPATH_FOR_MDSELECT_CONTAINS_ID = "//md-select[contains(@id,'%s')]";
-  private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/preceding-sibling::div";
+  private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/../preceding-sibling::div";
 
   @FindBy(css = "div.toast-error")
   public List<ToastError> toastErrors;

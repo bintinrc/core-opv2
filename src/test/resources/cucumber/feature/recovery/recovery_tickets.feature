@@ -1,4 +1,4 @@
-@OperatorV2 @Recovery @OperatorV2Part1 @RecoveryTickets @Saas
+@OperatorV2 @Recovery @OperatorV2Part1 @RecoveryTickets @Saas @CWF
 Feature: Recovery Tickets
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,25 +6,31 @@ Feature: Recovery Tickets
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteCreatedTickets
-  Scenario: Create damage ticket on Recovery Tickets menu (uid:43d733f5-61e2-4877-82c2-ae1ac3220a2b)
+  Scenario Outline: Create damage ticket on Recovery Tickets menu - <dataset_name> - (<hiptest_uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
       | investigatingDepartment | Fleet (First Mile) |
       | investigatingHub        | {hub-name}         |
       | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile) |
+      | rtsReason               | Nobody at address  |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | <orderOutcome>     |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
+    Examples:
+      | dataset_name            | orderOutcome                  | hiptest_uid   |
+      | nv liable - return      | NV LIABLE - RETURN PARCEL     | uid:0         |
+      | nv not liable - return  | NV NOT LIABLE - RETURN PARCEL | uid:0         |
+
 
   @DeleteCreatedTickets
   Scenario: Create missing ticket on Recovery Tickets menu (uid:dc66d575-0700-44c8-a4bc-2787a5616e64)
@@ -46,7 +52,33 @@ Feature: Recovery Tickets
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
   @DeleteCreatedTickets
-  Scenario: Create parcel exception ticket on Recovery Tickets menu (uid:22fe023b-3db9-4572-9ea2-11fc6d4bc8dc)
+  Scenario Outline: Create parcel on hold ticket on Recovery Tickets menu - <dataset_name> (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL ON HOLD     |
+      | ticketSubType                 | <ticketSubType>    |
+      | orderOutcome                  | RTS                |
+      | rtsReason                     | Nobody at address  |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    Then Operator verify ticket is created successfully on page Recovery Tickets
+    Examples:
+      | ticketSubType                   | dataset_name         | hiptest-uid |
+      | SHIPPER REQUEST                 | shipper request      | uid:0       |
+      | CUSTOMER REQUEST                | customer request     | uid:0       |
+      | PAYMENT PENDING (NINJA DIRECT)  | payment pending      | uid:0       |
+
+  @DeleteCreatedTickets
+  Scenario Outline: Create parcel exception ticket on Recovery Tickets menu - <dataset_name> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -57,7 +89,7 @@ Feature: Recovery Tickets
       | investigatingDepartment       | Fleet (First Mile) |
       | investigatingHub              | {hub-name}         |
       | ticketType                    | PARCEL EXCEPTION   |
-      | ticketSubType                 | INACCURATE ADDRESS |
+      | ticketSubType                 | <ticketSubType>    |
       | orderOutcomeInaccurateAddress | RTS                |
       | rtsReason                     | Nobody at address  |
       | exceptionReason               | GENERATED          |
@@ -65,9 +97,20 @@ Feature: Recovery Tickets
       | shipperZendeskId              | 1                  |
       | ticketNotes                   | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
+    Examples:
+      | ticketSubType               | dataset_name         | hiptest-uid |
+      | CANCELLED ORDER             | cancelled order      | uid:0       |
+      | COMPLETED ORDER             | completed order      | uid:0       |
+      | CUSTOMER REJECTED           | customer rejected    | uid:0       |
+      | DISPUTED ORDER INFO         | disputed order info  | uid:0       |
+      | DP OVERSIZED                | dp oversized         | uid: 0      |
+      | INACCURATE ADDRESS          | inaccurate address   | uid: 0      |
+      | MAXIMUM ATTEMPTS (DELIVERY) | max attempt delivery | uid: 0      |
+      | MAXIMUM ATTEMPTS (RTS)      | max attempt rts      | uid: 0      |
+      | RESTRICTED ZONES            | restricted zones     | uid: 0      |
 
   @DeleteCreatedTickets
-  Scenario: Create shipper issue ticket on Recovery Tickets menu (uid:5571d314-7b79-4376-9f7a-bab503424680)
+  Scenario Outline: Create shipper issue ticket on Recovery Tickets menu - <dataset_name> - (<hiptest_uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -78,10 +121,37 @@ Feature: Recovery Tickets
       | investigatingDepartment     | Fleet (First Mile) |
       | investigatingHub            | {hub-name}         |
       | ticketType                  | SHIPPER ISSUE      |
-      | ticketSubType               | DUPLICATE PARCEL   |
+      | ticketSubType               | <ticketSubType>    |
       | orderOutcomeDuplicateParcel | RTS                |
       | rtsReason                   | Nobody at address  |
       | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
+    Then Operator verify ticket is created successfully on page Recovery Tickets
+    Examples:
+      | ticketSubType               | dataset_name          | hiptest-uid |
+      | DUPLICATE PARCEL            | duplicate parcel      | uid:0       |
+      | NO ORDER                    | no order              | uid:0       |
+      | OVERWEIGHT/OVERSIZED        | overweight oversized  | uid:0       |
+      | POOR PACKAGING/LABEL        | poor packaging label  | uid:0       |
+      | REJECTED RETURN             | rejected return       | uid:0       |
+      | RESTRICTED GOODS            | restricted goods      | uid:0       |
+
+  @DeleteCreatedTickets
+  Scenario: Create self collection ticket on Recovery Tickets menu (uid:5571d314-7b79-4376-9f7a-bab503424680)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                 | DRIVER TURN        |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | {hub-name}         |
+      | ticketType                  | SELF COLLECTION    |
+      | orderOutcomeDuplicateParcel | RTS                |
+      | rtsReason                   | Nobody at address  |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
       | ticketNotes                 | GENERATED          |
@@ -101,7 +171,7 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile) |
       | damageDescription       | GENERATED          |
       | orderOutcomeDamaged     | NV LIABLE - FULL   |
       | custZendeskId           | 1                  |
@@ -126,18 +196,18 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile) |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator edits the ticket settings with below data and verifies it:
-      | ticketStatus        | IN PROGRESS      |
-      | orderOutcome        | NV LIABLE - FULL |
-      | assignTo            | NikoSusanto      |
-      | enterNewInstruction | GENERATED        |
+      | ticketStatus        | IN PROGRESS                         |
+      | orderOutcome        | NV LIABLE - FULL - PARCEL DELIVERED |
+      | assignTo            | NikoSusanto                         |
+      | enterNewInstruction | GENERATED                           |
     Then Operator edits the Additional settings with below data and verifies it:
       | customerZendeskId | RANDOM    |
       | shipperZendeskId  | RANDOM    |
@@ -245,9 +315,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile) |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -340,7 +410,7 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile) |
       | damageDescription       | GENERATED          |
       | orderOutcomeDamaged     | NV LIABLE - FULL   |
       | custZendeskId           | 1                  |
@@ -507,9 +577,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile) |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED  |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -530,9 +600,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile)          |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -576,9 +646,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED                 |
       | ticketSubType           | IMPROPER PACKAGING      |
       | parcelLocation          | DAMAGED RACK            |
-      | liability               | NV DRIVER               |
+      | liability               | Fleet (First Mile)               |
       | damageDescription       | GENERATED               |
-      | orderOutcomeDamaged     | NV LIABLE - FULL        |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED        |
       | custZendeskId           | 1                       |
       | shipperZendeskId        | 1                       |
       | ticketNotes             | GENERATED               |
@@ -599,9 +669,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile)          |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED  |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -622,9 +692,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile)         |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -645,9 +715,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile)          |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -668,9 +738,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile)          |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
@@ -691,9 +761,9 @@ Feature: Recovery Tickets
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
+      | liability               | Fleet (First Mile)          |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
