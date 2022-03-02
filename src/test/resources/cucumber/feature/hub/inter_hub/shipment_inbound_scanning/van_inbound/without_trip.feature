@@ -375,7 +375,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     And Operator refresh page
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
-    Then Operator verify error message in shipment inbound scanning is "transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify error message in shipment inbound scanning is "Transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -387,9 +387,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
       | status      | Transit                   |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND   |
-      | result | Transit                |
-      | userId | automation@ninjavan.co |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)   |
+      | result | Transit                      |
+      | userId | qa@ninjavan.co               |
 
   @DeleteShipment
   Scenario: Van Inbound Transit Shipment Not In Origin Hub (uid:b04b3727-aa95-488d-a65c-ee80513fa5df)
@@ -399,21 +399,21 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     And Operator refresh page
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page
-    Then Operator verify error message in shipment inbound scanning is "transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify error message in shipment inbound scanning is "Transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page using data below:
       | id          | {KEY_CREATED_SHIPMENT_ID} |
       | origHubName | {hub-name}                |
-      | currHubName | {hub-name-2}              |
+      | currHubName | {hub-name}                |
       | destHubName | {hub-name-2}              |
       | status      | Transit                   |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND   |
-      | result | Transit                |
-      | userId | automation@ninjavan.co |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)   |
+      | result | Transit                      |
+      | userId | qa@ninjavan.co               |
 
   @DeleteShipment
   Scenario: Van Inbound Pending Shipment In Other Country (uid:cfea52a0-fa58-4815-80a9-825f21efdd3a)
