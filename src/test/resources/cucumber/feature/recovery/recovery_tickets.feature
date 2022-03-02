@@ -190,18 +190,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile) |
-      | damageDescription       | GENERATED          |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
       | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator edits the ticket settings with below data and verifies it:
       | ticketStatus        | IN PROGRESS                         |
@@ -309,18 +309,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile) |
-      | damageDescription       | GENERATED          |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
       | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator changes the ticket status to Resloved
     And Operator updates the ticket
@@ -663,18 +663,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | OUTBOUND CLEAN     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile)          |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED  |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | entrySource             | OUTBOUND CLEAN                        |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     Then Operator chooses Entry Source Filter as "OUTBOUND CLEAN"
     And Operator enters the tracking id and verifies that is exists
 
@@ -686,18 +686,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | RECOVERY SCANNING  |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile)         |
-      | damageDescription       | GENERATED          |
+      | entrySource             | RECOVERY SCANNING                     |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
       | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     Then Operator chooses Entry Source Filter as "RECOVERY SCANNING"
     And Operator enters the tracking id and verifies that is exists
 
@@ -709,18 +709,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile)          |
-      | damageDescription       | GENERATED          |
+      | entrySource             | ROUTE CLEANING                        |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
       | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     Then Operator chooses Entry Source Filter as "ROUTE CLEANING"
     And Operator enters the tracking id and verifies that is exists
 
@@ -732,18 +732,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE INBOUNDING   |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile)          |
-      | damageDescription       | GENERATED          |
+      | entrySource             | ROUTE INBOUNDING                      |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
       | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     Then Operator chooses Entry Source Filter as "ROUTE INBOUNDING"
     And Operator enters the tracking id and verifies that is exists
 
@@ -755,18 +755,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | SHIPPER COMPLAINT  |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Fleet (First Mile)          |
-      | damageDescription       | GENERATED          |
+      | entrySource             | SHIPPER COMPLAINT                     |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | ticketSubType           | IMPROPER PACKAGING                    |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
       | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
     Then Operator chooses Entry Source Filter as "SHIPPER COMPLAINT"
     And Operator enters the tracking id and verifies that is exists
 
