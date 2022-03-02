@@ -273,6 +273,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
     Map<String, String> filter = resolveKeyValues(filters.get(0));
     stationManagementHomePage.applyFilters(tableName, filter, 1);
+    takesScreenshot();
   }
 
   @Then("Operator verifies that Edit Order page is opened on clicking tracking id")
@@ -418,6 +419,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Assert.assertTrue("Assert that the result grid contains all expected column values",
           value.contentEquals(actualResults.get(key)));
     });
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the following details are displayed on the modal under the table:{string}")
