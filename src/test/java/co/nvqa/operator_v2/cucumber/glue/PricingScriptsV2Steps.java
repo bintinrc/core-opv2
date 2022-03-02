@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper_support.PricedOrder;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -20,12 +19,16 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class PricingScriptsV2Steps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PricingScriptsV2Steps.class);
 
   private PricingScriptsV2Page pricingScriptsV2Page;
   private PricingScriptsV2CreateEditDraftPage pricingScriptsV2CreateEditDraftPage;
@@ -63,7 +66,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String description = f(
         "This script is created for testing purpose only. Ignore this script. Created at %s.",
         createdDate);
-    NvLogger.infof("Created Pricing Script Name :" + name);
+    LOGGER.info("Created Pricing Script Name :" + name);
 
     Script script = new Script();
     script.setName(name);
@@ -108,7 +111,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
   }
 
-  @Then("^Operator edit the created Draft Script using data below:$")
+  @Then("Operator edit the created Draft Script using data below:")
   public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
@@ -121,7 +124,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.editCreatedDraft(script);
   }
 
-  @Then("^Operator edit the created Active Script using data below:$")
+  @Then("Operator edit the created Active Script using data below:")
   public void operatorEditCreatedActiveScript(Map<String, String> mapOfData) {
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedActive(script);
@@ -153,7 +156,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     put(KEY_CREATED_PRICING_SCRIPT, script);
   }
 
-  @When("^Operator do Run Check on specific Draft Script using this data below:$")
+  @When("Operator do Run Check on specific Draft Script using this data below:")
   public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
@@ -161,7 +164,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
   }
 
-  @When("^Operator do Run Check on specific Active Script using this data below:$")
+  @When("Operator do Run Check on specific Active Script using this data below:")
   public void operatorDoRunCheckOnSpecificActiveScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
@@ -176,7 +179,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyErrorMessage(message, response);
   }
 
-  @Then("^Operator verify the Run Check Result is correct using data below:$")
+  @Then("Operator verify the Run Check Result is correct using data below:")
   public void operatorVerifyTheRunCheckResultIsCorrectUsingDataBelow(
       Map<String, String> mapOfData) {
     Double grandTotal = Double.parseDouble(mapOfData.get("grandTotal"));
@@ -215,7 +218,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.validateDraftAndReleaseScript(script);
   }
 
-  @When("^Operator validate and release Draft Script using this data below:$")
+  @When("Operator validate and release Draft Script using this data below:")
   public void operatorValidateAndReleaseDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
@@ -229,8 +232,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.validateDraftAndReleaseScript(script, verifyDraftParams);
   }
 
-  @When("^Operator verify Draft Script is released successfully$")
-  @Then("^Operator verify the script is saved successfully$")
+  @When("Operator verify Draft Script is released successfully")
+  @Then("Operator verify the script is saved successfully")
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
@@ -285,29 +288,29 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.linkShippers(script, shipper);
   }
 
-  @Then("^Operator verify the Script is linked successfully$")
+  @Then("Operator verify the Script is linked successfully")
   public void operatorVerifyTheScriptIsLinkedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     pricingScriptsV2Page.verifyShipperIsLinked(script, shipper);
   }
 
-  @When("^Operator delete Active Script$")
+  @When("Operator delete Active Script")
   public void operatorDeleteActiveScript() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.deleteActiveScript(script);
   }
 
-  @Then("^Operator verify the Active Script is deleted successfully$")
+  @Then("Operator verify the Active Script is deleted successfully")
   public void operatorVerifyTheActiveScriptIsDeletedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyActiveScriptIsDeleted(script);
   }
 
-  @Then("^Operator verify the price is correct using data below:$")
+  @Then("Operator verify the price is correct using data below:")
   public void operatorVerifyThePriceIsCorrectUsingDataBelow(Map<String, String> mapOfData) {
     PricedOrder order = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_DB);
-    NvLogger.info(f("Delivery fee is : %s", order.getDeliveryFee()));
+    LOGGER.info(f("Delivery fee is : %s", order.getDeliveryFee()));
     String expectedCost = mapOfData.get("expectedCost");
     assertEquals("Expected and Actual order cost mismatch ", expectedCost,
         order.getDeliveryFee().toString());
@@ -352,14 +355,14 @@ public class PricingScriptsV2Steps extends AbstractSteps {
         .verifyTheNewTimeBoundedScriptIsCreatedAndReleasedSuccessfully(parentScript, script);
   }
 
-  @When("^Operator delete the Time-Bounded Script$")
+  @When("Operator delete the Time-Bounded Script")
   public void operatorDeleteTheTimeBoundedScript() {
     Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
     Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
     pricingScriptsV2Page.deleteTimeBoundedScript(parentScript, script);
   }
 
-  @Then("^Operator verify the Time-Bounded Script is deleted successfully$")
+  @Then("Operator verify the Time-Bounded Script is deleted successfully")
   public void operatorVerifyTheTimeBoundedScriptIsDeletedSuccessfully() {
     Script parentScript = get(KEY_CREATED_PRICING_SCRIPT);
     Script script = get(KEY_CREATED_PRICING_SCRIPT_CHILD_1);
