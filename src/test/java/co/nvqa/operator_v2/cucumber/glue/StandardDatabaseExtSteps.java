@@ -28,7 +28,6 @@ import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -64,6 +63,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 import static co.nvqa.commons.support.DateUtil.TIME_FORMATTER_1;
@@ -74,6 +75,8 @@ import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
  */
 @ScenarioScoped
 public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioManager> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardDatabaseExtSteps.class);
 
   private final String TRANSACTION_TYPE_DELIVERY = "DELIVERY";
   private static final String HUB_CD_CD = "CD->CD";
@@ -91,7 +94,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void init() {
   }
 
-  @Then("^Operator verify Jaro Scores are created successfully$")
+  @Then("Operator verify Jaro Scores are created successfully")
   public void operatorVerifyJaroScoresAreCreatedSuccessfully() {
     List<JaroScore> jaroScores = get(KEY_LIST_OF_CREATED_JARO_SCORES);
 
@@ -107,7 +110,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     });
   }
 
-  @Then("^DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived$")
+  @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived")
   public void dbOperatorVerifyJaroScoresArchived() {
     Order order = get(KEY_ORDER_DETAILS);
     String trackingId = order.getTrackingId();
@@ -133,7 +136,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     });
   }
 
-  @Then("^DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived$")
+  @Then("DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived")
   public void dbOperatorVerifyJaroScoresOfPickupTransactionArchived() {
     Order order = get(KEY_ORDER_DETAILS);
     String trackingId = order.getTrackingId();
@@ -808,7 +811,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @Given("^DB Operator get data of created driver$")
+  @Given("DB Operator get data of created driver")
   public void dbOperatorGetDataOfCreatedDriver() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     DriverEntity driverEntity = getDriverJdbc().getDriverData(driverInfo.getUsername());
@@ -907,7 +910,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           f("Expected 1 record in Warehouse_sweeps table with tracking ID %s", finalTrackingId), 1,
           warehouseSweepRecordsFilteredTemp.size());
       return warehouseSweepRecordsFilteredTemp;
-    }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Map<String, Object> warehouseSweepRecord = warehouseSweepRecordsFiltered.get(0);
     assertEquals(f("Expected hub_id in Warehouse_sweeps table"), hubId,
@@ -917,7 +920,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   }
 
   @SuppressWarnings("unchecked")
-  @Given("^DB Operator verifies pickup info is updated in order record$")
+  @Given("DB Operator verifies pickup info is updated in order record")
   public void dbOperatorVerifiesPickupInfoInOrderRecord() {
     Order order = get(KEY_CREATED_ORDER);
     final String finalTrackingId = order.getTrackingId();
@@ -931,7 +934,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1,
           pickupInfoRecordsTemp.size());
       return pickupInfoRecordsTemp;
-    }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Order pickupInfoRecord = pickupInfoRecordsFiltered.get(0);
 
@@ -968,7 +971,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1,
           deliveryInfoRecordsTemp.size());
       return deliveryInfoRecordsTemp;
-    }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Order deliveryInfoRecord = deliveryInfoRecordsFiltered.get(0);
 
@@ -991,7 +994,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         deliveryInfoRecord.getToContact());
   }
 
-  @Given("^DB Operator verifies reservation record using data below:$")
+  @Given("DB Operator verifies reservation record using data below:")
   public void dbOperatorVerifiesReservationRecord(Map<String, String> mapOfData) {
     Reservation reservation = get(KEY_CREATED_RESERVATION);
     reservation = getCoreJdbc().getReservationRecordByAddressId(reservation.getAddressId());
@@ -1003,7 +1006,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
   }
 
-  @Given("^DB Operator verifies waypoint record using data below:$")
+  @Given("DB Operator verifies waypoint record using data below:")
   public void dbOperatorVerifiesWaypointRecord(Map<String, String> mapOfData) {
     Reservation reservation = get(KEY_CREATED_RESERVATION);
     Waypoint waypoint = getCoreJdbc().getWaypoint(reservation.getWaypointId());
@@ -1016,7 +1019,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   }
 
   @SuppressWarnings("unchecked")
-  @Given("^DB Operator verifies orders record using data below:$")
+  @Given("DB Operator verifies orders record using data below:")
   public void dbOperatorVerifiesOrdersRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     Order order = get(KEY_CREATED_ORDER);
@@ -1031,7 +1034,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1,
           orderRecordsTemp.size());
       return orderRecordsTemp;
-    }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Order orderRecord = orderRecordsFiltered.get(0);
 
@@ -1106,7 +1109,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   }
 
   @SuppressWarnings("unchecked")
-  @Given("^DB Operator verifies order is deleted$")
+  @Given("DB Operator verifies order is deleted")
   public void dbOperatorVerifiesOrderIsDeleted() {
     Order order = get(KEY_CREATED_ORDER);
     final String finalTrackingId = order.getTrackingId();
@@ -1117,7 +1120,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertEquals(f("Expected 0 record in Orders table with tracking ID %s", finalTrackingId), 0,
           orderRecords.size());
       return orderRecords;
-    }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
 
   @SuppressWarnings("unchecked")
@@ -1136,7 +1139,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       assertEquals(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId),
           0, waypointRecords.size());
       return waypointRecords;
-    }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
 
   private void validatePickupInWaypointRecord(Order order, String transactionType,

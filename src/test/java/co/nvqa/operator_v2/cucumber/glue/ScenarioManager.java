@@ -14,12 +14,16 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @Singleton
 public class ScenarioManager extends CommonSeleniumScenarioManager {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScenarioManager.class);
 
   public ScenarioManager() {
   }
@@ -44,7 +48,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
 
   @After("@ResetWindow")
   public void resetWindow() {
-    NvLogger.info("Reset window.");
+    LOGGER.info("Reset window.");
 
     try {
       TestUtils.acceptAlertDialogIfAppear(getWebDriver());
@@ -56,13 +60,13 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
       webElement.click();
       operatorV2SimplePage.waitUntilInvisibilityOfToast("sidenav-main-menu");
     } catch (Throwable th) {
-      NvLogger.warnf("Failed to 'Reset Window'. Cause: %s", th.getMessage());
+      LOGGER.warn("Failed to 'Reset Window'. Cause: {}", th.getMessage());
     }
   }
 
   @After("@CloseNewWindows")
   public void closeNewWindows() {
-    NvLogger.info("Close new windows.");
+    LOGGER.info("Close new windows.");
 
     try {
       String mainWindowHandle = getCurrentScenarioStorage()
@@ -78,7 +82,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
         getWebDriver().switchTo().window(mainWindowHandle).switchTo();
       }
     } catch (Throwable th) {
-      NvLogger.warn("Failed to 'Close new windows'.", th);
+      LOGGER.warn("Failed to 'Close new windows'.", th);
     }
   }
 
@@ -87,10 +91,14 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
     final String DOMAIN = "SUMMARY";
     testCaseService.pushExecutionResultViaApi(scenario);
 
-    if (scenario.isFailed() && NvLogger.isInMemoryEnabled()) {
-      NvLogger.error(DOMAIN, "scenario: " + scenario.getName() + " error");
-      NvLogger.info(NvLogger.getLogStash());
+    try {
+      if (scenario.isFailed() && NvLogger.isInMemoryEnabled()) {
+        NvLogger.error(DOMAIN, "scenario: " + scenario.getName() + " error");
+        NvLogger.info(NvLogger.getLogStash());
+      }
+      NvLogger.reset();
+    } catch (Exception ex) {
+      LOGGER.error(ex.getMessage(), ex);
     }
-    NvLogger.reset();
   }
 }

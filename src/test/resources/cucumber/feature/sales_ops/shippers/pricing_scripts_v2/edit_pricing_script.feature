@@ -144,9 +144,36 @@ Feature: Edit Pricing Script
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
     Then Operator verify the new Script is created successfully on Drafts
-    And Operator edit the created Draft Script using data below:
+    And Operator send below data to created Draft Script:
       | source | function calculatePricing(params) {var price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
+    Then Operator clicks Check Syntax
     Then Operator verify error message in header with "SyntaxError"
+
+  Scenario: Edit Draft Script - with "const" Syntax Error (uid:4af04ce4-8f1b-4384-92b7-b87780f1ce3e)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator send below data to created Draft Script:
+      | source | function calculatePricing(params) {const price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
+    Then Operator clicks Check Syntax
+    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
+      | top    | Network Request Error                 |
+      | bottom | `const` is not support in the script. |
+
+  Scenario: Edit Active Script - with "const" Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    When Operator search according Active Script name
+    And Operator edit the created Active Script using data below:
+      | source | function calculatePricing(params) {const price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
+    Then Operator clicks Check Syntax
+    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
+      | top    | Network Request Error                 |
+      | bottom | `const` is not support in the script. |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
