@@ -896,7 +896,6 @@ public class MovementManagementPage extends OperatorV2SimplePage {
           .put("departureTime", "start-time")
           .put("endTime", "duration")
           .put("comment", "comments")
-          //.put("daysOfWeek", "day")
           .build()
       );
       setColumnValueProcessors(ImmutableMap.of(
