@@ -890,12 +890,13 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     public StationMovementSchedulesTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("originHub", "originHubName")
-          .put("destinationHub", "destinationHubName")
-          .put("movementType", "movementType")
-          .put("departureTime", "startTime")
+          .put("originHub", "origin-hub-name")
+          .put("destinationHub", "destination-hub-name")
+          .put("movementType", "movement-type")
+          .put("departureTime", "start-time")
           .put("endTime", "duration")
-          .put("comment", "comment")
+          .put("comment", "comments")
+          //.put("daysOfWeek", "day")
           .build()
       );
       setColumnValueProcessors(ImmutableMap.of(
@@ -941,9 +942,9 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       String filterInputXPATH = "//th[contains(@class,'%s')]//input";
       String filterConfirmXPATH = "//th[contains(@class,'%s')]//button[.='OK']";
 
-      findElementByXpath(f(filterXPATH, "movementType")).click();
-      findElementByXpath(f(filterInputXPATH, "movementType")).click();
-      findElementByXpath(f(filterConfirmXPATH, "movementType")).click();
+      findElementByXpath(f(filterXPATH, "movement-type")).click();
+      findElementByXpath(f(filterInputXPATH, "movement-type")).click();
+      findElementByXpath(f(filterConfirmXPATH, "movement-type")).click();
 
       findElementByXpath(f(filterXPATH, "wave")).click();
       findElementByXpath(f(filterInputXPATH, "wave")).click();
@@ -953,9 +954,9 @@ public class MovementManagementPage extends OperatorV2SimplePage {
       findElementByXpath(f(filterInputXPATH, "duration")).click();
       findElementByXpath(f(filterConfirmXPATH, "duration")).click();
 
-      executeScript("arguments[0].click()", findElementByXpath(f(filterXPATH, "daysofweek")));
-      findElementByXpath(f(filterInputXPATH, "daysofweek")).click();
-      findElementByXpath(f(filterConfirmXPATH, "daysofweek")).click();
+      executeScript("arguments[0].click()", findElementByXpath(f(filterXPATH, "day")));
+      findElementByXpath(f(filterInputXPATH, "day")).click();
+      findElementByXpath(f(filterConfirmXPATH, "day")).click();
     }
   }
 
