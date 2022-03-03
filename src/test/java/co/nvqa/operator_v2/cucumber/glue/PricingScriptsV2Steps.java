@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
@@ -255,13 +254,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.linkShippers(script, shipper);
   }
 
-  @Then("^Operator verify the Script is linked successfully$")
-  public void operatorVerifyTheScriptIsLinkedSuccessfully() {
-    Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    Shipper shipper = get(KEY_CREATED_SHIPPER);
-    pricingScriptsV2Page.verifyShipperIsLinked(script, shipper);
-  }
-
   @When("^Operator delete Active Script$")
   public void operatorDeleteActiveScript() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
@@ -272,15 +264,6 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorVerifyTheActiveScriptIsDeletedSuccessfully() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyActiveScriptIsDeleted(script);
-  }
-
-  @Then("^Operator verify the price is correct using data below:$")
-  public void operatorVerifyThePriceIsCorrectUsingDataBelow(Map<String, String> mapOfData) {
-    PricedOrder order = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_DB);
-    NvLogger.info(f("Delivery fee is : %s", order.getDeliveryFee()));
-    String expectedCost = mapOfData.get("expectedCost");
-    assertEquals("Expected and Actual order cost mismatch ", expectedCost,
-        order.getDeliveryFee().toString());
   }
 
   @When("^Operator create and release new Time-Bounded Script using data below:$")
@@ -433,5 +416,26 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       Assertions.assertThat(pricingScriptsV2Page.toastErrorBottomText.getText())
           .as("Error bottom text is correct").contains(mapOfData.get("bottom"));
     }
+  }
+
+  @When("Operator verifies Save button is inactive")
+  public void operatorVerifiesSaveButtonIsInactive() {
+    Assertions.assertThat(pricingScriptsV2Page.saveBtn.isDisabled()).as("Save Btn is disabled")
+        .isTrue();
+  }
+
+  @When("Operator link Script to Shipper with ID and Name = {string} and undo the changes")
+  public void operatorLinkScriptToShipperWithIDAndNameAndUndoTheChanges(String shipperIdAndName) {
+    shipperIdAndName = resolveValue(shipperIdAndName);
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+
+    Shipper shipper = new Shipper();
+    String shipperId = shipperIdAndName.split("-", 2)[0];
+    String shipperName = shipperIdAndName.split("-", 2)[1];
+    shipper.setLegacyId(Long.parseLong(shipperId));
+    shipper.setName(shipperName);
+
+    pricingScriptsV2Page.searchAndSelectShipper(script, shipper);
+    pricingScriptsV2Page.clickUndoBtn();
   }
 }
