@@ -5,7 +5,6 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer and Payee Info (uid:4ef31ab4-b028-405e-bcc2-f4c665d9476d)
     Given API Operator create new 'normal' shipper
@@ -33,11 +32,6 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | status | Open           |
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
-    And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
-    And Operator verifies below details in billing_qa_gl.shipper_accounts table
-      | source          | <source> |
-      | overall_balance | -83.41   |
-      | logs            | -83.41   |
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
       | netsuite_id  | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |

@@ -6,6 +6,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
@@ -32,7 +33,8 @@ public class UploadPaymentsSteps extends AbstractSteps {
 
   @When("Operator upload CSV on Upload Payments page using data below:")
   public void operatorUploadCSVOnUploadPaymentsPageUsingDataBelow(DataTable dt) {
-    String sb = dt.asLists().stream().map(row -> String.join(",", row))
+    List<List<String>> rows = resolveListOfLists(dt.asLists());
+    String sb = rows.stream().map(row -> String.join(",", row))
         .collect(Collectors.joining("\n"));
     File csvFile = createFile(CSV_FILENAME_PATTERN, sb);
     uploadPaymentsPage.switchTo();
@@ -43,10 +45,8 @@ public class UploadPaymentsSteps extends AbstractSteps {
   @Then("Operator verifies csv file is successfully uploaded on the Upload Payments page")
   public void operatorVerifiesCsvFileIsSuccessfullyUploadedOnTheUploadPaymentsPage() {
     Assertions.assertThat(uploadPaymentsPage.getUploadedFileName())
-        .as("Uploaded file name is correct")
-        .isEqualTo(CSV_FILENAME_PATTERN);
+        .as("Uploaded file name is correct").isEqualTo(CSV_FILENAME_PATTERN);
     Assertions.assertThat(uploadPaymentsPage.getUploadStatusMessage())
-        .as("Uploaded file name is correct")
-        .contains("uploaded successfully.");
+        .as("Uploaded file name is correct").contains("uploaded successfully.");
   }
 }
