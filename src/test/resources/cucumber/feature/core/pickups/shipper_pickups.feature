@@ -261,7 +261,7 @@ Feature: Shipper Pickups
     Then Operator verify the route was removed from the created reservations
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Filters Reservation by - <Note> (<hiptest-uid>)
+  Scenario Outline: Operator Filters Reservation by Hub Name (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id}    |
@@ -276,15 +276,37 @@ Feature: Shipper Pickups
       | fromDate | {gradle-current-date-yyyy-MM-dd} |
       | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
       | hub      | <hubName>                        |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v4-name}      |
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
+      | driverName  | {ninja-driver-name}    |
+    Examples:
+      | Note     | hiptest-uid                              | hubName      |
+      | Hub Name | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-name-3} |
+
+  @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filters Reservation by Zone Name (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id}    |
+      | generateAddress | ZONE {zone-name-3} |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate | {gradle-current-date-yyyy-MM-dd} |
+      | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
       | zone     | <zoneName>                       |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}      |
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | Note      | hiptest-uid                              | hubName      | zoneName           |
-      | Hub Name  | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-name-3} |                    |
-      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 |              | {zone-full-name-3} |
+      | Note      | hiptest-uid                              | zoneName           |
+      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 | {zone-full-name-3} |
 
   Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Shipper Support -> Blocked Dates
