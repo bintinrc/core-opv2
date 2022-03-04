@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -59,6 +59,11 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']")
   public PageElement toastErrorBottomText;
 
+  @FindBy(name = "commons.undo")
+  public NvApiTextButton undoBtn;
+
+  @FindBy(name = "commons.save-changes")
+  public NvApiTextButton saveBtn;
 
   public PricingScriptsV2Page(WebDriver webDriver) {
     super(webDriver);
@@ -66,18 +71,26 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     timeBoundedScriptsPage = new TimeBoundedScriptsPage(webDriver);
   }
 
+  public void createDraftAndSave(Script script) {
+    clickCreateDraftBtn();
+    pricingScriptsV2CreateEditDraftPage.createDraftAndSave(script);
+  }
+
   public void createDraft(Script script) {
+    clickCreateDraftBtn();
+    pricingScriptsV2CreateEditDraftPage.createDraft(script);
+  }
+
+  private void clickCreateDraftBtn() {
     clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
     if (!getCurrentUrl().endsWith("pricing-scripts-v2/create?type=normal") && createDraftBtn
         .isEnabled()) {
       createDraftBtn.click();
     }
-    pricingScriptsV2CreateEditDraftPage.createDraft(script);
-
   }
 
   public void checkErrorHeader(String message) {
-    pricingScriptsV2CreateEditDraftPage.checkErrorHeader(message);
+    pricingScriptsV2CreateEditDraftPage.checkSyntaxHeader(message);
   }
 
   public void editCreatedDraft(Script script) {
@@ -266,10 +279,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     waitUntilInvisibilityOfElementLocated(
         "//md-dialog//md-dialog-content/div/md-progress-circular");
     selectValueFromNvAutocomplete("ctrl.view.textShipper", legacyId);
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+    saveBtn.clickAndWaitUntilDone();
   }
 
   public void linkShippersWithIdAndName(Script script, Shipper shipper) {
+    searchAndSelectShipper(script, shipper);
+    saveBtn.clickAndWaitUntilDone();
+  }
+
+  public void searchAndSelectShipper(Script script, Shipper shipper) {
     String scriptName = script.getName();
     String legacyId = shipper.getLegacyId().toString();
     String name = shipper.getName();
@@ -283,7 +301,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Data still not loaded");
       }
       Assertions.assertThat(
-          getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_ACTIVE_SCRIPTS))
+              getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_ACTIVE_SCRIPTS))
           .isEqualTo(scriptName);
     }, String.format("Active script found "), 10, 5);
 
@@ -307,8 +325,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     scrollIntoView(itemXpath, true);
     waitUntilElementIsClickable(itemXpath);
     click(itemXpath);
+  }
 
-    clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+  public void clickUndoBtn() {
+    undoBtn.click();
   }
 
   private List<String> getLinkedShipperNames() {
@@ -340,25 +360,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
           }
         })
         .collect(Collectors.toList());
-  }
-
-  public void verifyShipperIsLinked(Script script, Shipper shipper) {
-    String scriptName = script.getName();
-    String legacyId = shipper.getLegacyId().toString();
-
-    clickTabItem(TAB_ACTIVE_SCRIPTS);
-    searchTableActiveScriptsByScriptName(scriptName);
-    wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
-        "Active Scripts table is empty. Script not found.");
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
-    NvLogger.info("Waiting until Link Shippers Dialog loaded.");
-    waitUntilInvisibilityOfElementLocated(
-        "//md-dialog//md-dialog-content/div/md-progress-circular");
-
-    List<String> listOfLinkedShippers = getLinkedShipperIds();
-    assertThat(String.format("Shipper '%s' is not added to table.", legacyId), listOfLinkedShippers,
-        Matchers.hasItem(legacyId));
-    clickButtonOnMdDialogByAriaLabel("Save changes");
   }
 
   public void deleteActiveScript(Script script) {

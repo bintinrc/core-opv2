@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.util.NvAllure;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
@@ -25,6 +24,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -32,8 +33,10 @@ import org.openqa.selenium.support.PageFactory;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OperatorV2SimplePage extends SimplePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(OperatorV2SimplePage.class);
+
   private static final String XPATH_FOR_MDSELECT_CONTAINS_ID = "//md-select[contains(@id,'%s')]";
-  private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/preceding-sibling::div";
+  private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/../preceding-sibling::div";
 
   @FindBy(css = "div.toast-error")
   public List<ToastError> toastErrors;
@@ -360,7 +363,7 @@ public class OperatorV2SimplePage extends SimplePage {
       WebElement webElement = waitUntilVisibilityOfElementLocated(toastXpathExpression);
       text = webElement.getText();
     } catch (RuntimeException ex) {
-      NvLogger.warnf("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
+      LOGGER.warn("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to get text from element Toast. XPath: %s", toastXpathExpression);
     }
@@ -426,7 +429,7 @@ public class OperatorV2SimplePage extends SimplePage {
 
       text = we.getText().trim();
     } catch (NoSuchElementException ex) {
-      NvLogger.warnf("Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
+      LOGGER.warn("Failed to find element by XPath. XPath: {}", nvTableXpathExpression);
       NvAllure
           .addWarnAttachment(getCurrentMethodName(), "Failed to find element by XPath. XPath: %s",
               nvTableXpathExpression);
@@ -536,7 +539,7 @@ public class OperatorV2SimplePage extends SimplePage {
       List<WebElement> webElements = findElementsByXpath(xpath);
       return webElements.size();
     } catch (NoSuchElementException ex) {
-      NvLogger.warnf("Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
+      LOGGER.warn("Table with NgRepeat [{}] was not found. XPath: {}", ngRepeat, xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
       return 0;
@@ -559,7 +562,7 @@ public class OperatorV2SimplePage extends SimplePage {
       List<WebElement> webElements = findElementsByXpath(xpath);
       return webElements.size();
     } catch (NoSuchElementException | TimeoutException ex) {
-      NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat,
+      LOGGER.warn("Table with md-virtual-repeat [{}] was not found. XPath: {}", mdVirtualRepeat,
           xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
@@ -574,7 +577,7 @@ public class OperatorV2SimplePage extends SimplePage {
       List<WebElement> webElements = findElementsByXpathFast(xpath);
       return webElements.size();
     } catch (NoSuchElementException | TimeoutException ex) {
-      NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat,
+      LOGGER.warn("Table with md-virtual-repeat [{}] was not found. XPath: {}", mdVirtualRepeat,
           xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
@@ -599,7 +602,7 @@ public class OperatorV2SimplePage extends SimplePage {
       WebElement we = findElementByXpath(xpath);
       value = we.getAttribute("value").trim();
     } catch (NoSuchElementException ex) {
-      NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+      LOGGER.warn("Failed to getTextOnTableWithNgRepeat. XPath: {}", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
     }
@@ -624,7 +627,7 @@ public class OperatorV2SimplePage extends SimplePage {
       WebElement we = findElementByXpath(xpath);
       text = we.getText().trim();
     } catch (NoSuchElementException ex) {
-      NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+      LOGGER.warn("Failed to getTextOnTableWithNgRepeat. XPath: {}", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
     }
@@ -642,7 +645,7 @@ public class OperatorV2SimplePage extends SimplePage {
       WebElement we = findElementByXpath(xpath);
       text = we.getText().trim();
     } catch (NoSuchElementException ex) {
-      NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+      LOGGER.warn("Failed to getTextOnTableWithNgRepeat. XPath: {}", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
     }
@@ -689,10 +692,10 @@ public class OperatorV2SimplePage extends SimplePage {
   }
 
   public void checkRowWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat) {
-    WebElement mdCheckboxWe = findElementByXpath(
+    final WebElement mdCheckboxWe = findElementByXpath(
         f("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]//md-checkbox",
             mdVirtualRepeat, rowNumber));
-    String ariaChecked = getAttribute(mdCheckboxWe, "aria-checked");
+    final String ariaChecked = getAttribute(mdCheckboxWe, "aria-checked");
 
     if ("false".equalsIgnoreCase(ariaChecked)) {
       mdCheckboxWe.click();
@@ -700,10 +703,10 @@ public class OperatorV2SimplePage extends SimplePage {
   }
 
   public void checkRowWithNgRepeat(int rowNumber, String ngRepeat) {
-    WebElement mdCheckboxWe = findElementByXpath(
+    final WebElement mdCheckboxWe = findElementByXpath(
         f("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'selection')]//md-checkbox", ngRepeat,
             rowNumber));
-    boolean ariaChecked = Boolean.valueOf(getAttribute(mdCheckboxWe, "aria-checked"));
+    final boolean ariaChecked = Boolean.parseBoolean(getAttribute(mdCheckboxWe, "aria-checked"));
 
     if (!ariaChecked) {
       mdCheckboxWe.click();
@@ -1194,7 +1197,7 @@ public class OperatorV2SimplePage extends SimplePage {
     try {
       return isElementVisible(xpath, FAST_WAIT_IN_SECONDS);
     } catch (TimeoutException ex) {
-      NvLogger.warnf("Table is not empty. XPath: %s", xpath);
+      LOGGER.warn("Table is not empty. XPath: {}", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(), "Table is not empty. XPath: %s", xpath);
       return false;
     }
@@ -1229,8 +1232,8 @@ public class OperatorV2SimplePage extends SimplePage {
     {
       boolean result;
       String currentUrl = getCurrentUrl();
-      NvLogger
-          .infof("refreshPage: Current URL = [%s] - Expected URL = [%s]", currentUrl, previousUrl);
+      LOGGER
+          .info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
 
       if (previousUrl.contains("linehaul")) {
         result = currentUrl.contains("linehaul");
@@ -1252,7 +1255,7 @@ public class OperatorV2SimplePage extends SimplePage {
   }
 
   public void waitUntilNewWindowOrTabOpened() {
-    NvLogger.info("Wait until new window or tab opened.");
+    LOGGER.info("Wait until new window or tab opened.");
     wait5sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
         f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
   }

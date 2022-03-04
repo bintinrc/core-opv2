@@ -19,7 +19,6 @@ import co.nvqa.commons.model.driver.DriverFilter;
 import co.nvqa.commons.model.sort.nodes.Node;
 import co.nvqa.commons.model.sort.nodes.Node.NodeType;
 import co.nvqa.commons.util.JsonUtils;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.model.Addressing;
@@ -45,12 +44,16 @@ import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<ScenarioManager> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiOperatorPortalExtSteps.class);
 
   private static final String HUB_CD_CD = "CD->CD";
   private static final String HUB_CD_ITS_ST = "CD->its ST";
@@ -67,7 +70,134 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void init() {
   }
 
-  @Given("^API Operator create new DP Partner with the following attributes:$")
+  @After("@DeleteVehicleTypes")
+  public void deleteVehicleTypes() {
+    VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
+    if (vehicleType != null) {
+      if (vehicleType.getId() != null) {
+        try {
+          getVehicleTypeClient().delete(vehicleType.getId());
+        } catch (Throwable ex) {
+          LOGGER.warn(f("Could not delete Vehicle Type [%s]", ex.getMessage()));
+        }
+      } else {
+        LOGGER.warn(
+            f("Could not delete Vehicle Type [%s] - id was not defined", vehicleType.getName()));
+      }
+    }
+  }
+
+  @After("@DeleteAddress")
+  public void deleteAddress() {
+    Addressing addressing = get(KEY_CREATED_ADDRESSING);
+
+    if (addressing != null) {
+      try {
+        List<co.nvqa.commons.model.addressing.Address> addresses = getAddressingClient()
+            .searchAddresses(StandardTestConstants.COUNTRY_CODE, addressing.getBuildingNo());
+        if (CollectionUtils.isNotEmpty(addresses)) {
+          getAddressingClient().deleteAddress(addresses.get(0).getId());
+        }
+      } catch (Throwable ex) {
+        LOGGER.warn("Could not delete created address");
+      }
+    }
+  }
+
+  @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
+  public void deleteShipperPickupFilterTemplate() {
+    try {
+      ShipperPickupFilterTemplate shipperPickupFilterTemplate = get(
+          KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE);
+      if (shipperPickupFilterTemplate != null && shipperPickupFilterTemplate.getId() != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteShipperPickupsFilerTemplate(shipperPickupFilterTemplate.getId());
+      }
+    } catch (Throwable ex) {
+      LOGGER.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_ALL_ORDERS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteOrdersFilterTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      LOGGER.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteShipperPickupsFilerTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      LOGGER.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteRouteGroupsFilerTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      LOGGER.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_SHIPMENTS_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteShipmentsFilerTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      LOGGER.warn("Could not delete Filter Preset", ex);
+    }
+    try {
+      Long presetId = get(KEY_ROUTES_FILTERS_PRESET_ID);
+      if (presetId != null) {
+        getShipperPickupFilterTemplatesClient()
+            .deleteRoutesFilterTemplate(presetId);
+      }
+    } catch (Throwable ex) {
+      LOGGER.warn("Could not delete Filter Preset", ex);
+    }
+  }
+
+  @After("@DeleteThirdPartyShippers")
+  public void deleteThirdPartyShippers() {
+    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    if (thirdPartyShipper != null) {
+      if (thirdPartyShipper.getId() != null) {
+        try {
+          getThirdPartyShippersClient().delete(thirdPartyShipper.getId());
+        } catch (Throwable ex) {
+          LOGGER.warn(f("Could not delete Third Party Shipper [%s]", ex.getMessage()));
+        }
+      } else {
+        LOGGER.warn(f("Could not delete Third Party Shipper [%s] - id was not defined",
+            thirdPartyShipper.getName()));
+      }
+    }
+  }
+
+  @After("@DeleteContactTypes")
+  public void deleteContactTypes() {
+    ContactType contactType = get(KEY_CONTACT_TYPE);
+    if (contactType != null) {
+      if (contactType.getId() != null) {
+        try {
+          getContactTypeClient().delete(contactType.getId());
+        } catch (Throwable ex) {
+          LOGGER.warn(f("Could not delete Driver Contact Type [%s]", ex.getMessage()));
+        }
+      } else {
+        LOGGER.warn(f("Could not delete Driver Contact Type [%s] - id was not defined",
+            contactType.getName()));
+      }
+    }
+  }
+
+  @Given("API Operator create new DP Partner with the following attributes:")
   public void apiOperatorCreateNewDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
     DpPartner dpPartner = new DpPartner(data);
     Map<String, Object> responseBody = getDpClient().createPartner(toJsonSnakeCase(dpPartner));
@@ -158,31 +288,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
   }
 
-  private void setPhoneNumber(Map<String, String> mapOfDynamicVariable, String country) {
-    switch (country) {
-      case "SG":
-        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6531594329");
-        break;
-      case "ID":
-        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6282188881593");
-        break;
-      case "MY":
-        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6066567878");
-        break;
-      case "PH":
-        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+639285554697");
-        break;
-      case "TH":
-        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+66955573510");
-        break;
-      case "VN":
-        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+0812345678");
-        break;
-      default:
-        break;
-    }
-  }
-
   @And("API Operator refresh drivers data")
   public void refreshDriversData() {
     getDriverClient().getAllDriver();
@@ -244,40 +349,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     thirdPartyShipper.setId(apiData.getId());
   }
 
-  @After("@DeleteThirdPartyShippers")
-  public void deleteThirdPartyShippers() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
-    if (thirdPartyShipper != null) {
-      if (thirdPartyShipper.getId() != null) {
-        try {
-          getThirdPartyShippersClient().delete(thirdPartyShipper.getId());
-        } catch (Throwable ex) {
-          NvLogger.warn(f("Could not delete Third Party Shipper [%s]", ex.getMessage()));
-        }
-      } else {
-        NvLogger.warn(f("Could not delete Third Party Shipper [%s] - id was not defined",
-            thirdPartyShipper.getName()));
-      }
-    }
-  }
-
-  @After("@DeleteContactTypes")
-  public void deleteContactTypes() {
-    ContactType contactType = get(KEY_CONTACT_TYPE);
-    if (contactType != null) {
-      if (contactType.getId() != null) {
-        try {
-          getContactTypeClient().delete(contactType.getId());
-        } catch (Throwable ex) {
-          NvLogger.warn(f("Could not delete Driver Contact Type [%s]", ex.getMessage()));
-        }
-      } else {
-        NvLogger.warn(f("Could not delete Driver Contact Type [%s] - id was not defined",
-            contactType.getName()));
-      }
-    }
-  }
-
   @Given("^API Operator gets data of created Vehicle Type$")
   public void apiOperatorGetsDataOfCreatedVehicleType() {
     VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
@@ -291,30 +362,13 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     vehicleType.setId(apiData.getId());
   }
 
-  @After("@DeleteVehicleTypes")
-  public void deleteVehicleTypes() {
-    VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
-    if (vehicleType != null) {
-      if (vehicleType.getId() != null) {
-        try {
-          getVehicleTypeClient().delete(vehicleType.getId());
-        } catch (Throwable ex) {
-          NvLogger.warn(f("Could not delete Vehicle Type [%s]", ex.getMessage()));
-        }
-      } else {
-        NvLogger.warn(
-            f("Could not delete Vehicle Type [%s] - id was not defined", vehicleType.getName()));
-      }
-    }
-  }
-
   @Given("^API Operator retrieve information about Bulk Order with ID \"(.+)\"$")
   public void apiOperatorRetrieveBulkOrderIdInfo(long bulkId) {
     BulkOrderInfo bulkOrderInfo = getOrderClient().retrieveBulkOrderInfo(bulkId);
     put(KEY_CREATED_BULK_ORDER_INFO, bulkOrderInfo);
   }
 
-  @Given("^API Operator enable Set Aside using data below:$")
+  @Given("API Operator enable Set Aside using data below:")
   public void apiOperatorEnableSetAside(Map<String, String> data) {
     data = resolveKeyValues(data);
     SetAsideRequest request = new SetAsideRequest();
@@ -322,31 +376,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     getSetAsideClient().enable(request);
   }
 
-  @Given("^API Operator retrieve information about Bulk Order$")
+  @Given("API Operator retrieve information about Bulk Order")
   public void apiOperatorRetrieveBatchOrderIdInfo() {
     BatchOrderInfo batchOrderInfo = getOrderClient()
         .retrieveBatchOrderInfo(Long.parseLong(get(KEY_CREATED_BATCH_ORDER_ID)));
     put(KEY_CREATED_BATCH_ORDER_INFO, batchOrderInfo);
   }
 
-  @After("@DeleteAddress")
-  public void deleteAddress() {
-    Addressing addressing = get(KEY_CREATED_ADDRESSING);
-
-    if (addressing != null) {
-      try {
-        List<co.nvqa.commons.model.addressing.Address> addresses = getAddressingClient()
-            .searchAddresses(StandardTestConstants.COUNTRY_CODE, addressing.getBuildingNo());
-        if (CollectionUtils.isNotEmpty(addresses)) {
-          getAddressingClient().deleteAddress(addresses.get(0).getId());
-        }
-      } catch (Throwable ex) {
-        NvLogger.warn("Could not delete created address");
-      }
-    }
-  }
-
-  @Given("^API Operator creates new Shipper Pickup Filter Template using data below:$")
+  @Given("API Operator creates new Shipper Pickup Filter Template using data below:")
   public void apiOperatorCreatesShipperPickupFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
@@ -357,7 +394,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
-  @Given("^API Operator creates new Orders Filter Template using data below:$")
+  @Given("API Operator creates new Orders Filter Template using data below:")
   public void apiOperatorCreatesOrdersFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
@@ -367,7 +404,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
-  @Given("^API Operator creates new Routes Filter Template using data below:$")
+  @Given("API Operator creates new Routes Filter Template using data below:")
   public void apiOperatorCreatesRoutesFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
@@ -377,7 +414,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_ROUTES_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
-  @Given("^API Operator creates new Route Groups Filter Template using data below:$")
+  @Given("API Operator creates new Route Groups Filter Template using data below:")
   public void apiOperatorCreatesRouteGroupsFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
@@ -387,7 +424,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
-  @Given("^API Operator creates new Shipments Filter Template using data below:$")
+  @Given("API Operator creates new Shipments Filter Template using data below:")
   public void apiOperatorCreatesShipmentsFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
@@ -397,66 +434,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_SHIPMENTS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
-  @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
-  public void deleteShipperPickupFilterTemplate() {
-    try {
-      ShipperPickupFilterTemplate shipperPickupFilterTemplate = get(
-          KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE);
-      if (shipperPickupFilterTemplate != null && shipperPickupFilterTemplate.getId() != null) {
-        getShipperPickupFilterTemplatesClient()
-            .deleteShipperPickupsFilerTemplate(shipperPickupFilterTemplate.getId());
-      }
-    } catch (Throwable ex) {
-      NvLogger.warn("Could not delete Filter Preset", ex);
-    }
-    try {
-      Long presetId = get(KEY_ALL_ORDERS_FILTERS_PRESET_ID);
-      if (presetId != null) {
-        getShipperPickupFilterTemplatesClient()
-            .deleteOrdersFilterTemplate(presetId);
-      }
-    } catch (Throwable ex) {
-      NvLogger.warn("Could not delete Filter Preset", ex);
-    }
-    try {
-      Long presetId = get(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID);
-      if (presetId != null) {
-        getShipperPickupFilterTemplatesClient()
-            .deleteShipperPickupsFilerTemplate(presetId);
-      }
-    } catch (Throwable ex) {
-      NvLogger.warn("Could not delete Filter Preset", ex);
-    }
-    try {
-      Long presetId = get(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID);
-      if (presetId != null) {
-        getShipperPickupFilterTemplatesClient()
-            .deleteRouteGroupsFilerTemplate(presetId);
-      }
-    } catch (Throwable ex) {
-      NvLogger.warn("Could not delete Filter Preset", ex);
-    }
-    try {
-      Long presetId = get(KEY_SHIPMENTS_FILTERS_PRESET_ID);
-      if (presetId != null) {
-        getShipperPickupFilterTemplatesClient()
-            .deleteShipmentsFilerTemplate(presetId);
-      }
-    } catch (Throwable ex) {
-      NvLogger.warn("Could not delete Filter Preset", ex);
-    }
-    try {
-      Long presetId = get(KEY_ROUTES_FILTERS_PRESET_ID);
-      if (presetId != null) {
-        getShipperPickupFilterTemplatesClient()
-            .deleteRoutesFilterTemplate(presetId);
-      }
-    } catch (Throwable ex) {
-      NvLogger.warn("Could not delete Filter Preset", ex);
-    }
-  }
-
-  @When("^API Operator create new COD for created order$")
+  @When("API Operator create new COD for created order")
   public void operatorCreateNewCod() {
     Order order = get(KEY_CREATED_ORDER);
     Long routeId = get(KEY_CREATED_ROUTE_ID);
@@ -508,5 +486,30 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
     salesPerson = getSalesClient().createSalesPerson(salesPerson);
     putInList(KEY_LIST_OF_SALES_PERSON, salesPerson);
+  }
+
+  private void setPhoneNumber(Map<String, String> mapOfDynamicVariable, String country) {
+    switch (country) {
+      case "SG":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6531594329");
+        break;
+      case "ID":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6282188881593");
+        break;
+      case "MY":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+6066567878");
+        break;
+      case "PH":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+639285554697");
+        break;
+      case "TH":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+66955573510");
+        break;
+      case "VN":
+        mapOfDynamicVariable.put("DRIVER_CONTACT_DETAIL", "+0812345678");
+        break;
+      default:
+        break;
+    }
   }
 }
