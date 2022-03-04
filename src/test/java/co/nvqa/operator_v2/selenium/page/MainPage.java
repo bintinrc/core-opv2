@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.HashMap;
@@ -161,7 +160,7 @@ public class MainPage extends OperatorV2SimplePage {
           closeDialogIfVisible();
           refreshPage = false;
         } catch (Exception ex) {
-          NvLogger.warn("Failed to click nav child.", ex);
+          LOGGER.warn("Failed to click nav child.", ex);
         }
       }
 

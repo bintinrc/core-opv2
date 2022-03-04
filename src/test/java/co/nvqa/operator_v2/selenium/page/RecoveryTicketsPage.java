@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -34,6 +35,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
   public static final String TICKET_TYPE_PARCEL_ON_HOLD = "PARCEL ON HOLD";
   public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
   public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
+  public static final String TICKET_TYPE_SELF_COLLECTION = "SELF COLLECTION";
   public static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
 
   public TicketsTable ticketsTable;
@@ -77,6 +79,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public EditTicketDialog editTicketDialog;
 
+  @FindBy(xpath = "//md-input-container[@label='Last Instruction']/div[@class='readonly']")
+  public PageElement lastInstructionText;
+
   public RecoveryTicketsPage(WebDriver webDriver) {
     super(webDriver);
     ticketsTable = new TicketsTable(webDriver);
@@ -101,6 +106,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
         //Damaged Details
         createTicketDialog.orderOutcome
             .searchAndSelectValue(recoveryTicket.getOrderOutcomeDamaged());
+        if (!recoveryTicket.getRtsReason().isEmpty()) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
         createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
         createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
         createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
@@ -131,6 +139,14 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
+        break;
+      }
+      case TICKET_TYPE_SELF_COLLECTION: {
+        createTicketDialog.orderOutcome
+            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
         break;
       }
       case TICKET_TYPE_PARCEL_ON_HOLD: {

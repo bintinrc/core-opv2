@@ -201,8 +201,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        Assertions.assertThat(errorMessage.contains(f("Shipment id %d cannot change status from %s", shipmentId, condition)))
-                .isTrue();
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as(condition+" shipment:").contains(expected);
         break;
       case "Pending":
       case "Closed":
@@ -234,14 +234,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
             errorMessage, containsString(f("shipment for %d not found", shipmentId)));
         break;
 
-      case "transit":
-        assertThat("Last scanned is true",
-            errorMessage, containsString(
-                f("Last scanned:%d", shipmentId)));
-        String scanStatusCardString = scanStatusCard.getText();
-        assertThat("Scan card is true",
-            scanStatusCardString, containsString(
-                f("Still In Transit\nContinue Shipment\n1 Shipment ID(s)\n%s", shipmentId)));
+      case "Transit":
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as("Transit:").contains(expected);
         break;
     }
   }

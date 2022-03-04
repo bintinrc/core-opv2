@@ -53,11 +53,17 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
     setScriptInfo(script);
     setWriteScript(script);
-    boolean headerHint = isElementVisible(
-        "//div[@text='Run a syntax check before saving or verifying the draft.']");
-    if (headerHint) {
-      checkSyntax(script);
-    }
+  }
+
+  public void createDraftAndSave(Script script) {
+    waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
+    setScriptInfo(script);
+    setWriteScript(script);
+    assertTrue("Run Syntax is visible", isElementVisible(
+        "//div[@text='Run a syntax check before saving or verifying the draft.']"));
+    checkSuccessfulSyntax();
+    saveDraft();
+    waitUntilVisibilityOfToast("Your script has been successfully created.");
   }
 
   private void setScriptInfo(Script script) {
@@ -88,23 +94,16 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     }
   }
 
-  private void checkSyntax(Script script) {
-    clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
-    String headerHintXpath = "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info') and contains(@text, 'No errors found')]";
-    boolean headerHint = isElementVisible(headerHintXpath);
-    if (headerHint) {
-      String actualSyntaxInfo = getAttribute(headerHintXpath, "text");
-      assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
-          actualSyntaxInfo);
-      if (isElementVisible("//nv-api-text-button[@name='Save Draft']")) {
-        saveDraft();
-      } else {
-        validateDraftAndReleaseScript(script);
-      }
-    }
+  public void checkSuccessfulSyntax() {
+    checkSyntax();
+    checkSyntaxHeader("No errors found. You may proceed to verify or save the draft.");
   }
 
-  public void checkErrorHeader(String message) {
+  public void checkSyntax() {
+    clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
+  }
+
+  public void checkSyntaxHeader(String message) {
     String actualErrorInfo = getText("//div[contains(@class,'hint')]");
     assertTrue(actualErrorInfo.contains(message));
   }
@@ -112,13 +111,11 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
   public void editScript(Script script) {
     waitUntilPageLoaded(buildScriptUrl(script));
     setWriteScript(script);
-    checkSyntax(script);
   }
 
-  private void saveDraft() {
+  public void saveDraft() {
     pause2s();
     clickNvApiTextButtonByNameAndWaitUntilDone("Save Draft");
-    clickToast("Your script has been successfully created.");
   }
 
   private void validateDraft() {

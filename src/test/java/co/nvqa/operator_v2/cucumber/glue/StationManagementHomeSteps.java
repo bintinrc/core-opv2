@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
@@ -15,6 +14,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Veera N
@@ -23,6 +24,9 @@ import org.openqa.selenium.TimeoutException;
 @SuppressWarnings("unused")
 @ScenarioScoped
 public class StationManagementHomeSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(StationManagementHomeSteps.class);
+
   public static final String CSV_FILENAME_PATTERN = "Failure_Reasons";
   public static final String SFLD_ACK_FAILURE_MSG = "SFLD ticket acknowledgement failed because ticket is not of UNCONFIRMED status or other parameters are wrong.";
 
@@ -44,7 +48,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     retryIfExpectedExceptionOccurred(() -> {
           String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
           stationManagementHomePage.selectHubAndProceed(hub);
-        }, null, NvLogger::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
         NoSuchElementException.class, TimeoutException.class);
   }
 
