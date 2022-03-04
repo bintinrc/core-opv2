@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -288,7 +287,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.linkShippers(script, shipper);
   }
 
-  @When("^Operator delete Active Script$")
+  @When("Operator delete Active Script")
   public void operatorDeleteActiveScript() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.deleteActiveScript(script);
