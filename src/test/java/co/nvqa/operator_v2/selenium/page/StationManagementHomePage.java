@@ -45,7 +45,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
   private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
-  private static final String MODAL_TABLE_HEADER_XPATH = "//div[contains(@class,'th')]";
+  private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[@class='th']//input";
@@ -784,7 +784,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
   }
 
-  public void getRecordsAndValidateSorting(String columnName) {
+  public List<String> getColumnValuesByColumnName(String columnName) {
     int columnIndex = 0;
     List<String> colData = new ArrayList<String>();
     waitWhilePageIsLoading();
@@ -815,6 +815,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    return colData;
+  }
+
+  public void getRecordsAndValidateSorting(String columnName) {
+    List<String> colData = getColumnValuesByColumnName(columnName);
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
@@ -824,6 +829,17 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       Assert.assertTrue(
           f("Assert that the column values %s are sorted as expected", columnName),
           Comparators.isInOrder(columnValue, Comparator.reverseOrder()));
+      return;
+    }
+    if ("Last Scanned Time".contentEquals(columnName)) {
+      List<Double> columnValue = new ArrayList<Double>();
+      colData.forEach(value -> {
+        value = value.replaceAll("-", "").replaceAll(" ", ".").replaceAll(":", "");
+        columnValue.add(Double.parseDouble(value));
+      });
+      Assert.assertTrue(
+          f("Assert that the column values %s are sorted as expected", columnName),
+          Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
       return;
     }
 

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -25,19 +26,23 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String PRIORITY_LEVEL_COLOR_XPATH = "//div[contains(@class,'priority-container')]";
   private static final String LOCATOR_RTS_INFO = "//div[contains(@class,'rts-info-container')]/div/h5";
   private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//span";
-  private static final String HUB_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]/ancestor::md-autocomplete";
-  private static final String HUB_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]";
-  private static final String CHOSEN_VALUE_SELECTION_XPATH = "//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
+  private static final String HUB_DROPDOWN_XPATH = "//span[contains(text(),'Search or select hub')]//preceding::input[@type='search']";
+  private static final String HUB_INPUT_XPATH = "//span[contains(text(),'Search or select hub')]//preceding::input[@type='search']";
+  private static final String CHOSEN_VALUE_SELECTION_XPATH = "//div[@label='%s']";
   private static final String CHOSEN_VALUE_TASK_XPATH = "//md-virtual-repeat-container/following-sibling::md-virtual-repeat-container//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]/ancestor::md-autocomplete";
   private static final String SORT_TASK_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]";
   private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
 
-  @FindBy(xpath = "//nv-icon-text-button[@name='Proceed']")
+  @FindBy(xpath = "//button[text()='Proceed']")
   public Button proceedButton;
 
   @FindBy(xpath = "//div[contains(@class,'prior-container')]/h5")
   public PageElement priorTag;
+
+  @FindBy(xpath = "//input[@data-testid='scan-input-field']")
+  public PageElement trackingIdBox;
+
 
   public ParcelSweeperLivePage(WebDriver webDriver) {
     super(webDriver);
@@ -48,7 +53,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   }
 
   public void scanTrackingId(String trackingId) {
-    sendKeysAndEnterByAriaLabel("Tracking ID", trackingId);
+    trackingIdBox.sendKeys(trackingId);
+    trackingIdBox.sendKeys(Keys.ENTER);
     pause1s();
   }
 
@@ -123,6 +129,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     pause2s();
 
     // Select Hub
+    getWebDriver().switchTo().frame(0);
     click(HUB_DROPDOWN_XPATH);
     waitUntilVisibilityOfElementLocated(HUB_INPUT_XPATH);
     sendKeys(HUB_INPUT_XPATH, hubName);
