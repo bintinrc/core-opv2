@@ -133,7 +133,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
   @Then("Operator verifies that the status of ticket is {string}")
   public void operatorVerifiesThatTheStatusOfTicketIs(String expectedStatus) {
     recoveryTicketsPage.verifyTicketStatus(expectedStatus);
-    recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
+    recoveryTicketsPage.clickButtonByAriaLabel("Cancel Ticket");
     pause2s();
   }
 
@@ -172,8 +172,8 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     assertEquals(recoveryTicket.getAssignTo().toLowerCase(),
         recoveryTicketsPage.getTextById("assign-to").toLowerCase());
     assertEquals(recoveryTicket.getEnterNewInstruction().toLowerCase(),
-        recoveryTicketsPage.getTextByIdForInputFields("last-instruction").toLowerCase());
-    recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
+        recoveryTicketsPage.lastInstructionText.getText().toLowerCase());
+    recoveryTicketsPage.editTicketDialog.forceClose();
     pause2s();
   }
 
@@ -233,7 +233,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         recoveryTicketsPage.getInnerTextByIdForInputFields("shipper-zendesk-id").trim());
     //Commenting the below assertion because of JIRA TICKETING-173(https://jira.ninjavan.co/browse/TICKETING-173)
     //assertEquals(recoveryTicket.getTicketComments().toLowerCase(),recoveryTicketsPage.getTextByClassInTable("comments").toLowerCase());
-    recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
+    recoveryTicketsPage.editTicketDialog.forceClose();
     pause2s();
   }
 
