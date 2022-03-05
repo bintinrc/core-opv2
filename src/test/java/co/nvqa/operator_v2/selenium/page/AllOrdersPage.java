@@ -974,4 +974,36 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     }
   }
 
+  public void choosePickupActionAndClickSubmit(String trackingId, String action) {
+    filterTableOrderByTrackingId(trackingId);
+    selectAllShown();
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+            findElementByXpath("//button[@aria-label = 'Action']"));
+    pause2s();
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+            findElementByXpath("//button[@aria-label = 'Early Pickup']"));
+    pause2s();
+    if ("Return To Sender".equalsIgnoreCase(action)) {
+      ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+              findElementByXpath("//md-radio-button[@aria-label='Return To Sender']"));
+      pause2s();
+    }
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+            findElementByXpath("//button[@aria-label = 'Submit']"));
+    pause2s();
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+            findElementByXpath("//button[@aria-label = 'Submit']"));
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
+  }
+
+  public void verifyCustomerDeliveryAddress(Order order, String address1, String address2) {
+    assertEquals("Delivery Address1 is correct: ", order.getToAddress1().trim(), address1);
+    assertEquals("Delivery Address2 is correct: ", order.getToAddress2().trim(), address2);
+  }
+
+  public void verifyDeliveryAddressIsRts(Order order) {
+    assertEquals("Delivery Address1 is correct: ", order.getFromAddress1(), order.getToAddress1());
+    assertEquals("Delivery Address2 is correct: ", order.getFromAddress2(), order.getToAddress2());
+  }
 }

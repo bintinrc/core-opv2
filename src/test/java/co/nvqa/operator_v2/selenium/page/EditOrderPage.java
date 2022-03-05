@@ -54,6 +54,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.DATE_TIME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
@@ -2441,6 +2442,19 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
     }
 
+  }
+
+  public String getEventTimeByEventName(String eventName) {
+    int rowWithExpectedEvent = 1;
+    for (int i = 1; i <= eventsTable.getRowsCount(); i++) {
+      String eventNameActual = getTextOnTableEvent(i, EVENT_NAME);
+      if (eventName.equals(eventNameActual)) {
+        rowWithExpectedEvent = i;
+      }
+    }
+    OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
+    String eventTime = eventRow.getEventTime();
+    return eventTime;
   }
 
 }

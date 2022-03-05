@@ -9,6 +9,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -195,11 +197,12 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   public void checkAlert(Long shipmentId, String condition) {
     scanAlertMessage.waitUntilVisible();
     String errorMessage = scanAlertMessage.getText();
+    String expected = "";
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        assertTrue("Error Message is not the same : ", errorMessage
-            .contains(f("shipment %d is in terminal state: [%s]", shipmentId, condition)));
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as(condition+" shipment:").contains(expected);
         break;
       case "Pending":
       case "Closed":
@@ -207,25 +210,23 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
             errorMessage.contains(f("shipment %d is [%s]", shipmentId, condition)));
         break;
       case "different country van":
-        assertEquals("Error Message is not the same : ", errorMessage,
-            f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
-                TestConstants.COUNTRY_CODE.toLowerCase()));
+        Assertions.assertThat(f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
+                        TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "different country hub":
-        assertEquals("Error Message is not the same : ", errorMessage,
-            f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
-                TestConstants.COUNTRY_CODE.toLowerCase()));
+        Assertions.assertThat(f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
+                TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "pending shipment":
-        assertTrue("Error Message is different : ",
-            errorMessage.contains(f("shipment %d is [Pending]", shipmentId)));
+        expected = f("shipment %d is [Pending]",shipmentId);
+        Assertions.assertThat(errorMessage).as("pending shipment:").contains(expected);
         break;
 
       case "closed shipment":
-        assertTrue("Error Message is not the same : ",
-            errorMessage.contains(f("shipment %d is [Closed]", shipmentId)));
+        expected = f("shipment %d is [Closed]",shipmentId);
+        Assertions.assertThat(errorMessage).as("closed shipment:").contains(expected);
         break;
 
       case "shipment not found":
@@ -233,14 +234,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
             errorMessage, containsString(f("shipment for %d not found", shipmentId)));
         break;
 
-      case "transit":
-        assertThat("Last scanned is true",
-            errorMessage, containsString(
-                f("Last scanned:%d", shipmentId)));
-        String scanStatusCardString = scanStatusCard.getText();
-        assertThat("Scan card is true",
-            scanStatusCardString, containsString(
-                f("Still In Transit\nContinue Shipment\n1 Shipment ID(s)\n%s", shipmentId)));
+      case "Transit":
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as("Transit:").contains(expected);
         break;
     }
   }

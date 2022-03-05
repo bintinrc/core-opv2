@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
@@ -22,6 +21,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Veera N
@@ -30,6 +31,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 @SuppressWarnings("WeakerAccess")
 public class StationManagementHomePage extends OperatorV2SimplePage {
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(StationManagementHomePage.class);
 
   private static final String STATION_HOME_URL_PATH = "/station-homepage";
   private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
@@ -42,7 +45,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
   private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
-  private static final String MODAL_TABLE_HEADER_XPATH = "//div[contains(@class,'th')]";
+  private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[@class='th']//input";
@@ -234,10 +237,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
-      int actualCount = Integer.parseInt(tile.getText().replace(",", "").trim());
-      return actualCount;
+      return Integer.parseInt(tile.getText().replace(",", "").trim());
     } catch (Exception e) {
-      NvLogger.error(e.getMessage());
+      LOGGER.error(e.getMessage(), e);
       return 0;
     }
   }
@@ -270,10 +272,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String dollarAmount = tile.getText().trim().replaceAll("\\$|\\,", "");
-      double dollarValue = Double.parseDouble(dollarAmount);
-      return dollarValue;
+      return Double.parseDouble(dollarAmount);
     } catch (Exception e) {
-      NvLogger.error(e.getMessage());
+      LOGGER.error(e.getMessage(), e);
       return 0;
     }
   }
@@ -366,16 +367,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         .withTimeout(Duration.ofSeconds(15))
         .pollingEvery(Duration.ofMillis(100))
         .ignoring(NoSuchElementException.class);
-    fWait.until(driver -> {
-      System.out.println(f("THE CURRENT URL IS %s", driver.getCurrentUrl()));
-      return driver.getCurrentUrl().endsWith(partUrl);
-    });
+    fWait.until(driver -> driver.getCurrentUrl().endsWith(partUrl));
   }
 
   public void waitUntilTileValueMatches(String tileName, int expected) {
     WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
     wdWait.until(driver -> {
-      NvLogger.info("Refreshing the page to reload the tile value...");
+      LOGGER.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();
       waitUntilPageLoaded();
       closeIfModalDisplay();
@@ -389,7 +387,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     String tileValueXpath = f(TILE_VALUE_XPATH, tileName, tileName);
     wdWait.until(driver -> {
       double actualCount = -1;
-      NvLogger.info("Waiting for the tile value to load...");
+      LOGGER.info("Waiting for the tile value to load...");
       try {
         WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
         actualCount = Double.parseDouble(tile.getText().replaceAll("\\$|\\,", "").trim());
@@ -403,7 +401,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   public void waitUntilTileDollarValueMatches(String tileName, double expected) {
     WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
     wdWait.until(driver -> {
-      NvLogger.info("Refreshing the page to reload the tile value...");
+      LOGGER.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();
       waitUntilPageLoaded();
       double actual = getDollarValueFromTile(tileName);
@@ -786,7 +784,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
   }
 
-  public void getRecordsAndValidateSorting(String columnName) {
+  public List<String> getColumnValuesByColumnName(String columnName) {
     int columnIndex = 0;
     List<String> colData = new ArrayList<String>();
     waitWhilePageIsLoading();
@@ -817,6 +815,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    return colData;
+  }
+
+  public void getRecordsAndValidateSorting(String columnName) {
+    List<String> colData = getColumnValuesByColumnName(columnName);
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
@@ -826,6 +829,17 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       Assert.assertTrue(
           f("Assert that the column values %s are sorted as expected", columnName),
           Comparators.isInOrder(columnValue, Comparator.reverseOrder()));
+      return;
+    }
+    if ("Last Scanned Time".contentEquals(columnName)) {
+      List<Double> columnValue = new ArrayList<Double>();
+      colData.forEach(value -> {
+        value = value.replaceAll("-", "").replaceAll(" ", ".").replaceAll(":", "");
+        columnValue.add(Double.parseDouble(value));
+      });
+      Assert.assertTrue(
+          f("Assert that the column values %s are sorted as expected", columnName),
+          Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
       return;
     }
 

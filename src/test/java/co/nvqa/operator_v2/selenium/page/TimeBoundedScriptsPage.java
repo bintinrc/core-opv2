@@ -1,16 +1,19 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.pricing.Script;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class TimeBoundedScriptsPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(TimeBoundedScriptsPage.class);
 
   private static final String MD_VIRTUAL_REPEAT_TABLE = "script in getTableData()";
   public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE = "name";
@@ -86,8 +89,8 @@ public class TimeBoundedScriptsPage extends OperatorV2SimplePage {
     waitUntil(() ->
         {
           String currentUrl = getCurrentUrl();
-          NvLogger.infof(
-              "TimeBoundedScriptsPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]",
+          LOGGER.debug(
+              "TimeBoundedScriptsPage.waitUntilPageLoaded: Current URL = [{}] - Expected URL contains = [{}]",
               currentUrl, expectedUrlEndsWith);
           return currentUrl.endsWith(expectedUrlEndsWith);
         }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS,

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.util;
 
 import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
 import co.nvqa.commons.util.JsonUtils;
-import co.nvqa.commons.util.NvLogger;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,12 +15,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
 public class TestUtils extends CommonSeleniumTestUtils {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
   private TestUtils() {
   }
@@ -33,7 +36,7 @@ public class TestUtils extends CommonSeleniumTestUtils {
       String userJson = URLDecoder.decode(cookie, StandardCharsets.UTF_8.name());
       return (String) JsonUtils.fromJsonCamelCaseToMap(userJson).get("timezone");
     } catch (IOException ex) {
-      NvLogger.error("Failed to get timezone from browser cookies.", ex);
+      LOGGER.error("Failed to get timezone from browser cookies.", ex);
     }
 
     return null;
@@ -156,7 +159,7 @@ public class TestUtils extends CommonSeleniumTestUtils {
         fileText.append(input);
       }
     } catch (IOException ex) {
-      NvLogger.warnf("File '%s' failed to read. Cause: %s....", file.getAbsolutePath(),
+      LOGGER.warn("File '{}' failed to read. Cause: {}....", file.getAbsolutePath(),
           ex.getMessage());
     }
 

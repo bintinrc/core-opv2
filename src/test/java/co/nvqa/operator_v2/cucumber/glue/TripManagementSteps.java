@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
@@ -12,19 +11,22 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tristania Siagian
  */
 
 public class TripManagementSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(TripManagementSteps.class);
 
   private TripManagementPage tripManagementPage;
 
@@ -143,16 +145,15 @@ public class TripManagementSteps extends AbstractSteps {
             put(KEY_MOVEMENT_TYPE_INCLUDED, true);
             break;
           default:
-            NvLogger.warn("Filter Type is not found!");
+            LOGGER.warn("Filter Type: {} is not found!", filterName);
         }
         tripManagementPage.selectValueFromFilterDropDownDirectly(filterMap.get("filterName"),
             filterMap.get("filterValue"));
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         tripManagementPage.refreshPage();
         tripManagementPage.switchTo();
-        throw new NvTestRuntimeException(ex.getCause());
+        throw new NvTestRuntimeException(ex);
       }
     }, 10);
   }
@@ -166,9 +167,9 @@ public class TripManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies that the trip management shown in {string} tab is correct")
   public void operatorVerifiesThatTheTripManagementShownIsCorrect(String tabName) {
-    TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+    final TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
     // Get the record counts for today
-    Long tripManagementCount = tripManagementDetailsData.getData().stream().filter(
+    final Long tripManagementCount = tripManagementDetailsData.getData().stream().filter(
                     (job) -> job.getExpectedDepartureTime().toString().contains(DateUtil.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
             .count();
 
