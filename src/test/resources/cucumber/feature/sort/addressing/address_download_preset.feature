@@ -1,4 +1,4 @@
-@Sort @AddressDownload
+@Sort @AddressDownload @run
 Feature: Address Download
 
   @LaunchBrowser @ShouldAlwaysRun
