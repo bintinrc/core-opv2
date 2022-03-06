@@ -736,37 +736,37 @@ public class MovementManagementPage extends OperatorV2SimplePage {
 
   public static class HubRelationSchedulesTable extends AntTable<HubRelationSchedule> {
 
-    @FindBy(xpath = "//td[@class='startTime']//span[@class='ant-time-picker']")
+    @FindBy(xpath = "//td[contains(@class,'start-time')]")
     public AntTimePicker departureTime;
 
-    @FindBy(xpath = "//td[@class='duration']//input[@class='ant-input-number-input']")
+    @FindBy(xpath = "//td[contains(@class,'duration')]")
     public TextBox durationDays;
 
-    @FindBy(xpath = "//td[@class='duration']//span[@class='ant-time-picker']")
+    @FindBy(xpath = "//td[@class='duration']")
     public AntTimePicker durationTime;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='1']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='1']")
     public CheckBox monday;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='2']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='2']")
     public CheckBox tuesday;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='3']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='3']")
     public CheckBox wednesday;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='4']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='4']")
     public CheckBox thursday;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='5']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='5']")
     public CheckBox friday;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='6']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='6']")
     public CheckBox saturday;
 
-    @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='7']")
+    @FindBy(xpath = "//td[contains(@class,'day')]//input[@type='checkbox'][@value='7']")
     public CheckBox sunday;
 
-    @FindBy(xpath = "//td[@class='comment']//textarea")
+    @FindBy(xpath = "//td[contains(@class,'comment')]")
     public TextBox comment;
 
     private static final Pattern DURATION_PATTERN = Pattern
@@ -775,12 +775,12 @@ public class MovementManagementPage extends OperatorV2SimplePage {
     public HubRelationSchedulesTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("originHubName", "originHubName")
-          .put("destinationHubName", "destinationHubName")
-          .put("movementType", "movementType")
-          .put("startTime", "startTime")
-          .put("duration", "duration")
-          .put("comment", "comment")
+          .put("originHub", "origin-hub-name")
+          .put("destinationHub", "destination-hub-name")
+          .put("movementType", "movement-type")
+          .put("departureTime", "start-time")
+          .put("endTime", "duration")
+          .put("comment", "comments")
           .build()
       );
       setColumnValueProcessors(ImmutableMap.of(
@@ -789,7 +789,7 @@ public class MovementManagementPage extends OperatorV2SimplePage {
             value = value.toLowerCase();
             return String.join("_", value.split(" "));
           },
-          "duration", value ->
+          "endTime", value ->
           {
             Matcher m = DURATION_PATTERN.matcher(value);
             return m.matches() ? m.group(1) + ":" + m.group(2) + ":" + m.group(3) : null;
