@@ -13,7 +13,9 @@ import org.openqa.selenium.support.FindBy;
 public class ParcelSweeperPage extends OperatorV2SimplePage {
 
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
-  private static final String LOCATOR_ROUTE_INFO_CONTAINER = "//div[contains(@class, 'route-info-container')]";
+  private static final String LOCATOR_ROUTE_CONTAINER = "//div[@class= 'panel route-info-container']";
+  private static final String LOCATOR_ROUTE_INFO_CONTAINER = "//span[@data-testid = 'route-title']";
+  private static final String LOCATOR_ROUTE_DESCRIPTION_CONTAINER = "//h4[@data-testid = 'route-description']";
   private static final String LOCATOR_ZONE_INFO_CONTAINER = "//div[contains(@class, 'zone-info-container')]";
   private static final String LOCATOR_DESTINATION_HUB_CONTAINER = "//div[contains(@class, 'destination-hub-container')]";
 
@@ -48,18 +50,19 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
   }
 
   public void verifyRouteInfo(String routeId, String driverName, String color) {
+    pause2s();
     if (routeId != null) {
-      assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h3"));
+      assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER));
     }
 
     if (StringUtils.isNotBlank(driverName)) {
-      assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"),
+      assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_DESCRIPTION_CONTAINER),
           equalToIgnoringCase(driverName));
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
-          .fromString(getCssValue(LOCATOR_ROUTE_INFO_CONTAINER, "background-color"));
+          .fromString(getCssValue(LOCATOR_ROUTE_CONTAINER, "background-color"));
       assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
     }
   }
