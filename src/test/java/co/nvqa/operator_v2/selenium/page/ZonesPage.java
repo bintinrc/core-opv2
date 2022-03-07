@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
-import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -25,8 +24,8 @@ public class ZonesPage extends OperatorV2SimplePage {
 
   private static final String CSV_FILENAME = "zones.csv";
 
-  @FindBy(xpath = "//*[contains(text(), 'Add Zone')]")
-  public Button addZone;
+  @FindBy(name = "Add Zone")
+  public NvIconTextButton addZone;
 
   @FindBy(name = "View Selected Polygons")
   public NvIconTextButton viewSelectedPolygons;
