@@ -45,8 +45,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
   public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment']";
-  public static final String XPATH_BARCODE_SCAN = "//input[@id='toAddTrackingId']";
-  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//input[@id='toRemoveTrackingId']";
+  public static final String XPATH_BARCODE_SCAN = "//div[h5[text()='Scan Shipment to Inbound']]//input";
+  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//div[h5[text()='Remove Shipment']]//input";
   //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
   public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
   public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
@@ -54,29 +54,29 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SCANNED_SHIPMENT = "//td[contains(@class,'shipment_id')]";
   public static final String XPATH_SCANNED_SHIPMENT_BY_ID = "//td[contains(@class,'shipment_id')][.='%s']";
   public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
-  public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
+  public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]/following-sibling::span";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[contains(@class,'scan-barcode-container')]//small";
   public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
   public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
 
 
-  @FindBy(xpath = "//div[span[.='Driver']]//p")
+  @FindBy(xpath = "//div[span[.='Driver']]/following-sibling::span")
   public TextBox driverText;
 
-  @FindBy(xpath = "//div[span[.='Movement Trip']]//p")
+  @FindBy(xpath = "//div[span[.='Movement Trip']]/following-sibling::span")
   public TextBox movementTripText;
 
   @FindBy(xpath = XPATH_INBOUND_HUB_TEXT)
   public TextBox inboundHubText;
 
-  @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
+  @FindBy(xpath = "//div[span[.='Inbound Type']]/following-sibling::span")
   public TextBox inboundTypeText;
 
   @FindBy(xpath = "//div[.='End Inbound']")
   public Button endInboundButton;
 
-  @FindBy(xpath = "//h5[@class='shipment-parcel-numbers']")
+  @FindBy(xpath = "//h5[contains(.,'Shipments Scanned to Hub')]")
   public TextBox numberOfScannedParcel;
 
   @FindBy(css = "md-dialog")
@@ -555,12 +555,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualDepartureTime = f("%s %s",
         actualMovementTrip.split(",")[1].trim().split(" ")[1],
         actualMovementTrip.split(",")[1].trim().split(" ")[2]);
-    assertThat("Inbound Hub is the same", actualInboundHub, equalTo(expectedInboundHub));
-    assertThat("Inbound Type is the same", actualInboundType, equalTo(expectedInboundType));
-    assertThat("Driver is the same", actualDriver, equalTo(expectedDriver));
-    assertThat("Destination or Origin hub is the same", actualDestinationHub,
-        containsString(expectedDestinationHub));
-    assertThat("Departure time is the same", actualDepartureTime, equalTo(expectedDepartureTime));
+    Assertions.assertThat(actualInboundHub).as("Inbound Hub is the same").isEqualTo(expectedInboundHub);
+    Assertions.assertThat(actualInboundType).as("Inbound Type is the same").isEqualTo(expectedInboundType);
+    Assertions.assertThat(actualDriver).as("Driver is the same").isEqualTo(expectedDriver);
+    Assertions.assertThat(actualDestinationHub).as("Destination or Origin hub is the same").contains(expectedDestinationHub);
+    Assertions.assertThat(actualDepartureTime).as("Departure time is the same").isEqualTo(expectedDepartureTime);
   }
 
   public void verifyShipmentInTrip(String expectedShipmentId) {
@@ -573,7 +572,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String textNumberOfScannedParcel = numberOfScannedParcel.getText();
     assertThat("Number of shipment scanned to Hub message is the same",
         textNumberOfScannedParcel,
-        equalTo(f("%s Shipment Scanned to Hub", numberOfShipment)));
+        equalTo(f("%s Shipments Scanned to Hub", numberOfShipment)));
   }
 
   public void removeShipmentWithId(String shipmentId) {

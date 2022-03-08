@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -31,6 +32,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
       XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
   public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
+  public static final String XPATH_INBOUND_HUB = "//div[@class='ant-select-selector']//input[@id='rc_select_0']";
+  public static final String XPATH_DRIVER = "//div[@class='ant-select-selector']//input[@id='rc_select_1']";
+  public static final String XPATH_MOVEMENT_TRIP = "//div[@class='ant-select-selector']//input[@id='rc_select_2']";
 
   @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
   public MdSelect inboundHub;
@@ -47,7 +51,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
   public TextBox inboundTypeText;
 
-  @FindBy(xpath = "//button[contains(@class,'start-inbound-btn')]")
+  @FindBy(xpath = "//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")
   public Button startInboundButton;
 
   @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
@@ -73,6 +77,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
 
   @FindBy(css = "div.scanned-shipping-id")
   public PageElement scannedShipmentId;
+
+  @FindBy(tagName = "iframe")
+  private PageElement pageFrame;
 
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
@@ -127,8 +134,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   }
 
   public String grabXpathButton(String label) {
-    return "//md-radio-button[@aria-label='" + label
-        + "']//div[@class='md-container md-ink-ripple']";
+    return f("//div[contains(text(),'%s')]",label);
   }
 
   public List<String> grabSessionIdNotChangedScan() {
@@ -242,18 +248,29 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   }
 
   public void selectDriver(String driverName) {
-    driver.searchAndSelectValue(driverName);
+    TestUtils.findElementAndClick(XPATH_DRIVER, "xpath", getWebDriver());
+    sendKeysAndEnter(XPATH_DRIVER, driverName);
   }
 
   public void selectMovementTrip(String movementTripSchedule) {
-    movementTrip.searchAndSelectValue(movementTripSchedule);
+    TestUtils.findElementAndClick(XPATH_MOVEMENT_TRIP, "xpath", getWebDriver());
+    sendKeysAndEnter(XPATH_MOVEMENT_TRIP, movementTripSchedule);
+  }
+
+  public void selectInboundHub(String hub) {
+    TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
+    sendKeysAndEnter(XPATH_INBOUND_HUB, hub);
+  }
+
+  public void switchTo() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
   public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver,
       String movementTripSchedule) {
     if (hub != null) {
       pause2s();
-      inboundHub.searchAndSelectValue(hub);
+      selectInboundHub(hub);
     }
 
     if (label != null) {
