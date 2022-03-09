@@ -23,7 +23,7 @@ import org.openqa.selenium.support.FindBy;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
+public class ShipmentInboundScanningPage extends SimpleReactPage {
 
   public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
   public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
@@ -77,9 +77,6 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
 
   @FindBy(css = "div.scanned-shipping-id")
   public PageElement scannedShipmentId;
-
-  @FindBy(tagName = "iframe")
-  private PageElement pageFrame;
 
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
@@ -260,10 +257,6 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   public void selectInboundHub(String hub) {
     TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_INBOUND_HUB, hub);
-  }
-
-  public void switchTo() {
-    getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
   public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver,
