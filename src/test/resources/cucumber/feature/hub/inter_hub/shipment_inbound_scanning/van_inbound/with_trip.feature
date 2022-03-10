@@ -41,8 +41,8 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
-      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
-      | inboundType    | Into Van                                                                                    |
+      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
+      | inboundType    | SHIPMENT VAN INBOUND                                                                        |
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
