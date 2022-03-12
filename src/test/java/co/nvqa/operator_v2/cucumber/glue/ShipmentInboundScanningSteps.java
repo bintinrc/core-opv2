@@ -183,6 +183,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         String inboundType = finalData.get("inboundType");
         String driver = finalData.get("driver");
         String movementTripSchedule = finalData.get("movementTripSchedule");
+        scanningPage.switchTo();
         scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver,
             movementTripSchedule);
       } catch (Throwable ex) {
