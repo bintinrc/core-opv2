@@ -19,7 +19,7 @@ public class AntInputText extends TextBox {
   @FindBy(css = ".ant-input-clear-icon")
   private PageElement clearIcon;
 
-  @FindBy(css = ".ant-input")
+  @FindBy(css = ".ant-input,.ant-input-number-input")
   private TextBox input;
   
   @FindBy(className = "ant-form-item-explain-error")

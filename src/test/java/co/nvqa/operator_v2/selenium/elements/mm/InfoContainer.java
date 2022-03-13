@@ -10,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class InfoContainer extends PageElement {
 
-  @FindBy(xpath = "//span/strong")
+  @FindBy(xpath = "./span/strong")
   public PageElement infoText;
 
   public InfoContainer(WebDriver webDriver, WebElement webElement) {
