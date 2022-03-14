@@ -64,7 +64,7 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
     switch (shipmentWeightAddStateEnum) {
       case ERROR:
         Assertions.assertThat(shipmentIdInput.isError()).as("Shipment ID Input is show error").isTrue();
-        Assertions.assertThat(shipmentIdInput.getErrorText()).as("Shipment ID input is correct")
+        Assertions.assertThat(shipmentIdInput.getErrorText()).as("Shipment ID input error message is correct")
             .isEqualTo(message);
         break;
       case INITIAL:

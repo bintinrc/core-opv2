@@ -170,11 +170,6 @@ Feature: Search Weight and Dimension
       | height              | 9.7               |
       | shipment status     | Closed            |
 
-
-
-
-
-
   @KillBrowser
   Scenario: Kill Browser
     Given no-op
