@@ -21,7 +21,10 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -749,67 +752,33 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorVerifyAllStationSchedulesAreCorrectFromUI() {
     List<StationMovementSchedule> stationMovementSchedules = get(
         KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE);
-    assertThat("Number of displayed schedules",
-        movementManagementPage.stationMovementSchedulesTable.getRowsCount(),
-        equalTo(stationMovementSchedules.size()));
+    Assertions.assertThat(movementManagementPage.stationMovementSchedulesTable.getRowsCount()-1)
+            .as("Number of displayed schedules:").isEqualTo(stationMovementSchedules.size());
     for (int i = 0; i < stationMovementSchedules.size(); i++) {
       StationMovementSchedule actual = movementManagementPage.stationMovementSchedulesTable
-          .readEntity(i + 1);
+          .readEntity(i + 2);
       stationMovementSchedules.get(i).setCrossdockHub(null);
+      stationMovementSchedules.get(i).setDaysOfWeek((Set<String>)null);
       stationMovementSchedules.get(i).setDuration((Integer) null);
       stationMovementSchedules.get(i).compareWithActual(actual);
     }
-    assertThat("Monday is checked",
-        movementManagementPage.stationMovementSchedulesTable.monday.isChecked(), equalTo(true));
-    movementManagementPage.stationMovementSchedulesTable.monday.click();
-    assertThat("Monday still checked",
-        movementManagementPage.stationMovementSchedulesTable.monday.isChecked(), equalTo(true));
-
-    movementManagementPage.stationMovementSchedulesTable.filterStationsColumn();
-    assertThat("Number of displayed schedules",
-        movementManagementPage.stationMovementSchedulesTable.getRowsCount(),
-        equalTo(1));
-    StationMovementSchedule actual = movementManagementPage.stationMovementSchedulesTable
-        .readEntity(1);
-    stationMovementSchedules.get(0).setCrossdockHub(null);
-    stationMovementSchedules.get(0).setDuration((Integer) null);
-    stationMovementSchedules.get(0).compareWithActual(actual);
   }
 
   @Then("Operator verify all station schedules are correct")
   public void operatorVerifyAllStationSchedulesAreCorrect() {
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    assertThat("Number of displayed schedules",
-        movementManagementPage.schedulesTable.getRowsCount(),
-        equalTo(hubRelations.size()));
+    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount()-1)
+            .as("Number of displayed schedules:").isEqualTo(hubRelations.size());
     for (int i = 0; i < hubRelations.size(); i++) {
       HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
-          .readEntity(i + 1);
+          .readEntity(i + 2);
       hubRelations.get(i).getSchedules().get(i).setId(null);
       hubRelations.get(i).getSchedules().get(i).setStartTime(null);
       hubRelations.get(i).getSchedules().get(i).setDay(null);
-      hubRelations.get(i).getSchedules().get(i)
-          .setOriginHubName(hubRelations.get(i).getOriginHubName());
-      hubRelations.get(i).getSchedules().get(i)
-          .setDestinationHubName(hubRelations.get(i).getDestinationHubName());
+      hubRelations.get(i).getSchedules().get(i).setOriginHubName(hubRelations.get(i).getOriginHubName());
+      hubRelations.get(i).getSchedules().get(i).setDestinationHubName(hubRelations.get(i).getDestinationHubName());
       hubRelations.get(i).getSchedules().get(i).compareWithActual(actual);
     }
-    assertThat("Monday is checked",
-        movementManagementPage.hubRelationScheduleTable.monday.isChecked(), equalTo(true));
-    movementManagementPage.hubRelationScheduleTable.monday.click();
-    assertThat("Monday still checked",
-        movementManagementPage.hubRelationScheduleTable.monday.isChecked(), equalTo(true));
-
-    movementManagementPage.hubRelationScheduleTable.filterStationsColumn();
-    assertThat("Number of displayed schedules",
-        movementManagementPage.hubRelationScheduleTable.getRowsCount(),
-        equalTo(1));
-    HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
-        .readEntity(1);
-    hubRelations.get(0).getSchedules().get(0).setId(null);
-    hubRelations.get(0).getSchedules().get(0).setStartTime(null);
-    hubRelations.get(0).getSchedules().get(0).setDay(null);
-    hubRelations.get(0).getSchedules().get(0).compareWithActual(actual);
   }
 
   @When("Operator updates created station schedule")

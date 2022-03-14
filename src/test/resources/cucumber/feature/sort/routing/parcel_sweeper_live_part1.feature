@@ -13,7 +13,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | invalid    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY |
+      | routeId    | RECOVERY |
       | driverName | INVALID               |
       | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -34,7 +34,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -71,7 +71,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -411,29 +411,45 @@ Feature: Parcel Sweeper Live
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | NV DRIVER          |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+    When API Operator create recovery ticket using data below:
+      | ticketType              | 5                                |
+      | subTicketType           | 9                                |
+      | entrySource             | 1                                |
+      | investigatingParty      | 448                              |
+      | investigatingHubId      | 1                                |
+      | outcomeName             | ORDER OUTCOME (DUPLICATE PARCEL) |
+      | outComeValue            | REPACKED/RELABELLED TO SEND      |
+      | comments                | Automation Testing.              |
+      | shipperZendeskId        | 1                                |
+      | ticketNotes             | Automation Testing.              |
+      | issueDescription        | Automation Testing.              |
+      | creatorUserId           | 106307852128204474889            |
+      | creatorUserName         | Niko Susanto                     |
+      | creatorUserEmail        | niko.susanto@ninjavan.co         |
+      | TicketCreationSource    | TICKET_MANAGEMENT                |
+      | ticketTypeId            | 17                               |
+      | subTicketTypeId         | 17                               |
+      | entrySourceId           | 13                               |
+      | trackingIdFieldId       | 2                                |
+      | investigatingPartyId    | 15                               |
+      | investigatingHubFieldId | 67                               |
+      | outcomeNameId           | 64                               |
+      | commentsId              | 26                               |
+      | shipperZendeskFieldId   | 36                               |
+      | ticketNotesId           | 32                               |
+      | issueDescriptionId      | 45                               |
+      | creatorUserFieldId      | 30                               |
+      | creatorUserNameId       | 39                               |
+      | creatorUserEmailId      | 66                               |
     And API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY |
-      | driverName | ON HOLD               |
-      | color      | #e86161               |
+      | routeId    | RECOVERY |
+      | driverName | ON HOLD  |
+      | color      | #e86161  |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #e86161 |
@@ -451,6 +467,8 @@ Feature: Parcel Sweeper Live
       | hubId     | {hub-id}            |
     And Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
+    And DB Operator verify ticket status
+      | status | 1 |
 
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - On Hold Order - Resolve PENDING MISSING Ticket (uid:85edd7d1-f479-471a-bd26-563d387ca91e)
@@ -460,17 +478,34 @@ Feature: Parcel Sweeper Live
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+    When API Operator create recovery ticket using data below:
+      | ticketType              | 2                        |
+      | entrySource             | 1                        |
+      | investigatingParty      | 448                      |
+      | investigatingHubId      | 1                        |
+      | outcomeName             | ORDER OUTCOME (MISSING)  |
+      | comments                | Automation Testing.      |
+      | shipperZendeskId        | 1                        |
+      | ticketNotes             | Automation Testing.      |
+      | issueDescription        | Automation Testing.      |
+      | creatorUserId           | 106307852128204474889    |
+      | creatorUserName         | Niko Susanto             |
+      | creatorUserEmail        | niko.susanto@ninjavan.co |
+      | TicketCreationSource    | TICKET_MANAGEMENT        |
+      | ticketTypeId            | 17                       |
+      | subTicketTypeId         | 17                       |
+      | entrySourceId           | 13                       |
+      | trackingIdFieldId       | 2                        |
+      | investigatingPartyId    | 15                       |
+      | investigatingHubFieldId | 67                       |
+      | outcomeNameId           | 64                       |
+      | commentsId              | 26                       |
+      | shipperZendeskFieldId   | 36                       |
+      | ticketNotesId           | 32                       |
+      | issueDescriptionId      | 45                       |
+      | creatorUserFieldId      | 30                       |
+      | creatorUserNameId       | 39                       |
+      | creatorUserEmailId      | 66                       |
     And API Operator refresh created order data
     And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
@@ -527,7 +562,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -574,7 +609,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -648,7 +683,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY |
+      | routeId    | RECOVERY  |
       | driverName | CANCELLED             |
       | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:

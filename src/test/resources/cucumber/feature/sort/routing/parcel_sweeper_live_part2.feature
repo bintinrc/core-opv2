@@ -18,7 +18,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY |
+      | routeId    | RECOVERY  |
       | driverName | COMPLETED             |
       | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -58,7 +58,7 @@ Feature: Parcel Sweeper Live
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify RTS label on Parcel Sweeper Live page
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY |
+      | routeId    | RECOVERY           |
       | driverName | RETURNED TO SENDER    |
       | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -95,7 +95,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY |
+      | routeId    | RECOVERY           |
       | driverName | TRANSFERRED TO 3PL    |
       | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -243,7 +243,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | sync_problem RECOVERY   |
+      | routeId    | RECOVERY                |
       | driverName | ON VEHICLE FOR DELIVERY |
       | color      | #e86161                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -276,7 +276,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -323,7 +323,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID}  |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
@@ -356,7 +356,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | error_outline ERROR |
+      | routeId    | ERROR         |
       | driverName | NOT INBOUNDED       |
       | color      | #ffa400             |
     Then Operator verify Zone on Parcel Sweeper page using data below:
