@@ -129,7 +129,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String RTS_DATA_TESTID = "rts";
   private static final String CREATED_AT_TESTID = "created_at";
 
-  private static final String CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD = "//div[contains(@class, 'ant-picker-range')]//input[@placeholder='%s time']";
+  private static final String CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD = "(//div[contains(text(), 'Creation Time')]/following-sibling::span//input)[%d]";
   private static final String CREATION_TIME_FILTER_DATEPICKER_FIELD = "//div[contains(@class, 'ant-picker-range')]//input[@placeholder='%s date']";
   private static final String CREATION_TIME_FILTER_DROPDOWN = "//div[contains(@class, 'ant-picker-dropdown')]";
   private static final String CREATION_TIME_FILTER_DATEPICKER_YEAR = "//td[contains(@class, 'ant-picker-cell') and @title='%s']";
@@ -301,10 +301,12 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public void verifiesPresetIsExisted(String presetName) {
-    getWebDriver().navigate().refresh();
-    switchToIframe();
-    verifiesPageIsFullyLoaded();
-    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
+    retryIfRuntimeExceptionOccurred(() -> {
+      getWebDriver().navigate().refresh();
+      switchToIframe();
+      verifiesPageIsFullyLoaded();
+      waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
+    }, "Reloading page until contents appear.");
     click(EXISTED_PRESET_SELECTION_XPATH);
     sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
     waitUntilVisibilityOfElementLocated(f(PRESET_TO_BE_SELECTED_XPATH, presetName));
@@ -469,8 +471,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public void setPresetCreationTimeDatepicker(Map<String, String> selectedTime) {
-    String startTimepickerFieldXpath = f(CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD, "Start");
-    String endTimepickerFieldXpath = f(CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD, "End");
+    String startTimepickerFieldXpath = f(CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD, 1);
+    String endTimepickerFieldXpath = f(CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD, 2);
 
     String startHourVal = selectedTime.get("start_hour");
     String startMinuteVal = selectedTime.get("start_minute");

@@ -172,6 +172,10 @@ public class CreateRouteGroupsV15Page extends OperatorV2SimplePage {
         .put("Shipper", shipperFilter::selectFilter)
         .put("Master Shipper", masterShipperFilter::selectFilter)
         .put("DP Order", value -> dpOrderFilter.selectFilter(value))
+        .put("Service Level", value -> {
+          serviceLevelFilter.clearAll();
+          serviceLevelFilter.selectFilter(value);
+        })
         .build();
     txnRsvnTable = new TxnRsvnTable(webDriver);
     filters = ImmutableMap.<String, AbstractFilterBox>builder()

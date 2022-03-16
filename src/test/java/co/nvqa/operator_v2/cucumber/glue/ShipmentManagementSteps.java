@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
@@ -28,6 +27,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.management.RuntimeErrorException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea. Modified by Sergey Mishanin.
@@ -37,6 +38,8 @@ import org.apache.commons.lang3.StringUtils;
 @SuppressWarnings("WeakerAccess")
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentManagementSteps.class);
 
   private ShipmentManagementPage shipmentManagementPage;
   public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS = "KEY_SHIPMENT_MANAGEMENT_FILTERS";
@@ -87,14 +90,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Last Inbound Hub", lastInboundHub);
 
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage(), ex);
         shipmentManagementPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, getCurrentMethodName(), 3000, 10);
   }
 
-  @When("^Operator search shipments by given Ids on Shipment Management page:$")
+  @When("Operator search shipments by given Ids on Shipment Management page:")
   public void fillSearchShipmentsByIds(List<String> ids) {
     retryIfRuntimeExceptionOccurred(() ->
     {
@@ -104,15 +107,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
             .collect(Collectors.toList());
         shipmentManagementPage.searchByShipmentIds(shipmentIds);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.debug("Searched element is not found, retrying after 2 seconds...");
         shipmentManagementPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
   }
 
-  @When("^Operator filter shipment based on MAWB value on Shipment Management page$")
+  @When("Operator filter shipment based on MAWB value on Shipment Management page")
   public void fillSearchFilterMawb() {
     final String mawb = get(KeyConstants.KEY_MAWB);
 
@@ -134,7 +136,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.changeDate(dateOfTomorrow, false);
   }
 
-  @Given("^Operator click Edit filter on Shipment Management page$")
+  @Given("Operator click Edit filter on Shipment Management page")
   public void operatorClickEditFilterOnShipmentManagementPage() {
     shipmentManagementPage.clickEditSearchFilterButton();
   }
@@ -149,7 +151,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator verify inbounded Shipment exist on Shipment Management page$")
+  @Then("Operator verify inbounded Shipment exist on Shipment Management page")
   public void operatorVerifyInboundedShipmentExistOnShipmentManagementPage() {
     Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
     shipmentManagementPage.verifyInboundedShipmentExist(shipmentId);
@@ -207,10 +209,9 @@ public class ShipmentManagementSteps extends AbstractSteps {
           put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.debug("Searched element is not found, retrying after 2 seconds...");
         shipmentManagementPage.refreshPage();
-        throw new NvTestRuntimeException(ex.getCause());
+        throw new NvTestRuntimeException(ex);
       }
     }, 10);
   }
@@ -438,7 +439,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
                     expectedEvent.getSource())));
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage(), ex);
         throw ex;
       }
     }, "retry shipment details", 5000, 5);
@@ -470,7 +471,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
                       expectedEvent.getSource())));
           expectedEvent.compareWithActual(actualEvent);
         } catch (Throwable ex) {
-          NvLogger.error(ex.getMessage());
+          LOGGER.error(ex.getMessage(), ex);
           throw ex;
         }
       }, "retry shipment details event", 5000, 10);
@@ -505,13 +506,13 @@ public class ShipmentManagementSteps extends AbstractSteps {
                     expectedEvent.getSource())));
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage(), ex);
         throw ex;
       }
     }, "retry shipment details event", 5000, 10);
   }
 
-  @Then("^Operator verify movement event on Shipment Details page using data below:$")
+  @Then("Operator verify movement event on Shipment Details page using data below:")
   public void operatorVerifyMovementEventOnEditOrderPage(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     MovementEvent expectedEvent = new MovementEvent(mapOfData);
@@ -671,7 +672,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     } else if ("none".equalsIgnoreCase(mode)) {
       shipmentManagementPage.verifiesSearchErrorModalIsShown(false);
     } else {
-      NvLogger.warn("Mode is not existed!");
+      LOGGER.warn("Mode {} is not existed!", mode);
     }
   }
 

@@ -23,7 +23,6 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -62,6 +61,8 @@ import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
@@ -77,6 +78,8 @@ import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
  */
 @ScenarioScoped
 public class AllShippersSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AllShippersSteps.class);
 
   private static final String KEY_CURRENT_COUNTRY = "KEY_CURRENT_COUNTRY";
   private AllShippersPage allShippersPage;
@@ -452,14 +455,14 @@ public class AllShippersSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
+  @Then("Operator add New Pricing Profile on Edit Shipper Page using data below:")
   public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data) {
     Shipper shipper = setShipperPricingProfile(data);
     allShippersPage.addNewPricingProfileWithoutSaving(shipper);
     put(KEY_PRICING_PROFILE, shipper.getPricing());
   }
 
-  @Then("^Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:$")
+  @Then("Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:")
   public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data) {
     try {
       data = resolveKeyValues(data);
@@ -468,38 +471,38 @@ public class AllShippersSteps extends AbstractSteps {
 
       String value = data.get("startDate");
       if (StringUtils.isNotBlank(value)) {
-        NvLogger.infof("Set Start date : %s", value);
+        LOGGER.info("Set Start date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate
             .simpleSetValue(value);
         pricing.setEffectiveDate(YYYY_MM_DD_SDF.parse(value));
       }
       value = data.get("endDate");
       if (StringUtils.isNotBlank(value)) {
-        NvLogger.infof("Set End date : %s", value);
+        LOGGER.info("Set End date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate
             .simpleSetValue(value);
         pricing.setContractEndDate(YYYY_MM_DD_SDF.parse(value));
       }
       value = data.get("pricingScriptName");
       if (StringUtils.isNotBlank(value)) {
-        NvLogger.infof("Set Pricing Script value : %s", value);
+        LOGGER.info("Set Pricing Script value : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
             .searchAndSelectValue(value);
       }
       value = data.get("discount");
       if (StringUtils.equalsIgnoreCase("none", value)) {
-        NvLogger.infof("Set Discount value : %s", value);
+        LOGGER.info("Set Discount value : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
         pricing.setDiscount(null);
       } else if (StringUtils.isNotBlank(value)) {
-        NvLogger.infof("Set Discount value : %s", value);
+        LOGGER.info("Set Discount value : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
             .setValue(value);
         pricing.setDiscount(value);
       }
       value = data.get("comments");
       if (StringUtils.isNotBlank(value)) {
-        NvLogger.infof("Set comments : %s", value);
+        LOGGER.info("Set comments : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         pricing.setComments(value);
       }
@@ -662,14 +665,14 @@ public class AllShippersSteps extends AbstractSteps {
       takesScreenshot();
       ErrorSaveDialog errorSaveDialog = allShippersPage.allShippersCreateEditPage.errorSaveDialog;
       String errorMessage = errorSaveDialog.message.getText();
-      NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
+      LOGGER.info(f("Error dialog is displayed : %s ", errorMessage));
 
       if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
           .contains("DB constraints")) {
         errorSaveDialog.forceClose();
         takesScreenshot();
         if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
-          NvLogger.info(f("Toast msg is displayed :  %s ",
+          LOGGER.info(f("Toast msg is displayed :  %s ",
               allShippersPage.allShippersCreateEditPage.getToast().getText()));
           allShippersPage.allShippersCreateEditPage.closeToast();
         }
@@ -1681,7 +1684,7 @@ public class AllShippersSteps extends AbstractSteps {
           boolean isSubShipperExist;
           boolean isNextPageDisabled = false;
           List<Shipper> actualSubShipper;
-          NvLogger.infof("Check seller id %s", expectedSellerId);
+          LOGGER.info("Check seller id {}", expectedSellerId);
 
           page.goToFirstPage();
 

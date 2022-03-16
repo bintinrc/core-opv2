@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +23,7 @@ import org.openqa.selenium.support.FindBy;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
+public class ShipmentInboundScanningPage extends SimpleReactPage {
 
   public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
   public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
@@ -31,6 +32,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
       XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
   public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
+  public static final String XPATH_INBOUND_HUB = "//div[@class='ant-select-selector']//input[@id='rc_select_0']";
+  public static final String XPATH_DRIVER = "//div[@class='ant-select-selector']//input[@id='rc_select_1']";
+  public static final String XPATH_MOVEMENT_TRIP = "//div[@class='ant-select-selector']//input[@id='rc_select_2']";
 
   @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
   public MdSelect inboundHub;
@@ -47,7 +51,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
   public TextBox inboundTypeText;
 
-  @FindBy(xpath = "//button[contains(@class,'start-inbound-btn')]")
+  @FindBy(xpath = "//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")
   public Button startInboundButton;
 
   @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
@@ -127,8 +131,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
   }
 
   public String grabXpathButton(String label) {
-    return "//md-radio-button[@aria-label='" + label
-        + "']//div[@class='md-container md-ink-ripple']";
+    return f("//div[contains(text(),'%s')]",label);
   }
 
   public List<String> grabSessionIdNotChangedScan() {
@@ -201,8 +204,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        Assertions.assertThat(errorMessage.contains(f("Shipment id %d cannot change status from %s", shipmentId, condition)))
-                .isTrue();
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as(condition+" shipment:").contains(expected);
         break;
       case "Pending":
       case "Closed":
@@ -234,31 +237,33 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
             errorMessage, containsString(f("shipment for %d not found", shipmentId)));
         break;
 
-      case "transit":
-        assertThat("Last scanned is true",
-            errorMessage, containsString(
-                f("Last scanned:%d", shipmentId)));
-        String scanStatusCardString = scanStatusCard.getText();
-        assertThat("Scan card is true",
-            scanStatusCardString, containsString(
-                f("Still In Transit\nContinue Shipment\n1 Shipment ID(s)\n%s", shipmentId)));
+      case "Transit":
+        expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
+        Assertions.assertThat(errorMessage).as("Transit:").contains(expected);
         break;
     }
   }
 
   public void selectDriver(String driverName) {
-    driver.searchAndSelectValue(driverName);
+    TestUtils.findElementAndClick(XPATH_DRIVER, "xpath", getWebDriver());
+    sendKeysAndEnter(XPATH_DRIVER, driverName);
   }
 
   public void selectMovementTrip(String movementTripSchedule) {
-    movementTrip.searchAndSelectValue(movementTripSchedule);
+    TestUtils.findElementAndClick(XPATH_MOVEMENT_TRIP, "xpath", getWebDriver());
+    sendKeysAndEnter(XPATH_MOVEMENT_TRIP, movementTripSchedule);
+  }
+
+  public void selectInboundHub(String hub) {
+    TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
+    sendKeysAndEnter(XPATH_INBOUND_HUB, hub);
   }
 
   public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver,
       String movementTripSchedule) {
     if (hub != null) {
       pause2s();
-      inboundHub.searchAndSelectValue(hub);
+      selectInboundHub(hub);
     }
 
     if (label != null) {
