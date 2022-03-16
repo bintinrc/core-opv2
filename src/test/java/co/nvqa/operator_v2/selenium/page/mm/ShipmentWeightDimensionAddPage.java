@@ -2,15 +2,24 @@ package co.nvqa.operator_v2.selenium.page.mm;
 
 import co.nvqa.operator_v2.cucumber.glue.mm.ShipmentWeightDimensionSteps;
 import co.nvqa.operator_v2.model.ShipmentWeightDimensionAddInfo;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.mm.AntInputText;
+import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.elements.mm.InfoContainer;
+import co.nvqa.operator_v2.selenium.page.AddressVerificationPage.EditAddressModal;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import java.util.Optional;
 import java.util.stream.Stream;
+import javax.swing.text.html.Option;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +30,8 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
   public AntInputText shipmentIdInput;
   @FindBy(id = "shipmentScanSubmit")
   public AntButton searchButton;
+  @FindBy(xpath = "//button[span[text()='Submit']]")
+  public AntButton submitButton;
   @FindBy(xpath = "//div[span[text()='Start Hub']]/parent::div")
   public InfoContainer startHubInfo;
   @FindBy(xpath = "//div[span[text()='End Hub']]/parent::div")
@@ -43,7 +54,11 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
   public AntInputText widthInput;
   @FindBy(xpath = "//div[contains(@class,' ant-form-item-control') and .//input[@id='height'] ]")
   public AntInputText heightInput;
+  @FindBy(xpath = "//div[@class='ant-message-notice'][last()]")
+  public AntNotice notice;
 
+  @FindBy(className = "ant-modal-content")
+  public OverWeightModal overWeightModal;
 
 
   public ShipmentWeightDimensionAddPage(WebDriver webDriver) {
@@ -109,6 +124,12 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
     shipmentIdInput.setValue(shipmentId);
   }
 
+  public void checkMessage(String message) {
+    Assertions.assertThat(notice.getNoticeMessage()).as("Notification contains correct message :" + message)
+        .isEqualTo(message);
+    pause4s();// duration to wait ant message closed
+  }
+
   public void checkNotificationMessage(String message) {
     antNotificationMessage.waitUntilVisible();
     Assertions.assertThat(
@@ -116,6 +137,80 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
         .as("Notification contains correct message :" + message)
         .isTrue();
   }
+  
+  public void enterDimensionInfo(Double weight, Double length, Double width, Double height) {
+    Optional.ofNullable(weight).ifPresent((val) -> weightInput.setValue(val.toString()));
+    Optional.ofNullable(length).ifPresent((val) -> lengthInput.setValue(val.toString()));
+    Optional.ofNullable(width).ifPresent((val) -> widthInput.setValue(val.toString()));
+    Optional.ofNullable(height).ifPresent((val) -> heightInput.setValue(val.toString()));
+  }
+
+  public void submitWeightData() {
+    submitButton.click();
+  }
+
+  public void verifyDimensionFieldError(String fieldName, String errorMessage) {
+    retryIfAssertionErrorOccurred(() -> {
+      if (fieldName.equalsIgnoreCase("weight")) {
+        Assertions.assertThat(weightInput.isError()).as("Weight input is error").isTrue();
+        Assertions.assertThat(weightInput.getErrorText()).as("Weight input show correct error message "+ errorMessage)
+            .isEqualTo(errorMessage);
+      }
+    }, "verifyDimensionFieldError", 500, 5);
+  }
+
+  public void verifyOverWeightDialog() {
+    overWeightModal.verifyModalUI();
+  }
+
+  public void confirmOverWeightDialog() {
+    overWeightModal.confirm();
+  }
+
+  public void cancelOverWeightDialog() {
+    overWeightModal.cancel();
+  }
+
+  public static class OverWeightModal extends AntModal {
+
+    @FindBy(css = ".ant-modal-body")
+    private PageElement modalBody;
+    @FindBy(id = "overweightModalConfirm")
+    private AntButton confirmButton;
+    @FindBy(id = "overweightModalCancel")
+    private AntButton cancelButton;
+
+    public OverWeightModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public OverWeightModal(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public void verifyModalUI() {
+      Assertions.assertThat(title.getText()).as("Modal title is correct")
+          .isEqualTo("Over Weight?");
+      Assertions.assertThat(modalBody.getText()).as("Modal body is correct")
+          .isEqualTo("Please double check. Is this shipment weight more than 100 kg?");
+      Assertions.assertThat(confirmButton.isDisplayedFast()).as("Confirm button is visible").isTrue();
+      Assertions.assertThat(confirmButton.getText()).as("Confirm button text is correct").isEqualTo("Yes, I Confirm");
+      Assertions.assertThat(cancelButton.isDisplayedFast()).as("Cancel button is visible").isTrue();
+      Assertions.assertThat(cancelButton.getText()).as("Cancel button text is correct").isEqualTo("No, go back");
+    }
+
+    public void cancel() {
+      this.cancelButton.click();
+    }
+
+    public void confirm() {
+      this.confirmButton.click();
+    }
+  }
+
 
 
   public enum ShipmentWeightAddState {
