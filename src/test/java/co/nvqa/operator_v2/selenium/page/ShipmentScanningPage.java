@@ -438,8 +438,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     removeButton.click();
     ok.waitUntilClickable();
     ok.click();
-    //confirmRemoveDialog.waitUntilVisible();
-    //confirmRemoveDialog.remove.click();
   }
 
   public void verifyErrorShipmentWithMessage(String shipmentId, String resultMessage) {
