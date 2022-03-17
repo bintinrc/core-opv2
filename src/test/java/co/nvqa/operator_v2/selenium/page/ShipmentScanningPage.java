@@ -157,7 +157,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//nv-table[@param='ctrl.unregisteredTableParam']//table[@class='table-body']")
   public NvTable<ErrorShipmentRow> unregisteredShipmentRow;
 
-  @FindBy(xpath = "//button[.='Force Complete Trip']")
+  @FindBy(xpath = "//button[.='Force Completion']")
   public Button forceCompleteButton;
 
   @FindBy(tagName = "iframe")
@@ -345,7 +345,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyBottomToastContainingMessageIsShown(String expectedToastMessageContain) {
-    String actualToastMessage = getToastBottomText();
+    String actualToastMessage = getAntNotificationMessage();
     assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
         containsString(expectedToastMessageContain));
   }
@@ -358,7 +358,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void verifyBottomToastDriverInTripContainingEitherMessage(
       List<String> expectedToastMessages) {
-    String actualToastMessage = getToastBottomText().split(" with expected ")[0];
+    String actualToastMessage = getAntNotificationMessage().split(" with expected ")[0];
     assertThat(f("Toast message contains either %s or %s", expectedToastMessages.get(0),
         expectedToastMessages.get(1)), actualToastMessage,
         isOneOf(expectedToastMessages.get(0), expectedToastMessages.get(1)));
