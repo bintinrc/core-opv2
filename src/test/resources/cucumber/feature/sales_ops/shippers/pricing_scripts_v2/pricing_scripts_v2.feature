@@ -72,6 +72,7 @@ Feature: Pricing Scripts V2
     And Operator waits for 5 seconds
     Then DB Operator gets the pricing script details
     And Operator search according to "name" and verify search result
+    Then DB Operator gets the pricing script details
     And Operator verify Active Script data is correct
 
   @DeletePricingScript

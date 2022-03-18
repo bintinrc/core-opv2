@@ -12,6 +12,7 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
     And Operator verify Active Script data is correct
 
   @DeletePricingScript
@@ -234,6 +235,7 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
     And Operator verify Active Script data is correct
 
   @DeletePricingScript

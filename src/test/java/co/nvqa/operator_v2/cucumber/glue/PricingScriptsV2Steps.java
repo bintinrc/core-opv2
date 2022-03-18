@@ -124,6 +124,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
     pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
+    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
+    pricingScriptsV2CreateEditDraftPage.validateDraft();
   }
 
   @And("Operator send below data to created Draft Script:")

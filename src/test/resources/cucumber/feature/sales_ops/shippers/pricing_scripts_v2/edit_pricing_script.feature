@@ -114,6 +114,7 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     And Operator edit the created Active Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {result.delivery_fee = 5;} else {result.delivery_fee = 3;}if (params.size == "S") {result.delivery_fee += 2.1;} else if (params.size == "M") {result.delivery_fee += 2.2;} else if (params.size == "L") {result.delivery_fee += 3.3;} else if (params.size == "XL") {result.delivery_fee += 4.4;} else if (params.size == "XXL") {result.delivery_fee += 5.5;} else {throw "Unknown size.";}if (params.weight <= 3) {result.delivery_fee += 6.6} else if (params.weight > 3) {result.delivery_fee += 7.7}return result;} |
+    And Operator clicks Check Syntax and Verify Draft
     Then Operator verify the script is saved successfully
 
   @DeletePricingScript
@@ -126,6 +127,7 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     And Operator edit the created Active Script using data below:
       | source | function calculatePricing(params) {var price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
+    And Operator clicks Check Syntax
     Then Operator verify error message in header with "SyntaxError"
 
   @DeletePricingScript @HappyPath
