@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
+import static co.nvqa.commons.cucumber.StandardScenarioStorageKeys.KEY_CREATED_ORDER_TRACKING_ID;
+
 /**
  * @author Sergey Mishanin
  */
@@ -51,20 +53,24 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
 
   public void verifyRouteInfo(String routeId, String driverName, String color) {
     pause2s();
-    if (routeId != null) {
-      assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER));
-    }
+    retryIfAssertionErrorOccurred(() ->
+    {
+//      sendKeysAndEnter("//input[@data-testid='scan-input-field']", get(KEY_CREATED_ORDER_TRACKING_ID));
+      if (routeId != null) {
+        assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER));
+      }
 
-    if (StringUtils.isNotBlank(driverName)) {
-      assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_DESCRIPTION_CONTAINER),
-          equalToIgnoringCase(driverName));
-    }
+      if (StringUtils.isNotBlank(driverName)) {
+        assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_DESCRIPTION_CONTAINER),
+            equalToIgnoringCase(driverName));
+      }
 
-    if (StringUtils.isNotBlank(color)) {
-      Color actualColor = Color
-          .fromString(getCssValue(LOCATOR_ROUTE_CONTAINER, "background-color"));
-      assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
-    }
+      if (StringUtils.isNotBlank(color)) {
+        Color actualColor = Color
+            .fromString(getCssValue(LOCATOR_ROUTE_CONTAINER, "background-color"));
+        assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
+      }
+    }, "Route ID Assertion");
   }
 
   public void verifyZoneInfo(String shortName, String name, String color) {
