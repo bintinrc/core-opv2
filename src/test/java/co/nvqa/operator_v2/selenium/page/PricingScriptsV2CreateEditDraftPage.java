@@ -118,7 +118,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     clickNvApiTextButtonByNameAndWaitUntilDone("Save Draft");
   }
 
-  private void validateDraft() {
+  public void validateDraft() {
     clickNvIconTextButtonByName("container.pricing-scripts.validate");
     waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
     clickNvIconTextButtonByNameAndWaitUntilDone("Release Script");
