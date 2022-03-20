@@ -24,6 +24,7 @@ public class NinjaHubProvisioningSteps extends AbstractSteps {
 
   @When("^Operator download QR Code of Mobile Applications on Ninja Hub Provisioning page$")
   public void operatorDownloadQrCode() {
+    ninjaHubProvisioningPage.switchToIframe();
     File qrCodeFile = ninjaHubProvisioningPage.saveQrCodeAsPngFile();
     put("qrCodeFile", qrCodeFile);
   }
