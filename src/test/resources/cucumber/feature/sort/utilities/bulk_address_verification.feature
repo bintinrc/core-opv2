@@ -121,7 +121,7 @@ Feature: Bulk Address Verification
 
   Scenario: Bulk AV Reservation - RTS zone doesn't exist
     Given API Operator create multiple shipper addresses V2 using data below:
-      | numberOfAddresses | 2               |
+      | numberOfAddresses | 5               |
       | shipperId         | {shipper-v4-id} |
       | generateAddress   | RANDOM          |
     And API Operator create multiple V2 reservations based on number of created addresses using data below:
@@ -138,7 +138,7 @@ Feature: Bulk Address Verification
 
   Scenario: Bulk AV Reservation - RTS zone exist
     Given API Operator create multiple shipper addresses V2 using data below:
-      | numberOfAddresses | 2               |
+      | numberOfAddresses | 5               |
       | shipperId         | {shipper-v4-id} |
       | generateAddress   | RANDOM          |
     And API Operator create multiple V2 reservations based on number of created addresses using data below:
@@ -155,7 +155,7 @@ Feature: Bulk Address Verification
 
   Scenario: Bulk AV Reservation - Zone is NULL
     Given API Operator create multiple shipper addresses V2 using data below:
-      | numberOfAddresses | 2               |
+      | numberOfAddresses | 5               |
       | shipperId         | {shipper-v4-id} |
       | generateAddress   | RANDOM          |
     And API Operator create multiple V2 reservations based on number of created addresses using data below:
