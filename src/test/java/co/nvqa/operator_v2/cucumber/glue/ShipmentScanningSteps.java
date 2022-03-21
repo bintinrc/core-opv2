@@ -133,29 +133,6 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
-  @And("Wait for shipment SLA status to get updated")
-  public void waitForShipmentSLAStatusToGetUpdated(Map<String, String> data) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
-      try {
-        final Map<String, String> finalData = resolveKeyValues(data);
-        String expectedSla = finalData.get("slaStatus");
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        //standardApiHubClientSteps.apiOperatorGetShipmentDetailsByCreatedShipmentId();
-        //Shipments shipments = get(KEY_SHIPMENT_DETAILS);
-        //NvAssertions.LOGGER.info(shipments.getShipment().getEvents().get);
-        /*MovementEventEntity movementEventEntity = getHubJdbc().getMovementEventByShipmentId(shipmentId);
-        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));*/
-      } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-        navigateRefresh();
-        throw new NvTestRuntimeException(ex.getCause());
-      }
-    }, 10);
-  }
-
   @When("^Operator scan multiple created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
   public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub, String destHub) {
     retryIfRuntimeExceptionOccurred(() ->

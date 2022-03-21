@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip
 Feature: Shipment Van Inbound With Trip Scanning
 
-  @1 @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -1843,7 +1843,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name}    |
       | comments       | Shipment added to trip                |
 
-  @1 @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Same Trip (Validation at End Inbound) (uid:0a874092-f3e3-4b07-a3cf-d8c8b1d1e97e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -1881,10 +1881,6 @@ Feature: Shipment Van Inbound With Trip Scanning
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
-    And Operator refresh page
-    And Wait for shipment SLA status to get updated
-    | slaStatus | SUCCESS |
-    And Operator refresh page
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
