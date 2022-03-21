@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -35,8 +36,8 @@ public class LoginSteps extends AbstractSteps {
     profilePage = new ProfilePage(getWebDriver());
   }
 
-  @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
-  public void loginToOperatorV2(String username, String password) {
+  @And("^Operator login Operator portal with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+  public void loginToOperatorV2withLoginDetails(String username, String password) {
     loginPage.loadPage();
 
     if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
@@ -48,7 +49,11 @@ public class LoginSteps extends AbstractSteps {
       loginPage.enterCredential(username, password);
       //loginPage.checkForGoogleSimpleVerification("Singapore");
     }
+  }
 
+  @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+  public void loginToOperatorV2(String username, String password) {
+    loginToOperatorV2withLoginDetails(username, password);
     mainPage.verifyTheMainPageIsLoaded();
   }
 

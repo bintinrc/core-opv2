@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("WeakerAccess")
 public class StationManagementHomePage extends OperatorV2SimplePage {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(StationManagementHomePage.class);
 
   private static final String STATION_HOME_URL_PATH = "/station-homepage";
@@ -237,7 +237,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
-      return Integer.parseInt(tile.getText().replace(",", "").trim());
+      String tileValue = tile.getText().replace(",", "").trim();
+      LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
+      return Integer.parseInt(tileValue);
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
       return 0;
@@ -419,6 +421,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public void validateHeaderHubValue(String expectedHub) {
     refreshPage_v1();
+    pause10s();
     if (pageFrame.size() > 0) {
       switchToStationHomeFrame();
     }
