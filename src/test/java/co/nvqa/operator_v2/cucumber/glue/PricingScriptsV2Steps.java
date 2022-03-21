@@ -102,7 +102,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       script.setActiveParameters(listOfActiveParameters);
     }
     if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
-      script.setUpdatedAt(MYSQL_24_SDF.format(new Date()));
+      script.setUpdatedAt(YYYY_MM_DD_SDF.format(new Date()));
     }
     return script;
   }
