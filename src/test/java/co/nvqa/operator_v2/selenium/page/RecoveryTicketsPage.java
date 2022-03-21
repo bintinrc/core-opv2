@@ -106,7 +106,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
         //Damaged Details
         createTicketDialog.orderOutcome
             .searchAndSelectValue(recoveryTicket.getOrderOutcomeDamaged());
-        if (!recoveryTicket.getRtsReason().isEmpty()) {
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
