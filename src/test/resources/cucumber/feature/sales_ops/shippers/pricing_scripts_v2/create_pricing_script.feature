@@ -12,7 +12,8 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
-    And Operator verify Draft Script data is correct
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @DeletePricingScript
   Scenario: Create Script and Check Syntax (uid:183521ce-da01-417b-95a3-efeae76f5059)
@@ -234,7 +235,8 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
-    And Operator verify Draft Script data is correct
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @DeletePricingScript
   Scenario: Create Pricing Script - Import from CSV File Fails (uid:4b0b4ba7-1a1f-46e1-af20-adf2307f3950)
