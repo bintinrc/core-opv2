@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -171,6 +172,8 @@ public class CreateRouteGroupsV15Page extends OperatorV2SimplePage {
         .put("Route Grouping", routeGroupingFilter::selectFilter)
         .put("Shipper", shipperFilter::selectFilter)
         .put("Master Shipper", masterShipperFilter::selectFilter)
+        .put("Excluded Shipper",
+            value -> excludedShipperFilter.selectFilter(DataEntity.splitAndNormalize(value)))
         .put("DP Order", value -> dpOrderFilter.selectFilter(value))
         .put("Service Level", value -> {
           serviceLevelFilter.clearAll();

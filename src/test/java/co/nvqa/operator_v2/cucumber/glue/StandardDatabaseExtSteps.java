@@ -110,6 +110,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     });
   }
 
+  @Then("DB Operator verify Jaro Scores:")
+  public void dbOperatorVerifyJaroScores(List<Map<String, String>> data) {
+    data = resolveListOfMaps(data);
+
+    data.forEach(map ->
+    {
+      JaroScore jaroScore = new JaroScore(map);
+      List<JaroScore> actualJaroScores = getCoreJdbc().getJaroScores(jaroScore.getWaypointId());
+      Assertions.assertThat(actualJaroScores)
+          .as("List of Jaro Scores for waypoint id" + jaroScore.getWaypointId())
+          .isNotEmpty();
+      JaroScore actual = actualJaroScores.get(0);
+      jaroScore.compareWithActual(actual);
+    });
+  }
+
   @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived")
   public void dbOperatorVerifyJaroScoresArchived() {
     Order order = get(KEY_ORDER_DETAILS);
@@ -163,7 +179,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   }
 
   @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:")
-  public void dbOperatorVerifyJaroScores(List<Map<String, String>> data) {
+  public void dbOperatorVerifyJaroScoresOdFeliveryTransaction(List<Map<String, String>> data) {
     Order order = get(KEY_ORDER_DETAILS);
     String trackingId = order.getTrackingId();
 

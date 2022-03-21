@@ -2,12 +2,10 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
@@ -27,18 +25,18 @@ import org.openqa.selenium.support.FindBy;
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class BulkAddressVerificationPage extends OperatorV2SimplePage {
+public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVerificationPage> {
 
-  @FindBy(name = "Upload CSV")
-  public NvIconTextButton uploadCsv;
+  @FindBy(css = "[data-testid='upload-csv-button']")
+  public Button uploadCsv;
 
-  @FindBy(name = "Update Successful Matches")
-  public NvApiTextButton updateSuccessfulMatches;
+  @FindBy(css = "[data-testid='update-successful-matches']")
+  public Button updateSuccessfulMatches;
 
   @FindBy(name = "here")
   public NvApiIconButton downloadSampleCsv;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal")
   public UploadAddressesCsvDialog uploadAddressesCsvDialog;
 
   public final SuccessfulMatchesTable successfulMatchesTable;
@@ -84,39 +82,35 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage {
     }
 
     updateSuccessfulMatches();
-    String toastMessage = f("%d Waypoint(s) Updated", jaroScores.size());
-    waitUntilInvisibilityOfToast(toastMessage);
-
   }
 
   public void uploadCsv(File file) {
     uploadCsv.click();
     uploadAddressesCsvDialog.waitUntilVisible();
-    uploadAddressesCsvDialog.chooseButton.setValue(file);
-    uploadAddressesCsvDialog.submit.clickAndWaitUntilDone();
+    uploadAddressesCsvDialog.fileInput.setValue(file);
+    uploadAddressesCsvDialog.submit.click();
     uploadAddressesCsvDialog.waitUntilInvisible();
   }
 
   public void updateSuccessfulMatches() {
-    updateSuccessfulMatches.clickAndWaitUntilDone();
+    updateSuccessfulMatches.click();
   }
 
-  public static class SuccessfulMatchesTable extends NgRepeatTable<JaroScore> {
+  public static class SuccessfulMatchesTable extends AntTable<JaroScore> {
 
     private static final Pattern LATLONG_PATTERN = Pattern
-        .compile(".*?(-?[\\d.]+).*?([\\d.]+).*");
+        .compile(".*?(-?[\\d.]+),([\\d.]+).*");
     public static final String NG_REPEAT = "scs in $data";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
 
     public SuccessfulMatchesTable(WebDriver webDriver) {
       super(webDriver);
-      setNgRepeat(NG_REPEAT);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("waypointId", "id")
-          .put("address1", "//td[@data-title-text='Address']")
-          .put(COLUMN_LATITUDE, "coordinate")
-          .put(COLUMN_LONGITUDE, "coordinate")
+          .put("waypointId", "waypoint_id")
+          .put("address1", "address_one")
+          .put(COLUMN_LATITUDE, "latitude")
+          .put(COLUMN_LONGITUDE, "latitude")
           .build());
       setColumnValueProcessors(ImmutableMap.of(
           COLUMN_LATITUDE, value ->
@@ -134,13 +128,13 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class UploadAddressesCsvDialog extends MdDialog {
+  public static class UploadAddressesCsvDialog extends AntModal {
 
-    @FindBy(css = "[label='Choose']")
-    NvButtonFilePicker chooseButton;
+    @FindBy(css = "[data-testid='upload-dragger']")
+    public FileInput fileInput;
 
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
+    @FindBy(xpath = ".//button[.='Submit']")
+    public Button submit;
 
     public UploadAddressesCsvDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

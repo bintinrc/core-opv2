@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.addressing.JaroScore;
+import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
@@ -46,6 +48,19 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
           jaroScores.add(jaroScore);
         });
         break;
+      case "FROM_CREATED_RESERVATIONS":
+        List<Reservation> reservations = get(KEY_LIST_OF_CREATED_RESERVATIONS);
+        List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
+        for (int i = 0; i < reservations.size(); i++) {
+          Reservation r = reservations.get(i);
+          Address a = addresses.get(i);
+          JaroScore jaroScore = new JaroScore();
+          jaroScore.setWaypointId(r.getWaypointId());
+          jaroScore.setVerifiedAddressId("BULK_VERIFY");
+          jaroScore.setAddress1(a.getAddress1());
+          jaroScores.add(jaroScore);
+        }
+        break;
       default:
         JaroScore jaroScore = new JaroScore();
         jaroScore.setWaypointId(Long.parseLong(waypoint));
@@ -74,7 +89,9 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
     }
 
     put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);
-    bulkAddressVerificationPage.uploadWaypointsData(jaroScores);
+    bulkAddressVerificationPage.inFrame(page ->
+        page.uploadWaypointsData(jaroScores)
+    );
   }
 
   @When("^Operator download sample CSV file on Bulk Address Verification page$")

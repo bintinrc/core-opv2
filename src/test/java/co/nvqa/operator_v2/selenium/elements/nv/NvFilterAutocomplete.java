@@ -43,6 +43,10 @@ public class NvFilterAutocomplete extends AbstractFilterBox {
     searchOrSelect.selectValue(value);
   }
 
+  public void selectFilter(Iterable<String> values) {
+    values.forEach(this::selectFilter);
+  }
+
   public List<String> getSelectedValues() {
     return selectedItems.stream()
         .map(element -> element.getAttribute("aria-label"))
