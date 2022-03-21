@@ -101,12 +101,28 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     jaroScores.forEach(jaroScore ->
     {
       List<JaroScore> actualJaroScores = getCoreJdbc().getJaroScores(jaroScore.getWaypointId());
-      assertEquals("Number of rows in DB", 2, actualJaroScores.size());
+      Assertions.assertThat(
+              actualJaroScores.stream().filter(js -> js.getSourceId() == 4).findFirst())
+          .as("Waypoint source id is CORRECT: 4")
+          .isNotNull();
+      Assertions.assertThat(actualJaroScores.stream().filter(js -> js.getScore() == 1).findFirst())
+          .as("Waypoint Jaro score is CORRECT: 1")
+          .isNotNull();
+      Assertions.assertThat(
+              actualJaroScores.stream().filter(js -> js.getArchived() == 1).findFirst())
+          .as("Waypoint is ARCHIVED")
+          .isNotNull();
 
       Waypoint actualWaypoint = getCoreJdbc().getWaypoint(jaroScore.getWaypointId());
-      assertNotNull("Actual waypoint from DB should not be null.", actualWaypoint);
-      assertEquals("Latitude", jaroScore.getLatitude(), actualWaypoint.getLatitude(), 0);
-      assertEquals("Longitude", jaroScore.getLongitude(), actualWaypoint.getLongitude(), 0);
+      Assertions.assertThat(actualWaypoint)
+          .as("Actual waypoint from DB should not be null.")
+          .isNotNull();
+      Assertions.assertThat(actualWaypoint.getLatitude())
+          .as(String.format("Latitude is CORRECT: %f", jaroScore.getLatitude()))
+          .isEqualTo(jaroScore.getLatitude());
+      Assertions.assertThat(actualWaypoint.getLongitude())
+          .as(String.format("Longitude is CORRECT: %f", jaroScore.getLongitude()))
+          .isEqualTo(jaroScore.getLongitude());
     });
   }
 
