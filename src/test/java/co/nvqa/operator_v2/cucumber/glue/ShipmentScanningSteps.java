@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.api.StandardApiHubClientSteps;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
@@ -27,7 +28,7 @@ import org.openqa.selenium.JavascriptExecutor;
 public class ShipmentScanningSteps extends AbstractSteps {
 
   private ShipmentScanningPage shipmentScanningPage;
-
+  private StandardApiHubClientSteps standardApiHubClientSteps = new StandardApiHubClientSteps();
   public ShipmentScanningSteps() {
   }
 
@@ -70,6 +71,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
+        pause10s();
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
             ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
@@ -129,6 +131,29 @@ public class ShipmentScanningSteps extends AbstractSteps {
     String shipmentType = mapOfData.get("shipmentType");
     String shipmentId = mapOfData.get("shipmentId");
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
+  }
+
+  @And("Wait for shipment SLA status to get updated")
+  public void waitForShipmentSLAStatusToGetUpdated(Map<String, String> data) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        String expectedSla = finalData.get("slaStatus");
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        //standardApiHubClientSteps.apiOperatorGetShipmentDetailsByCreatedShipmentId();
+        //Shipments shipments = get(KEY_SHIPMENT_DETAILS);
+        //NvAssertions.LOGGER.info(shipments.getShipment().getEvents().get);
+        /*MovementEventEntity movementEventEntity = getHubJdbc().getMovementEventByShipmentId(shipmentId);
+        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));*/
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 10);
   }
 
   @When("^Operator scan multiple created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
@@ -461,7 +486,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorClickForceCompleteTripInShipmentInboundScanningPage() {
     shipmentScanningPage.forceCompleteButton.waitUntilClickable();
     shipmentScanningPage.forceCompleteButton.click();
-    pause5s();
+    pause2s();
+    shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
   }
 
   @When("Operator opens new tab and switch to new tab in shipment inbound scanning page")
