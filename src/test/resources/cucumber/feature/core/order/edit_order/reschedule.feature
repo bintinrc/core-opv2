@@ -376,6 +376,137 @@ Feature: Reschedule & RTS
       | city     | Singapore                          |
       | country  | Singapore                          |
 
+  @DeleteOrArchiveRoute
+  Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Operator start the route
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | status      | SUCCESS                          |
+      | shipperName | {filter-shipper-name}            |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | timestamp             | {gradle-current-date-yyyy-MM-dd}           |
+      | inputOnPod            | 1                                          |
+      | scannedAtShipperCount | 1                                          |
+      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And Operator verifies POD details in POD Details dialog on Shipper Pickups page using data below:
+      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | recipientName  | {KEY_CREATED_RESERVATION.name}           |
+      | shipperId      | {shipper-v4-legacy-id}                   |
+      | shipperName    | {shipper-v4-name}                        |
+      | shipperContact | {shipper-v4-contact}                     |
+      | status         | SUCCESS                                  |
+    And Operator verifies downloaded POD CSV file on Shipper Pickups page using data below:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Driver Starts the route
+    And API Driver failed the delivery of the created parcel using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 6           |
+      | failureReasonIndexMode | FIRST       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Delivery Fail" on Edit Order page
+    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | FAIL |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    When Operator click Order Settings -> Reschedule Order on Edit Order page
+    And Operator reschedule Delivery on Edit Order Page
+      | recipientName    | test recipient name       |
+      | recipientContact | +9727894434               |
+      | recipientEmail   | test@mail.com             |
+      | internalNotes    | test internalNotes        |
+      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
+      | deliveryTimeslot | 9AM - 12PM                |
+      | country          | Singapore                 |
+      | city             | Singapore                 |
+      | address1         | 116 Keng Lee Rd           |
+      | address2         | 15                        |
+      | postalCode       | 308402                    |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    When Operator refresh page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | SUCCESS                |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order events on Edit order page using data below:
+      | tags           | name                |
+      | PICKUP, SCAN   | DRIVER PICKUP SCAN  |
+      | PICKUP         | PICKUP SUCCESS      |
+      | SORT, SCAN     | HUB INBOUND SCAN    |
+      | MANUAL ACTION  | ADD TO ROUTE        |
+      | SCAN, DELIVERY | DRIVER INBOUND SCAN |
+      | MANUAL ACTION  | DRIVER START ROUTE  |
+      | DELIVERY       | DELIVERY FAILURE    |
+      | MANUAL ACTION  | RESCHEDULE          |
+      | SYSTEM ACTION  | PRICING CHANGE      |
+      | DELIVERY       | DELIVERY SUCCESS    |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
