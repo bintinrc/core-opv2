@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.glue.api.StandardApiHubClientSteps;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
@@ -28,7 +27,6 @@ import org.openqa.selenium.JavascriptExecutor;
 public class ShipmentScanningSteps extends AbstractSteps {
 
   private ShipmentScanningPage shipmentScanningPage;
-  private StandardApiHubClientSteps standardApiHubClientSteps = new StandardApiHubClientSteps();
   public ShipmentScanningSteps() {
   }
 
