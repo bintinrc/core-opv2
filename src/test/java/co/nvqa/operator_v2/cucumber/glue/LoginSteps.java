@@ -36,8 +36,8 @@ public class LoginSteps extends AbstractSteps {
     profilePage = new ProfilePage(getWebDriver());
   }
 
-  @And("^Operator login Operator portal with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
-  public void loginToOperatorV2withLoginDetails(String username, String password) {
+  @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+  public void loginToOperatorV2(String username, String password) {
     loginPage.loadPage();
 
     if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
@@ -49,12 +49,23 @@ public class LoginSteps extends AbstractSteps {
       loginPage.enterCredential(username, password);
       //loginPage.checkForGoogleSimpleVerification("Singapore");
     }
+
+    mainPage.verifyTheMainPageIsLoaded();
   }
 
-  @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
-  public void loginToOperatorV2(String username, String password) {
-    loginToOperatorV2withLoginDetails(username, password);
-    mainPage.verifyTheMainPageIsLoaded();
+  @And("Operator login Operator portal with username = {string} and password = {string}")
+  public void loginToOperatorV2WithoutURLValidation(String username, String password) {
+    loginPage.loadPage();
+
+    if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
+      String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get()
+          .getOperatorAccessToken();
+      loginPage.forceLogin(operatorAccessToken);
+    } else {
+      loginPage.clickLoginButton();
+      loginPage.enterCredential(username, password);
+      //loginPage.checkForGoogleSimpleVerification("Singapore");
+    }
   }
 
   @Given("^Operator is in Operator Portal V2 login page$")
