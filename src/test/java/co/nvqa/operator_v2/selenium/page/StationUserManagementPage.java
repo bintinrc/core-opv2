@@ -176,8 +176,9 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void validateAddUserSuccessMessage(String hubName) {
     String addUserSuccessMessageXpath = f(ADD_USER_SUCCESS_MESSAGE, hubName);
-    Assert.assertTrue("Add User Success Message is not displayed",
-        getWebDriver().findElement(By.xpath(addUserSuccessMessageXpath)).isDisplayed());
+    pause1s();
+    WebElement successMessage = getWebDriver().findElement(By.xpath(addUserSuccessMessageXpath));
+    Assert.assertTrue("Add User Success Message is not displayed", successMessage.isDisplayed());
   }
 
   public void validateRemoveUserSuccessMessageIsDisplayed(String userName) {
