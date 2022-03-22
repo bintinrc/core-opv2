@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.model.RegularPickup;
@@ -24,8 +26,11 @@ import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -924,8 +929,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void clearAllSelectionsAndLoadSelection() {
-    click("//button[contains(@aria-label,'clear-all-selections')]");
-    click("//button[contains(@aria-label,'load-selection')]");
+    click("//button[contains(@aria-label,'Clear All Selections')]");
+    click("//button[contains(@aria-label,'Load Selection')]");
   }
 
   public void applyAction(String trackingId) {
@@ -1005,5 +1010,55 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void verifyDeliveryAddressIsRts(Order order) {
     assertEquals("Delivery Address1 is correct: ", order.getFromAddress1(), order.getToAddress1());
     assertEquals("Delivery Address2 is correct: ", order.getFromAddress2(), order.getToAddress2());
+  }
+
+  public void verifyDriverCollect(
+          DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder, String trackingId) {
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+    assertEquals("Barcode is different : ", dbCheckingDriverCollectOrder.getBarcode(), trackingId);
+    assertEquals("DP Reservation Status is not the same : ",
+            dbCheckingDriverCollectOrder.getRsvnStatus(), "RELEASED");
+    assertEquals("DP Reservation Event Name is not the same : ", dbCheckingDriverCollectOrder.getRsvnEventName(), "DRIVER_COLLECTED");
+    assertEquals("DP Job Status is not the same : ", dbCheckingDriverCollectOrder.getJobStatus(),
+            "COMPLETED");
+    assertEquals("DP Job Order Status is not the same : ", dbCheckingDriverCollectOrder.getJobOrderStatus(), "SUCCESS");
+    assertEquals("Released To is not the same : ", dbCheckingDriverCollectOrder.getReleasedTo(),
+            "DRIVER");
+    assertTrue("Released At is not the same : ",
+            dbCheckingDriverCollectOrder.getReleasedAt().toString()
+                    .startsWith(formatter.format(today)));
+  }
+
+  public void verifyOrderStatus(Order order, String status, String granularStatus) {
+    assertTrue("Status is not correct", order.getStatus()
+            .equalsIgnoreCase(status));
+    assertTrue("Granular Status is not correct: ", order
+            .getGranularStatus().equalsIgnoreCase(granularStatus));
+  }
+
+  public void databaseVerifyCustomerCollect(
+          DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder, String trackingId) {
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+    assertEquals("Barcode is different : ", dbCheckingCustomerCollectOrder.getBarcode(),
+            trackingId);
+    assertEquals("Released To is not the same : ", dbCheckingCustomerCollectOrder.getReleasedTo(),
+            "CUSTOMER");
+    assertEquals("Reservation Event Name is not correct: ",
+            dbCheckingCustomerCollectOrder.getRsvnEventName(),
+            "DP_RELEASED_TO_CUSTOMER");
+    assertTrue("Released At is not the same : ",
+            dbCheckingCustomerCollectOrder.getReleasedAt().toString()
+                    .startsWith(formatter.format(today)));
+    assertTrue("Collected At is not the same : ",
+            dbCheckingCustomerCollectOrder.getCollectedAt().toString()
+                    .startsWith(formatter.format(today)));
+    assertEquals("Status is not the same : ", dbCheckingCustomerCollectOrder.getStatus(),
+            "RELEASED");
+    assertEquals("Source is not the same : ", dbCheckingCustomerCollectOrder.getSource(),
+            "OPERATOR");
   }
 }

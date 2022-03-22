@@ -299,13 +299,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @And("Operator clicks proceed in end inbound dialog {string}")
   public void operatorClicksProceedInEndInboundDialog(String inboundType) {
-    retryIfAssertionErrorOccurred(() -> {
-      if ("Van Inbound".equals(inboundType)) {
-        shipmentScanningPage.clickProceedInTripDepartureDialog();
-        return;
-      }
+    if ("Van Inbound".equals(inboundType)) {
+      shipmentScanningPage.clickProceedInTripDepartureDialog();
+    }else{
       shipmentScanningPage.clickProceedInEndInboundDialog();
-    }, getCurrentMethodName(), 500, 10);
+    }
   }
 
   @And("Operator clicks leave in leaving page dialog")

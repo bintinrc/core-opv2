@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.Script;
+import co.nvqa.commons.model.pricing.ScriptVersion;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -18,8 +20,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE;
+import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_ID_ON_TABLE;
+import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE;
+import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_NAME_ON_TABLE;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -94,7 +102,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       script.setActiveParameters(listOfActiveParameters);
     }
     if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
-      script.setUpdatedAt(MYSQL_24_SDF.format(new Date()));
+      script.setUpdatedAt(YYYY_MM_DD_SDF.format(new Date()));
     }
     return script;
   }
@@ -108,6 +116,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
+    put(KEY_ACTIVE_SCRIPT_ID, script.getId());
   }
 
   @Then("Operator edit the created Draft Script using data below:")
@@ -115,6 +124,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
     pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
+    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
+    pricingScriptsV2CreateEditDraftPage.validateDraft();
   }
 
   @And("Operator send below data to created Draft Script:")
@@ -205,14 +216,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.closeScreen();
   }
 
+  @Then("Operator clicks validate and release Draft Script")
   @Then("Operator validate and release Draft Script")
   public void operatorValidateAndReleaseDraft() {
-    Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    pricingScriptsV2Page.validateDraftAndReleaseScript(script);
-  }
-
-  @Then("Operator clicks validate and release Draft Script")
-  public void operatorClicksValidateAndReleaseDraft() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.validateDraftAndReleaseScript(script);
   }
@@ -238,16 +244,43 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
   }
 
+  @Then("^Operator verify Active Script data is correct$")
+  public void operatorVerifyDraftScriptDataIsCorrect() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    verifyScriptDetails(pricingScriptsV2Page, script);
+  }
+
   @Then("Operator search according to {string} and verify search result")
   public void operatorSearch(String searchType) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script, searchType);
+    verifyScriptDetails(pricingScriptsV2Page, script);
   }
 
-  @Then("^Operator verify Draft Script data is correct$")
-  public void operatorVerifyDraftScriptDataIsCorrect() {
-    Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    pricingScriptsV2Page.verifyDraftScriptDataIsCorrect(script);
+  private void verifyScriptDetails(PricingScriptsV2Page pricingScriptsV2Page, Script script) {
+    SoftAssertions softAssertions = new SoftAssertions();
+    String actualId = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
+        COLUMN_CLASS_DATA_ID_ON_TABLE);
+    softAssertions.assertThat(actualId).as("Script ID is empty. Script is not created.")
+        .isNotNull();
+
+    String actualScriptName = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
+        COLUMN_CLASS_DATA_NAME_ON_TABLE);
+    softAssertions.assertThat(actualScriptName).as("Script Name is correct")
+        .isEqualTo(script.getName());
+
+    String actualDescription = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
+        COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE);
+    softAssertions.assertThat(actualDescription).as("Script Description is correct")
+        .isEqualTo(script.getDescription());
+
+    String lastModified = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
+        COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE);
+    ScriptVersion scriptVersion = get(KEY_PRICING_SCRIPT_LATEST_VERSION_DETAILS);
+    softAssertions.assertThat(lastModified).as("Last Modified date is correct")
+        .isEqualTo(DateUtil.getDefaultDateTimeFromUTC(scriptVersion.getCreatedAt()));
+
+    softAssertions.assertAll();
   }
 
   @When("^Operator link Script to Shipper with ID = \"([^\"]*)\"$")
@@ -473,8 +506,16 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   }
 
   @Then("Operator clicks Check Syntax")
+  public void operatorClicksCheckScript() {
+    pricingScriptsV2CreateEditDraftPage.checkSyntax();
+    takesScreenshot();
+  }
+
+  @Then("Operator clicks Check Syntax and Verify Draft")
   public void operatorClicksCheckScriptSaveDraft() {
     pricingScriptsV2CreateEditDraftPage.checkSyntax();
+    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
+    pricingScriptsV2CreateEditDraftPage.validateDraft();
     takesScreenshot();
   }
 }
