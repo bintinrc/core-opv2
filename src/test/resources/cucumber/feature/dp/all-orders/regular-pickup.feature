@@ -1,3 +1,4 @@
+@OperatorV2 @DpRegularPickup @DpAdministrationV2 @DP
 Feature: Regular Pickup
 
   @LaunchBrowser @ShouldAlwaysRun

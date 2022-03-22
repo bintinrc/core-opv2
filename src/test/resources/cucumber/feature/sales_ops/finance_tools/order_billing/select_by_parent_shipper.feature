@@ -12,7 +12,7 @@ Feature: Order Billing
     Given operator marks gmail messages as read
 
 
-  @DeleteOrArchiveRoute @HappyPath
+  @HappyPath @GenerateTestData
   Scenario: Test Data: Generate order for MarketPlace shipper
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -22,7 +22,7 @@ Feature: Order Billing
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order
 
-  @DeleteOrArchiveRoute @HappyPath
+  @HappyPath @GenerateTestData
   Scenario: Test Data: Generate order for sub shipper
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {sub-shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |

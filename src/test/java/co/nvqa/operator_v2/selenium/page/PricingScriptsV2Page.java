@@ -29,16 +29,13 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   private final TimeBoundedScriptsPage timeBoundedScriptsPage;
 
   private static final String MD_VIRTUAL_REPEAT_TABLE_DRAFTS = "script in getTableData()";
-  public static final String COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS = "id";
-  public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS = "name";
-  public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS = "description";
-  public static final String ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS = "container.pricing-scripts.edit-script";
+  public static final String COLUMN_CLASS_DATA_ID_ON_TABLE = "id";
+  public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE = "name";
+  public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE = "description";
+  public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE = "last-modified";
+  public static final String ACTION_BUTTON_EDIT_ON_TABLE = "container.pricing-scripts.edit-script";
 
   private static final String MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS = "script in getTableData()";
-  public static final String COLUMN_CLASS_DATA_ID_ON_TABLE_ACTIVE_SCRIPTS = "id";
-  public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_ACTIVE_SCRIPTS = "name";
-  public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_ACTIVE_SCRIPTS = "description";
-  public static final String ACTION_BUTTON_EDIT_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.edit-script";
   public static final String ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.link-shippers";
   public static final String ACTION_BUTTON_MANAGE_TIME_BOUNDED_SCRIPTS_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.manage-time-bounded-scripts";
 
@@ -107,22 +104,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() ->
     {
       searchTableDraftsByScriptName(script.getName());
+      waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
         fail("Data still not loaded");
       }
     }, String.format("Draft script found "));
 
-    String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
-    assertNotNull("Script ID is empty. Script is not created.", actualId);
+    String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE);
     script.setId(Long.parseLong(actualId));
-
-    String actualScriptName = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
-    String actualDescription = getTextOnTableDrafts(1,
-        COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS);
-
-    assertEquals("Script Name", script.getName(), actualScriptName);
-    assertEquals("Script Description", script.getDescription(), actualDescription);
   }
 
   public void deleteDraftScript(Script script) {
@@ -139,7 +129,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Data still not loaded");
       }
     }, String.format("Active script found "));
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void verifyDraftScriptIsDeleted(Script script) {
@@ -194,7 +184,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     searchTableDraftsByScriptName(script.getName());
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Drafts Table is empty. Cannot delete script.");
-    clickActionButtonOnTableDrafts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
+    clickActionButtonOnTableDrafts(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void verifyDraftScriptIsReleased(Script script) {
@@ -211,6 +201,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void verifyDraftScriptIsReleased(Script script, String searchWay) {
+    refreshPage();
     clickTabItem(TAB_ACTIVE_SCRIPTS);
 
     retryIfAssertionErrorOccurred(() ->
@@ -250,20 +241,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     }, String.format("Active script found "), 100, 10);
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Drafts Table is empty. Cannot find script.");
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
-  }
-
-  public void verifyDraftScriptDataIsCorrect(Script script) {
-    String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
-    script.setId(Long.parseLong(actualId));
-    String actualScriptName = getTextOnTableActiveScripts(1,
-        COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
-    String actualDescription = getTextOnTableActiveScripts(1,
-        COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS);
-
-    assertEquals("Script ID", String.valueOf(script.getId()), actualId);
-    assertEquals("Script Name", script.getName(), actualScriptName);
-    assertEquals("Script Description", script.getDescription(), actualDescription);
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void linkShippers(Script script, Shipper shipper) {
@@ -301,7 +279,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Data still not loaded");
       }
       Assertions.assertThat(
-              getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_ACTIVE_SCRIPTS))
+              getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE))
           .isEqualTo(scriptName);
     }, String.format("Active script found "), 10, 5);
 
@@ -386,7 +364,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     searchTableActiveScriptsByScriptName(script.getName());
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Active Scripts Table is empty. Cannot delete script.");
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_ACTIVE_SCRIPTS);
+    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void goToManageTimeBoundedScript(Script script) {
