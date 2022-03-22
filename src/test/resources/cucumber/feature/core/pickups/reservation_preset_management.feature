@@ -50,6 +50,32 @@ Feature: Reservation Preset Management
     And Operator refresh page
     Then Operator verify created Reservation Group was deleted successfully on Reservation Preset Management page
 
+#  @DeleteShipper @DeleteReservationGroup
+#  Scenario: Assign a Shipper Milkrun Address to a Milkrun Group
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    And Operator go to menu Shipper -> All Shippers
+#    And Operator create new Shipper with basic settings using data below:
+#      | isShipperActive               | true                  |
+#      | shipperType                   | Normal                |
+#      | ocVersion                     | v4                    |
+#      | services                      | STANDARD              |
+#      | trackingType                  | Fixed                 |
+#      | isAllowCod                    | false                 |
+#      | isAllowCashPickup             | true                  |
+#      | isPrepaid                     | true                  |
+#      | isAllowStagedOrders           | false                 |
+#      | isMultiParcelShipper          | false                 |
+#      | isDisableDriverAppReschedule  | false                 |
+#      | pricingScriptName             | {pricing-script-name} |
+#      | industryName                  | {industry-name}       |
+#      | salesPerson                   | {sales-person}        |
+#      | pickupAddressCount            | 1                     |
+#      | address.1.milkrun.1.startTime | 9AM                   |
+#      | address.1.milkrun.1.endTime   | 12PM                  |
+#      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
+#    When Operator go to menu Pick Ups -> Reservation Preset Management
+#    And Operator waits for 1 seconds
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -90,6 +90,7 @@ public class CreateRouteGroupsV15Page extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//nv-filter-time-box[.//p[normalize-space(.)='Orig Trxn End Time']]")
   public NvFilterTimeBox origTrxnEndTimeFilter;
+
   //endregion
 
   @FindBy(css = "[id^='route-group']")
@@ -175,6 +176,10 @@ public class CreateRouteGroupsV15Page extends OperatorV2SimplePage {
         .put("Excluded Shipper",
             value -> excludedShipperFilter.selectFilter(DataEntity.splitAndNormalize(value)))
         .put("DP Order", value -> dpOrderFilter.selectFilter(value))
+        .put("Start Datetime", value -> startDateTimeFilter.selectFilter(value))
+        .put("End Datetime", value -> endDateTimeFilter.selectFilter(value))
+        .put("Hub Inbound Datetime", value -> hubInboundDateTimeFilter.selectFilter(value))
+        .put("Hub Inbound User", value -> hubInboundUserFilter.selectFilter(value))
         .put("Service Level", value -> {
           serviceLevelFilter.clearAll();
           serviceLevelFilter.selectFilter(value);

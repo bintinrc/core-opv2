@@ -62,7 +62,7 @@ public class OperatorV2SimplePage extends SimplePage {
   }
 
   public void waitWhilePageIsLoading() {
-    waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']");
+    waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", 60);
     waitUntilPageLoaded();
   }
 
@@ -1192,8 +1192,7 @@ public class OperatorV2SimplePage extends SimplePage {
   }
 
   public boolean isTableEmpty(String tableXpath) {
-    String xpath = tableXpath + "//h5[text()='No Results Found']";
-
+    String xpath = tableXpath + "//*[text()='No Results Found']";
     try {
       return isElementVisible(xpath, FAST_WAIT_IN_SECONDS);
     } catch (TimeoutException ex) {

@@ -1382,6 +1382,60 @@ public class CreateRouteGroupsV15Steps extends AbstractSteps {
     });
   }
 
+  @Then("^Operator verifies Transaction records not shown on Create Route Group V1.5 page using data below:$")
+  public void operatorVerifyTransactionRecordNotShownOnCreateRouteGroupPageUsingDataBelow(
+      List<Map<String, String>> data) {
+    data.forEach(entry -> {
+      Map<String, String> mutableEntry = new HashMap<>(entry);
+      String id = mutableEntry.get("id");
+      mutableEntry.remove("id");
+
+      TxnRsvn expected = new TxnRsvn(resolveKeyValues(mutableEntry));
+
+      if (StringUtils.isBlank(expected.getTrackingId())) {
+        throw new IllegalArgumentException("trackingId value was not defined");
+      }
+      if (StringUtils.isBlank(expected.getType())) {
+        throw new IllegalArgumentException("type value was not defined");
+      }
+
+      if (StringUtils.isNotBlank(id)) {
+        Pattern p = Pattern.compile("GET_FROM_CREATED_ORDER\\[(\\d+)]");
+        Matcher m = p.matcher(id);
+        if (m.find()) {
+          int index = Integer.parseInt(m.group(1));
+          List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+          String type = expected.getType().split("\\s")[0];
+
+          Order order = orders.get(index - 1);
+          Transaction transaction = order.getTransactions().stream()
+              .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType()))
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException(
+                  f("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
+          expected.setId(transaction.getId());
+        } else if (StringUtils.isNumeric(id)) {
+          expected.setId(id);
+        }
+      }
+
+      createRouteGroupsPage.txnRsvnTable.clearColumnFilter(COLUMN_ID);
+      createRouteGroupsPage.txnRsvnTable
+          .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
+      createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_TYPE, expected.getType());
+      Assertions.assertThat(createRouteGroupsPage.txnRsvnTable.isEmpty())
+          .as("List of found transactions is empty")
+          .isTrue();
+    });
+  }
+
+  @Then("^Operator verifies results table is empty on Create Route Group V1.5$")
+  public void operatorVerifyTransactionsTableIsEmpty() {
+    Assertions.assertThat(createRouteGroupsPage.txnRsvnTable.isTableEmpty())
+        .as("Results table is empty")
+        .isTrue();
+  }
+
   @Then("^Operator verifies Reservation records on Create Route Group V1.5 page using data below:$")
   public void operatorVerifyReservationRecordOnCreateRouteGroupPageUsingDataBelow(
       List<Map<String, String>> data) {
@@ -1398,6 +1452,25 @@ public class CreateRouteGroupsV15Steps extends AbstractSteps {
           createRouteGroupsPage.txnRsvnTable.getRowsCount());
       TxnRsvn actual = createRouteGroupsPage.txnRsvnTable.readEntity(1);
       expected.compareWithActual(actual);
+    });
+  }
+
+  @Then("^Operator verifies Reservation records not shown on Create Route Group V1.5 page using data below:$")
+  public void operatorVerifyReservationRecordsNotShownOnCreateRouteGroupPageUsingDataBelow(
+      List<Map<String, String>> data) {
+    data.forEach(entry -> {
+      TxnRsvn expected = new TxnRsvn(resolveKeyValues(entry));
+
+      if (expected.getId() == null) {
+        throw new IllegalArgumentException("id value was not defined");
+      }
+
+      createRouteGroupsPage.txnRsvnTable.clearColumnFilter(COLUMN_TRACKING_ID);
+      createRouteGroupsPage.txnRsvnTable.clearColumnFilter(COLUMN_TYPE);
+      createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_ID, expected.getId());
+      assertEquals(
+          f("Number of records for id = %s", expected.getId()), 0,
+          createRouteGroupsPage.txnRsvnTable.getRowsCount());
     });
   }
 
