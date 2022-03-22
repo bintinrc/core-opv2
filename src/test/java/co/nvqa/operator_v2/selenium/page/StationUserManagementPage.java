@@ -170,8 +170,9 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void validateErrorMessageIsDisplayed(String hubName) {
     String errorMessageXpath = f(ERROR_MESSAGE, hubName);
-    Assert.assertTrue("Error Message is not displayed",
-        getWebDriver().findElement(By.xpath(errorMessageXpath)).isDisplayed());
+    pause1s();
+    WebElement errorMessage = getWebDriver().findElement(By.xpath(errorMessageXpath));
+    Assert.assertTrue("Error Message is not displayed", errorMessage.isDisplayed());
   }
 
   public void validateAddUserSuccessMessage(String hubName) {
@@ -183,8 +184,11 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void validateRemoveUserSuccessMessageIsDisplayed(String userName) {
     String removeUserSuccessMessageXpath = f(REMOVE_USER_SUCCESS_MESSAGE, userName);
+    pause1s();
+    WebElement removeUserSuccessMessage = getWebDriver().findElement(
+        By.xpath(removeUserSuccessMessageXpath));
     Assert.assertTrue("Remove User Success Message is not displayed",
-        getWebDriver().findElement(By.xpath(removeUserSuccessMessageXpath)).isDisplayed());
+        removeUserSuccessMessage.isDisplayed());
   }
 
   public void validateFilter(String columnName, String expectedValue) {
