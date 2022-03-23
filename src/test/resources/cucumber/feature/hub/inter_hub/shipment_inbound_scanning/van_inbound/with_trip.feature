@@ -1597,6 +1597,11 @@ Feature: Shipment Van Inbound With Trip Scanning
       | primaryDriver    | {KEY_LIST_OF_CREATED_DRIVERS[1].id} |
       | additionalDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
     And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
@@ -1623,8 +1628,9 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verifies toast bottom containing following messages is shown on Shipment Inbound Scanning page:
       | Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} has departed." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on Shipment Inbound Scanning page
 #    When Operator go to menu Inter-Hub -> Movement Trips
 #    And Operator verifies movement Trip page is loaded
 #    And Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
@@ -1906,8 +1912,9 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} with expected arrival time" is shown on Shipment Inbound Scanning page
     When Operator click force complete trip in shipment inbound scanning page
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} has completed" is shown on Shipment Inbound Scanning page
+    When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has departed." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on Shipment Inbound Scanning page
 #    When Operator go to menu Inter-Hub -> Movement Trips
 #    And Operator verifies movement Trip page is loaded
 #    And Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
@@ -2769,15 +2776,16 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} has departed." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on Shipment Inbound Scanning page
     And Operator close new tab in shipment inbound scanning page
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} with expected arrival time" is shown on Shipment Inbound Scanning page
     When Operator click force complete trip in shipment inbound scanning page
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} has completed" is shown on Shipment Inbound Scanning page
+    When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
-    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has departed." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on Shipment Inbound Scanning page
 #    When Operator go to menu Inter-Hub -> Movement Trips
 #    And Operator verifies movement Trip page is loaded
 #    And Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
