@@ -172,6 +172,14 @@ public class AllShippersSteps extends AbstractSteps {
       }
 
       shipper.getPickup().setReservationPickupAddresses(pickupAddresses);
+    } else if (mapOfData.containsKey("useCreatedAddress")) {
+      List<Address> pickupAddresses = new ArrayList<>();
+      int i = Integer.parseInt(mapOfData.get("useCreatedAddress"));
+      List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
+      Address address = addresses.get(i - 1);
+      fillMilkrunReservationsProperties(address, i, mapOfData);
+      pickupAddresses.add(address);
+      shipper.getPickup().setReservationPickupAddresses(pickupAddresses);
     }
   }
 
@@ -1498,22 +1506,22 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorVerifiesCorporateSubShipper() {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page -> {
-      List<Shipper> subShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
-      List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
+          List<Shipper> subShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
+          List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
 
-      for (Shipper shipper : actualSubShipper) {
-        assertTrue(f("Check shipper with id %d on API", shipper.getId()), subShipper.stream()
-            .anyMatch(s -> s.getExternalRef().equals(shipper.getExternalRef())));
-      }
-    });
+          for (Shipper shipper : actualSubShipper) {
+            assertTrue(f("Check shipper with id %d on API", shipper.getId()), subShipper.stream()
+                .anyMatch(s -> s.getExternalRef().equals(shipper.getExternalRef())));
+          }
+        });
   }
 
   @When("Operator search corporate sub shipper by name with {string}")
   public void operatorFillNameSearchFieldOnSubShipperBBManagementPage(String searchValue) {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page ->
-        page.subShipperTable.filterByColumn("name", resolveValue(searchValue))
-    );
+            page.subShipperTable.filterByColumn("name", resolveValue(searchValue))
+        );
     pause1s();
   }
 
@@ -1521,19 +1529,19 @@ public class AllShippersSteps extends AbstractSteps {
   public void qaVerifySubShippersWithNameContainsIsDisplayedOnBBManagementPage(String shipperName) {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page -> {
-      List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
-      boolean isExist = actualSubShipper.stream()
-          .allMatch(s -> s.getName().contains(shipperName));
-      assertTrue(f("Check shippers name contain %s", shipperName), isExist);
-    });
+          List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
+          boolean isExist = actualSubShipper.stream()
+              .allMatch(s -> s.getName().contains(shipperName));
+          assertTrue(f("Check shippers name contain %s", shipperName), isExist);
+        });
   }
 
   @When("Operator search corporate sub shipper by email with {string}")
   public void operatorFillEmailSearchFieldOnSubShipperBBManagementPage(String searchValue) {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page -> page.subShipperTable
-        .filterByColumn("email", resolveValue(searchValue))
-    );
+            .filterByColumn("email", resolveValue(searchValue))
+        );
     pause1s();
   }
 
@@ -1552,21 +1560,21 @@ public class AllShippersSteps extends AbstractSteps {
   public void createCorporateSubShipper(Map<String, String> mapOfData) {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page -> {
-          pause2s();
-          page.addSubShipper.click();
-          fillNewSubShipperData(0, resolveKeyValues(mapOfData));
-          page.createSubShipperAccount.click();
-          pause1s();
-        }
-    );
+              pause2s();
+              page.addSubShipper.click();
+              fillNewSubShipperData(0, resolveKeyValues(mapOfData));
+              page.createSubShipperAccount.click();
+              pause1s();
+            }
+        );
   }
 
   @When("Operator verifies success notification {string} is displayed on Corporate sub shippers tab")
   public void checkSuccessNotification(String expected) {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page ->
-        page.waitUntilInvisibilityOfNotification(resolveValue(expected), true)
-    );
+            page.waitUntilInvisibilityOfNotification(resolveValue(expected), true)
+        );
   }
 
   private void fillNewSubShipperData(int index, Map<String, String> data) {
@@ -1750,10 +1758,10 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorClickEditActionButtonForSubShipperOnBBManagementPage() {
     allShippersPage.allShippersCreateEditPage
         .b2bManagementPage.inFrame(page -> {
-      String name = page.subShipperTable.getColumnText(1, NAME_COLUMN_LOCATOR_KEY);
-      put(KEY_SHIPPER_NAME, name);
-      page.subShipperTable.clickActionButton(1, "Edit");
-    });
+          String name = page.subShipperTable.getColumnText(1, NAME_COLUMN_LOCATOR_KEY);
+          put(KEY_SHIPPER_NAME, name);
+          page.subShipperTable.clickActionButton(1, "Edit");
+        });
   }
 
   @Then("Operator verifies corporate sub shipper details page is displayed")
