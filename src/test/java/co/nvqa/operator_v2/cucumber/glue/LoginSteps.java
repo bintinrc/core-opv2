@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -50,6 +51,21 @@ public class LoginSteps extends AbstractSteps {
     }
 
     mainPage.verifyTheMainPageIsLoaded();
+  }
+
+  @And("Operator login Operator portal with username = {string} and password = {string}")
+  public void loginToOperatorV2WithoutURLValidation(String username, String password) {
+    loginPage.loadPage();
+
+    if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
+      String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get()
+          .getOperatorAccessToken();
+      loginPage.forceLogin(operatorAccessToken);
+    } else {
+      loginPage.clickLoginButton();
+      loginPage.enterCredential(username, password);
+      //loginPage.checkForGoogleSimpleVerification("Singapore");
+    }
   }
 
   @Given("^Operator is in Operator Portal V2 login page$")

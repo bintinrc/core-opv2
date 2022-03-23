@@ -15,6 +15,7 @@ public class LogoutPage extends OperatorV2SimplePage {
   }
 
   public void logout() {
+    getWebDriver().switchTo().defaultContent();
     WebElement elm = getWebDriver()
         .findElement(By.xpath("//span[(contains(@class, 'nv-text-ellipsis nv-p-med name'))]"));
 
