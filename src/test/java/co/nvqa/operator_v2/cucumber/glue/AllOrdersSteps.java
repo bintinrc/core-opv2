@@ -446,7 +446,6 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @Then("^Operator verifies All Orders Page is displayed$")
   public void operatorVerifiesAllOrdersPageIsDispalyed() {
-    pause10s();
     allOrdersPage.verifyItsCurrentPage();
   }
 
