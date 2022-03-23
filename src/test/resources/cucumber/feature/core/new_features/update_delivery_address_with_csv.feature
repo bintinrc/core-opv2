@@ -175,6 +175,63 @@ Feature: Update Delivery Address with CSV
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
 
+  @DeleteOrArchiveRoute
+  Scenario: Bulk Update Order Delivery Address with CSV - RTS Order
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
+    When Operator update delivery address of created orders on Update Delivery Address with CSV page
+    Then Operator verify updated addresses on Update Delivery Address with CSV page
+    When Operator confirm addresses update on Update Delivery Address with CSV page
+    Then Operator verify addresses were updated successfully on Update Delivery Address with CSV page
+    And API Operator get order details
+    And Operator verify created orders info after address update
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order events on Edit order page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+      | UPDATE AV                  |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | FAIL |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+    And DB Operator verifies transactions after RTS
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    When DB Operator gets waypoint record
+    And API Operator get Addressing Zone from a lat long with type "RTS"
+    Then Operator verifies Zone is correct after RTS on Edit Order page
+    And Operator verifies waypoints.routing_zone_id is correct
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

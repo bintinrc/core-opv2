@@ -57,25 +57,29 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator verify the new Zone is created successfully")
   public void operatorVerifyTheNewZoneIsCreatedSuccessfully() {
-    Zone expected = get(KEY_CREATED_ZONE);
-    zonesPage.findZone(expected);
-    Zone actual = zonesPage.zonesTable.readEntity(1);
-    expected.compareWithActual(actual);
-    put(KEY_CREATED_ZONE_ID, actual.getId());
-    putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
-    takesScreenshot();
+    zonesPage.inFrame(page -> {
+      Zone expected = get(KEY_CREATED_ZONE);
+      zonesPage.findZone(expected);
+      Zone actual = zonesPage.zonesTable.readEntity(1);
+      expected.compareWithActual(actual);
+      put(KEY_CREATED_ZONE_ID, actual.getId());
+      putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+      takesScreenshot();
+    });
   }
 
   @Then("Operator verifies that the newly created {string} zone's details are right")
   public void operatorVerifiesThatTheNewlyCreatedZoneSDetailsAreRight(String zoneType) {
     operatorVerifyTheNewZoneIsCreatedSuccessfully();
-    String actualRtsValue = zonesPage.rtsValue.getText();
-    if (RTS.equalsIgnoreCase(zoneType)) {
-      assertEquals("Zone Type is right", RTS, actualRtsValue);
-    } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-      assertEquals("Zone Type is right", "-", actualRtsValue);
-    }
-    takesScreenshot();
+    zonesPage.inFrame(page -> {
+      String actualRtsValue = zonesPage.zonesTable.readEntity(1).getType();
+      if (RTS.equalsIgnoreCase(zoneType)) {
+        assertEquals("Zone Type is right", RTS, actualRtsValue);
+      } else if (NORMAL.equalsIgnoreCase(zoneType)) {
+        assertEquals("Zone Type is right", "-", actualRtsValue);
+      }
+      takesScreenshot();
+    });
   }
 
   @When("Operator update the new Zone")
@@ -92,18 +96,20 @@ public class ZonesSteps extends AbstractSteps {
 
     put("zoneEdited", zoneEdited);
 
-    zonesPage.waitUntilPageLoaded();
-    zonesPage.findZone(zone);
-    zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
-    zonesPage.editZoneDialog.waitUntilVisible();
-    zonesPage.editZoneDialog.name.setValue(zoneEdited.getName());
-    zonesPage.editZoneDialog.shortName.setValue(zoneEdited.getShortName());
-    zonesPage.editZoneDialog.hub.searchAndSelectValue(zoneEdited.getHubName());
-    zonesPage.editZoneDialog.latitude.setValue(zoneEdited.getLatitude());
-    zonesPage.editZoneDialog.longitude.setValue(zoneEdited.getLongitude());
-    zonesPage.editZoneDialog.description.setValue(zoneEdited.getDescription());
-    zonesPage.editZoneDialog.update.clickAndWaitUntilDone();
-    zonesPage.editZoneDialog.waitUntilInvisible();
+    zonesPage.inFrame(page -> {
+      zonesPage.waitUntilPageLoaded();
+      zonesPage.findZone(zone);
+      zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
+      zonesPage.editZoneDialog.waitUntilVisible();
+      zonesPage.editZoneDialog.name.setValue(zoneEdited.getName());
+      zonesPage.editZoneDialog.shortName.setValue(zoneEdited.getShortName());
+      zonesPage.editZoneDialog.hub.selectValue(zoneEdited.getHubName());
+      zonesPage.editZoneDialog.latitude.setValue(zoneEdited.getLatitude());
+      zonesPage.editZoneDialog.longitude.setValue(zoneEdited.getLongitude());
+      zonesPage.editZoneDialog.description.setValue(zoneEdited.getDescription());
+      zonesPage.editZoneDialog.update.click();
+      zonesPage.editZoneDialog.waitUntilInvisible();
+    });
   }
 
   @When("Operator changes the newly created Zone to be {string} zone")
@@ -116,93 +122,108 @@ public class ZonesSteps extends AbstractSteps {
     zoneEdited.setHubName(zone.getHubName());
     zoneEdited.setDescription(zone.getDescription());
 
-    zonesPage.waitUntilPageLoaded();
-    zonesPage.findZone(zone);
-    zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
-    zonesPage.editZoneDialog.waitUntilVisible();
-    zonesPage.rtsToggle.click();
-    zonesPage.editZoneDialog.update.clickAndWaitUntilDone();
-    zonesPage.editZoneDialog.waitUntilInvisible();
+    zonesPage.inFrame(page -> {
+      zonesPage.waitUntilPageLoaded();
+      zonesPage.findZone(zone);
+      zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
+      zonesPage.editZoneDialog.waitUntilVisible();
+      zonesPage.editZoneDialog.rts.click();
+      zonesPage.editZoneDialog.update.click();
+      zonesPage.editZoneDialog.waitUntilInvisible();
 
-    if (RTS.equalsIgnoreCase(zoneType)) {
-      zoneEdited.setName("RTS-" + zone.getName());
-      zoneEdited.setShortName("RTS-" + zone.getShortName());
-    } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-      zoneEdited.setName(zone.getName().substring(4));
-      zoneEdited.setShortName(zone.getShortName().substring(4));
-    }
+      if (RTS.equalsIgnoreCase(zoneType)) {
+        zoneEdited.setName("RTS-" + zone.getName());
+        zoneEdited.setShortName("RTS-" + zone.getShortName());
+      } else if (NORMAL.equalsIgnoreCase(zoneType)) {
+        zoneEdited.setName(zone.getName().substring(4));
+        zoneEdited.setShortName(zone.getShortName().substring(4));
+      }
+    });
     put(KEY_CREATED_ZONE, zoneEdited);
   }
 
   @Then("Operator verify the new Zone is updated successfully")
   public void operatorVerifyTheNewZoneIsUpdatedSuccessfully() {
     Zone expected = get("zoneEdited");
-    zonesPage.findZone(expected);
-    Zone actual = zonesPage.zonesTable.readEntity(1);
-    expected.compareWithActual(actual);
-    takesScreenshot();
+    zonesPage.inFrame(page -> {
+      zonesPage.findZone(expected);
+      Zone actual = zonesPage.zonesTable.readEntity(1);
+      expected.compareWithActual(actual);
+      takesScreenshot();
+    });
   }
 
   @When("Operator delete the new Zone")
   public void operatorDeleteTheNewZone() {
     Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
-    zonesPage.waitUntilPageLoaded();
-    zonesPage.findZone(zone);
-    zonesPage.zonesTable.clickActionButton(1, ACTION_DELETE);
-    zonesPage.confirmDeleteDialog.waitUntilVisible();
-    zonesPage.confirmDeleteDialog.confirmDelete();
+    zonesPage.inFrame(page -> {
+      zonesPage.waitUntilPageLoaded();
+      zonesPage.findZone(zone);
+      zonesPage.zonesTable.clickActionButton(1, ACTION_DELETE);
+      zonesPage.confirmDeleteDialog.waitUntilVisible();
+      zonesPage.confirmDeleteDialog.confirm.click();
+    });
   }
 
   @Then("^Operator verify the new Zone is deleted successfully$")
   public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
     Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
-    zonesPage.clickRefreshCache();
-    zonesPage.refreshPage();
-    zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
-    Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
-        .as("Zone " + zone.getName() + " were deleted").isTrue();
-    takesScreenshot();
+    zonesPage.inFrame(page -> {
+      zonesPage.clickRefreshCache();
+      zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
+      Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
+          .as("Zone " + zone.getName() + " were deleted").isTrue();
+      takesScreenshot();
+    });
   }
 
   @Then("Operator check all filters on Zones page work fine")
   public void operatorCheckAllFiltersOnZonesPageWork() {
     Zone zone = get(KEY_CREATED_ZONE);
 
-    zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
-    List<String> values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
-    assertThat("Short Name filter results", values,
-        Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+    zonesPage.inFrame(page -> {
+      zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
+      List<String> values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
+      assertThat("Short Name filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
 
-    zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
-    values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
-    assertThat("Name filter results", values,
-        Matchers.everyItem(Matchers.containsString(zone.getName())));
+      zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
+      values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
+      assertThat("Name filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getName())));
 
-    zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
-    values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
-    assertThat("Hub Name filter results", values,
-        Matchers.everyItem(Matchers.containsString(zone.getHubName())));
-    takesScreenshot();
+      zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
+      values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
+      assertThat("Hub Name filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      takesScreenshot();
+    });
   }
 
   @When("Operator download Zone CSV file")
   public void operatorDownloadZoneCsvFile() {
-    zonesPage.downloadCsvFile.click();
+    zonesPage.inFrame(page -> {
+      zonesPage.downloadCsvFile.click();
+    });
   }
 
   @Then("Operator verify Zone CSV file is downloaded successfully")
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
     Zone zone = get(KEY_CREATED_ZONE);
-    zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
-    takesScreenshot();
+    zonesPage.inFrame(page -> {
+      zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
+      takesScreenshot();
+    });
   }
 
   @Then("^Operator click View Selected Polygons for zone id \"([^\"]*)\"$")
   public void operatorClickViewSelectedPolygonsForZone(String zoneId) {
-    zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
-    zonesPage.zonesTable.selectRow(1);
-    zonesPage.viewSelectedPolygons.click();
-    zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    zonesPage.inFrame(page -> {
+      zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
+      zonesPage.zonesTable.selectRow(1);
+      zonesPage.viewSelectedPolygons.click();
+      zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    });
   }
 
   @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
@@ -255,26 +276,26 @@ public class ZonesSteps extends AbstractSteps {
         f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.",
             new Date()));
 
-    zonesPage.waitUntilPageLoaded();
-    zonesPage.addZone.click();
-    zonesPage.addZoneDialog.waitUntilVisible();
-    zonesPage.addZoneDialog.name.setValue(zone.getName());
-    zonesPage.addZoneDialog.shortName.setValue(zone.getShortName());
-    zonesPage.addZoneDialog.hub.searchAndSelectValue(zone.getHubName());
-    zonesPage.addZoneDialog.latitude.setValue(zone.getLatitude());
-    zonesPage.addZoneDialog.longitude.setValue(zone.getLongitude());
-    zonesPage.addZoneDialog.description.setValue(zone.getDescription());
+    zonesPage.inFrame(page -> {
+      page.waitUntilPageLoaded();
+      page.addZone.click();
+      page.addZoneDialog.waitUntilVisible();
+      page.addZoneDialog.name.setValue(zone.getName());
+      page.addZoneDialog.shortName.setValue(zone.getShortName());
+      page.addZoneDialog.hub.selectValue(zone.getHubName());
+      page.addZoneDialog.latitude.setValue(zone.getLatitude());
+      page.addZoneDialog.longitude.setValue(zone.getLongitude());
+      page.addZoneDialog.description.setValue(zone.getDescription());
 
-    if (isRts) {
-      zonesPage.rtsToggle.click();
-      zone.setName("RTS-" + zone.getName());
-      zone.setShortName("RTS-" + zone.getShortName());
-    }
+      if (isRts) {
+        page.addZoneDialog.rts.click();
+        zone.setName("RTS-" + zone.getName());
+        zone.setShortName("RTS-" + zone.getShortName());
+      }
 
-    zonesPage.addZoneDialog.submit.clickAndWaitUntilDone();
-    zonesPage.addZoneDialog.waitUntilInvisible();
-    zonesPage.waitUntilInvisibilityOfToast("Zone created successfully", true);
-
+      page.addZoneDialog.submit.click();
+      page.addZoneDialog.waitUntilInvisible();
+    });
     put(KEY_CREATED_ZONE, zone);
   }
 }

@@ -595,6 +595,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   private void fillMilkrunReservationSettings(Address address) {
     click("//span[.='Milkrun Reservations']");
+    pause500ms();
     if (CollectionUtils.isNotEmpty(address.getMilkrunSettings())) {
       List<MilkrunSettings> milkrunSettingsList = address.getMilkrunSettings();
       for (int i = 0; i < milkrunSettingsList.size(); i++) {
@@ -908,7 +909,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         "//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
     assertEquals("Number of Milkrun Reservations", reservationsCount,
         getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
-    clickNvIconButtonByName("Cancel");
+    clickNvApiTextButtonByName("commons.save-changes");
     waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
   }
 

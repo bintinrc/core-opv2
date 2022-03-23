@@ -77,7 +77,7 @@ Feature: Shipper Pickups
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Assign Reservation to a Driver Route with Priority Level (uid:5830302f-c452-49c4-bc59-28bb130e20ae)
+  Scenario: Operator Edit Single Reservation Priority Level in Shipper Pickup Page (uid:5830302f-c452-49c4-bc59-28bb130e20ae)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -92,17 +92,9 @@ Feature: Shipper Pickups
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
     And Operator refresh routes on Shipper Pickups page
-    And Operator assign Reservation to Route with priority level = "3" on Shipper Pickups page
+    And Operator set the Priority Level of the created reservation to "3" from Apply Action
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName   | {shipper-v4-name}            |
-      | approxVolume  | Less than 10 Parcels         |
-      | comments      | GET_FROM_CREATED_RESERVATION |
-      | routeId       | GET_FROM_CREATED_ROUTE       |
-      | driverName    | {ninja-driver-name}          |
-      | priorityLevel | 3                            |
-    And DB Operator verifies route_waypoint record exist
-    And DB Operator verifies waypoint status is "ROUTED"
-    And DB Operator verifies route_monitoring_data record
+      | priorityLevel | 3 |
 
   Scenario: Operator Find Created Reservation by Shipper Name (uid:4d2d2a71-33e0-4f6c-846e-9cca10ef4c2b)
     Given Operator go to menu Shipper Support -> Blocked Dates

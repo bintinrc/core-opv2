@@ -476,8 +476,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     @FindBy(id = "Priority Level")
     public TextBox priorityLevel;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(name = "container.shipper-pickups.dialog.edit-route.update-route")
+    public NvApiTextButton updateRoute;
+
+    @FindBy(name = "container.shipper-pickups.dialog.edit-route.update-address")
+    public NvApiTextButton updateAddress;
 
     @FindBy(name = "container.shipper-pickups.dialog.change-address")
     public NvIconTextButton editAddress;
@@ -514,7 +517,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     }
 
     public void submitForm() {
-      saveChanges.clickAndWaitUntilDone();
+      updateRoute.clickAndWaitUntilDone();
       waitUntilInvisible();
     }
   }

@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import java.util.Date;
+import java.util.List;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -47,6 +49,14 @@ public class NvFilterDateBox extends AbstractFilterBox {
   public void selectDates(Date fromDate, Date toDate) {
     selectFromDate(fromDate);
     selectToDate(toDate);
+  }
+
+  public void selectFilter(String value) {
+    List<String> vals = DataEntity.splitAndNormalize(value);
+    Date from = DataEntity.toDateTime(vals.get(0));
+    selectFromDate(from);
+    Date to = DataEntity.toDateTime(vals.get(1));
+    selectToDate(to);
   }
 
   @Override

@@ -9,6 +9,8 @@ Feature: Zones
   Scenario: Operator Create New Zone (uid:985217e6-7dd4-4d15-80b6-e97d6f7cf587)
     When Operator go to menu "Routing" -> "Zones"
     And Operator create new Zone using Hub "{hub-name}"
+    Then Operator verifies that success react notification displayed:
+      | top | Zone created successfully |
     Then Operator verify the new Zone is created successfully
 
   @DeleteCreatedZone
