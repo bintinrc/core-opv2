@@ -1751,11 +1751,11 @@ Feature: Shipment Van Inbound With Trip Scanning
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
-    And Operator verifies event is present for order on Edit order page
-      | eventName         | HUB INBOUND SCAN                                  |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
-      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
+#    And Operator verifies event is present for order on Edit order page
+#      | eventName         | HUB INBOUND SCAN                                  |
+#      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
+#      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
+#      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -1936,11 +1936,11 @@ Feature: Shipment Van Inbound With Trip Scanning
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
-    And Operator verifies event is present for order on Edit order page
-      | eventName         | HUB INBOUND SCAN                                  |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
-      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
+#    And Operator verifies event is present for order on Edit order page
+#      | eventName         | HUB INBOUND SCAN                                  |
+#      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
+#      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
+#      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
@@ -2029,11 +2029,11 @@ Feature: Shipment Van Inbound With Trip Scanning
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
-    And Operator verifies event is present for order on Edit order page
-      | eventName         | HUB INBOUND SCAN                                  |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
-      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
+#    And Operator verifies event is present for order on Edit order page
+#      | eventName         | HUB INBOUND SCAN                                  |
+#      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
+#      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
+#      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
