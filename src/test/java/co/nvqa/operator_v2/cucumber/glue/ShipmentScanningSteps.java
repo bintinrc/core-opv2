@@ -27,7 +27,6 @@ import org.openqa.selenium.JavascriptExecutor;
 public class ShipmentScanningSteps extends AbstractSteps {
 
   private ShipmentScanningPage shipmentScanningPage;
-
   public ShipmentScanningSteps() {
   }
 
@@ -70,6 +69,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
+        pause10s();
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
             ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
@@ -461,7 +461,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorClickForceCompleteTripInShipmentInboundScanningPage() {
     shipmentScanningPage.forceCompleteButton.waitUntilClickable();
     shipmentScanningPage.forceCompleteButton.click();
-    pause5s();
+    pause2s();
+    shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
   }
 
   @When("Operator opens new tab and switch to new tab in shipment inbound scanning page")
@@ -507,7 +508,9 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.getWebDriver().switchTo().window(windowHandle).close();
       }
     }
-    getWebDriver().switchTo().window(mainWindowHandle).switchTo();
+    getWebDriver().switchTo().window(mainWindowHandle);
+    shipmentScanningPage.switchTo();
+    pause5s();
   }
 
 }
