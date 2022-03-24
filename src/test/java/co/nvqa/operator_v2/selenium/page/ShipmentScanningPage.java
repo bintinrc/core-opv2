@@ -239,7 +239,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipmentWithData(String originHubName, String destinationHubName,
       String shipmentType, String shipmentId) {
-    //waitUntilVisibilityOfElementLocated("//span[.='Search or Select']");
     pause10s();
     switchTo();
     selectHub(originHubName);
