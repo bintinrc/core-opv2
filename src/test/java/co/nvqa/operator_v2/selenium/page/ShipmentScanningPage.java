@@ -100,8 +100,25 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public RemoveAllParcelsDialog removeAllParcelsDialog;
 
-  @FindBy(css = "md-dialog")
-  public ShipmentWithTrip shipmentWithTripDialog;
+  public String shipmentWithTripDialog = "//div[contains(@class,'ant-modal-content')]";
+
+  @FindBy(xpath = "//div[@class='ant-modal-title']")
+  public TextBox shipmentWithTripDialogTitle;
+
+  @FindBy(xpath = "//td[contains(@class,'shipment-id')]")
+  public List<PageElement> shipmentIdList;
+
+  @FindBy(xpath = "//td[contains(@class,'origin-hub-name')]")
+  public List<PageElement> originHubNameList;
+
+  @FindBy(xpath = "//td[contains(@class,'dropoff-hub-name')]")
+  public List<PageElement> dropOffHubNameList;
+
+  @FindBy(xpath = "//td[contains(@class,'destination-hub-name')]")
+  public List<PageElement> destinationHubNameList;
+
+  @FindBy(xpath = "//td[contains(@class,'message')]")
+  public List<PageElement> commentsList;
 
   @FindBy(css = "md-dialog")
   public ConfirmRemoveDialog confirmRemoveDialog;
@@ -115,7 +132,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(name = "commons.cancel")
   public NvIconButton cancelButton;
 
-  @FindBy(xpath = "//div//p[@class='nv-p']//a")
+  @FindBy(xpath = "//button//span[contains(text(), ' shipments')]")
   public TextBox shipmentToGo;
 
   @FindBy(xpath = "//div//p[@class='nv-p']//a")
@@ -497,21 +514,21 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String destinationHub = finalData.get("destinationHub");
     String comments = finalData.get("comments");
 
-    shipmentWithTripDialog.waitUntilVisible();
-    String actualDialogTitle = shipmentWithTripDialog.dialogTitle.getText().toLowerCase();
+    waitUntilVisibilityOfElementLocated(shipmentWithTripDialog);
+    String actualDialogTitle = shipmentWithTripDialogTitle.getText().toLowerCase();
     int index = 0;
-    for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
+    for (PageElement shipmentIdElement : shipmentIdList) {
       String currentShipmentId = shipmentIdElement.getText().trim();
       if (shipmentId.equals(currentShipmentId)) {
         break;
       }
       index++;
     }
-    String actualShipmentId = shipmentWithTripDialog.shipmentId.get(index).getText();
-    String actualOriginHub = shipmentWithTripDialog.originHubName.get(index).getText();
-    String actualDropOffHub = shipmentWithTripDialog.dropOffHubName.get(index).getText();
-    String actualDestinationHub = shipmentWithTripDialog.destinationHubName.get(index).getText();
-    String actualComments = shipmentWithTripDialog.comments.get(index).getText();
+    String actualShipmentId = shipmentIdList.get(index).getText();
+    String actualOriginHub = originHubNameList.get(index).getText();
+    String actualDropOffHub = dropOffHubNameList.get(index).getText();
+    String actualDestinationHub = destinationHubNameList.get(index).getText();
+    String actualComments = commentsList.get(index).getText();
 
     assertThat("Dialog title is equal", actualDialogTitle, equalTo(dialogTitle));
     assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
@@ -545,12 +562,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickShipmentToGoWithId(String shipmentIdAsString) {
-    shipmentWithTripDialog.waitUntilVisible();
-    for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
+    waitUntilVisibilityOfElementLocated(shipmentWithTripDialog);
+    for (PageElement shipmentIdElement : shipmentIdList) {
       String currentShipmentId = shipmentIdElement.getText();
       if (shipmentIdAsString.equals(currentShipmentId)) {
         assertEquals(shipmentIdAsString, currentShipmentId);
-        shipmentIdElement.click();
+        TestUtils.callJavaScriptExecutor("arguments[0].click();",
+                getWebDriver().findElement(By.xpath("//td[contains(@class,'shipment-id')]//a[.='"+shipmentIdAsString+"']")),
+                getWebDriver());
         switchToOtherWindow();
         return;
       }
@@ -649,8 +668,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyShipmentToGoTableToScrollInto(String shipmentId) {
-    shipmentWithTripDialog.waitUntilVisible();
-    for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
+    waitUntilVisibilityOfElementLocated(shipmentWithTripDialog);
+    for (PageElement shipmentIdElement : shipmentIdList) {
       String currentShipmentId = shipmentIdElement.getText();
       if (shipmentId.equals(currentShipmentId)) {
         assertEquals(shipmentId, currentShipmentId);
