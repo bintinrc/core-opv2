@@ -18,6 +18,7 @@ Feature: Search by SID
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Dimension Table page is shown
 
 
   @KillBrowser

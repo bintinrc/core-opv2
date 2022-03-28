@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensi
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionAddPage.ShipmentWeightAddState;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionPage;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionPage.ShipmentWeightState;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 @ScenarioScoped
 public class ShipmentWeightDimensionSteps extends AbstractSteps {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentWeightDimensionSteps.class);
 
   // keys
@@ -31,10 +33,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   // page object
   ShipmentWeightDimensionPage shipmentWeightDimensionPage;
   ShipmentWeightDimensionAddPage shipmentWeightDimensionAddPage;
+  ShipmentWeightDimensionTablePage shipmentWeightDimensionTablePage;
 
   @Override
   public void init() {
     shipmentWeightDimensionPage = new ShipmentWeightDimensionPage(getWebDriver());
+    shipmentWeightDimensionTablePage = new ShipmentWeightDimensionTablePage(getWebDriver());
   }
 
   @Then("Operator verify Shipment Weight Dimension page UI")
@@ -65,8 +69,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         break;
       case VALID:
       case HAS_DIMENSION:
-        Shipment shipmentData = ((Shipments) getScenarioStorage().get(KEY_CREATED_SHIPMENT)).getShipment();
-        String shipmentStatus = (String) Optional.ofNullable(dataTable.get(STATUS_KEY)).orElse(shipmentData.getStatus());
+        Shipment shipmentData = ((Shipments) getScenarioStorage().get(KEY_CREATED_SHIPMENT))
+            .getShipment();
+        String shipmentStatus = (String) Optional.ofNullable(dataTable.get(STATUS_KEY))
+            .orElse(shipmentData.getStatus());
         uiInfo.setStartHub(shipmentData.getOrigHubName());
         uiInfo.setEndHub(shipmentData.getDestHubName());
         uiInfo.setStatus(shipmentStatus);
@@ -89,9 +95,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorEnterShipmentIDOnShipmentWeightDimension(String shipmentId) {
     String shipmentIdToSend;
     if (shipmentId.equalsIgnoreCase("invalid")) {
-      shipmentIdToSend  = RandomStringUtils.randomNumeric(15);
-    } else if (shipmentId.equalsIgnoreCase("JSON")){
-      shipmentIdToSend = f("{ \"shipment_id\": \"%s\" , \"destination_hub_id\":\"1\"}", getString("KEY_CREATED_SHIPMENT_ID"));
+      shipmentIdToSend = RandomStringUtils.randomNumeric(15);
+    } else if (shipmentId.equalsIgnoreCase("JSON")) {
+      shipmentIdToSend = f("{ \"shipment_id\": \"%s\" , \"destination_hub_id\":\"1\"}",
+          getString("KEY_CREATED_SHIPMENT_ID"));
     } else {
       shipmentIdToSend = getString("KEY_CREATED_SHIPMENT_ID");
     }
@@ -106,7 +113,8 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   }
 
   @When("Operator enter dimension values on Shipment Weight Dimension Weight input")
-  public void operatorEnterDimensionValuesOnShipmentWeightDimensionWeightInput(Map<String, Double> dataTable) {
+  public void operatorEnterDimensionValuesOnShipmentWeightDimensionWeightInput(
+      Map<String, Double> dataTable) {
     shipmentWeightDimensionAddPage.enterDimensionInfo(
         dataTable.get("weight"),
         dataTable.get("length"),
@@ -121,8 +129,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   }
 
   @Then("Operator verify Shipment Weight Dimension Add Dimension UI")
-  public void operatorVerifyShipmentWeightDimensionAddDimensionUI(Map<String,String> dataTable) {
-    shipmentWeightDimensionAddPage.verifyDimensionFieldError(dataTable.get("field"), dataTable.get("errorMessage"));
+  public void operatorVerifyShipmentWeightDimensionAddDimensionUI(Map<String, String> dataTable) {
+    shipmentWeightDimensionAddPage
+        .verifyDimensionFieldError(dataTable.get("field"), dataTable.get("errorMessage"));
   }
 
   @And("Operator verify Shipment Weight Dimension Submit button is disabled")
@@ -151,7 +160,8 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   }
 
   @Then("Operator verify Shipment Weight Dimension Load Shipment page UI")
-  public void operatorVerifyShipmentWeightDimensionLoadShipmentPageUI(Map<String, String> dataTable) {
+  public void operatorVerifyShipmentWeightDimensionLoadShipmentPageUI(
+      Map<String, String> dataTable) {
     String state = Optional.ofNullable(dataTable.get("state")).orElse("initial");
     shipmentWeightDimensionPage.verifyLoadShipmentWeightUI(ShipmentWeightState.fromLabel(state));
   }
@@ -165,5 +175,17 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @When("Operator click search button on Shipment Weight Dimension page")
   public void operatorClickSearchButtonOnShipmentWeightDimensionPage() {
     shipmentWeightDimensionPage.searchButton.click();
+  }
+
+  @Then("Operator verify Shipment Weight Dimension Table page is shown")
+  public void operatorVerifyShipmentWeightDimensionTablePageIsShown() {
+    LOGGER.info("Verifying that Shipment Weight Table page is visible");
+    Assertions.assertThat(shipmentWeightDimensionTablePage.backButton.isDisplayed())
+        .as("Back button is visible").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.isDisplayed())
+        .as("Shipment Weight table is visible").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionTablePage.resultCounterText.isDisplayed())
+        .as("search counter is shown").isTrue();
+    System.out.println(shipmentWeightDimensionTablePage.resultCounterText.getText());
   }
 }

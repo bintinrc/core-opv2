@@ -5,7 +5,9 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+
 import java.util.stream.Stream;
+
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +16,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ShipmentWeightDimensionTablePage extends SimpleReactPage<ShipmentWeightDimensionTablePage> {
+public class ShipmentWeightDimensionTablePage extends
+    SimpleReactPage<ShipmentWeightDimensionTablePage> {
 
   private static final Logger LOGGER = LoggerFactory
       .getLogger(ShipmentWeightDimensionTablePage.class);
@@ -24,6 +27,8 @@ public class ShipmentWeightDimensionTablePage extends SimpleReactPage<ShipmentWe
   public Button sumUpButton;
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentWeightRow> shipmentWeightNvTable;
+  @FindBy(xpath = "//div[contains(text(), 'Showing')]")
+  public PageElement resultCounterText;
 
   @FindBy(xpath = "//input[@aria-label='input-shipment_id']")
   public PageElement shipmentIdFilter;
@@ -42,33 +47,76 @@ public class ShipmentWeightDimensionTablePage extends SimpleReactPage<ShipmentWe
   @FindBy(xpath = "//input[@aria-label='input-shipment_type']")
   public PageElement shipmentTypeFilter;
 
-  public enum Column {
-    INITIAL("initial"),
-    SEARCH_VALID("search_valid"),
-    ERROR("error");
-
-    private final String value;
-
-    ShipmentWeightState(String value) {
-      this.value = value;
-    }
-
-    public static ShipmentWeightDimensionPage.ShipmentWeightState fromLabel(String label) {
-      return Stream.of(ShipmentWeightDimensionPage.ShipmentWeightState.values())
-          .filter(instance -> instance.value.equals(label))
-          .findFirst()
-          .orElse(INITIAL);
-    }
-  }
-
-
-
   public ShipmentWeightDimensionTablePage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void filterColumn()
+  public void filterColumn(Column filterColumn, String filterValue) {
+    clearFilter();
+    PageElement pe = null;
+    switch (filterColumn) {
+      case SHIPMENT_ID:
+        pe = shipmentIdFilter;
+        break;
+      case STATUS:
+        pe = statusFilter;
+        break;
+      case END_HUB:
+        pe = endHubFilter;
+        break;
+      case CREATION_DATE:
+        pe = shipmentCreationDateTimeFilter;
+        break;
+      case COMMENTS:
+        pe = commentsFilter;
+        break;
+      case START_HUB:
+        pe = startHubFilter;
+        break;
+      case MAWB:
+        pe = mawbFilter;
+        break;
+      case SHIPMENT_TYPE:
+        pe = shipmentTypeFilter;
+        break;
+    }
+    pe.sendKeys(filterValue);
+  }
 
+  public void clearFilter() {
+    shipmentIdFilter.clear();
+    statusFilter.clear();
+    endHubFilter.clear();
+    shipmentCreationDateTimeFilter.clear();
+    mawbFilter.clear();
+    commentsFilter.clear();
+    startHubFilter.clear();
+    shipmentTypeFilter.clear();
+  }
+
+  public enum Column {
+    COMMENTS("comments"),
+    CREATION_DATE("creation_date"),
+    END_HUB("end_hub"),
+    MAWB("mawb"),
+    SHIPMENT_ID("shipment_id"),
+    SHIPMENT_TYPE("shipment_type"),
+    STATUS("status"),
+    START_HUB("start_hub");
+
+    private final String value;
+
+    Column(String value) {
+      this.value = value;
+    }
+
+    public static ShipmentWeightDimensionTablePage.Column fromLabel(String label) {
+      return Stream.of(ShipmentWeightDimensionTablePage.Column.values())
+          .filter(instance -> instance.value.equals(label))
+          .findFirst()
+          .orElse(SHIPMENT_ID);
+    }
+  }
 
   public static class ShipmentWeightRow extends NvTable.NvRow {
 
