@@ -123,14 +123,28 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ConfirmRemoveDialog confirmRemoveDialog;
 
-  @FindBy(css = "md-dialog")
-  public ErrorShipmentDialog errorShipment;
+  public String errorShipment = "//div[@class='ant-modal-content']";
+
+  @FindBy(xpath = "//div[@class='ant-modal-title']")
+  public TextBox errorDialogTitle;
+
+  @FindBy(xpath = "//span[.='Cancel']")
+  public Button errorShipmentCancel;
+
+  @FindBy(xpath = "//span[.='Proceed']")
+  public Button errorShipmentProceed;
+
+  @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'shipment-id')]")
+  public TextBox shipmentIdTextBox;
+
+  @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'message')]")
+  public TextBox resultTextBox;
 
   @FindBy(xpath = "//button[contains(@class,'sc-qvapu6-1 bTUICx')]")
   public Button removeButton;
 
-  @FindBy(name = "commons.cancel")
-  public NvIconButton cancelButton;
+  @FindBy(xpath = "//button[contains(@class,'ant-modal-close')]")
+  public Button cancelButton;
 
   @FindBy(xpath = "//button//span[contains(text(), ' shipments')]")
   public TextBox shipmentToGo;
@@ -409,7 +423,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void clickEndShipmentInbound() {
     endInboundButton.click();
-    waitUntilVisibilityOfElementLocated("//div[contains(@class, 'ant-modal-confirm')]");
+    waitUntilVisibilityOfElementLocated("//div[contains(@class, 'ant-modal-confirm')] | //div[contains(@class, 'ant-modal-content')]");
   }
 
   public void clickProceedInEndInboundDialog() {
@@ -459,12 +473,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyErrorShipmentWithMessage(String shipmentId, String resultMessage) {
-    errorShipment.waitUntilVisible();
-    String dialogTitleText = errorShipment.dialogTitle.getText();
+    waitUntilVisibilityOfElementLocated(errorShipment);
+    String dialogTitleText = errorDialogTitle.getText();
     assertEquals("Error Shipment", dialogTitleText);
 
-    String actualShipmentId = errorShipment.shipmentIdTextBox.getText();
-    String actualResultMessage = errorShipment.resultTextBox.getText();
+    String actualShipmentId = shipmentIdTextBox.getText();
+    String actualResultMessage = resultTextBox.getText();
 
     assertEquals(shipmentId, actualShipmentId);
     assertEquals(resultMessage, actualResultMessage);
@@ -472,8 +486,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void verifyErrorShipmentWithMessage(String shipmentId, String resultMessage,
       String errorShipmentType) {
-    errorShipment.waitUntilVisible();
-    String dialogTitleText = errorShipment.dialogTitle.getText();
+    waitUntilVisibilityOfElementLocated(errorShipment);
+    String dialogTitleText = errorDialogTitle.getText();
     assertEquals("Error Shipment", dialogTitleText);
     String actualShipmentId = "";
     String actualResultMessage = "";
@@ -498,8 +512,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedButtonInErrorShipmentDialog() {
-    errorShipment.proceed.waitUntilClickable();
-    errorShipment.proceed.click();
+    errorShipmentProceed.waitUntilClickable();
+    errorShipmentProceed.click();
+    antNotificationMessage = getAntNotificationMessage();
   }
 
   public void verifyShipmentWithTripData(Map<String, String> finalData, String expectedDialogTitle) {

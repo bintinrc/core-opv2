@@ -549,6 +549,12 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -644,6 +650,12 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan all created shipments with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
@@ -880,6 +892,21 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+    And Operator refresh page
+    And Operator close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}      |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan all created shipments with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
@@ -940,15 +967,10 @@ Feature: Shipment Van Inbound With Trip Scanning
       | status      | At Transit Hub                        |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
+      | source | SHIPMENT_HUB_INBOUND(MMDA)         |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | userId | qa@ninjavan.co             |
-    And Operator verifies event is present for order on Edit order page
-      | eventName         | HUB INBOUND SCAN                                  |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
-      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     And DB Operator verify unscanned shipment with following data:
       | shipmentId | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | type       | MISSING                               |
@@ -1769,6 +1791,16 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[3].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id}"
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[4].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+#    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[4].name}
+#    And Operator close the shipment which has been created
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                   |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
