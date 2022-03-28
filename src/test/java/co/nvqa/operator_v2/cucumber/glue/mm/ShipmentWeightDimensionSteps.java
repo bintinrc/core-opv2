@@ -1,23 +1,20 @@
 package co.nvqa.operator_v2.cucumber.glue.mm;
 
 import co.nvqa.commons.model.core.hub.Shipment;
-import co.nvqa.commons.model.core.hub.ShipmentDimensionResponse;
-import co.nvqa.commons.model.core.hub.ShipmentDimensions;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.ShipmentWeightDimensionAddInfo;
-import co.nvqa.operator_v2.selenium.page.mm.ShipmentWeightDimensionAddPage;
-import co.nvqa.operator_v2.selenium.page.mm.ShipmentWeightDimensionAddPage.ShipmentWeightAddState;
-import co.nvqa.operator_v2.selenium.page.mm.ShipmentWeightDimensionPage;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionAddPage;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionAddPage.ShipmentWeightAddState;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionPage;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionPage.ShipmentWeightState;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.text.StringSubstitutor;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +41,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorVerifyShipmentWeightDimensionPageUI() {
     shipmentWeightDimensionPage.switchTo();
     shipmentWeightDimensionPage.waitUntilLoaded();
-    shipmentWeightDimensionPage.verifyUI();
+    shipmentWeightDimensionPage.verifyAddNewWeightDimensionUI();
   }
 
   @When("Operator click on Shipment Weight Dimension New Record button")
@@ -151,5 +148,22 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else if (buttonName.equalsIgnoreCase("cancel")) {
       shipmentWeightDimensionAddPage.cancelOverWeightDialog();
     }
+  }
+
+  @Then("Operator verify Shipment Weight Dimension Load Shipment page UI")
+  public void operatorVerifyShipmentWeightDimensionLoadShipmentPageUI(Map<String, String> dataTable) {
+    String state = Optional.ofNullable(dataTable.get("state")).orElse("initial");
+    shipmentWeightDimensionPage.verifyLoadShipmentWeightUI(ShipmentWeightState.fromLabel(state));
+  }
+
+  @When("Operator search {string} on Shipment Weight Dimension search by SID text")
+  public void operatorSearchOnShipmentWeightDimensionSearchBySIDText(String key) {
+    String shipmentId = resolveValue(key);
+    shipmentWeightDimensionPage.searchShipmentId(shipmentId);
+  }
+
+  @When("Operator click search button on Shipment Weight Dimension page")
+  public void operatorClickSearchButtonOnShipmentWeightDimensionPage() {
+    shipmentWeightDimensionPage.searchButton.click();
   }
 }
