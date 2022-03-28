@@ -371,7 +371,6 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.62   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
-  @nadeera
     @DeleteNewlyCreatedShipper
   Scenario Outline: Operator Upload CSV Payment With Both Debit And Credit Type
     #1 Account ID linked to 2 Shippers
