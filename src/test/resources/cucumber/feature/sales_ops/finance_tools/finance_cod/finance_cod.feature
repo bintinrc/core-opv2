@@ -5,7 +5,6 @@ Feature: Finance COD
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @nadeera
   Scenario: Generate COD report
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator generates success finance cod report using data below:
