@@ -138,27 +138,28 @@ Feature: Create Route Groups V1.5 - Priority Parcel Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Arrived at Sorting Hub                                   |
 
-  Scenario: Operator Filter Hub Inbound Datetime with Order Creation Time on Create Route Group V1.5
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator global inbounds the order belongs to specific Hub Inbound User:
-      | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Hub Inbound User"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time    | Today         |
-      | Hub Inbound User | {vendor-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator click Load Selection on Create Route Group V1.5 page
-    And Operator verifies Transaction record on Create Route Group page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-      | status     | Arrived at Sorting Hub                                   |
+#   Commented this scenario as need to confirm which scenario is correct (duplicate name as scenario below this)
+#  Scenario: Operator Filter Hub Inbound Datetime with Order Creation Time on Create Route Group V1.5
+#    Given Operator go to menu Utilities -> QRCode Printing
+#    And API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+#      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator global inbounds the order belongs to specific Hub Inbound User:
+#      | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
+#    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
+#    And Operator wait until 'Create Route Group V1.5' page is loaded
+#    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Hub Inbound User"
+#    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
+#      | Creation Time    | Today         |
+#      | Hub Inbound User | {vendor-name} |
+#    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
+#    And Operator click Load Selection on Create Route Group V1.5 page
+#    And Operator verifies Transaction record on Create Route Group page using data below:
+#      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
+#      | type       | DELIVERY Transaction                                     |
+#      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
+#      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+#      | status     | Arrived at Sorting Hub                                   |
 
   Scenario: Operator Filter Hub Inbound Datetime with Order Creation Time on Create Route Group V1.5
     Given Operator go to menu Utilities -> QRCode Printing
