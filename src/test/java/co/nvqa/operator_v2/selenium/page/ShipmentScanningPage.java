@@ -383,7 +383,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessageContain) {
-    String actualToastMessage = getAntNotificationMessage();
+    String actualToastMessage = "";
+    if(null == antNotificationMessage || antNotificationMessage.equals("")){
+      actualToastMessage = getAntTopText();
+    }else{
+      actualToastMessage = antNotificationMessage;
+    }
     assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
         containsString(expectedToastMessageContain));
   }
@@ -423,7 +428,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void clickEndShipmentInbound() {
     endInboundButton.click();
-    waitUntilVisibilityOfElementLocated("//div[contains(@class, 'ant-modal-confirm')] | //div[contains(@class, 'ant-modal-content')]");
+    waitUntilVisibilityOfElementLocated("//div[ contains(@role,'dialog') and not(contains(@style, 'none'))]//div[contains(@class, 'ant-modal-content')]");
   }
 
   public void clickProceedInEndInboundDialog() {
@@ -551,6 +556,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     assertThat("Drop off hub is equal", actualDropOffHub, equalTo(dropOffHub));
     assertThat("Destination hub is equal", actualDestinationHub, equalTo(destinationHub));
     assertThat("Comments is equal", actualComments, equalTo(comments));
+    cancelButton.click();
   }
 
   public void verifyCreatedShipmentsShipmentToGoWithTripDataLastIndexTransitHub(
