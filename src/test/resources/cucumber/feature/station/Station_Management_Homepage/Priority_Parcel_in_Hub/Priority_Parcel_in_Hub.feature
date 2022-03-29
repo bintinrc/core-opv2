@@ -754,7 +754,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType    | TicketSubType    | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -809,7 +809,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType | TicketSubType      | OrderOutcome     | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -863,7 +863,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -916,7 +916,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -974,7 +974,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1034,7 +1034,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType | TicketSubType      | OrderOutcome     | Status      | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status      | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1093,7 +1093,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1151,7 +1151,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1210,7 +1210,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1270,7 +1270,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType | TicketSubType      | OrderOutcome     | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1329,7 +1329,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1523,7 +1523,7 @@ Feature: Priority Parcel in Hub
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName      | HubId      | TileName                | ModalName               | Filter   | FSRModalTitle                                |
+      | HubName       | HubId       | TileName                | ModalName               | Filter   | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1581,7 +1581,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1641,7 +1641,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType | TicketSubType      | OrderOutcome     | Status          | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1700,7 +1700,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1758,11 +1758,11 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
-  Scenario Outline: View Priority Parcel of Cancelled Ticket Status (uid:6f86c722-3500-4d45-97d1-2f39d899476b)
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Shipper Issue
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -1816,11 +1816,189 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-8} | {hub-id-8} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
-  Scenario Outline: View Priority Parcel of Resolved Ticket Status (uid:7d43c915-de6d-4804-a372-d73fff9b33dc)
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Damaged
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | <TicketType>       |
+      | ticketSubType           | <TicketSubType>    |
+      | parcelLocation          | DAMAGED RACK       |
+      | liability               | Recovery           |
+      | damageDescription       | GENERATED          |
+      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Recovery Ticket Type | <TicketType> |
+      | Ticket Status        | <Status>     |
+
+    Examples:
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status    | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Parcel On Hold
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | ROUTE CLEANING     |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | <TicketType>       |
+      | ticketSubType           | <TicketSubType>    |
+      | orderOutcome            | <OrderOutcome>     |
+      | exceptionReason         | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Recovery Ticket Type | <TicketType> |
+      | Ticket Status        | <Status>     |
+
+    Examples:
+      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status    | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Parcel Exception
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | <HubName>          |
+      | ticketType                    | <TicketType>       |
+      | ticketSubType                 | <TicketSubType>    |
+      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
+      | rtsReason                     | Nobody at address  |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Recovery Ticket Type | <TicketType> |
+      | Ticket Status        | <Status>     |
+
+    Examples:
+      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Shipper Issue
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -1875,8 +2053,185 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome                | Status   | KeepCurrentOrderOutcome | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-8} | {hub-id-8} | SHIPPER ISSUE | DUPLICATE PARCEL | REPACKED/RELABELLED TO SEND | RESOLVED | No                      | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome                | Status   | KeepCurrentOrderOutcome | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | REPACKED/RELABELLED TO SEND | RESOLVED | No                      | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Damaged
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | <TicketType>       |
+      | ticketSubType           | <TicketSubType>    |
+      | parcelLocation          | DAMAGED RACK       |
+      | liability               | Recovery           |
+      | damageDescription       | GENERATED          |
+      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Recovery Ticket Type | <TicketType> |
+      | Ticket Status        | <Status>     |
+
+    Examples:
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status   | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel On Hold
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | ROUTE CLEANING     |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | <TicketType>       |
+      | ticketSubType           | <TicketSubType>    |
+      | orderOutcome            | <OrderOutcome>     |
+      | exceptionReason         | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Recovery Ticket Type | <TicketType> |
+      | Ticket Status        | <Status>     |
+
+    Examples:
+      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status   | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @PriorityParcelSet1
+  Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel Exception
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | <HubName>          |
+      | ticketType                    | <TicketType>       |
+      | ticketSubType                 | <TicketSubType>    |
+      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
+      | rtsReason                     | Nobody at address  |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status          | <Status>       |
+      | outcome         | <OrderOutcome> |
+      | assignTo        | NikoSusanto    |
+      | newInstructions | GENERATED      |
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    Then Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Recovery Ticket Type | <TicketType> |
+      | Ticket Status        | <Status>     |
+
+    Examples:
+      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder
   Scenario Outline: View Priority Parcel of Missing Ticket Type (uid:05e8d756-57f8-48bc-aa3a-f3b35c67d41d)
