@@ -67,6 +67,39 @@ Feature: Bulk Address Verification
       | fromLatitude | fromLongitude | toLatitude | toLongitude |
       | 1.2853069    | 103.8061058   | 1.3880089  | 103.8946339 |
 
+  @DeleteOrArchiveRoute
+  Scenario: Operator Bulk Verify Reservation Addresses by Upload CSV Successfully
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Utilities -> Bulk Address Verification
+    And Operator upload bulk address CSV using data below:
+      | waypoint  | FROM_CREATED_RESERVATIONS |
+      | latitude  | GENERATED                 |
+      | longitude | GENERATED                 |
+    Then Operator verifies that success react notification displayed:
+      | top | Updated 2 waypoint(s) |
+    Then DB Operator verify Jaro Scores:
+      | waypointId                                      | archived | score | sourceId |
+      | {KEY_LIST_OF_CREATED_JARO_SCORES[1].waypointId} | 1        | 1     | 4        |
+      | {KEY_LIST_OF_CREATED_JARO_SCORES[2].waypointId} | 1        | 1     | 4        |
+    And DB Operator verifies waypoints record:
+      | id        | {KEY_LIST_OF_CREATED_JARO_SCORES[1].waypointId} |
+      | latitude  | {KEY_LIST_OF_CREATED_JARO_SCORES[1].latitude}   |
+      | longitude | {KEY_LIST_OF_CREATED_JARO_SCORES[1].longitude}  |
+    And DB Operator verifies waypoints record:
+      | id        | {KEY_LIST_OF_CREATED_JARO_SCORES[2].waypointId} |
+      | latitude  | {KEY_LIST_OF_CREATED_JARO_SCORES[2].latitude}   |
+      | longitude | {KEY_LIST_OF_CREATED_JARO_SCORES[2].longitude}  |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

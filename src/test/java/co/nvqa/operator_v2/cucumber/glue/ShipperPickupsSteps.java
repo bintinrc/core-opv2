@@ -686,7 +686,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
     if (newAddress.getLongitude() != null) {
       shipperPickupsPage.editRouteDialog.longitude.setValue(newAddress.getLongitude());
     }
-    shipperPickupsPage.editRouteDialog.submitForm();
+    shipperPickupsPage.editRouteDialog.updateAddress.clickAndWaitUntilDone();
   }
 
   @When("^Operator selects filters on Shipper Pickups page:$")

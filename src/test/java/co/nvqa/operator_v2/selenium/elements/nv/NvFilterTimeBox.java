@@ -1,8 +1,11 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -77,6 +80,21 @@ public class NvFilterTimeBox extends AbstractFilterBox {
   public void selectDates(Date fromDate, Date toDate) {
     selectFromDate(fromDate);
     selectToDate(toDate);
+  }
+
+  public void selectFilter(String value) {
+    List<String> vals = DataEntity.splitAndNormalize(value);
+    Date from = DataEntity.toDateTime(vals.get(0));
+    selectFromDate(from);
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(from);
+    selectFromHours(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+    selectFromMinutes(String.valueOf(calendar.get(Calendar.MINUTE)));
+    Date to = DataEntity.toDateTime(vals.get(1));
+    selectToDate(to);
+    calendar.setTime(to);
+    selectToHours(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+    selectToMinutes(String.valueOf(calendar.get(Calendar.MINUTE)));
   }
 
   @Override

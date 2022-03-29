@@ -632,7 +632,15 @@ public class StationManagementHomeSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that no results found text is displayed under the table: {string}")
-  public void operator_verifies_that_no_results_found_text_is_displayed_under_the_table(String table) {
+  public void operator_verifies_that_no_results_found_text_is_displayed_under_the_table(
+      String table) {
     stationManagementHomePage.verifyNoResultsFoundByTableName(table);
   }
+
+  @Then("Operator verifies user is redirected to the Station Management Homepage of hub {string} that has been mapped to user")
+  public void operatorVerifiesUserIsRedirectedToTheStationManagementHomepageOfHubThatHasBeenMappedToUser(
+      String hubName) {
+    stationManagementHomePage.validateHeaderHubValue(hubName);
+  }
+
 }

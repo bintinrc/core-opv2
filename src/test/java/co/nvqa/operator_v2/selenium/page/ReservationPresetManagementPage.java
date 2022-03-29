@@ -1,12 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ReservationGroup;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,12 +34,27 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public EditGroupDialog editGroupDialog;
 
+  @FindBy(css = "md-dialog")
+  public AssignShipperDialog assignShipperDialog;
+
+  @FindBy(css = "div.title md-menu")
+  public MdMenu actionsMenu;
+
+  @FindBy(xpath = "//md-tab-item[contains(.,'Pending')]")
+  public PageElement pendingTab;
+
+  @FindBy(xpath = "//md-tab-item[contains(.,'Overview')]")
+  public PageElement overviewTab;
+
+  @FindBy(css = "div[ng-repeat='pendingTask in ctrl.pendingTasks']")
+  public List<PendingTaskBlock> pendingTasks;
+
   @FindBy(name = "container.reservation-preset-management.add-new-group")
   public NvIconTextButton addNewGroup;
 
   public static final String LOCATOR_SPINNER_LOADING_FILTERS = "//md-progress-circular/following-sibling::div[text()='Loading filters...']";
 
-  private ReservationPresetTable reservationPresetTable;
+  public ReservationPresetTable reservationPresetTable;
 
   public ReservationPresetManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -182,4 +200,34 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
       setMdVirtualRepeat("group in getTableData()");
     }
   }
+
+  public static class PendingTaskBlock extends PageElement {
+
+    @FindBy(css = "span.status")
+    public PageElement shipper;
+
+    @FindBy(css = "div.address")
+    public PageElement address;
+
+    @FindBy(name = "container.reservation-preset-management.assign")
+    public NvIconTextButton assign;
+
+    public PendingTaskBlock(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class AssignShipperDialog extends MdDialog {
+
+    @FindBy(css = "md-autocomplete")
+    public NvAutocomplete group;
+
+    @FindBy(name = "Assign Shipper")
+    public NvApiTextButton assignShipper;
+
+    public AssignShipperDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
 }

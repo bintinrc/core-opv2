@@ -550,6 +550,85 @@ Feature: Failed Delivery Management
       | dnr    | NORMAL                                |
       | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Operator Fails Reschedule a Single Rescheduled Failed Delivery
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
+    When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator wait until Failed Delivery Management page is loaded
+    And Operator opens the same page in new tab
+    And Operator wait until Failed Delivery Management page is loaded
+    And Operator reschedule failed delivery order on next 2 days
+    Then Operator verifies that success toast displayed:
+      | top    | Order Rescheduling Success     |
+      | bottom | Success to reschedule 1 orders |
+    When Operator close new tabs
+    And Operator reschedule failed delivery order on next 2 days
+    Then Operator verifies that error toast displayed:
+      | top | Order Rescheduling Failed |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Operator Fails Reschedule Multiple Rescheduled Failed Deliveries
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    And API Driver failed the delivery of multiple parcels
+    When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator wait until Failed Delivery Management page is loaded
+    And Operator opens the same page in new tab
+    And Operator wait until Failed Delivery Management page is loaded
+    And Operator reschedule failed delivery orders using data below:
+      | date | {gradle-next-2-day-yyyy-MM-dd} |
+    Then Operator verifies that success toast displayed:
+      | top    | Order Rescheduling Success     |
+      | bottom | Success to reschedule 2 orders |
+    When Operator close new tabs
+    And Operator reschedule failed delivery orders using data below:
+      | date | {gradle-next-2-day-yyyy-MM-dd} |
+    Then Operator verifies error messages in dialog on Failed Delivery Management page:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}: Current order state is En-route to Sorting Hub, is not in Pending Reschedule state [OrderId:{KEY_LIST_OF_CREATED_ORDER_ID[1]}] |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}: Current order state is En-route to Sorting Hub, is not in Pending Reschedule state [OrderId:{KEY_LIST_OF_CREATED_ORDER_ID[2]}] |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
