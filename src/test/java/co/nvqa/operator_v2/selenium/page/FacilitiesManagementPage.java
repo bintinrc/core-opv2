@@ -2,19 +2,17 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.ConfirmUpdatesDialog;
 import com.google.common.collect.ImmutableMap;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -24,44 +22,41 @@ import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTab
 import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_DISABLE;
 import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.COLUMN_NAME;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("WeakerAccess")
-public class FacilitiesManagementPage extends OperatorV2SimplePage {
+public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManagementPage> {
 
   private static final String CSV_FILENAME = "hubs.csv";
 
   @FindBy(xpath = "//div[text()='Loading hubs...']")
   public PageElement loadingHubsLabel;
 
-  @FindBy(name = "commons.refresh")
-  public NvIconButton refresh;
+  @FindBy(css = "[data-testid='reload-hub-cache']")
+  public Button refresh;
 
-  @FindBy(name = "Add Hub")
-  public NvIconTextButton addHub;
+  @FindBy(css = "[data-testid='add-hub-button']")
+  public Button addHub;
 
   @FindBy(name = "Download CSV File")
   public NvApiTextButton downloadCsvFile;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal-content")
   public AddHubDialog addHubDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal-content")
   public EditHubDialog editHubDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//div[@class='ant-modal-content'][contains(.,'Submit Changes?')]")
   public ConfirmUpdateHubDialog confirmUpdateHubDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal-content")
   public ConfirmDeactivationDialog confirmDeactivationDialog;
 
   @FindBy(css = "md-dialog")
   public ConfirmActivationDialog confirmActivationDialog;
-
-  @FindBy(xpath = "//button[@aria-label='Yes']")
-  public Button sortHub;
 
   @FindBy(xpath = "//button[@aria-label='Save']")
   public Button saveChanges;
@@ -79,61 +74,62 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
   }
 
   public void createNewHub(Hub hub) {
-    loadingHubsLabel.waitUntilInvisible();
-    addHub.waitUntilClickable();
     addHub.click();
     addHubDialog.waitUntilVisible();
     addHubDialog.hubName.setValue(hub.getName());
     addHubDialog.displayName.setValue(hub.getShortName());
-    Optional.ofNullable(hub.getFacilityType())
-        .ifPresent(value -> addHubDialog.facilityType.selectByValue(value));
-    Optional.ofNullable(hub.getRegion())
-        .ifPresent(value -> addHubDialog.region.selectByValue(value));
+    if (isNotBlank(hub.getFacilityType())) {
+      addHubDialog.facilityType.selectValue(hub.getFacilityTypeDisplay());
+    }
+    if (BooleanUtils.isTrue(hub.getSortHub())) {
+      addHubDialog.sortHub.check();
+    }
+    if (isNotBlank(hub.getRegion())) {
+      addHubDialog.region.selectValue(hub.getRegion());
+    }
     addHubDialog.city.setValue(hub.getCity());
     addHubDialog.country.setValue(hub.getCountry());
-    addHubDialog.latitude.setValue(String.valueOf(hub.getLatitude()));
-    addHubDialog.longitude.setValue(String.valueOf(hub.getLongitude()));
-    Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
-    addHubDialog.submit.clickAndWaitUntilDone();
-    addHubDialog.waitUntilInvisible();
+    addHubDialog.latitude.setValue(hub.getLatitude());
+    addHubDialog.longitude.setValue(hub.getLongitude());
+    if (BooleanUtils.isTrue(hub.getVirtualHub())) {
+      addHubDialog.virtualHub.check();
+      addHubDialog.parentHub.selectValue(hub.getParentHub());
+    }
+    addHubDialog.submit.click();
   }
 
   public void updateHub(String searchHubsKeyword, Hub hub) {
-    retryIfAssertionErrorOccurred(() ->
-    {
-      refreshPage();
-      loadingHubsLabel.waitUntilInvisible();
-      hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
-      assertFalse(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword),
-          hubsTable.isEmpty());
-    }, "Unable to find the hub, retrying...");
-
+    loadingHubsLabel.waitUntilInvisible();
+    hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
+    assertFalse(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword),
+        hubsTable.isEmpty());
     hubsTable.clickActionButton(1, ACTION_EDIT);
     editHubDialog.waitUntilVisible();
-
     pause1s();
-    Optional.ofNullable(hub.getFacilityType())
-        .ifPresent(value -> editHubDialog.facilityType.selectByValue(value));
-    Optional.ofNullable(hub.getName()).ifPresent(value -> editHubDialog.hubName.setValue(value));
-    Optional.ofNullable(hub.getShortName())
-        .ifPresent(value -> editHubDialog.displayName.setValue(value));
-    Optional.ofNullable(hub.getCity()).ifPresent(value -> editHubDialog.city.setValue(value));
-    Optional.ofNullable(hub.getCountry()).ifPresent(value -> editHubDialog.country.setValue(value));
-    Optional.ofNullable(hub.getLatitude())
-        .ifPresent(value -> editHubDialog.latitude.setValue(value));
-    Optional.ofNullable(hub.getLongitude())
-        .ifPresent(value -> editHubDialog.longitude.setValue(value));
-    Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
-    editHubDialog.submitChanges.click();
 
-    String facilityType = hub.getFacilityType();
-    if (facilityType.equalsIgnoreCase("CROSSDOCK") || facilityType
-        .equalsIgnoreCase("CROSSDOCK_STATION") || facilityType.equalsIgnoreCase("STATION")) {
-      confirmUpdateHubDialog.saveButton.waitUntilVisible();
-      confirmUpdateHubDialog.saveButton.waitUntilClickable();
+    editHubDialog.hubName.setValue(hub.getName());
+    editHubDialog.displayName.setValue(hub.getShortName());
+    if (isNotBlank(hub.getFacilityType())) {
+      editHubDialog.facilityType.selectValue(hub.getFacilityTypeDisplay());
+    }
+    if (BooleanUtils.isTrue(hub.getSortHub())) {
+      editHubDialog.sortHub.check();
+    }
+    if (isNotBlank(hub.getRegion())) {
+      editHubDialog.region.selectValue(hub.getRegion());
+    }
+    editHubDialog.city.setValue(hub.getCity());
+    editHubDialog.country.setValue(hub.getCountry());
+    editHubDialog.latitude.setValue(hub.getLatitude());
+    editHubDialog.longitude.setValue(hub.getLongitude());
+    if (BooleanUtils.isTrue(hub.getVirtualHub())) {
+      editHubDialog.virtualHub.check();
+      editHubDialog.parentHub.selectValue(hub.getParentHub());
+    }
+    editHubDialog.submit.click();
+    if (confirmUpdateHubDialog.waitUntilVisible(1)) {
       confirmUpdateHubDialog.saveButton.click();
     }
-    editHubDialog.waitUntilInvisible();
   }
 
   public void updateHubByColumn(Hub hub, String column, String typeBefore) {
@@ -142,32 +138,18 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     hubsTable.clickActionButton(1, ACTION_EDIT);
     editHubDialog.waitUntilVisible();
     if ("facility type".equals(column)) {
-      editHubDialog.facilityType.selectByValue(hub.getFacilityType());
+      editHubDialog.facilityType.selectValue(hub.getFacilityType());
     }
     if ("lat/long".equals(column)) {
       editHubDialog.latitude.setValue(hub.getLatitude());
       editHubDialog.longitude.setValue(hub.getLongitude());
     }
     if ("facility type and lat/long".equals(column)) {
-      editHubDialog.facilityType.selectByValue(hub.getFacilityType());
+      editHubDialog.facilityType.selectValue(hub.getFacilityType());
       editHubDialog.latitude.setValue(hub.getLatitude());
       editHubDialog.longitude.setValue(hub.getLongitude());
     }
-    editHubDialog.submitChanges.click();
-    if (typeBefore.equalsIgnoreCase("CROSSDOCK") || typeBefore
-        .equalsIgnoreCase("CROSSDOCK_STATION") || typeBefore.equalsIgnoreCase("STATION")) {
-      confirmUpdateHubDialog.saveButton.waitUntilVisible();
-      confirmUpdateHubDialog.saveButton.waitUntilClickable();
-      confirmUpdateHubDialog.saveButton.click();
-    }
-    editHubDialog.waitUntilInvisible();
-  }
-
-  public void updateFacilityType(String searchHubsKeyword, String typeBefore) {
-    hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
-    hubsTable.clickActionButton(1, ACTION_EDIT);
-    editHubDialog.facilityType.selectByValue(searchHubsKeyword);
-    editHubDialog.submitChanges.click();
+    editHubDialog.submit.click();
     if (typeBefore.equalsIgnoreCase("CROSSDOCK") || typeBefore
         .equalsIgnoreCase("CROSSDOCK_STATION") || typeBefore.equalsIgnoreCase("STATION")) {
       confirmUpdateHubDialog.saveButton.waitUntilVisible();
@@ -181,9 +163,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
     hubsTable.clickActionButton(1, ACTION_DISABLE);
     confirmDeactivationDialog.waitUntilVisible();
-    pause1s();
     confirmDeactivationDialog.disable.click();
-    confirmDeactivationDialog.waitUntilInvisible();
   }
 
   public void activateHub(String searchHubsKeyword) {
@@ -204,7 +184,6 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyHubIsExistAndDataIsCorrect(Hub expectedHub) {
-    super.waitUntilPageLoaded();
     Hub actualHub = searchHub(expectedHub.getName());
     expectedHub.setId(actualHub.getId());
     if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK")) {
@@ -215,34 +194,37 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt", "sortHub");
   }
 
-  public static class HubsTable extends MdVirtualRepeatTable<Hub> {
+  public static class HubsTable extends AntTable<Hub> {
 
     private static final Pattern LATLONG_PATTERN = Pattern
-        .compile(".*?([\\d\\.]+).*?([\\d\\.]+).*");
+        .compile(".*?([\\d.]+).*?([\\d.]+).*");
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_SHORT_NAME = "shortName";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
-    public static final String COLUMN_ACTIVE = "active";
+    public static final String COLUMN_SORT_HUB = "sortHub";
+    public static final String COLUMN_VIRTUAL_HUB = "virtualHub";
     public static final String ACTION_EDIT = "Edit";
     public static final String ACTION_ACTIVATE = "Activate";
     public static final String ACTION_DISABLE = "Disable";
 
     public HubsTable(WebDriver webDriver) {
       super(webDriver);
-      setMdVirtualRepeat("hub in getTableData()");
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put("id", "id")
           .put(COLUMN_NAME, "name")
           .put(COLUMN_SHORT_NAME, "short_name")
           .put("city", "city")
           .put("region", "region")
-          .put("area", "area")
+          .put("area", "areaString")
           .put("country", "country")
-          .put(COLUMN_LATITUDE, "_latlng")
-          .put(COLUMN_LONGITUDE, "_latlng")
-          .put("facilityType", "_facility-type")
-          .put(COLUMN_ACTIVE, "_active")
+          .put(COLUMN_LATITUDE, "latAndLong")
+          .put(COLUMN_LONGITUDE, "latAndLong")
+          .put("facilityType", "facilityTypeString")
+          .put("status", "status")
+          .put(COLUMN_SORT_HUB, "sortHubString")
+          .put(COLUMN_VIRTUAL_HUB, "virtualHubString")
+          .put("parentHub", "parent_hub")
           .build()
       );
       setColumnValueProcessors(ImmutableMap.of(
@@ -256,87 +238,78 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
             Matcher m = LATLONG_PATTERN.matcher(value);
             return m.matches() ? m.group(2) : null;
           },
-          COLUMN_ACTIVE, value -> String.valueOf(StringUtils.equalsIgnoreCase("active", value))
+          COLUMN_SORT_HUB, value -> String.valueOf(StringUtils.equalsIgnoreCase("yes", value)),
+          COLUMN_VIRTUAL_HUB, value -> String.valueOf(StringUtils.equalsIgnoreCase("yes", value))
       ));
-      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "commons.edit", ACTION_ACTIVATE,
-          "//nv-icon-text-button[@name='commons.activate']", ACTION_DISABLE,
-          "//nv-icon-text-button[@name='commons.disable']"));
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT, "//tr[%d]//*[contains(@data-testid,'edit-hub-button')]",
+          ACTION_ACTIVATE, "//tr[%d]//*[contains(@data-testid,'activate-hub-button')]",
+          ACTION_DISABLE, "//tr[%d]//*[contains(@data-testid,'disable-hub-button')]"));
       setEntityClass(Hub.class);
     }
   }
 
-  public static class AddHubDialog extends MdDialog {
+  public static class AddHubDialog extends AntModal {
 
     public AddHubDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='container.hub-list.hub-name']")
-    public TextBox hubName;
+    @FindBy(css = "[data-testid='hub-name-input']")
+    public ForceClearTextBox hubName;
 
-    @FindBy(css = "[id^='container.hub-list.display-name']")
-    public TextBox displayName;
+    @FindBy(css = "[data-testid='short-name-input']")
+    public ForceClearTextBox displayName;
 
-    @FindBy(css = "[id='container.hub-list.facility-type']")
-    public MdSelect facilityType;
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='facility-type']]")
+    public AntSelect facilityType;
 
-    @FindBy(css = "[id='container.hub-list.region']")
-    public MdSelect region;
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='region']]")
+    public AntSelect region;
 
-    @FindBy(css = "[id^='container.hub-list.city']")
-    public TextBox city;
+    @FindBy(css = "[data-testid='city-input']")
+    public ForceClearTextBox city;
 
-    @FindBy(css = "[id^='container.hub-list.country']")
-    public TextBox country;
+    @FindBy(css = "[data-testid='country-input']")
+    public ForceClearTextBox country;
 
-    @FindBy(css = "[id^='container.hub-list.latitude']")
-    public TextBox latitude;
+    @FindBy(css = "[data-testid='latitude-input']")
+    public ForceClearTextBox latitude;
 
-    @FindBy(css = "[id^='container.hub-list.longitude']")
-    public TextBox longitude;
+    @FindBy(css = "[data-testid='longitude-input']")
+    public ForceClearTextBox longitude;
 
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
+    @FindBy(css = "[data-testid='virtual-hub-switch']")
+    public AntSwitch virtualHub;
+
+    @FindBy(css = "[data-testid='sort-hub-switch']")
+    public AntSwitch sortHub;
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='parent-hub']]")
+    public AntSelect parentHub;
+
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button submit;
   }
 
-  public static class EditHubDialog extends MdDialog {
+  public static class EditHubDialog extends AddHubDialog {
 
     public EditHubDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='container.hub-list.hub-name']")
-    public TextBox hubName;
+    @FindBy(id = "id")
+    public PageElement id;
 
-    @FindBy(css = "[id^='container.hub-list.display-name']")
-    public TextBox displayName;
-
-    @FindBy(css = "[id='container.hub-list.facility-type']")
-    public MdSelect facilityType;
-
-    @FindBy(css = "[id^='container.hub-list.city']")
-    public TextBox city;
-
-    @FindBy(css = "[id^='container.hub-list.country']")
-    public TextBox country;
-
-    @FindBy(css = "[id^='container.hub-list.latitude']")
-    public TextBox latitude;
-
-    @FindBy(css = "[id^='container.hub-list.longitude']")
-    public TextBox longitude;
-
-    @FindBy(name = "Submit Changes")
-    public NvButtonSave submitChanges;
   }
 
-  public static class ConfirmDeactivationDialog extends MdDialog {
+  public static class ConfirmDeactivationDialog extends AntModal {
 
     public ConfirmDeactivationDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "button[aria-label='Disable']")
+    @FindBy(css = "[data-testid='disable-button']")
     public Button disable;
   }
 
@@ -350,15 +323,16 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage {
     public Button activate;
   }
 
-  public static class ConfirmUpdateHubDialog extends MdDialog {
+  public static class ConfirmUpdateHubDialog extends AntModal {
+
     public ConfirmUpdateHubDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = "//button[@aria-label='Save']")
+    @FindBy(xpath = "//button[.='Save']")
     public Button saveButton;
 
-    @FindBy(xpath = "//button[@aria-label='Cancel']")
+    @FindBy(xpath = "//button[.='Cancel']")
     public Button cancelButton;
   }
 }

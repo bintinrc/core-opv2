@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 public class AntSelect extends PageElement {
 
   public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_CASE_IGNORE_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][contains(translate(normalize-space(text()),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]";
   public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
 
   public AntSelect(WebDriver webDriver, WebElement webElement) {
@@ -47,6 +49,11 @@ public class AntSelect extends PageElement {
     clickMenuItem(value);
   }
 
+  public void selectValueIgnoreCase(String value) {
+    enterSearchTerm(value);
+    clickMenuItemIgnoreCase(value);
+  }
+
   public void selectValues(Iterable<String> values) {
     values.forEach(this::selectValue);
   }
@@ -63,6 +70,10 @@ public class AntSelect extends PageElement {
 
   public void clickMenuItem(String value) {
     clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
+  }
+
+  public void clickMenuItemIgnoreCase(String value) {
+    clickf(ITEM_CASE_IGNORE_LOCATOR, StringUtils.normalizeSpace(value.toLowerCase(Locale.ROOT)));
   }
 
   public void clickMenuItemByIndex(int index) {
