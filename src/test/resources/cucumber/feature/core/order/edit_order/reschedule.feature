@@ -490,9 +490,6 @@ Feature: Reschedule & RTS
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status  | SUCCESS                |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
     And Operator verify order events on Edit order page using data below:
       | tags           | name                |
       | PICKUP, SCAN   | DRIVER PICKUP SCAN  |

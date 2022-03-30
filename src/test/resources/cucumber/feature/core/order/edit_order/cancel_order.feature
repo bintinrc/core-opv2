@@ -9,21 +9,18 @@ Feature: Cancel Order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Recovery           |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | DAMAGED            |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Shipper            |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator create new recovery ticket on Edit Order page:
+      | entrySource                   | CUSTOMER COMPLAINT |
+      | investigatingDepartment       | Recovery           |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    And Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page

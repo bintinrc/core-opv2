@@ -481,7 +481,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | serviceType | hiptest-uid                              |
       | Corporate   | uid:e9550294-1f8b-4e43-a7ec-234239ab9d67 |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 - Transaction Filters - Corporate Return (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Corporate Return (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
