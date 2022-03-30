@@ -209,6 +209,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorScanTheCreatedShipment(String shipmentIdAsString) {
     String shipmentId = resolveValue(shipmentIdAsString);
     shipmentScanningPage.scanBarcode(shipmentId);
+    shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
   }
 
   @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
