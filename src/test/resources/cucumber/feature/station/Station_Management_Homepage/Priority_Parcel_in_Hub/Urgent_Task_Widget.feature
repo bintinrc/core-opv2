@@ -1,4 +1,4 @@
-@StationManagement @SfldTickets @UrgentTask @PriorityParcelInHub
+@StationManagement @SfldTickets @UrgentTask
 Feature: Urgent Task Widget
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -17,10 +17,8 @@ Feature: Urgent Task Widget
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -45,8 +43,8 @@ Feature: Urgent Task Widget
     And Operator verifies that save and confirm button is disabled
 
     Examples:
-      | HubName      | TileName                | ModalName                                    | SlackMessageContent | FSRParcelText                              |
-      | {hub-name-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | FSR parcels' ETA that need to be confirmed |
+      | HubName       | HubId       | TileName                | ModalName                                    | SlackMessageContent | FSRParcelText                              |
+      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | FSR parcels' ETA that need to be confirmed |
 
   @ForceSuccessOrder
   Scenario Outline: Late Parcel Inbounded After Cut Off Time (uid:1ff92084-f1e8-4567-a898-560737faf32a)
@@ -59,10 +57,8 @@ Feature: Urgent Task Widget
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -77,8 +73,8 @@ Feature: Urgent Task Widget
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                | UrgentTasksText                |
-      | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 20:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
+      | HubName       | HubId       | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                | UrgentTasksText                |
+      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 20:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
 
   @ForceSuccessOrder
   Scenario Outline: Late Parcel Inbounded Before Cut Off Time (uid:a556c76e-9ccd-4d59-a4ff-eb255f7437a8)
@@ -91,10 +87,8 @@ Feature: Urgent Task Widget
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -109,8 +103,8 @@ Feature: Urgent Task Widget
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName      | HubName      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                | UrgentTasksText                |
-      | {hub-name-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
+      | HubName       | HubId       | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                | UrgentTasksText                |
+      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
 
   @ForceSuccessOrder
   Scenario Outline: Due Today Parcel (uid:c6964a2f-17fe-43ed-9d8c-5825943f900f)
@@ -123,10 +117,8 @@ Feature: Urgent Task Widget
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -141,8 +133,8 @@ Feature: Urgent Task Widget
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                | UrgentTasksText                |
-      | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
+      | HubName       | HubId       | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                | UrgentTasksText                |
+      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

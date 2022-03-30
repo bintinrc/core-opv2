@@ -121,7 +121,7 @@ Feature: Route Logs
     Then Operator verify printed passwords of selected routes info is correct
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Print Multiple Routes Details from Route Logs Page (uid:1a53a8cd-1499-4135-9171-5435bf397469)
+  Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page (uid:1a53a8cd-1499-4135-9171-5435bf397469)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
