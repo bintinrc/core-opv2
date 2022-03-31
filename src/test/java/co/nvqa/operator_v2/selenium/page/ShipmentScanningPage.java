@@ -44,7 +44,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
-  public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment']";
+  public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment'] | //button[.='Add Parcels to Shipment']";
   public static final String XPATH_BARCODE_SCAN = "//div[h5[text()='Scan Shipment to Inbound']]//input";
   public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//div[h5[text()='Remove Shipment']]//input";
   //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
