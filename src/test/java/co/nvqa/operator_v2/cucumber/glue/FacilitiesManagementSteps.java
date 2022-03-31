@@ -12,7 +12,6 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.junit.platform.commons.util.StringUtils;
 
 import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.COLUMN_NAME;
@@ -100,25 +99,13 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     facilitiesManagementPage.inFrame(page -> page.createNewHub(hub));
   }
 
-  @Then("^Operator verify a new Hub is created successfully on Facilities Management page$")
-  public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration() {
-    Hub hub = get(KEY_CREATED_HUB);
-
-    retryIfAssertionErrorOccurred(() ->
-    {
-      navigateRefresh();
-      facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
-    }, "Unable to find the hub, retrying...");
-  }
-
   @Then("^Operator verify hub parameters on Facilities Management page:$")
   public void verifyHubParameters(Map<String, String> data) {
     Hub expected = new Hub(resolveKeyValues(data));
     facilitiesManagementPage.inFrame(page -> {
       page.hubsTable.filterByColumn(COLUMN_NAME, expected.getName());
       Assertions.assertThat(page.hubsTable.isEmpty())
-          .as("Hub with name [%s] was found", expected.getName())
-          .isFalse();
+          .as("Hub with name [%s] was found", expected.getName()).isFalse();
       Hub actual = page.hubsTable.readEntity(1);
       expected.compareWithActual(actual);
     });
@@ -193,17 +180,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
         page -> facilitiesManagementPage.updateHub(searchHubsKeyword, hub));
   }
 
-  @Then("^Operator verify Hub is updated successfully on Facilities Management page$")
-  public void operatorVerifyHubIsUpdatedSuccessfullyOnPageHubsAdministration() {
-    Hub hub = get(KEY_CREATED_HUB);
-
-    retryIfAssertionErrorOccurred(() ->
-    {
-      navigateRefresh();
-      facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
-    }, "Unable to find the hub, retrying...");
-  }
-
   @When("^Operator search Hub on page Hubs Administration using data below:$")
   public void operatorSearchHubOnPageHubsAdministrationUsingDataBelow(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -213,25 +189,9 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     put("searchHubsKeyword", searchHubsKeyword);
   }
 
-  @Then("^Operator verify Hub is found on Facilities Management page and contains correct info$")
-  public void operatorVerifyHubIsFoundOnPageHubsAdministrationAndContainsCorrectInfo() {
-    String searchHubsKeyword = get("searchHubsKeyword");
-    Hub expectedHub = get(KEY_CREATED_HUB);
-    Hub actualHub = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
-
-    assertNotNull(f("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualHub);
-    assertEquals("Hub Name", expectedHub.getName(), actualHub.getName());
-    assertEquals("Display Name", expectedHub.getShortName(), actualHub.getShortName());
-    assertThat("City", expectedHub.getCity(), Matchers.equalToIgnoringCase(actualHub.getCity()));
-    assertThat("Country", expectedHub.getCountry(),
-        Matchers.equalToIgnoringCase(actualHub.getCountry()));
-    assertEquals("Latitude", expectedHub.getLatitude(), actualHub.getLatitude());
-    assertEquals("Longitude", expectedHub.getLongitude(), actualHub.getLongitude());
-  }
-
   @When("^Operator download Hub CSV file on Facilities Management page$")
   public void operatorDownloadHubCsvFileOnPageHubsAdministration() {
-    facilitiesManagementPage.downloadCsvFile.clickAndWaitUntilDone();
+    facilitiesManagementPage.inFrame(page -> page.downloadCsvFile.click());
   }
 
   @Then("^Operator verify Hub CSV file is downloaded successfully on Facilities Management page and contains correct info$")
@@ -261,8 +221,7 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     Hub hub = new Hub();
     hub.setName(resolveValue(hubName));
 
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
-    {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       try {
         facilitiesManagementPage.disableHub(hub.getName());
         hub.setActive(false);
@@ -276,7 +235,7 @@ public class FacilitiesManagementSteps extends AbstractSteps {
   @When("^Operator activate created hub on Facilities Management page$")
   public void operatorActivateCreatedHub() {
     Hub hub = get(KEY_CREATED_HUB);
-    facilitiesManagementPage.activateHub(hub.getName());
+    facilitiesManagementPage.inFrame(page -> page.activateHub(hub.getName()));
     hub.setActive(true);
   }
 
@@ -285,8 +244,7 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     Hub hub = new Hub();
     hub.setName(resolveValue(hubName));
 
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
-    {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       try {
         facilitiesManagementPage.activateHub(hub.getName());
         hub.setActive(true);
@@ -310,18 +268,14 @@ public class FacilitiesManagementSteps extends AbstractSteps {
       assertEquals("Status", expectedHub.getActive(), actualHub.getActive());
     }
     if ("lat/long".equals(columnName)) {
-      assertEquals("Hub latitude", expectedHub.getLatitude(),
-          actualHub.getLatitude());
-      assertEquals("Hub longitude", expectedHub.getLongitude(),
-          actualHub.getLongitude());
+      assertEquals("Hub latitude", expectedHub.getLatitude(), actualHub.getLatitude());
+      assertEquals("Hub longitude", expectedHub.getLongitude(), actualHub.getLongitude());
     }
     if ("facility type and lat/long".equals(columnName)) {
       assertEquals("Facility Type Display", expectedHub.getFacilityTypeDisplay(),
           actualHub.getFacilityTypeDisplay());
-      assertEquals("Hub latitude", expectedHub.getLatitude(),
-          actualHub.getLatitude());
-      assertEquals("Hub longitude", expectedHub.getLongitude(),
-          actualHub.getLongitude());
+      assertEquals("Hub latitude", expectedHub.getLatitude(), actualHub.getLatitude());
+      assertEquals("Hub longitude", expectedHub.getLongitude(), actualHub.getLongitude());
     }
   }
 

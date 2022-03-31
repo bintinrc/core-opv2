@@ -7,8 +7,6 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,8 +38,8 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
   @FindBy(css = "[data-testid='add-hub-button']")
   public Button addHub;
 
-  @FindBy(name = "Download CSV File")
-  public NvApiTextButton downloadCsvFile;
+  @FindBy(css = "[data-testid='download-button']")
+  public Button downloadCsvFile;
 
   @FindBy(css = "div.ant-modal-content")
   public AddHubDialog addHubDialog;
@@ -55,7 +53,7 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
   @FindBy(css = "div.ant-modal-content")
   public ConfirmDeactivationDialog confirmDeactivationDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "div.ant-modal-content")
   public ConfirmActivationDialog confirmActivationDialog;
 
   @FindBy(xpath = "//button[@aria-label='Save']")
@@ -114,6 +112,8 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     }
     if (BooleanUtils.isTrue(hub.getSortHub())) {
       editHubDialog.sortHub.check();
+    } else if (editHubDialog.sortHub.isDisplayedFast()) {
+      editHubDialog.sortHub.uncheck();
     }
     if (isNotBlank(hub.getRegion())) {
       editHubDialog.region.selectValue(hub.getRegion());
@@ -170,9 +170,7 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
     hubsTable.clickActionButton(1, ACTION_ACTIVATE);
     confirmActivationDialog.waitUntilVisible();
-    pause1s();
     confirmActivationDialog.activate.click();
-    confirmActivationDialog.waitUntilInvisible();
   }
 
   public Hub searchHub(String searchHubsKeyword) {
@@ -313,13 +311,13 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     public Button disable;
   }
 
-  public static class ConfirmActivationDialog extends MdDialog {
+  public static class ConfirmActivationDialog extends AntModal {
 
     public ConfirmActivationDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "button[aria-label='Activate']")
+    @FindBy(css = "[data-testid='leave-text']")
     public Button activate;
   }
 
