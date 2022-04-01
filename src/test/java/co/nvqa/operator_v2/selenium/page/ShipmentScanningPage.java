@@ -427,6 +427,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickEndShipmentInbound() {
+    pause3s();
     endInboundButton.click();
     waitUntilVisibilityOfElementLocated("//div[ contains(@role,'dialog') and not(contains(@style, 'none'))]//div[contains(@class, 'ant-modal-content')]");
   }

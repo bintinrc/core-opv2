@@ -1988,11 +1988,11 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator click start inbound
+    And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify small message "Shipment added to trip. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
     And API Operator depart trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}              |
-    And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
-    Then Operator verify small message "Shipment added to trip. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
     Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
       | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType    | SHIPMENT VAN INBOUND                                                                        |
@@ -2005,9 +2005,9 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} with expected arrival time" is shown on Shipment Inbound Scanning page
     When Operator click force complete trip in shipment inbound scanning page
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} has completed" is shown on Shipment Inbound Scanning page
-    When Operator clicks end inbound button
-    And Operator clicks proceed in end inbound dialog "Van Inbound"
-    Then Operator verifies toast with message containing "departed" is shown on Shipment Inbound Scanning page
+#    When Operator clicks end inbound button
+#    And Operator clicks proceed in end inbound dialog "Van Inbound"
+#    Then Operator verifies toast with message containing "departed" is shown on Shipment Inbound Scanning page
 #    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on Shipment Inbound Scanning page
 #    When Operator go to menu Inter-Hub -> Movement Trips
 #    And Operator verifies movement Trip page is loaded
