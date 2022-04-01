@@ -59,7 +59,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[h5[text()='Scan Shipment to Inbound']]//div[@class='message']";
   public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
   public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
-  public static String antNotificationMessage = "";
+  private static String antNotificationMessage = "";
 
   @FindBy(xpath = "//div[span[.='Driver']]/following-sibling::span")
   public TextBox driverText;
@@ -93,6 +93,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = ".//button[.='OK']")
   public Button ok;
+
+  @FindBy(xpath = ".//button[.='Yes, continue']")
+  public Button yesContinue;
+
+  @FindBy(xpath = ".//button[.='No, go back']")
+  public Button noGoBack;
 
   @FindBy(css = "md-dialog")
   public LeavePageDialog leavePageDialog;
@@ -459,11 +465,26 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     antNotificationMessage = getAntNotificationMessage();
   }
 
+  public void clickGoBackInCancelledTripDepartureDialog(String shipmentId) {
+    waitUntilVisibilityOfElementLocated(errorShipment);
+    String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
+    assertThat("Dialog title is the same", dialogTitleText, equalTo("Proceed to inbound Cancelled Shipment?"));
+
+    String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
+    assertThat("Dialog message text is the same", dialogMessageText,
+            equalTo("Shipment "+shipmentId+" is in 'Cancelled' status. Are you sure want to proceed to inbound?"));
+
+    noGoBack.waitUntilClickable();
+    noGoBack.click();
+    antNotificationMessage = getAntNotificationMessage();
+  }
+
   public String getAntNotificationMessage(){
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
     waitUntilInvisibilityOfNotification(notificationXpath, false);
+    antNotificationMessage = notificationElement.getText();
     return notificationElement.getText();
   }
 
