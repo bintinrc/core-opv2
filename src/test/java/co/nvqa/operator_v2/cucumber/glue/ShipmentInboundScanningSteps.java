@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea.
@@ -195,16 +197,42 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }, getCurrentMethodName(), 1000, 5);
   }
 
+  @When("Operator fill Shipment Inbound Scanning page with data:")
+  public void fillInboundScanningIntoPartialValuesDataBelow(Map<String, String> data) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        String inboundHub = finalData.get("inboundHub");
+        String inboundType = finalData.get("inboundType");
+        String driver = finalData.get("driver");
+        String movementTripSchedule = finalData.get("movementTripSchedule");
+        scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver,
+                movementTripSchedule);
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, getCurrentMethodName(), 1000, 5);
+  }
+
   @Then("Operator verify start inbound button is {string}")
   public void verifyStartInboundButtonIs(String status) {
+    pause2s();
     if ("enabled".equals(status)) {
       assertThat("Inbound button enabled", scanningPage.startInboundButton.isEnabled(),
           equalTo(true));
       return;
     }
     if ("disabled".equals(status)) {
-      assertThat("Inbound button disabled", scanningPage.startInboundButton.isEnabled(),
-          equalTo(false));
+      String value = getWebDriver().findElement(By.xpath("//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")).getAttribute("disabled");
+      boolean result = false;
+      if (value != null){
+        result = true;
+      }
+      assertThat("Inbound button disabled", result, equalTo(false));
     }
   }
 
@@ -223,9 +251,8 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @Then("Operator verify driver and movement trip is cleared")
   public void verifyDriverAndMovementTripIsCleared() {
-    assertThat("Driver place holder is equal", scanningPage.driver.getText(), equalTo("Driver"));
-    assertThat("Movement trip place holder is equal", scanningPage.movementTrip.getText(),
-        equalTo("Movement Trip"));
+    assertThat("Driver place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
+    assertThat("Movement trip place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
   }
 
   @When("Operator click proceed in trip completion dialog")

@@ -284,7 +284,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     waitUntilElementIsClickable("//input[@id='shipment_id']");
     selectShipmentId(Long.parseLong(shipmentId));
     clickSelectShipment();
-    waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+    waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
     closeShipment();
   }
 
@@ -467,12 +467,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void clickGoBackInCancelledTripDepartureDialog(String shipmentId) {
     waitUntilVisibilityOfElementLocated(errorShipment);
-    String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
+    /*String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
     assertThat("Dialog title is the same", dialogTitleText, equalTo("Proceed to inbound Cancelled Shipment?"));
 
     String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
     assertThat("Dialog message text is the same", dialogMessageText,
-            equalTo("Shipment "+shipmentId+" is in 'Cancelled' status. Are you sure want to proceed to inbound?"));
+            equalTo("Shipment "+shipmentId+" is in 'Cancelled' status. Are you sure want to proceed to inbound?"));*/
 
     noGoBack.waitUntilClickable();
     noGoBack.click();
