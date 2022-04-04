@@ -13,8 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.junit.platform.commons.util.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea.
@@ -221,19 +219,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @Then("Operator verify start inbound button is {string}")
   public void verifyStartInboundButtonIs(String status) {
     pause2s();
-    if ("enabled".equals(status)) {
-      assertThat("Inbound button enabled", scanningPage.startInboundButton.isEnabled(),
-          equalTo(true));
-      return;
-    }
-    if ("disabled".equals(status)) {
-      String value = getWebDriver().findElement(By.xpath("//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")).getAttribute("disabled");
-      boolean result = false;
-      if (value != null){
-        result = true;
-      }
-      assertThat("Inbound button disabled", result, equalTo(false));
-    }
+    scanningPage.verifyStartInboundButtonIsEnabledOrDisabled(status);
   }
 
   @Then("Operator verify small message {string} {string} in Start Inbound Box")
@@ -251,8 +237,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @Then("Operator verify driver and movement trip is cleared")
   public void verifyDriverAndMovementTripIsCleared() {
-    assertThat("Driver place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
-    assertThat("Movement trip place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
+    scanningPage.validateDriverAndMovementTripIsCleared();
   }
 
   @When("Operator click proceed in trip completion dialog")

@@ -288,6 +288,27 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
     pause2s();
   }
 
+  public void verifyStartInboundButtonIsEnabledOrDisabled(String status) {
+    if ("enabled".equals(status)) {
+      assertThat("Inbound button enabled", startInboundButton.isEnabled(),
+              equalTo(true));
+      return;
+    }
+    if ("disabled".equals(status)) {
+      String value = getWebDriver().findElement(By.xpath("//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")).getAttribute("disabled");
+      boolean result = false;
+      if (value != null){
+        result = true;
+      }
+      assertThat("Inbound button disabled", result, equalTo(false));
+    }
+  }
+
+  public void validateDriverAndMovementTripIsCleared() {
+    assertThat("Driver place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
+    assertThat("Movement trip place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
+  }
+
   public static class TripCompletion extends MdDialog {
 
     @FindBy(className = "md-title")
