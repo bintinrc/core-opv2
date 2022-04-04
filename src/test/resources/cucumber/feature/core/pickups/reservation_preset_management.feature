@@ -130,7 +130,6 @@ Feature: Reservation Preset Management
       | group | {KEY_CREATED_RESERVATION_GROUP.name} |
     Then Operator waits for 1 seconds
 
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
