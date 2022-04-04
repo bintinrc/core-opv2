@@ -132,6 +132,22 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
+  @And("Operator close multiple shipments with data below:")
+  public void operatorCloseMultipleShipmentWithDataBelow(Map<String, String> mapOfData) {
+    String shipmentsCount = mapOfData.get("shipmentCount");
+    for(int i=1; i<=Integer.parseInt(shipmentsCount); i++){
+      Map<String, String> dataMap = mapOfData;
+      dataMap.put("shipmentId", f(dataMap.get("shipmentId"), shipmentsCount));
+      dataMap = resolveKeyValues(dataMap);
+      String origHubName = dataMap.get("origHubName");
+      String destHubName = dataMap.get("destHubName");
+      String shipmentType = dataMap.get("shipmentType");
+      String shipmentId = dataMap.get("shipmentId");
+      shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
+//      operatorRefreshPage();
+    }
+  }
+
   @When("^Operator scan multiple created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
   public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub, String destHub) {
     retryIfRuntimeExceptionOccurred(() ->
