@@ -219,6 +219,17 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.verifyToastWithMessageIsShown(resolvedToastMessage);
   }
 
+  @Then("Capture the toast with message is shown on Shipment Inbound Scanning page")
+  public void operatorCaptureToastWithMessageIsShown() {
+    shipmentScanningPage.getAntNotificationMessage();
+  }
+
+  @Then("Click on No, goback on dialog box for shipment {string}")
+  public void operatorClickProceedOnCancelledDialog(String shipmentId) {
+    shipmentId = resolveValue(shipmentId);
+    shipmentScanningPage.clickGoBackInCancelledTripDepartureDialog(shipmentId);
+  }
+
   @Then("Operator verifies toast bottom with message {string} is shown on Shipment Inbound Scanning page")
   public void operatorVerifiesToastBottomWithMessageIsShownOnShipmentInboundScanningPage(
       String toastMessage) {
@@ -464,7 +475,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.forceCompleteButton.waitUntilClickable();
     shipmentScanningPage.forceCompleteButton.click();
     pause2s();
-    shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
+    shipmentScanningPage.getAntNotificationMessage();
   }
 
   @When("Operator opens new tab and switch to new tab in shipment inbound scanning page")
