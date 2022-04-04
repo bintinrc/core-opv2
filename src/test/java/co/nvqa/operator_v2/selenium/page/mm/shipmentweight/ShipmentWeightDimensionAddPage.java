@@ -1,6 +1,5 @@
-package co.nvqa.operator_v2.selenium.page.mm;
+package co.nvqa.operator_v2.selenium.page.mm.shipmentweight;
 
-import co.nvqa.operator_v2.cucumber.glue.mm.ShipmentWeightDimensionSteps;
 import co.nvqa.operator_v2.model.ShipmentWeightDimensionAddInfo;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -9,11 +8,9 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.mm.AntInputText;
 import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.elements.mm.InfoContainer;
-import co.nvqa.operator_v2.selenium.page.AddressVerificationPage.EditAddressModal;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.util.Optional;
 import java.util.stream.Stream;
-import javax.swing.text.html.Option;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
