@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 public class FinanceCodPage extends SimpleReactPage<FinanceCodPage> {
 
   private static final String FILTER_GENERATE_FILE_PATTERN = "//span[text()='%s']";
+  private static final String XAPTH_ERROR = "//p[text()='%s']";
   @FindBy(xpath = "//input[@placeholder='Start date']")
   public PageElement startDate;
   @FindBy(css = "div.ant-picker-range")
@@ -34,5 +35,9 @@ public class FinanceCodPage extends SimpleReactPage<FinanceCodPage> {
     if (toastErrors.size() > 0) {
       fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
     }
+  }
+
+  public boolean verifyErrorMsgIsVisible(String errorMsg) {
+    return isElementVisible(f(XAPTH_ERROR, errorMsg));
   }
 }

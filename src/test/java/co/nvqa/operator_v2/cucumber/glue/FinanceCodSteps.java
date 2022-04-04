@@ -2,8 +2,11 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.FinanceCodPage;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 
 public class FinanceCodSteps extends AbstractSteps {
 
@@ -24,27 +27,44 @@ public class FinanceCodSteps extends AbstractSteps {
   }
 
   private void setFinanceCodData(Map<String, String> mapOfData) {
-    if (Objects.nonNull(mapOfData.get("basedOn"))) {
-      String basedOn = mapOfData.get("basedOn");
-      financeCodPage.selectOption(basedOn);
+    String value;
+    value = mapOfData.get("basedOn");
+    if (Objects.nonNull(value)) {
+      financeCodPage.selectOption(value);
     }
-    if (Objects.nonNull(mapOfData.get("startDate"))) {
-      String startDate = mapOfData.get("startDate");
-      put(KEY_ORDER_BILLING_START_DATE, startDate);
-      financeCodPage.betweenDates.setFromDate(startDate);
+    value = mapOfData.get("startDate");
+    if (Objects.nonNull(value)) {
+      put(KEY_FINANCE_COD_REPORT_START_DATE, value);
+      financeCodPage.betweenDates.clearAndSetFromDate(value);
     }
-    if (Objects.nonNull(mapOfData.get("endDate"))) {
-      String endDate = mapOfData.get("endDate");
-      put(KEY_ORDER_BILLING_END_DATE, endDate);
-      financeCodPage.betweenDates.setToDate(endDate);
+    value = mapOfData.get("endDate");
+    if (Objects.nonNull(value)) {
+      put(KEY_FINANCE_COD_REPORT_END_DATE, value);
+      financeCodPage.betweenDates.clearAndSetToDate(value);
     }
-    String generateFile = mapOfData.get("generateFile");
-    if (Objects.nonNull(generateFile)) {
-      financeCodPage.selectOption(generateFile);
+    value = mapOfData.get("generateFile");
+    if (Objects.nonNull(value)) {
+      financeCodPage.selectOption(value);
+      put(KEY_FINANCE_COD_REPORT_TYPE, value);
     }
-    String emailAddress = mapOfData.get("emailAddress");
-    if (Objects.nonNull(emailAddress)) {
-      financeCodPage.setEmailAddress(emailAddress);
+    value = mapOfData.get("emailAddress");
+    if (Objects.nonNull(value)) {
+      financeCodPage.setEmailAddress(value);
     }
   }
+
+  @When("Operator selects Finance COD Report data as below")
+  public void operatorSelectsFinanceCODReportDataAsBelow(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    financeCodPage.switchTo();
+    setFinanceCodData(mapOfData);
+    financeCodPage.generateCodReportBtn.click();
+  }
+
+  @Then("Operator verifies error message {string}")
+  public void operatorVerifiesErrorMessage(String errorMsg) {
+    Assertions.assertThat(financeCodPage.verifyErrorMsgIsVisible(errorMsg))
+        .as("Error message is visible").isTrue();
+  }
+
 }
