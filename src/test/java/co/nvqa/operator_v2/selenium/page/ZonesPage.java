@@ -1,13 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.collect.ImmutableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,36 +18,30 @@ import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME
 /**
  * @author Sergey Mishanin
  */
-public class ZonesPage extends OperatorV2SimplePage {
+public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
   private static final String CSV_FILENAME = "zones.csv";
 
-  @FindBy(name = "Add Zone")
-  public NvIconTextButton addZone;
+  @FindBy(css = "[data-testid='add-zone-button']")
+  public Button addZone;
 
-  @FindBy(name = "View Selected Polygons")
-  public NvIconTextButton viewSelectedPolygons;
+  @FindBy(xpath = "//button[.='View Selected Polygons']")
+  public Button viewSelectedPolygons;
 
-  @FindBy(name = "Download CSV File")
-  public NvApiTextButton downloadCsvFile;
+  @FindBy(css = "[data-testid='download-button']")
+  public Button downloadCsvFile;
 
-  @FindBy(name = "commons.refresh")
-  public NvIconButton refresh;
+  @FindBy(css = "[data-testid='reload-zone-cache']")
+  public Button refresh;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(className = "ant-modal-wrap")
   public AddZoneDialog addZoneDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(className = "ant-modal-wrap")
   public EditZoneDialog editZoneDialog;
 
-  @FindBy(css = "md-dialog")
-  public ConfirmDeleteDialog confirmDeleteDialog;
-
-  @FindBy(xpath = "//md-switch[@aria-label='commons.rts']//div[contains(@class,'ink-ripple')]")
-  public PageElement rtsToggle;
-
-  @FindBy(xpath = "//td[@class='zone-type']")
-  public PageElement rtsValue;
+  @FindBy(className = "ant-modal-wrap")
+  public ConfirmDeleteModal confirmDeleteDialog;
 
   public ZonesTable zonesTable;
 
@@ -67,45 +59,48 @@ public class ZonesPage extends OperatorV2SimplePage {
     String name = zone.getName();
     String shortName = zone.getShortName();
     String hubName = zone.getHubName();
-    String expectedText = String.format("\"%s\",\"%s\",\"%s\"", shortName, name, hubName);
+    String expectedText = String.format("%s,%s,%s", shortName, name, hubName);
     verifyFileDownloadedSuccessfully(CSV_FILENAME, expectedText);
   }
 
   public void clickRefreshCache() {
     refresh.click();
-    waitUntilInvisibilityOfToast("Zones cache refreshed!");
+    waitUntilVisibilityOfNotification("Zone Cache Refreshed");
+    pause2s();
   }
 
-  private static class ZoneParamsDialog extends MdDialog {
+  private static class ZoneParamsDialog extends AntModal {
 
     public ZoneParamsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='commons.name']")
-    public TextBox name;
+    @FindBy(xpath = ".//div[./input[@data-testid='zone-name-input']]")
+    public AntTextBox name;
 
-    @FindBy(css = "[id^='commons.short-name']")
-    public TextBox shortName;
+    @FindBy(xpath = ".//div[./input[@data-testid='short-name-input']]")
+    public AntTextBox shortName;
 
-    @FindBy(css = "[id^='commons.hub']")
-    public MdSelect hub;
+    @FindBy(css = "div.ant-select")
+    public AntSelect hub;
 
-    @FindBy(css = "[id^='commons.latitude']")
-    public TextBox latitude;
+    @FindBy(xpath = ".//div[./input[@data-testid='latitude-input']]")
+    public AntTextBox latitude;
 
-    @FindBy(css = "[id^='commons.longitude']")
-    public TextBox longitude;
+    @FindBy(xpath = ".//div[./input[@data-testid='longitude-input']]")
+    public AntTextBox longitude;
 
-    @FindBy(id = "commons.description")
-    public TextBox description;
+    @FindBy(xpath = ".//div[./input[@data-testid='description-input']]")
+    public AntTextBox description;
+
+    @FindBy(css = "[data-testid='rts-switch']")
+    public AntSwitch rts;
   }
 
   public void findZone(Zone zone) {
     zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
     if (zonesTable.isEmpty()) {
       clickRefreshCache();
-      refreshPage();
       zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
     }
   }
@@ -116,8 +111,8 @@ public class ZonesPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "Submit")
-    public NvApiTextButton submit;
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button submit;
   }
 
   public static class EditZoneDialog extends ZoneParamsDialog {
@@ -126,11 +121,11 @@ public class ZonesPage extends OperatorV2SimplePage {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "Update")
-    public NvApiTextButton update;
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button update;
   }
 
-  public static class ZonesTable extends MdVirtualRepeatTable<Zone> {
+  public static class ZonesTable extends AntTable<Zone> {
 
     private static final Pattern LATLONG_PATTERN = Pattern
         .compile(".*?(-?[\\d.]+).*?(-?[\\d.]+).*");
@@ -141,6 +136,7 @@ public class ZonesPage extends OperatorV2SimplePage {
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_ZONE_TYPE = "type";
 
     public static final String ACTION_EDIT_POLYGON = "Edit Polygon";
     public static final String ACTION_EDIT = "Edit";
@@ -152,16 +148,17 @@ public class ZonesPage extends OperatorV2SimplePage {
           .put(COLUMN_ID, "id")
           .put(COLUMN_SHORT_NAME, "short_name")
           .put(COLUMN_NAME, "name")
-          .put(COLUMN_HUB_NAME, "hub-name")
-          .put(COLUMN_LATITUDE, "lat-lng")
-          .put(COLUMN_LONGITUDE, "lat-lng")
+          .put(COLUMN_HUB_NAME, "hubName")
+          .put(COLUMN_LATITUDE, "latAndLong")
+          .put(COLUMN_LONGITUDE, "latAndLong")
           .put(COLUMN_DESCRIPTION, "description")
+          .put(COLUMN_ZONE_TYPE, "type")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of(
-          ACTION_EDIT_POLYGON, "Edit Polygon",
-          "Edit", "commons.edit",
-          "Delete", "commons.delete"));
+          ACTION_EDIT_POLYGON, "//tr[%d]/td[contains(@class,'action')]//button[1]",
+          "Edit", "//tr[%d]/td[contains(@class,'action')]//button[2]",
+          "Delete", "//tr[%d]/td[contains(@class,'action')]//button[3]"));
       setColumnValueProcessors(ImmutableMap.of(
           COLUMN_LATITUDE, value ->
           {
@@ -175,7 +172,16 @@ public class ZonesPage extends OperatorV2SimplePage {
           }
       ));
       setEntityClass(Zone.class);
-      setMdVirtualRepeat("zone in getTableData()");
     }
+  }
+
+  public static class ConfirmDeleteModal extends AntModal {
+
+    public ConfirmDeleteModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button confirm;
   }
 }

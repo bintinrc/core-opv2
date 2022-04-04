@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -39,11 +40,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
   public MdSelect inboundHub;
 
-  @FindBy(xpath = "//md-select[contains(@id,'driver')]")
-  public MdSelect driver;
+  @FindBy(xpath = "//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']")
+  public WebElement driver;
 
-  @FindBy(xpath = "//md-select[contains(@id,'movement-trip')]")
-  public MdSelect movementTrip;
+  @FindBy(xpath = "//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']")
+  public WebElement movementTrip;
 
   @FindBy(xpath = XPATH_INBOUND_HUB_TEXT)
   public TextBox inboundHubText;
@@ -255,6 +256,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void selectInboundHub(String hub) {
+    if(getWebDriver().findElements(By.xpath("//div[@data-testid='hub-select']//span[@class='ant-select-selection-item']")).size()!=0){
+      moveToElementWithXpath("//div[@data-testid='hub-select']//span[@class='ant-select-clear']");
+      TestUtils.findElementAndClick("//div[@data-testid='hub-select']//span[@class='ant-select-clear']", "xpath", getWebDriver());
+    }
     TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_INBOUND_HUB, hub);
   }
@@ -281,6 +286,27 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
     }
 
     pause2s();
+  }
+
+  public void verifyStartInboundButtonIsEnabledOrDisabled(String status) {
+    if ("enabled".equals(status)) {
+      assertThat("Inbound button enabled", startInboundButton.isEnabled(),
+              equalTo(true));
+      return;
+    }
+    if ("disabled".equals(status)) {
+      String value = getWebDriver().findElement(By.xpath("//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")).getAttribute("disabled");
+      boolean result = false;
+      if (value != null){
+        result = true;
+      }
+      assertThat("Inbound button disabled", result, equalTo(false));
+    }
+  }
+
+  public void validateDriverAndMovementTripIsCleared() {
+    assertThat("Driver place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
+    assertThat("Movement trip place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
   }
 
   public static class TripCompletion extends MdDialog {

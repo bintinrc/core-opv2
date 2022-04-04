@@ -1,5 +1,5 @@
 @StationManagement @RecoveryTickets @DamagedParcels
-Feature: Number of Missing or Damaged Parcels
+Feature: Number of Damaged Parcels
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -13,10 +13,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -49,8 +47,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | CREATED |
 
     Examples:
-      | HubName      | TicketType | TileName        | ModalName       | TableName       |
-      | {hub-name-6} | DAMAGED    | Damaged parcels | Damaged Parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
 
   Scenario Outline: View In-progress Damage Ticket Type (uid:aaa0d5b4-ce79-44f3-86aa-01c902c0f34e)
@@ -61,10 +59,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -104,8 +100,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status      | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
-      | {hub-name-6} | DAMAGED    | IN PROGRESS | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | Status      | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | IN PROGRESS | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
 
   Scenario Outline: View on Hold Damage Ticket Type (uid:88925961-4327-4688-9d3e-dd5e304baca3)
@@ -116,10 +112,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -159,8 +153,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status  | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
-      | {hub-name-6} | DAMAGED    | ON HOLD | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | Status  | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | ON HOLD | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
 
   Scenario Outline: View Pending Shipper of  Damage Ticket Type (uid:189f7c7b-515b-4d04-aba3-7ced3b87e8bf)
@@ -171,10 +165,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -214,8 +206,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status | <Status> |
 
     Examples:
-      | HubName      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
-      | {hub-name-6} | DAMAGED    | PENDING SHIPPER | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | PENDING SHIPPER | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
 
   Scenario Outline: Resolved Ticket of Damage Type Disappear (uid:ae510579-e438-4a1f-b609-160c93c96a8c)
@@ -226,10 +218,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -272,8 +262,8 @@ Feature: Number of Missing or Damaged Parcels
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType | Status   | OrderOutcome              | KeepCurrentOrderOutcome | RtsReason         | TileName        | ModalName       | TableName       |
-      | {hub-name-6} | DAMAGED    | RESOLVED | NV LIABLE - RETURN PARCEL | No                      | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | Status   | OrderOutcome              | KeepCurrentOrderOutcome | RtsReason         | TileName        | ModalName       | TableName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | RESOLVED | NV LIABLE - RETURN PARCEL | No                      | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
 
   @ForceSuccessOrder
@@ -285,10 +275,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"HUB INBOUND SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
@@ -326,8 +314,8 @@ Feature: Number of Missing or Damaged Parcels
       | Ticket Status     | CREATED          |
 
     Examples:
-      | HubName      | TicketType | TileName        | ModalName       | LastScannedEvent |
-      | {hub-name-6} | DAMAGED    | Damaged parcels | Damaged Parcels | HUB_INBOUND_SCAN |
+      | HubName      | HubId      | TicketType | TileName        | ModalName       | LastScannedEvent |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel Routing Scanned Damaged Pacels (uid:78b409c6-d0c7-46b7-b575-1b31f0de1154)
@@ -338,10 +326,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name-6}                    |
@@ -384,8 +370,8 @@ Feature: Number of Missing or Damaged Parcels
 
 
     Examples:
-      | HubName      | TicketType | TileName        | ModalName       | LastScannedEvent    |
-      | {hub-name-6} | DAMAGED    | Damaged parcels | Damaged Parcels | PARCEL_ROUTING_SCAN |
+      | HubName      | HubId      | TicketType | TileName        | ModalName       | LastScannedEvent    |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels | PARCEL_ROUTING_SCAN |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Driver Inbound Scanned Damaged Parcels (uid:0908d756-3b31-4cae-afd6-4b7846fdb1e9)
@@ -396,10 +382,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -456,10 +440,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -526,10 +508,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -556,8 +536,8 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the url for edit order page is loaded with order id
 
     Examples:
-      | HubName      | TicketType | TileName        | ModalName       |
-      | {hub-name-6} | DAMAGED    | Damaged parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels |
 
 
   Scenario Outline: View Recovery Ticket  of Damaged Parcels (uid:c171160e-3740-4852-b44e-3c6bdb2314af)
@@ -568,10 +548,8 @@ Feature: Number of Missing or Damaged Parcels
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -598,8 +576,164 @@ Feature: Number of Missing or Damaged Parcels
     And Operator verifies that the url for recovery tickets page is loaded with tracking id
 
     Examples:
-      | HubName      | TicketType | TileName        | ModalName       |
-      | {hub-name-6} | DAMAGED    | Damaged parcels | Damaged Parcels |
+      | HubName      | HubId      | TicketType | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels |
+
+  @ForceSuccessOrder
+  Scenario Outline: Sort Damaged Parcels Based on Last Scanned Time (uid:b1456531-3e28-4e0f-a32f-cc6679cc0606)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operators sorts and verifies that the column:"Last Scanned Time" is in ascending order
+
+    Examples:
+      | HubName      | HubId      | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | Damaged parcels | Damaged Parcels |
+
+  @ForceSuccessOrder
+  Scenario Outline: Parcel Exception Ticket Not Appears in Damaged Cases (uid:3802bc73-49c3-4d1c-ae0a-a01f24b5a722)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | <HubName>          |
+      | ticketType                    | <TicketType>       |
+      | ticketSubType                 | <TicketSubType>    |
+      | orderOutcomeInaccurateAddress | RTS                |
+      | rtsReason                     | Nobody at address  |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator expects no results in the modal under the table:"<ModalName>" when applying the following filters:
+      | Tracking ID                     |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName      | HubId      | TicketType       | TicketSubType      | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | PARCEL EXCEPTION | INACCURATE ADDRESS | Damaged parcels | Damaged Parcels |
+
+  @ForceSuccessOrder
+  Scenario Outline: Parcel on Hold Ticket Not Appears in Damaged Cases (uid:36429a6f-6d65-466b-9fc0-a6e045da4d5a)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | ROUTE CLEANING     |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | <TicketType>       |
+      | ticketSubType           | <TicketSubType>    |
+      | orderOutcome            | RESUME DELIVERY    |
+      | exceptionReason         | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator expects no results in the modal under the table:"<ModalName>" when applying the following filters:
+      | Tracking ID                     |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName      | HubId      | TicketType     | TicketSubType   | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | PARCEL ON HOLD | SHIPPER REQUEST | Damaged parcels | Damaged Parcels |
+
+  @ForceSuccessOrder
+  Scenario Outline: Shipper Issue Ticket Not Appears in Damaged Cases (uid:eb921d4a-638e-4301-a546-9d97a35986f7)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                 | CUSTOMER COMPLAINT |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | <HubName>          |
+      | ticketType                  | <TicketType>       |
+      | ticketSubType               | <TicketSubType>    |
+      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator expects no results in the modal under the table:"<ModalName>" when applying the following filters:
+      | Tracking ID                     |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName      | HubId      | TicketType    | TicketSubType    | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | SHIPPER ISSUE | DUPLICATE PARCEL | Damaged parcels | Damaged Parcels |
+
+  @ForceSuccessOrder
+  Scenario Outline: Missing Ticket Not Appears in Damaged Cases (uid:b30b4a99-3370-4d8d-af1a-5f828fe78f69)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | <TicketType>       |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator expects no results in the modal under the table:"<ModalName>" when applying the following filters:
+      | Tracking ID                     |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+
+    Examples:
+      | HubName      | HubId      | TicketType | TileName        | ModalName       |
+      | {hub-name-6} | {hub-id-6} | MISSING    | Damaged parcels | Damaged Parcels |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

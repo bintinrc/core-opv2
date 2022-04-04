@@ -13,10 +13,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -51,8 +49,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | CREATED         |
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Pending Parcel on Hold Ticket Type (uid:eb9b1948-329f-45e4-94ac-ce69dfdaacaf)
     Given Operator loads Operator portal home page
@@ -62,10 +60,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -100,8 +96,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | CREATED         |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Pending Parcel Exception Ticket Type (uid:bd998ebc-4a85-4604-aca0-58f6ea49d81c)
     Given Operator loads Operator portal home page
@@ -111,10 +107,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -150,8 +144,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | CREATED         |
 
     Examples:
-      | HubName      | TicketType       | TicketSubType      | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType       | TicketSubType      | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View In-progress Shipper Issue Ticket Type (uid:06bcacaa-588f-464f-95f8-2ee71c5a40a0)
     Given Operator loads Operator portal home page
@@ -161,10 +155,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -203,8 +195,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Subtype | <TicketSubType> |
       | Ticket Status  | <Status>        |
     Examples:
-      | HubName      | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View on Hold Shipper Issue Ticket Type (uid:a5af556b-3c65-469a-abe3-ed478990b0e7)
     Given Operator loads Operator portal home page
@@ -214,10 +206,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -257,8 +247,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Pending Shipper of  Shipper Issue Ticket Type (uid:ae7d775e-4a1b-4df1-85b6-2a3c1d75780b)
     Given Operator loads Operator portal home page
@@ -268,10 +258,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -311,8 +299,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View In-progress Parcel on Hold Ticket Type (uid:4e3e1b3f-679e-453e-9ff8-8cadb4fd21f3)
     Given Operator loads Operator portal home page
@@ -322,10 +310,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -365,8 +351,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View on Hold Parcel on Hold Ticket Type (uid:378e02ba-3196-4a6d-b924-4f61c93bed8b)
     Given Operator loads Operator portal home page
@@ -376,10 +362,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -419,8 +403,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Pending Shipper Parcel on Hold Ticket Type (uid:f06876ed-3c73-443d-9266-0c96381ec64a)
     Given Operator loads Operator portal home page
@@ -430,10 +414,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -473,8 +455,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
 
 
   Scenario Outline: View In-progress Parcel Exception Ticket Type (uid:b9e2d218-a25e-4a79-9ca5-82f086e7a2cd)
@@ -485,10 +467,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -529,8 +509,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType       | TicketSubType      | OrderOutcome | Status      | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status      | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View on Hold Parcel Exception Ticket Type (uid:c550f630-678c-442e-8c87-a4db9adb3b02)
     Given Operator loads Operator portal home page
@@ -540,10 +520,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -584,8 +562,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Pending Shipper Parcel Exception Ticket Type (uid:36ba42b6-ea60-4983-a890-313c1679fe57)
     Given Operator loads Operator portal home page
@@ -595,10 +573,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -639,18 +615,16 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Resolved Ticket of Shipper Issue Type Disappear (uid:ab9b8b45-4b3a-4f61-9fb2-d78abde35d5f)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -689,18 +663,16 @@ Feature: Number of Parcels with Exception Cases
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | OrderOutcome | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Resolved Ticket of Parcel Exception Type Disappear (uid:fc916a62-b9fe-4fb8-be97-915e29cc5b88)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -740,18 +712,16 @@ Feature: Number of Parcels with Exception Cases
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType       | TicketSubType      | OrderOutcome | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Resolved Ticket of on Hold Type Disappear (uid:1df65d62-727a-4531-9368-a9f2079cb0f5)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -790,8 +760,8 @@ Feature: Number of Parcels with Exception Cases
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | OrderOutcome    | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Recovery Ticket  of Exception Cases Parcels (uid:ff67196f-4020-4a36-abf8-5e33420ca106)
     Given Operator loads Operator portal home page
@@ -801,10 +771,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -835,8 +803,8 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the url for recovery tickets page is loaded with tracking id
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View Order Details of Exception Cases Parcels (uid:36f6ec17-4e1d-4bcb-b99a-fd754118bf06)
     Given Operator loads Operator portal home page
@@ -846,10 +814,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -880,8 +846,8 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the url for edit order page is loaded with order id
 
     Examples:
-      | HubName      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
-      | {hub-name-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Missing Ticket Not Appears in Exception Cases (uid:0af9d116-d7ec-449d-87ca-65e8697e294e)
     Given Operator loads Operator portal home page
@@ -891,10 +857,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -923,8 +887,8 @@ Feature: Number of Parcels with Exception Cases
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType | TileName                               | ModalName                    |
-      | {hub-name-3} | MISSING    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | MISSING    | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Damaged Ticket Not Appears in Exception Cases (uid:e03bc400-4f70-4192-b520-4621c9288617)
     Given Operator loads Operator portal home page
@@ -934,10 +898,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -969,8 +931,8 @@ Feature: Number of Parcels with Exception Cases
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | TicketType | TileName                               | ModalName                    |
-      | {hub-name-3} | DAMAGED    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | DAMAGED    | Number of parcels with exception cases | Parcels with Exception Cases |
 
   @ForceSuccessOrder
   Scenario Outline: View Hub Inbound Scanned Parcels with Exception Cases (uid:e4008185-20ef-483f-b786-854adf617c35)
@@ -981,10 +943,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"HUB INBOUND SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
@@ -1022,8 +982,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     | CREATED          |
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
+      | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel Routing Scanned Pacels with Exception Cases (uid:b407f68a-f384-476f-b3f9-7ff9e049d8fa)
@@ -1034,10 +994,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name-3}                    |
@@ -1080,8 +1038,8 @@ Feature: Number of Parcels with Exception Cases
 
 
     Examples:
-      | HubName      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent    |
-      | {hub-name-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN |
+      | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent    |
+      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Driver Inbound Scanned Parcels with Exception Cases (uid:8583e86a-58f3-4244-80bf-78cc5d3c7f47)
@@ -1092,10 +1050,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -1152,10 +1108,8 @@ Feature: Number of Parcels with Exception Cases
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -1222,8 +1176,8 @@ Feature: Number of Parcels with Exception Cases
     And Operators sorts and verifies that the column:"Last Scanned Time" is in ascending order
 
     Examples:
-      | HubName      | TileName                               | ModalName                    |
-      | {hub-name-3} | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

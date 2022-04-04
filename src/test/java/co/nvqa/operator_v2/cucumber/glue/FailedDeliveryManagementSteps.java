@@ -7,15 +7,17 @@ import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.RtsDetails;
 import co.nvqa.operator_v2.selenium.page.CommonParcelManagementPage;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.JavascriptExecutor;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -124,6 +126,21 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
   }
 
+  @When("^Operator wait until Failed Delivery Management page is loaded$")
+  public void operatorWaitUntilPageIsLoaded() {
+    failedDeliveryManagementPage.waitWhilePageIsLoading();
+  }
+
+  @When("^Operator opens the same page in new tab$")
+  public void operatorOpensTheSamePageInNewTab() {
+    failedDeliveryManagementPage.waitWhilePageIsLoading();
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    String url = getCurrentUrl();
+    ((JavascriptExecutor) getWebDriver()).executeScript("window.open('" + url + "', '_blank');");
+    failedDeliveryManagementPage.switchToNewWindow();
+    pause4s();
+  }
+
   @When("^Operator reschedule failed delivery order on next 2 days$")
   public void operatorRescheduleFailedDeliveryOrderOnNext2Days() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -227,5 +244,19 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     failedDeliveryManagementPage.waitWhilePageIsLoading();
     failedDeliveryManagementPage.rtsSelectedOrderNextDay(trackingId);
+  }
+
+  @When("^Operator verifies error messages in dialog on Failed Delivery Management page:$")
+  public void operatorVerifyErrorMessagesDialog(List<String> data) {
+    data = resolveValues(data);
+    assertTrue("Errors dialog is displayed",
+        failedDeliveryManagementPage.errorsDialog.waitUntilVisible(5));
+    List<String> actual = failedDeliveryManagementPage.errorsDialog.errorMessage.stream()
+        .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
+            .replaceAll("^\\d{1,2}\\.", ""))
+        .collect(Collectors.toList());
+    Assertions.assertThat(actual)
+        .as("List of error messages")
+        .containsExactlyInAnyOrderElementsOf(data);
   }
 }

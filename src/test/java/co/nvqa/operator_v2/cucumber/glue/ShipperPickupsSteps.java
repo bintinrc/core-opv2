@@ -154,7 +154,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   public void operatorVerifyTheNewReservationsAreListedOnTableInShipperPickupsPageUsingDataBelow(
       Map<String, String> mapOfData) {
     List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
-    addresses.forEach(address -> verifyReservationData(address, mapOfData));
+    addresses.forEach(address -> verifyReservationData(address, resolveKeyValues(mapOfData)));
   }
 
   private void verifyReservationData(Address address, Map<String, String> mapOfData) {
@@ -306,6 +306,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator use the Route Suggestion to add created reservation to the route using data below:$")
   public void operatorUseTheRouteSuggestionToAddCreatedReservationToTheRoute(
       Map<String, String> dataTableAsMap) {
+    dataTableAsMap = resolveKeyValues(dataTableAsMap);
     Address address = get(KEY_CREATED_ADDRESS);
     String routeTagName = dataTableAsMap.get("routeTagName");
     addRouteViaRouteSuggestion(Collections.singletonList(address),
@@ -359,13 +360,14 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator use the Route Suggestion to add created reservations to the route using data below:$")
   public void operatorUseTheRouteSuggestionToAddCreatedReservationsToTheRoute(
       Map<String, String> dataTableAsMap) {
+    dataTableAsMap = resolveKeyValues(dataTableAsMap);
     List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
     String routeTagName = dataTableAsMap.get("routeTagName");
     addRouteViaRouteSuggestion(addresses, Collections.singletonList(routeTagName));
   }
 
   private void addRouteViaRouteSuggestion(List<Address> addresses, List<String> routeTags) {
-    List<Route> zzzRoutes = get(KEY_LIST_OF_FOUND_ROUTES);
+    List<Route> zzzRoutes = get(KEY_LIST_OF_CREATED_ROUTES);
     Route suggestedRoute = shipperPickupsPage
         .suggestRoute(addresses, routeTags)
         .validateSuggestedRoutes(zzzRoutes);
@@ -684,7 +686,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
     if (newAddress.getLongitude() != null) {
       shipperPickupsPage.editRouteDialog.longitude.setValue(newAddress.getLongitude());
     }
-    shipperPickupsPage.editRouteDialog.submitForm();
+    shipperPickupsPage.editRouteDialog.updateAddress.clickAndWaitUntilDone();
   }
 
   @When("^Operator selects filters on Shipper Pickups page:$")

@@ -16,10 +16,8 @@ Feature: Priority Parcels On Vehicle for Delivery
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -60,10 +58,8 @@ Feature: Priority Parcels On Vehicle for Delivery
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | <HubName>                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:

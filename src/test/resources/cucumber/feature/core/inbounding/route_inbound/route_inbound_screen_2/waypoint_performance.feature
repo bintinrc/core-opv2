@@ -295,6 +295,7 @@ Feature: Waypoint Performance
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
     And API Operator get route details of created route
+#  to update get from index = 0 once dummy waypoint is removed
     And API Operator get order details from route details
     And API Driver deliver partial created parcels successfully
     When Operator go to menu Inbounding -> Route Inbound

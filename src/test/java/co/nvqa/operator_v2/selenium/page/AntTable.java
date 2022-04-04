@@ -24,7 +24,10 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   protected String getTextOnTable(int rowNumber, String columnDataClass) {
-    String xpath = f(".//tbody/tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
+    String xpath = f(".//tbody/tr[%d]/td[@class='%s']", rowNumber, columnDataClass);
+    if (!isElementExistFast(xpath)) {
+      xpath = f(".//tbody/tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
+    }
     return getText(xpath);
   }
 
@@ -45,7 +48,7 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public void selectRow(int rowNumber) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    clickf("//tr[%d]/td[contains(@class,'_checkbox')]//input", rowNumber);
   }
 
   @Override
@@ -55,9 +58,15 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = f("//th[contains(@class,'%s')]//input", columnId);
+    String xpath = f("//th[contains(@class,' %s')]//input", getColumnLocators().get(columnId));
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
+    }
+    if (!isElementExistFast(xpath)) {
+      xpath = f("//th[contains(@class,'%s')]//input", getColumnLocators().get(columnId));
+      if (StringUtils.isNotBlank(tableLocator)) {
+        xpath = tableLocator + xpath;
+      }
     }
     String currentValue = getValue(xpath);
     if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {

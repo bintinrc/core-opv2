@@ -521,6 +521,12 @@ public class AllOrdersSteps extends AbstractSteps {
         .containsExactlyInAnyOrderElementsOf(data);
   }
 
+  @When("Operator clicks Continue button in Selection Error dialog on All Orders page")
+  public void clickContinueButtonInSelectionErrorDialog() {
+    allOrdersPage.selectionErrorDialog.waitUntilVisible();
+    allOrdersPage.selectionErrorDialog.continueBtn.click();
+  }
+
   @Then("Operator verifies latest event is {string}")
   public void operatorVerifiesLatestEventIs(String latestEvent) {
     Order createdOrder = get(KEY_CREATED_ORDER);
@@ -920,7 +926,8 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   @And("Operator verifies the delivery address is doorstep address {string} and {string}")
-  public void operatorVerifiesTheDeliveryAddressIsDoorstepAddressAnd(String address1, String address2) {
+  public void operatorVerifiesTheDeliveryAddressIsDoorstepAddressAnd(String address1,
+      String address2) {
     pause3s();
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyCustomerDeliveryAddress(order, address1, address2);

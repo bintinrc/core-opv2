@@ -2,10 +2,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage;
+import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage.PendingTaskBlock;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
+
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_NAME;
 
 /**
  * @author Sergey Mishanin
@@ -60,5 +63,34 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.verifyGroupDeleted(reservationGroup.getName());
     remove(KEY_CREATED_RESERVATION_GROUP);
     remove(KEY_CREATED_RESERVATION_GROUP_ID);
+  }
+
+  @Then("^Operator assign pending task on Reservation Preset Management page:$")
+  public void assignPendingTask(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String shipper = data.get("shipper");
+    String group = data.get("group");
+    reservationPresetManagementPage.pendingTab.click();
+    pause2s();
+    PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
+        .filter(t -> t.shipper.getText().replace("Assign:", "").trim().equalsIgnoreCase(shipper))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Task for shipper " + shipper + " was not found"));
+    pendingTaskBlock.assign.click();
+    reservationPresetManagementPage.assignShipperDialog.waitUntilVisible();
+    reservationPresetManagementPage.assignShipperDialog.group.selectValue(group);
+    reservationPresetManagementPage.assignShipperDialog.assignShipper.clickAndWaitUntilDone();
+  }
+
+  @Then("^Operator route pending reservations on Reservation Preset Management page:$")
+  public void routePendingReservations(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String group = data.get("group");
+    reservationPresetManagementPage.overviewTab.click();
+    pause2s();
+    reservationPresetManagementPage.reservationPresetTable.filterByColumn(COLUMN_NAME, group);
+    reservationPresetManagementPage.reservationPresetTable.selectRow(1);
+    reservationPresetManagementPage.actionsMenu.selectOption("Route Pending Reservations");
+
   }
 }

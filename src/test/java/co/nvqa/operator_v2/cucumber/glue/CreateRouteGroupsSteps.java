@@ -136,6 +136,22 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.clickAndWaitUntilDone();
   }
 
+  @When("Operator adds following reservations to Route Group {string}:")
+  public void addReservationsToRouteGroup(String groupName, List<Map<String, String>> data) {
+    groupName = resolveValue(groupName);
+    data.forEach(entry -> {
+      entry = resolveKeyValues(entry);
+      String id = entry.get("id");
+      createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_ID, id);
+      createRouteGroupsPage.txnRsvnTable.selectAllShown();
+    });
+    createRouteGroupsPage.addToRouteGroup.click();
+    createRouteGroupsPage.addToRouteGroupDialog.waitUntilVisible();
+    createRouteGroupsPage.addToRouteGroupDialog.existingRouteGroup.click();
+    createRouteGroupsPage.addToRouteGroupDialog.routeGroup.searchAndSelectValue(groupName);
+    createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.clickAndWaitUntilDone();
+  }
+
   @Given("^Operator removes all General Filters except following: \"([^\"]*)\"$")
   public void operatorRemovesAllGeneralFiltersExceptFollowingCreationTime(String filtersAsString) {
     List<String> filters = Arrays.asList(filtersAsString.replaceAll(", ", ",").split(","));

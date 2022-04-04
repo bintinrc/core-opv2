@@ -5,6 +5,7 @@ import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.model.RtsDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -45,6 +46,9 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public RescheduleSelectedOrdersDialog rescheduleSelectedOrdersDialog;
 
+  @FindBy(css = "md-dialog")
+  public ErrorsDialog errorsDialog;
+
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
 
@@ -82,7 +86,6 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     rescheduleSelectedOrdersDialog.waitUntilVisible();
     rescheduleSelectedOrdersDialog.date.setDate(TestUtils.getNextDate(2));
     rescheduleSelectedOrdersDialog.reschedule.click();
-    waitUntilInvisibilityOfToast("Order Rescheduling Success");
   }
 
   public EditRtsDetailsDialog openEditRtsDetailsDialog(String trackingId) {
@@ -420,6 +423,22 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     public NvButtonSave upload;
 
     public UploadCsvRescheduleDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ErrorsDialog extends MdDialog {
+
+    @FindBy(name = "Close")
+    public NvIconTextButton close;
+
+    @FindBy(xpath = ".//div[@ng-repeat='error in ctrl.payload.errors track by $index']")
+    public List<PageElement> errorMessage;
+
+    @FindBy(css = "[ng-click='ctrl.payload.errorDescription.onClick()']")
+    public PageElement downloadFailedUpdates;
+
+    public ErrorsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
