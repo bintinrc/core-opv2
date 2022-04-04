@@ -52,6 +52,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | created_at        | notNull                                                                                    |
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
+      | event             | Remittance                                                                                 |
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
@@ -116,6 +117,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | created_at        | notNull                                                                                    |
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
+      | event             | Remittance                                                                                 |
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value         |
@@ -134,7 +136,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer and Payee Info (uid:bcfea88f-3f9e-4be2-8bc5-31b11fc41f49)
+  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer and Payee Info
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -180,6 +182,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | created_at        | notNull                                                                                    |
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
+      | event             | Remittance                                                                                 |
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
@@ -243,6 +246,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | created_at        | notNull                                                                                    |
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
+      | event             | Remittance                                                                                 |
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
@@ -306,6 +310,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | created_at        | notNull                                                                                    |
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
+      | event             | Remittance                                                                                 |
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value         |
@@ -324,7 +329,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: Payment via CSV Upload for COD Remittance - CSV Has Multiple Account ID (uid:bcfea88f-3f9e-4be2-8bc5-31b11fc41f49)
+  Scenario Outline: Payment via CSV Upload for COD Remittance - CSV Has Multiple Account ID
         #Shipper 1 - "Ready" ledger is exists
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
@@ -490,6 +495,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
+      | event          | Remittance           |
     And DB Operator gets shipper account details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>      |
@@ -510,6 +516,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | created_at        | notNull                                                                                    |
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
+      | event             | Remittance                                                                                 |
     And DB Operator gets shipper account details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].id}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>   |
