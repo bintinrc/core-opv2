@@ -22,13 +22,13 @@ Feature: Import Script ByParam Function
       | insuredValue | 0.00     |
       | codValue     | 0.00     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 9595 |
-      | gst          | 95   |
-      | deliveryFee  | 9500 |
-      | insuranceFee | 0    |
-      | codFee       | 0    |
-      | handlingFee  | 0    |
-      | comments     | OK   |
+      | grandTotal   | 9604.5 |
+      | gst          | 104.5  |
+      | deliveryFee  | 9500   |
+      | insuranceFee | 0      |
+      | codFee       | 0      |
+      | handlingFee  | 0      |
+      | comments     | OK     |
     And Operator close page
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
