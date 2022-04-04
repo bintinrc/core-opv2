@@ -3,8 +3,8 @@
 Feature: Generate COD Report - International Order(s)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
-    Given API Operator whitelist email "{order-billing-email}"
-    Given operator marks gmail messages as read
+#    Given API Operator whitelist email "{order-billing-email}"
+#    Given operator marks gmail messages as read
 
   Scenario: Generate COD Report - Select One Hub/Station
      #Test Data - Normal Order
@@ -39,3 +39,11 @@ Feature: Generate COD Report - International Order(s)
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
+
+  Scenario: Generate COD Report - Not Select Any Hub/Station
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    Given Operator go to menu Finance Tools -> Finance COD
+    When Operator selects Finance COD Report data as below
+      | generateFile | Select By Hub/Station |
+      | emailAddress | {order-billing-email} |
+    Then Operator verifies error message "Please select at least one hub."

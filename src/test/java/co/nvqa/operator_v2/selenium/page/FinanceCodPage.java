@@ -14,7 +14,7 @@ public class FinanceCodPage extends SimpleReactPage<FinanceCodPage> {
   public PageElement startDate;
   @FindBy(css = "div.ant-picker-range")
   public AntDateRangePicker betweenDates;
-  @FindBy(xpath = "//input[@type='search']")
+  @FindBy(xpath = "//span[text()='Enter Email Addresses']//preceding-sibling::div/div/div/input")
   public PageElement emailAddressTxtBox;
   @FindBy(xpath = "//button[@label='Generate Success Billings']")
   public AntButton generateCodReportBtn;
