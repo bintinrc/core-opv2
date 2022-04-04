@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page.mm.shipmentweight;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.mm.AntConfirmModal;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
@@ -43,6 +44,9 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(id = "mawb")
   public PageElement mawbInput;
 
+  @FindBy(className = "ant-modal-confirm")
+  public AntConfirmModal searchErrorConfirmModal;
+
   public ShipmentWeightDimensionPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -52,8 +56,11 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
     Assertions.assertThat(newRecordBtn.isDisplayedFast()).as("is New Record button is visible").isTrue();
   }
 
-
   public void verifyLoadShipmentWeightUI(ShipmentWeightState uiState) {
+    verifyLoadShipmentWeightUI(uiState, null);
+  }
+
+  public void verifyLoadShipmentWeightUI(ShipmentWeightState uiState, String numberOfShipments) {
     switch (uiState) {
       case INITIAL:
         Assertions.assertThat(loadShipmentHeader.isDisplayed()).as("Load Shipment Weight Dimension header is shown").isTrue();
@@ -67,7 +74,15 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
         Assertions.assertThat(searchButton.getAttribute("disabled")).as("Search button is disabled").isEqualTo("true");
         break;
       case SEARCH_VALID:
-        Assertions.assertThat(shipmentCounter.getText().trim()).as("Shipment counter show 1 entered").isEqualTo("1 entered");
+        Assertions.assertThat(shipmentCounter.getText().trim())
+            .as("Shipment counter show %s entered", numberOfShipments)
+            .isEqualTo("%s entered", numberOfShipments);
+        Assertions.assertThat(searchButton.isEnabled()).as("Search button is enabled").isTrue();
+        break;
+      case DUPLICATE:
+        Assertions.assertThat(shipmentCounter.getText().trim())
+            .as("Shipment counter show %s entered (1 duplicate)", numberOfShipments)
+            .isEqualTo("%s entered (1 duplicate)", numberOfShipments);
         Assertions.assertThat(searchButton.isEnabled()).as("Search button is enabled").isTrue();
     }
   }
@@ -88,6 +103,7 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   public enum ShipmentWeightState {
     INITIAL("initial"),
     SEARCH_VALID("search_valid"),
+    DUPLICATE("duplicate"),
     ERROR("error");
 
     private final String value;

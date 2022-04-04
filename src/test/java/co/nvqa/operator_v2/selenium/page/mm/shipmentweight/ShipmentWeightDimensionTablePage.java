@@ -1,13 +1,17 @@
 package co.nvqa.operator_v2.selenium.page.mm.shipmentweight;
 
+import co.nvqa.commons.model.core.hub.Shipment;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
-
+import co.nvqa.operator_v2.util.TestUtils;
+import java.util.Locale;
 import java.util.stream.Stream;
-
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -46,13 +50,15 @@ public class ShipmentWeightDimensionTablePage extends
   public PageElement startHubFilter;
   @FindBy(xpath = "//input[@aria-label='input-shipment_type']")
   public PageElement shipmentTypeFilter;
+  @FindBy(xpath = "//th[contains(@class,'selection')]//input")
+  public CheckBox selectAllCheckbox;
+
 
   public ShipmentWeightDimensionTablePage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void filterColumn(Column filterColumn, String filterValue) {
-    clearFilter();
+  private PageElement filterColumn(Column filterColumn) {
     PageElement pe = null;
     switch (filterColumn) {
       case SHIPMENT_ID:
@@ -80,18 +86,73 @@ public class ShipmentWeightDimensionTablePage extends
         pe = shipmentTypeFilter;
         break;
     }
+    return pe;
+  }
+
+  private String getFilterValueByColumn(Column col, Shipment shipmentData) {
+    String filterValue = "";
+    switch (col) {
+      case MAWB:
+        filterValue = shipmentData.getMawb();
+        break;
+      case STATUS:
+        filterValue = shipmentData.getStatus().toUpperCase(Locale.ROOT);
+        break;
+      case END_HUB:
+        filterValue = shipmentData.getDestHubName();
+        break;
+      case START_HUB:
+        filterValue = shipmentData.getOrigHubName();
+        break;
+      case SHIPMENT_ID:
+        filterValue = shipmentData.getId().toString();
+        break;
+      case COMMENTS:
+        filterValue = shipmentData.getComments();
+        break;
+      case SHIPMENT_TYPE:
+        filterValue = shipmentData.getShipmentType();
+        break;
+      case CREATION_DATE:
+        filterValue = DateUtil.displayOperatorTime(shipmentData.getCreatedAt(), true);
+        break;
+    }
+    return filterValue;
+  }
+
+  public void filterColumn(Column col, Shipment shipmentData) {
+    String filterValue = getFilterValueByColumn(col, shipmentData);
+    if (filterValue != null && !filterValue.isEmpty()) {
+      filterColumn(col, filterValue);
+    }
+  }
+
+  public void filterColumn(Column col, String filterValue) {
+    PageElement pe = filterColumn(col);
+    scrollAndClear(pe);
     pe.sendKeys(filterValue);
   }
 
-  public void clearFilter() {
-    shipmentIdFilter.clear();
-    statusFilter.clear();
-    endHubFilter.clear();
-    shipmentCreationDateTimeFilter.clear();
-    mawbFilter.clear();
-    commentsFilter.clear();
-    startHubFilter.clear();
-    shipmentTypeFilter.clear();
+  public void clearFilters() {
+    scrollAndClear(shipmentIdFilter);
+    scrollAndClear(statusFilter);
+    scrollAndClear(endHubFilter);
+    scrollAndClear(shipmentCreationDateTimeFilter);
+    scrollAndClear(mawbFilter);
+    scrollAndClear(commentsFilter);
+    scrollAndClear(startHubFilter);
+    scrollAndClear(shipmentTypeFilter);
+  }
+
+  /**
+   * alternative method for table filter clear
+   *
+   * @param p PageElement
+   */
+  private void scrollAndClear(PageElement p) {
+    p.scrollIntoView();
+    p.sendKeys(Keys.chord(TestUtils.getControlKeyByPlatform(), "a"));
+    p.sendKeys(Keys.BACK_SPACE);
   }
 
   public enum Column {

@@ -11,8 +11,10 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -143,6 +145,13 @@ public class TestUtils extends CommonSeleniumTestUtils {
   @SuppressWarnings("unused")
   public static void resetImplicitTimeout(WebDriver webDriver) {
     setImplicitTimeout(webDriver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_IN_SECONDS);
+  }
+
+  public static Keys getControlKeyByPlatform() {
+    if (SystemUtils.IS_OS_MAC) {
+      return Keys.COMMAND;
+    }
+    return Keys.CONTROL;
   }
 
   public static String readFromFile(File file) {

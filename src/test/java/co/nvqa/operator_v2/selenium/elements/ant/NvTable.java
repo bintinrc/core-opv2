@@ -32,7 +32,7 @@ public class NvTable<R> extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  @FindBy(css = "tbody tr")
+  @FindBy(css = "tbody tr.ant-table-row")
   public List<R> rows;
 
   public R getRow(int index) {
