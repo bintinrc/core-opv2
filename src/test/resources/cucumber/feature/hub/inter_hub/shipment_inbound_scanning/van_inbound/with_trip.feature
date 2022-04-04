@@ -378,7 +378,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} departed" is shown on Shipment Inbound Scanning page
@@ -525,7 +525,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     And Operator scan shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in Shipment Inbound Box
-    And Operator verifies Scanned Shipment color is "#cef0cc"
+    And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     And Operator refresh page
@@ -997,7 +997,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verifies shipment to go with trip is shown with total "2"
     And Operator scan shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in Shipment Inbound Box
-    And Operator verifies Scanned Shipment color is "#cef0cc"
+    And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "-"
     When Operator click proceed in error shipment dialog
@@ -1229,7 +1229,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
-    And Operator verifies Scanned Shipment color is "#cef0cc"
+    And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Duplicate scan for shipment {KEY_CREATED_SHIPMENT_ID}" is shown on Shipment Inbound Scanning page
@@ -1279,7 +1279,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
-    And Operator verifies Scanned Shipment color is "#cef0cc"
+    And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator enter shipment with id "{KEY_CREATED_SHIPMENT_ID}" in remove shipment
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is successfully removed" is shown on Shipment Inbound Scanning page
@@ -1359,8 +1359,8 @@ Feature: Shipment Van Inbound With Trip Scanning
 #    Then Operator verify small message "Partial Success. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
     And Operator verifies shipment counter is "2"
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#cef0cc"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#cef0cc"
+    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#e1f6e0"
+    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message containing "departed" is shown on Shipment Inbound Scanning page
@@ -1592,9 +1592,9 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator scan shipment with id "{KEY_SHIPMENT_AWB}"
     Then Operator verify small message "Scan successful. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
     And Operator verifies shipment counter is "2"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#cef0cc"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#e1f6e0"
+    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message containing "departed" is shown on Shipment Inbound Scanning page
@@ -1746,7 +1746,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast bottom containing following messages is shown on Shipment Inbound Scanning page:
@@ -1849,7 +1849,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on Shipment Inbound Scanning page
@@ -2045,7 +2045,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} with expected arrival time" is shown on Shipment Inbound Scanning page
@@ -2145,7 +2145,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on Shipment Inbound Scanning page
@@ -2297,7 +2297,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | comments       | Stay in vehicle. Drop off: {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator scan shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in Shipment Inbound Box
-    And Operator verifies Scanned Shipment color is "#cef0cc"
+    And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} departed" is shown on Shipment Inbound Scanning page
@@ -2445,7 +2445,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | comments       | Stay in vehicle. Drop off: {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator scan shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}"
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in Shipment Inbound Box
-    And Operator verifies Scanned Shipment color is "#cef0cc"
+    And Operator verifies Scanned Shipment color is "#e1f6e0"
     When Operator scan shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Duplicate scan for shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" is shown on Shipment Inbound Scanning page
@@ -2879,7 +2879,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator opens new tab and switch to new tab in shipment inbound scanning page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
@@ -2978,7 +2978,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#cef0cc"
+    And Operator verifies Scan Shipment Container color is "#e1f6e0"
     When Operator opens new tab and switch to new tab in shipment inbound scanning page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
@@ -3811,7 +3811,7 @@ Feature: Shipment Van Inbound With Trip Scanning
 #    Then Operator verifies shipment to go with trip is shown with total "101"
 #    And Operator scan shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[101]}"
 ##    Then Operator verify small message "Shipment added to trip. Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in Shipment Inbound Box
-##    And Operator verifies Scanned Shipment color is "#cef0cc"
+##    And Operator verifies Scanned Shipment color is "#e1f6e0"
 ##    And Operator clicks end inbound button
 ##    Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "-"
 ##    When Operator click proceed in error shipment dialog

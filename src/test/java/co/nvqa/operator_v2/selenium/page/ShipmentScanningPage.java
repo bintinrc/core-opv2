@@ -416,8 +416,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
     String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
-    assertThat("Scanned shipment color is the same", expectedShipmentColorAsHex,
-        equalTo(actualColorAsHex));
+    Assertions.assertThat(actualColorAsHex).as("Scanned shipment color:").isEqualTo(expectedShipmentColorAsHex);
   }
 
   public void verifyScannedShipmentColorById(String expectedShipmentColorAsHex,
