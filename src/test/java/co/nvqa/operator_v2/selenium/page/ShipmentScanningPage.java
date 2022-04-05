@@ -45,18 +45,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
   public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment'] | //button[.='Add Parcels to Shipment']";
-  public static final String XPATH_BARCODE_SCAN = "//div[h5[text()='Scan Shipment to Inbound']]//input | //input[@id='toAddTrackingId']";
-  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//div[h5[text()='Remove Shipment']]//input | //input[@id='toRemoveTrackingId']";
+  public static final String XPATH_BARCODE_SCAN = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']";
+  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//div[.='Remove Shipment']//input | //input[@id='toRemoveTrackingId']";
   //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
   public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
   public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
-  public static final String XPATH_SCAN_SHIPMENT_CONTAINER = "//div[h5[text()='Scan Shipment to Inbound']]";
+  public static final String XPATH_SCAN_SHIPMENT_CONTAINER = "//form[.='Scan Shipment to Inbound']//parent::div";
   public static final String XPATH_SCANNED_SHIPMENT = "//td[contains(@class,'shipment-id')]";
   public static final String XPATH_SCANNED_SHIPMENT_BY_ID = "//td[contains(@class,'shipment-id')][.='%s']";
   public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]/following-sibling::span";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
-  public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[h5[text()='Scan Shipment to Inbound']]//div[@class='message']";
+  public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//form[.='Scan Shipment to Inbound']/following-sibling::div[@class='message']";
   public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
   public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
   private static String antNotificationMessage = "";
@@ -185,7 +185,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public CloseShipmentDialog closeShipmentDialog;
 
-  @FindBy(xpath = "//div[h5[text()='Remove Shipment']]//div[@class='message']")
+  @FindBy(xpath = "//form[.='Remove Shipment']/following-sibling::div[@class='message']")
   public TextBox smallRemoveMessage;
 
   @FindBy(xpath = "//nv-table[@param='ctrl.missingTableParam']//table[@class='table-body']")
@@ -284,6 +284,22 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     waitUntilElementIsClickable("//input[@id='shipment_id']");
     selectShipmentId(Long.parseLong(shipmentId));
     clickSelectShipment();
+    waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
+    closeShipment();
+  }
+
+  public void scanAndCloseShipmentWithData(String originHubName, String destinationHubName,
+                                    String shipmentType, String shipmentId, String trackingId) {
+    pause10s();
+    switchTo();
+    selectHub(originHubName);
+    selectDestinationHub(destinationHubName);
+    selectShipmentType(shipmentType);
+    waitUntilElementIsClickable("//input[@id='shipment_id']");
+    selectShipmentId(Long.parseLong(shipmentId));
+    clickSelectShipment();
+    scanBarcode(trackingId);
+    checkOrderInShipment(trackingId);
     waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
     closeShipment();
   }
@@ -416,8 +432,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
     String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
-    assertThat("Scanned shipment color is the same", expectedShipmentColorAsHex,
-        equalTo(actualColorAsHex));
+    Assertions.assertThat(actualColorAsHex).as("Scanned shipment color:").isEqualTo(expectedShipmentColorAsHex);
   }
 
   public void verifyScannedShipmentColorById(String expectedShipmentColorAsHex,
