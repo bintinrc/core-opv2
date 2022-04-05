@@ -132,19 +132,27 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
+  @And("Operator scan and close shipment with data below:")
+  public void operatorScanAndCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String origHubName = mapOfData.get("origHubName");
+    String destHubName = mapOfData.get("destHubName");
+    String shipmentType = mapOfData.get("shipmentType");
+    String shipmentId = mapOfData.get("shipmentId");
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    shipmentScanningPage.scanAndCloseShipmentWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
+  }
+
   @And("Operator close multiple shipments with data below:")
   public void operatorCloseMultipleShipmentWithDataBelow(Map<String, String> mapOfData) {
     String shipmentsCount = mapOfData.get("shipmentCount");
+    String origHubName = mapOfData.get("origHubName");
+    String destHubName = mapOfData.get("destHubName");
+    String shipmentType = mapOfData.get("shipmentType");
+    String shipment = mapOfData.get("shipmentId");
     for(int i=1; i<=Integer.parseInt(shipmentsCount); i++){
-      Map<String, String> dataMap = mapOfData;
-      dataMap.put("shipmentId", f(dataMap.get("shipmentId"), shipmentsCount));
-      dataMap = resolveKeyValues(dataMap);
-      String origHubName = dataMap.get("origHubName");
-      String destHubName = dataMap.get("destHubName");
-      String shipmentType = dataMap.get("shipmentType");
-      String shipmentId = dataMap.get("shipmentId");
+      String shipmentId = resolveValue(f(shipment,shipmentsCount));
       shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
-//      operatorRefreshPage();
     }
   }
 
