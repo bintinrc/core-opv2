@@ -140,7 +140,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     When Operator remove scanned shipment from remove button in scanned shipment table
-    And Capture the toast with message is shown on Shipment Inbound Scanning page
+#    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator verifies shipment counter is "0"
 
@@ -378,7 +378,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} departed" is shown on Shipment Inbound Scanning page
@@ -699,9 +699,9 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan and close shipment with data below:
-      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
-      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
-      | shipmentType | Land Haul                  |
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
+      | shipmentType | Land Haul                             |
       | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     And Operator refresh page
     And Operator scan and close shipment with data below:
@@ -709,6 +709,54 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
       | shipmentType | Land Haul                  |
       | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[3]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[5]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[6]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[7]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[8]} |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[9]}      |
+    And Operator refresh page
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[10]}     |
 #    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
 #    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
 #    And Operator close the shipment which has been created
@@ -758,12 +806,6 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     Then Operator verifies shipment to go with trip is shown with total "10"
     When Operator clicks shipment to go with trip
-    Then Operator verifies created shipments data in shipment to go with trip with data below:
-      | shipmentCount  | 10                                 |
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | comments       | Shipment added to trip             |
     Then Operator verifies it able to scroll into row with shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
     When Operator clicks shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
     Then Operator verifies it will direct to shipment details page for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
@@ -1188,7 +1230,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     And Operator enter shipment with id "{KEY_CREATED_SHIPMENT_ID}" in remove shipment
-    And Capture the toast with message is shown on Shipment Inbound Scanning page
+#    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
@@ -1293,7 +1335,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verify small message "Shipment added to trip. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
     And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator enter shipment with id "{KEY_CREATED_SHIPMENT_ID}" in remove shipment
-    And Capture the toast with message is shown on Shipment Inbound Scanning page
+#    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
@@ -1758,7 +1800,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast bottom containing following messages is shown on Shipment Inbound Scanning page:
@@ -1831,9 +1873,14 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator reloads hubs cache
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 #    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
-    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
-    And Operator close the shipment which has been created
+#    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+#    And Operator close the shipment which has been created
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator refresh page
@@ -1861,7 +1908,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on Shipment Inbound Scanning page
@@ -1993,7 +2040,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verifies shipment to go with trip is shown with total "2"
     When Operator clicks shipment to go with trip
     Then Operator verifies shipment with trip with data below:
-      | shipmentCount  | 1                                                              |
+      | shipmentCount  | 2                                                              |
       | shipmentId     | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                          |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                             |
       | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[3].name}                             |
@@ -2057,7 +2104,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast bottom containing message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} from {KEY_LIST_OF_CREATED_HUBS[2].name} to {KEY_LIST_OF_CREATED_HUBS[1].name} with expected arrival time" is shown on Shipment Inbound Scanning page
@@ -2132,8 +2179,13 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Add To Shipment
 #    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    And Operator close the shipment which has been created
+#    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+#    And Operator close the shipment which has been created
+    And Operator close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     And API Operator depart trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id} |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}              |
@@ -2157,7 +2209,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Van Inbound"
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on Shipment Inbound Scanning page
@@ -2683,8 +2735,13 @@ Feature: Shipment Van Inbound With Trip Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
 #    And API Operator put created parcel to shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name-temp} to hub id = {hub-name-temp-2}
-    And Operator close the shipment which has been created
+    And Operator scan and close shipment with data below:
+      | origHubName  | {hub-name-temp}         |
+      | destHubName  | {hub-name-temp-2}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+#    Then Operator scan the created order to shipment in hub {hub-name-temp} to hub id = {hub-name-temp-2}
+#    And Operator close the shipment which has been created
 #    Given Operator go to menu Inter-Hub -> Add To Shipment
 #    And Operator close shipment with data below:
 #      | origHubName  | {hub-name-temp}           |
@@ -2865,9 +2922,14 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[3].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 #    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    And Operator close the shipment which has been created
+#    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+#    And Operator close the shipment which has been created
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And API Operator depart trip with data below:
@@ -2891,7 +2953,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator opens new tab and switch to new tab in shipment inbound scanning page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
@@ -2971,9 +3033,14 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name}         |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}         |
+      | shipmentType | Land Haul                  |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+#    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
 #    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    And Operator close the shipment which has been created
+#    And Operator close the shipment which has been created
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
@@ -2990,7 +3057,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     When Operator opens new tab and switch to new tab in shipment inbound scanning page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:

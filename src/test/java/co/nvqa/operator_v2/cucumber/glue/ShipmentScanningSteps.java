@@ -150,9 +150,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
     String destHubName = mapOfData.get("destHubName");
     String shipmentType = mapOfData.get("shipmentType");
     String shipment = mapOfData.get("shipmentId");
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     for(int i=1; i<=Integer.parseInt(shipmentsCount); i++){
       String shipmentId = resolveValue(f(shipment,shipmentsCount));
-      shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
+      shipmentScanningPage.scanAndCloseShipmentWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
+      shipmentScanningPage.refreshPage();
     }
   }
 
