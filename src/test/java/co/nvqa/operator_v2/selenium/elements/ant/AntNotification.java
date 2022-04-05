@@ -31,4 +31,7 @@ public class AntNotification extends PageElement {
   @FindBy(css = ".ant-notification-notice-description")
   public PageElement description;
 
+  @FindBy(css = "a.ant-notification-notice-close")
+  public PageElement close;
+
 }

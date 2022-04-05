@@ -5,9 +5,8 @@ Feature: Stations
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb  
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Create New Station Hub (uid:5f261101-65b8-4790-8928-d55cba446f01)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Hubs -> Facilities Management
     And Operator create new Hub on page Hubs Administration using data below:
       | name         | GENERATED |
@@ -18,13 +17,22 @@ Feature: Stations
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    Then Operator verifies that success react notification displayed:
+      | top | Hub Created Successfully |
     And Operator refresh hubs cache on Facilities Management page
-    And Operator refresh page
-    Then Operator verify a new Hub is created successfully on Facilities Management page
+    Then Operator verify hub parameters on Facilities Management page:
+      | name         | {KEY_CREATED_HUB.name}         |
+      | facilityType | {KEY_CREATED_HUB.facilityType} |
+      | region       | {KEY_CREATED_HUB.region}       |
+      | displayName  | {KEY_CREATED_HUB.displayName}  |
+      | city         | {KEY_CREATED_HUB.city}         |
+      | country      | {KEY_CREATED_HUB.country}      |
+      | latitude     | {KEY_CREATED_HUB.latitude}     |
+      | longitude    | {KEY_CREATED_HUB.longitude}    |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: Update Hub Type to Station (uid:bae5cf22-4c6a-4984-b9ea-0666ded1818e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -34,13 +42,23 @@ Feature: Stations
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And Operator refresh page
     When Operator go to menu Hubs -> Facilities Management
+    And Operator refresh hubs cache on Facilities Management page
     And Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name} |
       | facilityType      | Station                |
+    Then Operator verifies that success react notification displayed:
+      | top | Hub Updated Successfully |
     And Operator refresh hubs cache on Facilities Management page
-    Then Operator verify Hub is updated successfully on Facilities Management page
+    Then Operator verify hub parameters on Facilities Management page:
+      | name         | {KEY_CREATED_HUB.name}        |
+      | facilityType | Station                       |
+      | region       | {KEY_CREATED_HUB.region}      |
+      | displayName  | {KEY_CREATED_HUB.displayName} |
+      | city         | {KEY_CREATED_HUB.city}        |
+      | country      | {KEY_CREATED_HUB.country}     |
+      | latitude     | {KEY_CREATED_HUB.latitude}    |
+      | longitude    | {KEY_CREATED_HUB.longitude}   |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb  
   Scenario: View Station Schedule - Show All Station Schedule under Selected Crossdock Hub (uid:17d9e2b0-2270-4b04-a7d5-db15cd188eb7)

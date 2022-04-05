@@ -1045,7 +1045,7 @@ public class RouteLogsSteps extends AbstractSteps {
             .findFirst()
             .orElse(null);
       } while (toastInfo == null && new Date().getTime() - start < 20000);
-      Assertions.assertThat(toastInfo != null).as("Toast " + finalData.toString() + " is displayed")
+      Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed")
           .isTrue();
       if (toastInfo != null && waitUntilInvisible) {
         toastInfo.waitUntilInvisible();
