@@ -162,7 +162,7 @@ Feature: Station User Management
       | HubName      |
       | {hub-name-6} |
 
-  Scenario Outline: Scenario Outline: Search Station by Number of User
+  Scenario Outline: Search Station by Number of User
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
     When Operator verifies "Overview of Stations" title is displayed

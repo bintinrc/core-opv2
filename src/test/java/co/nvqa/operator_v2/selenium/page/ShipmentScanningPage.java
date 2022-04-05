@@ -45,8 +45,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
   //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
   public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[.='Select Shipment'] | //button[.='Add Parcels to Shipment']";
-  public static final String XPATH_BARCODE_SCAN = "//div[h5[text()='Scan Shipment to Inbound']]//input";
-  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//div[h5[text()='Remove Shipment']]//input";
+  public static final String XPATH_BARCODE_SCAN = "//div[h5[text()='Scan Shipment to Inbound']]//input | //input[@id='toAddTrackingId']";
+  public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//div[h5[text()='Remove Shipment']]//input | //input[@id='toRemoveTrackingId']";
   //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
   public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
   public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
@@ -59,7 +59,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[h5[text()='Scan Shipment to Inbound']]//div[@class='message']";
   public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
   public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
-  public static String antNotificationMessage = "";
+  private static String antNotificationMessage = "";
 
   @FindBy(xpath = "//div[span[.='Driver']]/following-sibling::span")
   public TextBox driverText;
@@ -93,6 +93,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = ".//button[.='OK']")
   public Button ok;
+
+  @FindBy(xpath = ".//button[.='Yes, continue']")
+  public Button yesContinue;
+
+  @FindBy(xpath = ".//button[.='No, go back']")
+  public Button noGoBack;
 
   @FindBy(css = "md-dialog")
   public LeavePageDialog leavePageDialog;
@@ -256,8 +262,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void closeShipment() {
     pause300ms();
-    click("//div[@class='ant-card-head-wrapper']//button//span[.='Close Shipment']");
-    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
+    click("//button//span[.='Close Shipment']");
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
     TestUtils.callJavaScriptExecutor("arguments[0].click();",
             getWebDriver().findElement(By.xpath("//div[@class='ant-modal-content']//button[.='Close Shipment']")),
             getWebDriver());
@@ -278,7 +284,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     waitUntilElementIsClickable("//input[@id='shipment_id']");
     selectShipmentId(Long.parseLong(shipmentId));
     clickSelectShipment();
-    waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+    waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
     closeShipment();
   }
 
@@ -427,6 +433,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickEndShipmentInbound() {
+    pause3s();
     endInboundButton.click();
     waitUntilVisibilityOfElementLocated("//div[ contains(@role,'dialog') and not(contains(@style, 'none'))]//div[contains(@class, 'ant-modal-content')]");
   }
@@ -458,11 +465,26 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     antNotificationMessage = getAntNotificationMessage();
   }
 
+  public void clickGoBackInCancelledTripDepartureDialog(String shipmentId) {
+    waitUntilVisibilityOfElementLocated(errorShipment);
+    /*String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
+    assertThat("Dialog title is the same", dialogTitleText, equalTo("Proceed to inbound Cancelled Shipment?"));
+
+    String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
+    assertThat("Dialog message text is the same", dialogMessageText,
+            equalTo("Shipment "+shipmentId+" is in 'Cancelled' status. Are you sure want to proceed to inbound?"));*/
+
+    noGoBack.waitUntilClickable();
+    noGoBack.click();
+    antNotificationMessage = getAntNotificationMessage();
+  }
+
   public String getAntNotificationMessage(){
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
     waitUntilInvisibilityOfNotification(notificationXpath, false);
+    antNotificationMessage = notificationElement.getText();
     return notificationElement.getText();
   }
 

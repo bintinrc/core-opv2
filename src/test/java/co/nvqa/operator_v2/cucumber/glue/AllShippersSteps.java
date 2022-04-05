@@ -1452,6 +1452,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Given("Operator changes the country to {string}")
   public void operatorChangesTheCountryTo(String country) {
+    getWebDriver().switchTo().defaultContent();
     profilePage.clickProfileButton();
     profilePage.changeCountry(country);
     profilePage.closeProfile();

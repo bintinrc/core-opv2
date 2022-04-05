@@ -195,17 +195,31 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }, getCurrentMethodName(), 1000, 5);
   }
 
+  @When("Operator fill Shipment Inbound Scanning page with data:")
+  public void fillInboundScanningIntoPartialValuesDataBelow(Map<String, String> data) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        String inboundHub = finalData.get("inboundHub");
+        String inboundType = finalData.get("inboundType");
+        String driver = finalData.get("driver");
+        String movementTripSchedule = finalData.get("movementTripSchedule");
+        scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver,
+                movementTripSchedule);
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, getCurrentMethodName(), 1000, 5);
+  }
+
   @Then("Operator verify start inbound button is {string}")
   public void verifyStartInboundButtonIs(String status) {
-    if ("enabled".equals(status)) {
-      assertThat("Inbound button enabled", scanningPage.startInboundButton.isEnabled(),
-          equalTo(true));
-      return;
-    }
-    if ("disabled".equals(status)) {
-      assertThat("Inbound button disabled", scanningPage.startInboundButton.isEnabled(),
-          equalTo(false));
-    }
+    pause2s();
+    scanningPage.verifyStartInboundButtonIsEnabledOrDisabled(status);
   }
 
   @Then("Operator verify small message {string} {string} in Start Inbound Box")
@@ -223,9 +237,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @Then("Operator verify driver and movement trip is cleared")
   public void verifyDriverAndMovementTripIsCleared() {
-    assertThat("Driver place holder is equal", scanningPage.driver.getText(), equalTo("Driver"));
-    assertThat("Movement trip place holder is equal", scanningPage.movementTrip.getText(),
-        equalTo("Movement Trip"));
+    scanningPage.validateDriverAndMovementTripIsCleared();
   }
 
   @When("Operator click proceed in trip completion dialog")

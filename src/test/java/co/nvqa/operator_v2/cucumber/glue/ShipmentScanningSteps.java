@@ -40,6 +40,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
+        pause10s();
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
@@ -209,13 +210,24 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorScanTheCreatedShipment(String shipmentIdAsString) {
     String shipmentId = resolveValue(shipmentIdAsString);
     shipmentScanningPage.scanBarcode(shipmentId);
-    shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
+    //shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
   }
 
   @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
   public void operatorVerifiesToastWithMessageIsShown(String toastMessage) {
     String resolvedToastMessage = resolveValue(toastMessage);
     shipmentScanningPage.verifyToastWithMessageIsShown(resolvedToastMessage);
+  }
+
+  @Then("Capture the toast with message is shown on Shipment Inbound Scanning page")
+  public void operatorCaptureToastWithMessageIsShown() {
+    shipmentScanningPage.getAntNotificationMessage();
+  }
+
+  @Then("Click on No, goback on dialog box for shipment {string}")
+  public void operatorClickProceedOnCancelledDialog(String shipmentId) {
+    shipmentId = resolveValue(shipmentId);
+    shipmentScanningPage.clickGoBackInCancelledTripDepartureDialog(shipmentId);
   }
 
   @Then("Operator verifies toast bottom with message {string} is shown on Shipment Inbound Scanning page")
@@ -463,7 +475,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.forceCompleteButton.waitUntilClickable();
     shipmentScanningPage.forceCompleteButton.click();
     pause2s();
-    shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
+    shipmentScanningPage.getAntNotificationMessage();
   }
 
   @When("Operator opens new tab and switch to new tab in shipment inbound scanning page")

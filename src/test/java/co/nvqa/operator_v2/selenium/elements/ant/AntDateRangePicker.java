@@ -55,4 +55,18 @@ public class AntDateRangePicker extends PageElement {
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, to)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
   }
+
+  public void clearAndSetFromDate(String from) {
+    fromInput.click();
+    fromInput.forceClear();
+    fromInput.sendKeys(from);
+    fromInput.sendKeys(Keys.ENTER);
+  }
+
+  public void clearAndSetToDate(String to) {
+    toInput.click();
+    toInput.forceClear();
+    toInput.sendKeys(to);
+    toInput.sendKeys(Keys.ENTER);
+  }
 }
