@@ -382,6 +382,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         }else{
           actualToastMessage = antNotificationMessage;
         }
+        antNotificationMessage = "";
         assertThat("Shipment inbound toast message is the same", actualToastMessage,
             equalTo(expectedToastMessage));
       } catch (Throwable ex) {
