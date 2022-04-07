@@ -17,6 +17,7 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,6 +44,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void init() {
     shipmentWeightDimensionPage = new ShipmentWeightDimensionPage(getWebDriver());
     shipmentWeightDimensionTablePage = new ShipmentWeightDimensionTablePage(getWebDriver());
+    shipmentWeightDimensionAddPage = new ShipmentWeightDimensionAddPage(getWebDriver());
   }
 
   @Then("Operator verify Shipment Weight Dimension page UI")
@@ -54,7 +56,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
   @When("Operator click on Shipment Weight Dimension New Record button")
   public void operatorClickOnShipmentWeightDimensionNewRecordButton() {
-    shipmentWeightDimensionAddPage = shipmentWeightDimensionPage.openNewRecord();
+    shipmentWeightDimensionPage.openNewRecord();
   }
 
   @Then("Operator verify Shipment Weight Dimension Add UI")
@@ -117,7 +119,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
   @When("Operator enter dimension values on Shipment Weight Dimension Weight input")
   public void operatorEnterDimensionValuesOnShipmentWeightDimensionWeightInput(
-      Map<String, Double> dataTable) {
+      Map<String, String> dataTable) {
     shipmentWeightDimensionAddPage.enterDimensionInfo(
         dataTable.get("weight"),
         dataTable.get("length"),
@@ -386,4 +388,20 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     Assertions.assertThat(shipmentWeightDimensionTablePage.sumUpButton.getText())
         .as("sum up button counter is increased").isEqualTo("Sum up & Update MAWB (%s)", counter);
   }
+
+  @And("Operator click edit button on Shipment Weight Dimension table")
+  public void operatorClickEditButtonOnShipmentWeightDimensionTable() {
+    String mainWindowHandle = shipmentWeightDimensionPage.getWebDriver().getWindowHandle();
+    put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+    shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.get(0).editButton.click();
+    Set<String> windowHandles = shipmentWeightDimensionPage.getWebDriver().getWindowHandles();
+
+    for (String windowHandle : windowHandles) {
+      if (!windowHandle.equalsIgnoreCase(mainWindowHandle)) {
+        shipmentWeightDimensionPage.getWebDriver().switchTo().window(windowHandle);
+      }
+    }
+    shipmentWeightDimensionAddPage.switchTo();
+  }
 }
+
