@@ -135,11 +135,36 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
         .isTrue();
   }
   
-  public void enterDimensionInfo(Double weight, Double length, Double width, Double height) {
-    Optional.ofNullable(weight).ifPresent((val) -> weightInput.setValue(val.toString()));
-    Optional.ofNullable(length).ifPresent((val) -> lengthInput.setValue(val.toString()));
-    Optional.ofNullable(width).ifPresent((val) -> widthInput.setValue(val.toString()));
-    Optional.ofNullable(height).ifPresent((val) -> heightInput.setValue(val.toString()));
+  public void enterDimensionInfo(String weight, String length, String width, String height) {
+    Optional.ofNullable(weight).ifPresent((val) -> {
+      if (val.equalsIgnoreCase("null")) {
+        weightInput.forceClear();
+      } else {
+        weightInput.setValue(val);
+      }
+    });
+    Optional.ofNullable(length).ifPresent((val) -> {
+      if (val.equalsIgnoreCase("null")) {
+        lengthInput.forceClear();
+      } else {
+        lengthInput.setValue(val);
+      }
+    });
+    Optional.ofNullable(width).ifPresent((val) -> {
+      if (val.equalsIgnoreCase("null")) {
+        widthInput.forceClear();
+      } else {
+        widthInput.setValue(val);
+      }
+    });
+
+    Optional.ofNullable(height).ifPresent((val) -> {
+      if (val.equalsIgnoreCase("null")) {
+        heightInput.forceClear();
+      } else {
+        heightInput.setValue(val);
+      }
+    });
   }
 
   public void submitWeightData() {
