@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip
 Feature: Shipment Van Inbound With Trip Scanning
 
-  @1 @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -1341,7 +1341,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
     Then Operator verify small message "" appears in Shipment Inbound Box
 
-  @1 @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Scan Correct MAWB to Van Inbound (uid:494da16d-189b-4180-8e97-8f70b110358a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
