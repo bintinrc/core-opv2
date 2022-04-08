@@ -211,6 +211,8 @@ public class ShipmentWeightDimensionTablePage extends
     public PageElement originHubName;
     @FindBy(xpath = "//td[contains(@class,'ant-table-cell shipmentType')]")
     public PageElement shipmentType;
+    @FindBy(css = ".actions .edit-dimension-btn")
+    public Button editButton;
 
     public ShipmentWeightRow(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

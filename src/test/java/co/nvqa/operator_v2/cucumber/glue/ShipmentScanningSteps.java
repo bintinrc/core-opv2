@@ -132,6 +132,32 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
+  @And("Operator scan and close shipment with data below:")
+  public void operatorScanAndCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String origHubName = mapOfData.get("origHubName");
+    String destHubName = mapOfData.get("destHubName");
+    String shipmentType = mapOfData.get("shipmentType");
+    String shipmentId = mapOfData.get("shipmentId");
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    shipmentScanningPage.scanAndCloseShipmentWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
+  }
+
+  @And("Operator close multiple shipments with data below:")
+  public void operatorCloseMultipleShipmentWithDataBelow(Map<String, String> mapOfData) {
+    String shipmentsCount = mapOfData.get("shipmentCount");
+    String origHubName = mapOfData.get("origHubName");
+    String destHubName = mapOfData.get("destHubName");
+    String shipmentType = mapOfData.get("shipmentType");
+    String shipment = mapOfData.get("shipmentId");
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    for(int i=1; i<=Integer.parseInt(shipmentsCount); i++){
+      String shipmentId = resolveValue(f(shipment,shipmentsCount));
+      shipmentScanningPage.scanAndCloseShipmentWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
+      shipmentScanningPage.refreshPage();
+    }
+  }
+
   @When("^Operator scan multiple created order to shipment in hub ([^\"]*) to hub id = ([^\"]*)$")
   public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub, String destHub) {
     retryIfRuntimeExceptionOccurred(() ->

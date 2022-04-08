@@ -94,10 +94,8 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
 
 
 
-  public ShipmentWeightDimensionAddPage openNewRecord() {
+  public void openNewRecord() {
     newRecordBtn.click();
-    ShipmentWeightDimensionAddPage addPage = new ShipmentWeightDimensionAddPage(this.webDriver);
-    return addPage;
   }
 
   public enum ShipmentWeightState {
