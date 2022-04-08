@@ -10,8 +10,14 @@ public class FinanceCodPage extends SimpleReactPage<FinanceCodPage> {
 
   private static final String FILTER_GENERATE_FILE_PATTERN = "//span[text()='%s']";
   private static final String XAPTH_ERROR = "//p[text()='%s']";
+  @FindBy(xpath = "//input[@value='ORDER_COMPLETED']")
+  public PageElement orderCompletedBtn;
+  @FindBy(xpath = "//input[@value='ROUTE']")
+  public PageElement routeBtn;
   @FindBy(xpath = "//input[@placeholder='Start date']")
   public PageElement startDate;
+  @FindBy(xpath = "//input[@placeholder='End date']")
+  public PageElement endDate;
   @FindBy(css = "div.ant-picker-range")
   public AntDateRangePicker betweenDates;
   @FindBy(xpath = "//span[text()='Enter Email Addresses']//preceding-sibling::div/div/div/input")
