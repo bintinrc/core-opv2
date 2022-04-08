@@ -67,4 +67,19 @@ public class FinanceCodSteps extends AbstractSteps {
         .as("Error message is visible").isTrue();
   }
 
+  @Then("Operator verifies Generate COD based on option is not clickable")
+  public void operatorVerifiesGenerateCODBasedOnOptionIsNotClickable() {
+    Assertions.assertThat(financeCodPage.orderCompletedBtn.isEnabled())
+        .as("Order Completed date is disabled").isFalse();
+    Assertions.assertThat(financeCodPage.routeBtn.isEnabled()).as("Route date is disabled")
+        .isFalse();
+  }
+
+  @Then("Operator verifies Between Dates option is not clickable")
+  public void operatorVerifiesBetweenDatesOptionIsNotClickable() {
+    Assertions.assertThat(financeCodPage.startDate.isEnabled()).as("Start Date is disabled")
+        .isFalse();
+    Assertions.assertThat(financeCodPage.endDate.isEnabled()).as("End Date is disabled")
+        .isFalse();
+  }
 }
