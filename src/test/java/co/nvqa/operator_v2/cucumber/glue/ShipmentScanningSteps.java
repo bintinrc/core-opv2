@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -132,6 +133,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
+  @And("Set constant order for Indonesia:")
+  public void setConstantOrder(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String constantOrder = mapOfData.get("constantOrder");
+    put(KEY_CREATED_ORDER_TRACKING_ID, constantOrder);
+  }
+
   @And("Operator scan and close shipment with data below:")
   public void operatorScanAndCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -170,6 +178,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
         String resolvedDestHub = resolveValue(destHub);
+        pause10s();
         shipmentScanningPage.switchTo();
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectDestinationHub(resolvedDestHub);

@@ -292,6 +292,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
                                     String shipmentType, String shipmentId, String trackingId) {
     pause10s();
     switchTo();
+    waitUntilVisibilityOfElementLocated("//div[span[input[@id='orig_hub']]]//span[.='Search or Select']");
     selectHub(originHubName);
     selectDestinationHub(destinationHubName);
     selectShipmentType(shipmentType);

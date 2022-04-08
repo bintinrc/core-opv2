@@ -1001,10 +1001,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='select-type']")
     public MdSelect type;
 
-    @FindBy(css = "[id^='start-hub']")
+    @FindBy(css = "[id^='origHub']")
     public MdSelect startHub;
 
-    @FindBy(css = "[id^='end-hub']")
+    @FindBy(css = "[id^='destHub']")
     public MdSelect endHub;
 
     @FindBy(id = "container.shipment-management.comments-optional")
