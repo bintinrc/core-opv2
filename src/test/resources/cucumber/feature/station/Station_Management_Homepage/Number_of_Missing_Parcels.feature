@@ -5,6 +5,7 @@ Feature: Number of Missing Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @Happypath
   Scenario Outline: View Pending Missing Ticket Type (uid:1b0879dc-9af9-428b-9d30-c27f3d772f81)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -263,6 +264,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TicketType | TileName        | ModalName       | TableName       |
       | {hub-name-6} | {hub-id-6} | MISSING    | Missing parcels | Missing Parcels | Missing Parcels |
 
+  @Happypath
   Scenario Outline: Resolved Ticket of Missing Type Disappear (uid:9366a5d9-5245-4651-a799-146fbcdac30b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
