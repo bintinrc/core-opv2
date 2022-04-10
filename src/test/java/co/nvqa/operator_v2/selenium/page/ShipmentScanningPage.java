@@ -305,6 +305,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     closeShipment();
   }
 
+  public void scanAndCloseShipmentsWithData(String originHubName, String destinationHubName,
+                                           String shipmentType, String shipmentId, String trackingId) {
+    waitUntilVisibilityOfElementLocated("//div[span[input[@id='shipment_id']]]//span[.='Search or Select']");
+    waitUntilElementIsClickable("//input[@id='shipment_id']");
+    selectShipmentId(Long.parseLong(shipmentId));
+    clickSelectShipment();
+    scanBarcode(trackingId);
+    checkOrderInShipment(trackingId);
+    waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
+    closeShipment();
+  }
+
   public void removeOrderFromShipment(String firstTrackingId) {
     pause1s();
     sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
