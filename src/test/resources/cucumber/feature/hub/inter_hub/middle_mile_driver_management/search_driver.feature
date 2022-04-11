@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver
 Feature: Middle Mile Driver Management - Search Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -124,7 +124,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
 
-  @DeleteDriver @RT
+  @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Active and License Status Inactive(uid:8fe481c5-13db-4dc6-be5b-9a7c67cc6c93)
     Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
