@@ -58,6 +58,7 @@ public class VanInboundSteps extends AbstractSteps {
   @Then("Operator verify the van inbound process is succeed")
   public void verifyVanInboundSucceed() {
     vanInboundPage.verifyVanInboundSucceed();
+    takesScreenshot();
   }
 
   @Then("Operator verifies {string} scanned parcels displayed on Van Inbound Page")
@@ -186,7 +187,79 @@ public class VanInboundSteps extends AbstractSteps {
     vanInboundPage.backToRouteInputScreen.click();
     Assert.assertTrue("Assert that the van inbound main page is displayed "
             + "on clicking back to route input screen",
-      vanInboundPage.vanInboundHomePage.size() > 0);
+        vanInboundPage.vanInboundHomePage.size() > 0);
   }
 
+  @And("Operator verifies unable to Van Inbound message is displayed")
+  public void operatorVerifiesUnableToVanInboundMessageIsDisplayed() {
+    vanInboundPage.validateUnableToVanInboundModalIsDisplayed();
+    takesScreenshot();
+  }
+
+  @And("Operator closes the modal")
+  public void operatorClosesTheModal() {
+    vanInboundPage.clickCloseIcon();
+  }
+
+  @And("Operator click Parcels Yet to scan area on Van Inbound Page")
+  public void operatorClickParcelsYetToScanAreaOnVanInboundPage() {
+    vanInboundPage.parcelsYetToScan.click();
+  }
+
+  @And("Operator closes the dialog")
+  public void operatorClosesTheDialog() {
+    vanInboundPage.clickCloseButton();
+  }
+
+  @Then("Operator verifies the following details in the modal")
+  public void operatorVerifiesTheFollowingDetailsInTheModal(Map<String, String> values) {
+    Map<String, String> expectedValues = resolveKeyValues(values);
+
+    String expectedmodalName = expectedValues.get("ModalName");
+    String actualDialogHeader = vanInboundPage.unScannedParcelsDialog.dialogHeader.getText().trim();
+    Assertions.assertThat(actualDialogHeader)
+        .as(f("Assert that the dialog header displayed is %s", expectedmodalName))
+        .isEqualTo(expectedmodalName.trim());
+    String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String actualTrackingId = vanInboundPage.unScannedParcelsDialog.trackingId.getText().trim();
+    Assertions.assertThat(actualTrackingId)
+        .as(f("Assert that the tracking id: %s is shown in the modal", expectedTrackingId))
+        .isEqualTo(expectedTrackingId);
+    String expectedWarningMessage = expectedValues.get("WarningMessage");
+    if (StringUtils.isNotBlank(expectedValues.get("WarningMessage"))) {
+      String actualWarningMessage = vanInboundPage.unScannedParcelsDialog.granularWarningText.getText()
+          .trim();
+      Assertions.assertThat(actualWarningMessage)
+          .as(f("Assert that the warning message: %s is shown in the Granular status",
+              expectedWarningMessage))
+          .isEqualTo(expectedWarningMessage);
+      takesScreenshot();
+    }
+  }
+
+  @Then("Operator verifies Parcel is not available in the modal")
+  public void operatorVerifiesParcelIsNotAvailableInTheModal() {
+    Assert.assertFalse(f("Assert that the tracking id: %s is shown in the modal",
+            get(KEY_CREATED_SHIPMENT_ID).toString()),
+        vanInboundPage.unScannedParcelsDialog.trackingId.isDisplayed());
+    takesScreenshot();
+  }
+
+  @And("Operator clicks the Hub Inbound Shipment button")
+  public void operatorClicksTheHubInboundShipmentButton() {
+    vanInboundPage.clickHubInboundShipmentButton();
+  }
+
+
+  @And("Operator clicks on the view button")
+  public void operatorClicksOnTheViewButton() {
+    vanInboundPage.clickViewButton();
+  }
+
+  @Then("Operator verifies edit order page is displayed on clicking the view button")
+  public void operatorVerifiesEditOrderPageIsDisplayedOnClickingTheViewButton() {
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    vanInboundPage.verifyNavigationToEditOrderScreen(trackingId);
+    takesScreenshot();
+  }
 }

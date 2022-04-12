@@ -5,8 +5,8 @@ Feature: Van Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRoute
-  Scenario Outline: Proceed without Hub Inbounding Parcels in Pending Shipment (uid:11f153b1-8e54-4ddf-9823-f67987815814)
+  @Happypath @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable to Van Inbound Parcels in Pending Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -25,28 +25,22 @@ Feature: Van Inbound
       | addParcelToRouteRequest | { "type":"DD" } |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
-    Then Operator confirms that the modal: "<ModalName1>" is displayed and has 1 parcels
-    And Operator verifies that tracking id is displayed and proceeds without hub inbounding
     And Operator fill the tracking ID on Van Inbound Page then click enter
-    And Operator confirms that the modal: "<ModalName2>" is displayed and has tracking id displayed
-    And Operator verifies the route is started on clicking route start button
-    And Operator verifies that van inbound page is displayed after clicking back to route input screen
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator verifies Latest Event is "DRIVER START ROUTE" on Edit Order page
-    And Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator verify route details on Route Logs page using data below:
-      | id     | {KEY_CREATED_ROUTE_ID} |
-      | status | IN_PROGRESS            |
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please hub inbound shipment!    |
+
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
-      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ArchiveRoute
-  Scenario Outline: Proceed without Hub Inbounding Parcels in Transit Shipment (uid:7712631d-b091-4aa7-ab7e-99ba57be85ac)
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable Van Inbound Parcels in Transit Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -69,29 +63,22 @@ Feature: Van Inbound
       | addParcelToRouteRequest | { "type":"DD" } |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
-    Then Operator confirms that the modal: "<ModalName1>" is displayed and has 1 parcels
-    And Operator verifies that tracking id is displayed and proceeds without hub inbounding
     And Operator fill the tracking ID on Van Inbound Page then click enter
-    And Operator confirms that the modal: "<ModalName2>" is displayed and has tracking id displayed
-    And Operator verifies the route is started on clicking route start button
-    And Operator verifies that van inbound page is displayed after clicking back to route input screen
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name | DRIVER INBOUND SCAN |
-    And Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator verify route details on Route Logs page using data below:
-      | id     | {KEY_CREATED_ROUTE_ID} |
-      | status | IN_PROGRESS            |
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please hub inbound shipment!    |
+
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
-      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ArchiveRoute
-  Scenario Outline: Proceed without Hub Inbounding Parcels at Transit Hub Shipment (uid:2cbbb2e5-0f48-4d82-8256-835ad3896824)
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable Van Inbound Parcels at Transit Hub Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -114,29 +101,21 @@ Feature: Van Inbound
       | addParcelToRouteRequest | { "type":"DD" } |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
-    Then Operator confirms that the modal: "<ModalName1>" is displayed and has 1 parcels
-    And Operator verifies that tracking id is displayed and proceeds without hub inbounding
     And Operator fill the tracking ID on Van Inbound Page then click enter
-    And Operator confirms that the modal: "<ModalName2>" is displayed and has tracking id displayed
-    And Operator verifies the route is started on clicking route start button
-    And Operator verifies that van inbound page is displayed after clicking back to route input screen
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name | DRIVER INBOUND SCAN |
-    And Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator verify route details on Route Logs page using data below:
-      | id     | {KEY_CREATED_ROUTE_ID} |
-      | status | IN_PROGRESS            |
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please hub inbound shipment!    |
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | TransHubId | Country | ModalName1                                        | ModalName2                   | Comments  |
-      | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-id-0} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
+      | OrigHubId  | OrigHubName  | DestHubId  | TransHubId | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-id-0} | sg      | Unscanned Parcels | GENERATED |
 
-  @ArchiveRoute
-  Scenario Outline: Proceed without Hub Inbounding Parcels in Closed Shipment (uid:c693992e-ba1e-4533-b89e-95e4bc9ca174)
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable to Van Inbound Parcels in Closed Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -156,28 +135,21 @@ Feature: Van Inbound
       | addParcelToRouteRequest | { "type":"DD" } |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
-    Then Operator confirms that the modal: "<ModalName1>" is displayed and has 1 parcels
-    And Operator verifies that tracking id is displayed and proceeds without hub inbounding
     And Operator fill the tracking ID on Van Inbound Page then click enter
-    And Operator confirms that the modal: "<ModalName2>" is displayed and has tracking id displayed
-    And Operator verifies the route is started on clicking route start button
-    And Operator verifies that van inbound page is displayed after clicking back to route input screen
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name | DRIVER INBOUND SCAN |
-    And Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator verify route details on Route Logs page using data below:
-      | id     | {KEY_CREATED_ROUTE_ID} |
-      | status | IN_PROGRESS            |
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please hub inbound shipment!    |
+
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
-      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ArchiveRoute
+  @Happypath @ForceSuccessOrder @ArchiveRoute
   Scenario Outline: Complete Shipment Before Scan Parcel to Van Inbound (uid:a244ba55-96d4-417d-af81-42549ea00786)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -201,9 +173,9 @@ Feature: Van Inbound
       | addParcelToRouteRequest | { "type":"DD" } |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
-    Then Operator confirms that the modal: "<ModalName1>" is displayed and has 1 parcels
-    And Operator verifies that tracking id is displayed and proceeds with hub inbounding
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator clicks the Hub Inbound Shipment button
     And Operator inbound scanning Shipment Into Hub in hub <DestHubName> on Shipment Inbound Scanning page
     And Operator check alert message on Shipment Inbound Scanning page using data below:
       | alert | Last scanned:{KEY_CREATED_SHIPMENT_ID} |
@@ -213,26 +185,23 @@ Feature: Van Inbound
       | scannedShipmentId | Shipment ID(s)\n{KEY_CREATED_SHIPMENT_ID} |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName   | <ModalName>                     |
+      | Tracking ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator closes the dialog
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator verifies the route is started on clicking route start button
-    And Operator verifies that van inbound page is displayed after clicking back to route input screen
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name | DRIVER INBOUND SCAN |
-    And Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator verify route details on Route Logs page using data below:
-      | id     | {KEY_CREATED_ROUTE_ID} |
-      | status | IN_PROGRESS            |
+    And Operator closes the dialog
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies Parcel is not available in the modal
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | DestHubName  | Country | ModalName1                                        | Comments  |
-      | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-name-9} | sg      | List of parcels that have yet to shipment inbound | GENERATED |
+      | OrigHubId  | OrigHubName  | DestHubId  | DestHubName  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-name-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ArchiveRoute
-  Scenario Outline: Proceed without Hub Inbounding Parcels in Incomplete Latest Shipment (uid:d4b0564e-b745-4121-a348-0992ed169598)
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable to Van Inbound Parcels in Incomplete Latest Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -265,26 +234,18 @@ Feature: Van Inbound
       | hubId      | <OrigHubId>               |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
-    Then Operator confirms that the modal: "<ModalName1>" is displayed and has 1 parcels
-    And Operator verifies that tracking id is displayed and proceeds without hub inbounding
     And Operator fill the tracking ID on Van Inbound Page then click enter
-    And Operator confirms that the modal: "<ModalName2>" is displayed and has tracking id displayed
-    And Operator verifies the route is started on clicking route start button
-    And Operator verifies that van inbound page is displayed after clicking back to route input screen
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order event on Edit order page using data below:
-      | name | DRIVER INBOUND SCAN |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
-    And Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator verify route details on Route Logs page using data below:
-      | id     | {KEY_CREATED_ROUTE_ID} |
-      | status | IN_PROGRESS            |
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please hub inbound shipment!    |
 
     Examples:
-      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName1                                        | ModalName2                   | Comments  |
-      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | List of parcels that have yet to shipment inbound | Parcel Not Yet Hub Inbounded | GENERATED |
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
   @ArchiveRoute
   Scenario Outline: Van Inbound Parcels in Completed Shipment (uid:6fba8e5f-55b7-4402-925d-ca00660a8746)
@@ -401,6 +362,39 @@ Feature: Van Inbound
     Examples:
       | OrigHubId  | OrigHubName  |
       | {hub-id-8} | {hub-name-8} |
+
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: View Parcel Yet to Scan Details
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"<OrigHubId>" } |
+    And API Operator creates shipment using data below:
+      | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
+    And API Operator adds parcels to shipment using following data:
+      | country    | <Country>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | actionType | ADD                             |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please hub inbound shipment!    |
+    Then Operator verifies edit order page is displayed on clicking the view button
+
+
+
+    Examples:
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
