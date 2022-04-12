@@ -376,8 +376,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void validateShipmentId(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-    String expectedShipmentId = getText("//td[@nv-table-highlight='filter.id']");
-    assertEquals("Shipment ID is not the same : ", expectedShipmentId, String.valueOf(shipmentId));
+    waitUntilVisibilityOfElementLocated("//td[@nv-table-highlight='filter.id']");
+    String actualShipmentId = getText("//td[@nv-table-highlight='filter.id']");
+    assertEquals("Shipment ID is not the same : ", String.valueOf(shipmentId), actualShipmentId);
   }
 
   public void verifyOpenedShipmentDetailsPageIsTrue(Long shipmentId, String trackingId) {
