@@ -37,7 +37,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        Long shipmentId = new Long(get(KEY_CREATED_SHIPMENT_ID).toString());
+        Long shipmentId = Long.valueOf(String.valueOf(get(KEY_CREATED_SHIPMENT_ID)));
         final String finalHub = resolveValue(hub);
         scanningPage.inboundScanning(shipmentId, label, finalHub);
       } catch (Throwable ex) {
