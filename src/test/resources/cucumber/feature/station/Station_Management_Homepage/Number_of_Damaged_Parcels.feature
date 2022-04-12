@@ -5,6 +5,7 @@ Feature: Number of Damaged Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @Happypath
   Scenario Outline: View Pending Damage Ticket Type (uid:c233aa39-f51d-410f-a833-944086363dd8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -209,7 +210,7 @@ Feature: Number of Damaged Parcels
       | HubName      | HubId      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
       | {hub-name-6} | {hub-id-6} | DAMAGED    | PENDING SHIPPER | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
-
+  @Happypath
   Scenario Outline: Resolved Ticket of Damage Type Disappear (uid:ae510579-e438-4a1f-b609-160c93c96a8c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

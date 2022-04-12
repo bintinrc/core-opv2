@@ -41,6 +41,7 @@ public class FacilitiesManagementSteps extends AbstractSteps {
 
   @When("^Operator create new Hub on page Hubs Administration using data below:$")
   public void operatorCreateNewHubOnPageHubsAdministrationUsingDataBelow(Map<String, String> data) {
+    facilitiesManagementPage.switchTo();
     data = resolveKeyValues(data);
 
     String name = data.get("name");

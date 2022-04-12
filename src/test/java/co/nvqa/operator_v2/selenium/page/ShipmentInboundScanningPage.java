@@ -52,7 +52,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
   public TextBox inboundTypeText;
 
-  @FindBy(xpath = "//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")
+  @FindBy(xpath = "//button[contains(@class,'button')]//div[text()='Start Inbound']")
   public Button startInboundButton;
 
   @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
@@ -132,7 +132,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public String grabXpathButton(String label) {
-    return f("//div[contains(text(),'%s')]",label);
+    return f("//*[@aria-label='%s']", label);
   }
 
   public List<String> grabSessionIdNotChangedScan() {

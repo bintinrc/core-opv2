@@ -99,6 +99,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    |
       | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases |
 
+  @Happypath
   Scenario Outline: View Pending Parcel Exception Ticket Type (uid:bd998ebc-4a85-4604-aca0-58f6ea49d81c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -666,6 +667,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
       | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
 
+  @Happypath
   Scenario Outline: Resolved Ticket of Parcel Exception Type Disappear (uid:fc916a62-b9fe-4fb8-be97-915e29cc5b88)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:

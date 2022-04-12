@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -132,6 +133,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.closeShipmentWithData(origHubName, destHubName, shipmentType, shipmentId);
   }
 
+  @And("Set constant order for Indonesia:")
+  public void setConstantOrder(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String constantOrder = mapOfData.get("constantOrder");
+    put(KEY_CREATED_ORDER_TRACKING_ID, constantOrder);
+  }
+
   @And("Operator scan and close shipment with data below:")
   public void operatorScanAndCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -146,15 +154,19 @@ public class ShipmentScanningSteps extends AbstractSteps {
   @And("Operator close multiple shipments with data below:")
   public void operatorCloseMultipleShipmentWithDataBelow(Map<String, String> mapOfData) {
     String shipmentsCount = mapOfData.get("shipmentCount");
-    String origHubName = mapOfData.get("origHubName");
-    String destHubName = mapOfData.get("destHubName");
+    String origHubName = resolveValue(mapOfData.get("origHubName"));
+    String destHubName = resolveValue(mapOfData.get("destHubName"));
     String shipmentType = mapOfData.get("shipmentType");
     String shipment = mapOfData.get("shipmentId");
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     for(int i=1; i<=Integer.parseInt(shipmentsCount); i++){
-      String shipmentId = resolveValue(f(shipment,shipmentsCount));
-      shipmentScanningPage.scanAndCloseShipmentWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
-      shipmentScanningPage.refreshPage();
+      String shipmentId = resolveValue(f(shipment,i));
+      NvAssertions.LOGGER.info("Shipment Count: " + i + ", Shipment Id: " + shipmentId);
+      if(i>1){
+        shipmentScanningPage.scanAndCloseShipmentsWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
+      }else{
+        shipmentScanningPage.scanAndCloseShipmentWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
+      }
     }
   }
 
@@ -170,6 +182,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
         String resolvedDestHub = resolveValue(destHub);
+        pause10s();
         shipmentScanningPage.switchTo();
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectDestinationHub(resolvedDestHub);

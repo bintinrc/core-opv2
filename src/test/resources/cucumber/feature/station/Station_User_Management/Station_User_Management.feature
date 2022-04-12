@@ -37,6 +37,7 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
+  @Happypath
   Scenario Outline: Delete User (uid:7a2eef21-7c36-4618-8a97-5952fea5fec2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
@@ -71,6 +72,7 @@ Feature: Station User Management
       | HubName1     | HubID      | HubName2     | HubName3     |
       | {hub-name-6} | {hub-id-6} | {hub-name-8} | {hub-name-9} |
 
+  @Happypath
   Scenario Outline: Create User (uid:71a042fc-8cab-40bc-8ff9-1375ae640d67)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management

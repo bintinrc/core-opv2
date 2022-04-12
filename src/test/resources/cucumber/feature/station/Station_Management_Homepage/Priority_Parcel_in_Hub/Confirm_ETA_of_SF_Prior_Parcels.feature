@@ -48,7 +48,7 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubId       | HubName       | TileName                | ModalName                                    | SlackMessageContent | FSRParcelText                              |
       | {hub-id-12} | {hub-name-12} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | FSR parcels' ETA that need to be confirmed |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Unacknowledged SFLD Parcel When ETA has Passed (uid:ceae8b90-16da-48a1-b74f-25cad6dc2e58)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -333,7 +333,7 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubId       | HubName       | TileName                | ModalName                                    | SlackMessageContent | ColumnName     |
       | {hub-id-12} | {hub-name-12} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | ETA Calculated |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: Update Confirmed ETA for Unacknowledged SFLD Parcel (uid:1ed56a8f-fb7d-482d-b4ee-67fb63d8028f)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -378,7 +378,7 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubId       | HubName       | TileName                | ModalName                                    | SlackMessageContent | FSRParcelText                              | ToastMessage                     |
       | {hub-id-12} | {hub-name-12} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | FSR parcels' ETA that need to be confirmed | Successfully confirmed 1 ETA(s)! |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: Bulk Update Confirmed ETA for Multiple Unacknowledged SFLD Parcel (uid:d395ac0f-61f5-464d-b2ce-3de3d0668273)
     Given Operator loads Operator portal home page
     And API Shipper create multiple V4 orders using data below:
@@ -426,7 +426,7 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubId       | HubName       | TileName                | ModalName                                    | SlackMessageContent | NoOfRecords | FSRParcelText                              |
       | {hub-id-12} | {hub-name-12} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 2           | FSR parcels' ETA that need to be confirmed |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: Partial Success Upon Bulk Update Confirmed ETA for Unacknowledged SFLD Parcel (uid:27d29f5d-9948-47f9-8bee-984174e922bc)
     Given Operator loads Operator portal home page
     And API Shipper create multiple V4 orders using data below:
@@ -516,7 +516,7 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubId       | HubName       | TileName                | ModalName                                    | SlackMessageContent |
       | {hub-id-12} | {hub-name-12} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: Fail Bulk Update Confirmed ETA for Less Than 5 Unacknowledged SFLD Parcels (uid:72868a40-a4d0-4712-b206-2d16b5c12aba)
     Given Operator loads Operator portal home page
     And API Shipper create multiple V4 orders using data below:
@@ -616,7 +616,7 @@ Feature: Confirm ETA of SF Prior Parcels
       | HubId       | HubName       | ModalName                                    | SlackMessageContent | NoOfRecords | Status           | FailureModal                                                                                                  | FSRParcelText                              |
       | {hub-id-12} | {hub-name-12} | Please Confirm ETA of FSR Parcels to Proceed | GENERATED           | 5           | MANUAL_CONFIRMED | SFLD ticket acknowledgement failed because ticket is not of UNCONFIRMED status or other parameters are wrong. | FSR parcels' ETA that need to be confirmed |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: Fail Bulk Update Confirmed ETA for More Than 5 Unacknowledged SFLD Parcels (uid:baafe30e-90ac-4a2b-9c31-cc967bfe661a)
     Given Operator loads Operator portal home page
     And API Shipper create multiple V4 orders using data below:
