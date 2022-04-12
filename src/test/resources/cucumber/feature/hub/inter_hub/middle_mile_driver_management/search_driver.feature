@@ -99,6 +99,45 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator searches and verifies the created username is not exist
 
   @DeleteDriver
+  Scenario: Load Driver by Filter - Employment Status Active and License Status Active(uid:8a8df869-aa86-438d-9ad9-7e0ae0497d1b)
+    Given API Driver gets all the driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
+
+  @DeleteDriver
+  Scenario: Load Driver by Filter - Employment Status Inactive and License Status Active(uid:74fe1b41-427f-4d03-b263-bf4024b3df50)
+    Given API Driver gets all the driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-current-date-yyyy-MM-dd}"}} |
+    When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    When Operator selects the "Employment Status" with the value of "Inactive" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
+
+  @DeleteDriver
+  Scenario: Load Driver by Filter - Employment Status Active and License Status Inactive(uid:8fe481c5-13db-4dc6-be5b-9a7c67cc6c93)
+    Given API Driver gets all the driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-current-date-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    When Operator selects the "License Status" with the value of "Inactive" on Middle Mile Driver Page
+    When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
+
+  @DeleteDriver
   Scenario: Load Driver by Filter - Hub, Employment Status Inactive and License Status Inactive (uid:e1d54146-6e85-4b1b-884e-e7f1f9a89070)
     Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
