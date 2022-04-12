@@ -59,7 +59,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     When Operator selects Finance COD Report data as below
       | generateFile | Select By Route       |
       | emailAddress | {order-billing-email} |
-    Then Operator verifies error message "Please select at least one hub."
+    Then Operator verifies error message "Please enter at least 1 route ID."
 
   Scenario: Generate COD Report - Select By Route - Verify Some Filter Can Not Be Selected
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
