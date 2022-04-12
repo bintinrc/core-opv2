@@ -37,7 +37,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        Long shipmentId = (Long)get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = new Long(get(KEY_CREATED_SHIPMENT_ID).toString());
         final String finalHub = resolveValue(hub);
         scanningPage.inboundScanning(shipmentId, label, finalHub);
       } catch (Throwable ex) {
@@ -281,8 +281,10 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         .getText(), equalTo(messages.get("scanState")));
     assertThat(f("Assert that scanned message is %s", messages.get("scanMessage")), scanningPage.scannedMessage
         .getText(), equalTo(messages.get("scanMessage")));
-    assertThat(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")), scanningPage.scannedShipmentId
-        .getText(), containsString(messages.get("scannedShipmentId")));
+    assertThat(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")),
+        scanningPage.scannedShipmentId
+            .getText(), containsString(messages.get("scannedShipmentId")));
+    takesScreenshot();
   }
 
 }
