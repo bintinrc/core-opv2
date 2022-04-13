@@ -23,7 +23,6 @@ Feature: Generate COD Report - Selected Shipper(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
-    And API Operator force succeed created order with cod
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
