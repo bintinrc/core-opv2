@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
 import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -88,17 +87,6 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
 
   @After
   public void afterScenario(Scenario scenario) {
-    final String DOMAIN = "SUMMARY";
     testCaseService.pushExecutionResultViaApi(scenario);
-
-    try {
-      if (scenario.isFailed() && NvLogger.isInMemoryEnabled()) {
-        NvLogger.error(DOMAIN, "scenario: " + scenario.getName() + " error");
-        NvLogger.info(NvLogger.getLogStash());
-      }
-      NvLogger.reset();
-    } catch (Exception ex) {
-      LOGGER.error(ex.getMessage(), ex);
-    }
   }
 }

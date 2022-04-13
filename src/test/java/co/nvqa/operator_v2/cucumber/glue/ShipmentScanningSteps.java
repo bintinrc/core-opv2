@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvAssertions;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
@@ -18,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.openqa.selenium.JavascriptExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lanang Jati
@@ -26,6 +27,8 @@ import org.openqa.selenium.JavascriptExecutor;
  */
 @ScenarioScoped
 public class ShipmentScanningSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentScanningSteps.class);
 
   private ShipmentScanningPage shipmentScanningPage;
   public ShipmentScanningSteps() {
@@ -58,8 +61,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.scanBarcode(trackingId);
         shipmentScanningPage.checkOrderInShipment(trackingId);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -87,8 +90,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']");
         shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -110,8 +113,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -197,8 +200,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
           shipmentScanningPage.scanBarcode(trackingId);
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -388,7 +391,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         String resultStringValue = resolveValue(resultString);
         shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
         shipmentScanningPage.clickCancelInMdDialog();
         pause1s();
         shipmentScanningPage.clickEndShipmentInbound();
@@ -407,7 +410,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage
             .verifyErrorShipmentWithMessage(shipmentId, resultStringValue, errorShipmentType);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
         shipmentScanningPage.clickCancelInMdDialog();
         pause1s();
         shipmentScanningPage.clickEndShipmentInbound();

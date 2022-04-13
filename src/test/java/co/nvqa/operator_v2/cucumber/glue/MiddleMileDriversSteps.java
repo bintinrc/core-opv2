@@ -5,7 +5,6 @@ import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
 import io.cucumber.java.en.Given;
@@ -16,12 +15,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tristania Siagian
  */
 
 public class MiddleMileDriversSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(MiddleMileDriversSteps.class);
 
   private static final ZonedDateTime TODAY = DateUtil.getDate();
   private static final DateTimeFormatter CAL_FORMATTER = DateTimeFormatter
@@ -111,8 +114,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       try {
         middleMileDriversPage.selectHubFilter(hubName);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Element in middle mile driver page not found, retrying...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in middle mile driver page not found, retrying...");
         middleMileDriversPage.refreshPage();
         middleMileDriversPage.switchTo();
         middleMileDriversPage.loadButton.waitUntilClickable();
@@ -158,7 +161,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           middleMileDriver
               .setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
-          middleMileDriversPage.fillLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriversPage.fillLicenseExpiryDate(
+              EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
 
           if (country == null) {
             middleMileDriver.setLicenseType(CLASS_5);
@@ -185,7 +189,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                 break;
 
               default:
-                NvLogger.warn("Country is not on the list");
+                LOGGER.warn("Country is not on the list");
             }
           }
           middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
@@ -201,7 +205,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
 
           middleMileDriversPage.fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
-          middleMileDriversPage.fillEmploymentEndDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriversPage.fillEmploymentEndDate(
+              EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
 
           middleMileDriver.setUsername(data.get("username"));
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
@@ -221,8 +226,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           put(KEY_CREATED_DRIVER_USERNAME, middleMileDriver.getUsername());
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Element in middle mile driver page not found, retrying...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in middle mile driver page not found, retrying...");
         middleMileDriversPage.refreshPage();
         middleMileDriversPage.switchTo();
         middleMileDriversPage.loadButton.waitUntilClickable();
@@ -304,7 +309,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         break;
 
       default:
-        NvLogger.warn("Filter is not found");
+        LOGGER.warn("Filter is not found");
     }
   }
 
