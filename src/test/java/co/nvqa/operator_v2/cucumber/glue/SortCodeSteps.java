@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.RandomUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.SortCodePage;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.en.And;
@@ -11,8 +10,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SortCodeSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SortCodeSteps.class);
 
   private static final String POSTCODE = "postcode";
   private static final String SORT_CODE = "sort_code";
@@ -101,27 +104,27 @@ public class SortCodeSteps extends AbstractSteps {
     String postcodeValue;
     String sortCodeValue;
     SortCode sortCode = get(KEY_CREATED_SORT_CODE);
-    NvLogger.infof("content of original file for upload : \n%s", content);
+    LOGGER.info("content of original file for upload : \n{}", content);
 
     //Replacing existed postcode
     if (content.contains("existed-postcode")) {
       postcodeValue = sortCode.getPostcode();
       content = content.replaceAll("existed-postcode", postcodeValue);
-      NvLogger.info(postcodeValue);
+      LOGGER.info(postcodeValue);
     }
 
     //Replacing existed sort code
     if (content.contains("existed-sort-code")) {
       sortCodeValue = sortCode.getSortCode();
       content = content.replaceAll("existed-sort-code", sortCodeValue);
-      NvLogger.info(sortCodeValue);
+      LOGGER.info(sortCodeValue);
     }
 
     //Replacing new postcode
     if (content.contains("new-postcode")) {
       postcodeValue = AddressFactory.getRandomAddress().getPostcode();
       content = content.replaceAll("new-postcode", postcodeValue);
-      NvLogger.info(postcodeValue);
+      LOGGER.info(postcodeValue);
       sortCode.setPostcode(postcodeValue);
     }
 
@@ -129,11 +132,11 @@ public class SortCodeSteps extends AbstractSteps {
     if (content.contains("new-sort-code")) {
       sortCodeValue = "SA" + randomInt(0, 999) + RandomUtil.randomString(5);
       content = content.replaceAll("new-sort-code", sortCodeValue);
-      NvLogger.info(sortCodeValue);
+      LOGGER.info(sortCodeValue);
       sortCode.setSortCode(sortCodeValue);
     }
 
-    NvLogger.infof("content of generated file for upload : \n%s", content);
+    LOGGER.info("content of generated file for upload : \n{}", content);
 
     String fileName = file.getName();
     file = TestUtils.createFile(fileName, content);
