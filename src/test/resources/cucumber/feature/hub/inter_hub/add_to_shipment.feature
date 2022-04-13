@@ -13,11 +13,12 @@ Feature: Add To Shipment
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan multiple created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    When Operator scan multiple created order to shipment in hub {hub-name-2} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Remove Parcel In Shipment from Action Toggle (uid:ffad1735-0cb1-43ac-a6f2-2fe32cfcfadf)
@@ -46,6 +47,7 @@ Feature: Add To Shipment
     Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator pulled out parcel "DELIVERY" from route
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Operator Van Inbound parcel
@@ -60,6 +62,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Parcel to Shipment with Alert (uid:21ff371d-e507-453a-9d4a-f37c18037aa7)
@@ -76,6 +79,8 @@ Feature: Add To Shipment
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created multiple shipment on Shipment Management page
     Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Set temporary order:
+      | constantOrder  | {indonesia-default-order} |
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator verifies that the row of the added order is red highlighted
 
@@ -89,6 +94,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment
   Scenario: Add Pending Pickup at Distribution Point Parcel to Shipment (uid:d2181800-29d5-4f12-a344-7198446b0599)
@@ -104,6 +110,7 @@ Feature: Add To Shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is red highlighted
+    And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add Pickup Fail Parcel to Shipment (uid:aa02f11e-ee9f-4d6d-9051-5f403771c2ed)
@@ -124,6 +131,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add En-route to Sorting Hub Parcel to Shipment (uid:1f5b734c-70cb-4ea5-9d4f-4db9593bc497)
@@ -144,6 +152,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add Van En-route to Pickup Parcel to Shipment (uid:d8d50542-1770-4ab1-8c93-abd6cc245460)
@@ -160,6 +169,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add On Vehicle for Delivery Parcel to Shipment (uid:cc66a7bd-cfb3-4d83-b680-e6c86b6b90bc)
@@ -181,6 +191,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Cancelled Parcel to Shipment (uid:48c12c8f-4a28-47af-927a-b2e895d4f737)
@@ -193,6 +204,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Staging Parcel to Shipment (uid:9ee96560-bccb-41de-8ab7-42b1aa800682)
@@ -204,6 +216,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add Completed Parcel to Shipment (uid:b703c8fe-a10f-4b92-b4c7-1afb577164e5)
@@ -216,6 +229,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Arrived at Sorting Hub to Shipment (uid:4a1176a8-bb81-4713-8d4d-78f0eb7c625a)
@@ -229,6 +243,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add Pending Reschedule Parcel to Shipment (uid:63b05de8-14e2-4ea0-8b66-7d4ec1a4746b)
@@ -253,6 +268,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Returned to Sender Parcel to Shipment (uid:c9a90e68-17e2-42b8-b527-a45010410e88)
@@ -278,6 +294,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add On Hold Non Missing Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
@@ -304,6 +321,7 @@ Feature: Add To Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Parcel with Tag to Shipment (uid:3d303265-3fae-445e-a59b-982a9d1f281d)
@@ -333,6 +351,7 @@ Feature: Add To Shipment
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Parcel to Shipment (uid:d271a9e3-af5c-478f-9190-5661b2af9986)
@@ -347,11 +366,12 @@ Feature: Add To Shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is blue highlighted
+    And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Pending |
+      | status | Closed |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
@@ -445,11 +465,12 @@ Feature: Add To Shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is blue highlighted
+    And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status      | Pending |
+      | status      | Closed  |
       | ordersCount | 1       |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
@@ -470,8 +491,10 @@ Feature: Add To Shipment
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
+#    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     When Operator add to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator removes the parcel from the shipment with error alert
+    And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
