@@ -23,6 +23,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
@@ -37,5 +38,4 @@ Feature: Generate COD Report - Selected Shipper(s)
       | generateFile | Selected Shippers              |
       | shipperId    | {shipper-v4-global-id}         |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body

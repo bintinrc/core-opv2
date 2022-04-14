@@ -23,6 +23,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
@@ -35,8 +37,6 @@ Feature: Generate COD Report - International Order(s)
       | basedOn      | Order Completed Date           |
       | generateFile | International                  |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
   Scenario: Generate COD Report - Filter By Route Date - International Orders
@@ -56,6 +56,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
@@ -68,8 +70,6 @@ Feature: Generate COD Report - International Order(s)
       | basedOn      | Route Date                     |
       | generateFile | International                  |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
   Scenario: Generate COD Report - Filter By Order Completed Date - International Orders - Orders Not Exist On The Selected Date
@@ -96,7 +96,9 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
-    # Finance COD Report
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
+      # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
@@ -108,8 +110,6 @@ Feature: Generate COD Report - International Order(s)
       | basedOn      | Order Completed Date           |
       | generateFile | International                  |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
   Scenario: Generate COD Report - Filter By Order Completed Date - International Orders - Service Type = Non-International - Delivery Type = International
@@ -130,6 +130,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
@@ -142,6 +144,4 @@ Feature: Generate COD Report - International Order(s)
       | basedOn      | Order Completed Date           |
       | generateFile | International                  |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body

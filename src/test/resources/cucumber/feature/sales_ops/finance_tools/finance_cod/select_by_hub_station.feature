@@ -39,6 +39,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "hub_ids": [ {hub-id},{hub-id-2} ], "template_id": {finance-cod-template-id}} |
@@ -52,8 +54,6 @@ Feature: Generate COD Report - International Order(s)
       | generateFile | Select By Hub/Station          |
       | hubId        | {hub-id},{hub-id-2}            |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
   Scenario: Generate COD Report - Filter By Route Date - Select One Hub/Station
@@ -73,6 +73,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "hub_ids": [ {hub-id} ], "template_id": {finance-cod-template-id}} |
@@ -86,8 +88,6 @@ Feature: Generate COD Report - International Order(s)
       | generateFile | Select By Hub/Station          |
       | hubId        | {hub-id}                       |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
   Scenario: Generate COD Report - Not Select Any Hub/Station
