@@ -96,6 +96,7 @@ Feature: Shipment Management - Search Shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
@@ -148,10 +149,10 @@ Feature: Shipment Management - Search Shipment
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Pending on Shipment Management page
+#    When Operator filter Shipment Status = Pending on Shipment Management page
     And Operator filter Start Hub = {hub-name} on Shipment Management page
     And Operator filter End Hub = {hub-name-2} on Shipment Management page
-    And Operator filter Shipment Type = Air Haul on Shipment Management page
+#    And Operator filter Shipment Type = Air Haul on Shipment Management page
     And Operator save current filters as preset on Shipment Management page
     And Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
@@ -162,7 +163,7 @@ Feature: Shipment Management - Search Shipment
   Scenario: Preset Setting - Delete Shipment Filter as Preset (uid:c722664d-4ef4-4f13-92d6-5074a3dde4f5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Pending on Shipment Management page
+#    When Operator filter Shipment Status = Pending on Shipment Management page
     And Operator save current filters as preset on Shipment Management page
     And Operator delete created filters preset on Shipment Management page
     And Operator refresh page
