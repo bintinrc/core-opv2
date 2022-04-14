@@ -74,7 +74,7 @@ Feature: Generate COD Report - International Order(s)
 
   Scenario: Generate COD Report - Filter By Order Completed Date - International Orders - Orders Not Exist On The Selected Date
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-current-date-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-next-1-day-yyyy-MM-dd}","end_date": "{gradle-next-1-day-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and verifies the finance cod email body contains message "Error: No orders found."
 
