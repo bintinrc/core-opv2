@@ -24,7 +24,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
- And API Operator generates finance cod report using data below
+    And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
@@ -58,7 +58,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
- And API Operator generates finance cod report using data below
+    And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
@@ -66,7 +66,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     Then DB Operator verifies the count of entries for data below
       | startDate       | {gradle-current-date-yyyyMMdd}   |
       | endDate         | {gradle-current-date-yyyyMMdd}   |
-      | basedOn         | Route Date             |
+      | basedOn         | Route Date                       |
       | generateFile    | Select By Parent Shipper         |
       | parentShipperId | {shipper-sop-mktpl-v4-global-id} |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
@@ -78,6 +78,6 @@ Feature: Generate COD Report - Select by Parent Shipper
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below
-      | generateFile    | Select By Parent Shipper         |
-      | emailAddress | {order-billing-email} |
+      | generateFile | Select By Parent Shipper |
+      | emailAddress | {order-billing-email}    |
     Then Operator verifies error message "Please select at least one marketplace."

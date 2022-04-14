@@ -24,7 +24,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
- And API Operator generates finance cod report using data below
+    And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "global_shipper_ids": [ {shipper-sop-normal-rts-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
@@ -58,7 +58,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
- And API Operator generates finance cod report using data below
+    And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "global_shipper_ids": [ {shipper-sop-normal-rts-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
@@ -116,7 +116,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
- And API Operator generates finance cod report using data below
+    And API Operator generates finance cod report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "global_shipper_ids": [ {shipper-sop-normal-rts-global-id}, {shipper-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email

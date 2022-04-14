@@ -65,6 +65,6 @@ Feature: Generate COD Report - Select by Parent Shipper
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below
-      | generateFile | Select By Route       |
+      | generateFile | Select By Route |
     Then Operator verifies Generate COD based on option is not clickable
     Then Operator verifies Between Dates option is not clickable
