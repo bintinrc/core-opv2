@@ -24,8 +24,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
-    And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
+ And API Operator generates finance cod report using data below
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -57,8 +57,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
-    And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
+ And API Operator generates finance cod report using data below
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -97,8 +97,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
-    And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
+ And API Operator generates finance cod report using data below
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -131,8 +131,8 @@ Feature: Generate COD Report - International Order(s)
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
     # Finance COD Report
-    And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
+ And API Operator generates finance cod report using data below
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "service_types" : ["International","Marketplace International"], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
