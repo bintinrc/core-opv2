@@ -86,7 +86,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   public void inboundScanning(long shipmentId, String label, String hub) {
     pause2s();
     selectInboundHub(hub);
-    //inboundHub.searchAndSelectValue(hub);
     click(grabXpathButton(label));
     startInboundButton.click();
     fillShipmentId(shipmentId);
