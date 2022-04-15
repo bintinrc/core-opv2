@@ -197,9 +197,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause1s();
   }
 
-  public void changeDate(String date, boolean isToday) {
-    String datepickerXpath = "//md-datepicker[@ng-model='%s']//input";
-    if (isToday) {
+  public void changeDate(String field, String date, boolean isFromDate) {
+    String datepickerXpath = "//div//p[contains(.,'"+field+"')]//parent::div//parent::div//md-datepicker[@ng-model='%s']//input";
+    if (isFromDate) {
       clear(f(datepickerXpath, "container.fromDate"));
       pause1s();
       sendKeys(f(datepickerXpath, "container.fromDate"), date);

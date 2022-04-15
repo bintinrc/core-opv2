@@ -42,6 +42,7 @@ Feature: Shipment Management - Search Shipment
       | trackingId | GET_FROM_CREATED_ORDER |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     When Operator filter shipment based on "Shipment Completion Date Time" Date on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment via API on Shipment Management page
@@ -66,6 +67,8 @@ Feature: Shipment Management - Search Shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
+    When Operator filter Shipment Status = Transit on Shipment Management page
     When Operator filter shipment based on "Transit Date Time" Date on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
