@@ -376,10 +376,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       return this;
     }
 
-    public void setType() {
-      type.selectValue("Testing1234C");
-      waitUntilVisibilityOfElementLocated("//div[@label='Testing1234C']");
-      click("//div[@label='Testing1234C']");
+    public void setType(String driverType) {
+      type.selectValue(driverType);
+      waitUntilVisibilityOfElementLocated(f("//div[@label='%s']", driverType));
+      click(f("//div[@label='%s']", driverType));
     }
 
     public void setMaximumOnDemandWaypoint(long param) {
@@ -482,7 +482,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
-      setType();
+      setType(driverInfo.getType());
       setMaximumOnDemandWaypoint(10l);
       setCodLimit(driverInfo.getCodLimit());
       setHub(driverInfo.getHub());

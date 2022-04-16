@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
@@ -36,7 +37,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @When("Operator create new Driver on Driver Strength page using data below:")
   public void operatorCreateNewDriverOnDriverStrengthPageUsingDataBelow(
       Map<String, String> data) {
+    DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
     DriverInfo driverInfo = new DriverInfo(resolveKeyValues(data));
+    driverInfo.setType(driverTypeParams.getDriverTypeName());
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     dsPage.inFrame(() -> {
       dsPage.addNewDriver(driverInfo);

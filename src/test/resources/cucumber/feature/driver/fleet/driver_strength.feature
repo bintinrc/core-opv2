@@ -7,8 +7,16 @@ Feature: Driver Strength
 
   @DeleteDriver
   Scenario: Create New Driver Account (uid:7b2078bd-589f-4c9a-a06e-156098e34cf2)
-    Given Operator go to menu Fleet -> Driver Strength
-    When Operator create new Driver on Driver Strength page using data below:
+    Given Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator create new Driver on Driver Strength page using data below:
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -19,7 +27,7 @@ Feature: Driver Strength
       | vehicleCapacity      | 100                                                              |
       | contactType          | {contact-type-name}                                              |
       | contact              | GENERATED                                                        |
-      | zoneId               | {zone-name}                                                      |
+      | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 1                                                                |
       | zoneMax              | 1                                                                |
       | zoneCost             | 1                                                                |
