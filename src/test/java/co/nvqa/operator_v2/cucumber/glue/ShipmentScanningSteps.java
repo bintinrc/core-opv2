@@ -579,7 +579,6 @@ public class ShipmentScanningSteps extends AbstractSteps {
       }
     }
     getWebDriver().switchTo().window(mainWindowHandle);
-    shipmentScanningPage.switchTo();
     pause5s();
   }
 

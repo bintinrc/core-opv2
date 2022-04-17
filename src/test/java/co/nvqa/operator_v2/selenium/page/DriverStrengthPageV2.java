@@ -379,7 +379,6 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public void setType(String driverType) {
       type.selectValue(driverType);
       waitUntilVisibilityOfElementLocated(f("//div[@label='%s']", driverType));
-      click(f("//div[@label='%s']", driverType));
     }
 
     public void setMaximumOnDemandWaypoint(long param) {

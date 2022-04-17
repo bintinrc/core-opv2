@@ -83,7 +83,6 @@ Feature: Driver Strength
     And Operator wait until table loaded
     Then Operator verify contact details of created driver on Driver Strength page
 
-  @DeleteDriver
   Scenario: Delete Driver Account (uid:4cdc0535-7095-463e-87da-ea108e500644)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
@@ -215,7 +214,15 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "No" resigned
 
   Scenario: Can Not Create New Driver Account Without Active Contact (uid:30bcd5fd-376f-45be-bbf5-2e420a760f2c)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    And Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
@@ -238,7 +245,15 @@ Feature: Driver Strength
     And Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
 
   Scenario: Can Not Create New Driver Account Without Active Vehicle (uid:faf2e60a-730e-4d7a-b67e-7a17fba22f6e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    And Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:

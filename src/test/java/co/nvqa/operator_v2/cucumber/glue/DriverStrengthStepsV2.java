@@ -57,7 +57,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @When("Operator fill Add Driver form on Driver Strength page using data below:")
   public void operatorFillAddDriverOnDriverStrengthPageUsingDataBelow(
       Map<String, String> mapOfData) {
+    DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
     DriverInfo driverInfo = new DriverInfo(resolveKeyValues(mapOfData));
+    driverInfo.setType(driverTypeParams.getDriverTypeName());
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     dsPage.inFrame(() -> dsPage.addDriverDialog.fillForm(driverInfo));
   }
