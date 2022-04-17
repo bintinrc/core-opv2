@@ -134,6 +134,6 @@ Feature: Driver Performance
     And Operator deletes preset on Driver Performance page
     Then Operator verifies "{KEY_CREATED_DRIVER_PERFORMANCE_PRESET.name}" preset was deleted on Driver Performance page
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @Now
   Scenario: Kill Browser
     Given no-op

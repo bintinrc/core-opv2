@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Now
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -212,11 +212,11 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
         #To be unlocked when slide/horizontal scroll action is solved on react page
     Then Operator verify driver strength is filtered by "No" resigned
-
+  @Now1
   Scenario: Can Not Create New Driver Account Without Active Contact (uid:30bcd5fd-376f-45be-bbf5-2e420a760f2c)
     Given Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
-      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | driverTypeName  | DT1-{gradle-current-date-yyyyMMddHHmmsss} |
       | deliveryType    | Normal Delivery                          |
       | priorityLevel   | Priority                                 |
       | reservationSize | Less Than 3 Parcels                      |
@@ -247,7 +247,7 @@ Feature: Driver Strength
   Scenario: Can Not Create New Driver Account Without Active Vehicle (uid:faf2e60a-730e-4d7a-b67e-7a17fba22f6e)
     Given Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
-      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | driverTypeName  | DT2-{gradle-current-date-yyyyMMddHHmmsss} |
       | deliveryType    | Normal Delivery                          |
       | priorityLevel   | Priority                                 |
       | reservationSize | Less Than 3 Parcels                      |
@@ -274,9 +274,17 @@ Feature: Driver Strength
       | comments            | This driver is created by "Automation Test" for testing purpose. |
     Then Operator click Submit button in Add Driver dialog
     And Operator verifies hint "At least one vehicle required." is displayed in Add Driver dialog
-
+  @Now
   Scenario: Can Not Create New Driver Account Without Preferred Zone and Capacity (uid:a7f36604-0398-4d3d-ab5f-b4fb554bb8a7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT3-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    And Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
@@ -331,6 +339,6 @@ Feature: Driver Strength
     And Operator click Submit button in Add Driver dialog
     And Operator verifies hint "At least one preferred zone required." is displayed in Add Driver dialog
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @Now
   Scenario: Kill Browser
     Given no-op
