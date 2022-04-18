@@ -1,6 +1,6 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @FinanceCod
 
-Feature: Generate COD Report - International Order(s)
+Feature: Generate COD Report - Select by Hub/Station
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given API Operator whitelist email "{order-billing-email}"
