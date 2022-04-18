@@ -52,9 +52,16 @@ public class OperatorV2SimplePage extends SimplePage {
   @FindBy(css = "div.load-more-data")
   public PageElement loadMoreData;
 
+  @FindBy(tagName = "iframe")
+  private PageElement pageFrame;
+
   public OperatorV2SimplePage(WebDriver webDriver) {
     super(webDriver);
     PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+  }
+
+  public void switchTo() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
   public void goToUrl(String url) {

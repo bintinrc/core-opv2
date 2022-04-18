@@ -197,9 +197,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause1s();
   }
 
-  public void changeDate(String date, boolean isToday) {
-    String datepickerXpath = "//md-datepicker[@ng-model='%s']//input";
-    if (isToday) {
+  public void changeDate(String field, String date, boolean isFromDate) {
+    String datepickerXpath = "//div//p[contains(.,'"+field+"')]//parent::div//parent::div//md-datepicker[@ng-model='%s']//input";
+    if (isFromDate) {
       clear(f(datepickerXpath, "container.fromDate"));
       pause1s();
       sendKeys(f(datepickerXpath, "container.fromDate"), date);
@@ -956,7 +956,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String COLUMN_TOTAL_PARCELS = "ordersCount";
     public static final String COLUMN_COMMENTS = "comments";
     public static final String COLUMN_MAWB = "mawb";
-    public static final String ACTION_EDIT = "Edit";
+    public static final String ACTION_EDIT = "//button[@aria-label='Edit'][//i[.='edit']]";
     public static final String ACTION_DETAILS = "//tr[%s]//td//nv-icon-button[@name='Details']";
     public static final String ACTION_FORCE = "Force";
     public static final String ACTION_PRINT = "Print";
@@ -1028,10 +1028,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='select-type']")
     public MdSelect type;
 
-    @FindBy(css = "[id^='start-hub']")
+    @FindBy(css = "[id^='origHub']")
     public MdSelect startHub;
 
-    @FindBy(css = "[id^='end-hub']")
+    @FindBy(css = "[id^='destHub']")
     public MdSelect endHub;
 
     @FindBy(id = "container.shipment-management.comments-optional")

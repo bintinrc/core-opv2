@@ -44,6 +44,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       try {
         Long shipmentId = Long.valueOf(String.valueOf(get(KEY_CREATED_SHIPMENT_ID)));
         final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
         scanningPage.inboundScanning(shipmentId, label, finalHub);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
