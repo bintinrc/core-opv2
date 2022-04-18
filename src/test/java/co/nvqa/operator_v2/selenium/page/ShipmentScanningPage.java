@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.constants.HttpConstants;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
@@ -57,8 +59,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]/following-sibling::span";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//form[.='Scan Shipment to Inbound']/following-sibling::div[@class='message']";
-  public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']";
-  public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div[@class='vkbq6g-0 daBITT']";
+  public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div";
+  public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div";
   private static String antNotificationMessage = "";
 
   @FindBy(xpath = "//div[span[.='Driver']]/following-sibling::span")
@@ -251,13 +253,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void checkOrderInShipment(String trackingId) {
-//        String rack = getText(XPATH_RACK_SECTOR);
-//        assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
-
     WebElement orderWe = getWebDriver().findElement(By.xpath(String
         .format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", trackingId)));
     boolean orderExist = orderWe != null;
     assertTrue("order " + trackingId + " doesn't exist in shipment", orderExist);
+  }
+
+  public void checkOrderNotInShipment(String trackingId) {
+    List<String> shipmentsList = getTextOfElements("//td[contains(@class, 'tracking-id')]");
+    Assertions.assertThat(!shipmentsList.contains(trackingId)).as("Order "+ trackingId +" exists in shipment").isTrue();
   }
 
   public void closeShipment() {
@@ -342,7 +346,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     pause1s();
     sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
     pause1s();
-    String statusCardText = findElementByXpath("//div[@class='ant-row']//div[3]//div[@class='vkbq6g-0 daBITT']").getText();
+    String statusCardText = findElementByXpath(XPATH_STATUS_CARD_BOX).getText();
     assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
     assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
         containsString("not in shipment"));
@@ -367,8 +371,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void verifyTheSumOfOrderIsZero() {
     String actualSumOfOrder = getText(
-        "//ul[@class='ant-card-actions']//h4")
-        .substring(0, 1);
+        "//div[@class='ant-space-item']//h4").substring(0, 1);
     int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
     assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
   }
@@ -697,6 +700,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
+    waitUntilVisibilityOfElementLocated("//div[@data-testid='remove-parcel-scan-container']//span[contains(.,'"+shipmentId+"')]");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {

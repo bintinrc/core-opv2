@@ -59,7 +59,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.scanBarcode(trackingId);
-        shipmentScanningPage.checkOrderInShipment(trackingId);
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[@data-testid='add-parcel-scan-container']//span[contains(.,'"+trackingId+"')]");
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
@@ -88,7 +88,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']");
-        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
@@ -143,6 +143,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
     put(KEY_CREATED_ORDER_TRACKING_ID, constantOrder);
   }
 
+  @And("Set temporary order:")
+  public void setTempOrder(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String constantOrder = mapOfData.get("constantOrder");
+    put(KEY_CREATED_ORDER_TRACKING_ID, constantOrder);
+  }
+
   @And("Operator scan and close shipment with data below:")
   public void operatorScanAndCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -187,17 +194,19 @@ public class ShipmentScanningSteps extends AbstractSteps {
         String resolvedDestHub = resolveValue(destHub);
         pause10s();
         shipmentScanningPage.switchTo();
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[span[input[@id='orig_hub']]]//span[.='Search or Select']");
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectDestinationHub(resolvedDestHub);
         shipmentScanningPage.selectShipmentType(shipmentType);
         shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
-        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
 
         for (String trackingId : trackingIds) {
           pause1s();
           shipmentScanningPage.scanBarcode(trackingId);
+          shipmentScanningPage.checkOrderInShipment(trackingId);
         }
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
@@ -211,7 +220,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
   @And("Operator removes the parcel from the shipment")
   public void operatorRemovesTheParcelFromTheShipment() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    shipmentScanningPage.removeOrderFromShipment(trackingId);
+    shipmentScanningPage.removeShipmentWithId(trackingId);
+    shipmentScanningPage.checkOrderNotInShipment(trackingId);
   }
 
   @And("Operator removes the parcel from the shipment with error alert")
@@ -229,7 +239,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @And("Operator removes all the parcel from the shipment")
   public void operatorRemovesAllTheParcelFromTheShipment() {
-    shipmentScanningPage.removeAllOrdersFromShipment();
+    List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
+    for (String trackingId : trackingIds) {
+      pause1s();
+      shipmentScanningPage.removeShipmentWithId(trackingId);
+      shipmentScanningPage.checkOrderNotInShipment(trackingId);
+    }
   }
 
   @Then("Operator verifies that the parcel shown is zero")
