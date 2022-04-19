@@ -14,6 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 public class AntSelect extends PageElement {
 
   public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][contains(normalize-space(text()), '%s')]";
+  public static final String ITEM_EQUALS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][normalize-space(text())='%s')]";
   public static final String ITEM_CASE_IGNORE_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(@class,'ant-select')][contains(translate(normalize-space(text()),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]";
   public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
 
@@ -69,7 +70,12 @@ public class AntSelect extends PageElement {
   }
 
   public void clickMenuItem(String value) {
-    clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
+    String xpath = f(ITEM_EQUALS_LOCATOR, StringUtils.normalizeSpace(value));
+    if (isElementVisible(xpath, 1)) {
+      click(xpath);
+    } else {
+      clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
+    }
   }
 
   public void clickMenuItemIgnoreCase(String value) {

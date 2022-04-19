@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.Addressing;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import java.util.List;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,114 +19,60 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Tristania Siagian
  */
-@SuppressWarnings("WeakerAccess")
-public class AddressingPage extends OperatorV2SimplePage {
+public class AddressingPage extends SimpleReactPage<AddressingPage> {
 
-  @FindBy(name = "Add Address")
-  public NvIconTextButton addAddress;
+  @FindBy(css = ".ant-list-empty-text")
+  public PageElement emptyListText;
 
-  @FindBy(name = "Update")
-  public NvIconTextButton editAddress;
+  @FindBy(css = "[data-testid='add-address-button']")
+  public Button addAddress;
 
-  @FindBy(name = "Delete")
-  public NvIconTextButton deleteAddress;
-
-  @FindBy(tagName = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public AddAddressModal addAddressModal;
 
-  @FindBy(tagName = "md-dialog")
+  @FindBy(css = ".ant-modal")
+  public ConfirmDeleteModal confirmDeleteModal;
+
+  @FindBy(css = ".ant-modal")
   public EditAddressModal editAddressModal;
 
-  @FindBy(css = "md-dialog")
-  public ConfirmDeleteDialog confirmDeleteDialog;
+  @FindBy(css = "[data-testid='search-input']")
+  public ForceClearTextBox searchInput;
 
-  @FindBy(id = "search")
-  public TextBox searchInput;
+  @FindBy(css = "li[data-testid^='address-row']")
+  public List<PageElement> addressCardBtn;
 
-  @FindBy(xpath = "//md-card[contains(@class, 'address-list-card')]")
-  public PageElement addressCard;
-
-  @FindBy(xpath = "//label[starts-with(@for, 'building-no')]/following-sibling::div[1]")
-  public PageElement buildingNo;
-
-  @FindBy(xpath = "//label[starts-with(@for, 'street')]/following-sibling::div[1]")
-  public PageElement street;
-
-  @FindBy(xpath = "//label[starts-with(@for, 'postcode')]/following-sibling::div[1]")
-  public PageElement postcode;
-
-  @FindBy(xpath = "//label[starts-with(@for, 'latitude')]/following-sibling::div[1]")
-  public PageElement latitude;
-
-  @FindBy(xpath = "//label[starts-with(@for, 'longitude')]/following-sibling::div[1]")
-  public PageElement longitude;
+  @FindBy(css = ".ant-card")
+  public List<AddressCard> addressCards;
 
   public AddressingPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void clickAddAddressButton() {
-    clickNvIconTextButtonByNameAndWaitUntilDone("Add Address");
+    addAddress.click();
   }
 
   public void addNewAddress(Addressing addressing) {
     addAddress.click();
     addAddressModal.fill(addressing);
-    addAddressModal.addAddress.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Success create address", true);
-    pause100ms();
+    addAddressModal.addAddress.click();
   }
 
   public void searchAddress(Addressing addressing) {
-    refreshPage();
-    searchInput.setValue(addressing.getBuildingNo() + Keys.ENTER);
-    pause1s();
-  }
-
-  public void verifyAddressExistAndInfoIsCorrect(Addressing addressing) {
-    addressCard.click();
-
-    assertEquals("Building No", addressing.getBuildingNo(), buildingNo.getText());
-    assertEquals("Street Name", addressing.getStreetName(), street.getText());
-    assertEquals("Postcode", addressing.getPostcode(), postcode.getText());
-    assertEquals("Latitude", String.valueOf(addressing.getLatitude()), latitude.getText());
-    assertEquals("Longitude", String.valueOf(addressing.getLongitude()), longitude.getText());
-  }
-
-  public void deleteAddress() {
-    deleteAddress.waitUntilClickable();
-    deleteAddress.click();
-    confirmDeleteDialog.confirmDelete();
-    waitUntilInvisibilityOfToast("Success delete address");
-  }
-
-  public void verifyDelete(Addressing addressing) {
-    searchAddress(addressing);
+    searchInput.setValue(
+        addressing.getBuildingNo() + ", " + addressing.getStreetName() + Keys.ENTER);
     pause2s();
-    String actualResult = getText("//md-card[contains(@class, 'address-list-card')]/div/h5");
-    assertEquals("Result is different.", "No address found!", actualResult);
-  }
-
-  public void editAddress(Addressing addressingOld, Addressing addressingEdited) {
-    searchAddress(addressingOld);
-    addressCard.click();
-    editAddress.waitUntilClickable();
-    editAddress.click();
-    editAddressModal.waitUntilVisible();
-    editAddressModal.fill(addressingEdited);
-    editAddressModal.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Success update address");
   }
 
   public static class AddAddressModal extends BaseAddressModel {
 
     public AddAddressModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
-      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(name = "Add Address")
-    public NvApiTextButton addAddress;
+    @FindBy(css = "[data-testid='save-text']")
+    public Button addAddress;
 
     public void fill(Addressing address) {
       if (isNotBlank(address.getPostcode())) {
@@ -143,49 +89,45 @@ public class AddressingPage extends OperatorV2SimplePage {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(name = "Save Changes")
-    public NvApiTextButton saveChanges;
-
-    @FindBy(id = "deleteButton")
-    public NvApiTextButton deleteAddress;
+    @FindBy(css = "[data-testid='save-text']")
+    public Button editAddress;
   }
 
-  public static class BaseAddressModel extends MdDialog {
+  public static class BaseAddressModel extends AntModal {
 
     public BaseAddressModel(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
-      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(id = "country")
-    public MdSelect country;
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='country']]")
+    public AntSelect country;
 
-    @FindBy(id = "city")
-    public TextBox city;
+    @FindBy(css = "[data-testid='form-city-input']")
+    public ForceClearTextBox city;
 
-    @FindBy(id = "postcode")
-    public TextBox postcode;
+    @FindBy(css = "[data-testid='form-postcode-input']")
+    public ForceClearTextBox postcode;
 
-    @FindBy(id = "street")
-    public TextBox street;
+    @FindBy(css = "[data-testid='form-street-input']")
+    public ForceClearTextBox street;
 
-    @FindBy(id = "building_name")
-    public TextBox buildingName;
+    @FindBy(css = "[data-testid='form-building-input']")
+    public ForceClearTextBox buildingName;
 
-    @FindBy(id = "building_number")
-    public TextBox buildingNumber;
+    @FindBy(css = "[data-testid='form-building-no-input']")
+    public ForceClearTextBox buildingNumber;
 
-    @FindBy(id = "latitude")
-    public TextBox latitude;
+    @FindBy(css = "[data-testid='form-latitude-input']")
+    public ForceClearTextBox latitude;
 
-    @FindBy(id = "longitude")
-    public TextBox longitude;
+    @FindBy(css = "[data-testid='form-longitude-input']")
+    public ForceClearTextBox longitude;
 
-    @FindBy(id = "address_type")
-    public MdSelect addressType;
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='address_type']]")
+    public AntSelect addressType;
 
-    @FindBy(id = "source")
-    public MdSelect source;
+    @FindBy(css = "[data-testid='form-region-input']")
+    public ForceClearTextBox source;
 
     public void fill(Addressing address) {
       if (isNotBlank(address.getStreetName())) {
@@ -207,5 +149,43 @@ public class AddressingPage extends OperatorV2SimplePage {
         addressType.selectValue(String.valueOf(address.getAddressType()));
       }
     }
+  }
+
+  public static class AddressCard extends PageElement {
+
+    public AddressCard(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = ".//div[./div/label='Building No']//input")
+    public PageElement buildingNo;
+
+    @FindBy(xpath = ".//div[./div/label='Street']//input")
+    public PageElement street;
+
+    @FindBy(xpath = ".//div[./div/label='Postcode']//input")
+    public PageElement postcode;
+
+    @FindBy(xpath = ".//div[./div/label='Latitude']//input")
+    public PageElement latitude;
+
+    @FindBy(xpath = ".//div[./div/label='Longitude']//input")
+    public PageElement longitude;
+
+    @FindBy(css = "[data-testid='edit-address-button']")
+    public Button editAddress;
+
+    @FindBy(css = "[data-testid='delete-address-button']")
+    public Button deleteAddress;
+  }
+
+  public static class ConfirmDeleteModal extends AntModal {
+
+    public ConfirmDeleteModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button delete;
   }
 }

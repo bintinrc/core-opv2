@@ -1,11 +1,11 @@
 @OperatorV2 @Core @Order @AllOrders
 Feature: All Orders - Preset Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @Debug
   Scenario: Operator Save A New Preset on All Orders Page (uid:d4c62eac-0614-498b-8d30-9b204a7280f6)
     When Operator go to menu Order -> All Orders
     And Operator selects filters on All Orders page:
