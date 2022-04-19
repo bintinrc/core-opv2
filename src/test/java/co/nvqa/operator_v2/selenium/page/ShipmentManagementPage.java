@@ -49,8 +49,7 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Lanang Jati
@@ -83,6 +82,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_SHIPMENT_ID_RESULT_TABLE = "//td[@nv-table-highlight='filter.id']";
   private static final String XPATH_SHIPMENT_ID_DUPLICATED = "//span[@ng-if='ctrl.duplicateCount!==0']";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL = "//md-dialog[contains(@class,'shipment-search-error')]";
+  private static final String XPATH_SHIPMENT_SEARCH_ERROR_TEXT = "//md-dialog[contains(@class,'shipment-search-error')]";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
@@ -233,7 +233,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     clickButtonByAriaLabel("Delete Preset");
     waitUntilVisibilityOfElementLocated("//md-dialog-content//div[.='Select a preset to delete']");
     waitUntilElementIsClickable("//md-select[contains(@aria-label,'Select preset')]");
-    TestUtils.findElementAndClick("//md-select[contains(@aria-label,'Select preset')]", "xpath", getWebDriver());
+    //TestUtils.findElementAndClick("//md-select[contains(@aria-label,'Select preset')]", "xpath", getWebDriver());
     selectValueFromMdSelectByAriaLabel("Select preset", presetName);
     clickNvIconTextButtonByName("commons.delete");
     waitUntilVisibilityOfToast("1 filter preset deleted");
@@ -644,9 +644,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyEmptyLineParsingErrorToastExist() {
-    waitUntilVisibilityOfToast("Network Request Error");
-    assertThat("toast message is the same", getToastBottomText(),
-        containsString("Cannot parse parameter id as Long: For input string: \"\""));
+    waitUntilVisibilityOfToast("Search error");
+    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_TEXT + "//p[1]"),
+            matchesPattern("We cannot find following .* shipment ids:"));
+    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_TEXT + "//p[2]"),
+            containsString(""));
   }
 
   public void verifyUnableToEditCompletedShipmentToastExist() {
