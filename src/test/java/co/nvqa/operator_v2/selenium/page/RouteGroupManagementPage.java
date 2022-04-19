@@ -129,12 +129,11 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     @FindBy(xpath = ".//div[@class='BaseTable__body']//div[@role='row']/div[@role='gridcell'][2]")
     public List<PageElement> groupNames;
 
-    @FindBy(css = "input[type='password']")
+    @FindBy(xpath = ".//div[contains(.,'Password')]//input")
     public TextBox password;
 
     @FindBy(xpath = ".//button[.='Delete Route Group(s)']")
     public Button delete;
-
   }
 
   public static class ConfirmDeleteRouteGroupDialog extends AntModal {

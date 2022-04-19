@@ -3,10 +3,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.page.AddressingPage;
 import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 
 /**
  * @author Tristania Siagian
@@ -26,7 +29,9 @@ public class AddressingSteps extends AbstractSteps {
 
   @When("^Operator clicks on Add Address Button on Addressing Page$")
   public void clickAddAddressButton() {
-    addressingPage.clickAddAddressButton();
+    addressingPage.inFrame(pahe -> {
+      addressingPage.clickAddAddressButton();
+    });
   }
 
   @And("^Operator creates new address on Addressing Page$")
@@ -43,31 +48,29 @@ public class AddressingSteps extends AbstractSteps {
     addressing.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
     addressing.setAddressType("Standard");
 
-    addressingPage.addNewAddress(addressing);
+    addressingPage.inFrame(page -> {
+      page.addNewAddress(addressing);
+    });
     put(KEY_CREATED_ADDRESSING, addressing);
   }
 
-  @And("^Operator searches the address that has been made on Addressing Page$")
-  public void searchAddress() {
-    Addressing addressing = get(KEY_CREATED_ADDRESSING);
-    addressingPage.searchAddress(addressing);
-  }
-
-  @Then("^Operator verifies the address exists on Addressing Page$")
-  public void verifyAddressExist() {
-    Addressing addressing = get(KEY_CREATED_ADDRESSING);
-    addressingPage.verifyAddressExistAndInfoIsCorrect(addressing);
-  }
-
-  @When("^Operator delete the address that has been made on Addressing Page$")
+  @When("^Operator delete address on Addressing Page$")
   public void deleteAddress() {
-    addressingPage.deleteAddress();
+    addressingPage.inFrame(page -> {
+      page.addressCardBtn.get(0).click();
+      page.addressCards.get(0).deleteAddress.click();
+      page.confirmDeleteModal.waitUntilVisible();
+      page.confirmDeleteModal.delete.click();
+    });
   }
 
-  @Then("^Operator verifies the address does not exist anymore on Addressing Page$")
+  @Then("^Operator verifies the address does not exist on Addressing Page$")
   public void verifyDelete() {
-    Addressing addressing = get(KEY_CREATED_ADDRESSING);
-    addressingPage.verifyDelete(addressing);
+    addressingPage.inFrame(page -> {
+      Assertions.assertThat(page.emptyListText.isDisplayed())
+          .as("No address found is displayed")
+          .isTrue();
+    });
   }
 
   @When("^Operator edits the address on Addressing Page$")
@@ -86,18 +89,48 @@ public class AddressingSteps extends AbstractSteps {
     addressingEdited.setAddressType(addressing.getAddressType());
 
     put(KEY_EDITED_ADDRESSING, addressingEdited);
-    addressingPage.editAddress(addressing, addressingEdited);
+    addressingPage.inFrame(page -> {
+      page.searchAddress(addressing);
+      page.addressCardBtn.get(0).click();
+      page.addressCards.get(0).editAddress.click();
+      page.editAddressModal.waitUntilVisible();
+      page.editAddressModal.fill(addressingEdited);
+      page.editAddressModal.editAddress.click();
+    });
   }
 
-  @And("^Operator searches the address that has been edited on Addressing Page$")
-  public void searchEditedAddress() {
-    Addressing addressingEdited = get(KEY_EDITED_ADDRESSING);
-    addressingPage.searchAddress(addressingEdited);
+  @And("Operator searches {value} address on Addressing Page")
+  public void searchAddress(String input) {
+    addressingPage.inFrame(page -> {
+      page.searchInput.forceClear();
+      pause1s();
+      page.searchInput.setValue(input);
+      pause1s();
+    });
   }
 
-  @Then("^Operator verifies the address has been changed$")
-  public void verifyAddressEdited() {
-    Addressing addressingEdited = get(KEY_EDITED_ADDRESSING);
-    addressingPage.verifyAddressExistAndInfoIsCorrect(addressingEdited);
+  @Then("^Operator verifies address on Addressing Page:$")
+  public void verifyAddressEdited(Map<String, String> data) {
+    Addressing expected = new Addressing(resolveKeyValues(data));
+    addressingPage.inFrame(page -> {
+      page.addressCardBtn.get(0).click();
+      SoftAssertions assertions = new SoftAssertions();
+      assertions.assertThat(page.addressCards.get(0).buildingNo.getValue())
+          .as("Building No")
+          .isEqualTo(expected.getBuildingNo());
+      assertions.assertThat(page.addressCards.get(0).street.getValue())
+          .as("Street Name")
+          .isEqualTo(expected.getStreetName());
+      assertions.assertThat(page.addressCards.get(0).postcode.getValue())
+          .as("Postcode")
+          .isEqualTo(expected.getPostcode());
+      assertions.assertThat(page.addressCards.get(0).latitude.getValue())
+          .as("Latitude")
+          .isEqualTo(expected.getLatitude().toString());
+      assertions.assertThat(page.addressCards.get(0).longitude.getValue())
+          .as("Longitude")
+          .isEqualTo(expected.getLongitude().toString());
+      assertions.assertAll();
+    });
   }
 }

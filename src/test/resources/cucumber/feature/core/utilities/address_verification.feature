@@ -7,24 +7,17 @@ Feature: Address Verification
 
   @DeleteRouteGroups
   Scenario Outline: Operator Fetch Addresses By Route Groups on Address Verification Page - <Note> (<hiptest-uid>)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
-    And Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator removes all General Filters except following: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-    And Operator click Load Selection on Create Route Group page
-    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
-      | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator verifies that success toast displayed:
-      | top | Added successfully |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of <transactionType> Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -40,24 +33,17 @@ Feature: Address Verification
 
   @DeleteRouteGroups
   Scenario: Operator Archive Address By Route Groups on Address Verification Page (uid:92b022ea-5a46-4380-83e9-f56f01d02c35)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
-    And Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator removes all General Filters except following: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-    And Operator click Load Selection on Create Route Group page
-    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
-      | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator verifies that success toast displayed:
-      | top | Added successfully |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -72,24 +58,17 @@ Feature: Address Verification
 
   @DeleteRouteGroups
   Scenario: Operator Edit Waypoint Lat/Long By Route Groups on Address Verification Page (uid:fac2c989-56ed-43d0-b333-a56cff5b3f4a)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
-    And Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator removes all General Filters except following: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-    And Operator click Load Selection on Create Route Group page
-    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
-      | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator verifies that success toast displayed:
-      | top | Added successfully |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -111,24 +90,17 @@ Feature: Address Verification
 
   @DeleteRouteGroups
   Scenario: Operator Save Address on Address Verification Page (uid:0a7847d4-9c68-4954-95e8-baaad8d893d5)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
-    And Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Group' page is loaded
-    And Operator removes all General Filters except following: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
-    And Operator click Load Selection on Create Route Group page
-    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}":
-      | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator verifies that success toast displayed:
-      | top | Added successfully |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
