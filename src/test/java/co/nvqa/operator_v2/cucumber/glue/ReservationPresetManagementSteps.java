@@ -91,6 +91,20 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.reservationPresetTable.filterByColumn(COLUMN_NAME, group);
     reservationPresetManagementPage.reservationPresetTable.selectRow(1);
     reservationPresetManagementPage.actionsMenu.selectOption("Route Pending Reservations");
+  }
 
+  @Then("^Operator create route on Reservation Preset Management page:$")
+  public void createRoute(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String group = data.get("group");
+    String routeDate = data.get("routeDate");
+    reservationPresetManagementPage.overviewTab.click();
+    pause2s();
+    reservationPresetManagementPage.reservationPresetTable.filterByColumn(COLUMN_NAME, group);
+    reservationPresetManagementPage.reservationPresetTable.selectRow(1);
+    reservationPresetManagementPage.routeDate.setValue(routeDate);
+    reservationPresetManagementPage.actionsMenu.selectOption("Create route");
+    reservationPresetManagementPage.createRouteDialog.waitUntilVisible();
+    reservationPresetManagementPage.createRouteDialog.confirm.clickAndWaitUntilDone();
   }
 }
