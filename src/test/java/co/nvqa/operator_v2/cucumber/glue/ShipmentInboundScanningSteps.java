@@ -34,6 +34,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
   public void inboundScanning(String label, String hub) {
+    pause10s();
     scanningPage.switchTo();
     retryIfRuntimeExceptionOccurred(() ->
     {
