@@ -82,7 +82,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_SHIPMENT_ID_RESULT_TABLE = "//td[@nv-table-highlight='filter.id']";
   private static final String XPATH_SHIPMENT_ID_DUPLICATED = "//span[@ng-if='ctrl.duplicateCount!==0']";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL = "//md-dialog[contains(@class,'shipment-search-error')]";
-  private static final String XPATH_SHIPMENT_SEARCH_ERROR_TEXT = "//md-dialog[contains(@class,'shipment-search-error')]";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
@@ -645,9 +644,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void verifyEmptyLineParsingErrorToastExist() {
     waitUntilVisibilityOfToast("Search error");
-    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_TEXT + "//p[1]"),
+    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]"),
             matchesPattern("We cannot find following .* shipment ids:"));
-    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_TEXT + "//p[2]"),
+    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]"),
             containsString(""));
   }
 
