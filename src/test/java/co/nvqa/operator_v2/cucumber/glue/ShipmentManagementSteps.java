@@ -417,7 +417,6 @@ public class ShipmentManagementSteps extends AbstractSteps {
     } else {
       shipmentInfo = get(KEY_SHIPMENT_INFO);
     }
-    shipmentManagementPage.refreshPage();
     shipmentManagementPage
         .verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
