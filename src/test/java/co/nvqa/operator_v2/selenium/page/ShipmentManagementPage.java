@@ -643,10 +643,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void verifyEmptyLineParsingErrorToastExist() {
     waitUntilVisibilityOfToast("Search error");
-    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]"),
-            matchesPattern("We cannot find following .* shipment ids:"));
-    assertThat("toast message is the same", getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]"),
-            containsString(""));
+    Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]")).
+            as("toast message is the same").matches("We cannot find following .* shipment ids:");
+    Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]")).
+            as("toast message is the same").contains("");
   }
 
   public void verifyUnableToEditCompletedShipmentToastExist() {
