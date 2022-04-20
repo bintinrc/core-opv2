@@ -88,6 +88,7 @@ public class GlobalInboundSteps extends AbstractSteps {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(finalMapOfData);
+        globalInboundPage.switchTo();
         globalInboundPage.successfulGlobalInbound(globalInboundParams);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
       } catch (Throwable ex) {

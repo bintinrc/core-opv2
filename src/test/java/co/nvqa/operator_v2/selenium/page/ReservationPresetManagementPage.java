@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -37,8 +38,14 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public AssignShipperDialog assignShipperDialog;
 
+  @FindBy(css = "md-dialog")
+  public CreateRouteDialog createRouteDialog;
+
   @FindBy(css = "div.title md-menu")
   public MdMenu actionsMenu;
+
+  @FindBy(css = "div.route-date")
+  public MdDatepicker routeDate;
 
   @FindBy(xpath = "//md-tab-item[contains(.,'Pending')]")
   public PageElement pendingTab;
@@ -226,6 +233,16 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
     public NvApiTextButton assignShipper;
 
     public AssignShipperDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class CreateRouteDialog extends MdDialog {
+
+    @FindBy(name = "commons.confirm")
+    public NvApiTextButton confirm;
+
+    public CreateRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

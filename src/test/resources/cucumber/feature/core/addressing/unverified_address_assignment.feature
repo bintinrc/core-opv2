@@ -24,7 +24,7 @@ Feature: Unverified Address Assignment
 
   @DeleteAddress
   Scenario: Operator Assign a Zone to an Unverified Address Successfully (uid:2bf09de6-73bb-42b5-b052-69be8aca67dc)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -37,9 +37,9 @@ Feature: Unverified Address Assignment
     When Operator go to menu Addressing -> Unverified Address Assignment
     And Operator clicks Load Selection on Unverified Address Assignment page
     And Operator assign address "{KEY_CREATED_ORDER.buildCommaSeparatedToAddress}" to zone "{zone-name}" on Unverified Address Assignment page
-    Then Operator verifies that success toast displayed:
-      | top                | 1 Addresses Assigned |
-      | waitUntilInvisible | true                 |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 address assigned |
+      | waitUntilInvisible | true               |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verifies Zone is "{zone-short-name}" on Edit Order page
     When DB operator gets details for delivery transactions by order id

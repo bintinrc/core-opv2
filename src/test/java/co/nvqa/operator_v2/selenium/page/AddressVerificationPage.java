@@ -19,7 +19,7 @@ import org.openqa.selenium.support.PageFactory;
 /**
  * @author Sergey Mishanin
  */
-public class AddressVerificationPage extends OperatorV2SimplePage {
+public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -27,22 +27,22 @@ public class AddressVerificationPage extends OperatorV2SimplePage {
   @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;
 
-  @FindBy(xpath = "//div[contains(@class,'SectionNavigation')][.='Verify Addresses']")
+  @FindBy(xpath = "//label[.='Verify Address']")
   public PageElement verifyAddressTab;
 
-  @FindBy(id = "route-group-selector")
+  @FindBy(xpath = "//div[./div[.='By Route Group']]//div[contains(@class,'ant-select')]")
   public AntSelect routeGroup;
 
-  @FindBy(xpath = "//div[contains(@class,'AvfetchAddressForm__Grey')][contains(.,'By Route Groups')]//button")
+  @FindBy(css = "[data-testid='by-route-group-submit-button']")
   public AntButton fetchAddressByRouteGroup;
 
   @FindBy(xpath = "//div[contains(@class,'ant-table')]//tr/td[2]")
   public List<PageElement> fetchedAddresses;
 
-  @FindBy(xpath = "//div[contains(@class,'ant-table')]//tr/td[4]//a[.='Edit']")
+  @FindBy(xpath = "//div[contains(@class,'ant-table')]//tr/td[4]//span[text()='Edit']")
   public List<PageElement> editLinks;
 
-  @FindBy(xpath = "//div[contains(@class,'ant-table')]//tr/td[4]//a[.='More']")
+  @FindBy(xpath = "//div[contains(@class,'ant-table')]//tr/td[4]//span[text()='More']")
   public List<PageElement> moreLinks;
 
   @FindBy(xpath = "//li[.='Archive Address']")
