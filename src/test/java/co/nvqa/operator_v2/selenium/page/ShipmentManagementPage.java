@@ -49,8 +49,7 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Lanang Jati
@@ -233,7 +232,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     clickButtonByAriaLabel("Delete Preset");
     waitUntilVisibilityOfElementLocated("//md-dialog-content//div[.='Select a preset to delete']");
     waitUntilElementIsClickable("//md-select[contains(@aria-label,'Select preset')]");
-    TestUtils.findElementAndClick("//md-select[contains(@aria-label,'Select preset')]", "xpath", getWebDriver());
     selectValueFromMdSelectByAriaLabel("Select preset", presetName);
     clickNvIconTextButtonByName("commons.delete");
     waitUntilVisibilityOfToast("1 filter preset deleted");
@@ -644,9 +642,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyEmptyLineParsingErrorToastExist() {
-    waitUntilVisibilityOfToast("Network Request Error");
-    assertThat("toast message is the same", getToastBottomText(),
-        containsString("Cannot parse parameter id as Long: For input string: \"\""));
+    waitUntilVisibilityOfToast("Search error");
+    Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]")).
+            as("toast message is the same").matches("We cannot find following .* shipment ids:");
+    Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]")).
+            as("toast message is the same").contains("");
   }
 
   public void verifyUnableToEditCompletedShipmentToastExist() {
