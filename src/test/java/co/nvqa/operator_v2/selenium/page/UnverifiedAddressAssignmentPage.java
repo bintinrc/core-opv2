@@ -1,8 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.TxnAddress;
-import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
@@ -13,7 +14,8 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class UnverifiedAddressAssignmentPage extends OperatorV2SimplePage {
+public class UnverifiedAddressAssignmentPage extends
+    SimpleReactPage<UnverifiedAddressAssignmentPage> {
 
   public TxnAddressTable txnAddressTable;
 
@@ -29,14 +31,14 @@ public class UnverifiedAddressAssignmentPage extends OperatorV2SimplePage {
   @FindBy(css = "nv-filter-box[item-types='Delivery Type']")
   public NvFilterBox deliveryTypeFilter;
 
-  @FindBy(name = "commons.load-selection")
-  public NvApiTextButton loadSelection;
+  @FindBy(css = "[data-testid='load-addresses']")
+  public AntButton loadSelection;
 
-  @FindBy(css = "md-autocomplete[placeholder='Assign to zone']")
-  public MdAutocomplete selectZone;
+  @FindBy(css = "div.select-zone")
+  public AntSelect selectZone;
 
-  @FindBy(id = "assignButton")
-  public MdAutocomplete assignButton;
+  @FindBy(xpath = "//button[.='Assign']")
+  public Button assignButton;
 
   public UnverifiedAddressAssignmentPage(WebDriver webDriver) {
     super(webDriver);
@@ -46,7 +48,7 @@ public class UnverifiedAddressAssignmentPage extends OperatorV2SimplePage {
   /**
    * Accessor for Transaction/Reservation table
    */
-  public static class TxnAddressTable extends MdVirtualRepeatTable<TxnAddress> {
+  public static class TxnAddressTable extends AntTable<TxnAddress> {
 
     public static final String MD_VIRTUAL_REPEAT = "trvn in getTableData()";
     public static final String COLUMN_ADDRESS = "address";
@@ -59,7 +61,6 @@ public class UnverifiedAddressAssignmentPage extends OperatorV2SimplePage {
           .build()
       );
       setEntityClass(TxnAddress.class);
-      setMdVirtualRepeat("txn in getTableData()");
     }
   }
 

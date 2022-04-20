@@ -1,6 +1,6 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @FinanceCod
 
-Feature: Generate COD Report - Select by Parent Shipper
+Feature: Generate COD Report - Select by Route ID
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given API Operator whitelist email "{order-billing-email}"
@@ -40,6 +40,8 @@ Feature: Generate COD Report - Select by Parent Shipper
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
       | {"timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"], "report_type" : "COD", "route_ids": [ {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} ], "template_id": {finance-cod-template-id}} |
@@ -50,8 +52,6 @@ Feature: Generate COD Report - Select by Parent Shipper
       | generateFile | Select By Route                                                     |
       | routeId      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
   Scenario: Generate COD Report - Not Select Any Route ID
@@ -66,6 +66,6 @@ Feature: Generate COD Report - Select by Parent Shipper
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below
-      | generateFile | Select By Route       |
+      | generateFile | Select By Route |
     Then Operator verifies Generate COD based on option is not clickable
     Then Operator verifies Between Dates option is not clickable

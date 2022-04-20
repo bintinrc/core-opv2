@@ -68,19 +68,19 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
-  @FindBy(css = "nv-filter-box[item-types='Status']")
+  @FindBy(css = "nv-filter-box[main-title='commons.status']")
   public NvFilterBox statusFilter;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Granular Status']")
+  @FindBy(css = "nv-filter-box[main-title='commons.model.granular-status']")
   public NvFilterBox granularStatusFilter;
 
   @FindBy(css = "nv-filter-time-box")
   public NvFilterTimeBox creationTimeFilter;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Master Shipper']")
+  @FindBy(css = "nv-filter-box[main-title='commons.master-shipper']")
   public NvFilterBox masterShipperFilter;
 
-  @FindBy(xpath = "//nv-filter-autocomplete[@item-types='Shipper']")
+  @FindBy(css = "nv-filter-autocomplete[main-title='commons.shipper']")
   public NvFilterAutocomplete shipperFilter;
 
   @FindBy(css = "md-autocomplete[md-input-name='searchTerm']")
@@ -144,8 +144,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public MdSelect filterPreset;
 
   public void addFilter(String value) {
-    addFilter.selectValue(value);
-    addFilter.closeSuggestions();
+    addFilter.simpleSelectValue(value);
   }
 
   public enum Category {

@@ -219,7 +219,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | overall_balance | 16.59        |
       | logs            | -83.41,16.59 |
     Examples:
-      | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
+      | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 100.0  | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
@@ -371,7 +371,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.62   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
-    @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShipper
   Scenario Outline: Operator Upload CSV Payment With Both Debit And Credit Type
     #1 Account ID linked to 2 Shippers
     #Shipper 1
@@ -445,17 +445,17 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
       | event             | Payment                                                                                    |
-      Then DB Operator gets ledger details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.ledgers table
-      Then Operator verifies below details in billing_qa_gl.ledgers table
-        | column         | expected_value       |
-        | origin_balance | <amount>             |
-        | total_remitted | <amount>             |
-        | balance        | 0.00                 |
-        | status         | Completed            |
-        | status_logs    | Open,Ready,Completed |
-      And DB Operator gets shipper account details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.shipper_accounts table
-      And Operator verifies below details in billing_qa_gl.shipper_accounts table
-        | source          | <source>     |
+    Then DB Operator gets ledger details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.ledgers table
+    Then Operator verifies below details in billing_qa_gl.ledgers table
+      | column         | expected_value       |
+      | origin_balance | <amount>             |
+      | total_remitted | <amount>             |
+      | balance        | 0.00                 |
+      | status         | Completed            |
+      | status_logs    | Open,Ready,Completed |
+    And DB Operator gets shipper account details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.shipper_accounts table
+    And Operator verifies below details in billing_qa_gl.shipper_accounts table
+      | source          | <source>     |
       | overall_balance | 0.0          |
       | logs            | <amount>,0.0 |
    # Verify shipper 3
@@ -474,11 +474,11 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | updated_at        | notNull                                                                                    |
       | deleted_at        | null                                                                                       |
       | event             | Remittance                                                                                 |
-      And DB Operator gets shipper account details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[3].id}" from billing_qa_gl.shipper_accounts table
-      And Operator verifies below details in billing_qa_gl.shipper_accounts table
-        | source          | <source>   |
-        | overall_balance | <amount_2> |
-        | logs            | <amount_2> |
-      Examples:
-        | source   | account_id                                       | account_id_2                                       | amount | amount_2 | type  | type_2 | payment_method | transaction_no                                             | transaction_no_2                                             | payee_name       | payee_account_number                                       | payee_bank |
-        | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 2.54   | 7.62     | DEBIT | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-2-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+    And DB Operator gets shipper account details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[3].id}" from billing_qa_gl.shipper_accounts table
+    And Operator verifies below details in billing_qa_gl.shipper_accounts table
+      | source          | <source>   |
+      | overall_balance | <amount_2> |
+      | logs            | <amount_2> |
+    Examples:
+      | source   | account_id                                       | account_id_2                                       | amount | amount_2 | type  | type_2 | payment_method | transaction_no                                             | transaction_no_2                                             | payee_name       | payee_account_number                                       | payee_bank |
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 2.54   | 7.62     | DEBIT | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-2-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
