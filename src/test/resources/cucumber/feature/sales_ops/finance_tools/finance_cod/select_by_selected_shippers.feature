@@ -6,6 +6,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select One Shipper
       #Test Data - Normal Order
     Given API Shipper create V4 order using data below:
@@ -40,6 +41,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
     Then Operator verifies the cod entry details in the body
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Route Date - Select One Shipper
       #Test Data - Normal Order
     Given API Shipper create V4 order using data below:
@@ -82,6 +84,7 @@ Feature: Generate COD Report - Selected Shipper(s)
       | emailAddress | {order-billing-email} |
     Then Operator verifies error message "Please select at least one shipper."
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select Multiple Shippers
            #Test Data - Normal Order - Shipper 1
     Given API Shipper create V4 order using data below:

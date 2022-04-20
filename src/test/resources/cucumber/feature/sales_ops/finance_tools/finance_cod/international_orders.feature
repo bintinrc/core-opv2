@@ -6,6 +6,7 @@ Feature: Generate COD Report - International Order(s)
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - International Orders
     #Test Data - International Order
     Given API Shipper create an order using below json as request body
@@ -39,6 +40,7 @@ Feature: Generate COD Report - International Order(s)
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
     Then Operator verifies the cod entry details in the body
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Route Date - International Orders
     #Test Data - International Order
     Given API Shipper create an order using below json as request body
@@ -78,6 +80,7 @@ Feature: Generate COD Report - International Order(s)
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and verifies the finance cod email body contains message "Error: No orders found."
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - International Orders - Service Type = Non-International - Delivery Type = International
    #Test Data - International Order
     Given API Shipper create V4 order using data below:
@@ -112,6 +115,7 @@ Feature: Generate COD Report - International Order(s)
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
     Then Operator verifies the cod entry details in the body
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - International Orders - Service Type = Non-International - Delivery Type = International
    #Test Data - International Order
     Given API Shipper create an order using below json as request body

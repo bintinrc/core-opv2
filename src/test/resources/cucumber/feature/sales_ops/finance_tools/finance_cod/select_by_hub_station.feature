@@ -6,6 +6,8 @@ Feature: Generate COD Report - Select by Hub/Station
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select Multiple Hub/Station
          #Test Data - Normal Order- Hub 1
     Given API Shipper create V4 order using data below:
@@ -56,6 +58,7 @@ Feature: Generate COD Report - Select by Hub/Station
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
     Then Operator verifies the cod entry details in the body
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Route Date - Select One Hub/Station
      #Test Data - Normal Order
     Given API Shipper create V4 order using data below:
