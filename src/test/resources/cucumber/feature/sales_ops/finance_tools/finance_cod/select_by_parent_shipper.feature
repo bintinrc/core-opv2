@@ -6,6 +6,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select One Parent Shipper
      #Test Data - Normal Order by Marketplace Shipper
     Given API Shipper create V4 order using data below:
@@ -40,6 +41,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Route Date - Select One Parent Shipper
      #Test Data - Normal Order by Marketplace Shipper
     Given API Shipper create V4 order using data below:

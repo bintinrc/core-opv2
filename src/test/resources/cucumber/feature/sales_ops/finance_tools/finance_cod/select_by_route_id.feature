@@ -6,6 +6,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Select Multiple Route IDs
        #Test Data - Normal Order -Route 1
     Given API Shipper create V4 order using data below:

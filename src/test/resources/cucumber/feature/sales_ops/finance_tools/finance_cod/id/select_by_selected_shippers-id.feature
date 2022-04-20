@@ -6,6 +6,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select One Shipper - ID
       #Test Data - Normal Order
     Given API Shipper create V4 order using data below:
