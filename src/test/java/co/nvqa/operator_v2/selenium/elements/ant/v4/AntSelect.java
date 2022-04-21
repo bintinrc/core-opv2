@@ -11,13 +11,19 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 /**
- * AntSelect Wrapper for Ant design v4
- * AntSelect v4 use virtual repeat, therefore no backing list of option that we can select
- * therefore any select operation need to scroll and select or by type and select the item
+ * AntSelect Wrapper for Ant design v4 AntSelect v4 use virtual repeat, therefore no backing list of
+ * option that we can select therefore any select operation need to scroll and select or by type and
+ * select the item
  */
 public class AntSelect extends PageElement {
 
   public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')]";
+  @FindBy(className = "ant-select-selection-item")
+  public PageElement selectValueElement;
+  @FindBy(xpath = ".//input[contains(@class,'ant-select-search__field') or contains(@class,'ant-select-selection-search-input')]")
+  public PageElement searchInput;
+  @FindBy(css = ".ant-select-clear-icon, .ant-select-clear")
+  public PageElement clearIcon;
 
   public AntSelect(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
@@ -32,15 +38,6 @@ public class AntSelect extends PageElement {
   public AntSelect(WebDriver webDriver, SearchContext searchContext, String xpath) {
     super(webDriver, searchContext, xpath);
   }
-
-  @FindBy(className = "ant-select-selection-item")
-  public PageElement selectValueElement;
-
-  @FindBy(xpath = "//input[contains(@class,'ant-select-search__field') or contains(@class,'ant-select-selection-search-input')]")
-  public PageElement searchInput;
-
-  @FindBy(className = "ant-select-clear-icon")
-  public PageElement clearIcon;
 
   public void selectValue(String value) {
     enterSearchTerm(value);
@@ -94,6 +91,7 @@ public class AntSelect extends PageElement {
 
   public boolean hasItem(String value) {
     openMenu();
+    searchInput.sendKeys(value);
     return isElementExistFast(f(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value)));
   }
 }
