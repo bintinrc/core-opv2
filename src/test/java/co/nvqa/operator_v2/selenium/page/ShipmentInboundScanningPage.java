@@ -85,6 +85,8 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
 
   public void inboundScanning(long shipmentId, String label, String hub) {
     pause2s();
+    click(XPATH_INBOUND_HUB);
+    waitUntilInvisibilityOfElementLocated("//div[@id='rc_select_0_list']//div[@class='ant-empty-description']");
     selectInboundHub(hub);
     click(grabXpathButton(label));
     startInboundButton.click();
