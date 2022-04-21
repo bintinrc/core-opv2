@@ -49,8 +49,7 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Lanang Jati
@@ -197,9 +196,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause1s();
   }
 
-  public void changeDate(String date, boolean isToday) {
-    String datepickerXpath = "//md-datepicker[@ng-model='%s']//input";
-    if (isToday) {
+  public void changeDate(String field, String date, boolean isFromDate) {
+    String datepickerXpath = "//div//p[contains(.,'"+field+"')]//parent::div//parent::div//md-datepicker[@ng-model='%s']//input";
+    if (isFromDate) {
       clear(f(datepickerXpath, "container.fromDate"));
       pause1s();
       sendKeys(f(datepickerXpath, "container.fromDate"), date);
@@ -233,7 +232,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     clickButtonByAriaLabel("Delete Preset");
     waitUntilVisibilityOfElementLocated("//md-dialog-content//div[.='Select a preset to delete']");
     waitUntilElementIsClickable("//md-select[contains(@aria-label,'Select preset')]");
-    TestUtils.findElementAndClick("//md-select[contains(@aria-label,'Select preset')]", "xpath", getWebDriver());
     selectValueFromMdSelectByAriaLabel("Select preset", presetName);
     clickNvIconTextButtonByName("commons.delete");
     waitUntilVisibilityOfToast("1 filter preset deleted");
@@ -376,8 +374,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void validateShipmentId(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-    String expectedShipmentId = getText("//td[@nv-table-highlight='filter.id']");
-    assertEquals("Shipment ID is not the same : ", expectedShipmentId, String.valueOf(shipmentId));
+    waitUntilVisibilityOfElementLocated("//td[@nv-table-highlight='filter.id']");
+    String actualShipmentId = getText("//td[@nv-table-highlight='filter.id']");
+    assertEquals("Shipment ID is not the same : ", String.valueOf(shipmentId), actualShipmentId);
   }
 
   public void verifyOpenedShipmentDetailsPageIsTrue(Long shipmentId, String trackingId) {
@@ -643,9 +642,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyEmptyLineParsingErrorToastExist() {
-    waitUntilVisibilityOfToast("Network Request Error");
-    assertThat("toast message is the same", getToastBottomText(),
-        containsString("Cannot parse parameter id as Long: For input string: \"\""));
+    waitUntilVisibilityOfToast("Search error");
+    Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]")).
+            as("toast message is the same").matches("We cannot find following .* shipment ids:");
+    Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]")).
+            as("toast message is the same").contains("");
   }
 
   public void verifyUnableToEditCompletedShipmentToastExist() {
@@ -955,7 +956,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String COLUMN_TOTAL_PARCELS = "ordersCount";
     public static final String COLUMN_COMMENTS = "comments";
     public static final String COLUMN_MAWB = "mawb";
-    public static final String ACTION_EDIT = "Edit";
+    public static final String ACTION_EDIT = "//button[@aria-label='Edit'][//i[.='edit']]";
     public static final String ACTION_DETAILS = "//tr[%s]//td//nv-icon-button[@name='Details']";
     public static final String ACTION_FORCE = "Force";
     public static final String ACTION_PRINT = "Print";
@@ -1027,10 +1028,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='select-type']")
     public MdSelect type;
 
-    @FindBy(css = "[id^='start-hub']")
+    @FindBy(css = "[id^='origHub']")
     public MdSelect startHub;
 
-    @FindBy(css = "[id^='end-hub']")
+    @FindBy(css = "[id^='destHub']")
     public MdSelect endHub;
 
     @FindBy(id = "container.shipment-management.comments-optional")

@@ -12,7 +12,10 @@ import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea.
@@ -21,6 +24,8 @@ import org.junit.platform.commons.util.StringUtils;
  */
 @ScenarioScoped
 public class ShipmentInboundScanningSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentInboundScanningSteps.class);
 
   private ShipmentInboundScanningPage scanningPage;
 
@@ -34,15 +39,17 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
   public void inboundScanning(String label, String hub) {
+    pause10s();
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        Long shipmentId = (Long)get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = Long.valueOf(String.valueOf(get(KEY_CREATED_SHIPMENT_ID)));
         final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
         scanningPage.inboundScanning(shipmentId, label, finalHub);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
         scanningPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -277,12 +284,18 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @Then("Operator verifies that the following messages display on the card after inbounding")
   public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(Map<String, String> messages) {
     messages = resolveKeyValues(messages);
-    assertThat(f("Assert that scanned state is %s", messages.get("scanState")), scanningPage.scannedState
-        .getText(), equalTo(messages.get("scanState")));
-    assertThat(f("Assert that scanned message is %s", messages.get("scanMessage")), scanningPage.scannedMessage
-        .getText(), equalTo(messages.get("scanMessage")));
-    assertThat(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")), scanningPage.scannedShipmentId
-        .getText(), containsString(messages.get("scannedShipmentId")));
+    Assertions.assertThat(scanningPage.scannedState.getText())
+        .as(f("Assert that scanned state is %s", messages.get("scanState")))
+        .isEqualTo(messages.get("scanState"));
+    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+        .as(f("Assert that scanned message is %s", messages.get("scanMessage")))
+        .isEqualTo(messages.get("scanMessage"));
+    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+        .as(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")))
+        .isEqualTo(messages.get("scannedShipmentId"));
+    takesScreenshot();
+
+
   }
 
 }

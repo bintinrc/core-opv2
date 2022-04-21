@@ -5,7 +5,7 @@ Feature: Priority Parcel in Hub
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel in Hub (uid:4e760809-5688-407c-83c5-32f2fe53e368)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -611,7 +611,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | TagId | ModalName1                                   | ModalName2              | SlackMessageContent |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | 5570  | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel in Hub of Unacknowledged SLFD Parcel (uid:f748e580-5089-4003-bdee-b9cfaa06e8ff)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -653,7 +653,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel in Hub of Acknowledged SLFD Parcel (uid:1d024335-8032-4efb-b82a-c9b6bf14e387)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -704,7 +704,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           | Successfully confirmed 1 ETA(s)! |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @Happypath @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Ticket Status - Recovery Ticket Type = Shipper Issue (uid:8fa5f052-59e4-4154-819b-718d4d891984)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -2233,7 +2233,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel of Missing Ticket Type (uid:05e8d756-57f8-48bc-aa3a-f3b35c67d41d)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

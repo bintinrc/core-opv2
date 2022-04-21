@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
@@ -64,8 +63,8 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub
             .selectValue(finalHubName);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info(
+        LOGGER.error(ex.getMessage());
+        LOGGER.info(
             f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog",
                 hubName));
         navigateRefresh();
@@ -110,8 +109,8 @@ public class MovementManagementSteps extends AbstractSteps {
         operatorClickButtonOnAddMovementScheduleDialog("OK");
         pause6s();
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
@@ -188,8 +187,8 @@ public class MovementManagementSteps extends AbstractSteps {
         }
         movementManagementPage.editStationRelationsModal.waitUntilInvisible();
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying...");
         movementManagementPage.refreshPage();
         movementManagementPage.switchTo();
         movementManagementPage.relationsTab.waitUntilClickable(60);
@@ -211,8 +210,8 @@ public class MovementManagementSteps extends AbstractSteps {
         Optional.ofNullable(station)
             .ifPresent(value -> movementManagementPage.stationFilter.setValue(value));
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         movementManagementPage.switchTo();
         movementManagementPage.relationsTab.waitUntilClickable(60);
@@ -320,8 +319,8 @@ public class MovementManagementSteps extends AbstractSteps {
         String destinationHub = data.get("destinationHub");
         movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         movementManagementPage.refreshPage();
         movementManagementPageIsLoaded();
         throw new NvTestRuntimeException(ex.getCause());
@@ -390,8 +389,8 @@ public class MovementManagementSteps extends AbstractSteps {
           existed.getSchedules().addAll(movementSchedule.getSchedules());
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
@@ -672,8 +671,8 @@ public class MovementManagementSteps extends AbstractSteps {
             movementManagementPage.noResultsFoundText.getText(),
             equalTo("No Results Found"));
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info(
+        LOGGER.error(ex.getMessage());
+        LOGGER.info(
             f("Cannot select hub name value in Origin Crossdock Hub field on the Movement Schedule page"));
         movementManagementPage.refreshPage();
         movementManagementPage.switchTo();
@@ -722,8 +721,8 @@ public class MovementManagementSteps extends AbstractSteps {
             break;
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info(
+        LOGGER.error(ex.getMessage());
+        LOGGER.info(
             f("Cannot select hub name value in Origin Crossdock Hub field on the Movement Schedule page"));
         movementManagementPage.refreshPage();
         movementManagementPage.switchTo();

@@ -750,6 +750,28 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     backToShipperList();
   }
 
+  public void unsetPickupAddressesAsMilkrun(Shipper shipper) {
+    waitUntilShipperCreateEditPageIsLoaded();
+    clickTabItem("More Settings");
+    if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses())) {
+      shipper.getPickup().getReservationPickupAddresses().stream().filter(a -> !a.getMilkRun())
+          .forEach(address ->
+          {
+            searchTableCustom1("contact", address.getContact());
+            clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
+            waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+            fillMilkrunReservationSettings(address);
+            clickNvApiTextButtonByName("commons.save-changes");
+            waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
+
+            verifyPickupAddress(address);
+          });
+    }
+    clickNvIconTextButtonByName("Save Changes");
+    waitUntilInvisibilityOfToast("All changes saved successfully");
+    backToShipperList();
+  }
+
   public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper) {
     waitUntilShipperCreateEditPageIsLoaded();
     String actualShipperStatus = basicSettingsForm.shipperStatus.getValue();

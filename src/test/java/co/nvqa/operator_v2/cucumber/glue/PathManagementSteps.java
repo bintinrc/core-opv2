@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.PathManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.JavascriptExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -25,6 +26,8 @@ import org.openqa.selenium.JavascriptExecutor;
  */
 @ScenarioScoped
 public class PathManagementSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PathManagementSteps.class);
 
   private PathManagementPage pathManagementPage;
 
@@ -75,8 +78,8 @@ public class PathManagementSteps extends AbstractSteps {
           operatorSelectsValueInFilter(resolvedDestinationHub, "Destination Hub");
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Hub not found, retrying...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Hub not found, retrying...");
         pathManagementPage.refreshPage();
         operatorMovementTripPageIsLoaded();
         throw new NvTestRuntimeException(ex.getCause());

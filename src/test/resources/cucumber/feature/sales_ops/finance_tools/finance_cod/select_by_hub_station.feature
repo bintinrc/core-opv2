@@ -1,11 +1,13 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @FinanceCod
 
-Feature: Generate COD Report - International Order(s)
+Feature: Generate COD Report - Select by Hub/Station
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select Multiple Hub/Station
          #Test Data - Normal Order- Hub 1
     Given API Shipper create V4 order using data below:
@@ -39,9 +41,11 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "hub_ids": [ {hub-id},{hub-id-2} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "hub_ids": [ {hub-id},{hub-id-2} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -52,10 +56,9 @@ Feature: Generate COD Report - International Order(s)
       | generateFile | Select By Hub/Station          |
       | hubId        | {hub-id},{hub-id-2}            |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Route Date - Select One Hub/Station
      #Test Data - Normal Order
     Given API Shipper create V4 order using data below:
@@ -73,19 +76,27 @@ Feature: Generate COD Report - International Order(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T16:00:00.000Z","timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "hub_ids": [ {hub-id} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "hub_ids": [ {hub-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
     Then DB Operator verifies the count of entries for data below
       | startDate    | {gradle-current-date-yyyyMMdd} |
       | endDate      | {gradle-current-date-yyyyMMdd} |
-      | basedOn      | Route Date           |
+      | basedOn      | Route Date                     |
       | generateFile | Select By Hub/Station          |
       | hubId        | {hub-id}                       |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets order details from the billing_qa_gl.cod_orders table
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body
+
+  Scenario: Generate COD Report - Not Select Any Hub/Station
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    Given Operator go to menu Finance Tools -> Finance COD
+    When Operator selects Finance COD Report data as below
+      | generateFile | Select By Hub/Station |
+      | emailAddress | {order-billing-email} |
+    Then Operator verifies error message "Please select at least one hub."

@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvAssertions;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
@@ -18,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.openqa.selenium.JavascriptExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lanang Jati
@@ -26,6 +27,8 @@ import org.openqa.selenium.JavascriptExecutor;
  */
 @ScenarioScoped
 public class ShipmentScanningSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentScanningSteps.class);
 
   private ShipmentScanningPage shipmentScanningPage;
   public ShipmentScanningSteps() {
@@ -56,10 +59,10 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.scanBarcode(trackingId);
-        shipmentScanningPage.checkOrderInShipment(trackingId);
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[@data-testid='add-parcel-scan-container']//span[contains(.,'"+trackingId+"')]");
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -85,10 +88,10 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']");
-        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -110,8 +113,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -135,6 +138,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @And("Set constant order for Indonesia:")
   public void setConstantOrder(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String constantOrder = mapOfData.get("constantOrder");
+    put(KEY_CREATED_ORDER_TRACKING_ID, constantOrder);
+  }
+
+  @And("Set temporary order:")
+  public void setTempOrder(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String constantOrder = mapOfData.get("constantOrder");
     put(KEY_CREATED_ORDER_TRACKING_ID, constantOrder);
@@ -184,21 +194,23 @@ public class ShipmentScanningSteps extends AbstractSteps {
         String resolvedDestHub = resolveValue(destHub);
         pause10s();
         shipmentScanningPage.switchTo();
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[span[input[@id='orig_hub']]]//span[.='Search or Select']");
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectDestinationHub(resolvedDestHub);
         shipmentScanningPage.selectShipmentType(shipmentType);
         shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
         shipmentScanningPage.selectShipmentId(shipmentId);
         shipmentScanningPage.clickSelectShipment();
-        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[contains(text(),'Shipment ID')]");
+        shipmentScanningPage.waitUntilVisibilityOfElementLocated("//button//span[.='Close Shipment']");
 
         for (String trackingId : trackingIds) {
           pause1s();
           shipmentScanningPage.scanBarcode(trackingId);
+          shipmentScanningPage.checkOrderInShipment(trackingId);
         }
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -208,7 +220,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
   @And("Operator removes the parcel from the shipment")
   public void operatorRemovesTheParcelFromTheShipment() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    shipmentScanningPage.removeOrderFromShipment(trackingId);
+    shipmentScanningPage.removeShipmentWithId(trackingId);
+    shipmentScanningPage.checkOrderNotInShipment(trackingId);
   }
 
   @And("Operator removes the parcel from the shipment with error alert")
@@ -226,7 +239,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @And("Operator removes all the parcel from the shipment")
   public void operatorRemovesAllTheParcelFromTheShipment() {
-    shipmentScanningPage.removeAllOrdersFromShipment();
+    List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
+    for (String trackingId : trackingIds) {
+      pause1s();
+      shipmentScanningPage.removeShipmentWithId(trackingId);
+      shipmentScanningPage.checkOrderNotInShipment(trackingId);
+    }
   }
 
   @Then("Operator verifies that the parcel shown is zero")
@@ -388,7 +406,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         String resultStringValue = resolveValue(resultString);
         shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
         shipmentScanningPage.clickCancelInMdDialog();
         pause1s();
         shipmentScanningPage.clickEndShipmentInbound();
@@ -407,7 +425,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage
             .verifyErrorShipmentWithMessage(shipmentId, resultStringValue, errorShipmentType);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
+        LOGGER.error(ex.getMessage());
         shipmentScanningPage.clickCancelInMdDialog();
         pause1s();
         shipmentScanningPage.clickEndShipmentInbound();

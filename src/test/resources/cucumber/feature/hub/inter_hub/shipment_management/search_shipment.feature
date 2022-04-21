@@ -42,6 +42,7 @@ Feature: Shipment Management - Search Shipment
       | trackingId | GET_FROM_CREATED_ORDER |
     Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     When Operator filter shipment based on "Shipment Completion Date Time" Date on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment via API on Shipment Management page
@@ -66,6 +67,8 @@ Feature: Shipment Management - Search Shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
+    When Operator filter Shipment Status = Transit on Shipment Management page
     When Operator filter shipment based on "Transit Date Time" Date on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
@@ -96,6 +99,7 @@ Feature: Shipment Management - Search Shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
@@ -148,10 +152,8 @@ Feature: Shipment Management - Search Shipment
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Pending on Shipment Management page
     And Operator filter Start Hub = {hub-name} on Shipment Management page
     And Operator filter End Hub = {hub-name-2} on Shipment Management page
-    And Operator filter Shipment Type = Air Haul on Shipment Management page
     And Operator save current filters as preset on Shipment Management page
     And Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
@@ -162,7 +164,6 @@ Feature: Shipment Management - Search Shipment
   Scenario: Preset Setting - Delete Shipment Filter as Preset (uid:c722664d-4ef4-4f13-92d6-5074a3dde4f5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Pending on Shipment Management page
     And Operator save current filters as preset on Shipment Management page
     And Operator delete created filters preset on Shipment Management page
     And Operator refresh page
@@ -183,7 +184,39 @@ Feature: Shipment Management - Search Shipment
       | Note                                        | scenarioName    | hiptest-uid                              | filterName      | filterValue  |
       | Search Shipment by Filter - Start Hub       | Start Hub       | uid:6fe69d4d-a6fe-4640-ac42-6a84c2617d17 | Start Hub       | {hub-name}   |
       | Search Shipment by Filter - End Hub         | End Hub         | uid:b8bf98ae-d33f-4686-a0f5-0bf4ce8eed47 | End Hub         | {hub-name-2} |
+
+  @DeleteShipment
+  Scenario Outline: Search Shipment by Filter - <scenarioName> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator clear all filters on Shipment Management page
+    When Operator filter Shipment Status = Pending on Shipment Management page
+    When Operator filter <filterName> = <filterValue> on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Examples:
+      | Note                                        | scenarioName    | hiptest-uid                              | filterName      | filterValue  |
       | Search Shipment by Filter - Shipment Type   | Shipment Type   | uid:2c1f7ae7-0e00-43ea-8fcf-be5e699a4ffe | Shipment Type   | Air Haul     |
+
+  @DeleteShipment
+  Scenario Outline: Search Shipment by Filter - <scenarioName> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator clear all filters on Shipment Management page
+    When Operator filter Shipment Type = Air Haul on Shipment Management page
+    When Operator filter <filterName> = <filterValue> on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Examples:
+      | Note                                        | scenarioName    | hiptest-uid                              | filterName      | filterValue  |
       | Search Shipment by Filter - Shipment Status | Shipment Status | uid:6cebf48f-e62c-4366-80ee-ec36fbbc6a82 | Shipment Status | Pending      |
 
   @DeleteShipment

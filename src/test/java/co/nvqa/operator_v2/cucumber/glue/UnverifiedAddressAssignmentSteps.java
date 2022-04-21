@@ -21,23 +21,27 @@ public class UnverifiedAddressAssignmentSteps extends AbstractSteps {
 
   @And("Operator clicks Load Selection on Unverified Address Assignment page")
   public void operatorClicksLoadSelection() {
-    page.loadSelection.clickAndWaitUntilDone(60);
+    page.inFrame(() -> page.loadSelection.clickAndWaitUntilDone(120));
   }
 
   @Then("Operator verifies address on Unverified Address Assignment page:")
   public void operatorVerifiesAddress(Map<String, String> data) {
     TxnAddress expected = new TxnAddress(resolveKeyValues(data));
-    page.txnAddressTable.filterByColumn(TxnAddressTable.COLUMN_ADDRESS, expected.getAddress());
-    TxnAddress actual = page.txnAddressTable.readEntity(1);
-    expected.compareWithActual(actual);
+    page.inFrame(() -> {
+      page.txnAddressTable.filterByColumn(TxnAddressTable.COLUMN_ADDRESS, expected.getAddress());
+      TxnAddress actual = page.txnAddressTable.readEntity(1);
+      expected.compareWithActual(actual);
+    });
   }
 
   @Then("Operator assign address {string} to zone {string} on Unverified Address Assignment page")
   public void operatorAssignAddress(String address, String zone) {
-    page.txnAddressTable.filterByColumn(TxnAddressTable.COLUMN_ADDRESS, resolveValue(address));
-    page.txnAddressTable.selectRow(1);
-    page.selectZone.selectValue(resolveValue(zone));
-    page.assignButton.click();
+    page.inFrame(() -> {
+      page.txnAddressTable.filterByColumn(TxnAddressTable.COLUMN_ADDRESS, resolveValue(address));
+      page.txnAddressTable.selectRow(1);
+      page.selectZone.selectValue(resolveValue(zone));
+      page.assignButton.click();
+    });
   }
 
 

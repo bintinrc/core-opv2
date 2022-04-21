@@ -6,9 +6,12 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.page.VanInboundPage.ShipmentInboundDialog;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,7 +35,10 @@ public class VanInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[./h3[.='Scanned Parcels']]/h5")
   public PageElement scannedParcelsCount;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "  //div[./h3[.='Parcels yet to Scan']]/h5")
+  public PageElement parcelsYetToScan;
+
+  @FindBy(css = "md-dialog-content")
   public ScannedParcelsDialog scannedParcelsDialog;
 
   @FindBy(css = "button[aria-label='Route Start']")
@@ -46,6 +52,27 @@ public class VanInboundPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-content[class^='nv-van-inbound']")
   public List<PageElement> vanInboundHomePage;
+
+  @FindBy(xpath = "//h4[contains(text(),' Unable to van inbound')]")
+  public PageElement unableToVanInboundModalTitle;
+
+  @FindBy(xpath = "//p[contains(text(),' We are unable to van inbound this parcel')]")
+  public PageElement unableToVanInboundModalMessage;
+
+  @FindBy(xpath = "//md-icon[@role='button']")
+  public PageElement closeIcon;
+
+  @FindBy(xpath = "//button[@aria-label='Close']")
+  public PageElement closeButton;
+
+  @FindBy(xpath = "//button[@aria-label='View']")
+  public PageElement viewButton;
+
+  @FindBy(xpath = "//button[@aria-label='Hub Inbound Shipment']")
+  public PageElement hubInboundShipment;
+
+  @FindBy(xpath = "//label[text()='Tracking ID']/following-sibling::h3")
+  private PageElement editOrderTrackingId;
 
   public VanInboundPage(WebDriver webDriver) {
     super(webDriver);
@@ -88,6 +115,45 @@ public class VanInboundPage extends OperatorV2SimplePage {
     String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
     assertEquals("Tracking ID is invalid", "EMPTY", actualMessage);
   }
+
+  public void clickCloseIcon() {
+    closeIcon.click();
+  }
+
+  public void clickCloseButton() {
+    closeButton.click();
+  }
+
+  public void clickViewButton() {
+    viewButton.click();
+  }
+
+  public void verifyNavigationToEditOrderScreen(String expectedTrackingId) {
+    clickViewButton();
+    String windowHandle = getWebDriver().getWindowHandle();
+    switchToNewWindow();
+    waitWhilePageIsLoading();
+    pause3s();
+    String actualTrackingId = editOrderTrackingId.getText().trim();
+    closeAllWindows(windowHandle);
+    pause3s();
+    Assert.assertTrue("Assert that the search has results as expected after applying filters",
+        actualTrackingId.equalsIgnoreCase(expectedTrackingId));
+  }
+
+  public void validateUnableToVanInboundModalIsDisplayed() {
+    Assert.assertTrue(
+        "Unable to Van Inbound Modal is not displayed",
+        unableToVanInboundModalTitle.isDisplayed());
+    Assert.assertTrue(
+        "Unable to Van Inbound Modal message is not displayed",
+        unableToVanInboundModalMessage.isDisplayed());
+  }
+
+  public void clickHubInboundShipmentButton() {
+    hubInboundShipment.click();
+  }
+
 
   public static class ScannedParcelsDialog extends MdDialog {
 
@@ -185,7 +251,7 @@ public class VanInboundPage extends OperatorV2SimplePage {
   }
 
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "md-dialog-content")
   public ShipmentInboundDialog shipmentInboundDialog;
 
   public static class ShipmentInboundDialog extends MdDialog{
@@ -214,8 +280,25 @@ public class VanInboundPage extends OperatorV2SimplePage {
 
   }
 
+  @FindBy(css = "md-dialog-content")
+  public UnScannedParcelsDialog unScannedParcelsDialog;
 
+  public static class UnScannedParcelsDialog extends MdDialog {
 
+    public UnScannedParcelsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "h4")
+    public PageElement dialogHeader;
+
+    @FindBy(css = "td.tracking-id")
+    public PageElement trackingId;
+
+    @FindBy(css = "td.granular-status>div.warning-text")
+    public PageElement granularWarningText;
+
+  }
 
 
 }

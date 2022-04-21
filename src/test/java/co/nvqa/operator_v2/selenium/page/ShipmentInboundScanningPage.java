@@ -52,13 +52,13 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
   public TextBox inboundTypeText;
 
-  @FindBy(xpath = "//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")
+  @FindBy(xpath = "//button[contains(@class,'button')]//div[text()='Start Inbound']")
   public Button startInboundButton;
 
   @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
   public TextBox tripUnselectedWarning;
 
-  @FindBy(css = "[ng-model='ctrl.shipmentId']")
+  @FindBy(xpath = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']")
   public TextBox shipmentIdInput;
 
   @FindBy(xpath = "//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span")
@@ -85,7 +85,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
 
   public void inboundScanning(long shipmentId, String label, String hub) {
     pause2s();
-    inboundHub.searchAndSelectValue(hub);
+    selectInboundHub(hub);
     click(grabXpathButton(label));
     startInboundButton.click();
     fillShipmentId(shipmentId);
@@ -132,7 +132,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public String grabXpathButton(String label) {
-    return f("//div[contains(text(),'%s')]",label);
+    return f("//*[@aria-label='%s']", label);
   }
 
   public List<String> grabSessionIdNotChangedScan() {
@@ -154,9 +154,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void checkSessionScan(String shipmentId) {
-    waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + String
-        .format("[td[contains(@class,'sn')][text()='1']][td[@class='shipmentId'][text()='%s']]",
-            shipmentId));
+    waitUntilVisibilityOfElementLocated(f("//tr//td[text()='%s']", shipmentId));
   }
 
   public void checkSessionScanResult(Long shipmentId, String condition) {

@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.zone.Zone;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperLivePage;
 import io.cucumber.java.en.Then;
@@ -13,9 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ScenarioScoped
 public class ParcelSweeperLiveSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParcelSweeperLiveSteps.class);
 
   private ParcelSweeperLivePage parcelSweeperLivePage;
 
@@ -72,8 +75,8 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         }
         parcelSweeperLivePage.scanTrackingId(trackingId);
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         parcelSweeperLivePage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }

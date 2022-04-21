@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -44,11 +46,13 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   @FindBy(css = "md-autocomplete[placeholder='Select Hub']")
   public MdAutocomplete selectHub;
 
-  @FindBy(id = "container.global-inbound.device-id-optional")
+  public static final String XPATH_INBOUND_HUB = "//div[@class='ant-select-selector']//input[@id='rc_select_0']";
+
+  @FindBy(xpath = "//input[@data-testid='device-id-input']")
   public TextBox deviceIdInput;
 
-  @FindBy(name = "Continue")
-  public NvApiTextButton continueButton;
+  @FindBy(xpath = "//button[text()='Proceed']")
+  public Button proceedButton;
 
   @FindBy(xpath = "//nv-tag")
   public PageElement dpTag;
@@ -79,11 +83,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   private void selectHubAndDeviceId(String hubName, String deviceId) {
     if (isElementExistFast("//h4[text()='Select the following to begin:']")) {
       pause1s();
-      retryIfRuntimeExceptionOccurred(() -> selectHub.selectValue(hubName));
+      TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
+      sendKeysAndEnter(XPATH_INBOUND_HUB, hubName);
       if (StringUtils.isNotBlank(deviceId)) {
         deviceIdInput.setValue(deviceId);
       }
-      continueButton.clickAndWaitUntilDone();
+      proceedButton.click();
     } else {
       clickNvIconButtonByNameAndWaitUntilEnabled("commons.settings");
       selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
@@ -145,8 +150,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
 
     retryIfAssertionErrorOccurred(() ->
     {
-      String lastScanned = getTextTrimmed("//div[contains(text(), 'Last Scanned')]");
-      String lastScannedTrackingId = lastScanned.split(":")[1].trim();
+      String lastScannedTrackingId = getTextTrimmed("//h5[contains(@class, 'last-scanned-tracking-id')]");
       assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
     }, "Checking Last Scanned Tracking ID");
   }
@@ -186,9 +190,9 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
       List<String> items = Arrays.asList(tags.split("\\s*,\\s*"));
       addTag(items);
     }
-
-    sendKeysAndEnterByAriaLabel("Scan a new parcel / Enter a tracking ID",
-        globalInboundParams.getTrackingId());
+    sendKeysAndEnter("//input[@data-testid='scan-input-field']", globalInboundParams.getTrackingId());
+//    sendKeysAndEnterBy("Scan a new parcel / Enter a tracking ID",
+//        globalInboundParams.getTrackingId());
     pause500ms();
   }
 
