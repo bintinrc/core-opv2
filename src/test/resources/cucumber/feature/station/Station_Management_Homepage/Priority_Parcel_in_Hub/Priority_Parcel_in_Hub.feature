@@ -2481,10 +2481,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 172 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2527,10 +2524,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2574,10 +2568,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2621,10 +2612,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2668,10 +2656,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 4 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2758,10 +2743,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 172 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2804,10 +2786,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2851,10 +2830,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2898,10 +2874,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2945,10 +2918,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 4 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3036,10 +3006,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 172 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3082,10 +3049,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3129,10 +3093,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3176,10 +3137,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 2 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3223,10 +3181,7 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 4 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
