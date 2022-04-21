@@ -642,7 +642,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyEmptyLineParsingErrorToastExist() {
-    waitUntilVisibilityOfToast("Search error");
+    waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'shipment-search-error')]");
     Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]")).
             as("toast message is the same").matches("We cannot find following .* shipment ids:");
     Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]")).
