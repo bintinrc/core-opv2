@@ -1,4 +1,4 @@
-@StationManagement @RecoveryTickets @MissedOrDamaged
+#@StationManagement @RecoveryTickets @MissedOrDamaged
 Feature: Number of Missing or Damaged Parcels
 
   @LaunchBrowser @ShouldAlwaysRun
