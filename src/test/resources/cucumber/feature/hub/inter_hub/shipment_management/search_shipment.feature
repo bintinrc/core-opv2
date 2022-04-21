@@ -147,8 +147,6 @@ Feature: Shipment Management - Search Shipment
     When Operator searches multiple shipment ids in the Shipment Management Page with "empty line"
     Then Operator verify empty line parsing error toast exist
 
-
-  @DeleteFilersPreset
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
