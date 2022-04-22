@@ -301,7 +301,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
       } else if ("Into Hub".equals(label)) {
         intoHub.click();
       }
-      //click(grabXpathButton(label));
     }
 
     if (driver != null) {
