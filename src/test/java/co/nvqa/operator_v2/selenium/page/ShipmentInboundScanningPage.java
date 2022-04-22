@@ -36,6 +36,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   public static final String XPATH_INBOUND_HUB = "//div[@class='ant-select-selector']//input[@id='rc_select_0']";
   public static final String XPATH_DRIVER = "//div[@class='ant-select-selector']//input[@id='rc_select_1']";
   public static final String XPATH_MOVEMENT_TRIP = "//div[@class='ant-select-selector']//input[@id='rc_select_2']";
+  public static final String XPATH_ANT_SPINNING = "//div[contains(@class,'ant-spin-spinning')]";
 
   @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
   public MdSelect inboundHub;
@@ -261,11 +262,14 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void selectDriver(String driverName) {
+    waitUntilInvisibilityOfElementLocated(XPATH_ANT_SPINNING);
+    waitUntilElementIsClickable(XPATH_DRIVER);
     TestUtils.findElementAndClick(XPATH_DRIVER, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_DRIVER, driverName);
   }
 
   public void selectMovementTrip(String movementTripSchedule) {
+    waitUntilElementIsClickable(XPATH_MOVEMENT_TRIP);
     TestUtils.findElementAndClick(XPATH_MOVEMENT_TRIP, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_MOVEMENT_TRIP, movementTripSchedule);
   }
@@ -292,7 +296,12 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
 
     if (label != null) {
       pause2s();
-      click(grabXpathButton(label));
+      if ("Into Van".equals(label)) {
+        intoVan.click();
+      } else if ("Into Hub".equals(label)) {
+        intoHub.click();
+      }
+      //click(grabXpathButton(label));
     }
 
     if (driver != null) {
