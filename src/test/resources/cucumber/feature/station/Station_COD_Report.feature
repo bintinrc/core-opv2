@@ -278,7 +278,7 @@ Feature: Station COD Report
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
     And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
+      | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -382,7 +382,7 @@ Feature: Station COD Report
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
     And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
+      | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -488,7 +488,7 @@ Feature: Station COD Report
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
     And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
+      | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -592,7 +592,7 @@ Feature: Station COD Report
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
     And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
+      | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
@@ -650,7 +650,7 @@ Feature: Station COD Report
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
     And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
+      | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -690,7 +690,7 @@ Feature: Station COD Report
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
     And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
+      | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
