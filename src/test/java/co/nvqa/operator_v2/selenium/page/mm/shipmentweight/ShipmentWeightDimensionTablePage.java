@@ -115,6 +115,7 @@ public class ShipmentWeightDimensionTablePage extends
         break;
       case CREATION_DATE:
         filterValue = DateUtil.displayOperatorTime(shipmentData.getCreatedAt(), true);
+        LOGGER.debug("Filter value is: " + filterValue);
         break;
     }
     return filterValue;
@@ -131,6 +132,11 @@ public class ShipmentWeightDimensionTablePage extends
     PageElement pe = filterColumn(col);
     scrollAndClear(pe);
     pe.sendKeys(filterValue);
+  }
+
+  public void clearFilterColumn(Column col) {
+    PageElement pe = filterColumn(col);
+    scrollAndClear(pe);
   }
 
   public void clearFilters() {

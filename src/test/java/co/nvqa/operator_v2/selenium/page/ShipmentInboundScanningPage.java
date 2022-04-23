@@ -52,7 +52,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
   public TextBox inboundTypeText;
 
-  @FindBy(xpath = "//button[contains(@class,'button')]//div[text()='Start Inbound']")
+  @FindBy(xpath = "//span[text()='Start Inbound']")
   public Button startInboundButton;
 
   @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
@@ -79,14 +79,29 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(css = "div.scanned-shipping-id")
   public PageElement scannedShipmentId;
 
+  @FindBy(xpath = "//div[@id='rc_select_0_list']//div[@class='ant-empty-description']")
+  public PageElement listEmptyData;
+
+  @FindBy(xpath = "//input[@value='SHIPMENT_VAN_INBOUND']")
+  public PageElement intoVan;
+
+  @FindBy(xpath = "//input[@value='SHIPMENT_HUB_INBOUND']")
+  public PageElement intoHub;
+
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void inboundScanning(long shipmentId, String label, String hub) {
     pause2s();
+    click(XPATH_INBOUND_HUB);
+    listEmptyData.waitUntilInvisible();
     selectInboundHub(hub);
-    click(grabXpathButton(label));
+    if ("Into Van".equals(label)) {
+      intoVan.click();
+    } else if ("Into Hub".equals(label)) {
+      intoHub.click();
+    }
     startInboundButton.click();
     fillShipmentId(shipmentId);
     checkSessionScan(String.valueOf(shipmentId));
@@ -204,7 +219,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
       case "Completed":
       case "Cancelled":
         expected = f("Shipment id %d cannot change status from %s", shipmentId, condition);
-        Assertions.assertThat(errorMessage).as(condition+" shipment:").contains(expected);
+        Assertions.assertThat(errorMessage).as(condition + " shipment:").contains(expected);
         break;
       case "Pending":
       case "Closed":
@@ -212,22 +227,24 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
             errorMessage.contains(f("shipment %d is [%s]", shipmentId, condition)));
         break;
       case "different country van":
-        Assertions.assertThat(f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
-                        TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
+        Assertions.assertThat(
+            f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
+                TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "different country hub":
-        Assertions.assertThat(f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
+        Assertions.assertThat(
+            f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
                 TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "pending shipment":
-        expected = f("shipment %d is [Pending]",shipmentId);
+        expected = f("shipment %d is [Pending]", shipmentId);
         Assertions.assertThat(errorMessage).as("pending shipment:").contains(expected);
         break;
 
       case "closed shipment":
-        expected = f("shipment %d is [Closed]",shipmentId);
+        expected = f("shipment %d is [Closed]", shipmentId);
         Assertions.assertThat(errorMessage).as("closed shipment:").contains(expected);
         break;
 
@@ -254,9 +271,13 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void selectInboundHub(String hub) {
-    if(getWebDriver().findElements(By.xpath("//div[@data-testid='hub-select']//span[@class='ant-select-selection-item']")).size()!=0){
+    if (getWebDriver().findElements(
+            By.xpath("//div[@data-testid='hub-select']//span[@class='ant-select-selection-item']"))
+        .size() != 0) {
       moveToElementWithXpath("//div[@data-testid='hub-select']//span[@class='ant-select-clear']");
-      TestUtils.findElementAndClick("//div[@data-testid='hub-select']//span[@class='ant-select-clear']", "xpath", getWebDriver());
+      TestUtils.findElementAndClick(
+          "//div[@data-testid='hub-select']//span[@class='ant-select-clear']", "xpath",
+          getWebDriver());
     }
     TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_INBOUND_HUB, hub);
@@ -289,13 +310,15 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   public void verifyStartInboundButtonIsEnabledOrDisabled(String status) {
     if ("enabled".equals(status)) {
       assertThat("Inbound button enabled", startInboundButton.isEnabled(),
-              equalTo(true));
+          equalTo(true));
       return;
     }
     if ("disabled".equals(status)) {
-      String value = getWebDriver().findElement(By.xpath("//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']")).getAttribute("disabled");
+      String value = getWebDriver().findElement(
+              By.xpath("//button[contains(@class,'ant-btn')]//span[text()='Start Inbound']"))
+          .getAttribute("disabled");
       boolean result = false;
-      if (value != null){
+      if (value != null) {
         result = true;
       }
       assertThat("Inbound button disabled", result, equalTo(false));
@@ -303,8 +326,12 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void validateDriverAndMovementTripIsCleared() {
-    assertThat("Driver place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
-    assertThat("Movement trip place holder is equal", getWebDriver().findElements(By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']")).size(), equalTo(0));
+    assertThat("Driver place holder is equal", getWebDriver().findElements(
+            By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']"))
+        .size(), equalTo(0));
+    assertThat("Movement trip place holder is equal", getWebDriver().findElements(
+            By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']"))
+        .size(), equalTo(0));
   }
 
   public static class TripCompletion extends MdDialog {

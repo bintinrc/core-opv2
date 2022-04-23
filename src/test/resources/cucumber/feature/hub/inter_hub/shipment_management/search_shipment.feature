@@ -102,7 +102,7 @@ Feature: Shipment Management - Search Shipment
     When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify inbounded Shipment exist on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments without Duplicate (uid:68b7217b-41a8-4259-9da8-e8ce68f0a7b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -147,8 +147,6 @@ Feature: Shipment Management - Search Shipment
     When Operator searches multiple shipment ids in the Shipment Management Page with "empty line"
     Then Operator verify empty line parsing error toast exist
 
-
-  @DeleteFilersPreset
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
