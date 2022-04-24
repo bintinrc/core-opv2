@@ -9,9 +9,16 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
+import com.google.common.collect.Comparators;
+import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Tristania Siagian
@@ -39,6 +46,11 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'apply-action-btn')]";
   private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-to-coming-btn')]";
   private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
+  private static final String MODAL_TABLE_HEADER_XPATH ="//div[@class='ant-table-container']//thead";
+  private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH ="//div[@class='ant-table-container']//tbody//td[%d]";
+  private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title' and text()='%s']";
+  private static final String Employment_Status_Filter_Text = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
+  private static final String License_Status_Filter_Text = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
   private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
   private static final String TABLE_ASSERTION_XPATH = "//div[contains(@class,'ant-table-body')]//tbody/tr[2]/td[%d]";
@@ -138,6 +150,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Edit Search Filter']")
   public Button editSearchFilterButton;
 
+  @FindBy(xpath = "//span[contains(@class,'anticon-loading')]")
+  public PageElement loadingIcon;
+
+
   public MiddleMileDriversPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -153,6 +169,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     } else {
       loadDrivers.waitUntilInvisible();
       editSearchFilterButton.waitUntilVisible();
+      loadingIcon.waitUntilInvisible(60);
     }
   }
 
@@ -161,6 +178,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
       assertTrue("Total Driver Shown is the same.",
           getText(TOTAL_DRIVER_SHOW_XPATH).contains(String.valueOf(totalDriver)));
     }
+  }
+
+  public void verifiesTextInEmploymentStatusFilter(String text){
+    assertTrue("Employment Status Filter Text is: "+text,getText(Employment_Status_Filter_Text).equalsIgnoreCase(text));
+  }
+
+  public void verifiesTextInLicenseStatusFilter(String text){
+    assertTrue("License Status Filter Text is: "+text,getText(License_Status_Filter_Text).equalsIgnoreCase(text));
   }
 
   public void selectHubFilter(String hubName) {
@@ -592,6 +617,84 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
       click("//button[.='close']");
       pause1s();
     }
+  }
+
+  public void sortColumn(String columnName, String sortingOrder) {
+    waitWhilePageIsLoading();
+    String sortColumnXpath = f(TABLE_FILTER_SORT_XPATH, columnName);
+    //scrollIntoView(sortColumnXpath);
+    List<WebElement> sortFields = getWebDriver().findElements(By.xpath(sortColumnXpath));
+    if (sortFields.size() == 0) {
+      Assert.assertTrue(
+              f("Assert that the column %s to be sorted is displayed on the screen", columnName),sortFields.size() > 0);
+    }
+    sortFields.get(0).click();
+    waitWhilePageIsLoading();
+    if (sortingOrder.equalsIgnoreCase("Descending")) {
+      sortFields.get(0).click();
+      waitWhilePageIsLoading();
+    }
+  }
+
+  public List<String> getColumnValuesByColumnName(String columnName) {
+    int columnIndex = 0;
+    List<String> colData = new ArrayList<String>();
+    waitWhilePageIsLoading();
+    String headerXpath = f(MODAL_TABLE_HEADER_XPATH);
+    List<WebElement> headerFields = getWebDriver().findElements(By.xpath(headerXpath));
+    if (headerFields.size() == 0) {
+      Assert.assertTrue(
+              f("Assert that the column %s to be sorted is displayed on the screen", columnName),
+              headerFields.size() > 0);
+    }
+    for (WebElement header : headerFields) {
+      String headerName = header.getText().trim().toLowerCase();
+      columnIndex++;
+      if (headerName.contains(columnName.toLowerCase())) {
+        break;
+      }
+    }
+
+    List<WebElement> colElements = getWebDriver().findElements(
+            By.xpath(f(TABLE_COLUMN_VALUES_BY_INDEX_XPATH, columnIndex)));
+    colElements.forEach(element -> {
+      colData.add(element.getText().trim());
+    });
+    return colData;
+  }
+
+  public void getRecordsAndValidateSorting(String columnName, String sortingOrder) {
+    List<String> colData = getColumnValuesByColumnName(columnName);
+    if (sortingOrder.equalsIgnoreCase("Ascending")) {
+      Assert.assertTrue(
+              f("Assert that the column values %s are sorted as expected", columnName),
+              Comparators.isInOrder(colData, Comparator.naturalOrder()));
+      return;
+    }
+    if (sortingOrder.equalsIgnoreCase("Descending")) {
+      Assert.assertTrue(
+              f("Assert that the column values %s are sorted as expected", columnName),
+              Comparators.isInOrder(colData, Comparator.reverseOrder()));
+      return;
+    }
+
+    Assert.assertTrue(
+            f("Assert that the column values %s are sorted as expected", columnName),
+            Comparators.isInOrder(colData, Comparator.naturalOrder()));
+  }
+
+  public void ClickToBrowserBackButton(){
+    getWebDriver().navigate().back();
+    switchTo();
+    loadDrivers.waitUntilClickable();
+  }
+
+  public void ClickToBrowserForwardButton(){
+    getWebDriver().navigate().forward();
+    switchTo();
+    loadDrivers.waitUntilInvisible();
+    loadingIcon.waitUntilInvisible(60);
+
   }
 
   public static class TableFilterPopup extends PageElement {
