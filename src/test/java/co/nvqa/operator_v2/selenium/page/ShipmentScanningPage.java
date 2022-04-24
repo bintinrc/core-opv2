@@ -904,6 +904,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void switchTo() {
-    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    if(isElementExist("//iframe"))
+      getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 }

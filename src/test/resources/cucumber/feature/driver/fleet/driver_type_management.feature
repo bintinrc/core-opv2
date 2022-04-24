@@ -6,16 +6,31 @@ Feature: Driver Type Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Download CSV File of Driver Type (uid:76f6ba04-4f9c-46f7-b450-8b73f67a7b7b)
-    Given Operator go to menu Fleet -> Driver Type Management
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
     When Operator get all Driver Type params on Driver Type Management page
-    When Operator click on Download CSV File button on Driver Type Management page
+    And Operator click on Download CSV File button on Driver Type Management page
     Then Downloaded CSV file contains correct Driver Types data
 
   @DeleteDriverType
   Scenario: Create New Driver Type (uid:eaa1b45c-725f-4ec3-9383-99fa808f887a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    Given Operator create new Driver Type with the following attributes:
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
+      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | deliveryType    | Normal Delivery                          |
+      | priorityLevel   | Priority                                 |
+      | reservationSize | Less Than 3 Parcels                      |
+      | parcelSize      | Small                                    |
+      | timeslot        | 9AM To 6PM                               |
+    When Operator get new Driver Type params on Driver Type Management page
+    Then Operator verify new Driver Type params
+
+  @DeleteDriverType
+  Scenario: Update Driver Type (uid:d47cf8da-5c64-4771-ad90-0ceed2f4bac0)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
       | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
       | deliveryType    | Normal Delivery                          |
       | priorityLevel   | Priority                                 |
@@ -23,20 +38,6 @@ Feature: Driver Type Management
       | parcelSize      | Small                                    |
       | timeslot        | 9AM To 6PM                               |
     And Operator get new Driver Type params on Driver Type Management page
-    Then Operator verify new Driver Type params
-
-  @DeleteDriverType
-  Scenario: Update Driver Type (uid:d47cf8da-5c64-4771-ad90-0ceed2f4bac0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    Given Operator create new Driver Type with the following attributes:
-      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
-      | deliveryType    | Normal Delivery                          |
-      | priorityLevel   | Priority                                 |
-      | reservationSize | Less Than 3 Parcels                      |
-      | parcelSize      | Small                                    |
-      | timeslot        | 9AM To 6PM                               |
-    Given Operator get new Driver Type params on Driver Type Management page
     When Operator edit new Driver Type with the following attributes:
       | deliveryType    | C2C + Return Pick Up |
       | priorityLevel   | Non-Priority Only    |
@@ -47,21 +48,21 @@ Feature: Driver Type Management
 
   @DeleteDriverType
   Scenario: Delete Driver Type That Is Not Being Used by Driver (uid:693eafa6-09c6-4a38-9a84-043c5afed854)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    Given Operator create new Driver Type with the following attributes:
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
-    Given Operator get new Driver Type params on Driver Type Management page
+    And Operator get new Driver Type params on Driver Type Management page
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verify new Driver Type is deleted successfully
 
   @DeleteDriverType @DeleteDriver
   Scenario: Can Not Delete Driver Type That Is Being Used by Driver (uid:ea7d45b6-cc32-4362-8b8c-f57743a6d453)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    Given Operator create new Driver Type with the following attributes:
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
-    Given Operator get new Driver Type params on Driver Type Management page
+    And Operator get new Driver Type params on Driver Type Management page
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_DRIVER_TYPE_PARAMS.driverTypeName}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator delete new Driver Type on on Driver Type Management page
@@ -72,9 +73,9 @@ Feature: Driver Type Management
 
   @DeleteDriverType
   Scenario Outline: Filter Driver Type - <dataset_name> (<hiptest-uid>)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    Given Operator create new Driver Type with the following attributes:
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
       | <param>        | <value>                                  |
     And Operator get new Driver Type params on Driver Type Management page
@@ -107,9 +108,9 @@ Feature: Driver Type Management
 
   @DeleteDriverType
   Scenario: Search Driver Type by ID (uid:xxx)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    Given Operator create new Driver Type with the following attributes:
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    And Operator create new Driver Type with the following attributes:
       | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
       | deliveryType    | Normal Delivery                          |
       | priorityLevel   | Priority                                 |
@@ -121,9 +122,9 @@ Feature: Driver Type Management
 
   @DeleteDriverType
   Scenario: List All Driver Type (uid:xxx)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Fleet -> Driver Type Management
-    And Operator create new Driver Type with the following attributes:
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Type Management
+    When Operator create new Driver Type with the following attributes:
       | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
       | deliveryType    | Normal Delivery                          |
       | priorityLevel   | Priority                                 |
