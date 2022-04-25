@@ -363,7 +363,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     middleMileDriversPage.refreshAndWaitUntilLoadingDone();
   }
 
-  @When("Operator click {string} in {string} column")
+  @When("Operator click {string} in {string} column on Middle Mile Driver Page")
   public void operatorClicksortIconInNameColumn(String sortOrder, String column){
     middleMileDriversPage.sortColumn(column, sortOrder);
   }

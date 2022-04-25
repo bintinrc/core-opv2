@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import com.google.common.collect.Comparators;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -49,8 +50,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_HEADER_XPATH ="//div[@class='ant-table-container']//thead";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH ="//div[@class='ant-table-container']//tbody//td[%d]";
   private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title' and text()='%s']";
-  private static final String Employment_Status_Filter_Text = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
-  private static final String License_Status_Filter_Text = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
+  private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
+  private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
   private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
   private static final String TABLE_ASSERTION_XPATH = "//div[contains(@class,'ant-table-body')]//tbody/tr[2]/td[%d]";
@@ -180,12 +181,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
   }
 
-  public void verifiesTextInEmploymentStatusFilter(String text){
-    assertTrue("Employment Status Filter Text is: "+text,getText(Employment_Status_Filter_Text).equalsIgnoreCase(text));
+  public void verifiesTextInEmploymentStatusFilter(String ExpectedResult){
+    assertEquals("Employment Status Filter Text: ",ExpectedResult,getText(EMPLOYMENT_STATUS_FILTER_TEXT));
   }
 
-  public void verifiesTextInLicenseStatusFilter(String text){
-    assertTrue("License Status Filter Text is: "+text,getText(License_Status_Filter_Text).equalsIgnoreCase(text));
+  public void verifiesTextInLicenseStatusFilter(String ExpectedResult){
+    assertEquals("License Status Filter Text: ",ExpectedResult,getText(LICENSE_STATUS_FILTER_TEXT));
   }
 
   public void selectHubFilter(String hubName) {
