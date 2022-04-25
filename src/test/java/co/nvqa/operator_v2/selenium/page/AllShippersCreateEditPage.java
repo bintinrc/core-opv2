@@ -1446,8 +1446,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     String billingWeight = pricing.getBillingWeight();
     String country = COUNTRY_CODE;
     if (Objects.isNull(billingWeight) && (country.equalsIgnoreCase("TH")
-        || country.equalsIgnoreCase("PH")
-        || country.equalsIgnoreCase("ID"))) {
+        || country.equalsIgnoreCase("PH") || country.equalsIgnoreCase("ID"))) {
       newPricingProfileDialog.billingWeight.selectValue("Standard");
     }
   }
