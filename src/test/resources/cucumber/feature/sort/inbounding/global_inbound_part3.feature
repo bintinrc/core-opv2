@@ -47,7 +47,7 @@ Feature: Global Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | ON HOLD - SHIPPER ISSUE |
-      | rackInfo       | sync_problem RECOVERY   |
+      | rackInfo       | RECOVERY                |
       | color          | #e86161                 |
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id-3}             |

@@ -142,6 +142,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
 
   public void createDriverType(DriverTypeParams driverTypeParams) {
     createDriverType.click();
+    pause3s();
     addDriverTypeDialog.fillForm(driverTypeParams);
     addDriverTypeDialog.submitForm();
   }
