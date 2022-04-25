@@ -1,12 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
@@ -36,7 +38,11 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @When("Operator create new Driver on Driver Strength page using data below:")
   public void operatorCreateNewDriverOnDriverStrengthPageUsingDataBelow(
       Map<String, String> data) {
+    String driverTypeName = get(KEY_CREATED_DRIVER_TYPE_NAME);
     DriverInfo driverInfo = new DriverInfo(resolveKeyValues(data));
+    if(!Objects.isNull(driverTypeName)){
+      driverInfo.setType(driverTypeName);
+    }
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     dsPage.inFrame(() -> {
       dsPage.addNewDriver(driverInfo);
@@ -47,14 +53,18 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   public void operatorOpensAddDriverDialog() {
     dsPage.inFrame(() -> {
       dsPage.addNewDriver.click();
-      pause3s();
+      pause5s();
     });
   }
 
   @When("Operator fill Add Driver form on Driver Strength page using data below:")
   public void operatorFillAddDriverOnDriverStrengthPageUsingDataBelow(
       Map<String, String> mapOfData) {
+    String driverTypeName = get(KEY_CREATED_DRIVER_TYPE_NAME);
     DriverInfo driverInfo = new DriverInfo(resolveKeyValues(mapOfData));
+    if(!Objects.isNull(driverTypeName)){
+      driverInfo.setType(driverTypeName);
+    }
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     dsPage.inFrame(() -> dsPage.addDriverDialog.fillForm(driverInfo));
   }
