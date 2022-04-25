@@ -10,8 +10,6 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import com.google.common.collect.Comparators;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -626,7 +624,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     //scrollIntoView(sortColumnXpath);
     List<WebElement> sortFields = getWebDriver().findElements(By.xpath(sortColumnXpath));
     if (sortFields.size() == 0) {
-      Assert.assertTrue(
+      assertTrue(
               f("Assert that the column %s to be sorted is displayed on the screen", columnName),sortFields.size() > 0);
     }
     sortFields.get(0).click();
@@ -644,7 +642,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     String headerXpath = f(MODAL_TABLE_HEADER_XPATH);
     List<WebElement> headerFields = getWebDriver().findElements(By.xpath(headerXpath));
     if (headerFields.size() == 0) {
-      Assert.assertTrue(
+      assertTrue(
               f("Assert that the column %s to be sorted is displayed on the screen", columnName),
               headerFields.size() > 0);
     }
@@ -667,20 +665,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   public void getRecordsAndValidateSorting(String columnName, String sortingOrder) {
     List<String> colData = getColumnValuesByColumnName(columnName);
     if (sortingOrder.equalsIgnoreCase("Ascending")) {
-      Assert.assertTrue(
-              f("Assert that the column values %s are sorted as expected", columnName),
+      assertTrue(
+              f("The column values %s are sorted as expected", columnName),
               Comparators.isInOrder(colData, Comparator.naturalOrder()));
       return;
     }
     if (sortingOrder.equalsIgnoreCase("Descending")) {
-      Assert.assertTrue(
-              f("Assert that the column values %s are sorted as expected", columnName),
+      assertTrue(
+              f("The column values %s are sorted as expected", columnName),
               Comparators.isInOrder(colData, Comparator.reverseOrder()));
       return;
     }
 
-    Assert.assertTrue(
-            f("Assert that the column values %s are sorted as expected", columnName),
+    assertTrue(
+            f("The column values %s are sorted as expected", columnName),
             Comparators.isInOrder(colData, Comparator.naturalOrder()));
   }
 
