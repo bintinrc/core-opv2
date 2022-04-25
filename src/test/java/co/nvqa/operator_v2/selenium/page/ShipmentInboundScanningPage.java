@@ -36,6 +36,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   public static final String XPATH_INBOUND_HUB = "//div[@class='ant-select-selector']//input[@id='rc_select_0']";
   public static final String XPATH_DRIVER = "//div[@class='ant-select-selector']//input[@id='rc_select_1']";
   public static final String XPATH_MOVEMENT_TRIP = "//div[@class='ant-select-selector']//input[@id='rc_select_2']";
+  public static final String XPATH_ANT_SPINNING = "//div[contains(@class,'ant-spin-spinning')]";
+  public static final String CONST_INTO_VAN = "Into Van";
+  public static final String CONST_INTO_HUB = "Into Hub";
 
   @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
   public MdSelect inboundHub;
@@ -97,9 +100,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
     selectInboundHub(hub);
-    if ("Into Van".equals(label)) {
+    if (CONST_INTO_VAN.equals(label)) {
       intoVan.click();
-    } else if ("Into Hub".equals(label)) {
+    } else if (CONST_INTO_HUB.equals(label)) {
       intoHub.click();
     }
     startInboundButton.click();
@@ -261,11 +264,14 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void selectDriver(String driverName) {
+    waitUntilInvisibilityOfElementLocated(XPATH_ANT_SPINNING);
+    waitUntilElementIsClickable(XPATH_DRIVER);
     TestUtils.findElementAndClick(XPATH_DRIVER, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_DRIVER, driverName);
   }
 
   public void selectMovementTrip(String movementTripSchedule) {
+    waitUntilElementIsClickable(XPATH_MOVEMENT_TRIP);
     TestUtils.findElementAndClick(XPATH_MOVEMENT_TRIP, "xpath", getWebDriver());
     sendKeysAndEnter(XPATH_MOVEMENT_TRIP, movementTripSchedule);
   }
@@ -292,7 +298,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
 
     if (label != null) {
       pause2s();
-      click(grabXpathButton(label));
+      if (CONST_INTO_VAN.equals(label)) {
+        intoVan.click();
+      } else if (CONST_INTO_HUB.equals(label)) {
+        intoHub.click();
+      }
     }
 
     if (driver != null) {
