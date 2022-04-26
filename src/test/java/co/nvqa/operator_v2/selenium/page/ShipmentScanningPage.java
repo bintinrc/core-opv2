@@ -690,10 +690,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyShipmentCount(String numberOfShipment) {
-    String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-    assertThat("Number of shipment scanned to Hub message is the same",
-        textNumberOfScannedParcel,
-        equalTo(f("%s Shipments Scanned to Hub", numberOfShipment)));
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        String textNumberOfScannedParcel = numberOfScannedParcel.getText();
+        assertThat("Number of shipment scanned to Hub message is the same",
+                textNumberOfScannedParcel,
+                equalTo(f("%s Shipments Scanned to Hub", numberOfShipment)));
+      } catch (Throwable ex) {
+        NvLogger.info(ex.getMessage());
+        pause2s();
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 5);
   }
 
   public void removeShipmentWithId(String shipmentId) {
