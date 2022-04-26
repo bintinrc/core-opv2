@@ -5,7 +5,7 @@ Feature: Priority Parcel in Hub
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel in Hub (uid:4e760809-5688-407c-83c5-32f2fe53e368)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -17,7 +17,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -53,7 +56,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -91,7 +97,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -127,7 +136,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -170,7 +182,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -210,7 +225,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -247,7 +265,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -286,7 +307,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -326,7 +350,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -367,7 +394,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -424,7 +454,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -477,7 +510,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -532,7 +568,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -571,7 +610,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | <TagId> |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -611,7 +653,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | TagId | ModalName1                                   | ModalName2              | SlackMessageContent |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | 5570  | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel in Hub of Unacknowledged SLFD Parcel (uid:f748e580-5089-4003-bdee-b9cfaa06e8ff)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -623,7 +665,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -653,7 +698,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel in Hub of Acknowledged SLFD Parcel (uid:1d024335-8032-4efb-b82a-c9b6bf14e387)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -665,7 +710,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -704,7 +752,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           | Successfully confirmed 1 ETA(s)! |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @Happypath @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Ticket Status - Recovery Ticket Type = Shipper Issue (uid:8fa5f052-59e4-4154-819b-718d4d891984)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -716,7 +764,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -769,7 +820,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -824,7 +878,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -878,7 +935,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -931,7 +991,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -989,7 +1052,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -1049,7 +1115,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -1108,7 +1177,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -1167,7 +1239,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -1225,7 +1300,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -1285,7 +1363,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -1344,7 +1425,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -1402,7 +1486,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1454,7 +1541,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -1498,7 +1588,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1538,7 +1631,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -1596,7 +1692,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -1656,7 +1755,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -1715,7 +1817,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -1773,7 +1878,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -1832,7 +1940,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -1892,7 +2003,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -1950,7 +2064,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -2009,7 +2126,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -2068,7 +2188,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -2128,7 +2251,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -2186,7 +2312,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -2233,7 +2362,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel of Missing Ticket Type (uid:05e8d756-57f8-48bc-aa3a-f3b35c67d41d)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -2245,7 +2374,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -2303,7 +2435,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2562,7 +2697,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2822,7 +2960,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3079,7 +3220,10 @@ Feature: Priority Parcel in Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     When Operator go to menu Station Management Tool -> Station Management Homepage

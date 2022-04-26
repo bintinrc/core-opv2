@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
@@ -229,6 +230,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     List<String> expectedColumns = columnNames.asList();
     takesScreenshot();
     stationManagementHomePage.verifyColumnsInTableDisplayed(expectedColumns);
+    takesScreenshot();
   }
 
   @When("Operator searches for the orders in modal pop-up by applying the following filters:")
@@ -237,6 +239,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
     Map<String, String> filter = resolveKeyValues(filters.get(0));
     stationManagementHomePage.applyFilters(filter, 1);
+    takesScreenshot();
   }
 
   @When("Operator selects following filter criteria for the table column: {string}")
@@ -641,6 +644,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operatorVerifiesUserIsRedirectedToTheStationManagementHomepageOfHubThatHasBeenMappedToUser(
       String hubName) {
     stationManagementHomePage.validateHeaderHubValue(hubName);
+  }
+
+
+  @And("Operator gets the order details from modal {string}")
+  public void operatorGetsTheOrderDetailsFromModal(String tableName) {
+    Map<String, String> actualResults = stationManagementHomePage.getResultGridContentByTableName(
+        tableName);
+    put(KEY_STATION_HOME_PAGE_TABLE_DETAILS, actualResults);
   }
 
 }

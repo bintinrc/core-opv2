@@ -5,7 +5,7 @@ Feature: Parcel in Incoming Shipment
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRoute
+  @Happypath @ArchiveRoute
   Scenario Outline: View Parcel in Incoming Shipment (uid:e03d4b5c-4253-4f35-9e8a-87d7c912dcc2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -16,7 +16,10 @@ Feature: Parcel in Incoming Shipment
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<OrigHubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <OrigHubId>                     |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -51,7 +54,7 @@ Feature: Parcel in Incoming Shipment
       | OrigHubId   | OrigHubName   | DestHubId   | DestHubName   | Country | Comments  | TileName                     | TileName1 | TileName2 | ModalName                    | TableName1     | TableName2 |
       | {hub-id-10} | {hub-name-10} | {hub-id-11} | {hub-name-11} | sg      | GENERATED | Parcels in incoming shipment | Total     | Priority  | Parcels in Incoming Shipment | By Parcel Size | By Zone    |
 
-  @ArchiveRoute
+  @Happypath @ArchiveRoute
   Scenario Outline: View Priority Parcel in Incoming Shipment (uid:17a93bac-e718-4f9b-8be7-b6d025f66434)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -64,7 +67,10 @@ Feature: Parcel in Incoming Shipment
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<OrigHubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <OrigHubId>                     |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:

@@ -53,6 +53,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -750,6 +752,28 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     backToShipperList();
   }
 
+  public void unsetPickupAddressesAsMilkrun(Shipper shipper) {
+    waitUntilShipperCreateEditPageIsLoaded();
+    clickTabItem("More Settings");
+    if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses())) {
+      shipper.getPickup().getReservationPickupAddresses().stream().filter(a -> !a.getMilkRun())
+          .forEach(address ->
+          {
+            searchTableCustom1("contact", address.getContact());
+            clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
+            waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+            fillMilkrunReservationSettings(address);
+            clickNvApiTextButtonByName("commons.save-changes");
+            waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
+
+            verifyPickupAddress(address);
+          });
+    }
+    clickNvIconTextButtonByName("Save Changes");
+    waitUntilInvisibilityOfToast("All changes saved successfully");
+    backToShipperList();
+  }
+
   public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper) {
     waitUntilShipperCreateEditPageIsLoaded();
     String actualShipperStatus = basicSettingsForm.shipperStatus.getValue();
@@ -1419,6 +1443,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.rtsValue.sendKeys(shipperRtsValue);
       }
     }
+    String billingWeight = pricing.getBillingWeight();
+    String country = COUNTRY_CODE;
+    if (Objects.isNull(billingWeight) && (country.equalsIgnoreCase("TH")
+        || country.equalsIgnoreCase("PH") || country.equalsIgnoreCase("ID"))) {
+      newPricingProfileDialog.billingWeight.selectValue("Standard");
+    }
   }
 
   public Pricing getAddedPricingProfileDetails() throws ParseException {
@@ -1619,6 +1649,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
 
+    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    public MdSelect billingWeight;
+
     @FindBy(name = "Save Changes")
     public NvApiTextButton saveChanges;
   }
@@ -1688,6 +1721,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
     public MdCheckbox rtsCountryDefaultCheckbox;
+
+    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    public MdSelect billingWeight;
 
     @FindBy(name = "Save Changes")
     public NvApiTextButton saveChanges;

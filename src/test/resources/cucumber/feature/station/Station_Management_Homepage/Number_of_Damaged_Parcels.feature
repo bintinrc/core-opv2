@@ -5,6 +5,7 @@ Feature: Number of Damaged Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @Happypath
   Scenario Outline: View Pending Damage Ticket Type (uid:c233aa39-f51d-410f-a833-944086363dd8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -14,7 +15,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -60,7 +64,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -113,7 +120,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -166,7 +176,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -209,7 +222,7 @@ Feature: Number of Damaged Parcels
       | HubName      | HubId      | TicketType | Status          | OrderOutcome              | RtsReason         | TileName        | ModalName       | TableName       |
       | {hub-name-6} | {hub-id-6} | DAMAGED    | PENDING SHIPPER | NV LIABLE - RETURN PARCEL | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
-
+  @Happypath
   Scenario Outline: Resolved Ticket of Damage Type Disappear (uid:ae510579-e438-4a1f-b609-160c93c96a8c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -219,7 +232,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -276,7 +292,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"HUB INBOUND SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
@@ -327,7 +346,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name-6}                    |
@@ -383,7 +405,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -441,7 +466,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -509,7 +537,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -549,7 +580,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
@@ -601,7 +635,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                   | ROUTE CLEANING     |
@@ -638,7 +675,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | ROUTE CLEANING     |
@@ -674,7 +714,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource                 | CUSTOMER COMPLAINT |
@@ -710,7 +753,10 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |

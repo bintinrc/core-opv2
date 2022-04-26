@@ -5,6 +5,7 @@ Feature: Number of Parcels In Hub
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @Happypath
   Scenario Outline: View Number of Parcels in Hub (uid:34b4182d-ee92-4936-b4b8-fbc3890be67d)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -14,7 +15,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -36,7 +40,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -74,7 +81,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -114,7 +124,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -152,7 +165,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -190,7 +206,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -228,7 +247,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -266,7 +288,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -298,6 +323,39 @@ Feature: Number of Parcels In Hub
       | HubName      | HubId      | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome                        | OrderStatus |
       | {hub-name-1} | {hub-id-1} | Number of parcels in hub | CANCELLED | No                      | CANCEL - NINJA DID NOT RECEIVE | Transit     |
 
+  Scenario Outline: View Parcel of Pending Missing Ticket Type
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | <HubName>          |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator verify ticket is created successfully on page Recovery Tickets
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has decreased by 1
+
+    Examples:
+      | HubName      | HubId      | TileName                 |
+      | {hub-name-1} | {hub-id-1} | Number of parcels in hub |
+
   Scenario Outline: View Parcel in Hub after Update to Higher Size in Edit Order (uid:78bf5b4c-6222-42ff-9033-eb2bfedfab57)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -305,7 +363,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<LowerSize>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
@@ -333,7 +394,10 @@ Feature: Number of Parcels In Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<UpperSize>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"

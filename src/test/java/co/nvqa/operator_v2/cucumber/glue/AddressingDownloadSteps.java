@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.support.RandomUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
@@ -11,24 +10,21 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Date;
-
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
 
 public class AddressingDownloadSteps extends AbstractSteps {
 
@@ -196,14 +192,14 @@ public class AddressingDownloadSteps extends AbstractSteps {
           }
         }
       } else {
-        NvLogger.warn("Separation is not found!");
+        LOGGER.warn("Separation is not found!");
       }
     } else if (HALF.equalsIgnoreCase(trackingIdType)) {
       final String invalidTrackingId = "AUTOTEST" + RandomUtil.randomString(5);
       trackingIds.add(invalidTrackingId);
       addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
     } else {
-      NvLogger.warn("Automation only covered VALID and HALF VALID HALF INVALID types");
+      LOGGER.warn("Automation only covered VALID and HALF VALID HALF INVALID types");
     }
   }
 

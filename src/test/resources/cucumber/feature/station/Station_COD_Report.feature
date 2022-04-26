@@ -269,14 +269,17 @@ Feature: Station COD Report
       | Language | PageHeader         | HubName      | TransStatus   |
       | English  | Station COD Report | {hub-name-2} | DD - Delivery |
 
-  @ArchiveRoute @default-sg
+  @Happypath @ArchiveRoute @default-sg
   Scenario Outline: [SG, MY, TH, PH] View COD Amount in Detail Tab (uid:5acdcfa0-f03b-4f8d-adc7-b4f4c0eff567)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -370,14 +373,17 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-  @ArchiveRoute @default-sg
+  @Happypath @ArchiveRoute @default-sg
   Scenario Outline: [SG, MY, TH, PH] View COD Collected in Summary Tab (uid:bad20f02-1d6e-4014-a9fc-226b21a0b8cb)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -480,7 +486,10 @@ Feature: Station COD Report
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -581,7 +590,10 @@ Feature: Station COD Report
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add parcel to the route using data below:
@@ -629,14 +641,17 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery |
 
-  @ArchiveRoute
+  @Happypath @ArchiveRoute
   Scenario Outline: Download CSV of COD Report Detail (uid:69ca23d3-f0f9-4929-89e9-089321d3b5b7)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -667,13 +682,16 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransStatus   | TabName |
       | {hub-id-2} | {hub-name-2} | 1500.5    | GENERATED    | DD - Delivery | Details |
 
-  @ArchiveRoute
+  @Happypath @ArchiveRoute
   Scenario Outline: Download CSV of COD Report Summary (uid:e732bb2b-c198-4406-bc0c-1c34450e7d97)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery": <CODAmount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:

@@ -13,9 +13,9 @@ Feature: Global Inbound
       | hubName    | {hub-name-3} |
       | trackingId | INVALID      |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | INVALID               |
-      | rackInfo       | sync_problem RECOVERY |
-      | color          | #e86161               |
+      | destinationHub | INVALID  |
+      | rackInfo       | RECOVERY |
+      | color          | #e86161  |
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario Outline: Inbound failed delivery - <dataset_name> (<hiptest-uid>)

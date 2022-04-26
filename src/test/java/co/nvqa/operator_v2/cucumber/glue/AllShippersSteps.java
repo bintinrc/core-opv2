@@ -1043,6 +1043,19 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.setPickupAddressesAsMilkrun(shipper);
   }
 
+  @When("^Operator unset pickup addresses of the created shipper using data below:$")
+  public void operatorUnsetPickupAddressesOfTheCreatedShipperUsingDataBelow(
+      Map<String, String> mapOfData) {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
+    if (CollectionUtils.isNotEmpty(addresses)) {
+      for (int i = 0; i < addresses.size(); i++) {
+        fillMilkrunReservationsProperties(addresses.get(i), i + 1, mapOfData);
+      }
+    }
+    allShippersPage.unsetPickupAddressesAsMilkrun(shipper);
+  }
+
   @And("^Operator unset milkrun reservation \"(\\d+)\" form pickup address \"(\\d+)\" for created shipper$")
   public void operatorUnsetMilkrunReservationFormPickupAddressForCreatedShipper(
       int milkrunReservationIndex, int addressIndex) {
@@ -1452,6 +1465,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Given("Operator changes the country to {string}")
   public void operatorChangesTheCountryTo(String country) {
+    getWebDriver().switchTo().defaultContent();
     profilePage.clickProfileButton();
     profilePage.changeCountry(country);
     profilePage.closeProfile();

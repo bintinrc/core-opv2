@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
@@ -146,13 +146,13 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
   public static class AddCodDialog extends AntModal {
 
     @FindBy(css = "input[placeholder='Route ID']")
-    public TextBox routeId;
+    public ForceClearTextBox routeId;
 
-    @FindBy(css = "input[type='number']:nth-child(2)")
-    public TextBox amountCollected;
+    @FindBy(css = "input[label='Amount Collected']")
+    public ForceClearTextBox amountCollected;
 
     @FindBy(css = "input[placeholder='Receipt Number']")
-    public TextBox receiptNumber;
+    public ForceClearTextBox receiptNumber;
 
     @FindBy(xpath = ".//button[.='Submit']")
     public AntButton submit;
