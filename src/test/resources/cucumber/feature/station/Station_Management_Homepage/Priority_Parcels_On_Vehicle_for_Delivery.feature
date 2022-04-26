@@ -5,7 +5,7 @@ Feature: Priority Parcels On Vehicle for Delivery
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRoute
+  @ForceSuccessOrder @Happypath @ArchiveRoute
   Scenario Outline: View Priority Parcel on Vehicle for Delivery (uid:bd22c933-b02b-4302-b086-9336148dc9a8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -17,7 +17,10 @@ Feature: Priority Parcels On Vehicle for Delivery
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -50,7 +53,7 @@ Feature: Priority Parcels On Vehicle for Delivery
       | HubName      | HubId      | TileName                                 | ModalName                   |
       | {hub-name-5} | {hub-id-5} | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
-  @ArchiveRoute
+  @ForceSuccessOrder @Happypath @ArchiveRoute
   Scenario Outline: Priority Parcel on Vehicle for Delivery Number is Decreased (uid:01b34681-796b-432a-af31-33fb8c2cf930)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -59,7 +62,10 @@ Feature: Priority Parcels On Vehicle for Delivery
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:

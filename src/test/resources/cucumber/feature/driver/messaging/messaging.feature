@@ -15,9 +15,9 @@ Feature: Messaging
 
   Scenario: Search Driver by Driver Type Given Less Than 100 Drivers Listed Use Same Type (uid:f31378ea-f465-4de6-96bf-f4f0cb795e80)
     Given Operator refresh page
-    And DB Operator find drivers by "{driver-type-name-2}" driver type name
+    And DB Operator find drivers by "{driver-type-name}" driver type name
     When Operator opens Messaging panel
-    And Operator selects "{driver-type-name-2}" drivers group on Messaging panel
+    And Operator selects "{driver-type-name}" drivers group on Messaging panel
     Then Count of selected drivers is less than 100 on Messaging panel
     And All selected drivers belongs to selected group
 

@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.HubRelationData;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MovementVisualizationPage;
 import io.cucumber.java.en.And;
@@ -9,12 +8,16 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tristania Siagian
  */
 
 public class MovementVisualizationSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(MovementVisualizationSteps.class);
 
   private MovementVisualizationPage movementVisualizationPage;
 
@@ -41,8 +44,8 @@ public class MovementVisualizationSteps extends AbstractSteps {
         movementVisualizationPage.selectHub(hubName);
 
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
         throw new NvTestRuntimeException(ex.getCause());
       }

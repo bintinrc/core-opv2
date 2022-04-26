@@ -1,17 +1,20 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.InvoicedOrdersSearchPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 public class SearchInvoicedOrdersSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SearchInvoicedOrdersSteps.class);
 
   final String filename = "search-invoiced-orders-upload.csv";
   private InvoicedOrdersSearchPage invoicedOrdersSearchPage;
@@ -31,7 +34,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     trackingIds = resolveValues(trackingIds);
     File csvFile = createFile(filename, String.join("\n", trackingIds));
     String absolutePath = csvFile.getAbsolutePath();
-    NvLogger.info("Path of the created file : " + absolutePath);
+    LOGGER.info("Path of the created file : " + absolutePath);
     invoicedOrdersSearchPage.uploadFile(absolutePath);
     takesScreenshot();
   }

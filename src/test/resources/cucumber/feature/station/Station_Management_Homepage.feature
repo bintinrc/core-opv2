@@ -5,6 +5,7 @@ Feature: Station Management Homepage
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @Happypath
   Scenario Outline: Station Management Homepage Navigation Panel - <dataset_name> (<hiptest-uid>)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -124,6 +125,7 @@ Feature: Station Management Homepage
       | Language | PageHeader                  | ModalText                          | PageRefreshText                           | hiptest-uid                              |
       | English  | Station Management Homepage | Welcome to Station Management Tool | Refresh the page to retrieve updated data | uid:71904a8b-f17a-4606-9efb-e8177f79f7eb |
 
+  @Happypath
   Scenario: Able to Access Station Management Homepage Through URL (uid:3823b3b9-a2ab-45d5-80b6-67c6ec0d0db0)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

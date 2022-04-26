@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -272,17 +273,24 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     actualCodFee = actualCodFee.substring(4);
     actualHandlingFee = actualHandlingFee.substring(4);
 
-    assertEquals("Grand Total", RUN_CHECK_RESULT_DF.format(runCheckResult.getGrandTotal()),
-        actualGrandTotal);
-    assertEquals("GST", RUN_CHECK_RESULT_DF.format(runCheckResult.getGst()), actualGst);
-    assertEquals("Delivery Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getDeliveryFee()),
-        actualDeliveryFee);
-    assertEquals("Insurance Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getInsuranceFee()),
-        actualInsuranceFee);
-    assertEquals("COD Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getCodFee()), actualCodFee);
-    assertEquals("Handling Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getHandlingFee()),
-        actualHandlingFee);
-    assertEquals("Comments", runCheckResult.getComments(), actualComments);
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(actualGrandTotal).as("Grand Total is correct")
+        .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getGrandTotal()));
+    softAssertions.assertThat(actualGst).as("GST is correct")
+        .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getGst()),
+            actualGst);
+    softAssertions.assertThat(actualDeliveryFee).as("Delivery Fee is correct")
+        .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getDeliveryFee()));
+    softAssertions.assertThat(actualInsuranceFee).as("Insurance Fee is correct")
+        .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getInsuranceFee()));
+    softAssertions.assertThat(actualCodFee).as("COD Fee is correct")
+        .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getCodFee()),
+            actualCodFee);
+    softAssertions.assertThat(actualHandlingFee).as("Handling Fee is correct")
+        .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getHandlingFee()));
+    softAssertions.assertThat(actualComments).as("Comments is correct")
+        .isEqualTo(runCheckResult.getComments(), actualComments);
+    softAssertions.assertAll();
   }
 
   public void validateDraftAndReleaseScript(Script script, VerifyDraftParams verifyDraftParams) {

@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -14,6 +13,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
@@ -23,6 +25,8 @@ import static co.nvqa.commons.util.StandardTestUtils.createFile;
  */
 @ScenarioScoped
 public class OrderBillingSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrderBillingSteps.class);
 
   private OrderBillingPage orderBillingPage;
 
@@ -34,14 +38,14 @@ public class OrderBillingSteps extends AbstractSteps {
     orderBillingPage = new OrderBillingPage(getWebDriver());
   }
 
-  @Given("^Operator generates success billings using data below:$")
+  @Given("Operator generates success billings using data below:")
   public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData) {
     setOrderBillingData(mapOfData);
     orderBillingPage.clickGenerateSuccessBillingsButton();
     orderBillingPage.verifyNoErrorsAvailable();
   }
 
-  @Given("^Operator generates success billings with more than 1000 shippers using data below:$")
+  @Given("Operator generates success billings with more than 1000 shippers using data below:")
   public void operatorGeneratesSuccessBillingsFor1000ShippersData(Map<String, String> mapOfData) {
     setOrderBillingData(mapOfData);
   }
@@ -71,7 +75,7 @@ public class OrderBillingSteps extends AbstractSteps {
           orderBillingPage.uploadCsvShippers(get(KEY_ORDER_BILLING_UPLOAD_CSV_FILE));
         } else {
           File csvFile = createFile("shipper-id-upload.csv", shipperIds);
-          NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+          LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
           orderBillingPage.uploadCsvShippersAndVerifySuccessMsg(shipperIds, csvFile);
         }
       }
@@ -123,8 +127,9 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies {string} is selected in Customized CSV File Template")
   public void operatorVerifiesIsSelectedInCustomizedCSVFileTemplate(String value) {
-    assertEquals("Default Template is not selected", value,
-        orderBillingPage.getCsvFileTemplateName());
+    Assertions.assertThat(orderBillingPage.getCsvFileTemplateName())
+        .as("file template name is selected and shown")
+        .isEqualTo(value);
   }
 
   @Then("Operator verifies that error toast is displayed on Order Billing page:")
@@ -143,13 +148,15 @@ public class OrderBillingSteps extends AbstractSteps {
           StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle));
     }
 
-    assertTrue("Error message was not found", isErrorFound);
+    Assertions.assertThat(isErrorFound).as("Error message is exist").isTrue();
   }
 
   @Then("Operator verifies that info pop up is displayed with message {string}")
   public void operatorVerifiesThatInfoPopUpIsDisplayedWithMessage(String expectedInfoMsg) {
     String actualInfoMsg = orderBillingPage.infoMessage.getText();
-    assertEquals("Actual and expected info message", expectedInfoMsg, actualInfoMsg);
+    Assertions.assertThat(actualInfoMsg)
+        .as("info pop up message is correct")
+        .isEqualTo(expectedInfoMsg);
   }
 
   @When("Operator selects Order Billing data as below")
@@ -165,17 +172,18 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies Generate Success Billings button is disabled")
   public void operatorVerifiesGenerateSuccessBillingsButtonIsDisabled() {
-    assertFalse("Generate Success Billings button is enabled",
-        orderBillingPage.isGenerateSuccessBillingsButtonEnabled());
+    Assertions.assertThat(orderBillingPage.isGenerateSuccessBillingsButtonEnabled())
+        .as("Generate Success Billings button is disabled")
+        .isFalse();
   }
 
   @When("Operator generates CSV file with {int} shippers")
   public void operatorGeneratesCSVFileWithShippers(int shipperCount) {
-    String shipperIds = IntStream.range(1, shipperCount + 1).mapToObj(Integer::toString)
+    final String shipperIds = IntStream.range(1, shipperCount + 1).mapToObj(Integer::toString)
         .collect(Collectors.joining(","));
 
-    File csvFile = createFile("shipper-id-upload.csv", shipperIds);
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    final File csvFile = createFile("shipper-id-upload.csv", shipperIds);
+    LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
     put(KEY_ORDER_BILLING_UPLOAD_CSV_FILE, csvFile);
   }
 
@@ -190,7 +198,8 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies {string} is not available in template selector drop down menu")
   public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String template) {
-    assertFalse(f(" Template with name : %s is available in the dropdown ", template),
-        orderBillingPage.csvFileTemplate.isValueExist(template));
+    Assertions.assertThat(orderBillingPage.csvFileTemplate.isValueExist(template))
+        .as(f(" Template with name : %s is not available in the dropdown ", template))
+        .isFalse();
   }
 }

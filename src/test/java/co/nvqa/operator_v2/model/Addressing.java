@@ -1,9 +1,12 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
+import java.util.Map;
+
 /**
  * @author Tristania Siagian
  */
-public class Addressing {
+public class Addressing extends DataEntity<Addressing> {
 
   private String postcode;
   private String streetName;
@@ -14,6 +17,10 @@ public class Addressing {
   private String addressType;
 
   public Addressing() {
+  }
+
+  public Addressing(Map<String, ?> data) {
+    super(data);
   }
 
   public String getPostcode() {

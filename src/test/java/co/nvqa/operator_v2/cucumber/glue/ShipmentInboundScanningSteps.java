@@ -12,7 +12,10 @@ import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea.
@@ -21,6 +24,8 @@ import org.junit.platform.commons.util.StringUtils;
  */
 @ScenarioScoped
 public class ShipmentInboundScanningSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentInboundScanningSteps.class);
 
   private ShipmentInboundScanningPage scanningPage;
 
@@ -37,12 +42,14 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        Long shipmentId = (Long)get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
-        scanningPage.inboundScanning(shipmentId, label, finalHub);
+        scanningPage.inFrame(page -> {
+          scanningPage.inboundScanning(shipmentId, label, finalHub);
+        });
       } catch (Throwable ex) {
-        NvLogger.error(ex.getMessage());
-        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
         scanningPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
@@ -195,17 +202,31 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }, getCurrentMethodName(), 1000, 5);
   }
 
+  @When("Operator fill Shipment Inbound Scanning page with data:")
+  public void fillInboundScanningIntoPartialValuesDataBelow(Map<String, String> data) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        String inboundHub = finalData.get("inboundHub");
+        String inboundType = finalData.get("inboundType");
+        String driver = finalData.get("driver");
+        String movementTripSchedule = finalData.get("movementTripSchedule");
+        scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver,
+            movementTripSchedule);
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, getCurrentMethodName(), 1000, 5);
+  }
+
   @Then("Operator verify start inbound button is {string}")
   public void verifyStartInboundButtonIs(String status) {
-    if ("enabled".equals(status)) {
-      assertThat("Inbound button enabled", scanningPage.startInboundButton.isEnabled(),
-          equalTo(true));
-      return;
-    }
-    if ("disabled".equals(status)) {
-      assertThat("Inbound button disabled", scanningPage.startInboundButton.isEnabled(),
-          equalTo(false));
-    }
+    pause2s();
+    scanningPage.verifyStartInboundButtonIsEnabledOrDisabled(status);
   }
 
   @Then("Operator verify small message {string} {string} in Start Inbound Box")
@@ -223,9 +244,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @Then("Operator verify driver and movement trip is cleared")
   public void verifyDriverAndMovementTripIsCleared() {
-    assertThat("Driver place holder is equal", scanningPage.driver.getText(), equalTo("Driver"));
-    assertThat("Movement trip place holder is equal", scanningPage.movementTrip.getText(),
-        equalTo("Movement Trip"));
+    scanningPage.validateDriverAndMovementTripIsCleared();
   }
 
   @When("Operator click proceed in trip completion dialog")
@@ -263,14 +282,21 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the following messages display on the card after inbounding")
-  public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(Map<String, String> messages) {
+  public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(
+      Map<String, String> messages) {
     messages = resolveKeyValues(messages);
-    assertThat(f("Assert that scanned state is %s", messages.get("scanState")), scanningPage.scannedState
-        .getText(), equalTo(messages.get("scanState")));
-    assertThat(f("Assert that scanned message is %s", messages.get("scanMessage")), scanningPage.scannedMessage
-        .getText(), equalTo(messages.get("scanMessage")));
-    assertThat(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")), scanningPage.scannedShipmentId
-        .getText(), containsString(messages.get("scannedShipmentId")));
+    Assertions.assertThat(scanningPage.scannedState.getText())
+        .as(f("Assert that scanned state is %s", messages.get("scanState")))
+        .isEqualTo(messages.get("scanState"));
+    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+        .as(f("Assert that scanned message is %s", messages.get("scanMessage")))
+        .isEqualTo(messages.get("scanMessage"));
+    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+        .as(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")))
+        .isEqualTo(messages.get("scannedShipmentId"));
+    takesScreenshot();
+
+
   }
 
 }

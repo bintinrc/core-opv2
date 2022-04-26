@@ -126,14 +126,16 @@ public class ShipmentManagementSteps extends AbstractSteps {
   public void fillSearchFilterByDate(String dateFieldName) {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-    String dateOfToday = formatter.format(today);
+    LocalDateTime yesterday = today.minusDays(1);
+    String dateOfYesterday = formatter.format(yesterday);
     LocalDateTime tomorrow = today.plusDays(1);
     String dateOfTomorrow = formatter.format(tomorrow);
 
-    shipmentManagementPage
-        .selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", dateFieldName);
-    shipmentManagementPage.changeDate(dateOfToday, true);
-    shipmentManagementPage.changeDate(dateOfTomorrow, false);
+    if(!dateFieldName.equals("Shipment Date")){
+      shipmentManagementPage.selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", dateFieldName);
+    }
+    shipmentManagementPage.changeDate(dateFieldName, dateOfYesterday, true);
+    shipmentManagementPage.changeDate(dateFieldName, dateOfTomorrow, false);
   }
 
   @Given("Operator click Edit filter on Shipment Management page")
@@ -415,7 +417,6 @@ public class ShipmentManagementSteps extends AbstractSteps {
     } else {
       shipmentInfo = get(KEY_SHIPMENT_INFO);
     }
-    shipmentManagementPage.refreshPage();
     shipmentManagementPage
         .verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));

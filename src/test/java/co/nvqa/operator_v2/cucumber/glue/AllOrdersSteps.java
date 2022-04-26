@@ -608,6 +608,7 @@ public class AllOrdersSteps extends AbstractSteps {
     if (data.containsKey("masterShipperName")) {
       if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Master Shipper");
+        allOrdersPage.masterShipperFilter.waitUntilLoaded();
       }
       allOrdersPage.masterShipperFilter.clearAll();
       allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
@@ -942,13 +943,14 @@ public class AllOrdersSteps extends AbstractSteps {
   @Then("Operator verifies the data on the database for driver collect scenarios are all right")
   public void operatorVerifiesTheDataOnTheDatabaseForDriverCollectScenariosAreAllRight() {
     DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder =
-            get(KEY_DATABASE_CHECKING_DP_DRIVER_COLLECT_ORDER);
+        get(KEY_DATABASE_CHECKING_DP_DRIVER_COLLECT_ORDER);
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.verifyDriverCollect(dbCheckingDriverCollectOrder, trackingId);
   }
 
   @Then("Operator verifies the order status is {string} and granular status is {string}")
-  public void operatorVerifiesTheOrderStatusIsAndGranularStatusIs(String status, String granularStatus) {
+  public void operatorVerifiesTheOrderStatusIsAndGranularStatusIs(String status,
+      String granularStatus) {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyOrderStatus(order, status, granularStatus);
   }
@@ -956,7 +958,7 @@ public class AllOrdersSteps extends AbstractSteps {
   @Then("Operator verifies the data on the database for Customer Collect scenarios are all right")
   public void operatorVerifiesTheDataOnTheDatabaseForCustomerCollectScenariosAreAllRight() {
     DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder =
-            get(KEY_DATABASE_CHECKING_DP_CUSTOMER_COLLECT_ORDER);
+        get(KEY_DATABASE_CHECKING_DP_CUSTOMER_COLLECT_ORDER);
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.databaseVerifyCustomerCollect(dbCheckingCustomerCollectOrder, trackingId);
   }
