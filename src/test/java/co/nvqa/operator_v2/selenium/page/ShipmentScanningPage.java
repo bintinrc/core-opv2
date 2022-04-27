@@ -705,7 +705,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void removeShipmentWithId(String shipmentId) {
-    waitUntilVisibilityOfElementLocated(XPATH_REMOVE_SHIPMENT_SCAN);
     WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
