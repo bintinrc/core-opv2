@@ -693,11 +693,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() -> {
       try {
         String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-        assertThat("Number of shipment scanned to Hub message is the same",
-                textNumberOfScannedParcel,
-                equalTo(f("%s Shipments Scanned to Hub", numberOfShipment)));
+        Assertions.assertThat(textNumberOfScannedParcel).as("Number of shipment scanned to Hub message is the same").
+                isEqualTo(f("%s Shipments Scanned to Hub", numberOfShipment));
       } catch (Throwable ex) {
-        NvLogger.info(ex.getMessage());
+        LOGGER.info(ex.getMessage());
         pause2s();
         throw ex;
       }
@@ -709,7 +708,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
-    waitUntilVisibilityOfElementLocated("//div[@data-testid='remove-parcel-scan-container']//span[contains(.,'"+shipmentId+"')]");
+    waitUntilVisibilityOfElementLocated("//input[contains(@value,'"+shipmentId+"')]");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
