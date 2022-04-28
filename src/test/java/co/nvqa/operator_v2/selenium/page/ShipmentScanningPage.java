@@ -515,9 +515,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
-    waitUntilInvisibilityOfNotification(notificationXpath, false);
     antNotificationMessage = notificationElement.getText();
-    return notificationElement.getText();
+    waitUntilInvisibilityOfNotification(notificationXpath, false);
+    return antNotificationMessage;
   }
 
   public void clickLeavePageDialog() {
