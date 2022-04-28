@@ -270,7 +270,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
     switch (filterBy.toLowerCase()) {
       case NAME_FILTER:
-        middleMileDriversPage.tableFilter(middleMileDriver.get(0), NAME_FILTER);
+       // middleMileDriversPage.tableFilter(middleMileDriver.get(0), NAME_FILTER);
+        middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
         break;
 
       case ID_FILTER:
@@ -392,5 +393,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @When("Operator click on Browser Forward button")
   public void OperatorClickOnBrowserForwardButton(){
     middleMileDriversPage.ClickToBrowserForwardButton();
+  }
+
+  @Then("Make sure URL show is {string}")
+  public void VerifyURLinMiddleDriverPage(String URL){
+    middleMileDriversPage.verifyURLofPage(URL);
   }
 }

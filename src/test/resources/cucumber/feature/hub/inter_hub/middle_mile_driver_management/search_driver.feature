@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver @CWF
 Feature: Middle Mile Driver Management - Search Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -13,6 +13,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given API Driver get all middle mile driver
     When Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?showall=true"
 
   @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Driver by Filter - Hub (uid:c629d70f-53d3-4327-805f-e988e6b1e25c)
@@ -395,7 +396,7 @@ Feature: Middle Mile Driver Management - Search Driver
       | Ascending  | Ascending   |
       | Descending | Descending  |
 
-  @DeleteDriver
+  @DeleteDriver @RT
   Scenario: Load Driver by Filter - Click back/forward button(uid:8a8df869-aa86-438d-9ad9-7e0ae0497d1b)
 #    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates

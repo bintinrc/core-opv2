@@ -16,8 +16,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -366,7 +371,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
       default:
         NvLogger.warn("Filter is not found");
     }
-
+    System.out.println("Driver emp end date:  "+middleMileDriver.getEmploymentEndDate());
+    System.out.println("Driver license end date:  "+middleMileDriver.getLicenseExpiryDate());
     assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
     assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
     assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
@@ -401,6 +407,33 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         actualEmploymentType);
     assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
         actualLicenseType);
+    assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
+  }
+
+  public void tableFilterByname(Driver middleMileDriver) {
+    nameFilter.setValue(middleMileDriver.getFirstName());
+    waitUntilVisibilityOfElementLocated(
+            f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+
+    String actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+    String actualId = getText(f(TABLE_ASSERTION_XPATH, NEW_ID_TABLE_FILTER_ID));
+    String actualUsername = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
+    String actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
+    String actualEmploymentType = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
+    String actualLicenseType = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
+    String actualComments = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
+    System.out.println("Return employment status:   "+getEmploymentStatus(middleMileDriver));
+    assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
+    assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
+    assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
+    assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
+            actualEmploymentType);
+    assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
+            actualLicenseType);
     assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
   }
 
@@ -692,6 +725,11 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
   }
 
+  public void verifyURLofPage(String ExpectedURL){
+    String AcutalURL = getWebDriver().getCurrentUrl();
+    assertEquals("The URL is the same:",ExpectedURL, AcutalURL);
+  }
+
   public static class TableFilterPopup extends PageElement {
 
     public TableFilterPopup(WebDriver webDriver, WebElement webElement) {
@@ -836,5 +874,37 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
       WebElement licenseTypeInput = findElementByXpath(f(licenseTypeXpath, value));
       licenseTypeInput.click();
     }
+  }
+
+  public String getEmploymentStatus(Driver mmDriver){
+    SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
+    Date currentdate= new Date();
+    String status = mmDriver.getEmploymentEndDate();
+    try {
+      Date employmentEndDate = formatter.parse(status);
+      if (employmentEndDate.after(currentdate)){
+        return "Active";
+      }
+    } catch (ParseException e) {
+      NvLogger.error(e.getMessage());
+    }
+    return "Inactive";
+
+  }
+
+  public String getLicenseStatus(Driver mmDriver){
+    SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
+    Date currentdate= new Date();
+    String status = mmDriver.getLicenseExpiryDate();
+    try {
+      Date LicenseEndDate = formatter.parse(status);
+      if (LicenseEndDate.after(currentdate)){
+        return "Active";
+      }
+    } catch (ParseException e) {
+      NvLogger.error(e.getMessage());
+    }
+    return "Inactive";
+
   }
 }
