@@ -429,19 +429,13 @@ public class ShipmentManagementSteps extends AbstractSteps {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable
-            .readFirstEntities(1);
-        ShipmentEvent actualEvent = events.stream()
-            .filter(
-                event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError(
-                f("There is no [%s] shipment event on Shipment Details page",
-                    expectedEvent.getSource())));
+        shipmentManagementPage.switchTo();
+        ShipmentEvent actualEvent = new ShipmentEvent(shipmentManagementPage.shipmentEventsTable.readShipmentEventsTable(finalMapOfData.get("source")));
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage(), ex);
-        throw ex;
+        LOGGER.error(ex.getLocalizedMessage(), ex);
+        shipmentManagementPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
       }
     }, "retry shipment details", 5000, 5);
   }
