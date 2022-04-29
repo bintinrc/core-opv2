@@ -367,4 +367,30 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorRefreshMiddleMileDriverPage() {
     middleMileDriversPage.refreshAndWaitUntilLoadingDone();
   }
+
+  @When("Operator click {string} in {string} column on Middle Mile Driver Page")
+  public void operatorClicksortIconInNameColumn(String sortOrder, String column){
+    middleMileDriversPage.sortColumn(column, sortOrder);
+  }
+
+  @Then("Make sure All data in Middle Mile Driver tables is {string} shown based on {string}")
+  public void verifies_that_the_column_is_in_ascending_order(String sortOrder, String column){
+    middleMileDriversPage.getRecordsAndValidateSorting(column,sortOrder);
+  }
+
+  @When("Operator click on Browser back button")
+  public void OperatorClickOnBrowserBackButton(){
+    middleMileDriversPage.ClickToBrowserBackButton();
+  }
+
+  @Then("Operator verifies the Employment Status is {string} and License Status is {string}")
+  public void OperatorVerifiesFilterStatus(String Employment_value, String license_value){
+    middleMileDriversPage.verifiesTextInEmploymentStatusFilter(Employment_value);
+    middleMileDriversPage.verifiesTextInLicenseStatusFilter(license_value);
+  }
+
+  @When("Operator click on Browser Forward button")
+  public void OperatorClickOnBrowserForwardButton(){
+    middleMileDriversPage.ClickToBrowserForwardButton();
+  }
 }

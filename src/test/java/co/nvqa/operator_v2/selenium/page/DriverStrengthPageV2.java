@@ -376,22 +376,19 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       return this;
     }
 
-    public void setType() {
-      type.selectValue("Testing1234C");
-      waitUntilVisibilityOfElementLocated("//div[@label='Testing1234C']");
-      click("//div[@label='Testing1234C']");
+    public void setType(String driverType) {
+      type.selectValue(driverType);
+      waitUntilVisibilityOfElementLocated(f("//*[@*='%s']", driverType));
     }
 
     public void setMaximumOnDemandWaypoint(long param) {
       maximumOnDemandWaypoints.sendKeys(param);
     }
 
-    public AddDriverDialog addVehicle(String licenseNumber, Integer capacity) {
+    public AddDriverDialog addVehicle(String vehicleType, String licenseNumber, Integer capacity) {
       addMoreVehicles.click();
       VehicleSettingsForm form = vehicleSettingsForm.get(vehicleSettingsForm.size() - 1);
-      form.vehicleType.selectValue("Bus");
-      waitUntilVisibilityOfElementLocated("//div[@label='Bus']");
-      click("//div[@label='Bus']");
+      form.vehicleType.selectValue(vehicleType);
       if (licenseNumber != null) {
         form.vehicleLicenseNumber.setValue(licenseNumber);
       }
@@ -479,16 +476,17 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public void fillForm(DriverInfo driverInfo) {
       waitUntilVisible();
+      pause3s();
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
-      setType();
+      setType(driverInfo.getType());
       setMaximumOnDemandWaypoint(10l);
       setCodLimit(driverInfo.getCodLimit());
       setHub(driverInfo.getHub());
       setEmploymentStartDate(driverInfo.getEmploymentStartDate());
       if (driverInfo.hasVehicleInfo()) {
-        addVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
+        addVehicle(driverInfo.getVehicleType(), driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
       }
       if (driverInfo.hasContactsInfo()) {
         addContact(driverInfo.getContactType(), driverInfo.getContact());
@@ -646,7 +644,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         if (vehicleSettingsForm.size() > 0) {
           editVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
         } else {
-          addVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
+          addVehicle(driverInfo.getVehicleType(),driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
         }
       }
       if (driverInfo.hasContactsInfo()) {
