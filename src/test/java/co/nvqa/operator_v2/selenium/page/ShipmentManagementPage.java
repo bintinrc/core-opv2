@@ -1104,7 +1104,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     }
 
     public Map<String, String> readShipmentEventsTable(String source) {
-      waitUntilInvisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
+      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
       List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
       Assertions.assertThat(list.size()).as(f("There is no [%s] shipment event on Shipment Details page",source)).isNotEqualTo(0);
       Map<String, String> eventsTable = new HashMap<>();

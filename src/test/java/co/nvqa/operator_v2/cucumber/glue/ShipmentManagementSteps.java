@@ -424,7 +424,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @Then("^Operator verify shipment event on Shipment Details page using data below:$")
   public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfAssertionErrorOccurred(() ->
+    retryIfRuntimeExceptionOccurred(() ->
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
