@@ -18,7 +18,7 @@ public class FinanceCodSteps extends AbstractSteps {
   }
 
   @Given("Operator generates success finance cod report using data below:")
-  public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData) {
+  public void operatorGeneratesFinanceCodReportForData(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     financeCodPage.switchTo();
     setFinanceCodData(mapOfData);
