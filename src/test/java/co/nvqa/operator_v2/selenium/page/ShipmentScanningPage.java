@@ -260,8 +260,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void checkOrderNotInShipment(String trackingId) {
-    List<String> shipmentsList = getTextOfElements("//td[contains(@class, 'tracking-id')]");
-    Assertions.assertThat(!shipmentsList.contains(trackingId)).as("Order "+ trackingId +" exists in shipment").isTrue();
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        List<String> shipmentsList = getTextOfElements("//td[contains(@class, 'tracking-id')]");
+        Assertions.assertThat(!shipmentsList.contains(trackingId)).as("Order "+ trackingId +" exists in shipment").isTrue();
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 10);
+
   }
 
   public void closeShipment() {
