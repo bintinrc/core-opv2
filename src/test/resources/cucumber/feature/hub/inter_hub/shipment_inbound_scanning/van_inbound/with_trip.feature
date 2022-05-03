@@ -2156,9 +2156,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
 #    And Operator verifies event is present for order on Edit order page
 #      | eventName         | HUB INBOUND SCAN                                  |
