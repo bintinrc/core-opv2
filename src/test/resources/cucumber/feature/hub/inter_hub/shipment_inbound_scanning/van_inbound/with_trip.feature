@@ -1817,10 +1817,10 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}{KEY_LIST_OF_CREATED_DRIVERS[3].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[3].username}) |
       | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[4].name}                                                                                              |
     And Operator click start inbound
-    Then Operator verifies shipment to go with trip is shown with total "2"
+    Then Operator verifies shipment to go with trip is shown with total "1"
     When Operator clicks shipment to go with trip
     Then Operator verifies shipment with trip with data below:
-      | shipmentCount  | 2                                                              |
+      | shipmentCount  | 1                                                              |
       | shipmentId     | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                          |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                             |
       | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[3].name}                             |
