@@ -397,6 +397,29 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Then("Make sure URL show is {string}")
   public void VerifyURLinMiddleDriverPage(String URL){
+    if (URL.contains("<id>")){
+      Hub hub = get(KEY_HUB_INFO);
+      String hubID = hub.getId().toString();
+      URL = URL.replaceAll("<id>",hubID);
+    }
     middleMileDriversPage.verifyURLofPage(URL);
+  }
+
+  @Then("Operator verifies that the GUI elements are shown on the Middle Mile Driver Page")
+  public void operatorVerifyTheElementsAreShown() {
+    List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+    middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+  }
+
+  @Then("API Fillter the list of driver")
+  public void fillterTheListOfDriver(){
+    GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+    List<Driver> middleMileDrivers = drivers.getData().getDrivers();
+    System.out.println("Size of drivers: "+middleMileDrivers.size());
+//    for (Driver dr:middleMileDrivers) {
+//      System.out.println(dr.toString());
+//    }
+    int count = middleMileDriversPage.filterDriver(middleMileDrivers,"License Status","Active").size();
+    System.out.println("Total license active drivers:  "+count);
   }
 }

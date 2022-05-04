@@ -46,6 +46,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final String TOAST_DRIVER_CREATED_XPATH = "//div[contains(@class,'ant-notification-notice-description') and text()='Username: %s']";
   private static final String NO_RESULT_TABLE_XPATH = "//div[contains(@class,'ant-empty ')]";
   private static final String VIEW_BUTTON_XPATH = "//button[contains(@class,'view-user-btn')]";
+  private static final String EDIT_BUTTON_XPATH = "//button[contains(@class,'edit-user-btn')]";
   private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='No']";
   private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='Yes']";
   private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'ant-table-selection')]";
@@ -85,13 +86,17 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 4;
   private static final Integer NEW_HUB_TABLE_FILTER_ID = 5;
   private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 6;
+  private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 7;
   private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
+  private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 9;
   private static final Integer NEW_COMMENTS_TABLE_FILTER_ID = 10;
 
   private static final String EMPLOYMENT_TYPE = "employment type";
   private static final String EMPLOYMENT_STATUS = "employment status";
   private static final String LICENSE_TYPE = "license type";
   private static final String LICENSE_STATUS = "license status";
+  private static final String ACTIVE_STATUS = "Active";
+  private static final String INACTIVE_STATUS = "Inactive";
 
   private static final String YES = "yes";
   private static final String NO = "no";
@@ -422,19 +427,32 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     String actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
     String actualEmploymentType = getText(
             f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
+    String actualEmpStatus = getText(f(TABLE_ASSERTION_XPATH,NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID));
     String actualLicenseType = getText(
             f(TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
+    String actualLicenseStatus = getText(f(TABLE_ASSERTION_XPATH,NEW_LICENSE_STATUS_TABLE_FILTER_ID));
     String actualComments = getText(
             f(TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
-    System.out.println("Return employment status:   "+getEmploymentStatus(middleMileDriver));
-    assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
-    assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
-    assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
-    assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
-            actualEmploymentType);
-    assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
-            actualLicenseType);
-    assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
+    //System.out.println("Return employment status:   "+getEmploymentStatus(middleMileDriver));
+
+    Assertions.assertThat(actualName).as("The Name is the same").isEqualTo(middleMileDriver.getFirstName());
+    Assertions.assertThat(actualUsername).as("The Username is the same").isEqualTo(middleMileDriver.getUsername());
+    Assertions.assertThat(actualHub).as("The Hub is the same").isEqualTo(middleMileDriver.getHub());
+    Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same").isEqualTo(middleMileDriver.getEmploymentType());
+    Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same").isEqualTo(getEmploymentStatus(middleMileDriver));
+    Assertions.assertThat(actualLicenseType).as("The License Type is the same").isEqualTo(middleMileDriver.getLicenseType());
+    Assertions.assertThat(actualLicenseStatus).as("The License Status is the same").isEqualTo(getLicenseStatus(middleMileDriver));
+    Assertions.assertThat(actualComments).as("The Comment is the same").isEqualTo(middleMileDriver.getComments());
+    Assertions.assertThat(editDriver.isDisplayed()).as("The Edit driver is shown").isTrue();
+    Assertions.assertThat(viewDriver.isDisplayed()).as("The View driver is shown").isTrue();
+//    assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
+//    assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
+//    assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
+//    assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
+//            actualEmploymentType);
+//    assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
+//            actualLicenseType);
+//    assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
   }
 
   public void tableFilterByIdWithValue(Long driverId) {
@@ -726,8 +744,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   }
 
   public void verifyURLofPage(String ExpectedURL){
-    String AcutalURL = getWebDriver().getCurrentUrl();
-    assertEquals("The URL is the same:",ExpectedURL, AcutalURL);
+    String ActualURL = getWebDriver().getCurrentUrl();
+    //assertEquals("The URL is the same:",ExpectedURL, ActualURL);
+    Assertions.assertThat(ActualURL).as("The URL is the same:").isEqualTo(ExpectedURL);
   }
 
   public static class TableFilterPopup extends PageElement {
@@ -881,14 +900,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     Date currentdate= new Date();
     String status = mmDriver.getEmploymentEndDate();
     try {
-      Date employmentEndDate = formatter.parse(status);
+      Date employmentEndDate = new Date(Long.parseLong(status,10));
       if (employmentEndDate.after(currentdate)){
-        return "Active";
+        return ACTIVE_STATUS;
       }
-    } catch (ParseException e) {
+    } catch (Exception e) {
       NvLogger.error(e.getMessage());
     }
-    return "Inactive";
+    return INACTIVE_STATUS;
 
   }
 
@@ -897,14 +916,45 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     Date currentdate= new Date();
     String status = mmDriver.getLicenseExpiryDate();
     try {
-      Date LicenseEndDate = formatter.parse(status);
+      Date LicenseEndDate = new Date(Long.parseLong(status,10));
       if (LicenseEndDate.after(currentdate)){
-        return "Active";
+        return ACTIVE_STATUS;
       }
-    } catch (ParseException e) {
+    } catch (Exception e) {
       NvLogger.error(e.getMessage());
     }
-    return "Inactive";
+    return INACTIVE_STATUS;
 
+  }
+
+  public List<Driver> filterDriver(List<Driver> middleMileDrivers, String statusName, String filter){
+    List<Driver> temp = new ArrayList<>();
+    switch (statusName){
+      case "Employment Status":
+//        for (Driver driver:middleMileDrivers) {
+//          if(getLicenseStatus(driver).equals(filter)){
+//            temp.add(driver);
+//          }
+//        }
+        middleMileDrivers.forEach(driver ->{
+          if(getEmploymentStatus(driver).equals(filter)) temp.add(driver);
+        });
+        break;
+      case "License Status":
+//        for (Driver driver:middleMileDrivers) {
+//          System.out.println("License status print: "+getLicenseStatus(driver));
+//          System.out.println("Filter status print: "+filter);
+//          if(getLicenseStatus(driver).equals(filter)){
+//            System.out.println("Add driver: ");
+//            temp.add(driver);
+//          }
+//        }
+        middleMileDrivers.forEach(driver ->{
+          if(getLicenseStatus(driver).equals(filter)) temp.add(driver);
+        });
+        break;
+    }
+
+    return temp;
   }
 }
