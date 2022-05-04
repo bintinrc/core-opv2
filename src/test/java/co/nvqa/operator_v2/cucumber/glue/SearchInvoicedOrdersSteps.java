@@ -130,6 +130,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
 
   @Then("Operator verifies error message {string} is displayed")
   public void operatorVerifiesErrorMessageIsDisplayed(String errorMessage) {
+    takesScreenshot();
     String actualErrorMsgText = invoicedOrdersSearchPage.errorMessageText.getText();
     softAssert.assertEquals("Actual and expected error message text mismatch", errorMessage,
         actualErrorMsgText);
