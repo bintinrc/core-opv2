@@ -18,12 +18,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Tristania Siagian
@@ -100,6 +95,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
   private static final String YES = "yes";
   private static final String NO = "no";
+  public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
+
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -899,6 +896,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
     Date currentdate= new Date();
     String status = mmDriver.getEmploymentEndDate();
+    if (status == null) return ACTIVE_STATUS;
     try {
       Date employmentEndDate = new Date(Long.parseLong(status,10));
       if (employmentEndDate.after(currentdate)){
@@ -915,6 +913,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
     Date currentdate= new Date();
     String status = mmDriver.getLicenseExpiryDate();
+    //if (status == null) return ACTIVE_STATUS;
     try {
       Date LicenseEndDate = new Date(Long.parseLong(status,10));
       if (LicenseEndDate.after(currentdate)){
@@ -928,27 +927,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
   }
 
   public List<Driver> filterDriver(List<Driver> middleMileDrivers, String statusName, String filter){
-    List<Driver> temp = new ArrayList<>();
+    List<Driver> temp = new ArrayList<Driver>();
     switch (statusName){
       case "Employment Status":
-//        for (Driver driver:middleMileDrivers) {
-//          if(getLicenseStatus(driver).equals(filter)){
-//            temp.add(driver);
-//          }
-//        }
         middleMileDrivers.forEach(driver ->{
           if(getEmploymentStatus(driver).equals(filter)) temp.add(driver);
         });
         break;
       case "License Status":
-//        for (Driver driver:middleMileDrivers) {
-//          System.out.println("License status print: "+getLicenseStatus(driver));
-//          System.out.println("Filter status print: "+filter);
-//          if(getLicenseStatus(driver).equals(filter)){
-//            System.out.println("Add driver: ");
-//            temp.add(driver);
-//          }
-//        }
         middleMileDrivers.forEach(driver ->{
           if(getLicenseStatus(driver).equals(filter)) temp.add(driver);
         });
@@ -957,4 +943,29 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     return temp;
   }
+
+  public List<Driver> filterDriver(List<Driver> middleMileDrivers, String statusName1, String filter1,String statusName2, String filter2 ){
+    List<Driver> temp = new ArrayList<Driver>();
+    temp= filterDriver(middleMileDrivers,statusName1,filter1);
+    return filterDriver(temp,statusName2,filter2);
+  }
+  /*
+  Employment End date and License End Date of created driver are Date format, not Unix timestamp format
+  Convert them to Unix timestamp and set them
+   */
+  public void convertDateToUnixTimestamp(Driver driver){
+    try {
+      SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+      Date date = format.parse(driver.getEmploymentEndDate());
+      long timestamp = date.getTime();
+      driver.setEmploymentEndDate(Long.toString(timestamp));
+      date = format.parse(driver.getLicenseExpiryDate());
+      timestamp = date.getTime();
+      driver.setLicenseExpiryDate(Long.toString(timestamp));
+    } catch (ParseException e) {
+      NvLogger.error(e.getMessage());
+    }
+
+  }
+
 }
