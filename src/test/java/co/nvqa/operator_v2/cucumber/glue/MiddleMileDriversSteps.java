@@ -279,8 +279,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
     switch (filterBy.toLowerCase()) {
       case NAME_FILTER:
-       // middleMileDriversPage.tableFilter(middleMileDriver.get(0), NAME_FILTER);
-        middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+        middleMileDriversPage.tableFilter(middleMileDriver.get(0), NAME_FILTER);
         break;
 
       case ID_FILTER:

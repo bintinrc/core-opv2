@@ -373,8 +373,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
       default:
         NvLogger.warn("Filter is not found");
     }
-    System.out.println("Driver emp end date:  "+middleMileDriver.getEmploymentEndDate());
-    System.out.println("Driver license end date:  "+middleMileDriver.getLicenseExpiryDate());
+
     assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
     assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
     assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);

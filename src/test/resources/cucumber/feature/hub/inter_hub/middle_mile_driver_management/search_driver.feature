@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver
 Feature: Middle Mile Driver Management - Search Driver
 
   @LaunchBrowser @ShouldAlwaysRun
