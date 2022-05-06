@@ -328,9 +328,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     And Operator scan shipment with id "{KEY_SHIPMENT_AWB}"
-    Then Operator verify small message "Scan failed. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
-    And Operator verifies shipment counter is "2"
-    And Operator verifies Scanned Shipment color is "#fe5c5c"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Shipment {KEY_SHIPMENT_AWB} can not be found." is shown on Shipment Inbound Scanning page
+    And Operator verifies shipment counter is "0"
+    And Operator verifies Scan Shipment Container color is "#ffe7ec"
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Success Scan MAWB Partially at Hub Inbound (uid:89e24f29-ad80-4a8a-ae49-de0ebbb14e1c)
