@@ -17,12 +17,12 @@ Feature: Create SSB Template
       | selectHeaders       | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID          |
     Then DB Operator gets the template details using template name
     Then Operator verifies below details in billing_qa_gl.templates table
-      | column                | expected_value                       |
-      | system_id             | {KEY_COUNTRY}                        |
-      | description           | {KEY_TEMPLATE.description}           |
-      | report_type           | {KEY_TEMPLATE.reportType}            |
+      | column                | expected_value                                          |
+      | system_id             | {KEY_COUNTRY}                                           |
+      | description           | {KEY_TEMPLATE.description}                              |
+      | report_type           | {KEY_TEMPLATE.reportType}                               |
       | configuration         | notNull                                                 |
       | configuration.headers | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID |
       | created_at            | {gradle-current-date-yyyy-MM-dd}                        |
-      | updated_at            | {gradle-current-date-yyyy-MM-dd}     |
-      | deleted_at            | null                                 |
+      | updated_at            | {gradle-current-date-yyyy-MM-dd}                        |
+      | deleted_at            | null                                                    |

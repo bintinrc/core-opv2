@@ -144,7 +144,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public Button completeTripButton;
 
   @FindBy(xpath = "//input[@id='originHub']")
-  public AntSelect originHubFilter;
+  public PageElement originHubFilter;
 
   @FindBy(xpath = "//input[@id='destinationHub']")
   public AntSelect destinationHubFilter;
@@ -152,6 +152,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(id = "movementType")
   public AntSelect movementTypeFilterPage;
 
+  private static String originHub = "//input[@id='originHub']";
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
 
@@ -204,7 +205,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
     if (filterName.equalsIgnoreCase("originhub")) {
-      originHubFilter.selectValue(filterValue);
+      TestUtils.findElementAndClick(originHub, "xpath", getWebDriver());
+      sendKeysAndEnter(originHub, filterValue);
     } else if (filterName.equalsIgnoreCase("movementtype")) {
       movementTypeFilterPage.click();
       sendKeysAndEnter(movementType, filterValue);

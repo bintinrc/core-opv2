@@ -20,7 +20,6 @@ Feature: Search by SID
     When Operator search "{KEY_CREATED_SHIPMENT_ID}" on Shipment Weight Dimension search by SID text
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | search_valid |
-    When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
 
@@ -156,6 +155,7 @@ Feature: Search by SID
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     When Operator filter Shipment Weight Dimension Table by "shipment_id" column with first shipment value
+      | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
     When Operator clear filter on Shipment Weight Dimension Table

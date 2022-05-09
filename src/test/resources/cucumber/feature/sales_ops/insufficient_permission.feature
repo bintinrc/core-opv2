@@ -71,3 +71,14 @@ Feature: All test cases related to insufficient permission for Finance related p
     Then Operator verifies that error toast is displayed on SSB Template page:
       | top    | Network Request Error                                                                                                                 |
       | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [FINANCE_ADMIN ALL_ACCESS INTERNAL_SERVICE] |
+
+  @KillBrowser @User1
+  Scenario: Generate Financial Batch Report - Insufficient Permissions (uid:79e4fb77-e56b-434c-b8e6-0272451a3d37)
+    Given Operator go to menu Finance Tools -> Financial Batch Report
+    Then Operator waits for 3 seconds
+    When Operator select financial batch report using data below:
+      | For          | All Shippers          |
+      | emailAddress | {order-billing-email} |
+    Then Operator verifies that error toast is displayed on Financial Batch Reports page:
+      | top    | Network Request Error                                                                                                                                           |
+      | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |

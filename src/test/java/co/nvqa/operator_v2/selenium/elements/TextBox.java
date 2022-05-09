@@ -62,4 +62,14 @@ public class TextBox extends PageElement {
   public String getValue() {
     return getValue(webElement);
   }
+
+  public void type(String value) {
+    if (value != null) {
+      char[] chars = value.toCharArray();
+      for (char c : chars) {
+        getWebElement().sendKeys(String.valueOf(c));
+        pause200ms();
+      }
+    }
+  }
 }

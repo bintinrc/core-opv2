@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.SearchContext;
@@ -26,6 +27,9 @@ public class NvFilterBox extends AbstractFilterBox {
 
   @FindBy(css = "nv-icon-text-button[ng-repeat]")
   public List<NvIconTextButton> selectedItems;
+
+  @FindBy(css = "md-progress-circular")
+  public PageElement spinner;
 
   public void clearAll() {
     if (clearAll.isDisplayedFast()) {
@@ -58,5 +62,11 @@ public class NvFilterBox extends AbstractFilterBox {
     return selectedItems.stream()
         .map(element -> element.getAttribute("aria-label"))
         .collect(Collectors.toList());
+  }
+
+  public void waitUntilLoaded() {
+    if (spinner.waitUntilVisible(1)) {
+      spinner.waitUntilInvisible(30);
+    }
   }
 }

@@ -39,6 +39,11 @@ public class MdAutocomplete extends PageElement {
     selectItem(value);
   }
 
+  public void simpleSelectValue(String value) {
+    inputElement.click();
+    selectItem(value);
+  }
+
   public void enterSearchTerm(String value) {
     inputElement.waitUntilClickable();
     inputElement.moveAndClick();

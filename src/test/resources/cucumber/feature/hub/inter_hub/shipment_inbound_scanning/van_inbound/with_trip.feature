@@ -2151,7 +2151,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then Operator verify parameters of shipment on Shipment Management page using data below:
       | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
-      | currHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}    |
+      | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
@@ -2656,8 +2656,10 @@ Feature: Shipment Van Inbound With Trip Scanning
       | movementTripSchedule | {hub-name-temp}                         |
     And Operator click start inbound
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." is shown on Shipment Inbound Scanning page
 #    And Capture the toast with message is shown on Shipment Inbound Scanning page
-    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+#    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Singapore"

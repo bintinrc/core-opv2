@@ -6,6 +6,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+  @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select One Shipper - ID
       #Test Data - Normal Order
     Given API Shipper create V4 order using data below:
@@ -23,10 +24,11 @@ Feature: Generate COD Report - Selected Shipper(s)
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-previous-1-day-yyyy-MM-dd}T17:00:00.000Z","end_date": "{gradle-previous-1-day-yyyy-MM-dd}T17:00:00.000Z","timezone": "Asia/Jakarta","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "global_shipper_ids": [ {shipper-v4-global-id} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "global_shipper_ids": [ {shipper-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -37,5 +39,4 @@ Feature: Generate COD Report - Selected Shipper(s)
       | generateFile | Selected Shippers              |
       | shipperId    | {shipper-v4-global-id}         |
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
-    Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies the cod entry details in the body

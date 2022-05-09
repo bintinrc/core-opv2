@@ -21,7 +21,7 @@ public class AntButton extends PageElement {
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
-  @FindBy(css = "i.anticon-loading")
+  @FindBy(css = ".anticon-loading")
   public PageElement spinner;
 
   public void click() {
@@ -33,6 +33,13 @@ public class AntButton extends PageElement {
     click();
     if (spinner.waitUntilVisible(1)) {
       spinner.waitUntilInvisible();
+    }
+  }
+
+  public void clickAndWaitUntilDone(int timeoutInSeconds) {
+    click();
+    if (spinner.waitUntilVisible(1)) {
+      spinner.waitUntilInvisible(timeoutInSeconds);
     }
   }
 

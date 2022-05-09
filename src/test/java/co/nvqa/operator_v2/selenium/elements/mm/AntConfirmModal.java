@@ -11,6 +11,15 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AntConfirmModal extends PageElement {
 
+  @FindBy(className = "ant-modal-confirm-title")
+  public PageElement title;
+  @FindBy(className = "ant-modal-confirm-content")
+  public PageElement content;
+  @FindBy(className = "ant-btn-primary")
+  public Button confirmButton;
+  @FindBy(css = ".ant-modal-confirm-btns .ant-btn:not(.ant-btn-primary)")
+  public Button cancelButton;
+
   public AntConfirmModal(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -20,17 +29,6 @@ public class AntConfirmModal extends PageElement {
     super(webDriver, searchContext, webElement);
     PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
-
-
-
-  @FindBy(className = "ant-modal-confirm-title")
-  public PageElement title;
-
-  @FindBy(className = "ant-modal-confirm-content")
-  public PageElement content;
-
-  @FindBy(className = "ant-btn-primary")
-  public Button confirmButton;
 
   public boolean isDisplayed() {
     return title.isDisplayedFast();
@@ -42,5 +40,9 @@ public class AntConfirmModal extends PageElement {
 
   public void confirm() {
     confirmButton.click();
+  }
+
+  public void cancel() {
+    cancelButton.click();
   }
 }

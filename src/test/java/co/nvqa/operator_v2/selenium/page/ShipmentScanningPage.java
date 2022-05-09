@@ -515,9 +515,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
-    waitUntilInvisibilityOfNotification(notificationXpath, false);
     antNotificationMessage = notificationElement.getText();
-    return notificationElement.getText();
+    waitUntilInvisibilityOfNotification(notificationXpath, false);
+    return antNotificationMessage;
   }
 
   public void clickLeavePageDialog() {
@@ -690,17 +690,25 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void verifyShipmentCount(String numberOfShipment) {
-    String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-    assertThat("Number of shipment scanned to Hub message is the same",
-        textNumberOfScannedParcel,
-        equalTo(f("%s Shipments Scanned to Hub", numberOfShipment)));
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        String textNumberOfScannedParcel = numberOfScannedParcel.getText();
+        Assertions.assertThat(textNumberOfScannedParcel).as("Number of shipment scanned to Hub message is the same").
+                isEqualTo(f("%s Shipments Scanned to Hub", numberOfShipment));
+      } catch (Throwable ex) {
+        LOGGER.info(ex.getMessage());
+        pause2s();
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 5);
   }
 
   public void removeShipmentWithId(String shipmentId) {
+    waitUntilVisibilityOfElementLocated(XPATH_REMOVE_SHIPMENT_SCAN);
     WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
-    waitUntilVisibilityOfElementLocated("//div[@data-testid='remove-parcel-scan-container']//span[contains(.,'"+shipmentId+"')]");
+    waitUntilVisibilityOfElementLocated("//input[contains(@value,'"+shipmentId+"')]");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
@@ -904,6 +912,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void switchTo() {
-    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    if(isElementExist("//iframe"))
+      getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 }
