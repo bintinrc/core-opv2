@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.selenium.elements.nv;
+package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import org.openqa.selenium.Keys;
@@ -7,18 +7,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class NvFilterFreeTextBox extends AbstractFilterBox {
+public class AntFilterFreeTextBox extends AntAbstractFilterBox {
 
-  public NvFilterFreeTextBox(WebDriver webDriver, WebElement webElement) {
+  public AntFilterFreeTextBox(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
   }
 
-  public NvFilterFreeTextBox(WebDriver webDriver, SearchContext searchContext,
+  public AntFilterFreeTextBox(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
     super(webDriver, searchContext, webElement);
   }
 
-  @FindBy(css = "input[ng-model='search']")
+  @FindBy(css = "input")
   public TextBox search;
 
   public void setValue(String value) {
