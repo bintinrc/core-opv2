@@ -1044,7 +1044,12 @@ public class RouteLogsSteps extends AbstractSteps {
               }
               value = finalData.get("bottom");
               if (StringUtils.isNotBlank(value)) {
-                return StringUtils.equalsIgnoreCase(value, toast.description.getNormalizedText());
+                String actual = toast.description.getNormalizedText();
+                if (value.startsWith("^")) {
+                  return actual.matches(value);
+                } else {
+                  return StringUtils.equalsIgnoreCase(value, actual);
+                }
               }
               return true;
             })

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -16,9 +15,11 @@ import org.openqa.selenium.support.PageFactory;
 /**
  * @author Sergey Mishanin
  */
-public class AntDateRangePicker extends PageElement {
+public class AntDateRangePicker extends AntAbstractFilterBox {
 
-  private static final String BY_TITLE_LOCATOR = "table.ant-picker-content td[title='%s']";
+  private static final String BY_TITLE_LOCATOR = "div.ant-picker-dropdown:not(.ant-picker-dropdown-hidden) table.ant-picker-content td[title='%s']";
+  private static final String HOURS_LOCATOR = "//div[contains(@class,'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[1]/li[.='%s']";
+  private static final String MINUTES_LOCATOR = "//div[contains(@class,'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[2]/li[.='%s']";
 
   public AntDateRangePicker(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
@@ -36,6 +37,9 @@ public class AntDateRangePicker extends PageElement {
 
   @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[2]//input")
   public TextBox toInput;
+
+  @FindBy(xpath = "//div[contains(@class,'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//button[.='Ok']")
+  public Button ok;
 
   public void setDateRange(String from, String to) {
     fromInput.click();
@@ -68,5 +72,44 @@ public class AntDateRangePicker extends PageElement {
     toInput.forceClear();
     toInput.sendKeys(to);
     toInput.sendKeys(Keys.ENTER);
+  }
+
+  public void selectFromHours(String value) {
+    fromInput.click();
+    Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, value))));
+    button.scrollIntoView();
+    button.jsClick();
+    ok.click();
+  }
+
+  public void selectFromMinutes(String value) {
+    fromInput.click();
+    Button button = new Button(webDriver,
+        webDriver.findElement(By.xpath(f(MINUTES_LOCATOR, value))));
+    button.scrollIntoView();
+    button.jsClick();
+    ok.click();
+  }
+
+  public void selectToHours(String value) {
+    toInput.click();
+    Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, value))));
+    button.scrollIntoView();
+    button.jsClick();
+    ok.click();
+  }
+
+  public void selectToMinutes(String value) {
+    toInput.click();
+    Button button = new Button(webDriver,
+        webDriver.findElement(By.xpath(f(MINUTES_LOCATOR, value))));
+    button.scrollIntoView();
+    button.jsClick();
+    ok.click();
+  }
+
+  @Override
+  public void setValue(String... values) {
+
   }
 }
