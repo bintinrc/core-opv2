@@ -86,7 +86,7 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup @Debug
+  @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Assign a Shipper Milkrun Address to a Milkrun Group
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new Driver using data below:
