@@ -1449,7 +1449,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         || country.equalsIgnoreCase("ID"))) {
       if (Objects.isNull(billingWeight)) {
         newPricingProfileDialog.billingWeight.selectValue("Standard");
-      } else {
+      } else if(!billingWeight.equalsIgnoreCase("empty")){
         newPricingProfileDialog.billingWeight.selectValue(billingWeight);
       }
     }
@@ -1573,7 +1573,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");

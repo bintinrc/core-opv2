@@ -98,12 +98,60 @@ Feature: Create Pricing Profile - ID
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pending Profile With Billing Weight Logic = GROSS_WEIGHT - Normal Shipper - ID (uid:97675bba-7c6f-45dc-be7a-9cd7d54da531)
+    Given API Operator create new 'normal' shipper
+    # add active pricing profile
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
+    # add pending pricing profile
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | startDate          | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Gross weight only                                   |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pending Profile With Billing Weight Logic = SHIPPER_GROSS_WEIGHT - Normal Shipper - ID (uid:df639eef-b024-4094-baa6-a13e68be7009)
+    Given API Operator create new 'normal' shipper
+    # add active pricing profile
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
+    # add pending pricing profile
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | startDate          | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Shipper submitted weight only                       |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Corporate Branch Pending Pricing Profile With Billing Weight Logic = SHIPPER_GROSS_WEIGHT - Parent Shipper Has billing_weight_logic = Standard - ID (uid:2a4af4f9-3348-4309-ad6e-2338310f1cc4)
+    Given API Operator create new "corporate" shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
+      | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"pricing_levers": {"billing_weight_logic" : "STANDARD"}} |
+    And Operator waits for 1 seconds
+    Given API operator create new corporate branch for corporate shipper id "{KEY_SHIPPER_ID}"
+         # add pending pricing profile for the subshipper
+    And Operator edits shipper "{KEY_CORPORATE_BRANCH.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | startDate          | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Shipper submitted weight only                       |
+    Then Operator waits for 2 seconds
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
 
   @KillBrowser @ShouldAlwaysRun

@@ -3,8 +3,7 @@ Feature: Create Pricing Profile - TH
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-#    Given Operator changes the country to "Thailand"
-
+    Given Operator changes the country to "Thailand"
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - RTS Charge, Surcharge - TH (uid:fc7e368e-9e64-45a1-9815-989e26584ce2)
@@ -63,18 +62,32 @@ Feature: Create Pricing Profile - TH
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Subshipper Pending Pricing Profile With Billing Weight Logic = STANDARD - Parent Shipper Has billing_weight_logic = GROSS_WEIGHT - TH (uid:c0da810b-70ea-434e-9bbe-e48d05fdedc3)
+    Given API Operator create new 'marketplace' shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"billing_weight_logic": "GROSS_WEIGHT"} |
+    Given API operator create new marketplace seller for marketplace id "{KEY_SHIPPER_ID}"
+      # add pending pricing profile for the subshipper
+    And Operator edits shipper "{KEY_MARKETPLACE_SUB_SHIPPER.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | startDate          | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Shipper submitted weight only                       |
+    Then Operator waits for 2 seconds
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
 
-    @nadeera
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pending Profile - Not Select Any Billing Weight Logic - TH (uid:8690a0c1-ce4c-45bf-aa9e-ad88c8ab5cc3)
     Given Operator go to menu Shipper -> All Shippers
-    When Operator adds new pricing Profile
+    Given API Operator create new 'normal' shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator adds pricing profile with below details and verifies save button is disabled
-      | startDate         | {gradle-next-2-day-yyyy-MM-dd}                      |
-      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all} |
-      | type              | PERCENTAGE                                          |
-      | comments          | This is a test pricing script                       |
-      | billingWeightLogic | Empty                  |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Empty                                               |
 
 
   @KillBrowser @ShouldAlwaysRun
