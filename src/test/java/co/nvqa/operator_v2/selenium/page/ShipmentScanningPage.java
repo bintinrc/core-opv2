@@ -479,10 +479,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInEndInboundDialog() {
-    String dialogTitleText = dialogTitle.getText();
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
+    String dialogTitleText = getWebDriver().findElement(By.xpath("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//span[@class='ant-modal-confirm-title']")).getText();
     assertThat("Dialog title is the same", dialogTitleText, equalTo("Confirm End Inbound"));
 
-    String dialogMessageText = dialogMessage.getText();
+    String dialogMessageText = getWebDriver().findElement(By.xpath("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[@class='ant-modal-confirm-content']")).getText();
     assertThat("Dialog message text is the same", dialogMessageText,
         equalTo("Are you sure you want to end inbound?"));
 
