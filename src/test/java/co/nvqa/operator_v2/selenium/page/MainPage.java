@@ -124,6 +124,10 @@ public class MainPage extends OperatorV2SimplePage {
     closeDialogIfVisible();
     openNavigationPanel();
     String mainDashboard = grabEndURL(navTitle);
+    if (mainDashboard.contains("(new)")){
+      mainDashboard = mainDashboard.replace("(","");
+      mainDashboard = mainDashboard.replace(")","");
+    }
     clickNavigation(parentTitle, navTitle, mainDashboard);
   }
 
