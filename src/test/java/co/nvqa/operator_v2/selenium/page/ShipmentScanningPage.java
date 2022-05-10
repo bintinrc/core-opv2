@@ -161,7 +161,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button//span[contains(text(), ' shipments')]")
   public TextBox shipmentToGo;
 
-  @FindBy(xpath = "//div//p[@class='nv-p']//a")
+  @FindBy(xpath = "//button//span[contains(text(), ' shipments')]")
   public TextBox shipmentToUnload;
 
   @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
