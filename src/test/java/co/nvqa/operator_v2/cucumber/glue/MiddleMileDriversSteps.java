@@ -71,6 +71,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String MALAYSIA = "malaysia";
   private static final String PHILIPPINES = "philippines";
 
+  private static Boolean IS_FIRST_TIME_SETUP_DRIVER = true;
+
   private MiddleMileDriversPage middleMileDriversPage;
 
   public MiddleMileDriversSteps() {
@@ -122,6 +124,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, getCurrentMethodName(), 500, 5);
+
   }
 
   @When("Operator create new Middle Mile Driver with details:")
@@ -254,6 +257,12 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName,
       String value) {
     middleMileDriversPage.selectFilter(filterName, value);
+    if (IS_FIRST_TIME_SETUP_DRIVER){
+      GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+      middleMileDriversPage.LIST_OF_FILTER_DRIVERS = drivers.getData().getDrivers();
+      IS_FIRST_TIME_SETUP_DRIVER = false;
+    }
+    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,filterName,value);
   }
 
   @When("Operator searches by {string} with value {string}")
@@ -392,5 +401,40 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @When("Operator click on Browser Forward button")
   public void OperatorClickOnBrowserForwardButton(){
     middleMileDriversPage.ClickToBrowserForwardButton();
+  }
+
+  @Then("Make sure URL show is {string}")
+  public void VerifyURLinMiddleDriverPage(String URL){
+    if (URL.contains("<id>")){
+      Hub hub = get(KEY_HUB_INFO);
+      String hubID = hub.getId().toString();
+      URL = URL.replaceAll("<id>",hubID);
+    }
+    middleMileDriversPage.verifyURLofPage(URL);
+  }
+
+  @Then("Operator verifies that the GUI elements are shown on the Middle Mile Driver Page")
+  public void operatorVerifyTheElementsAreShown() {
+    List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+    middleMileDriversPage.convertDateToUnixTimestamp(middleMileDriver.get(0));
+    middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+  }
+
+//  @Then("API Fillter the list of driver")
+//  public void fillterTheListOfDriver(){
+//    GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+//    List<Driver> middleMileDrivers = drivers.getData().getDrivers();
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS = middleMileDrivers;
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,"Employment Status","Active");
+//    int count = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,"License Status","Active");
+//    count = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
+//  }
+
+  @When("Operator verifies that list of middle mile drivers is shown")
+  public void filterDriverby(){
+    int totalDriver = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
+    middleMileDriversPage.verifiesTotalDriverIsTheSame(totalDriver);
+
   }
 }
