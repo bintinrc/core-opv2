@@ -53,6 +53,24 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='label_restrictions']/span")
   public PageElement labelRestrictions;
 
+  @FindBy(xpath = "//div[@data-headerkey='id']/div/div[1]/*[name()='svg']")
+  public PageElement sortPartnerId;
+
+  @FindBy(xpath = "//div[@data-headerkey='name']/div/div[1]/*[name()='svg']")
+  public PageElement sortPartnerName;
+
+  @FindBy(xpath = "//div[@data-headerkey='poc_name']/div/div[1]/*[name()='svg']")
+  public PageElement sortPocName;
+
+  @FindBy(xpath = "//div[@data-headerkey='poc_tel']/div/div[1]/*[name()='svg']")
+  public PageElement sortPocNo;
+
+  @FindBy(xpath = "//div[@data-headerkey='poc_email']/div/div[1]/*[name()='svg']")
+  public PageElement sortPocEmail;
+
+  @FindBy(xpath = "//div[@data-headerkey='restrictions']/div/div[1]/*[name()='svg']")
+  public PageElement sortRestrictions;
+
   ImmutableMap<String, TextBox> textBoxElement = ImmutableMap.<String, TextBox>builder()
       .put("id", partnerId)
       .put("name", partnerName)
@@ -76,6 +94,19 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     dpPartner.setPocTel(partner.getPocTel());
     dpPartner.setRestrictions(partner.getRestrictions());
     return dpPartner;
+  }
+
+  public void sortFilter(String field){
+    ImmutableMap<String, PageElement> sortElement = ImmutableMap.<String, PageElement>builder()
+        .put("id", sortPartnerId)
+        .put("name", sortPartnerName)
+        .put("pocName", sortPocName)
+        .put("pocTel", sortPocNo)
+        .put("pocEmail", sortPocEmail)
+        .put("restrictions", sortRestrictions)
+        .build();
+
+    sortElement.get(field).click();
   }
 
   public void fillFilter(String field,String value){

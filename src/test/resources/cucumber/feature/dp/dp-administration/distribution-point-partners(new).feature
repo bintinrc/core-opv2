@@ -13,9 +13,11 @@ Feature: DP Administration - Distribution Point Partners
     Then Downloaded CSV file contains correct DP Partners data
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: DP Administration - Search DP partner
+  Scenario: DP Administration - Search DP partner (uid:2a3723b3-4584-492d-871e-52b439b2ade3)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator Search with Some DP Partner Details :
+      | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
+    And Operator check the data again with pressing ascending and descending order :
       | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |

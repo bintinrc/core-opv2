@@ -154,6 +154,27 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator check the data again with pressing ascending and descending order :")
+  public void ascendingDataCheck(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String [] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0],expected);
+      dpAdminReactPage.fillFilter(extractDetails[0],valueDetails);
+      for(String extractDetail : extractDetails){
+        dpAdminReactPage.sortFilter(extractDetail);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+      }
+    });
+  }
+
   private File getDpPhoto(String resourcePath) {
     final ClassLoader classLoader = getClass().getClassLoader();
     return new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
