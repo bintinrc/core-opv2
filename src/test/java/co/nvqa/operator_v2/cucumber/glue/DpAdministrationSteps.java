@@ -6,6 +6,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import io.cucumber.java.en.And;
@@ -130,6 +131,27 @@ public class DpAdministrationSteps extends AbstractSteps {
       resourcePath = "images/dpPhotoInvalidSize.png";
     }
     return resourcePath;
+  }
+
+  @And("Operator Search with Some DP Partner Details :")
+  public void operatorVerifyRouteDetails(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String [] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for(String extractDetail : extractDetails){
+        String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail,expected);
+        dpAdminReactPage.fillFilter(extractDetail,valueDetails);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+        dpAdminReactPage.clearFilter(extractDetail);
+      }
+    });
   }
 
   private File getDpPhoto(String resourcePath) {
