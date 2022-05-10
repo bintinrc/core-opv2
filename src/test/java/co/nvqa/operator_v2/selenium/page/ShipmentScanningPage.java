@@ -90,6 +90,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-modal-confirm-content']")
   public WebElement dialogMessage;
 
+  public String ANT_MODAL_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]";
+  public String ANT_MODAL_CONFIRM_TITLE_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//span[@class='ant-modal-confirm-title']";
+  public String ANT_MODAL_CONFIRM_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[@class='ant-modal-confirm-content']";
+
   @FindBy(xpath = ".//button[.='Cancel']")
   public Button cancel;
 
@@ -479,11 +483,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInEndInboundDialog() {
-    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
-    String dialogTitleText = getWebDriver().findElement(By.xpath("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//span[@class='ant-modal-confirm-title']")).getText();
+    waitUntilVisibilityOfElementLocated(ANT_MODAL_CONTENT_XPATH);
+    String dialogTitleText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_TITLE_XPATH)).getText();
     assertThat("Dialog title is the same", dialogTitleText, equalTo("Confirm End Inbound"));
 
-    String dialogMessageText = getWebDriver().findElement(By.xpath("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[@class='ant-modal-confirm-content']")).getText();
+    String dialogMessageText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_CONTENT_XPATH)).getText();
     assertThat("Dialog message text is the same", dialogMessageText,
         equalTo("Are you sure you want to end inbound?"));
 
