@@ -3,7 +3,7 @@ Feature: Create Pricing Profile - TH
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given Operator changes the country to "Thailand"
+#    Given Operator changes the country to "Thailand"
 
 
   @DeleteNewlyCreatedShipper @CloseNewWindows
@@ -22,6 +22,59 @@ Feature: Create Pricing Profile - TH
     Then Operator verifies the pricing profile and shipper discount details are correct
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
+
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Pending Profile With Billing Weight Logic = GROSS_WEIGHT - Normal Shipper - TH (uid:495a6579-5bbe-4c65-84e8-1c54dba57de0)
+    Given API Operator create new 'normal' shipper
+    # add active pricing profile
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
+    # add pending pricing profile
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | startDate          | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Gross weight only                                   |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
+
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Pending Profile With Billing Weight Logic = SHIPPER_GROSS_WEIGHT - Normal Shipper - TH (uid:b833eaa7-c6a6-439d-8062-a64517d5baf5)
+    Given API Operator create new 'normal' shipper
+    # add active pricing profile
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    And Operator waits for 1 seconds
+    # add pending pricing profile
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    When Operator adds new Shipper's Pricing Profile
+      | startDate          | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type               | PERCENTAGE                                          |
+      | comments           | This is a test pricing script                       |
+      | billingWeightLogic | Shipper submitted weight only                       |
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    And DB Operator fetches pricing lever details
+    Then Operator verifies the pricing lever details in the database
+
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Subshipper Pending Pricing Profile With Billing Weight Logic = STANDARD - Parent Shipper Has billing_weight_logic = GROSS_WEIGHT - TH (uid:c0da810b-70ea-434e-9bbe-e48d05fdedc3)
+
+    @nadeera
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Pending Profile - Not Select Any Billing Weight Logic - TH (uid:8690a0c1-ce4c-45bf-aa9e-ad88c8ab5cc3)
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator adds new pricing Profile
+    And Operator adds pricing profile with below details and verifies save button is disabled
+      | startDate         | {gradle-next-2-day-yyyy-MM-dd}                      |
+      | pricingScriptName | {pricing-script-id-all} - {pricing-script-name-all} |
+      | type              | PERCENTAGE                                          |
+      | comments          | This is a test pricing script                       |
+      | billingWeightLogic | Empty                  |
 
 
   @KillBrowser @ShouldAlwaysRun

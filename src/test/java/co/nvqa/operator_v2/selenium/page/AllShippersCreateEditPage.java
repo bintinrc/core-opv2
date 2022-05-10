@@ -1443,11 +1443,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.rtsValue.sendKeys(shipperRtsValue);
       }
     }
-    String billingWeight = pricing.getBillingWeight();
+    String billingWeight = pricing.getBillingWeight().getCode();
     String country = COUNTRY_CODE;
-    if (Objects.isNull(billingWeight) && (country.equalsIgnoreCase("TH")
-        || country.equalsIgnoreCase("PH") || country.equalsIgnoreCase("ID"))) {
-      newPricingProfileDialog.billingWeight.selectValue("Standard");
+    if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
+        || country.equalsIgnoreCase("ID"))) {
+      if (Objects.isNull(billingWeight)) {
+        newPricingProfileDialog.billingWeight.selectValue("Standard");
+      } else {
+        newPricingProfileDialog.billingWeight.selectValue(billingWeight);
+      }
     }
   }
 

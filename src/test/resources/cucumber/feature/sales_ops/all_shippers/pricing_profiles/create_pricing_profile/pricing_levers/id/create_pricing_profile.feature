@@ -96,6 +96,15 @@ Feature: Create Pricing Profile - ID
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
 
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Pending Profile With Billing Weight Logic = GROSS_WEIGHT - Normal Shipper - ID (uid:97675bba-7c6f-45dc-be7a-9cd7d54da531)
+
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Pending Profile With Billing Weight Logic = SHIPPER_GROSS_WEIGHT - Normal Shipper - ID (uid:df639eef-b024-4094-baa6-a13e68be7009)
+
+  @DeleteNewlyCreatedShipper @CloseNewWindows
+  Scenario: Create Corporate Branch Pending Pricing Profile With Billing Weight Logic = SHIPPER_GROSS_WEIGHT - Parent Shipper Has billing_weight_logic = Standard - ID (uid:2a4af4f9-3348-4309-ad6e-2338310f1cc4)
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

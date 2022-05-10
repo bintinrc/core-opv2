@@ -5,11 +5,11 @@ import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -50,7 +50,7 @@ public class LoginSteps extends AbstractSteps {
       //loginPage.checkForGoogleSimpleVerification("Singapore");
     }
 
-    mainPage.verifyTheMainPageIsLoaded();
+//    mainPage.verifyTheMainPageIsLoaded();
   }
 
   @And("Operator login Operator portal with username = {string} and password = {string}")

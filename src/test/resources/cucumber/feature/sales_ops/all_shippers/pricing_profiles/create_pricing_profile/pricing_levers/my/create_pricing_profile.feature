@@ -5,6 +5,7 @@ Feature: Create Pricing Profile - MY
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator changes the country to "Malaysia"
 
+   # @nadeera
   @DeleteNewlyCreatedShipper @CloseNewWindows
   Scenario: Create Pricing Profile - RTS Charge, Discount - MY (uid:10879c83-f455-491f-afc2-d9442bfa1d02)
     Given API Operator create new 'normal' shipper
