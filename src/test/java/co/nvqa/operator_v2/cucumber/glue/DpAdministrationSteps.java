@@ -6,7 +6,9 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
+import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -26,6 +28,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String NINJA_POINT_URL = StandardTestConstants.API_BASE_URL
       .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
+  private DpAdministrationReactPage dpAdminReactPage;
 
   public DpAdministrationSteps() {
   }
@@ -33,6 +36,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Override
   public void init() {
     dpAdminPage = new DpAdministrationPage(getWebDriver());
+    dpAdminReactPage = new DpAdministrationReactPage(getWebDriver());
   }
 
   @Given("Operator add new DP Partner on DP Administration page with the following attributes:")
@@ -59,6 +63,14 @@ public class DpAdministrationSteps extends AbstractSteps {
   @When("Operator click on Download CSV File button on DP Administration page")
   public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationPage() {
     dpAdminPage.downloadCsvFile();
+  }
+
+  @When("Operator click on Download CSV File button on DP Administration React page")
+  public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationReactPage() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonDownloadCsv.click();
+      pause5s();
+    });
   }
 
   @Then("Downloaded CSV file contains correct DP Partners data")
@@ -119,6 +131,48 @@ public class DpAdministrationSteps extends AbstractSteps {
       resourcePath = "images/dpPhotoInvalidSize.png";
     }
     return resourcePath;
+  }
+
+  @And("Operator Search with Some DP Partner Details :")
+  public void operatorVerifyRouteDetails(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String [] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for(String extractDetail : extractDetails){
+        String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail,expected);
+        dpAdminReactPage.fillFilter(extractDetail,valueDetails);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+        dpAdminReactPage.clearFilter(extractDetail);
+      }
+    });
+  }
+
+  @And("Operator check the data again with pressing ascending and descending order :")
+  public void ascendingDataCheck(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String [] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0],expected);
+      dpAdminReactPage.fillFilter(extractDetails[0],valueDetails);
+      for(String extractDetail : extractDetails){
+        dpAdminReactPage.sortFilter(extractDetail);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+      }
+    });
   }
 
   private File getDpPhoto(String resourcePath) {
