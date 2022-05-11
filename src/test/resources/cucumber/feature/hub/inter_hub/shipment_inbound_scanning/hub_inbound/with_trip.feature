@@ -8,7 +8,6 @@ Feature: Shipment Hub Inbound With Trip Scanning
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Shipment Already Scanned (Duplicate Scan on Hub Inbound) (uid:461f477f-c49e-493a-811d-50e73389162f)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -19,11 +18,24 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | longitude    | GENERATED |
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    And API Operator assign driver to movement trip schedule
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -33,6 +45,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator refresh page
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
       | scanType       | SHIPMENT_VAN_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
@@ -51,6 +64,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify small message "Destination reached. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
     And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Duplicate scan for shipment {KEY_CREATED_SHIPMENT_ID}" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -75,11 +89,24 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | longitude    | GENERATED |
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -89,6 +116,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator refresh page
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
       | scanType       | SHIPMENT_VAN_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
@@ -104,6 +132,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     And Operator enter shipment with id "{KEY_CREATED_SHIPMENT_ID}" in remove shipment
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "There is no SHIPMENT_HUB_INBOUND scan for shipment {KEY_CREATED_SHIPMENT_ID} and trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -128,11 +157,24 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | longitude    | GENERATED |
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -142,6 +184,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator refresh page
     And API Operator shipment end inbound with trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
       | scanType       | SHIPMENT_VAN_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
@@ -158,6 +201,8 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Completed]" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -212,6 +257,8 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
@@ -281,9 +328,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     And Operator scan shipment with id "{KEY_SHIPMENT_AWB}"
-    Then Operator verify small message "Scan failed. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
-    And Operator verifies shipment counter is "2"
-    And Operator verifies Scanned Shipment color is "#fe5c5c"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Shipment {KEY_SHIPMENT_AWB} can not be found." is shown on Shipment Inbound Scanning page
+    And Operator verifies shipment counter is "0"
+    And Operator verifies Scan Shipment Container color is "#ffe7ec"
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Success Scan MAWB Partially at Hub Inbound (uid:89e24f29-ad80-4a8a-ae49-de0ebbb14e1c)
@@ -361,11 +409,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     And Operator scan shipment with id "{KEY_SHIPMENT_AWB}"
-    Then Operator verify small message "Partial Success. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
-    And Operator verifies shipment counter is "2"
-    And Operator verifies Scan Shipment Container color is "#eaf4f9"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#e1f6e0"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#fe5c5c"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Shipment {KEY_SHIPMENT_AWB} can not be found." is shown on Shipment Inbound Scanning page
+    And Operator verifies shipment counter is "0"
+    And Operator verifies Scan Shipment Container color is "#ffe7ec"
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Scan Correct MAWB to Hub Inbound at Destination Hub (uid:88e76751-a121-4082-b727-a561e7972e0d)
@@ -439,24 +486,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     And Operator scan shipment with id "{KEY_SHIPMENT_AWB}"
-    Then Operator verify small message "Scan successful. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
-    And Operator verifies shipment counter is "2"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#e1f6e0"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#e1f6e0"
+    And Operator verifies shipment counter is "0"
+    And Operator verifies Scan Shipment Container color is "#eaf4f9"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
-    Then Operator verifies event is present for shipment on Shipment Detail page
-      | source | SHIPMENT_HUB_INBOUND               |
-      | result | Completed                          |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
-    And Operator verifies event is present for order on Edit order page
-      | eventName         | SHIPMENT COMPLETED                 |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[2].id}   |
-      | descriptionString | Shipment                           |
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Scan Correct MAWB to Hub Inbound at Transit Hub (uid:a5b22da0-6f93-4feb-ad16-10c08f5ebab2)
@@ -543,19 +578,15 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     And Operator scan shipment with id "{KEY_SHIPMENT_AWB}"
-    Then Operator verify small message "Scan successful. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
-    And Operator verifies shipment counter is "2"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" exist color is "#e1f6e0"
-    And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#e1f6e0"
+    And Operator verifies shipment counter is "0"
+    And Operator verifies Scan Shipment Container color is "#eaf4f9"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
     Then Operator verifies event is present for shipment on Shipment Detail page
-      | source | SHIPMENT_HUB_INBOUND               |
-      | result | At Transit Hub                     |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
+      | result | Transit                            |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -600,8 +631,8 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
-      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
-      | inboundType    | Into Hub                                                                                    |
+      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                       |
+      | inboundType    | SHIPMENT HUB INBOUND                                                                        |
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
 
@@ -637,7 +668,14 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
-    And API Operator put created parcel to shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -664,11 +702,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify small message "Destination reached. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     And Operator verifies Scanned Shipment "{KEY_CREATED_SHIPMENT_ID}" exist color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -679,10 +718,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Completed                          |
     Then Operator verifies event is present for shipment on Shipment Detail page
-      | source | SHIPMENT_HUB_INBOUND               |
+      | source | SHIPMENT_HUB_INBOUND(OpV2)         |
       | result | Completed                          |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order on Edit order page
       | eventName         | SHIPMENT COMPLETED                 |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[2].name} |
@@ -731,7 +770,14 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
-    And API Operator put created parcel to shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -758,11 +804,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify small message "At transit hub. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Shipment Inbound Box
     And Operator verifies shipment counter is "1"
-    And Operator verifies Scan Shipment Container color is "#e1f6e0"
+    And Operator verifies Scan Shipment Container color is "#cef0cc"
     And Operator verifies Scanned Shipment "{KEY_CREATED_SHIPMENT_ID}" exist color is "#e1f6e0"
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -773,10 +820,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | status      | At Transit Hub                     |
     Then Operator verifies event is present for shipment on Shipment Detail page
-      | source | SHIPMENT_HUB_INBOUND               |
+      | source | SHIPMENT_HUB_INBOUND(OpV2)         |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -821,15 +868,17 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator click start inbound
     And Operator click proceed in trip completion dialog
     Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
-      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
-      | inboundType    | Into Hub                                                                                    |
+      | inboundHub     | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                       |
+      | inboundType    | SHIPMENT HUB INBOUND                                                                        |
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
     And Operator scan shipment with id "INCORRECT_SHIPMENT"
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment INCORRECT_SHIPMENT can not be found." is shown on Shipment Inbound Scanning page
     When Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    And Capture the toast with message is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Shipments To Unload for Hub Inbound (uid:95ed3788-2005-4b0b-ac45-4a706dec9f5e)
@@ -853,11 +902,24 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | longitude    | GENERATED |
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_CREATED_SHIPMENT_ID}                               |
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
@@ -1070,7 +1132,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_CREATED_SHIPMENT_ID}" appears in error shipment dialog with result "Shipment not listed. Expected drop-off hub: {KEY_LIST_OF_CREATED_HUBS[2].name}."
     When Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Missing Scan Shipment From Shipment to Unload List (uid:e050e36c-938c-454e-a99d-d785a696d282)
@@ -1146,7 +1208,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in error shipment dialog with result "Shipment hasn't been scanned"
     When Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -1169,12 +1231,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_HUB_INBOUND               |
       | result | Completed                          |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     Then Operator verifies event is present for shipment id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" on Shipment Detail page
       | source | SHIPMENT_VAN_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[1].id}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[2].name}             |
@@ -1260,7 +1322,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_CREATED_SHIPMENT_ID}" appears in error shipment dialog with result "No path found."
     When Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -1274,7 +1336,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_HUB_INBOUND               |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[1].id}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -1353,7 +1415,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_CREATED_SHIPMENT_ID}" appears in error shipment dialog with result "Expected to stay in van. Expected drop-off hub: {KEY_LIST_OF_CREATED_HUBS[3].name}."
     When Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -1367,7 +1429,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_HUB_INBOUND               |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[1].id}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -1458,7 +1520,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "Shipment hasn't been scanned" in "missing shipments"
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in error shipment dialog with result "No path found." in "unregistered shipments"
     When Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -1481,12 +1543,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_VAN_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     Then Operator verifies event is present for shipment id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" on Shipment Detail page
       | source | SHIPMENT_HUB_INBOUND               |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[1].id}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -1688,7 +1750,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_CREATED       |
       | result | Pending                |
-      | userId | automation@ninjavan.co |
+      | userId | qa@ninjavan.co |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -1760,7 +1822,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_CLOSED        |
       | result | Closed                 |
-      | userId | automation@ninjavan.co |
+      | userId | qa@ninjavan.co |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -1828,7 +1890,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_CANCELLED     |
       | result | Cancelled              |
-      | userId | automation@ninjavan.co |
+      | userId | qa@ninjavan.co |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -1896,7 +1958,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_FORCE_COMPLETED |
       | result | Completed                |
-      | userId | automation@ninjavan.co   |
+      | userId | qa@ninjavan.co   |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -2008,7 +2070,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator clicks end inbound button
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "Shipment not listed. Expected drop-off hub: {KEY_LIST_OF_CREATED_HUBS[2].name}."
     When Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -2023,7 +2085,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_HUB_INBOUND               |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
@@ -2141,7 +2203,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator verifies Scanned Shipment color is "#e1f6e0"
     When Operator clicks end inbound button
     When Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -2156,7 +2218,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_VAN_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
@@ -2281,7 +2343,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verifies toast with message "Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} is successfully removed" is shown on Shipment Inbound Scanning page
     And Operator clicks end inbound button
     When Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -2296,7 +2358,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | DEL_FROM_HUB_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
@@ -2429,7 +2491,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator clicks end inbound button
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -2444,7 +2506,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_HUB_INBOUND               |
       | result | Completed                          |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[3].name}             |
@@ -2578,7 +2640,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator verifies Scanned Shipment color is "#e1f6e0"
     And Operator clicks end inbound button
     And Operator click proceed in error shipment dialog
-    Then Operator verifies toast with message "Hub inbound has ended." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
@@ -2593,7 +2655,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | source | SHIPMENT_VAN_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | userId | automation@ninjavan.co             |
+      | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
@@ -2722,7 +2784,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND   |
       | result | Transit                |
-      | userId | automation@ninjavan.co |
+      | userId | qa@ninjavan.co |
     And Operator close current window and switch to Shipment management page
 
   @KillBrowser @ShouldAlwaysRun

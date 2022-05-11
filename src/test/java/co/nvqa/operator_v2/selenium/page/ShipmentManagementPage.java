@@ -27,10 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1090,6 +1087,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String RESULT = "result";
     public static final String HUB = "hub";
     public static final String CREATED_AT = "createdAt";
+    public static final String XPATH_TABLE_DATA = "//div[contains(@class,'ant-row')][.//h2[.='Shipment Events']]/following-sibling::div//tr[./td[.='%s']]//td";
 
     public ShipmentEventsTable(WebDriver webDriver) {
       super(webDriver);
@@ -1103,6 +1101,19 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
           .build());
       setEntityClass(ShipmentEvent.class);
       setNvTableParam("ctrl.tableParamScans");
+    }
+
+    public Map<String, String> readShipmentEventsTable(String source) {
+      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
+      List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
+      Assertions.assertThat(list.size()).as(f("There is no [%s] shipment event on Shipment Details page",source)).isNotEqualTo(0);
+      Map<String, String> eventsTable = new HashMap<>();
+      eventsTable.put(SOURCE, list.get(0));
+      eventsTable.put(USER_ID, list.get(1));
+      eventsTable.put(RESULT, list.get(2));
+      eventsTable.put(HUB, list.get(3));
+      eventsTable.put(CREATED_AT, list.get(4));
+      return eventsTable;
     }
   }
 

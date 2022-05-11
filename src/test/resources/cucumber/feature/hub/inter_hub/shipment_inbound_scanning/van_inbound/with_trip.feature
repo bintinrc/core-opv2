@@ -1817,10 +1817,10 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}{KEY_LIST_OF_CREATED_DRIVERS[3].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[3].username}) |
       | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[4].name}                                                                                              |
     And Operator click start inbound
-    Then Operator verifies shipment to go with trip is shown with total "2"
+    Then Operator verifies shipment to go with trip is shown with total "1"
     When Operator clicks shipment to go with trip
     Then Operator verifies shipment with trip with data below:
-      | shipmentCount  | 2                                                              |
+      | shipmentCount  | 1                                                              |
       | shipmentId     | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                          |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                             |
       | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[3].name}                             |
@@ -2156,9 +2156,9 @@ Feature: Shipment Van Inbound With Trip Scanning
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
 #    And Operator verifies event is present for order on Edit order page
 #      | eventName         | HUB INBOUND SCAN                                  |
