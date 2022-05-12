@@ -1445,10 +1445,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.rtsValue.sendKeys(shipperRtsValue);
       }
     }
-    String billingWeight = pricing.getBillingWeight().getCode();
     String country = COUNTRY_CODE;
     if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
         || country.equalsIgnoreCase("ID"))) {
+      String billingWeight = pricing.getBillingWeight().getCode();
       if (Objects.isNull(billingWeight)) {
         newPricingProfileDialog.billingWeight.selectValue("Standard");
       } else if(!billingWeight.equalsIgnoreCase("empty")){

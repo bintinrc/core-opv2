@@ -67,6 +67,7 @@ import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_DASH_LOGIN;
@@ -632,7 +633,8 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies that Billing Weight Logic is not available in the Edit Pricing Profile dialog")
   public void operatorVerifiesThatBillingWeightLogicIsNotAvailable() {
-    Assertions.assertThat(allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.isDisplayed())
+    Assertions.assertThat(
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.isDisplayed())
         .as("Billing Weight Logic is not available in the Edit Pricing Profile Dialog")
         .isFalse();
   }
@@ -672,7 +674,6 @@ public class AllShippersSteps extends AbstractSteps {
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
-      put(KEY_PRICING_PROFILE, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
       allShippersPage.allShippersCreateEditPage.backToShipperList();
       pause3s();
@@ -711,6 +712,7 @@ public class AllShippersSteps extends AbstractSteps {
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
@@ -1240,15 +1242,22 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsMin(insuranceMinFee);
       pricing.setRtsChargeType(rtsChargeType);
       pricing.setRtsChargeValue(rtsChargeValue);
-      if (Objects.isNull(billingWeightLogic)) {
-        pricing.setBillingWeight(BillingWeightEnum.STANDARD);
-      } else {
-        pricing.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(billingWeightLogic));
-      }
       pricing.setEffectiveDate(
           Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
       pricing.setContractEndDate(
           Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
+      String country = COUNTRY_CODE;
+      if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
+          || country.equalsIgnoreCase("ID"))) {
+        if (Objects.isNull(billingWeightLogic)) {
+          pricing.setBillingWeight(BillingWeightEnum.STANDARD);
+        } else {
+          pricing.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(billingWeightLogic));
+        }
+      } else {
+        pricing.setBillingWeight(BillingWeightEnum.LEGACY);
+      }
+
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
@@ -1898,7 +1907,7 @@ public class AllShippersSteps extends AbstractSteps {
     Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
 
-    SoftAssertions softAssertions=new SoftAssertions();
+    SoftAssertions softAssertions = new SoftAssertions();
     if (Objects.nonNull(pricingProfile.getCodMin())) {
       softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee())).
           as("COD min fee is correct").isEqualTo(pricingProfile.getCodMin());
@@ -1908,15 +1917,18 @@ public class AllShippersSteps extends AbstractSteps {
           as("COD percentage fee is correct").isEqualTo(pricingProfile.getCodPercentage());
     }
     if (Objects.nonNull(pricingProfile.getInsMin())) {
-      softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee())).
+      softAssertions.assertThat(
+              NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee())).
           as("Insurance min fee is correct").isEqualTo(pricingProfile.getInsMin());
     }
     if (Objects.nonNull(pricingProfile.getInsPercentage())) {
-      softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage())).
+      softAssertions.assertThat(
+              NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage())).
           as("Insurance Percentage fee is correct").isEqualTo(pricingProfile.getInsPercentage());
     }
     if (Objects.nonNull(pricingProfile.getInsThreshold())) {
-      softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold())).
+      softAssertions.assertThat(
+              NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold())).
           as("Insurance Threshold fee is correct").isEqualTo(pricingProfile.getInsThreshold());
     }
     if (Objects.nonNull(pricingProfile.getRtsChargeType())) {
@@ -1929,9 +1941,15 @@ public class AllShippersSteps extends AbstractSteps {
         softAssertions.assertThat(rtsChargeDb).as("RTS charge is a positive value").isPositive();
       }
     }
-    if (Objects.nonNull(pricingProfile.getBillingWeight())) {
-      softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
-          as("Billing Weight Logic is correct").isEqualTo(pricingProfile.getBillingWeight());
+    BillingWeightEnum billingWeight = pricingProfile.getBillingWeight();
+    if (Objects.nonNull(billingWeight)) {
+      if (billingWeight.getCode().equalsIgnoreCase("Legacy")) {
+        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
+            as("Billing Weight Logic is null").isNull();
+      } else {
+        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
+            as("Billing Weight Logic is correct").isEqualTo(pricingProfile.getBillingWeight());
+      }
     }
   }
 

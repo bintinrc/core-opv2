@@ -529,8 +529,6 @@ public class AllShippersPage extends OperatorV2SimplePage {
           .as("INS Threshold is correct")
           .isEqualTo(NO_TRAILING_ZERO_DF.format(Double.valueOf(pricingProfile.getInsThreshold())));
     }
-    softAssertions.assertThat(pricingProfileFromOPV2.getBillingWeight())
-        .as("Billing Weight Logic is correct").isEqualTo(pricingProfile.getBillingWeight());
     softAssertions.assertAll();
   }
 
