@@ -437,7 +437,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         shipmentManagementPage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, "retry shipment details", 5000, 5);
+    }, "retry shipment details", 1000, 3);
   }
 
   @Then("Operator verifies event is present for shipment on Shipment Detail page")
