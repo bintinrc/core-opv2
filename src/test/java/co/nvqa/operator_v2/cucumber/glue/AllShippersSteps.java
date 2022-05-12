@@ -58,6 +58,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
@@ -629,6 +630,13 @@ public class AllShippersSteps extends AbstractSteps {
     }
   }
 
+  @And("Operator verifies that Billing Weight Logic is not available in the Edit Pricing Profile dialog")
+  public void operatorVerifiesThatBillingWeightLogicIsNotAvailable() {
+    Assertions.assertThat(allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.isDisplayed())
+        .as("Billing Weight Logic is not available in the Edit Pricing Profile Dialog")
+        .isFalse();
+  }
+
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
   public void operatorSaveChangesPricingProfileOnEditShipperPage() {
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges
@@ -663,6 +671,7 @@ public class AllShippersSteps extends AbstractSteps {
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
       allShippersPage.allShippersCreateEditPage.backToShipperList();
       pause3s();
@@ -1230,7 +1239,11 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsMin(insuranceMinFee);
       pricing.setRtsChargeType(rtsChargeType);
       pricing.setRtsChargeValue(rtsChargeValue);
-      pricing.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(billingWeightLogic));
+      if (Objects.isNull(billingWeightLogic)) {
+        pricing.setBillingWeight(BillingWeightEnum.STANDARD);
+      } else {
+        pricing.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(billingWeightLogic));
+      }
       pricing.setEffectiveDate(
           Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
       pricing.setContractEndDate(
@@ -1925,9 +1938,7 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorVerifiesThePricingProfileDetailsAreLikeBelow(Map<String, String> data) {
     Pricing pricingProfile = setShipperPricingProfile(data).getPricing();
     Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
-    allShippersPage
-        .verifyPricingProfileDetails(pricingProfile,
-            pricingProfileFromOPV2);
+    allShippersPage.verifyPricingProfileDetails(pricingProfile, pricingProfileFromOPV2);
   }
 
   @And("Operator verifies shipper type is {string} on Edit Shipper page")

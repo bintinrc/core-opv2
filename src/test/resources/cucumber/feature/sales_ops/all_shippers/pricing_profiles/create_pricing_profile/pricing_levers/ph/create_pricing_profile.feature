@@ -64,7 +64,7 @@ Feature: Create Pricing Profile - PH
   Scenario: Create Subshipper Pending Pricing Profile With Billing Weight Logic = GROSS_WEIGHT - Parent Shipper Has billing_weight_logic = SHIPPER_GROSS_WEIGHT - PH (uid:4e11d096-c1a1-4c5a-8e88-82b264f196cc)
     Given API Operator create new 'marketplace' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
-      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"billing_weight_logic": "SHIPPER_GROSS_WEIGHT"} |
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"pricing_levers": {"billing_weight_logic" : "SHIPPER_GROSS_WEIGHT"}} |
     Given API operator create new marketplace seller for marketplace id "{KEY_SHIPPER_ID}"
       # add pending pricing profile for the subshipper
     And Operator edits shipper "{KEY_MARKETPLACE_SUB_SHIPPER.legacyId}"
