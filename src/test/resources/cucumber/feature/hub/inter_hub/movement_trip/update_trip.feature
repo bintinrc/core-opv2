@@ -1,4 +1,4 @@
-@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip @CWF
+@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip
 Feature: Movement Trip - Update Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -689,7 +689,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
     Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Force Complete Trip via Trip Details page - Transit Trip in Archived (uid:08867801-23a7-459c-9362-fea46e90f792)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
