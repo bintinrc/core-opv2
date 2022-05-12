@@ -272,7 +272,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         LOGGER.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500, 10);
+    }, getCurrentMethodName(), 1000, 3);
 
   }
 
@@ -722,6 +722,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
     waitUntilVisibilityOfElementLocated("//input[contains(@value,'"+shipmentId+"')]");
+    waitUntilInvisibilityOfElementLocated("//td[contains(@class, 'tracking-id')][.='"+shipmentId+"]'");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
