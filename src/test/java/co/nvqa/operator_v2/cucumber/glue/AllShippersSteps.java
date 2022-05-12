@@ -657,13 +657,14 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("^Operator save changes on Edit Shipper Page and gets saved pricing profile values$")
   public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue() {
     try {
-//      retryIfRuntimeExceptionOccurred(()->{
-//        allShippersPage.allShippersCreateEditPage.saveChanges.click();
-//        closeErrorToastIfDisplayedAndSaveShipper();
-//        allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast("All changes saved successfully");
-//      },"Save Shipper", 100, 3);
-//
-//      takesScreenshot();
+      retryIfRuntimeExceptionOccurred(() -> {
+        allShippersPage.allShippersCreateEditPage.saveChanges.click();
+        closeErrorToastIfDisplayedAndSaveShipper();
+        allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast(
+            "All changes saved successfully");
+      }, "Save Shipper", 100, 3);
+
+      takesScreenshot();
       Shipper shipper = get(KEY_CREATED_SHIPPER);
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
       openSpecificShipperEditPage(shipper.getLegacyId().toString());

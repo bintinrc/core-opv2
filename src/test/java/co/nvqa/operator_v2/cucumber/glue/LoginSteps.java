@@ -50,7 +50,7 @@ public class LoginSteps extends AbstractSteps {
       //loginPage.checkForGoogleSimpleVerification("Singapore");
     }
 
-//    mainPage.verifyTheMainPageIsLoaded();
+    mainPage.verifyTheMainPageIsLoaded();
   }
 
   @And("Operator login Operator portal with username = {string} and password = {string}")
