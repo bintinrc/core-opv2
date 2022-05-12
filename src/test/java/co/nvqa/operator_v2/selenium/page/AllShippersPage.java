@@ -474,8 +474,8 @@ public class AllShippersPage extends OperatorV2SimplePage {
     if (Objects.isNull(discount)) {
       softAssertions.assertThat(pricingProfileFromOPV2.getDiscount()).as("Discount amount is blank")
           .isEqualTo("-");
-      softAssertions.assertThat(pricingProfileFromOPV2.getType()).as("Type is not blank")
-          .isNotNull();
+      softAssertions.assertThat(pricingProfileFromOPV2.getType()).as("Type is blank")
+          .isNull();
     } else if (Double.parseDouble(discount) * 100 % 1 > 0) {
       double expectedDiscount = Math.round(Double.parseDouble(discount) * 100.0) / 100.0;
       softAssertions.assertThat(pricingProfileFromOPV2.getDiscount())
