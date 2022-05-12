@@ -350,10 +350,6 @@ Feature: Number of Damaged Parcels
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name-6}                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"PARCEL ROUTING SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
