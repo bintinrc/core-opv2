@@ -1904,40 +1904,51 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
-    Pricing pricingProfile = get(KEY_PRICING_PROFILE);
+    Pricing pricingProfile =
+        Objects.isNull(get(KEY_PRICING_PROFILE)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
+            : get(KEY_PRICING_PROFILE);
+
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
+    if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {
+      throw new NvTestRuntimeException("Actual and expected pricing lever details are missing");
+    }
 
     SoftAssertions softAssertions = new SoftAssertions();
-    if (Objects.nonNull(pricingProfile.getCodMin())) {
+    String codMin = pricingProfile.getCodMin();
+    if (Objects.nonNull(codMin) && !codMin.equalsIgnoreCase("-")) {
       softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee())).
-          as("COD min fee is correct").isEqualTo(pricingProfile.getCodMin());
+          as("COD min fee is correct").isEqualTo(codMin);
     }
-    if (Objects.nonNull(pricingProfile.getCodPercentage())) {
+    String codPercentage = pricingProfile.getCodPercentage();
+    if (Objects.nonNull(codPercentage) && !codPercentage.equalsIgnoreCase("-")) {
       softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodPercentage())).
-          as("COD percentage fee is correct").isEqualTo(pricingProfile.getCodPercentage());
+          as("COD percentage fee is correct").isEqualTo(codPercentage);
     }
-    if (Objects.nonNull(pricingProfile.getInsMin())) {
+    String insMin = pricingProfile.getInsMin();
+    if (Objects.nonNull(insMin) && !insMin.equalsIgnoreCase("-")) {
       softAssertions.assertThat(
               NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee())).
-          as("Insurance min fee is correct").isEqualTo(pricingProfile.getInsMin());
+          as("Insurance min fee is correct").isEqualTo(insMin);
     }
-    if (Objects.nonNull(pricingProfile.getInsPercentage())) {
+    String insPercentage = pricingProfile.getInsPercentage();
+    if (Objects.nonNull(insPercentage) && !insPercentage.equalsIgnoreCase("-")) {
       softAssertions.assertThat(
               NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage())).
-          as("Insurance Percentage fee is correct").isEqualTo(pricingProfile.getInsPercentage());
+          as("Insurance Percentage fee is correct").isEqualTo(insPercentage);
     }
-    if (Objects.nonNull(pricingProfile.getInsThreshold())) {
+    String insThreshold = pricingProfile.getInsPercentage();
+    if (Objects.nonNull(insThreshold) && !insThreshold.equalsIgnoreCase("-")) {
       softAssertions.assertThat(
               NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold())).
-          as("Insurance Threshold fee is correct").isEqualTo(pricingProfile.getInsThreshold());
+          as("Insurance Threshold fee is correct").isEqualTo(insThreshold);
     }
-    if (Objects.nonNull(pricingProfile.getRtsChargeType())) {
-      String rtsChargeOpv2 = pricingProfile.getRtsChargeType();
+    String rtsChargeType = pricingProfile.getRtsChargeType();
+    if (Objects.nonNull(rtsChargeType)) {
       Double rtsChargeDb = pricingLeversFromDb.getRtsCharge();
-      if (rtsChargeOpv2.equalsIgnoreCase("Discount")) {
+      if (rtsChargeType.equalsIgnoreCase("Discount")) {
         softAssertions.assertThat(rtsChargeDb).as("RTS charge is a negative value").isNegative();
       }
-      if (rtsChargeOpv2.equalsIgnoreCase("Surcharge")) {
+      if (rtsChargeType.equalsIgnoreCase("Surcharge")) {
         softAssertions.assertThat(rtsChargeDb).as("RTS charge is a positive value").isPositive();
       }
     }
