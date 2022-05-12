@@ -1087,7 +1087,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String RESULT = "result";
     public static final String HUB = "hub";
     public static final String CREATED_AT = "createdAt";
-    public static final String XPATH_TABLE_DATA = "//div[contains(@class,'ant-row')][.//h2[.='Shipment Events']]/following-sibling::div//tr[./td[.='%s']]//td";
+    public static final String XPATH_TABLE_DATA = "//div[contains(@id,'shipment-events')]//tr[./td[.='%s']]//td";
 
     public ShipmentEventsTable(WebDriver webDriver) {
       super(webDriver);
