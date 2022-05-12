@@ -1,5 +1,5 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroupsV1.5
-Feature: Create Route Group V1.5s V1.5 - Shipment Filters
+Feature: Create Route Groups - Shipment Filters
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -7,8 +7,8 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Create Route Groups V1.5 Page - Shipment Filters (uid:a1be140c-623f-4d2a-9ec8-2afc56d2ac93)
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator set Shipment Filters on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
@@ -22,8 +22,8 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | shipmentType                   | Air Haul                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
-    And Operator selects "Save Current as Preset" shipments preset action on Create Route Group V1.5 page
-    Then Operator verifies Save Preset dialog on Create Route Group V1.5 page contains filters:
+    And Operator selects "Save Current as Preset" shipments preset action on Create Route Groups page
+    Then Operator verifies Save Preset dialog on Create Route Groups page contains filters:
       | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00                 |
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
       | Start Hub: {hub-name}                                                                                             |
@@ -33,25 +33,25 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | Shipment Status: At Transit Hub                                                                                   |
       | Shipment Type: Air Haul                                                                                           |
       | Transit Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00             |
-    And Operator verifies Preset Name field in Save Preset dialog on Create Route Group V1.5 page is required
-    And Operator verifies Cancel button in Save Preset dialog on Create Route Group V1.5 page is enabled
-    And Operator verifies Save button in Save Preset dialog on Create Route Group V1.5 page is disabled
-    When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Create Route Group V1.5 page
-    Then Operator verifies Preset Name field in Save Preset dialog on Create Route Group V1.5 page has green checkmark on it
-    And Operator verifies Save button in Save Preset dialog on Create Route Group V1.5 page is enabled
-    When Operator clicks Save button in Save Preset dialog on Create Route Group V1.5 page
+    And Operator verifies Preset Name field in Save Preset dialog on Create Route Groups page is required
+    And Operator verifies Cancel button in Save Preset dialog on Create Route Groups page is enabled
+    And Operator verifies Save button in Save Preset dialog on Create Route Groups page is disabled
+    When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Create Route Groups page
+    Then Operator verifies Preset Name field in Save Preset dialog on Create Route Groups page has green checkmark on it
+    And Operator verifies Save button in Save Preset dialog on Create Route Groups page is enabled
+    When Operator clicks Save button in Save Preset dialog on Create Route Groups page
     Then Operator verifies that success toast displayed:
       | top                | 1 filter preset created                             |
       | bottom             | Name: {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME} |
       | waitUntilInvisible | true                                                |
-    And Operator verifies selected shippers Filter Preset name is "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" on Create Route Group V1.5 page
+    And Operator verifies selected shippers Filter Preset name is "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" on Create Route Groups page
     And DB Operator verifies filter preset record:
       | id        | {KEY_SHIPMENTS_FILTERS_PRESET_ID}             |
       | namespace | shipments                                     |
       | name      | {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME} |
     When Operator refresh page
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Group V1.5 page
-    And Operator verifies selected Shipment Filters on Create Route Group V1.5 page:
+    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Groups page
+    And Operator verifies selected Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
@@ -76,9 +76,9 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | value.currHub        | {hub-id-3}                                   |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
       | value.shipmentType   | AIR_HAUL                                     |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Group V1.5 page
-    And Operator verifies selected Shipment Filters on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Groups page
+    And Operator verifies selected Shipment Filters on Create Route Groups page:
       | startHub       | {hub-name}     |
       | endHub         | {hub-name-2}   |
       | lastInboundHub | {hub-name-3}   |
@@ -95,13 +95,13 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | value.currHub        | {hub-id-3}                                   |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
       | value.shipmentType   | AIR_HAUL                                     |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator selects "Delete Preset" shipments preset action on Create Route Group V1.5 page
-    Then Operator verifies Cancel button in Delete Preset dialog on Create Route Group V1.5 page is enabled
-    And Operator verifies Delete button in Delete Preset dialog on Create Route Group V1.5 page is disabled
-    When Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" preset in Delete Preset dialog on Create Route Group V1.5 page
-    Then Operator verifies "Preset \"{KEY_SHIPMENTS_FILTERS_PRESET_NAME}\" will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Create Route Group V1.5 page
-    When Operator clicks Delete button in Delete Preset dialog on Create Route Group V1.5 page
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator selects "Delete Preset" shipments preset action on Create Route Groups page
+    Then Operator verifies Cancel button in Delete Preset dialog on Create Route Groups page is enabled
+    And Operator verifies Delete button in Delete Preset dialog on Create Route Groups page is disabled
+    When Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" preset in Delete Preset dialog on Create Route Groups page
+    Then Operator verifies "Preset \"{KEY_SHIPMENTS_FILTERS_PRESET_NAME}\" will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Create Route Groups page
+    When Operator clicks Delete button in Delete Preset dialog on Create Route Groups page
     Then Operator verifies that warning toast displayed:
       | top    | 1 filter preset deleted               |
       | bottom | ID: {KEY_SHIPMENTS_FILTERS_PRESET_ID} |
@@ -114,9 +114,9 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | name                 | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
       | value.shipmentType   | AIR_HAUL                                     |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Group V1.5 page
-    And Operator set Shipment Filters on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Groups page
+    And Operator set Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
@@ -130,8 +130,8 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | shipmentType                   | Air Haul                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
-    And Operator selects "Save Current as Preset" shipments preset action on Create Route Group V1.5 page
-    Then Operator verifies Save Preset dialog on Create Route Group V1.5 page contains filters:
+    And Operator selects "Save Current as Preset" shipments preset action on Create Route Groups page
+    Then Operator verifies Save Preset dialog on Create Route Groups page contains filters:
       | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00                 |
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
       | Start Hub: {hub-name}                                                                                             |
@@ -141,16 +141,16 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | Shipment Status: At Transit Hub                                                                                   |
       | Shipment Type: Air Haul                                                                                           |
       | Transit Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00             |
-    When Operator enters "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" Preset Name in Save Preset dialog on Create Route Group V1.5 page
-    Then Operator verifies help text "This name is already taken. Do you want to update this preset?" is displayed in Save Preset dialog on Create Route Group V1.5 page
-    When Operator clicks Update button in Save Preset dialog on Create Route Group V1.5 page
+    When Operator enters "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" Preset Name in Save Preset dialog on Create Route Groups page
+    Then Operator verifies help text "This name is already taken. Do you want to update this preset?" is displayed in Save Preset dialog on Create Route Groups page
+    When Operator clicks Update button in Save Preset dialog on Create Route Groups page
     Then Operator verifies that success toast displayed:
       | top                | 1 filter preset updated                   |
       | bottom             | Name: {KEY_SHIPMENTS_FILTERS_PRESET_NAME} |
       | waitUntilInvisible | true                                      |
     When Operator refresh page
-    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Group V1.5 page
-    And Operator verifies selected Shipment Filters on Create Route Group V1.5 page:
+    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Groups page
+    And Operator verifies selected Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
@@ -172,9 +172,9 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | name                 | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipmentStatus | AT_TRANSIT_HUB                               |
       | value.shipmentType   | AIR_HAUL                                     |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Group V1.5 page
-    And Operator set Shipment Filters on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Groups page
+    And Operator set Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
@@ -188,14 +188,14 @@ Feature: Create Route Group V1.5s V1.5 - Shipment Filters
       | shipmentType                   | Air Haul                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
-    And Operator selects "Update Preset" shipments preset action on Create Route Group V1.5 page
+    And Operator selects "Update Preset" shipments preset action on Create Route Groups page
     Then Operator verifies that success toast displayed:
       | top                | 1 filter preset updated                   |
       | bottom             | Name: {KEY_SHIPMENTS_FILTERS_PRESET_NAME} |
       | waitUntilInvisible | true                                      |
     When Operator refresh page
-    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Group V1.5 page
-    And Operator verifies selected Shipment Filters on Create Route Group V1.5 page:
+    And Operator selects "{KEY_SHIPMENTS_FILTERS_PRESET_NAME}" shipments Filter Preset on Create Route Groups page
+    And Operator verifies selected Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |

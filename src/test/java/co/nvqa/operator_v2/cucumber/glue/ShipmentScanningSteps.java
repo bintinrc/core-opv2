@@ -441,8 +441,15 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @Then("Operator verify small message {string} appears in Shipment Inbound Box")
   public void operatorVerifySmallMessageAppearsInShipmentInboundBox(String smallMessageAsString) {
-    String smallMessage = resolveValue(smallMessageAsString);
-    shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        String smallMessage = resolveValue(smallMessageAsString);
+        shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 5);
   }
 
   @Then("Operator verify small message {string} appears in Remove Shipment Container")

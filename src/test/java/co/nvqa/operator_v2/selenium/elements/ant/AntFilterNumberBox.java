@@ -1,7 +1,7 @@
-package co.nvqa.operator_v2.selenium.elements.nv;
+package co.nvqa.operator_v2.selenium.elements.ant;
 
-import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.openqa.selenium.SearchContext;
@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public abstract class NvFilterNumberBox extends AbstractFilterBox {
+public abstract class AntFilterNumberBox extends AntAbstractFilterBox {
 
   private static final Pattern RANGE_PATTERN = Pattern.compile(
       "\\s*(\\d*\\.?\\d*)\\s*:\\s*(\\d*\\.?\\d*)\\s*");
@@ -17,26 +17,29 @@ public abstract class NvFilterNumberBox extends AbstractFilterBox {
       "\\s*([<>=]{1,2})\\s*(\\d*\\.?\\d*)\\s*");
   private static final Pattern SIMPLE_VALUE_PATTERN = Pattern.compile("\\s*(\\d*\\.?\\d*)\\s*");
 
-  public NvFilterNumberBox(WebDriver webDriver, WebElement webElement) {
+  public AntFilterNumberBox(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
   }
 
-  public NvFilterNumberBox(WebDriver webDriver, SearchContext searchContext,
+  public AntFilterNumberBox(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
     super(webDriver, searchContext, webElement);
   }
 
-  @FindBy(css = "md-select[placeholder='Type']")
-  public MdSelect type;
+  @FindBy(xpath = ".//label[.='Range']")
+  public Button range;
 
-  @FindBy(css = "md-select[placeholder='OP']")
-  public MdSelect op;
+  @FindBy(xpath = ".//label[.='Value']")
+  public Button value;
 
-  @FindBy(css = "input[aria-label='from']")
-  public TextBox from;
+  @FindBy(css = "div.ant-select")
+  public AntSelect op;
 
-  @FindBy(css = "input[aria-label='to']")
-  public TextBox to;
+  @FindBy(xpath = "(.//input[@aria-valuemax])[1]")
+  public ForceClearTextBox from;
+
+  @FindBy(xpath = "(.//input[@aria-valuemax])[2]")
+  public ForceClearTextBox to;
 
   @Override
   public void setValue(String... values) {
@@ -63,15 +66,19 @@ public abstract class NvFilterNumberBox extends AbstractFilterBox {
   }
 
   public void selectRange(double from, double to) {
-    type.selectValue("Range");
+    if (value.isDisplayedFast()) {
+      value.click();
+    }
     this.from.setValue(format(from));
     this.to.setValue(format(to));
   }
 
   public void selectValue(String op, double to) {
-    type.selectValue("Value");
+    if (range.isDisplayedFast()) {
+      range.click();
+    }
     this.op.selectValue(op);
-    this.to.setValue(format(to));
+    this.from.setValue(format(to));
   }
 
   protected abstract String format(double value);

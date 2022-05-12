@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +43,7 @@ public class AntSelect3 extends PageElement {
   public List<SelectedItem> selectedItems;
 
   @FindBy(css = ".ant-select-selection-search-input")
-  public TextBox searchInput;
+  public ForceClearTextBox searchInput;
 
   @FindBy(css = ".ant-select-clear > span")
   public PageElement clearIcon;
@@ -129,7 +129,7 @@ public class AntSelect3 extends PageElement {
   }
 
   public void enterSearchTerm(String value) {
-    searchInput.sendKeys(value);
+    searchInput.setValue(value);
     pause500ms();
   }
 

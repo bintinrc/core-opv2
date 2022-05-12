@@ -1,5 +1,5 @@
 # https://studio.cucumber.io/projects/210778/test-plan/folders/2075581
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @Load @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @Load
 Feature: Load Shipment Weight and Dimension
 
   @LaunchBrowser @ShouldAlwaysRun
