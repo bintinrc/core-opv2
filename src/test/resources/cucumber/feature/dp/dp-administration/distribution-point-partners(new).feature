@@ -27,10 +27,29 @@ Feature: DP Administration - Distribution Point Partners
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-    |name                                      |pocName           |pocTel    |pocEmail                       | restrictions                  | sendNotificationsToCustomer |
-    |AUTO{gradle-next-0-day-yyyyMMddHHmmsss}   |Diaz Ilyasa       |VALID     |diaz.ilyasa@ninjavan.co        | Only For Testing              | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
+    Then DB Operator get newly DP partner by Id
+    Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same
+
+  @DeleteNewlyCreatedDpPartner
+  Scenario: DP Administration - Update DP Partner
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator click on Add Partner button on DP Administration React page
+    Then Operator Fill Dp Partner Details below :
+      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+    Then Operator press submit button
+    And Operator check the submitted data in the table
+    And Operator get partner id
+    Then Operator press edit partner button
+    Then Operator Fill Dp Partner Details below :
+      | pocName  | pocTel   |
+      | TEST POC | 11111111 |
+    Then Operator press submit partner changes button
+    And Operator check the submitted data in the table
     Then DB Operator get newly DP partner by Id
     Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same

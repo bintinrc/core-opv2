@@ -175,25 +175,38 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       if (partner.getName() != null){
         dpAdminReactPage.formPartnerName.setValue(partner.getName());
+        put(KEY_DP_PARTNER_NAME,partner.getName());
       }
       if (partner.getPocName() != null){
+        if(!dpAdminReactPage.formPocName.getValue().equals("")){
+          dpAdminReactPage.formPocName.forceClear();
+        }
         dpAdminReactPage.formPocName.setValue(partner.getPocName());
       }
-      if (partner.getPocTel().equals("VALID")){
-        partner.setPocTel(TestUtils.generatePhoneNumber());
-        dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+
+      if (partner.getPocTel() != null){
+
+        if(!dpAdminReactPage.formPocNo.getValue().equals("")){
+          dpAdminReactPage.formPocNo.forceClear();
+        }
+
+        if (partner.getPocTel().equals("VALID")){
+          partner.setPocTel(TestUtils.generatePhoneNumber());
+          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        } else {
+          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        }
       }
+
       if (partner.getPocEmail() != null){
         dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
       }
       if (partner.getRestrictions() != null){
         dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
       }
-      if (partner.getSendNotificationsToCustomer()){
+      if (partner.getSendNotificationsToCustomer() != null && partner.getSendNotificationsToCustomer()){
         dpAdminReactPage.buttonSendNotifications.click();
       }
-
-      put(KEY_DP_PARTNER_NAME,partner.getName());
     });
   }
 
@@ -201,6 +214,20 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void submitDpPartnerButton(){
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonSubmitPartner.click();
+    });
+  }
+
+  @Then("Operator press edit partner button")
+  public void editDpPartnerButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonEditPartner.click();
+    });
+  }
+
+  @Then("Operator press submit partner changes button")
+  public void submitDpPartnerChangesButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitPartnerChanges.click();
     });
   }
 
