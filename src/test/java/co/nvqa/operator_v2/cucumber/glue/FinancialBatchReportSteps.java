@@ -202,12 +202,12 @@ public class FinancialBatchReportSteps extends AbstractSteps {
           .isEqualTo(mapOfData.get("nvMeasuredWeight"));
     }
     if (mapOfData.containsKey("fromCity")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getFromCity())
+      softAssertions.assertThat(String.valueOf(financialBatchReportExtendedEntry.getFromCity()))
           .as("From City is correct")
           .isEqualTo(mapOfData.get("fromCity"));
     }
     if (mapOfData.containsKey("toAddress")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getToAddress())
+      softAssertions.assertThat(String.valueOf(financialBatchReportExtendedEntry.getToAddress()))
           .as("To Address is correct")
           .isEqualTo(mapOfData.get("toAddress"));
     }
