@@ -40,6 +40,7 @@ Feature: Generate COD Report - Select by Route ID
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    And Operator waits for 2 seconds
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report

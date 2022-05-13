@@ -626,6 +626,11 @@ public class AllShippersSteps extends AbstractSteps {
               .sendKeys(value);
         }
       }
+      value = data.get("billingWeightLogic");
+      if (StringUtils.isNotBlank(value)) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.selectValue(
+            value);
+      }
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
