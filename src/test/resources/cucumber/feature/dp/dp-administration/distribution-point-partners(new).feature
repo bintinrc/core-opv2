@@ -23,7 +23,7 @@ Feature: DP Administration - Distribution Point Partners
       | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
 
   @DeleteNewlyCreatedDpPartner
-  Scenario: DP Administration - Create DP Partner
+  Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
@@ -36,7 +36,7 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same
 
   @DeleteNewlyCreatedDpPartner
-  Scenario: DP Administration - Update DP Partner
+  Scenario: DP Administration - Update DP Partner (uid:cb1ca5de-be07-4a3b-903e-955bf19dd2b1)
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
