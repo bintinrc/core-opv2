@@ -17,23 +17,47 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testid='button_download_csv']")
   public Button buttonDownloadCsv;
 
+  @FindBy(xpath = "//button[@data-testid='button_add_partner']")
+  public Button buttonAddPartner;
+
+  @FindBy(xpath = "//button[@type='button'][@role='switch']")
+  public Button buttonSendNotifications;
+
+  @FindBy(xpath = "//button[@data-testId='button_submit_partner']")
+  public Button buttonSubmitPartner;
+
   @FindBy(xpath = "//input[@data-testId='field_partner_id']")
-  public TextBox partnerId;
+  public TextBox filterPartnerId;
 
   @FindBy(xpath = "//input[@data-testId='field_partner_name']")
-  public TextBox partnerName;
+  public TextBox filterPartnerName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_partner_name']")
+  public TextBox formPartnerName;
 
   @FindBy(xpath = "//input[@data-testId='field_poc_name']")
-  public TextBox pocName;
+  public TextBox filterPocName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_poc_name']")
+  public TextBox formPocName;
 
   @FindBy(xpath = "//input[@data-testId='field_poc_no']")
-  public TextBox pocNo;
+  public TextBox filterPocNo;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_poc_tel']")
+  public TextBox formPocNo;
 
   @FindBy(xpath = "//input[@data-testId='field_poc_email']")
-  public TextBox pocEmail;
+  public TextBox filterPocEmail;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_poc_email']")
+  public TextBox formPocEmail;
 
   @FindBy(xpath = "//input[@data-testId='field_restrictions']")
-  public TextBox restrictions;
+  public TextBox filterRestrictions;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_restrictions']")
+  public TextBox formRestrictions;
 
   @FindBy(xpath = "//div[@data-testid='label_partner_id']/span")
   public PageElement labelPartnerId;
@@ -72,12 +96,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public PageElement sortRestrictions;
 
   ImmutableMap<String, TextBox> textBoxElement = ImmutableMap.<String, TextBox>builder()
-      .put("id", partnerId)
-      .put("name", partnerName)
-      .put("pocName", pocName)
-      .put("pocTel", pocNo)
-      .put("pocEmail", pocEmail)
-      .put("restrictions", restrictions)
+      .put("id", filterPartnerId)
+      .put("name", filterPartnerName)
+      .put("pocName", filterPocName)
+      .put("pocTel", filterPocNo)
+      .put("pocEmail", filterPocEmail)
+      .put("restrictions", filterRestrictions)
       .build();
 
   public DpAdministrationReactPage(WebDriver webDriver) {
@@ -124,6 +148,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     Assertions.assertThat(dpPartner.getPocTel()).as(f("POC No Is %s",dpPartner.getPocTel())).isEqualTo(labelPocNo.getText());
     Assertions.assertThat(dpPartner.getPocEmail()).as(f("POC Email Is %s",dpPartner.getPocEmail())).isEqualTo(labelPocEmail.getText());
     Assertions.assertThat(dpPartner.getRestrictions()).as(f("Restrictions Is %s",dpPartner.getRestrictions())).isEqualTo(labelRestrictions.getText());
+  }
+
+  public void checkingIdAndDpmsId(Partner partner){
+    Assertions.assertThat(partner.getId()).as("DP ID and DPMS ID is Same").isEqualTo(partner.getDpmsPartnerId());
   }
 
   public String getDpPartnerElementByMap (String map,DpPartner dpPartner){
