@@ -126,7 +126,6 @@ public class FinancialBatchSteps extends AbstractSteps {
 
     Assertions.assertThat(errorMessages).as("Error Messages are correct")
         .isEqualTo(actualErrorMsgs);
-
   }
 
 

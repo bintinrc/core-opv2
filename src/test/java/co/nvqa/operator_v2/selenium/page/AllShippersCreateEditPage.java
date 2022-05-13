@@ -1728,7 +1728,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
     public MdCheckbox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    @FindBy(xpath = "//md-select[contains(@aria-label,'Select billing weight logic')]")
     public MdSelect billingWeight;
 
     @FindBy(name = "Save Changes")
