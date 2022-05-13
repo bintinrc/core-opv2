@@ -243,7 +243,6 @@ public class ShipmentScanningSteps extends AbstractSteps {
     for (String trackingId : trackingIds) {
       pause1s();
       shipmentScanningPage.removeShipmentWithId(trackingId);
-      shipmentScanningPage.checkOrderNotInShipment(trackingId);
     }
   }
 
