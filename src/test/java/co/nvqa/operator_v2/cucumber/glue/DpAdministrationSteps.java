@@ -193,8 +193,14 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.buttonSendNotifications.click();
       }
 
-      dpAdminReactPage.buttonSubmitPartner.click();
       put(KEY_DP_PARTNER_NAME,partner.getName());
+    });
+  }
+
+  @Then("Operator press submit button")
+  public void submitDpPartnerButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitPartner.click();
     });
   }
 

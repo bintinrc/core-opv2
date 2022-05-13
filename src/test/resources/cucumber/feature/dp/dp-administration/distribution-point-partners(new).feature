@@ -29,6 +29,7 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator Fill Dp Partner Details below :
     |name                                      |pocName           |pocTel    |pocEmail                       | restrictions                  | sendNotificationsToCustomer |
     |AUTO{gradle-next-0-day-yyyyMMddHHmmsss}   |Diaz Ilyasa       |VALID     |diaz.ilyasa@ninjavan.co        | Only For Testing              | true                        |
+    Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
     Then DB Operator get newly DP partner by Id
