@@ -2317,10 +2317,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
-      | eventName         | SHIPMENT VAN INBOUNDED                         |
+      | eventName         | HUB INBOUND SCAN                               |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}               |
-      | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[3].name}             |
@@ -2470,10 +2470,10 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
-      | eventName         | SHIPMENT VAN INBOUNDED                         |
+      | eventName         | HUB INBOUND SCAN                               |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}               |
-      | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[3].name}             |
