@@ -1614,15 +1614,15 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[1].id}" on Edit order page
-      | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
+      | eventName         | HUB INBOUND SCAN                                                                                   |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
-      | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[2].id} ({KEY_LIST_OF_CREATED_HUBS[2].name}) Hub Location Type ORIGIN |
+      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id}                                                  |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[2].id}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
-      | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[3].id} ({KEY_LIST_OF_CREATED_HUBS[3].name}) Hub Location Type ORIGIN |
+      | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[2].id} ({KEY_LIST_OF_CREATED_HUBS[2].name}) Hub Location Type ORIGIN |
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Remove Shipment From Hub Inbounded List (uid:fe33b7eb-a7c9-494f-b61e-abb128865383)
