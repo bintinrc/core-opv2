@@ -161,6 +161,7 @@ Feature: Station Management Homepage
     Given Operator loads Operator portal home page
     And Operator changes the country to "<Country>"
     And Operator verify operating country is "<Country>"
+    And Operator refresh page v1
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following navigation links are displayed under the header:"<Header1>"
