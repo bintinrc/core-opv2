@@ -149,19 +149,19 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'shipment-id')]")
   public TextBox shipmentIdTextBox;
 
-  @FindBy(xpath = "//div[//h5[contains(text(), 'Unregistered Shipments')]]//div[contains(@class,'ant-modal-body')]//td[contains(@class,'shipment-id')]")
+  @FindBy(xpath = "//h5[contains(., 'Unregistered Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'shipment-id')]")
   public TextBox unregisterShipmentIdTextBox;
 
-  @FindBy(xpath = "//div[//h5[contains(text(), 'Missing Shipments')]]//div[contains(@class,'ant-modal-body')]//td[contains(@class,'shipment-id')]")
+  @FindBy(xpath = "//h5[contains(., 'Missing Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'shipment-id')]")
   public TextBox missingShipmentIdTextBox;
 
   @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'message')]")
   public TextBox resultTextBox;
 
-  @FindBy(xpath = "//div[//h5[contains(text(), 'Unregistered Shipments')]]//div[contains(@class,'ant-modal-body')]//td[contains(@class,'message')]")
+  @FindBy(xpath = "//h5[contains(., 'Unregistered Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'message')]")
   public TextBox unregisterresultTextBox;
 
-  @FindBy(xpath = "//div[//h5[contains(text(), 'Missing Shipments')]]//div[contains(@class,'ant-modal-body')]//td[contains(@class,'message')]")
+  @FindBy(xpath = "//h5[contains(., 'Missing Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'message')]")
   public TextBox missingresultTextBox;
 
   @FindBy(xpath = "//button[contains(@class,'sc-qvapu6-1 bTUICx')]")

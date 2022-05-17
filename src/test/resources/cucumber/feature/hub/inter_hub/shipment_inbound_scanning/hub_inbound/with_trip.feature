@@ -1290,11 +1290,6 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
-    And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[1].id}" on Edit order page
-      | eventName         | SHIPMENT COMPLETED                             |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[2].name}             |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[2].id}               |
-      | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER[2].id}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -1544,13 +1539,13 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
-#    Given Operator go to menu Inter-Hub -> Add To Shipment
-#    And Operator scan and close shipment with data below:
-#      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-#      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-#      | shipmentType | Land Haul                          |
-#      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}          |
-#    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan and close shipment with data below:
+      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | shipmentType | Land Haul                          |
+      | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}          |
+    And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
       | scanValue      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                   |
@@ -1585,7 +1580,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify small message "No path found. Remove Shipment: {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in Shipment Inbound Box
     And Operator verifies Scanned Shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" exist color is "#fe5c5c"
     And Operator clicks end inbound button
-    Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "Shipment hasn't been scanned" in "missing shipments"
+    Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" appears in error shipment dialog with result "-" in "missing shipments"
     Then Operator verifies shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appears in error shipment dialog with result "No path found." in "unregistered shipments"
     When Operator click proceed in error shipment dialog
     And Capture the toast with message is shown on Shipment Inbound Scanning page
