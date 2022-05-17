@@ -377,4 +377,18 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.forceCompleteTrip();
     }
 
+    @When("Operator click on Assign Driver button on Department page")
+    public void clickAssignDriverButton(){
+        tripManagementPage.clickAssignDriverButtonOnDetailPage();
+    }
+
+    @When("Operator click on Unassign All driver button on Assign Driver page")
+    public void clickUnassignDriverButton(){
+        tripManagementPage.clickUnassignAllOnAssignDriverPage();
+    }
+
+    @Then("Pencil icon button on Assign driver is not visible")
+    public void AssignDriverIconInvisible(){
+        tripManagementPage.verifyAssignDriverInvisible();
+    }
 }

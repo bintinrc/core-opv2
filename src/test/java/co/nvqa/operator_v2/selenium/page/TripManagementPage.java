@@ -113,7 +113,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH="//div[@class='ant-modal-content']//span[text()='Origin Hub']/ancestor::div[contains(@class,'ant-col')]";
   private static final String TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH="//div[@class='ant-modal-content']//span[text()='Destination Hub']/ancestor::div[contains(@class,'ant-col')]";
   private static final String TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH="//div[@class='ant-modal-content']//span[text()='Movement Type']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_EXPECTED_DEPARTURE_TIME_XPATH = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_EXPECTED_ARRIVAL_TIME_XPATH = "//div[@class='ant-modal-content']//span[text()='Expected Arrival Time']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_SHIPMENTS_XPATH = "//div[@class='ant-modal-content']//span[text()='Shipments']/ancestor::div[contains(@class,'ant-col')]";
   private static final String TRIP_DEPARTURE_PAGE_DRIVER_XPATH="//div[@class='ant-modal-content']//span[text()='Driver']/ancestor::div[contains(@class,'ant-col')]";
+
+  private static final String TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH="//div[@class='ant-modal-content']//span[text()='Unassign All']";
+  private static final String TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH="//button[@data-testid='add-driver-button' and @disabled]";
+  private static final String TRIP_ASSIGN_DRIVER_PAGE_DRIVER_LABLE_XPATH="//label[@class='ant-form-item-required']";
 
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
@@ -171,6 +178,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[.='Submit']")
   public Button SubmitButton;
+
+  @FindBy(xpath = "//button[.='Add Driver']")
+  public Button AddDriverButton;
 
   @FindBy(xpath = "//input[@id='originHub']")
   public PageElement originHubFilter;
@@ -648,6 +658,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriver(driverId);
+    verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
@@ -656,6 +667,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
+    verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
@@ -828,6 +840,39 @@ public class TripManagementPage extends OperatorV2SimplePage {
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DRIVER_XPATH,5)).as("Driver appear in Trip Departure page").isTrue();
     tripDepartureArrivalModal.submitTripDeparture.click();
     tripDepartureArrivalModal.waitUntilInvisible();
+  }
+
+  public void clickAssignDriverButtonOnDetailPage(){
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_ASSIGN_DRIVER_XPATH);
+    findElementByXpath(DETAIL_PAGE_ASSIGN_DRIVER_XPATH).click();
+    tripDepartureArrivalModal.waitUntilVisible();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_EXPECTED_DEPARTURE_TIME_XPATH,5)).as("Expected Departure Time appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_EXPECTED_ARRIVAL_TIME_XPATH,5)).as("Expected Arrival Time appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_SHIPMENTS_XPATH,5)).as("Shipments appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH,5)).as("Unassign All Driver appear in Trip Assign Driver page").isTrue();
+  }
+
+  public void clickUnassignAllOnAssignDriverPage(){
+    waitUntilVisibilityOfElementLocated(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH);
+    findElementByXpath(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH).click();
+    assignTripModal.saveButton.click();
+    assignTripModal.waitUntilInvisible();
+  }
+
+  public void verifyAddDriverUnclickable(){
+    List<WebElement> listDrivers = findElementsByXpathFast(TRIP_ASSIGN_DRIVER_PAGE_DRIVER_LABLE_XPATH);
+    if (listDrivers.size()==4) {
+      Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH)).as("Add Driver in Trip Assign Driver page is diable").isTrue();
+    } else {
+      Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH)).as("Add Driver in Trip Assign Driver page is enable because Assigned Drivers are less than 4").isFalse();
+    }
+  }
+
+  public void verifyAssignDriverInvisible(){
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_ASSIGN_DRIVER_XPATH)).as("Assign Driver button is not visible.").isFalse();
   }
 
   public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
