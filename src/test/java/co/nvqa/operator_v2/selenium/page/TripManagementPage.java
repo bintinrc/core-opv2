@@ -92,6 +92,36 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final DateTimeFormatter BE_FORMATTER = DateTimeFormatter
           .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
 
+  private static final String DETAIL_PAGE_TRIP_ID_XPATH = "//h4[@class='ant-typography' and normalize-space()]";
+  private static final String DETAIL_PAGE_STATUS_XPATH = "//span[text()='Status']/ancestor::div[@class='ant-col']";
+  private static final String DETAIL_PAGE_ORIGIN_HUB_XPATH = "//div[@class='ant-card-body']//span[text()='Origin Hub']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_DESTINATION_HUB_XPATH = "//div[@class='ant-card-body']//span[text()='Destination Hub']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_MOVEMENT_TYPE_XPATH = "//div[@class='ant-card-body']//span[text()='Movement Type']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_EXPECTED_DEPARTURE_XPATH = "//div[@class='ant-card-body']//span[text()='Expected Departure Time']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_EXPECTED_ARRIVAL_XPATH = "//div[@class='ant-card-body']//span[text()='Expected Arrival Time']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_ACTUAL_DEPARTURE_XPATH = "//div[@class='ant-card-body']//span[text()='Actual Departure Time']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_ACTUAL_ARRIVAL_XPATH = "//div[@class='ant-card-body']//span[text()='Actual Arrival Time']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_SHIPMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Shipments']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_PARCELS_XPATH = "//div[@class='ant-card-body']//span[text()='Parcels']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_TRIP_PASSWORD_XPATH = "//div[@class='ant-card-body']//span[text()='Trip Password']//ancestor::div[@class='ant-space-item']";
+  private static final String DETAIL_PAGE_DRIVERS_XPATH = "//div[@class='ant-card-body']//span[text()='Driver']//ancestor::div[@class='ant-space-item']//div[@class='ant-spin-container']";
+  private static final String DETAIL_PAGE_SHIPMENTS_TAB_XPATH = "//div[text()='Shipments' and @role='tab']";
+  private static final String DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
+  private static final String DETAIL_PAGE_ASSIGN_DRIVER_XPATH = "//span[@data-testid='assign-driver-icon']"; //Helpful for the future - Add driver from detail page, do not remove
+
+  private static final String TRIP_DEPARTURE_PAGE_MESSAGE_XPATH="//div[@class='ant-modal-content']//span[@class='ant-typography']/strong";
+  private static final String TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH="//div[@class='ant-modal-content']//span[text()='Origin Hub']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH="//div[@class='ant-modal-content']//span[text()='Destination Hub']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH="//div[@class='ant-modal-content']//span[text()='Movement Type']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_EXPECTED_DEPARTURE_TIME_XPATH = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_EXPECTED_ARRIVAL_TIME_XPATH = "//div[@class='ant-modal-content']//span[text()='Expected Arrival Time']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_SHIPMENTS_XPATH = "//div[@class='ant-modal-content']//span[text()='Shipments']/ancestor::div[contains(@class,'ant-col')]";
+  private static final String TRIP_DEPARTURE_PAGE_DRIVER_XPATH="//div[@class='ant-modal-content']//span[text()='Driver']/ancestor::div[contains(@class,'ant-col')]";
+
+  private static final String TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH="//div[@class='ant-modal-content']//span[text()='Unassign All']";
+  private static final String TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH="//button[@data-testid='add-driver-button' and @disabled]";
+  private static final String TRIP_ASSIGN_DRIVER_PAGE_DRIVER_LABLE_XPATH="//label[@class='ant-form-item-required']";
+
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
 
@@ -142,6 +172,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[.='Complete']")
   public Button completeTripButton;
+
+  @FindBy(xpath = "//button[.='Cancel Trip']")
+  public Button CancelTripButton;
+
+  @FindBy(xpath = "//button[.='Submit']")
+  public Button SubmitButton;
+
+  @FindBy(xpath = "//button[.='Add Driver']")
+  public Button AddDriverButton;
 
   @FindBy(xpath = "//input[@id='originHub']")
   public PageElement originHubFilter;
@@ -251,14 +290,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void searchAndVerifiesTripManagementIsExistedByDestinationHubName(
-      String destinationHubName) {
+          String destinationHubName) {
     waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, 1));
     sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, 1), destinationHubName);
     waitUntilVisibilityOfElementLocated(
-        f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
+            f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
 
     String actualDestinationHubName = getText(
-        f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
+            f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
     assertEquals("Destination Hub Name", destinationHubName, actualDestinationHubName);
   }
 
@@ -321,7 +360,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
-      TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
+                             TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
     ShipmentInfo shipmentInfo = new ShipmentInfo();
 
     // Get the newest record for today
@@ -347,7 +386,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case DESTINATION_HUB:
         filterValue = tripManagementDetailsData.getData().get(index).getDestinationHubName();
         waitUntilVisibilityOfElementLocated(
-            f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
+                f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
         sendKeysAndEnter(f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS)+"//input", filterValue);
         break;
 
@@ -365,7 +404,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case MOVEMENT_TYPE:
         filterValue = movementTypeConverter(
-            tripManagementDetailsData.getData().get(index).getMovementType());
+                tripManagementDetailsData.getData().get(index).getMovementType());
         movementTypeFilter.openButton.click();
         movementTypeFilter.selectType(filterValue.toLowerCase());
         movementTypeFilter.ok.click();
@@ -374,7 +413,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case EXPECTED_DEPARTURE_TIME:
         ZonedDateTime expectedDepartTime = tripManagementDetailsData.getData().get(index)
-            .getExpectedDepartureTime();
+                .getExpectedDepartureTime();
         String normalizedExpDepartDate = shipmentInfo.normalisedDate(expectedDepartTime.toString().replaceAll("Z", ":00.000Z"));
         normalizedExpDepartDate = normalizedExpDepartDate.replace(" ", "T") + ".000Z";
         expectedDepartTime = ZonedDateTime.parse(normalizedExpDepartDate, BE_FORMATTER);
@@ -387,9 +426,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case ACTUAL_DEPARTURE_TIME:
         ZonedDateTime actualDepartureTime = tripManagementDetailsData.getData().get(index)
-            .getExpectedArrivalTime();
-        String normalizedDepartDate = shipmentInfo.normalisedDate(actualDepartureTime.toString().replaceAll("Z", ":00.000Z"));
-        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + ".000Z";
+                .getExpectedArrivalTime();
+        String normalizedDepartDate = shipmentInfo.normalisedDate(actualDepartureTime.toString().replaceAll("Z", ":00Z"));
+        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + "Z";
         actualDepartureTime = ZonedDateTime.parse(normalizedDepartDate, BE_FORMATTER);
         actualDepartTimeFilter.openButton.click();
         actualDepartTimeFilter.selectTime(actualDepartureTime);
@@ -398,7 +437,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case EXPECTED_ARRIVAL_TIME:
         ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index)
-            .getExpectedArrivalTime();
+                .getExpectedArrivalTime();
         String normalizedArrivalDate = shipmentInfo.normalisedDate(expectedArrivalTime.toString().replaceAll("Z", ":00.000Z"));
         normalizedArrivalDate = normalizedArrivalDate.replace(" ", "T") + ".000Z";
         expectedArrivalTime = ZonedDateTime.parse(normalizedArrivalDate, BE_FORMATTER);
@@ -411,7 +450,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case ACTUAL_ARRIVAL_TIME:
         ZonedDateTime actualArrivalTime = tripManagementDetailsData.getData().get(index)
-            .getExpectedArrivalTime();
+                .getExpectedArrivalTime();
         actualArrivalTimeFilter.openButton.click();
         actualArrivalTimeFilter.selectDate(actualArrivalTime);
         actualArrivalTimeFilter.selectTime(actualArrivalTime);
@@ -456,7 +495,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
-      TripManagementDetailsData tripManagementDetailsData) {
+                             TripManagementDetailsData tripManagementDetailsData) {
     tableFiltering(tripManagementFilteringType, tripManagementDetailsData, null);
   }
 
@@ -465,7 +504,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyResult(TripManagementFilteringType tripManagementFilteringType,
-      TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
+                           TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
 
     if (!(isElementExistFast(FIRST_ROW_OF_TABLE_RESULT_XPATH))) {
       verifiesNoResult();
@@ -512,23 +551,23 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case MOVEMENT_TYPE:
         expectedValue = movementTypeConverter(
-            tripManagementDetailsData.getData().get(index).getMovementType());
+                tripManagementDetailsData.getData().get(index).getMovementType());
         actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, MOVEMENT_TYPE_CLASS));
         assertEquals("Movement Type", expectedValue, actualValue);
         break;
 
       case EXPECTED_DEPARTURE_TIME:
         expectedValue = expectedValueDateTime(
-            tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
+                tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
         actualValue = getText(
-            f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
+                f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
         Assertions.assertThat(actualValue).as("Expected Departure Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
       case ACTUAL_DEPARTURE_TIME:
         expectedValue = expectedValueDateTime(
-            tripManagementDetailsData.getData().get(index).getActualStartTime());
+                tripManagementDetailsData.getData().get(index).getActualStartTime());
         actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
         Assertions.assertThat(actualValue).as("Actual Departure Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
@@ -536,16 +575,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
       case EXPECTED_ARRIVAL_TIME:
         expectedValue = expectedValueDateTime(
-            tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
+                tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
         actualValue = getText(
-            f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
+                f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
         Assertions.assertThat(actualValue).as("Actual Arrival Time").contains(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
       case ACTUAL_ARRIVAL_TIME:
         expectedValue = expectedValueDateTime(
-            tripManagementDetailsData.getData().get(index).getActualEndTime());
+                tripManagementDetailsData.getData().get(index).getActualEndTime());
         actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
         assertTrue("Actual Departure Time", actualValue.contains(expectedValue));
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
@@ -580,7 +619,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyResult(TripManagementFilteringType tripManagementFilteringType,
-      TripManagementDetailsData tripManagementDetailsData) {
+                           TripManagementDetailsData tripManagementDetailsData) {
     verifyResult(tripManagementFilteringType, tripManagementDetailsData, null);
   }
 
@@ -619,6 +658,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriver(driverId);
+    verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
@@ -627,6 +667,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
+    verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
   }
@@ -640,17 +681,33 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
     switchToNewWindow();
-
     this.switchTo();
 //    TODO: WIP by MM Dev team
-
 //    waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
 //    String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
 //    assertThat("Trip ID is correct", actualTripId, containsString(tripId));
-
-    getWebDriver().close();
-    getWebDriver().switchTo().window(windowHandle);
-
+//    getWebDriver().close();
+//    getWebDriver().switchTo().window(windowHandle);
+//    switchTo();
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_TRIP_ID_XPATH);
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH);
+    String actualTripId = getText(DETAIL_PAGE_TRIP_ID_XPATH);
+    Assertions.assertThat(actualTripId).as("Trip ID is correct").contains(tripId);
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_STATUS_XPATH,5)).as("Trip Status appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_ORIGIN_HUB_XPATH,5)).as("Origin Hub appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_DESTINATION_HUB_XPATH,5)).as("Destination Hub appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_EXPECTED_DEPARTURE_XPATH,5)).as("Expected Departure Time appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_EXPECTED_ARRIVAL_XPATH,5)).as("Expected Arrival Time appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_ACTUAL_DEPARTURE_XPATH,5)).as("Actual Departure Time appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_ACTUAL_ARRIVAL_XPATH,5)).as("Actual Arrival Time appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_SHIPMENTS_XPATH,5)).as("Shipments appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_PARCELS_XPATH,5)).as("Parcels appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_TRIP_PASSWORD_XPATH,5)).as("Trip Password appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_DRIVERS_XPATH,5)).as("Assigned Driver appear in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_SHIPMENTS_TAB_XPATH,5)).as("Shipments tab in Trip Details page").isTrue();
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH,5)).as("Trip Events appear in Trip Details page").isTrue();
+    // Assertions.assertThat(departTripButton.isDisplayed()).as("Depart button appear in Trip Details page").isTrue();
 
   }
 
@@ -697,7 +754,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         if(actualToastMessageContent.equals("")){
           readTheToastMessage();
         }
-        Assertions.assertThat(actualToastMessageContent).as("Trip Management toast message:").contains(expectedToastMessage);
+        Assertions.assertThat(actualToastMessageContent).as("Trip Management toast message is shown").contains(expectedToastMessage);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         throw ex;
@@ -709,12 +766,12 @@ public class TripManagementPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() -> {
       try {
         waitUntilVisibilityOfElementLocated(
-            "//div[contains(@class,'notification-notice-message')]");
+                "//div[contains(@class,'notification-notice-message')]");
         WebElement toast = findElementByXpath(
-            "//div[contains(@class,'notification-notice-message')]");
+                "//div[contains(@class,'notification-notice-message')]");
         String actualToastMessage = toast.getText();
         assertThat("Trip Management toast message is the same", actualToastMessage,
-            containsString(expectedToastMessage));
+                containsString(expectedToastMessage));
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
@@ -734,7 +791,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
     departTripButton.click();
     tripDepartureArrivalModal.waitUntilVisible();
     tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH,5)).as("Trip Departure message appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DRIVER_XPATH,5)).as("Driver appear in Trip Departure page").isTrue();
     tripDepartureArrivalModal.submitTripDeparture.click();
+
   }
 
   public void arriveTrip() {
@@ -742,6 +805,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
     arriveTripButton.click();
     tripDepartureArrivalModal.waitUntilVisible();
     tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH,5)).as("Trip Departure message appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DRIVER_XPATH,5)).as("Driver appear in Trip Departure page").isTrue();
     tripDepartureArrivalModal.submitTripDeparture.click();
     tripDepartureArrivalModal.waitUntilInvisible();
   }
@@ -751,8 +819,60 @@ public class TripManagementPage extends OperatorV2SimplePage {
     completeTripButton.click();
     tripDepartureArrivalModal.waitUntilVisible();
     tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH,5)).as("Trip Departure message appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DRIVER_XPATH,5)).as("Driver appear in Trip Departure page").isTrue();
     tripDepartureArrivalModal.submitTripDeparture.click();
     tripDepartureArrivalModal.waitUntilInvisible();
+  }
+
+  public void forceCompleteTrip() {
+    forceTripCompletion.waitUntilClickable();
+    forceTripCompletion.click();
+    tripDepartureArrivalModal.waitUntilVisible();
+    tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH,5)).as("Trip Departure message appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Departure page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DRIVER_XPATH,5)).as("Driver appear in Trip Departure page").isTrue();
+    tripDepartureArrivalModal.submitTripDeparture.click();
+    tripDepartureArrivalModal.waitUntilInvisible();
+  }
+
+  public void clickAssignDriverButtonOnDetailPage(){
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_ASSIGN_DRIVER_XPATH);
+    findElementByXpath(DETAIL_PAGE_ASSIGN_DRIVER_XPATH).click();
+    tripDepartureArrivalModal.waitUntilVisible();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_EXPECTED_DEPARTURE_TIME_XPATH,5)).as("Expected Departure Time appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_EXPECTED_ARRIVAL_TIME_XPATH,5)).as("Expected Arrival Time appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_SHIPMENTS_XPATH,5)).as("Shipments appear in Trip Assign Driver page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH,5)).as("Unassign All Driver appear in Trip Assign Driver page").isTrue();
+  }
+
+  public void clickUnassignAllOnAssignDriverPage(){
+    waitUntilVisibilityOfElementLocated(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH);
+    findElementByXpath(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH).click();
+    assignTripModal.saveButton.click();
+    assignTripModal.waitUntilInvisible();
+  }
+
+  public void verifyAddDriverUnclickable(){
+    List<WebElement> listDrivers = findElementsByXpathFast(TRIP_ASSIGN_DRIVER_PAGE_DRIVER_LABLE_XPATH);
+    if (listDrivers.size()==4) {
+      Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH)).as("Add Driver in Trip Assign Driver page is diable").isTrue();
+    } else {
+      Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH)).as("Add Driver in Trip Assign Driver page is enable because Assigned Drivers are less than 4").isFalse();
+    }
+  }
+
+  public void verifyAssignDriverInvisible(){
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_ASSIGN_DRIVER_XPATH)).as("Assign Driver button is not visible.").isFalse();
   }
 
   public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
