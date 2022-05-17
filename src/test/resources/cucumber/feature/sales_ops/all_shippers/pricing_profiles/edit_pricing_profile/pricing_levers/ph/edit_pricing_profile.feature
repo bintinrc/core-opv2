@@ -42,7 +42,6 @@ Feature: Edit Pricing Profiles - PH
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     And Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | codMinFee | 10 |
-    And Operator verifies that Billing Weight Logic is not available in the Edit Pricing Profile dialog
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
