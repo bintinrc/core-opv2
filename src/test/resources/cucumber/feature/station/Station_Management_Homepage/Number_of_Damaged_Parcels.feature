@@ -282,7 +282,7 @@ Feature: Number of Damaged Parcels
       | {hub-name-6} | {hub-id-6} | DAMAGED    | RESOLVED | NV LIABLE - RETURN PARCEL | No                      | Nobody at address | Damaged parcels | Damaged Parcels | Damaged Parcels |
 
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: View Hub Inbound Scanned Damaged Parcels (uid:c045511d-c5b0-4377-bd52-3aa4e7dbb671)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

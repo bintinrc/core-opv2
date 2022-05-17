@@ -13,7 +13,9 @@ import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +52,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
           String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
           stationManagementHomePage.selectHubAndProceed(hub);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, TimeoutException.class);
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class);
   }
 
   @When("Operator chooses the hub as {string} displayed in {string} and proceed")
