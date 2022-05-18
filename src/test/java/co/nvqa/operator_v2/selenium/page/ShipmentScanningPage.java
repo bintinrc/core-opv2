@@ -149,8 +149,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'shipment-id')]")
   public TextBox shipmentIdTextBox;
 
+  @FindBy(xpath = "//h5[contains(., 'Unregistered Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'shipment-id')]")
+  public TextBox unregisterShipmentIdTextBox;
+
+  @FindBy(xpath = "//h5[contains(., 'Missing Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'shipment-id')]")
+  public TextBox missingShipmentIdTextBox;
+
   @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'message')]")
   public TextBox resultTextBox;
+
+  @FindBy(xpath = "//h5[contains(., 'Unregistered Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'message')]")
+  public TextBox unregisterresultTextBox;
+
+  @FindBy(xpath = "//h5[contains(., 'Missing Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'message')]")
+  public TextBox missingresultTextBox;
 
   @FindBy(xpath = "//button[contains(@class,'sc-qvapu6-1 bTUICx')]")
   public Button removeButton;
@@ -565,13 +577,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualResultMessage = "";
 
     if ("unregistered shipments".equals(errorShipmentType)) {
-      actualShipmentId = unregisteredShipmentRow.rows.get(0).shipmentId.getText();
-      actualResultMessage = unregisteredShipmentRow.rows.get(0).result.getText();
+      actualShipmentId = unregisterShipmentIdTextBox.getText();
+      actualResultMessage = unregisterresultTextBox.getText();
     }
 
     if ("missing shipments".equals(errorShipmentType)) {
-      actualShipmentId = missingShipmentRow.rows.get(0).shipmentId.getText();
-      actualResultMessage = missingShipmentRow.rows.get(0).result.getText();
+      actualShipmentId = missingShipmentIdTextBox.getText();
+      actualResultMessage = missingresultTextBox.getText();
     }
 
     assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
