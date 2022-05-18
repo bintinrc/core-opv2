@@ -846,12 +846,17 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(DETAIL_PAGE_ASSIGN_DRIVER_XPATH);
     findElementByXpath(DETAIL_PAGE_ASSIGN_DRIVER_XPATH).click();
     tripDepartureArrivalModal.waitUntilVisible();
+    verifyItemsDisplayOnAssignDriverPage();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_SHIPMENTS_XPATH,5)).as("Shipments appear in Trip Assign Driver page").isTrue();
+  }
+
+  public void verifyItemsDisplayOnAssignDriverPage(){
+    tripDepartureArrivalModal.waitUntilVisible();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Assign Driver page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Assign Driver page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Assign Driver page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_EXPECTED_DEPARTURE_TIME_XPATH,5)).as("Expected Departure Time appear in Trip Assign Driver page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_EXPECTED_ARRIVAL_TIME_XPATH,5)).as("Expected Arrival Time appear in Trip Assign Driver page").isTrue();
-    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_SHIPMENTS_XPATH,5)).as("Shipments appear in Trip Assign Driver page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH,5)).as("Unassign All Driver appear in Trip Assign Driver page").isTrue();
   }
 
