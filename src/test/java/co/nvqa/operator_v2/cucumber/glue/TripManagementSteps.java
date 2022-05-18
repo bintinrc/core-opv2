@@ -391,4 +391,7 @@ public class TripManagementSteps extends AbstractSteps {
     public void AssignDriverIconInvisible(){
         tripManagementPage.verifyAssignDriverInvisible();
     }
+
+    @Then("Operator verify Items display on Assign Driver Page")
+    public void OperatorVerifyItemsOnAssginDriverPage(){tripManagementPage.verifyItemsDisplayOnAssignDriverPage(); }
 }

@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @AssignDriver
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @AssignDriver @CWF
 Feature: Movement Trip - Assign Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -219,7 +219,6 @@ Feature: Movement Trip - Assign Driver
     And Operator assign driver "({KEY_LIST_OF_CREATED_DRIVERS[1].username})" to created movement schedule
     Then Operator verifies toast with message "1 driver(s) successfully assigned to the schedule" is shown on movement page
 
-
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Re-assign Multiple Drivers to Movement Schedules (uid:bc5b0feb-ddfd-4914-bb99-cf4d484b8627)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -390,6 +389,40 @@ Feature: Movement Trip - Assign Driver
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
     And Pencil icon button on Assign driver is not visible
+
+  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteDriver @RT
+  Scenario: Unassign Multiple Drivers via Movement Trips (uid:3d8fff3b-f453-4670-8f3c-adb513984f3f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {hub-relation-destination-hub-id}
+    Given Operator go to menu Inter-Hub -> Movement Trips
+    And Operator verifies movement Trip page is loaded
+    And Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
+    And Operator clicks on "assign_driver" icon on the action column
+    And Operator verify Items display on Assign Driver Page
+    And Operator assign following drivers to created movement trip:
+      | primaryDriver    | ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | additionalDriver | ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
+    Then Operator verifies toast with message "2 driver(s) successfully assigned to the trip" is shown on movement page
+    And Operator clicks on "assign_driver" icon on the action column
+    And Operator click on Unassign All driver button on Assign Driver page
+    Then Operator verifies toast with message "0 driver(s) successfully assigned to the trip" is shown on movement page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
