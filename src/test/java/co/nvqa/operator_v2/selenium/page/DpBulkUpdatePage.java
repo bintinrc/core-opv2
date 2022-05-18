@@ -36,6 +36,15 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//li[text()='Bulk Update']")
   public Button bulkUpdateButton;
 
+  @FindBy(xpath = "(//input[@type='checkbox'])[1]/..")
+  public Button firstCheckbox;
+
+  @FindBy(xpath = "//li[text()='Set Public']")
+  public Button setPublic;
+
+  @FindBy(xpath = "//li[text()='Set Not Public']")
+  public Button setNotPublic;
+
   @FindBy(xpath = "//div[contains(@id,'rcDialogTitle')]")
   public PageElement bulkUpdateDialog;
 

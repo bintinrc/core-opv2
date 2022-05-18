@@ -84,32 +84,6 @@ Feature: Open SMH from Side Navigation
       | HubName1     | HubID1     | HubName2     |
       | {hub-name-6} | {hub-id-6} | {hub-name-8} |
 
-
-  Scenario Outline: User has Hub changes Operating Country and Open SMH (uid:778b0c97-9978-415d-9acd-491c4faa335e)
-    Given Operator loads Operator portal home page
-    And Operator go to menu Station Management Tool -> User Management
-    Then Operator searches by "Station Name": "<HubName1>"
-    And Operator clicks on the view Users button
-    And Operator adds the user "{operator-email}" to the hub
-    Then Operator verifies the success message is displayed on adding user to Hub : "<HubName1>"
-    When Operator click logout button
-    And Operator login Operator portal with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Then Operator verifies user is redirected to the Station Management Homepage of hub "<HubName1>" that has been mapped to user
-    And Operator verifies that the url path parameter changes to hub-id:"<HubID1>"
-    And Operator go to menu Station Management Tool -> Station COD Report
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
-    When Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator refresh page v1
-    And Operator selects the hub as "<HubName2>" and proceed
-    Then Operator verifies user is redirected to the Station Management Homepage of hub "<HubName2>" that has been mapped to user
-    And Operator verifies that the url path parameter changes to hub-id:"<HubID2>"
-
-    Examples:
-      | HubName1     | HubID1     | Country  | HubName2     | HubID2     |
-      | {hub-name-6} | {hub-id-6} | Thailand | {hub-name-1} | {hub-id-1} |
-
-
   Scenario Outline: User has Disabled Hub Open SMH (uid:342cd60f-a96e-4399-a7e6-31a16118af70)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
@@ -138,6 +112,31 @@ Feature: Open SMH from Side Navigation
     Examples:
       | HubName1     | HubID1     | HubName2     | HubID2     | HubName3     | TimeStamp                                 |
       | {hub-name-6} | {hub-id-6} | {hub-name-8} | {hub-id-8} | {hub-name-9} | {gradle-current-date-yyyy-MM-dd} 00:00:00 |
+
+  Scenario Outline: User has Hub changes Operating Country and Open SMH (uid:778b0c97-9978-415d-9acd-491c4faa335e)
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> User Management
+    Then Operator searches by "Station Name": "<HubName1>"
+    And Operator clicks on the view Users button
+    And Operator adds the user "{operator-email}" to the hub
+    Then Operator verifies the success message is displayed on adding user to Hub : "<HubName1>"
+    When Operator click logout button
+    And Operator login Operator portal with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    Then Operator verifies user is redirected to the Station Management Homepage of hub "<HubName1>" that has been mapped to user
+    And Operator verifies that the url path parameter changes to hub-id:"<HubID1>"
+    And Operator go to menu Station Management Tool -> Station COD Report
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator refresh page v1
+    And Operator selects the hub as "<HubName2>" and proceed
+    Then Operator verifies user is redirected to the Station Management Homepage of hub "<HubName2>" that has been mapped to user
+    And Operator verifies that the url path parameter changes to hub-id:"<HubID2>"
+
+    Examples:
+      | HubName1     | HubID1     | Country  | HubName2     | HubID2     |
+      | {hub-name-6} | {hub-id-6} | Thailand | {hub-name-1} | {hub-id-1} |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
