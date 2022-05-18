@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @AssignDriver @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @AssignDriver
 Feature: Movement Trip - Assign Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -390,7 +390,7 @@ Feature: Movement Trip - Assign Driver
     Then Operator verifies that the new tab with trip details is opened
     And Pencil icon button on Assign driver is not visible
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteDriver
   Scenario: Unassign Multiple Drivers via Movement Trips (uid:3d8fff3b-f453-4670-8f3c-adb513984f3f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
