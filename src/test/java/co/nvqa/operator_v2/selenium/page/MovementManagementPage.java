@@ -321,23 +321,18 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
       }
 
-      //      @FindBy(xpath = "./following-sibling::div//*[contains(@id,'schedules_0_originHub')]")
-//      @FindBy(xpath = "./following-sibling::div//*[contains(@id,'schedules_0_originHub')]")
       @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='schedules_0_originHub']]")
       public AntSelect originHub;
 
-      //      @FindBy(xpath = "./following-sibling::div//*[contains(@id,'schedules_0_destinationHub')]")
       @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='schedules_0_destinationHub']]")
       public AntSelect destinationHub;
 
-      //      @FindBy(xpath = "./following-sibling::div//*[contains(@id,'schedules_0_movementType')]")
       @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='schedules_0_movementType']]")
       public AntSelect movementType;
 
       @FindBy(xpath = "(./following-sibling::div//span[@class='ant-time-picker'])[1]")
       public AntTimePicker departureTime;
 
-      //      @FindBy(xpath = "./following-sibling::div//*[contains(@id,'schedules_0_durationDay')]")
       @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='schedules_0_durationDay']]")
       public AntSelect durationDays;
 
@@ -403,10 +398,8 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
           String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
           moveToElementWithXpath("//div[@class='ant-picker-content']//ul[1]");
-//          click(f(".//li[@class='ant-picker-time-panel-cell']/div[contains(string(), '%s')]", hour));
           TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
           moveToElementWithXpath("//div[@class='ant-picker-content']//ul[2]");
-//          click(f(".//li[@class='ant-picker-time-panel-cell']/div[contains(string(), '%s')]", time));
           TestUtils.findElementAndClick(time, "xpath", getWebDriver());
           TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
         }
