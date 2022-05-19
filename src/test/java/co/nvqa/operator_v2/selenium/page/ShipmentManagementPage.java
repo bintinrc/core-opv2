@@ -1124,6 +1124,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String STATUS = "status";
     public static final String CREATED_AT = "createdAt";
     public static final String COMMENTS = "comments";
+    public static final String XPATH_TABLE_DATA = "//div[contains(@id,'movement-events')]//tr[./td[.='%s']]//td";
 
     public MovementEventsTable(WebDriver webDriver) {
       super(webDriver);
@@ -1136,6 +1137,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
           .build());
       setEntityClass(MovementEvent.class);
       setNvTableParam("ctrl.tableParamEvents");
+    }
+
+    public Map<String, String> readMovementEventsTable(String source) {
+      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
+      List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
+      Assertions.assertThat(list.size()).as(f("There is no [%s] movement event on Shipment Details page",source)).isNotEqualTo(0);
+      Map<String, String> eventsTable = new HashMap<>();
+      eventsTable.put(SOURCE, list.get(0));
+      eventsTable.put(STATUS, list.get(1));
+      eventsTable.put(CREATED_AT, list.get(2));
+      eventsTable.put(COMMENTS, list.get(3));
+      return eventsTable;
     }
   }
 
