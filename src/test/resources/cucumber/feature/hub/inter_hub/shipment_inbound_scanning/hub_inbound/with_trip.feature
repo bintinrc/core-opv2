@@ -2691,19 +2691,19 @@ Feature: Shipment Hub Inbound With Trip Scanning
     Then Operator verify parameters of shipment on Shipment Management page using data below:
       | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
-      | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
+      | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND(OpV2)               |
       | result | Transit                          |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | userId | qa@ninjavan.co             |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                         |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[3].name}             |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[3].id}               |
+      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
+      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}               |
       | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
