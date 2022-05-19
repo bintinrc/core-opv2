@@ -7,6 +7,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.MovementSchedule.Schedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
@@ -60,8 +61,8 @@ public class MovementManagementSteps extends AbstractSteps {
     {
       try {
         final String finalHubName = resolveValue(hubName);
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub
-            .selectValue(finalHubName);
+        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(
+            finalHubName);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info(
@@ -101,6 +102,7 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
+    pause10s();
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
@@ -328,6 +330,37 @@ public class MovementManagementSteps extends AbstractSteps {
     }, 10);
   }
 
+  @And("Operator load schedules and verifies on Movement Management page with retry using data below:")
+  public void operatorLoadSchedulesAndVerifiesOnMovementManagementPageWithRetryUsingDataBelow(
+      Map<String, String> inputData) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> data = resolveKeyValues(inputData);
+        String crossdockHub = data.get("crossdockHub");
+        String originHub = data.get("originHub");
+        String destinationHub = data.get("destinationHub");
+        movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
+
+        MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+        assertEquals("Number of displayed schedules", movementSchedule.getSchedules().size(),
+            movementManagementPage.schedulesTable.getRowsCount());
+        for (int i = 0; i < movementSchedule.getSchedules().size(); i++) {
+          MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(
+              i + 1);
+          movementSchedule.getSchedule(i).compareWithActual(actual);
+        }
+
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        movementManagementPage.refreshPage();
+        movementManagementPageIsLoaded();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 3);
+  }
+
   @And("Operator load schedules on Movement Management page")
   public void operatorLoadSchedulesOnMovementManagementPage() {
     if (movementManagementPage.editFilters.isDisplayedFast()) {
@@ -386,7 +419,13 @@ public class MovementManagementSteps extends AbstractSteps {
         if (existed == null) {
           put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
         } else {
-          existed.getSchedules().addAll(movementSchedule.getSchedules());
+          Optional<Schedule> scheduleExist = existed.getSchedules().stream()
+              .filter((schedule) -> schedule.getDepartureTime()
+                  .equals(movementSchedule.getSchedule(0).getDepartureTime())).findFirst();
+
+          if (!scheduleExist.isPresent()) {
+            existed.getSchedules().addAll(movementSchedule.getSchedules());
+          }
         }
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
@@ -411,7 +450,7 @@ public class MovementManagementSteps extends AbstractSteps {
     assertNull("Movement Type value",
         movementManagementPage.addMovementScheduleModal.getScheduleForm(
             1).movementType.getValue());
-    assertEquals("Comment value", "",
+    assertEquals("Comment value", null,
         movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue());
   }
 
@@ -492,7 +531,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
   public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage() {
-    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");
+    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted");
   }
 
   @Deprecated
