@@ -14,10 +14,10 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
 
-  private static final String CELL_LOCATOR_PATTERN = "//tr[contains(@class,'ant-table-row')][%d]/td[%s]";
+  private static final String CELL_LOCATOR_PATTERN = "//tr[contains(@class,'ant-table-row')][%d]/td[contains(@class, '%s')]";
   private static final String ACTION_BUTTON_LOCATOR_PATTERN = "(//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//button)[%s]";
 
-  @FindBy(css = "p.ant-empty-description")
+  @FindBy(className = "ant-empty-description")
   public PageElement noResultsFound;
 
   public AntTableV3(WebDriver webDriver) {
@@ -73,7 +73,7 @@ public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = getTableLocator() + f("//thead//th[%s]//input", columnLocators.get(columnId));
+    String xpath = getTableLocator() + f("//thead//th[contains(@class,'%s')]//input", columnLocators.get(columnId));
     String currentValue = getValue(xpath);
     if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
       StringBuilder sb = new StringBuilder();

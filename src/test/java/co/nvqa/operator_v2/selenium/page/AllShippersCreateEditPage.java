@@ -10,6 +10,7 @@ import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Pricing.BillingWeightEnum;
 import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
@@ -163,6 +164,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String XPATH_PRICING_PROFILE_INS_MIN = "//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
   public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
   public static final String XPATH_PRICING_PROFILE_RTS_CHARGE = "//table[@class='table-body']//tr[1]//td[@class='rts-charge']";
+  public static final String XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC = "//table[@class='table-body']//tr[1]//td[@class='billing-weight-logic']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
   public static final String XPATH_ADD_NEW_PRICING_PROFILE = "//button[@aria-label='Add New Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
@@ -1443,11 +1445,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.rtsValue.sendKeys(shipperRtsValue);
       }
     }
-    String billingWeight = pricing.getBillingWeight();
     String country = COUNTRY_CODE;
-    if (Objects.isNull(billingWeight) && (country.equalsIgnoreCase("TH")
-        || country.equalsIgnoreCase("PH") || country.equalsIgnoreCase("ID"))) {
-      newPricingProfileDialog.billingWeight.selectValue("Standard");
+    if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
+        || country.equalsIgnoreCase("ID"))) {
+      String billingWeight = pricing.getBillingWeight().getCode();
+      if (Objects.isNull(billingWeight)) {
+        newPricingProfileDialog.billingWeight.selectValue("Standard");
+      } else if(!billingWeight.equalsIgnoreCase("empty")){
+        newPricingProfileDialog.billingWeight.selectValue(billingWeight);
+      }
     }
   }
 
@@ -1463,6 +1469,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
     addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
     addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
+    addedPricingProfileOPV2.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(getText(XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC)));
     String value = getText(XPATH_PRICING_PROFILE_RTS_CHARGE);
     if (value.startsWith("-")) {
       addedPricingProfileOPV2.setRtsChargeType("Discount");
@@ -1569,7 +1576,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
@@ -1722,7 +1728,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
     public MdCheckbox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    @FindBy(xpath = "//md-select[contains(@aria-label,'Select billing weight logic')]")
     public MdSelect billingWeight;
 
     @FindBy(name = "Save Changes")

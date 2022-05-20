@@ -40,11 +40,12 @@ Feature: Generate COD Report - Select by Route ID
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    And Operator waits for 2 seconds
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"], "report_type" : "COD", "route_ids": [ {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} ], "template_id": {finance-cod-template-id}} |
+      | {"email_addresses": ["{order-billing-email}"], "report_type" : "COD", "route_ids": [ {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries

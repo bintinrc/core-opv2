@@ -35,7 +35,7 @@ public class NvFilterAutocomplete extends AbstractFilterBox {
   }
 
   @Override
-  void setValue(String... values) {
+  public void setValue(String... values) {
     selectFilter(values[0]);
   }
 

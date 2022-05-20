@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -22,6 +24,12 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
   public PageElement noResultsFound;
+
+  @FindBy(css = "div.caret-down-icon > button")
+  public PageElement openMenu;
+
+  @FindBy(xpath = ".//span[.='Select All Shown']")
+  public PageElement selectAllShown;
 
   public AntTableV2(WebDriver webDriver) {
     super(webDriver);
@@ -141,5 +149,23 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public String getRowLocator(int index) {
     throw new UnsupportedOperationException();
+  }
+
+  public void selectAllShown() {
+    if (!selectAllShown.isDisplayedFast()) {
+      openMenu.click();
+      selectAllShown.click();
+    }
+  }
+
+  public void sortColumn(String columnId, boolean ascending) {
+    String headerLocator = f("div[data-headerkey='%s'] > div > div",
+        getColumnLocators().get(columnId));
+    String xpath = f(".//div[@data-headerkey='%s']//*[contains(@class, 'Sort%s')]",
+        getColumnLocators().get(columnId), ascending ? "Up" : "Down");
+    Button button = new Button(getWebDriver(), findElementBy(By.cssSelector(headerLocator)));
+    while (!isElementExistFast(xpath)) {
+      button.click();
+    }
   }
 }

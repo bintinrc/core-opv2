@@ -292,10 +292,7 @@ Feature: Number of Damaged Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"{hub-id-Global2}" } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"HUB INBOUND SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
@@ -333,8 +330,8 @@ Feature: Number of Damaged Parcels
       | Ticket Status     | CREATED          |
 
     Examples:
-      | HubName      | HubId      | TicketType | TileName        | ModalName       | LastScannedEvent |
-      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels | HUB_INBOUND_SCAN |
+      | HubName            | HubId            | TicketType | TileName        | ModalName       | LastScannedEvent |
+      | {hub-name-Global2} | {hub-id-Global2} | DAMAGED    | Damaged parcels | Damaged Parcels | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel Routing Scanned Damaged Pacels (uid:78b409c6-d0c7-46b7-b575-1b31f0de1154)
@@ -350,10 +347,6 @@ Feature: Number of Damaged Parcels
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name-6}                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"PARCEL ROUTING SCAN"
     When Operator go to menu Recovery -> Recovery Tickets

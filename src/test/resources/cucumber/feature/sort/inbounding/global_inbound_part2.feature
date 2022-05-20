@@ -114,7 +114,7 @@ Feature: Global Inbound
     And Operator go to menu System Settings -> Global Settings
     And Operator set Weight Tolerance value to "2" on Global Settings page
     And Operator save Inbound settings on Global Settings page
-    And API Operator update order weight to 10
+    And API Operator update order weight to 10.00
     And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
@@ -249,10 +249,6 @@ Feature: Global Inbound
       | hubId      | {hub-id-3}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | type       | 2                                          |
-    Then DB Operator verify next Pickup transaction values are updated for the created order:
-      | status         | Success                     |
-      | serviceEndTime | {{current-date-yyyy-MM-dd}} |
-      | priorityLevel  | 0                           |
     And DB Operator verify next Delivery transaction values are updated for the created order:
       | priorityLevel | <priorityLevel> |
     And DB Operator verify order_events record for the created order:
@@ -403,6 +399,8 @@ Feature: Global Inbound
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator removes all ticket status filters
     And Operator enters the Tracking Id
+    And Operator chooses Created At Filter
+      | toDate | {gradle-next-1-day-yyyy-MM-dd} |
     Then Operator chooses the ticket status as "RESOLVED"
     And Operator enters the tracking id and verifies that is exists
     Then API Operator make sure "TICKET_RESOLVED" event is exist

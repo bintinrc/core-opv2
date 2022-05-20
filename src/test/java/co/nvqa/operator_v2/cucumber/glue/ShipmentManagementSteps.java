@@ -299,6 +299,16 @@ public class ShipmentManagementSteps extends AbstractSteps {
     shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
   }
 
+  @Then("^Operator open shipment management page and verify parameters of shipment on Shipment Management page using data below:$")
+  public void operatorOpenShipmentManagementPageVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    data = StandardTestUtils.replaceDataTableTokens(data);
+    ShipmentInfo shipmentInfo = new ShipmentInfo();
+    shipmentInfo.fromMap(data);
+
+    shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
+  }
+
   @Then("^Operator verify parameters of the created shipment via API on Shipment Management page$")
   public void operatorVerifyParametersOfTheCreatedShipmentViaApiOnShipmentManagementPage() {
     Shipments shipment = get(KEY_CREATED_SHIPMENT);
@@ -424,26 +434,20 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @Then("^Operator verify shipment event on Shipment Details page using data below:$")
   public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfAssertionErrorOccurred(() ->
+    retryIfRuntimeExceptionOccurred(() ->
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable
-            .readFirstEntities(1);
-        ShipmentEvent actualEvent = events.stream()
-            .filter(
-                event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError(
-                f("There is no [%s] shipment event on Shipment Details page",
-                    expectedEvent.getSource())));
+        shipmentManagementPage.switchTo();
+        ShipmentEvent actualEvent = new ShipmentEvent(shipmentManagementPage.shipmentEventsTable.readShipmentEventsTable(finalMapOfData.get("source")));
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage(), ex);
-        throw ex;
+        LOGGER.error(ex.getLocalizedMessage(), ex);
+        shipmentManagementPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
       }
-    }, "retry shipment details", 5000, 5);
+    }, "retry shipment details", 1000, 3);
   }
 
   @Then("Operator verifies event is present for shipment on Shipment Detail page")
@@ -513,18 +517,51 @@ public class ShipmentManagementSteps extends AbstractSteps {
     }, "retry shipment details event", 5000, 10);
   }
 
+  @Then("^Operator open shipment detail and verify shipment event on Shipment Details page using data below:$")
+  public void operatorOpenShipmentDetailAndVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData) {
+    retryIfAssertionErrorOccurred(() ->
+    {
+      try {
+        ShipmentInfo shipmentInfo;
+
+        if (get(KEY_SHIPMENT_INFO) == null) {
+          Shipments shipments = get(KEY_CREATED_SHIPMENT);
+          shipmentInfo = new ShipmentInfo(shipments);
+        } else {
+          shipmentInfo = get(KEY_SHIPMENT_INFO);
+        }
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+        shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
+
+        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+        shipmentManagementPage.switchTo();
+        ShipmentEvent actualEvent = new ShipmentEvent(shipmentManagementPage.shipmentEventsTable.readShipmentEventsTable(finalMapOfData.get("source")));
+        expectedEvent.compareWithActual(actualEvent);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getLocalizedMessage(), ex);
+        shipmentManagementPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "retry shipment details", 5000, 10);
+  }
+
   @Then("Operator verify movement event on Shipment Details page using data below:")
   public void operatorVerifyMovementEventOnEditOrderPage(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    MovementEvent expectedEvent = new MovementEvent(mapOfData);
-    List<MovementEvent> events = shipmentManagementPage.movementEventsTable.readAllEntities();
-    MovementEvent actualEvent = events.stream()
-        .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-        .findFirst()
-        .orElseThrow(() -> new AssertionError(
-            f("There is no [%s] movement event on Shipment Details page",
-                expectedEvent.getSource())));
-    expectedEvent.compareWithActual(actualEvent);
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+      MovementEvent expectedEvent = new MovementEvent(finalMapOfData);
+      try {
+        shipmentManagementPage.switchTo();
+        MovementEvent actualEvent = new MovementEvent(shipmentManagementPage.movementEventsTable.readMovementEventsTable(finalMapOfData.get("source")));
+        expectedEvent.compareWithActual(actualEvent);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getLocalizedMessage(), ex);
+        shipmentManagementPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "retry shipment details", 1000, 3);
   }
 
   @And("^Operator verify the the master AWB is opened$")

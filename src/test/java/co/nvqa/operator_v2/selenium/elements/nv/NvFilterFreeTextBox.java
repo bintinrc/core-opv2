@@ -27,7 +27,7 @@ public class NvFilterFreeTextBox extends AbstractFilterBox {
   }
 
   @Override
-  void setValue(String... values) {
+  public void setValue(String... values) {
     setValue(values[1]);
   }
 }

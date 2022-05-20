@@ -6,7 +6,11 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
+import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
+import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -16,6 +20,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.mail.Part;
 
 /**
  * @author Sergey Mishanin
@@ -26,6 +31,9 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String NINJA_POINT_URL = StandardTestConstants.API_BASE_URL
       .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
+  private DpAdministrationReactPage dpAdminReactPage;
+
+  private static final String KEY_DP_PARTNER_NAME = "KEY_DP_PARTNER_NAME";
 
   public DpAdministrationSteps() {
   }
@@ -33,6 +41,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Override
   public void init() {
     dpAdminPage = new DpAdministrationPage(getWebDriver());
+    dpAdminReactPage = new DpAdministrationReactPage(getWebDriver());
   }
 
   @Given("Operator add new DP Partner on DP Administration page with the following attributes:")
@@ -59,6 +68,14 @@ public class DpAdministrationSteps extends AbstractSteps {
   @When("Operator click on Download CSV File button on DP Administration page")
   public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationPage() {
     dpAdminPage.downloadCsvFile();
+  }
+
+  @When("Operator click on Download CSV File button on DP Administration React page")
+  public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationReactPage() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonDownloadCsv.click();
+      pause5s();
+    });
   }
 
   @Then("Downloaded CSV file contains correct DP Partners data")
@@ -119,6 +136,144 @@ public class DpAdministrationSteps extends AbstractSteps {
       resourcePath = "images/dpPhotoInvalidSize.png";
     }
     return resourcePath;
+  }
+
+  @And("Operator Search with Some DP Partner Details :")
+  public void operatorVerifyRouteDetails(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String [] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for(String extractDetail : extractDetails){
+        String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail,expected);
+        dpAdminReactPage.fillFilter(extractDetail,valueDetails);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+        dpAdminReactPage.clearFilter(extractDetail);
+      }
+    });
+  }
+
+  @And("Operator click on Add Partner button on DP Administration React page")
+  public void operatorPressAddDpButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonAddPartner.click();
+      pause3s();
+    });
+  }
+
+  @Then("Operator Fill Dp Partner Details below :")
+  public void operatorFillDpPartnerDetails(DataTable dt){
+    List<Partner> partners = convertDataTableToList(dt, Partner.class);
+    Partner partner = partners.get(0);
+
+    dpAdminReactPage.inFrame(() -> {
+      if (partner.getName() != null){
+        dpAdminReactPage.formPartnerName.setValue(partner.getName());
+        put(KEY_DP_PARTNER_NAME,partner.getName());
+      }
+      if (partner.getPocName() != null){
+        if(!dpAdminReactPage.formPocName.getValue().equals("")){
+          dpAdminReactPage.formPocName.forceClear();
+        }
+        dpAdminReactPage.formPocName.setValue(partner.getPocName());
+      }
+
+      if (partner.getPocTel() != null){
+
+        if(!dpAdminReactPage.formPocNo.getValue().equals("")){
+          dpAdminReactPage.formPocNo.forceClear();
+        }
+
+        if (partner.getPocTel().equals("VALID")){
+          partner.setPocTel(TestUtils.generatePhoneNumber());
+          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        } else {
+          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        }
+      }
+
+      if (partner.getPocEmail() != null){
+        dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
+      }
+      if (partner.getRestrictions() != null){
+        dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
+      }
+      if (partner.getSendNotificationsToCustomer() != null && partner.getSendNotificationsToCustomer()){
+        dpAdminReactPage.buttonSendNotifications.click();
+      }
+    });
+  }
+
+  @Then("Operator press submit button")
+  public void submitDpPartnerButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitPartner.click();
+    });
+  }
+
+  @Then("Operator press edit partner button")
+  public void editDpPartnerButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonEditPartner.click();
+    });
+  }
+
+  @Then("Operator press submit partner changes button")
+  public void submitDpPartnerChangesButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitPartnerChanges.click();
+    });
+  }
+
+  @And("Operator check the submitted data in the table")
+  public void checkSubmittedDataInTable() {
+    String partnerName = get(KEY_DP_PARTNER_NAME);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.fillFilter("name",partnerName);
+    });
+  }
+
+  @Then("Operator get partner id")
+  public void operatorGetPartnerId(){
+    dpAdminReactPage.inFrame(() -> {
+      String partnerId = dpAdminReactPage.labelPartnerId.getText();
+      put(KEY_DP_PARTNER_ID,partnerId);
+    });
+  }
+
+  @Then("Operator need to make sure that the id and dpms partner id from newly created dp partner is same")
+  public void dpPartnerIdDpmsIdChecking(){
+    Partner partner = get(KEY_DP_PARTNER);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.checkingIdAndDpmsId(partner);
+    });
+  }
+
+  @And("Operator check the data again with pressing ascending and descending order :")
+  public void ascendingDataCheck(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String [] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0],expected);
+      dpAdminReactPage.fillFilter(extractDetails[0],valueDetails);
+      for(String extractDetail : extractDetails){
+        dpAdminReactPage.sortFilter(extractDetail);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+      }
+    });
   }
 
   private File getDpPhoto(String resourcePath) {

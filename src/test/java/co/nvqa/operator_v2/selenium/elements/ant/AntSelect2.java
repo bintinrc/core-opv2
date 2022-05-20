@@ -87,7 +87,7 @@ public class AntSelect2 extends PageElement {
 
   public void enterSearchTerm(String value) {
     openMenu();
-    searchInput.sendKeys(value);
+    searchInput.clearAndSendKeys(value);
     pause1s();
   }
 

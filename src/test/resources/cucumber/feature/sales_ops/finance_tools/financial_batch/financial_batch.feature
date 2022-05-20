@@ -43,7 +43,6 @@ Feature: Financial Batch
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies error message is displayed in Financial Batch page
-      | Error when fetching shipper account balance.                    |
       | No batch found for the specified shipper on the specified date. |
 
   @DeleteNewlyCreatedShipper

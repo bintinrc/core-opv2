@@ -42,6 +42,12 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     }
   }
 
+  public void waitUntilLoaded(int timeoutInSeconds, int waitTimeoutInSeconds) {
+    if (spinner.waitUntilVisible(timeoutInSeconds)) {
+      spinner.waitUntilInvisible(waitTimeoutInSeconds);
+    }
+  }
+
   public void waitUntilVisibilityOfNotification(String message) {
     waitUntilVisibilityOfNotification(message, 20000);
   }
