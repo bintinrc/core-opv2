@@ -19,7 +19,6 @@ Feature: Facilities Management
       | longitude    | GENERATED |
     Then Operator verifies that success react notification displayed:
       | top | Hub Created Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}                |
       | facilityType | {KEY_CREATED_HUB.facilityTypeDisplay} |
@@ -53,7 +52,6 @@ Feature: Facilities Management
       | longitude         | 12                              |
     Then Operator verifies that success react notification displayed:
       | top | Hub Updated Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}                |
       | facilityType | {KEY_CREATED_HUB.facilityTypeDisplay} |
@@ -106,30 +104,6 @@ Feature: Facilities Management
       | top    | Report is being prepared         |
       | bottom | It will be in your inbox shortly |
     And Operator verify Hub CSV file is downloaded successfully on Facilities Management page and contains correct info
-
-  @DeleteHubsViaDb
-  Scenario: Refresh Hub Cache (uid:eed1ef3e-e148-45a8-a677-c97e6e228ecd)
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Hubs -> Facilities Management
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And Operator refresh hubs cache on Facilities Management page
-    Then Operator verify hub parameters on Facilities Management page:
-      | name         | {KEY_CREATED_HUB.name}                |
-      | facilityType | {KEY_CREATED_HUB.facilityTypeDisplay} |
-      | region       | {KEY_CREATED_HUB.region}              |
-      | displayName  | {KEY_CREATED_HUB.displayName}         |
-      | city         | {KEY_CREATED_HUB.city}                |
-      | country      | {KEY_CREATED_HUB.country}             |
-      | latitude     | {KEY_CREATED_HUB.latitude}            |
-      | longitude    | {KEY_CREATED_HUB.longitude}           |
 
   @DeleteHubsViaDb
   Scenario: Disable active hub (uid:667d6ff4-6483-490e-a4ea-0513741d00ad)
@@ -188,7 +162,6 @@ Feature: Facilities Management
       | longitude    | GENERATED |
     Then Operator verifies that success react notification displayed:
       | top | Hub Created Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | STATION                       |
@@ -243,7 +216,6 @@ Feature: Facilities Management
       | longitude    | GENERATED |
     Then Operator verifies that success react notification displayed:
       | top | Hub Created Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Hub - Crossdock               |
@@ -275,7 +247,6 @@ Feature: Facilities Management
       | sortHub      | YES       |
     Then Operator verifies that success react notification displayed:
       | top | Hub Created Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Hub - Crossdock               |
@@ -306,7 +277,6 @@ Feature: Facilities Management
       | longitude    | GENERATED         |
     Then Operator verifies that success react notification displayed:
       | top | Hub Created Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Station - Crossdock           |
@@ -347,7 +317,6 @@ Feature: Facilities Management
       | longitude         | 12                              |
     Then Operator verifies that success react notification displayed:
       | top | Hub Updated Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Hub - Crossdock               |
@@ -389,7 +358,6 @@ Feature: Facilities Management
       | longitude         | 12                              |
     Then Operator verifies that success react notification displayed:
       | top | Hub Updated Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Hub - Crossdock               |
@@ -430,7 +398,6 @@ Feature: Facilities Management
       | longitude         | 12                              |
     Then Operator verifies that success react notification displayed:
       | top | Hub Updated Successfully |
-    When Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Station - Crossdock           |
