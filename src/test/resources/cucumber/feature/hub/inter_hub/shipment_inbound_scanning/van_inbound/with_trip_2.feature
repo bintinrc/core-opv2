@@ -474,3 +474,7 @@ Feature: Shipment Van Inbound With Trip Scanning 2
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | status      | Pending                            |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

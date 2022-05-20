@@ -560,3 +560,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
       | userId | qa@ninjavan.co   |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator change the country to "Singapore"
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
