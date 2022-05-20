@@ -211,7 +211,7 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
 
-  @CloseNewWindows @WIP
+  @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Nextday (uid:49cbc076-7249-431d-abbb-43771b2ec41a)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
