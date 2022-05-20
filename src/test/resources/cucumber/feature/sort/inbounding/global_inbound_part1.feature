@@ -231,8 +231,8 @@ Feature: Global Inbound
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | TRANSFERRED TO 3PL    |
-      | rackInfo       | sync_problem RECOVERY |
-      | color          | #e86161               |
+      | rackInfo       | RECOVERY           |
+      | color          | #e86161            |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 

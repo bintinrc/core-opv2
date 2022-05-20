@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class GlobalInboundPage extends SimpleReactPage {
   @FindBy(xpath = "//div/*[self::h1]")
   public PageElement rackInfo;
 
-  @FindBy(css = "div.toast-bottom")
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement weightDiffInfo;
 
   @FindBy(css = "div[ng-if='ctrl.data.setAsideGroup']")
@@ -71,7 +72,10 @@ public class GlobalInboundPage extends SimpleReactPage {
   @FindBy(xpath = "//input[@data-testid='length-input']")
   public TextBox dimLengthInput;
 
-  @FindBy(xpath = "//nv-tag")
+  @FindBy(xpath = "//span[@data-testid='priority-level']")
+  public PageElement priorityLevel;
+
+  @FindBy(xpath = "//div[@class='order-tag']")
   public PageElement dpTag;
 
   @FindBy(xpath = "//span[contains(@class,'nv-tag md-nvBlue-theme')]")
@@ -80,16 +84,16 @@ public class GlobalInboundPage extends SimpleReactPage {
   @FindBy(xpath = "//button[@aria-label='Use order tagging']")
   public Button useOrderTagging;
 
-  @FindBy(xpath = ".//nv-autocomplete[@selected-options='ctrl.data.selectedTagOptions']")
-  public NvAutocomplete selectTag;
+  @FindBy(xpath = "//div[@data-testid='settings-tag-selection-select']")
+  public AntSelect2 selectTag;
 
-  @FindBy(xpath = "//nv-icon-button/button[@aria-label='Settings']")
+  @FindBy(xpath = "//button[@data-testid='settings-button']")
   public Button settings;
 
-  @FindBy(xpath = "    //nv-icon-text-button[@name='Save changes']")
+  @FindBy(xpath = "//span[@data-testid='save-text']")
   public Button saveChanges;
 
-  public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
+  public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[@class='order-tag']";
   public static String XPATH_CONTAINER = "//div[contains(@class, 'middle panel')]";
 
 
@@ -247,12 +251,10 @@ public class GlobalInboundPage extends SimpleReactPage {
 
   public void verifiesPriorityLevelInfoIsCorrect(int expectedPriorityLevel,
       String expectedPriorityLevelColorAsHex) {
-    String actualPriorityLevel = getText("//div[contains(@class,'priority-container')]//h5");
-    actualPriorityLevel = actualPriorityLevel.split(" ")[1];
     Color actualPriorityLevelColor = getBackgroundColor(
         "//div[contains(@class,'priority-container')]");
 
-    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
+    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), priorityLevel.getText());
     assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex,
         actualPriorityLevelColor.asHex());
   }
@@ -303,7 +305,7 @@ public class GlobalInboundPage extends SimpleReactPage {
 
   public void verifiesDpTag() {
     String actualTag = dpTag.getText();
-    assertEquals("DP tag", "DP PARCEL", actualTag);
+    assertEquals("DP tag", "DP Parcel", actualTag);
   }
 
   public void verifiesPriorTag() {

@@ -211,7 +211,7 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
 
-  @CloseNewWindows
+  @CloseNewWindows @WIP
   Scenario: Inbound parcel that is intended to be picked up on future date - Nextday (uid:49cbc076-7249-431d-abbb-43771b2ec41a)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -228,8 +228,6 @@ Feature: Global Inbound
       | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
-    And DB Operator verify order_events record for the created order:
-      | type | 26 |
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
@@ -357,8 +355,8 @@ Feature: Global Inbound
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                |
-      | v4OrderRequest    | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"export"}} |
-      | addressType       | global                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"International", "service_level":"Standard", "to":{"address": {"postcode": "319941"}},"parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"export"}} |
+      | addressType       | global                                                                                                                                                                                                                                                                                                         |
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
@@ -467,7 +465,7 @@ Feature: Global Inbound
 
   @CloseNewWindows
   Scenario: Order Tagging with Global Inbound - Total tags is more than 4 (uid:aecc250f-25a7-49ec-8d19-8634ff2a1d79)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

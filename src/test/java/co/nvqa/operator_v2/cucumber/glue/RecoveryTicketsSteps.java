@@ -344,6 +344,12 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicketsPage.resolvedTicketsFilter(filter);
   }
 
+  @Then("Operator chooses Created At Filter")
+  public void chooseCreatedAtTicketsFilter(Map<String, String> mapOfData) {
+    String toDate = mapOfData.get("toDate");
+    recoveryTicketsPage.createdAtFilter(toDate);
+  }
+
   @When("Operator clears all filters on Recovery Tickets page")
   public void clearAllFilters() {
     recoveryTicketsPage.clearAllSelections.click();
