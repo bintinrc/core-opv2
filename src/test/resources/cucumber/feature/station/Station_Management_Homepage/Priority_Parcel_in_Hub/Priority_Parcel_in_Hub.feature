@@ -1418,6 +1418,7 @@ Feature: Priority Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -2181,6 +2182,7 @@ Feature: Priority Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -2202,16 +2204,17 @@ Feature: Priority Parcel in Hub
       | parcelLocation          | DAMAGED RACK       |
       | liability               | Recovery           |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | <OrderOutcome>     |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+      | status                  | <Status>       |
+      | keepCurrentOrderOutcome | Keep           |
+      | outcome                 | <OrderOutcome> |
+      | assignTo                | NikoSusanto    |
+      | newInstructions         | GENERATED      |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2236,8 +2239,8 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status   | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome          | Status   | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel On Hold

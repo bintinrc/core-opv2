@@ -90,6 +90,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-modal-confirm-content']")
   public WebElement dialogMessage;
 
+  public String ANT_MODAL_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]";
+  public String ANT_MODAL_CONFIRM_TITLE_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//span[@class='ant-modal-confirm-title']";
+  public String ANT_MODAL_CONFIRM_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[@class='ant-modal-confirm-content']";
+
   @FindBy(xpath = ".//button[.='Cancel']")
   public Button cancel;
 
@@ -145,8 +149,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'shipment-id')]")
   public TextBox shipmentIdTextBox;
 
+  @FindBy(xpath = "//h5[contains(., 'Unregistered Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'shipment-id')]")
+  public TextBox unregisterShipmentIdTextBox;
+
+  @FindBy(xpath = "//h5[contains(., 'Missing Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'shipment-id')]")
+  public TextBox missingShipmentIdTextBox;
+
   @FindBy(xpath = "//div[contains(@class,'ant-modal-body')]//td[contains(@class,'message')]")
   public TextBox resultTextBox;
+
+  @FindBy(xpath = "//h5[contains(., 'Unregistered Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'message')]")
+  public TextBox unregisterresultTextBox;
+
+  @FindBy(xpath = "//h5[contains(., 'Missing Shipments')]//ancestor::div[contains(@class,'ant-table-title')]/following-sibling::div/div[contains(@class,'ant-table-body')]//td[contains(@class,'message')]")
+  public TextBox missingresultTextBox;
 
   @FindBy(xpath = "//button[contains(@class,'sc-qvapu6-1 bTUICx')]")
   public Button removeButton;
@@ -157,7 +173,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button//span[contains(text(), ' shipments')]")
   public TextBox shipmentToGo;
 
-  @FindBy(xpath = "//div//p[@class='nv-p']//a")
+  @FindBy(xpath = "//button//span[contains(text(), ' shipments')]")
   public TextBox shipmentToUnload;
 
   @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
@@ -260,8 +276,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void checkOrderNotInShipment(String trackingId) {
-    List<String> shipmentsList = getTextOfElements("//td[contains(@class, 'tracking-id')]");
-    Assertions.assertThat(!shipmentsList.contains(trackingId)).as("Order "+ trackingId +" exists in shipment").isTrue();
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        List<String> shipmentsList = getTextOfElements("//td[contains(@class, 'tracking-id')]");
+        Assertions.assertThat(!shipmentsList.contains(trackingId)).as("Order "+ trackingId +" exists in shipment").isTrue();
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 1000, 3);
+
   }
 
   public void closeShipment() {
@@ -471,10 +495,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInEndInboundDialog() {
-    String dialogTitleText = dialogTitle.getText();
+    waitUntilVisibilityOfElementLocated(ANT_MODAL_CONTENT_XPATH);
+    String dialogTitleText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_TITLE_XPATH)).getText();
     assertThat("Dialog title is the same", dialogTitleText, equalTo("Confirm End Inbound"));
 
-    String dialogMessageText = dialogMessage.getText();
+    String dialogMessageText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_CONTENT_XPATH)).getText();
     assertThat("Dialog message text is the same", dialogMessageText,
         equalTo("Are you sure you want to end inbound?"));
 
@@ -552,13 +577,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualResultMessage = "";
 
     if ("unregistered shipments".equals(errorShipmentType)) {
-      actualShipmentId = unregisteredShipmentRow.rows.get(0).shipmentId.getText();
-      actualResultMessage = unregisteredShipmentRow.rows.get(0).result.getText();
+      actualShipmentId = unregisterShipmentIdTextBox.getText();
+      actualResultMessage = unregisterresultTextBox.getText();
     }
 
     if ("missing shipments".equals(errorShipmentType)) {
-      actualShipmentId = missingShipmentRow.rows.get(0).shipmentId.getText();
-      actualResultMessage = missingShipmentRow.rows.get(0).result.getText();
+      actualShipmentId = missingShipmentIdTextBox.getText();
+      actualResultMessage = missingresultTextBox.getText();
     }
 
     assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
@@ -709,6 +734,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
     waitUntilVisibilityOfElementLocated("//input[contains(@value,'"+shipmentId+"')]");
+    waitUntilInvisibilityOfElementLocated("//td[contains(@class, 'tracking-id')][.='"+shipmentId+"]'");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {

@@ -40,9 +40,10 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public int getRowsCount() {
     if (StringUtils.isNotBlank(tableLocator)) {
-      return executeInContext(tableLocator, () -> getElementsCount(".//tbody/tr"));
+      return executeInContext(tableLocator,
+          () -> getElementsCount(".//tr[contains(@class,'ant-table-row')]"));
     } else {
-      return getElementsCount(".//tbody/tr");
+      return getElementsCount("//tr[contains(@class,'ant-table-row')]");
     }
   }
 

@@ -72,6 +72,14 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
+  public String TRIP_COMPLETION_DIALOG="//div[@class='ant-modal-content']";
+
+  @FindBy(xpath = ".//button[.='Cancel']")
+  public Button cancel;
+
+  @FindBy(xpath = ".//button[.='Proceed']")
+  public Button proceed;
+
   @FindBy(css = "div.scan-state-text h2")
   public PageElement scannedState;
 
@@ -203,10 +211,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   }
 
   public void completeTrip() {
-    tripCompletionDialog.waitUntilVisible();
-    tripCompletionDialog.proceed.waitUntilClickable();
-    tripCompletionDialog.proceed.click();
-    tripCompletionDialog.waitUntilInvisible();
+    waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
+    proceed.waitUntilClickable();
+    proceed.click();
+    waitUntilInvisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
   }
 
   public void inputEndDate(Date date) {

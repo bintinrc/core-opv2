@@ -171,28 +171,27 @@ Feature: Financial Batch Report
     When DB Operator gets the count shippers from ledgers by completed local date
     Then Operator verifies the count of files in financial batch reports zip
 
-#  #commenting because of bug
-#  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Name with Emoji and TH/VN Characters (uid:3c626801-e1e2-4d52-b557-9a0ba4bc7e04)
-#    Given API Shipper create V4 order using data below:
-#      | shipperClientId     | {shipper-sop-emoji-th-vn-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-#      | shipperClientSecret | {shipper-sop-emoji-th-vn-chars-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-#      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "from": {"name": "QA-SO-Test-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 5,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    And API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
-##    And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
-#    Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
-#    And API Operator trigger reconcile scheduler endpoint
-#    Then Operator waits for 5 seconds
-#    And API Operator generates financial batch report using data below
-#      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-emoji-th-vn-chars-global-id} ]} |
-#    And Finance Operator waits for "{order-billing-wait-time}" seconds
-#    And Operator opens Gmail and checks received financial batch report email
-#    Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
-#    And Operator gets the financial batch report entries
-#    Then Operator verifies financial batch report data in CSV is as below
-#      | globalShipperId | {shipper-sop-emoji-th-vn-chars-global-id}                                 |
-#      | legacyShipperId | {shipper-sop-emoji-th-vn-chars-legacy-id}                                 |
-#      | shipperName     | QA-SO-Normal-Emoji/VN/TH-🙂 👀-ทดสอบ-đây là một người gửi hàng thử nghiệm |
+  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Name with Emoji and TH/VN Characters (uid:3c626801-e1e2-4d52-b557-9a0ba4bc7e04)
+    Given API Shipper create V4 order using data below:
+      | shipperClientId     | {shipper-sop-emoji-th-vn-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-sop-emoji-th-vn-chars-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "from": {"name": "QA-SO-Test-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 5,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
+    And API Operator trigger reconcile scheduler endpoint
+    Then Operator waits for 5 seconds
+    And API Operator generates financial batch report using data below
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-emoji-th-vn-chars-global-id} ]} |
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
+    And Operator opens Gmail and checks received financial batch report email
+    Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
+    And Operator gets the financial batch report entries
+    Then Operator verifies financial batch report data in CSV is as below
+      | globalShipperId | {shipper-sop-emoji-th-vn-chars-global-id}                                 |
+      | legacyShipperId | {shipper-sop-emoji-th-vn-chars-legacy-id}                                 |
+      | shipperName     | QA-SO-Normal-Emoji/VN/TH-🙂 👀-ทดสอบ-đây là một người gửi hàng thử nghiệm |
 
   @DeleteNewlyCreatedShipper @DeleteOrArchiveRoute
   Scenario: Generate Financial Batch Report - Selected Shipper - Ledger has Reversion and Adjustment Ledger Orders (uid:b99e203c-7139-482c-a0bd-32e9602fddd1)
