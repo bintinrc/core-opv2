@@ -197,7 +197,7 @@ Feature: Parcel Sweeper Live
     And Operator refresh page
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name-2} |
+      | hubName    | {hub-name-4} |
       | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
@@ -217,13 +217,13 @@ Feature: Parcel Sweeper Live
       | color   | #55a1e8    |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED    |
-      | hubId      | {hub-id-2} |
+      | hubId      | {hub-id-4} |
     And DB Operator verify order_events record for the created order:
       | type | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name-2}        |
-      | hubId     | {hub-id-2}          |
+      | hubName   | {hub-name-4}        |
+      | hubId     | {hub-id-4}          |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
@@ -362,7 +362,7 @@ Feature: Parcel Sweeper Live
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":"738078","country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator refresh created order data
@@ -384,8 +384,8 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
