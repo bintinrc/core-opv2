@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.BillingReportsRequest;
 import co.nvqa.commons.model.pricing.billing.FinancialBatchReportEntry;
-import co.nvqa.commons.model.pricing.billing.FinancialBatchReportExtendedEntry;
 import co.nvqa.operator_v2.selenium.page.FinancialBatchReportsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -154,112 +153,6 @@ public class FinancialBatchReportSteps extends AbstractSteps {
     if (mapOfData.containsKey("balance")) {
       softAssertions.assertThat(financialBatchReportEntryCsv.getBalance())
           .as("Balance is correct").isEqualTo(mapOfData.get("balance"));
-    }
-    softAssertions.assertAll();
-  }
-
-  @Then("Operator verifies extended financial batch report data in CSV is as below")
-  public void operatorVerifiesExtendedFinancialBatchReportDataAsBelow(
-      Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    List<FinancialBatchReportExtendedEntry> listOfBatchEntries = get(
-        KEY_FINANCIAL_BATCH_REPORT_EXTENDED_BODY_ENTRIES);
-    FinancialBatchReportExtendedEntry financialBatchReportExtendedEntry = listOfBatchEntries.get(0);
-    SoftAssertions softAssertions = new SoftAssertions();
-    if (mapOfData.containsKey("batchId")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getBatchId())
-          .as("Batch Id is correct")
-          .isNotNull();
-    }
-    if (mapOfData.containsKey("batchDate")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getBatchDate())
-          .as("Batch Date is correct")
-          .isEqualTo(mapOfData.get("batchDate"));
-    }
-    if (mapOfData.containsKey("shipperId")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getShipperId())
-          .as("Shipper ID is correct")
-          .hasToString(mapOfData.get("shipperId"));
-    }
-    if (mapOfData.containsKey("shipperName")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getShipperName())
-          .as("Shipper Name is correct")
-          .isEqualTo(mapOfData.get("shipperName"));
-    }
-    if (mapOfData.containsKey("trackingID")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getTrackingID())
-          .as("Tracking ID is correct")
-          .isEqualTo(mapOfData.get("trackingID"));
-    }
-    if (mapOfData.containsKey("orderID")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getOrderID())
-          .as("Order ID is correct")
-          .isEqualTo(mapOfData.get("orderID"));
-    }
-    if (mapOfData.containsKey("nvMeasuredWeight")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getNvMeasuredWeight())
-          .as("NV Measured Weight is correct")
-          .isEqualTo(mapOfData.get("nvMeasuredWeight"));
-    }
-    if (mapOfData.containsKey("fromCity")) {
-      softAssertions.assertThat(String.valueOf(financialBatchReportExtendedEntry.getFromCity()))
-          .as("From City is correct")
-          .isEqualTo(mapOfData.get("fromCity"));
-    }
-    if (mapOfData.containsKey("toAddress")) {
-      softAssertions.assertThat(String.valueOf(financialBatchReportExtendedEntry.getToAddress()))
-          .as("To Address is correct")
-          .isEqualTo(mapOfData.get("toAddress"));
-    }
-    if (mapOfData.containsKey("toBillingZone")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getToBillingZone())
-          .as("To Billing Zone is correct")
-          .isEqualTo(mapOfData.get("toBillingZone"));
-    }
-    if (mapOfData.containsKey("codAmount")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getCodAmount())
-          .as("COD Amount is correct")
-          .isEqualTo(mapOfData.get("codAmount"));
-    }
-    if (mapOfData.containsKey("insuredAmount")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getInsuredAmount())
-          .as("Insured Amount is correct")
-          .isEqualTo(mapOfData.get("insuredAmount"));
-    }
-    if (mapOfData.containsKey("codFee")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getCodFee())
-          .as("COD Fee is correct")
-          .isEqualTo(mapOfData.get("codFee"));
-    }
-    if (mapOfData.containsKey("insuredFee")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getInsuredFee())
-          .as("Insured Fee is correct")
-          .isEqualTo(mapOfData.get("insuredFee"));
-    }
-    if (mapOfData.containsKey("deliveryFee")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getDeliveryFee())
-          .as("Delivery Fee is correct")
-          .isEqualTo(mapOfData.get("deliveryFee"));
-    }
-    if (mapOfData.containsKey("rtsFee")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getRtsFee())
-          .as("RTS Fee is correct")
-          .isEqualTo(mapOfData.get("rtsFee"));
-    }
-    if (mapOfData.containsKey("totalTax")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getTotalTax())
-          .as("Total Tax is correct")
-          .isEqualTo(mapOfData.get("totalTax"));
-    }
-    if (mapOfData.containsKey("totalWithTax")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getTotalWithTax())
-          .as("Total With Tax is correct")
-          .isEqualTo(mapOfData.get("totalWithTax"));
-    }
-    if (mapOfData.containsKey("type")) {
-      softAssertions.assertThat(financialBatchReportExtendedEntry.getType())
-          .as("Type is correct")
-          .isEqualTo(mapOfData.get("type"));
     }
     softAssertions.assertAll();
   }
