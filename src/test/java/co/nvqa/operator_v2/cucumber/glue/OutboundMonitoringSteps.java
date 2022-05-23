@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakroutePage.OrderInfo;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakrouteV2Page;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
+import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RouteInfo;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -12,12 +13,15 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_FLAG;
+import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_OUTBOUND_STATUS;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_ROUTE_ID;
 
 /**
@@ -200,7 +204,27 @@ public class OutboundMonitoringSteps extends AbstractSteps {
 
   @And("^Operator click on flag icon on chosen route ID on Outbound Monitoring Page$")
   public void clickFlagButton() {
-    outboundMonitoringPage.clickFlagButton();
+    outboundMonitoringPage.routesTable.clickActionButton(1, ACTION_FLAG);
+    pause5s();
+  }
+
+  @And("^Operator verifies route record on Outbound Monitoring page:$")
+  public void clickFlagButton(Map<String, String> map) {
+    RouteInfo expected = new RouteInfo(resolveKeyValues(map));
+    List<RouteInfo> actual = outboundMonitoringPage.routesTable.readAllEntities();
+    actual.stream()
+        .filter(expected::matchedTo)
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Route record was not found: " + expected));
+  }
+
+  @And("Operator verifies route record has {value} background color")
+  public void verifyColor(String color) {
+    PageElement cell = outboundMonitoringPage.routesTable.getCell(COLUMN_OUTBOUND_STATUS, 1);
+    String expected = "row-" + color.toLowerCase(Locale.ROOT);
+    Assertions.assertThat(cell.getAttribute("class"))
+        .as("cell class")
+        .contains(expected);
   }
 
   @Then("^Operator verifies the Outbound status on the chosen route ID is changed$")
@@ -208,6 +232,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(outboundMonitoringPage::verifyStatusMarked,
         "Verify Status is Marked");
   }
+
 
   @And("^Operator click on comment icon on chosen route ID on Outbound Monitoring Page$")
   public void clickCommentButtonAndSubmit() {

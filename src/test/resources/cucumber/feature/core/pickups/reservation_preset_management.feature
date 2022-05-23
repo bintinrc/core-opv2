@@ -87,50 +87,6 @@ Feature: Reservation Preset Management
       | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup
-  Scenario: Assign a Shipper Milkrun Address to a Milkrun Group
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator create new Shipper with basic settings using data below:
-      | isShipperActive               | true                  |
-      | shipperType                   | Normal                |
-      | ocVersion                     | v4                    |
-      | services                      | STANDARD              |
-      | trackingType                  | Fixed                 |
-      | isAllowCod                    | false                 |
-      | isAllowCashPickup             | true                  |
-      | isPrepaid                     | true                  |
-      | isAllowStagedOrders           | false                 |
-      | isMultiParcelShipper          | false                 |
-      | isDisableDriverAppReschedule  | false                 |
-      | pricingScriptName             | {pricing-script-name} |
-      | industryName                  | {industry-name}       |
-      | salesPerson                   | {sales-person}        |
-      | pickupAddressCount            | 1                     |
-      | address.1.milkrun.1.startTime | 9AM                   |
-      | address.1.milkrun.1.endTime   | 12PM                  |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
-    When Operator go to menu Pick Ups -> Reservation Preset Management
-    And Operator create new Reservation Group on Reservation Preset Management page using data below:
-      | name   | GENERATED                                                              |
-      | driver | {KEY_CREATED_DRIVER_INFO.firstName} {KEY_CREATED_DRIVER_INFO.lastName} |
-      | hub    | {hub-name}                                                             |
-    And Operator assign pending task on Reservation Preset Management page:
-      | shipper | {KEY_CREATED_SHIPPER.name}           |
-      | group   | {KEY_CREATED_RESERVATION_GROUP.name} |
-    Then Operator verifies that success toast displayed:
-      | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
-    And Operator assign pending task on Reservation Preset Management page:
-      | shipper | {KEY_CREATED_SHIPPER.name}           |
-      | group   | {KEY_CREATED_RESERVATION_GROUP.name} |
-    Then Operator verifies that success toast displayed:
-      | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
-    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
-
-    And Operator waits for 1 seconds
-
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Route Pending Reservations From the Reservation Preset Management Page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new Driver using data below:
@@ -260,6 +216,49 @@ Feature: Reservation Preset Management
     When Operator create route on Reservation Preset Management page:
       | group | {KEY_CREATED_RESERVATION_GROUP.name} |
       | date  | {gradle-next-1-day-yyyy-MM-dd}       |
+
+  @DeleteDriver @DeleteShipper @DeleteReservationGroup
+  Scenario: Unassign a Shipper Milkrun Address from a Milkrun Group
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
+    And Operator go to menu Shipper -> All Shippers
+    And Operator create new Shipper with basic settings using data below:
+      | isShipperActive               | true                  |
+      | shipperType                   | Normal                |
+      | ocVersion                     | v4                    |
+      | services                      | STANDARD              |
+      | trackingType                  | Fixed                 |
+      | isAllowCod                    | false                 |
+      | isAllowCashPickup             | true                  |
+      | isPrepaid                     | true                  |
+      | isAllowStagedOrders           | false                 |
+      | isMultiParcelShipper          | false                 |
+      | isDisableDriverAppReschedule  | false                 |
+      | pricingScriptName             | {pricing-script-name} |
+      | industryName                  | {industry-name}       |
+      | salesPerson                   | {sales-person}        |
+      | pickupAddressCount            | 1                     |
+      | address.1.milkrun.1.startTime | 9AM                   |
+      | address.1.milkrun.1.endTime   | 12PM                  |
+      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
+    When Operator go to menu Pick Ups -> Reservation Preset Management
+    And Operator create new Reservation Group on Reservation Preset Management page using data below:
+      | name   | GENERATED                                                              |
+      | driver | {KEY_CREATED_DRIVER_INFO.firstName} {KEY_CREATED_DRIVER_INFO.lastName} |
+      | hub    | {hub-name}                                                             |
+    And Operator assign pending task on Reservation Preset Management page:
+      | shipper | {KEY_CREATED_SHIPPER.name}           |
+      | group   | {KEY_CREATED_RESERVATION_GROUP.name} |
+    Then Operator verifies that success toast displayed:
+      | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
+    When Operator go to menu Shipper -> All Shippers
+    And Operator unset pickup addresses of the created shipper
+    When Operator go to menu Pick Ups -> Reservation Preset Management
+    And Operator unassign pending task on Reservation Preset Management page:
+      | shipper | {KEY_CREATED_SHIPPER.name} |
+    Then Operator verifies that success toast displayed:
+      | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been unlink from {KEY_CREATED_RESERVATION_GROUP.name} group! |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

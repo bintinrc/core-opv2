@@ -82,9 +82,9 @@ Feature: Bulk Address Verification
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_RESERVATIONS |
-      | latitude  | GENERATED                 |
-      | longitude | GENERATED                 |
+      | waypoint  | FROM_CREATED_RESERVATION_DETAILS |
+      | latitude  | GENERATED                        |
+      | longitude | GENERATED                        |
     Then Operator verifies that success react notification displayed:
       | top | Updated 2 waypoint(s) |
     Then DB Operator verify Jaro Scores:

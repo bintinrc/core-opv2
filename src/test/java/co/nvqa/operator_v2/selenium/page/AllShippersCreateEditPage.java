@@ -92,6 +92,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   @FindBy(css = "form[name='ctrl.moreForm'] [name='container.shippers.add-new-service']")
   public NvIconTextButton moreSettingsAddNewService;
 
+  @FindBy(name = "container.shippers.milkrun")
+  public NvIconTextButton milkrun;
+
   //endregion
 
   //region MARKETPLACE
@@ -135,6 +138,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public ErrorSaveDialog errorSaveDialog;
   @FindBy(css = "md-dialog")
   public WarningDialog warningDialog;
+  @FindBy(css = "md-dialog")
+  public UnsetAsMilkrunDialog unsetAsMilkrunDialog;
   @FindBy(xpath = "//md-dialog/md-toolbar")
   public PageElement dialogHeader;
 
@@ -762,13 +767,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
           .forEach(address ->
           {
             searchTableCustom1("contact", address.getContact());
-            clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
-            waitUntilVisibilityOfMdDialogByTitle("Edit Address");
-            fillMilkrunReservationSettings(address);
-            clickNvApiTextButtonByName("commons.save-changes");
-            waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
-
-            verifyPickupAddress(address);
+            milkrun.click();
+            unsetAsMilkrunDialog.waitUntilVisible();
+            unsetAsMilkrunDialog.delete.click();
+            unsetAsMilkrunDialog.waitUntilInvisible();
+            pause1s();
           });
     }
     clickNvIconTextButtonByName("Save Changes");
@@ -930,6 +933,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
     clickNvIconButtonByName("container.shippers.more-reservation-edit-pickup-address");
     waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+    pause1s();
     click("//span[.='Milkrun Reservations']");
     waitUntilVisibilityOfElementLocated(
         "//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
@@ -1966,5 +1970,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public String searchMarketplaceSubshipperAndGetLegacyId(String searchKey, String searchValue) {
     sendKeysAndEnter(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB, searchKey), searchValue);
     return getText(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB_LEGACY_ID, searchValue));
+  }
+
+  public static class UnsetAsMilkrunDialog extends MdDialog {
+
+    @FindBy(css = "[aria-label='Delete']")
+    public Button delete;
+
+    public UnsetAsMilkrunDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

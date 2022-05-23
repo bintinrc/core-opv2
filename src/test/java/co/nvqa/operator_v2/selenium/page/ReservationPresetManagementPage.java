@@ -39,6 +39,9 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   public AssignShipperDialog assignShipperDialog;
 
   @FindBy(css = "md-dialog")
+  public UnassignShipperDialog unassignShipperDialog;
+
+  @FindBy(css = "md-dialog")
   public CreateRouteDialog createRouteDialog;
 
   @FindBy(css = "div.title md-menu")
@@ -219,6 +222,9 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
     @FindBy(name = "container.reservation-preset-management.assign")
     public NvIconTextButton assign;
 
+    @FindBy(name = "container.reservation-preset-management.unassign")
+    public NvIconTextButton unassign;
+
     public PendingTaskBlock(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -233,6 +239,16 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
     public NvApiTextButton assignShipper;
 
     public AssignShipperDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class UnassignShipperDialog extends MdDialog {
+
+    @FindBy(name = "Unassign Shipper")
+    public NvApiTextButton unassignShipper;
+
+    public UnassignShipperDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

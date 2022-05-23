@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import com.google.common.base.Preconditions;
@@ -124,8 +125,13 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
   @Override
   public String getRowLocator(int index) {
-    return f(
-        "%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]",
+    return f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]",
         getTableLocator(), mdVirtualRepeat, index);
+  }
+
+  public PageElement getCell(String columnId, int index) {
+    String xpath =
+        getRowLocator(index) + f("/td[contains(@class, '%s')]", getColumnLocators().get(columnId));
+    return new PageElement(getWebDriver(), xpath);
   }
 }

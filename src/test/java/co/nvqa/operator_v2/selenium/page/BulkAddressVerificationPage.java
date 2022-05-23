@@ -1,24 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.cucumber.glue.api.StandardApiSortVendorClientSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -37,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class BulkAddressVerificationPage extends OperatorV2SimplePage {
+public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVerificationPage> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
       BulkAddressVerificationPage.class);
@@ -140,9 +132,6 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage {
   }
 
   public void uploadCsv(File file) {
-    waitUntilVisibilityOfElementLocated(IFRAME_XPATH);
-    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-    uploadCsv.waitUntilClickable();
     uploadCsv.click();
     uploadCsvDialog.waitUntilVisible();
     fileInput.setValue(file);
