@@ -550,7 +550,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
     String addressLn1 = order.getToAddress1();
     String addressLn2 = order.getToAddress2();
     String postCode = order.getToPostcode();
-    String formattedToAddress = f("%s, %s", addressLn1, postCode);
+    String formattedToAddress = "";
+    if (addressLn2.isEmpty()) {
+      formattedToAddress = f("%s, %s", addressLn1, postCode);
+    }
+    if (!addressLn2.isEmpty()) {
+      formattedToAddress = f("%s, %s, %s", addressLn1, addressLn2, postCode);
+    }
     put(KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS, formattedToAddress);
   }
 
