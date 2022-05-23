@@ -22,6 +22,9 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -72,6 +75,9 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -138,6 +144,9 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -208,6 +217,9 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -263,6 +275,9 @@ Feature: RTS
       | address1     | 116 Keng Lee Rd                |
       | address2     | 15                             |
       | postalCode   | 308402                         |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -335,6 +350,9 @@ Feature: RTS
       | address1     | 116 Keng Lee Rd                |
       | address2     | 15                             |
       | postalCode   | 308402                         |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -406,6 +424,9 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -470,6 +491,9 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -512,6 +536,160 @@ Feature: RTS
     And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify menu item "Delivery" > "Return to Sender" is disabled on Edit order page
+
+  Scenario Outline: Operator RTS Order with Active PETS Ticket Damaged/Missing - <ticketType>
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | <ticketType>       |
+      | orderOutcome            | <orderOutcome>     |
+      | ticketNotes             | GENERATED          |
+    And Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator RTS order on Edit Order page using data below:
+      | timeslot | All Day (9AM - 10PM) |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status  | PENDING                                    |
+      | address | {KEY_CREATED_ORDER.buildFromAddressString} |
+    And Operator verify transaction on Edit order page using data below:
+      | type               | DELIVERY                                                   |
+      | status             | PENDING                                                    |
+      | destinationAddress | {KEY_CREATED_ORDER.buildShortFromAddressWithCountryString} |
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+    When API Operator get order details
+    And Operator save the last DELIVERY transaction of the created order as "KEY_TRANSACTION_AFTER"
+    Then DB Operator verifies transactions record:
+      | orderId    | {KEY_CREATED_ORDER_ID}             |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | type       | DD                                 |
+      | status     | Pending                            |
+    And DB Operator verifies waypoints record:
+      | id      | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status  | Pending                            |
+      | routeId | null                               |
+      | seqNo   | null                               |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+    And DB Operator verify Jaro Scores:
+      | waypointId                         | archived |
+      | {KEY_TRANSACTION_AFTER.waypointId} | 1        |
+    Examples:
+      | ticketType | orderOutcome          |
+      | MISSING    | LOST - DECLARED       |
+      | DAMAGED    | NV TO REPACK AND SHIP |
+
+  Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - <ticketType>
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | <ticketType>       |
+      | ticketSubType           | <ticketSubType>    |
+      | orderOutcome            | <orderOutcome>     |
+      | ticketNotes             | GENERATED          |
+    And Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED       |
+      | outcome | <orderOutcome> |
+    And Operator refresh page
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator RTS order on Edit Order page using data below:
+      | timeslot | All Day (9AM - 10PM) |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status  | PENDING                                    |
+      | address | {KEY_CREATED_ORDER.buildFromAddressString} |
+    And Operator verify transaction on Edit order page using data below:
+      | type               | DELIVERY                                                   |
+      | status             | PENDING                                                    |
+      | destinationAddress | {KEY_CREATED_ORDER.buildShortFromAddressWithCountryString} |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    Then Operator verify order events on Edit order page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+    When API Operator get order details
+    And Operator save the last DELIVERY transaction of the created order as "KEY_TRANSACTION_AFTER"
+    Then DB Operator verifies transactions record:
+      | orderId    | {KEY_CREATED_ORDER_ID}             |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | type       | DD                                 |
+      | status     | Pending                            |
+    And DB Operator verifies waypoints record:
+      | id      | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status  | Pending                            |
+      | routeId | null                               |
+      | seqNo   | null                               |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
+    And DB Operator verify Jaro Scores:
+      | waypointId                         | archived |
+      | {KEY_TRANSACTION_AFTER.waypointId} | 1        |
+    Examples:
+      | ticketType       | ticketSubType     | orderOutcome                |
+      | SELF COLLECTION  |                   | RE-DELIVER                  |
+      | SHIPPER ISSUE    | DUPLICATE PARCEL  | REPACKED/RELABELLED TO SEND |
+      | PARCEL EXCEPTION | CUSTOMER REJECTED | RESUME DELIVERY             |
+      | PARCEL ON HOLD   | SHIPPER REQUEST   | RESUME DELIVERY             |
+
+  Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - <ticketType>
+    Given Operator refresh page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | <ticketType>       |
+      | ticketSubType           | <ticketSubType>    |
+      | orderOutcome            | <orderOutcome>     |
+      | ticketNotes             | GENERATED          |
+    And Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    When Operator RTS order on Edit Order page using data below:
+      | timeslot | All Day (9AM - 10PM) |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                                           |
+      | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING |
+    And DB Operator verifies orders record using data below:
+      | rts | 0 |
+    Examples:
+      | ticketType       | ticketSubType     | orderOutcome                |
+      | SELF COLLECTION  |                   | RE-DELIVER                  |
+      | SHIPPER ISSUE    | DUPLICATE PARCEL  | REPACKED/RELABELLED TO SEND |
+      | PARCEL EXCEPTION | CUSTOMER REJECTED | RESUME DELIVERY             |
+      | PARCEL ON HOLD   | SHIPPER REQUEST   | RESUME DELIVERY             |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
