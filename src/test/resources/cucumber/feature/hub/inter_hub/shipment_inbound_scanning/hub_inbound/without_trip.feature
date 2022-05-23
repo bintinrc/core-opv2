@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @HubInbound @WithoutTrip
 Feature: Shipment Hub Inbound Without Trip Scanning
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @1 @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -35,6 +35,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
@@ -46,6 +47,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
@@ -74,6 +76,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
@@ -102,6 +105,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
@@ -115,18 +119,20 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment destination hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Hub Inbound Closed Shipment In Other Country (uid:82e16097-1c55-4c6c-b6c9-443f6da987d0)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Singapore"
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    When Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page using data below:
       | origHubName | {hub-name}                                                          |
@@ -135,10 +141,12 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
-    When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment destination hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -149,10 +157,12 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
-    When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment destination hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -162,13 +172,16 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When API Operator change the status of the shipment into "Completed"
     When Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
-    When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment destination hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -178,13 +191,16 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     When API Operator change the status of the shipment into "Cancelled"
     When Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Cancelled on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
-    When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment destination hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @KillBrowser @ShouldAlwaysRun
