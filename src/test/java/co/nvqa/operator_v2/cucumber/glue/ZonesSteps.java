@@ -76,7 +76,7 @@ public class ZonesSteps extends AbstractSteps {
       if (RTS.equalsIgnoreCase(zoneType)) {
         assertEquals("Zone Type is right", RTS, actualRtsValue);
       } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-        assertEquals("Zone Type is right", "-", actualRtsValue);
+        assertEquals("Zone Type is right", "STANDARD", actualRtsValue);
       }
       takesScreenshot();
     });
