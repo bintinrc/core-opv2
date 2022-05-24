@@ -167,7 +167,10 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
 
   @When("^Operator download sample CSV file on Bulk Address Verification page$")
   public void operatorDownloadSampleCsvFile() {
-    bulkAddressVerificationPage.inFrame(page -> page.downloadSampleCsv.click());
+    bulkAddressVerificationPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.downloadSampleCsv.click();
+    });
   }
 
   @Then("^sample CSV file on Bulk Address Verification page is downloaded successfully$")

@@ -45,7 +45,7 @@ public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVeri
   @FindBy(xpath = "//button[@data-testid='update-successful-matches']")
   public Button updateSuccessfulMatches;
 
-  @FindBy(xpath = "//button[@data-testid='download-csv-sample-button']")
+  @FindBy(css = "[data-testid='download-csv-sample-button']")
   public Button downloadSampleCsv;
 
   @FindBy(xpath = "//div[contains(@class, 'upload-csv-dialog')]")
