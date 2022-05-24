@@ -100,7 +100,10 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
   public void findZone(Zone zone) {
     zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
     if (zonesTable.isEmpty()) {
+      pause2s();
       clickRefreshCache();
+      refreshPage();
+      switchTo();
       zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
     }
   }

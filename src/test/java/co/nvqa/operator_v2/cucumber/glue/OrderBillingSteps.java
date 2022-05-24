@@ -66,7 +66,7 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(mapOfData.get("shipper"))) {
         String shipper = mapOfData.get("shipper");
         orderBillingPage.setSpecificShipper(shipper);
-        put(KEY_ORDER_BILLING_SHIPPER, shipper);
+        put(KEY_ORDER_BILLING_SHIPPER, Long.valueOf(shipper));
 
       }
       if (Objects.nonNull(mapOfData.get("uploadCsv"))) {
@@ -82,7 +82,7 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(mapOfData.get("parentShipper"))) {
         String parentShipper = mapOfData.get("parentShipper");
         orderBillingPage.setParentShipper(parentShipper);
-        put(KEY_ORDER_BILLING_SHIPPER, parentShipper);
+        put(KEY_ORDER_BILLING_SHIPPER, Long.valueOf(parentShipper));
       }
       String generateFile = mapOfData.get("generateFile");
       if (Objects.nonNull(generateFile)) {

@@ -138,8 +138,12 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub,
       String condition) {
     pause2s();
-    inboundHub.searchAndSelectValue(hub);
-    click(grabXpathButton(label));
+    selectInboundHub(hub);
+    if (CONST_INTO_VAN.equals(label)) {
+      intoVan.click();
+    } else if (CONST_INTO_HUB.equals(label)) {
+      intoHub.click();
+    }
     startInboundButton.click();
     fillShipmentId(shipmentId);
     pause2s();
