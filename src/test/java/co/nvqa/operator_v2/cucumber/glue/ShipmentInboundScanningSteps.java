@@ -92,6 +92,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }
   }
 
+  @SuppressWarnings("unchecked")
   @When("^Operator check alert message on Shipment Inbound Scanning page using data below:$")
   public void checkAlertOnShipmentInboundScanningPage(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -283,6 +284,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage.checkSessionScanResult(Long.valueOf(resolvedShipmentId), condition);
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the following messages display on the card after inbounding")
   public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(
       Map<String, String> messages) {
