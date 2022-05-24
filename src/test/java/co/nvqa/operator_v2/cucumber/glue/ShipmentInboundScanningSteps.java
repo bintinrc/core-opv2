@@ -56,6 +56,25 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }, 5);
   }
 
+  @SuppressWarnings("unchecked")
+  @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) in Shipment Inbound Scanning page$")
+  public void inboundScanningShipment(String label, String hub) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
+        final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
+        scanningPage.inboundScanningShipment(shipmentId, label, finalHub);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 5);
+  }
+
   @When("Operator inbound scanning Shipment {string} with type {string} in hub {string} on Shipment Inbound Scanning page")
   public void operatorInboundScanningShipmentWithType(String shipmentId, String label, String hub) {
     retryIfRuntimeExceptionOccurred(() ->

@@ -6,29 +6,6 @@ Feature: Shipment Hub Inbound Without Trip Scanning
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment
-  Scenario: Hub Inbound Completed MAWB Not In Destination Hub (uid:56d7f8b3-9734-4d7e-87d1-adcbaa8ac232)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {hub-name}                                                          |
-      | destHubName | {hub-name-2}                                                        |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    When Operator click "Load All Selection" on Shipment Management page
-    When Operator edit Shipment on Shipment Management page including MAWB using data below:
-      | destHubName | {hub-name-2}                                                         |
-      | origHubName | {hub-name}                                                           |
-      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
-    When API Operator change the status of the shipment into "Completed"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify parameters of the created shipment on Shipment Management page
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB with Completed alert
-
-  @DeleteShipment
   Scenario: Hub Inbound Pending Shipment In Destination Hub (uid:69f49406-b51b-4629-bf0e-5291cff60d28)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}

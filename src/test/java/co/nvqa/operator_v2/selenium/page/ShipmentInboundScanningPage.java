@@ -104,6 +104,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void inboundScanning(long shipmentId, String label, String hub) {
+    inboundScanningShipment(shipmentId, label, hub);
+    checkSessionScan(String.valueOf(shipmentId));
+  }
+
+  public void inboundScanningShipment(long shipmentId, String label, String hub) {
     pause2s();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
@@ -115,7 +120,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
     }
     startInboundButton.click();
     fillShipmentId(shipmentId);
-    checkSessionScan(String.valueOf(shipmentId));
   }
 
   public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub) {
