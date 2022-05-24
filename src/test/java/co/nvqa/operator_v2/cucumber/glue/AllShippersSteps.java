@@ -1064,15 +1064,12 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.setPickupAddressesAsMilkrun(shipper);
   }
 
-  @When("^Operator unset pickup addresses of the created shipper using data below:$")
-  public void operatorUnsetPickupAddressesOfTheCreatedShipperUsingDataBelow(
-      Map<String, String> mapOfData) {
+  @When("^Operator unset pickup addresses of the created shipper$")
+  public void operatorUnsetPickupAddressesOfTheCreatedShipper() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
     if (CollectionUtils.isNotEmpty(addresses)) {
-      for (int i = 0; i < addresses.size(); i++) {
-        fillMilkrunReservationsProperties(addresses.get(i), i + 1, mapOfData);
-      }
+      addresses.forEach(address -> address.setMilkRun(false));
     }
     allShippersPage.unsetPickupAddressesAsMilkrun(shipper);
   }

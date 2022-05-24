@@ -14,6 +14,8 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
@@ -36,7 +39,7 @@ import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTab
 public class CreateRouteGroupsSteps extends AbstractSteps {
 
   public static final String LIST_OF_TXN_RSVN = "LIST_OF_TXN_RSVN";
-  public static final String CSV_FILE_NAME = "create_route_group.csv";
+  public static final String CSV_FILE_NAME = "createRouteGroups.csv";
 
   private CreateRouteGroupsPage createRouteGroupsPage;
 
@@ -98,24 +101,25 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator adds following reservations to new Route Group {string} on Create Route Groups page:")
+  @When("Operator adds following reservations to new Route Group {value} on Create Route Groups page:")
   public void addReservationsToNewRouteGroup(String groupName, List<Map<String, String>> data) {
-    groupName = resolveValue(groupName);
-    data.forEach(entry -> {
-      entry = resolveKeyValues(entry);
-      String id = entry.get("id");
-      createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_ID, id);
-      createRouteGroupsPage.txnRsvnTable.selectAllShown();
+    createRouteGroupsPage.inFrame(page -> {
+      data.forEach(entry -> {
+        entry = resolveKeyValues(entry);
+        String id = entry.get("id");
+        page.txnRsvnTable.filterByColumn(COLUMN_ID, id);
+        page.txnRsvnTable.selectAllShown();
+      });
+      page.addToRouteGroup.click();
+      page.addToRouteGroupDialog.waitUntilVisible();
+      page.addToRouteGroupDialog.createNewRouteGroup.click();
+      page.addToRouteGroupDialog.newRouteGroup.setValue(groupName);
+      page.addToRouteGroupDialog.addTransactionsReservations.click();
+      RouteGroup routeGroup = new RouteGroup();
+      routeGroup.setName(groupName);
+      put(KEY_CREATED_ROUTE_GROUP, routeGroup);
+      putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
     });
-    createRouteGroupsPage.addToRouteGroup.click();
-    createRouteGroupsPage.addToRouteGroupDialog.waitUntilVisible();
-    createRouteGroupsPage.addToRouteGroupDialog.createNewRouteGroup.click();
-    createRouteGroupsPage.addToRouteGroupDialog.newRouteGroup.setValue(groupName);
-    createRouteGroupsPage.addToRouteGroupDialog.addTransactionsReservations.click();
-    RouteGroup routeGroup = new RouteGroup();
-    routeGroup.setName(groupName);
-    put(KEY_CREATED_ROUTE_GROUP, routeGroup);
-    putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
   }
 
   @When("Operator adds following transactions to Route Group {value} on Create Route Groups:")
@@ -163,15 +167,12 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
     createRouteGroupsPage.inFrame(page -> {
       if (finalData.containsKey("granularOrderStatus")) {
-        if (!createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.isDisplayedFast()) {
           assertions.fail("Granular Order Status is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter
-                      .getSelectedValues())
-              .as("Granular Order Status")
-              .containsExactlyInAnyOrderElementsOf(
+                  createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.getSelectedValues())
+              .as("Granular Order Status").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("granularOrderStatus")));
         }
       }
@@ -181,10 +182,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Order Service Type is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter
-                      .getSelectedValues())
-              .as("Order Service Type")
-              .containsExactlyInAnyOrderElementsOf(
+                  createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter.getSelectedValues())
+              .as("Order Service Type").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("orderServiceType")));
         }
       }
@@ -194,11 +193,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Zone is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.zoneFilter
-                      .getSelectedValues())
+                  createRouteGroupsPage.transactionsFiltersForm.zoneFilter.getSelectedValues())
               .as("Zone")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("zone")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("zone")));
         }
       }
 
@@ -207,11 +204,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Order Type is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter
-                      .getSelectedValues())
+                  createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter.getSelectedValues())
               .as("Order Type")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("orderType")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("orderType")));
         }
       }
 
@@ -220,24 +215,19 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("PP/DD Leg is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter
-                      .getSelectedValues())
+                  createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter.getSelectedValues())
               .as("PP/DD Leg")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("ppDdLeg")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("ppDdLeg")));
         }
       }
 
       if (finalData.containsKey("transactionStatus")) {
-        if (!createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter.isDisplayedFast()) {
           assertions.fail("Transaction Status is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter
-                      .getSelectedValues())
-              .as("Transaction Status")
-              .containsExactlyInAnyOrderElementsOf(
+                  createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter.getSelectedValues())
+              .as("Transaction Status").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("transactionStatus")));
         }
       }
@@ -246,10 +236,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (!createRouteGroupsPage.transactionsFiltersForm.rtsFilter.isDisplayedFast()) {
           assertions.fail("Transaction Status is not displayed");
         } else {
-          assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.rtsFilter.getValue())
-              .as("Transaction Status")
-              .isEqualTo(finalData.get("rts"));
+          assertions.assertThat(createRouteGroupsPage.transactionsFiltersForm.rtsFilter.getValue())
+              .as("Transaction Status").isEqualTo(finalData.get("rts"));
         }
       }
 
@@ -258,11 +246,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Parcel Size is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter
-                      .getSelectedValues())
+                  createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter.getSelectedValues())
               .as("Parcel Size")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("parcelSize")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("parcelSize")));
         }
       }
 
@@ -271,11 +257,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Timeslots is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter
-                      .getSelectedValues())
+                  createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter.getSelectedValues())
               .as("Timeslots")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("timeslots")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("timeslots")));
         }
       }
 
@@ -283,11 +267,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (!createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter.isDisplayedFast()) {
           assertions.fail("Delivery Type is not displayed");
         } else {
-          assertions.assertThat(
-                  removeIdsFromValues(createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter
-                      .getSelectedValues()))
-              .as("Delivery Type")
-              .containsExactlyInAnyOrderElementsOf(
+          assertions.assertThat(removeIdsFromValues(
+                  createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter.getSelectedValues()))
+              .as("Delivery Type").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("deliveryType")));
         }
       }
@@ -299,8 +281,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.assertThat(
                   createRouteGroupsPage.transactionsFiltersForm.dnrGroupFilter.getSelectedValues())
               .as("DNR Group")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("dnrGroup")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("dnrGroup")));
         }
       }
     });
@@ -309,16 +290,14 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
   public static List<String> removeIdsFromValues(List<String> values) {
     Pattern p = Pattern.compile("(\\(\\d+\\))\\s*(.*)");
-    return values.stream()
-        .map(v -> {
-          Matcher m = p.matcher(v);
-          if (m.matches()) {
-            return m.group(2);
-          } else {
-            return v;
-          }
-        })
-        .collect(Collectors.toList());
+    return values.stream().map(v -> {
+      Matcher m = p.matcher(v);
+      if (m.matches()) {
+        return m.group(2);
+      } else {
+        return v;
+      }
+    }).collect(Collectors.toList());
   }
 
   @Given("^Operator add following filters on Transactions Filters section on Create Route Groups page:$")
@@ -331,13 +310,12 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value = finalData.get("granularOrderStatus");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.isDisplayedFast()) {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Granular Order Status");
         }
         createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("orderServiceType");
@@ -346,8 +324,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Order Service Type");
         }
         createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.orderServiceTypeFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("zone");
@@ -356,8 +334,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Zone");
         }
         createRouteGroupsPage.transactionsFiltersForm.zoneFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.zoneFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.zoneFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("orderType");
@@ -366,8 +344,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Order Type");
         }
         createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.orderTypeFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("ppDdLeg");
@@ -376,19 +354,18 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("PP/DD Leg");
         }
         createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.ppDdLegFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("transactionStatus");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter.isDisplayedFast()) {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Transaction Status");
         }
         createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.transactionStatusFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("rts");
@@ -396,8 +373,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (!createRouteGroupsPage.transactionsFiltersForm.rtsFilter.isDisplayedFast()) {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("RTS");
         }
-        createRouteGroupsPage.transactionsFiltersForm.rtsFilter
-            .selectFilter(StringUtils.equalsIgnoreCase("Show", value));
+        createRouteGroupsPage.transactionsFiltersForm.rtsFilter.selectFilter(
+            StringUtils.equalsIgnoreCase("Show", value));
       }
 
       value = finalData.get("parcelSize");
@@ -406,8 +383,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Parcel Size");
         }
         createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.parcelSizeFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("timeslots");
@@ -416,8 +393,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Timeslots");
         }
         createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.timeslotsFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("deliveryType");
@@ -426,8 +403,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("Delivery Type");
         }
         createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.deliveryTypeFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("dnrGroup");
@@ -436,8 +413,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.transactionsFiltersForm.addFilter("DNR Group");
         }
         createRouteGroupsPage.transactionsFiltersForm.dnrGroupFilter.clearAll();
-        createRouteGroupsPage.transactionsFiltersForm.dnrGroupFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.transactionsFiltersForm.dnrGroupFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("weight");
@@ -473,8 +450,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.reservationFiltersForm.addFilter.selectValue("Pick Up Size");
         }
         createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.clearAll();
-        createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("reservationType");
@@ -483,8 +460,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.reservationFiltersForm.addFilter.selectValue("Reservation Type");
         }
         createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter.clearAll();
-        createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter.selectFilter(
+            splitAndNormalize(value));
       }
 
       value = finalData.get("reservationStatus");
@@ -493,8 +470,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.reservationFiltersForm.addFilter.selectValue("Reservation Status");
         }
         createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter.clearAll();
-        createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter
-            .selectFilter(splitAndNormalize(value));
+        createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter.selectFilter(
+            splitAndNormalize(value));
       }
     });
   }
@@ -507,43 +484,34 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
     createRouteGroupsPage.inFrame(page -> {
       if (finalData.containsKey("pickUpSize")) {
-        if (!createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.isDisplayedFast()) {
           assertions.fail("Pick Up Size is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter
-                      .getSelectedValues())
+                  createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.getSelectedValues())
               .as("Pick Up Size")
-              .containsExactlyInAnyOrderElementsOf(
-                  splitAndNormalize(finalData.get("pickUpSize")));
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("pickUpSize")));
         }
       }
 
       if (finalData.containsKey("reservationType")) {
-        if (!createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter.isDisplayedFast()) {
           assertions.fail("Reservation Type is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter
-                      .getSelectedValues())
-              .as("Reservation Type")
-              .containsExactlyInAnyOrderElementsOf(
+                  createRouteGroupsPage.reservationFiltersForm.reservationTypeFilter.getSelectedValues())
+              .as("Reservation Type").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("reservationType")));
         }
       }
 
       if (finalData.containsKey("reservationStatus")) {
-        if (!createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter
-            .isDisplayedFast()) {
+        if (!createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter.isDisplayedFast()) {
           assertions.fail("Reservation Status is not displayed");
         } else {
           assertions.assertThat(
-                  createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter
-                      .getSelectedValues())
-              .as("Reservation Status")
-              .containsExactlyInAnyOrderElementsOf(
+                  createRouteGroupsPage.reservationFiltersForm.reservationStatusFilter.getSelectedValues())
+              .as("Reservation Status").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("reservationStatus")));
         }
       }
@@ -562,8 +530,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value;
       if (finalData.containsKey("startDateTimeFrom") || finalData.containsKey("startDateTimeTo")) {
-        if (!page.generalFiltersForm.startDateTimeFilter
-            .isDisplayedFast()) {
+        if (!page.generalFiltersForm.startDateTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Start Datetime");
         }
         value = finalData.get("startDateTimeFrom");
@@ -577,8 +544,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("endDateTimeFrom") || finalData.containsKey("endDateTimeTo")) {
-        if (!page.generalFiltersForm.endDateTimeFilter
-            .isDisplayedFast()) {
+        if (!page.generalFiltersForm.endDateTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("End Datetime");
         }
         value = finalData.get("endDateTimeFrom");
@@ -613,10 +579,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("shipper");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.shipperFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Shipper");
+        if (!page.generalFiltersForm.shipperFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Shipper");
         }
         page.generalFiltersForm.shipperFilter.clearAll();
         page.generalFiltersForm.shipperFilter.selectFilter(value);
@@ -624,10 +588,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("dpOrder");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.dpOrderFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("DP Order");
+        if (!page.generalFiltersForm.dpOrderFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("DP Order");
         }
         page.generalFiltersForm.dpOrderFilter.clearAll();
         page.generalFiltersForm.dpOrderFilter.selectFilter(value);
@@ -635,10 +597,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("routeGrouping");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.routeGroupingFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Route Grouping");
+        if (!page.generalFiltersForm.routeGroupingFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Route Grouping");
         }
         page.generalFiltersForm.routeGroupingFilter.clearAll();
         page.generalFiltersForm.routeGroupingFilter.selectFilter(value);
@@ -646,21 +606,17 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("routed");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.routedFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Routed");
+        if (!page.generalFiltersForm.routedFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Routed");
         }
-        page.generalFiltersForm.routedFilter
-            .selectFilter(StringUtils.equalsIgnoreCase(value, "Show"));
+        page.generalFiltersForm.routedFilter.selectFilter(
+            StringUtils.equalsIgnoreCase(value, "Show"));
       }
 
       value = finalData.get("serviceLevel");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.serviceLevelFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Service Level");
+        if (!page.generalFiltersForm.serviceLevelFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Service Level");
           page.waitUntilLoaded(2);
         }
         page.generalFiltersForm.serviceLevelFilter.clearAll();
@@ -669,10 +625,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("excludedShipper");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.excludedShipperFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Excluded Shipper");
+        if (!page.generalFiltersForm.excludedShipperFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Excluded Shipper");
           page.waitUntilLoaded(2);
         }
         page.generalFiltersForm.excludedShipperFilter.clearAll();
@@ -681,10 +635,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("hubInboundUser");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.hubInboundUserFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Hub Inbound User");
+        if (!page.generalFiltersForm.hubInboundUserFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Hub Inbound User");
           page.waitUntilLoaded(2);
         }
         page.generalFiltersForm.hubInboundUserFilter.clearAll();
@@ -693,10 +645,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       if (finalData.containsKey("hubInboundDatetimeFrom") || finalData.containsKey(
           "hubInboundDatetimeTo")) {
-        if (!page.generalFiltersForm.hubInboundDatetimeFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Hub Inbound Datetime");
+        if (!page.generalFiltersForm.hubInboundDatetimeFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Hub Inbound Datetime");
         }
 
         value = finalData.get("hubInboundDatetimeFrom");
@@ -716,10 +666,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       if (finalData.containsKey("originalTransactionEndTimeFrom") || finalData.containsKey(
           "originalTransactionEndTimeTo")) {
-        if (!page.generalFiltersForm.originalTransactionEndTimeFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Original Transaction End Time");
+        if (!page.generalFiltersForm.originalTransactionEndTimeFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Original Transaction End Time");
           page.waitUntilLoaded(2);
         }
 
@@ -759,8 +707,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value;
       if (finalData.containsKey("startDateTimeFrom") || finalData.containsKey("startDateTimeTo")) {
-        if (!page.generalFiltersForm.startDateTimeFilter
-            .isDisplayedFast()) {
+        if (!page.generalFiltersForm.startDateTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Start Datetime");
         }
         value = finalData.get("startDateTimeFrom");
@@ -776,8 +723,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("endDateTimeFrom") || finalData.containsKey("endDateTimeTo")) {
-        if (!page.generalFiltersForm.endDateTimeFilter
-            .isDisplayedFast()) {
+        if (!page.generalFiltersForm.endDateTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("End Datetime");
         }
         value = finalData.get("endDateTimeFrom");
@@ -792,7 +738,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         page.generalFiltersForm.endDateTimeFilter.removeFilter();
       }
 
-      if (finalData.containsKey("creationTimeFrom") || finalData.containsKey("creationTimeTo")) {
+      if (finalData.containsKey("creationTimeFrom") || finalData.containsKey("creationTimeTo")
+          || finalData.containsKey("creationTime")) {
         if (!page.generalFiltersForm.creationTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Creation Time");
         }
@@ -810,16 +757,41 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           page.generalFiltersForm.creationTimeFilter.selectToHours("00");
           page.generalFiltersForm.creationTimeFilter.selectToMinutes("00");
         }
+
+        value = finalData.get("creationTime");
+        if (StringUtils.equalsIgnoreCase(value, "current hour")) {
+          Date date = new Date();
+          date = DateUtils.addHours(date, 1);
+          page.generalFiltersForm.creationTimeFilter.setToDate(date);
+          page.generalFiltersForm.creationTimeFilter.selectToHours(
+              DateUtils.getFragmentInHours(date, Calendar.DAY_OF_YEAR));
+          page.generalFiltersForm.creationTimeFilter.selectToMinutes("00");
+
+          date = DateUtils.addHours(date, -1);
+          page.generalFiltersForm.creationTimeFilter.setFromDate(date);
+          page.generalFiltersForm.creationTimeFilter.selectFromHours(
+              DateUtils.getFragmentInHours(date, Calendar.DAY_OF_YEAR));
+          page.generalFiltersForm.creationTimeFilter.selectFromMinutes("00");
+        } else if (StringUtils.equalsIgnoreCase(value, "today")) {
+          Date date = new Date();
+
+          page.generalFiltersForm.creationTimeFilter.setFromDate(date);
+          page.generalFiltersForm.creationTimeFilter.selectFromHours("00");
+          page.generalFiltersForm.creationTimeFilter.selectFromMinutes("00");
+
+          date = DateUtils.addDays(date, 1);
+          page.generalFiltersForm.creationTimeFilter.setToDate(date);
+          page.generalFiltersForm.creationTimeFilter.selectToHours("00");
+          page.generalFiltersForm.creationTimeFilter.selectToMinutes("00");
+        }
       } else if (page.generalFiltersForm.creationTimeFilter.isDisplayedFast()) {
         page.generalFiltersForm.creationTimeFilter.removeFilter();
       }
 
       value = finalData.get("shipper");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.shipperFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Shipper");
+        if (!page.generalFiltersForm.shipperFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Shipper");
         }
         page.generalFiltersForm.shipperFilter.clearAll();
         page.generalFiltersForm.shipperFilter.selectFilter(value);
@@ -829,10 +801,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("dpOrder");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.dpOrderFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("DP Order");
+        if (!page.generalFiltersForm.dpOrderFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("DP Order");
         }
         page.generalFiltersForm.dpOrderFilter.clearAll();
         page.generalFiltersForm.dpOrderFilter.selectFilter(value);
@@ -842,10 +812,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("routeGrouping");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.routeGroupingFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Route Grouping");
+        if (!page.generalFiltersForm.routeGroupingFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Route Grouping");
         }
         page.generalFiltersForm.routeGroupingFilter.clearAll();
         page.generalFiltersForm.routeGroupingFilter.selectFilter(value);
@@ -855,23 +823,19 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("routed");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.routedFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Routed");
+        if (!page.generalFiltersForm.routedFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Routed");
         }
-        page.generalFiltersForm.routedFilter
-            .selectFilter(StringUtils.equalsIgnoreCase(value, "Show"));
+        page.generalFiltersForm.routedFilter.selectFilter(
+            StringUtils.equalsIgnoreCase(value, "Show"));
       } else if (page.generalFiltersForm.routedFilter.isDisplayedFast()) {
         page.generalFiltersForm.routedFilter.removeFilter();
       }
 
       value = finalData.get("serviceLevel");
       if (StringUtils.isNotBlank(value)) {
-        if (!page.generalFiltersForm.serviceLevelFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Service Level");
+        if (!page.generalFiltersForm.serviceLevelFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Service Level");
           page.waitUntilLoaded(2);
         }
         page.generalFiltersForm.serviceLevelFilter.clearAll();
@@ -904,10 +868,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       if (finalData.containsKey("hubInboundDatetimeFrom") || finalData.containsKey(
           "hubInboundDatetimeTo")) {
-        if (!page.generalFiltersForm.hubInboundDatetimeFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Hub Inbound Datetime");
+        if (!page.generalFiltersForm.hubInboundDatetimeFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Hub Inbound Datetime");
         }
 
         value = finalData.get("hubInboundDatetimeFrom");
@@ -929,10 +891,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       if (finalData.containsKey("originalTransactionEndTimeFrom") || finalData.containsKey(
           "originalTransactionEndTimeTo")) {
-        if (!page.generalFiltersForm.originalTransactionEndTimeFilter
-            .isDisplayedFast()) {
-          page.generalFiltersForm.addFilter
-              .selectValue("Original Transaction End Time");
+        if (!page.generalFiltersForm.originalTransactionEndTimeFilter.isDisplayedFast()) {
+          page.generalFiltersForm.addFilter.selectValue("Original Transaction End Time");
           page.waitUntilLoaded(2);
         }
 
@@ -976,10 +936,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value;
       if (finalData.containsKey("startDateTimeFrom") || finalData.containsKey("startDateTimeTo")) {
-        if (!createRouteGroupsPage.generalFiltersForm.startDateTimeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("Start Datetime");
+        if (!createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("Start Datetime");
         }
         value = finalData.get("startDateTimeFrom");
         if (StringUtils.isNotBlank(value)) {
@@ -992,10 +950,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("endDateTimeFrom") || finalData.containsKey("endDateTimeTo")) {
-        if (!createRouteGroupsPage.generalFiltersForm.endDateTimeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("End Datetime");
+        if (!createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("End Datetime");
         }
         value = finalData.get("endDateTimeFrom");
         if (StringUtils.isNotBlank(value)) {
@@ -1008,10 +964,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("creationTimeFrom") || finalData.containsKey("creationTimeTo")) {
-        if (!createRouteGroupsPage.generalFiltersForm.creationTimeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("Creation Time");
+        if (!createRouteGroupsPage.generalFiltersForm.creationTimeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("Creation Time");
         }
 
         value = finalData.get("creationTimeFrom");
@@ -1031,10 +985,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("shipper");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.generalFiltersForm.shipperFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("Shipper");
+        if (!createRouteGroupsPage.generalFiltersForm.shipperFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("Shipper");
         }
         createRouteGroupsPage.generalFiltersForm.shipperFilter.clearAll();
         createRouteGroupsPage.generalFiltersForm.shipperFilter.selectFilter(value);
@@ -1044,10 +996,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("dpOrder");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.generalFiltersForm.dpOrderFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("DP Order");
+        if (!createRouteGroupsPage.generalFiltersForm.dpOrderFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("DP Order");
         }
         createRouteGroupsPage.generalFiltersForm.dpOrderFilter.clearAll();
         createRouteGroupsPage.generalFiltersForm.dpOrderFilter.selectFilter(value);
@@ -1055,10 +1005,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("routeGrouping");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.generalFiltersForm.routeGroupingFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("Route Grouping");
+        if (!createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("Route Grouping");
         }
         createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.clearAll();
         createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.selectFilter(value);
@@ -1066,21 +1014,17 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("routed");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.generalFiltersForm.routedFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("Routed");
+        if (!createRouteGroupsPage.generalFiltersForm.routedFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("Routed");
         }
-        createRouteGroupsPage.generalFiltersForm.routedFilter
-            .selectFilter(StringUtils.equalsIgnoreCase(value, "Show"));
+        createRouteGroupsPage.generalFiltersForm.routedFilter.selectFilter(
+            StringUtils.equalsIgnoreCase(value, "Show"));
       }
 
       value = finalData.get("masterShipper");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.generalFiltersForm.masterShipperFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.generalFiltersForm.addFilter
-              .selectValue("Master Shipper");
+        if (!createRouteGroupsPage.generalFiltersForm.masterShipperFilter.isDisplayedFast()) {
+          createRouteGroupsPage.generalFiltersForm.addFilter.selectValue("Master Shipper");
         }
         createRouteGroupsPage.generalFiltersForm.masterShipperFilter.clearAll();
         createRouteGroupsPage.generalFiltersForm.masterShipperFilter.selectFilter(value);
@@ -1100,18 +1044,15 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Start Datetime is not displayed");
         } else {
           if (finalData.containsKey("startDateTimeFrom")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.fromInput.getValue()))
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.fromInput.getValue()))
                 .as("Start Datetime from")
                 .isEqualTo(toDateTime(finalData.get("startDateTimeFrom")));
           }
           if (finalData.containsKey("startDateTimeTo")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.toInput.getValue()))
-                .as("Start Datetime to")
-                .isEqualTo(toDateTime(finalData.get("startDateTimeTo")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.generalFiltersForm.startDateTimeFilter.toInput.getValue()))
+                .as("Start Datetime to").isEqualTo(toDateTime(finalData.get("startDateTimeTo")));
           }
         }
       }
@@ -1121,58 +1062,46 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("End Datetime is not displayed");
         } else {
           if (finalData.containsKey("endDateTimeFrom")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.fromInput.getValue()))
-                .as("End Datetime from")
-                .isEqualTo(toDateTime(finalData.get("endDateTimeFrom")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.fromInput.getValue()))
+                .as("End Datetime from").isEqualTo(toDateTime(finalData.get("endDateTimeFrom")));
           }
           if (finalData.containsKey("endDateTimeTo")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.toInput.getValue()))
-                .as("End Datetime to")
-                .isEqualTo(toDateTime(finalData.get("endDateTimeTo")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.generalFiltersForm.endDateTimeFilter.toInput.getValue()))
+                .as("End Datetime to").isEqualTo(toDateTime(finalData.get("endDateTimeTo")));
           }
         }
       }
 
       if (finalData.containsKey("creationTimeFrom")) {
-        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.creationTimeFilter
-            .isDisplayedFast();
+        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.creationTimeFilter.isDisplayedFast();
         if (!isDisplayed) {
           assertions.fail("Creation Time is not displayed");
         } else {
-          assertions.assertThat(
-                  toDateTime(
-                      createRouteGroupsPage.generalFiltersForm.creationTimeFilter.fromInput.getValue()))
-              .as("Creation Time from")
-              .isEqualTo(toDateTime(finalData.get("creationTimeFrom")));
+          assertions.assertThat(toDateTime(
+                  createRouteGroupsPage.generalFiltersForm.creationTimeFilter.fromInput.getValue()))
+              .as("Creation Time from").isEqualTo(toDateTime(finalData.get("creationTimeFrom")));
         }
       }
 
       if (finalData.containsKey("creationTimeTo")) {
-        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.creationTimeFilter
-            .isDisplayedFast();
+        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.creationTimeFilter.isDisplayedFast();
         if (!isDisplayed) {
           assertions.fail("Creation Time is not displayed");
         } else {
-          assertions.assertThat(
-                  toDateTime(
-                      createRouteGroupsPage.generalFiltersForm.creationTimeFilter.toInput.getValue()))
-              .as("Creation Time to")
-              .isEqualTo(toDateTime(finalData.get("creationTimeTo")));
+          assertions.assertThat(toDateTime(
+                  createRouteGroupsPage.generalFiltersForm.creationTimeFilter.toInput.getValue()))
+              .as("Creation Time to").isEqualTo(toDateTime(finalData.get("creationTimeTo")));
         }
       }
 
       if (finalData.containsKey("shipper")) {
-        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.shipperFilter
-            .isDisplayedFast();
+        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.shipperFilter.isDisplayedFast();
         if (!isDisplayed) {
           assertions.fail("Shipper is not displayed");
         } else {
-          assertions
-              .assertThat(
+          assertions.assertThat(
                   createRouteGroupsPage.generalFiltersForm.shipperFilter.getSelectedValues())
               .as("Shipper")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("shipper")));
@@ -1180,13 +1109,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("dpOrder")) {
-        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.dpOrderFilter
-            .isDisplayedFast();
+        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.dpOrderFilter.isDisplayedFast();
         if (!isDisplayed) {
           assertions.fail("DP Order is not displayed");
         } else {
-          assertions
-              .assertThat(
+          assertions.assertThat(
                   createRouteGroupsPage.generalFiltersForm.dpOrderFilter.getSelectedValues())
               .as("DP Order")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("dpOrder")));
@@ -1194,15 +1121,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("routeGrouping")) {
-        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.routeGroupingFilter
-            .isDisplayedFast();
+        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.isDisplayedFast();
         if (!isDisplayed) {
           assertions.fail("Route Grouping is not displayed");
         } else {
           assertions.assertThat(
                   createRouteGroupsPage.generalFiltersForm.routeGroupingFilter.getSelectedValues())
-              .as("Route Grouping")
-              .containsExactlyInAnyOrderElementsOf(
+              .as("Route Grouping").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("routeGrouping")));
         }
       }
@@ -1213,21 +1138,18 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Routed is not displayed");
         } else {
           assertions.assertThat(createRouteGroupsPage.generalFiltersForm.routedFilter.getValue())
-              .as("Routed")
-              .isEqualToIgnoringCase(finalData.get("routed"));
+              .as("Routed").isEqualToIgnoringCase(finalData.get("routed"));
         }
       }
 
       if (finalData.containsKey("masterShipper")) {
-        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.masterShipperFilter
-            .isDisplayedFast();
+        boolean isDisplayed = createRouteGroupsPage.generalFiltersForm.masterShipperFilter.isDisplayedFast();
         if (!isDisplayed) {
           assertions.fail("Master Shipper is not displayed");
         } else {
           assertions.assertThat(
                   createRouteGroupsPage.generalFiltersForm.masterShipperFilter.getSelectedValues())
-              .as("Master Shipper")
-              .containsExactlyInAnyOrderElementsOf(
+              .as("Master Shipper").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("masterShipper")));
         }
       }
@@ -1244,10 +1166,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value;
       if (finalData.containsKey("shipmentDateFrom") || finalData.containsKey("shipmentDateTo")) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Shipment Date");
+        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Shipment Date");
         }
         value = finalData.get("shipmentDateFrom");
         if (StringUtils.isNotBlank(value)) {
@@ -1266,10 +1186,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       if (finalData.containsKey("etaDateTimeFrom") || finalData.containsKey("etaDateTimeTo")) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("ETA (Date Time)");
+        if (!createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("ETA (Date Time)");
         }
         value = finalData.get("etaDateTimeFrom");
         if (StringUtils.isNotBlank(value)) {
@@ -1289,10 +1207,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("startHub");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.startHubFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Start Hub");
+        if (!createRouteGroupsPage.shipmentFiltersForm.startHubFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Start Hub");
         }
         createRouteGroupsPage.shipmentFiltersForm.startHubFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.startHubFilter.selectFilter(value);
@@ -1302,10 +1218,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("endHub");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.endHubFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("End Hub");
+        if (!createRouteGroupsPage.shipmentFiltersForm.endHubFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("End Hub");
         }
         createRouteGroupsPage.shipmentFiltersForm.endHubFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.endHubFilter.selectFilter(value);
@@ -1315,10 +1229,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("lastInboundHub");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Last Inbound Hub");
+        if (!createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Last Inbound Hub");
         }
         createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter.selectFilter(value);
@@ -1328,52 +1240,46 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("mawb");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.mawbFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("MAWB");
+        if (!createRouteGroupsPage.shipmentFiltersForm.mawbFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("MAWB");
         }
         createRouteGroupsPage.shipmentFiltersForm.mawbFilter.setValue(value);
       } else if (createRouteGroupsPage.shipmentFiltersForm.mawbFilter.isDisplayedFast()) {
         createRouteGroupsPage.shipmentFiltersForm.mawbFilter.removeFilter();
       }
 
-      if (finalData.containsKey("shipmentCompletionDateTimeFrom") || finalData
-          .containsKey("shipmentCompletionDateTimeTo")) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Shipment Completion Date Time");
+      if (finalData.containsKey("shipmentCompletionDateTimeFrom") || finalData.containsKey(
+          "shipmentCompletionDateTimeTo")) {
+        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue(
+              "Shipment Completion Date Time");
         }
         value = finalData.get("shipmentCompletionDateTimeFrom");
         if (StringUtils.isNotBlank(value)) {
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-              .setFromDate(value);
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-              .selectFromHours("00");
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-              .selectFromMinutes("00");
+          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.setFromDate(
+              value);
+          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectFromHours(
+              "00");
+          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectFromMinutes(
+              "00");
         }
         value = finalData.get("shipmentCompletionDateTimeTo");
         if (StringUtils.isNotBlank(value)) {
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-              .setToDate(value);
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-              .selectToHours("00");
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-              .selectToMinutes("00");
+          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.setToDate(
+              value);
+          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectToHours(
+              "00");
+          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectToMinutes(
+              "00");
         }
-      } else if (createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-          .isDisplayedFast()) {
+      } else if (createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.isDisplayedFast()) {
         createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.removeFilter();
       }
 
       value = finalData.get("shipmentStatus");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Shipment Status");
+        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Shipment Status");
         }
         createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.selectFilter(value);
@@ -1383,10 +1289,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       value = finalData.get("shipmentType");
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Shipment Type");
+        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Shipment Type");
         }
         createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.selectFilter(value);
@@ -1396,10 +1300,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       if (finalData.containsKey("transitDateTimeFrom") || finalData.containsKey(
           "transitDateTimeTo")) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter
-            .isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter
-              .selectValue("Transit Date Time");
+        if (!createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.isDisplayedFast()) {
+          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Transit Date Time");
         }
         value = finalData.get("transitDateTimeFrom");
         if (StringUtils.isNotBlank(value)) {
@@ -1433,18 +1335,14 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Start Datetime is not displayed");
         } else {
           if (finalData.containsKey("shipmentDateFrom")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.fromInput.getValue()))
-                .as("Shipment Date from")
-                .isEqualTo(toDateTime(finalData.get("shipmentDateFrom")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.fromInput.getValue()))
+                .as("Shipment Date from").isEqualTo(toDateTime(finalData.get("shipmentDateFrom")));
           }
           if (finalData.containsKey("shipmentDateTo")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.toInput.getValue()))
-                .as("Shipment Date to")
-                .isEqualTo(toDateTime(finalData.get("shipmentDateTo")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.toInput.getValue()))
+                .as("Shipment Date to").isEqualTo(toDateTime(finalData.get("shipmentDateTo")));
           }
         }
       }
@@ -1454,41 +1352,32 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("ETA (Date Time) is not displayed");
         } else {
           if (finalData.containsKey("etaDateTimeFrom")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.fromInput.getValue()))
-                .as("ETA (Date Time) from")
-                .isEqualTo(toDateTime(finalData.get("etaDateTimeFrom")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.fromInput.getValue()))
+                .as("ETA (Date Time) from").isEqualTo(toDateTime(finalData.get("etaDateTimeFrom")));
           }
           if (finalData.containsKey("etaDateTimeTo")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.toInput.getValue()))
-                .as("ETA (Date Time) to")
-                .isEqualTo(toDateTime(finalData.get("etaDateTimeTo")));
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.toInput.getValue()))
+                .as("ETA (Date Time) to").isEqualTo(toDateTime(finalData.get("etaDateTimeTo")));
           }
         }
       }
 
-      if (finalData.containsKey("shipmentCompletionDateTimeFrom") || finalData
-          .containsKey("shipmentCompletionDateTimeTo")) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter
-            .isDisplayedFast()) {
+      if (finalData.containsKey("shipmentCompletionDateTimeFrom") || finalData.containsKey(
+          "shipmentCompletionDateTimeTo")) {
+        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.isDisplayedFast()) {
           assertions.fail("Shipment Completion Date Time is not displayed");
         } else {
           if (finalData.containsKey("shipmentCompletionDateTimeFrom")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.fromInput
-                            .getValue()))
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.fromInput.getValue()))
                 .as("Shipment Completion Date Time from")
                 .isEqualTo(toDateTime(finalData.get("shipmentCompletionDateTimeFrom")));
           }
           if (finalData.containsKey("shipmentCompletionDateTimeTo")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.toInput
-                            .getValue()))
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.toInput.getValue()))
                 .as("Shipment Completion Date Time to")
                 .isEqualTo(toDateTime(finalData.get("shipmentCompletionDateTimeTo")));
           }
@@ -1501,16 +1390,14 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           assertions.fail("Transit Date Time is not displayed");
         } else {
           if (finalData.containsKey("transitDateTimeFrom")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.fromInput.getValue()))
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.fromInput.getValue()))
                 .as("Transit Date Time from")
                 .isEqualTo(toDateTime(finalData.get("transitDateTimeFrom")));
           }
           if (finalData.containsKey("transitDateTimeTo")) {
-            assertions.assertThat(
-                    toDateTime(
-                        createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.toInput.getValue()))
+            assertions.assertThat(toDateTime(
+                    createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.toInput.getValue()))
                 .as("Transit Date Time to")
                 .isEqualTo(toDateTime(finalData.get("transitDateTimeTo")));
           }
@@ -1545,8 +1432,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         } else {
           assertions.assertThat(
                   createRouteGroupsPage.shipmentFiltersForm.lastInboundHubFilter.getSelectedValues())
-              .as("Last Inbound Hub")
-              .containsExactlyInAnyOrderElementsOf(
+              .as("Last Inbound Hub").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("lastInboundHub")));
         }
       }
@@ -1555,10 +1441,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (!createRouteGroupsPage.shipmentFiltersForm.mawbFilter.isDisplayedFast()) {
           assertions.fail("MAWB is not displayed");
         } else {
-          assertions.assertThat(
-                  createRouteGroupsPage.shipmentFiltersForm.mawbFilter.getValue())
-              .as("MAWB")
-              .isEqualToIgnoringCase(finalData.get("mawb"));
+          assertions.assertThat(createRouteGroupsPage.shipmentFiltersForm.mawbFilter.getValue())
+              .as("MAWB").isEqualToIgnoringCase(finalData.get("mawb"));
         }
       }
 
@@ -1568,8 +1452,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         } else {
           assertions.assertThat(
                   createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.getSelectedValues())
-              .as("Shipment Status")
-              .containsExactlyInAnyOrderElementsOf(
+              .as("Shipment Status").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("shipmentStatus")));
         }
       }
@@ -1580,8 +1463,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         } else {
           assertions.assertThat(
                   createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.getSelectedValues())
-              .as("Shipment Type")
-              .containsExactlyInAnyOrderElementsOf(
+              .as("Shipment Type").containsExactlyInAnyOrderElementsOf(
                   splitAndNormalize(finalData.get("shipmentType")));
         }
       }
@@ -1605,19 +1487,23 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
   @Given("^Operator sort Transactions/Reservations table by Tracking ID on Create Route Groups page$")
   public void operatorSortTableOnCreateRouteGroupPage() {
-    createRouteGroupsPage.txnRsvnTable.sortColumn(COLUMN_TRACKING_ID, true);
+    createRouteGroupsPage.inFrame(page -> page.txnRsvnTable.sortColumn(COLUMN_TRACKING_ID, true));
   }
 
   @Given("^Operator save records from Transactions/Reservations table on Create Route Groups page$")
   public void operatorSaveTableOnCreateRouteGroupPage() {
-    List<TxnRsvn> records = createRouteGroupsPage.txnRsvnTable.readAllEntities("sequence");
-    put(LIST_OF_TXN_RSVN, records);
+    createRouteGroupsPage.inFrame(page -> {
+      List<TxnRsvn> records = page.txnRsvnTable.readAllEntities("sequence");
+      put(LIST_OF_TXN_RSVN, records);
+    });
   }
 
   @Given("^Operator download CSV file on Create Route Groups page$")
   public void operatorDownloadCsvFileOnCreateRouteGroupPage() {
-    createRouteGroupsPage.downloadCsvFile.click();
-    createRouteGroupsPage.verifyFileDownloadedSuccessfully(CSV_FILE_NAME);
+    createRouteGroupsPage.inFrame(page -> {
+      page.downloadCsvFile.click();
+      page.verifyFileDownloadedSuccessfully(CSV_FILE_NAME);
+    });
   }
 
   @Given("^Operator verify Transactions/Reservations CSV file on Create Route Groups page$")
@@ -1636,8 +1522,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @Then("^Operator verifies Transaction record on Create Route Groups page using data below:$")
   public void operatorVerifyTransactionReservationRecordOnCreateRouteGroupPageUsingDataBelow(
       Map<String, String> data) {
-    operatorVerifyTransactionRecordOnCreateRouteGroupPageUsingDataBelow(
-        ImmutableList.of(data));
+    operatorVerifyTransactionRecordOnCreateRouteGroupPageUsingDataBelow(ImmutableList.of(data));
   }
 
   @Then("^Operator verifies Transaction records on Create Route Groups page using data below:$")
@@ -1667,8 +1552,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
           Order order = orders.get(index - 1);
           Transaction transaction = order.getTransactions().stream()
-              .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType()))
-              .findFirst()
+              .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType())).findFirst()
               .orElseThrow(() -> new RuntimeException(
                   f("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
           expected.setId(transaction.getId());
@@ -1680,24 +1564,19 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       page.txnRsvnTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
       page.txnRsvnTable.filterByColumn(COLUMN_TYPE, expected.getType());
       List<TxnRsvn> actual = page.txnRsvnTable.readAllEntities();
-      Assertions.assertThat(actual)
-          .as("List of found transactions")
-          .isNotEmpty();
+      Assertions.assertThat(actual).as("List of found transactions").isNotEmpty();
       if (actual.size() == 1) {
         expected.compareWithActual(actual.get(0));
       } else {
-        actual.stream()
-            .filter(a -> {
-              try {
-                expected.compareWithActual(a);
-                return true;
-              } catch (AssertionError e) {
-                return false;
-              }
-            })
-            .findFirst()
-            .orElseThrow(
-                () -> new AssertionError("Transaction was not found: " + expected.toMap()));
+        actual.stream().filter(a -> {
+          try {
+            expected.compareWithActual(a);
+            return true;
+          } catch (AssertionError e) {
+            return false;
+          }
+        }).findFirst().orElseThrow(
+            () -> new AssertionError("Transaction was not found: " + expected.toMap()));
       }
     }));
   }
@@ -1705,55 +1584,56 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @Then("^Operator verifies Transaction records not shown on Create Route Groups page using data below:$")
   public void operatorVerifyTransactionRecordNotShownOnCreateRouteGroupPageUsingDataBelow(
       List<Map<String, String>> data) {
-    data.forEach(entry -> {
-      Map<String, String> mutableEntry = new HashMap<>(entry);
-      String id = mutableEntry.get("id");
-      mutableEntry.remove("id");
+    createRouteGroupsPage.inFrame(page -> {
+      data.forEach(entry -> {
+        Map<String, String> mutableEntry = new HashMap<>(entry);
+        String id = mutableEntry.get("id");
+        mutableEntry.remove("id");
 
-      TxnRsvn expected = new TxnRsvn(resolveKeyValues(mutableEntry));
+        TxnRsvn expected = new TxnRsvn(resolveKeyValues(mutableEntry));
 
-      if (StringUtils.isBlank(expected.getTrackingId())) {
-        throw new IllegalArgumentException("trackingId value was not defined");
-      }
-      if (StringUtils.isBlank(expected.getType())) {
-        throw new IllegalArgumentException("type value was not defined");
-      }
-
-      if (StringUtils.isNotBlank(id)) {
-        Pattern p = Pattern.compile("GET_FROM_CREATED_ORDER\\[(\\d+)]");
-        Matcher m = p.matcher(id);
-        if (m.find()) {
-          int index = Integer.parseInt(m.group(1));
-          List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-          String type = expected.getType().split("\\s")[0];
-
-          Order order = orders.get(index - 1);
-          Transaction transaction = order.getTransactions().stream()
-              .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType()))
-              .findFirst()
-              .orElseThrow(() -> new RuntimeException(
-                  f("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
-          expected.setId(transaction.getId());
-        } else if (StringUtils.isNumeric(id)) {
-          expected.setId(id);
+        if (StringUtils.isBlank(expected.getTrackingId())) {
+          throw new IllegalArgumentException("trackingId value was not defined");
         }
-      }
+        if (StringUtils.isBlank(expected.getType())) {
+          throw new IllegalArgumentException("type value was not defined");
+        }
 
-      createRouteGroupsPage.txnRsvnTable.clearColumnFilter(COLUMN_ID);
-      createRouteGroupsPage.txnRsvnTable
-          .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
-      createRouteGroupsPage.txnRsvnTable.filterByColumn(COLUMN_TYPE, expected.getType());
-      Assertions.assertThat(createRouteGroupsPage.txnRsvnTable.isEmpty())
-          .as("List of found transactions is empty")
-          .isTrue();
+        if (StringUtils.isNotBlank(id)) {
+          Pattern p = Pattern.compile("GET_FROM_CREATED_ORDER\\[(\\d+)]");
+          Matcher m = p.matcher(id);
+          if (m.find()) {
+            int index = Integer.parseInt(m.group(1));
+            List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+            String type = expected.getType().split("\\s")[0];
+
+            Order order = orders.get(index - 1);
+            Transaction transaction = order.getTransactions().stream()
+                .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType())).findFirst()
+                .orElseThrow(() -> new RuntimeException(
+                    f("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
+            expected.setId(transaction.getId());
+          } else if (StringUtils.isNumeric(id)) {
+            expected.setId(id);
+          }
+        }
+
+        page.txnRsvnTable.clearColumnFilter(COLUMN_ID);
+        page.txnRsvnTable.filterByColumn(COLUMN_TRACKING_ID,
+            expected.getTrackingId());
+        page.txnRsvnTable.filterByColumn(COLUMN_TYPE, expected.getType());
+        Assertions.assertThat(page.txnRsvnTable.isEmpty())
+            .as("List of found transactions is empty").isTrue();
+      });
     });
   }
 
   @Then("^Operator verifies results table is empty on Create Route Groups$")
   public void operatorVerifyTransactionsTableIsEmpty() {
-    Assertions.assertThat(createRouteGroupsPage.txnRsvnTable.isTableEmpty())
-        .as("Results table is empty")
-        .isTrue();
+    createRouteGroupsPage.inFrame(page -> {
+      Assertions.assertThat(page.txnRsvnTable.isEmpty())
+          .as("Results table is empty").isTrue();
+    });
   }
 
   @Then("^Operator verifies Reservation records on Create Route Groups page using data below:$")
@@ -1767,8 +1647,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       page.txnRsvnTable.filterByColumn(COLUMN_ID, expected.getId());
-      assertEquals(
-          f("Number of records for id = %s", expected.getId()), 1,
+      pause1s();
+      assertEquals(f("Number of records for id = %s", expected.getId()), 1,
           page.txnRsvnTable.getRowsCount());
       TxnRsvn actual = page.txnRsvnTable.readEntity(1);
       expected.compareWithActual(actual);
@@ -1788,8 +1668,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       page.txnRsvnTable.clearColumnFilter(COLUMN_TRACKING_ID);
       page.txnRsvnTable.clearColumnFilter(COLUMN_TYPE);
       page.txnRsvnTable.filterByColumn(COLUMN_ID, expected.getId());
-      assertEquals(
-          f("Number of records for id = %s", expected.getId()), 0,
+      assertEquals(f("Number of records for id = %s", expected.getId()), 0,
           page.txnRsvnTable.getRowsCount());
     }));
   }
@@ -1810,10 +1689,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.inFrame(page -> {
       page.savePresetDialog.waitUntilVisible();
       List<String> actual = page.savePresetDialog.selectedFilters.stream()
-          .map(PageElement::getNormalizedText)
-          .collect(Collectors.toList());
-      Assertions.assertThat(actual)
-          .as("List of selected filters")
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
+      Assertions.assertThat(actual).as("List of selected filters")
           .containsExactlyInAnyOrderElementsOf(expected);
     });
   }
@@ -1821,18 +1698,16 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @When("Operator verifies Preset Name field in Save Preset dialog on Create Route Groups page is required")
   public void verifyPresetNameIsRequired() {
     createRouteGroupsPage.savePresetDialog.waitUntilVisible();
-    Assertions
-        .assertThat(createRouteGroupsPage.savePresetDialog.presetName.getAttribute("ng-required"))
-        .as("Preset Name field ng-required attribute")
-        .isEqualTo("required");
+    Assertions.assertThat(
+            createRouteGroupsPage.savePresetDialog.presetName.getAttribute("ng-required"))
+        .as("Preset Name field ng-required attribute").isEqualTo("required");
   }
 
   @When("Operator verifies help text {string} is displayed in Save Preset dialog on Create Route Groups page")
   public void verifyHelpTextInSavePreset(String expected) {
     createRouteGroupsPage.inFrame(page -> {
       page.savePresetDialog.waitUntilVisible();
-      Assertions.assertThat(page.savePresetDialog.helpText.getNormalizedText())
-          .as("Help Text")
+      Assertions.assertThat(page.savePresetDialog.helpText.getNormalizedText()).as("Help Text")
           .isEqualTo(resolveValue(expected));
     });
   }
@@ -1841,8 +1716,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void verifyCancelIsEnabled() {
     createRouteGroupsPage.inFrame(page -> {
       page.savePresetDialog.waitUntilVisible();
-      Assertions.assertThat(page.savePresetDialog.cancel.isEnabled())
-          .as("Cancel button is enabled")
+      Assertions.assertThat(page.savePresetDialog.cancel.isEnabled()).as("Cancel button is enabled")
           .isTrue();
     });
   }
@@ -1851,8 +1725,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void verifySaveIsEnabled() {
     createRouteGroupsPage.inFrame(page -> {
       page.savePresetDialog.waitUntilVisible();
-      Assertions.assertThat(page.savePresetDialog.save.isEnabled())
-          .as("Save button is enabled")
+      Assertions.assertThat(page.savePresetDialog.save.isEnabled()).as("Save button is enabled")
           .isTrue();
     });
   }
@@ -1871,8 +1744,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void verifySaveIsDisabled() {
     createRouteGroupsPage.inFrame(page -> {
       page.savePresetDialog.waitUntilVisible();
-      Assertions.assertThat(page.savePresetDialog.save.isEnabled())
-          .as("Save button is enabled")
+      Assertions.assertThat(page.savePresetDialog.save.isEnabled()).as("Save button is enabled")
           .isFalse();
     });
   }
@@ -1882,8 +1754,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.inFrame(page -> {
       page.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(page.deletePresetDialog.cancel.isEnabled())
-          .as("Cancel button is enabled")
-          .isTrue();
+          .as("Cancel button is enabled").isTrue();
     });
   }
 
@@ -1892,8 +1763,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.inFrame(page -> {
       page.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(page.deletePresetDialog.delete.isEnabled())
-          .as("Delete button is enabled")
-          .isTrue();
+          .as("Delete button is enabled").isTrue();
     });
   }
 
@@ -1909,8 +1779,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void verifySelectedPreset(String value) {
     createRouteGroupsPage.inFrame(page -> {
       page.deletePresetDialog.waitUntilVisible();
-      Assertions.assertThat(page.deletePresetDialog.preset.getValue())
-          .as("Selected preset")
+      Assertions.assertThat(page.deletePresetDialog.preset.getValue()).as("Selected preset")
           .isEqualTo(value);
     });
   }
@@ -1925,8 +1794,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.inFrame(page -> {
       page.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(page.deletePresetDialog.delete.isEnabled())
-          .as("Delete button is enabled")
-          .isFalse();
+          .as("Delete button is enabled").isFalse();
     });
   }
 
@@ -1935,8 +1803,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.inFrame(page -> {
       page.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(page.deletePresetDialog.message.getNormalizedText())
-          .as("Delete Preset message")
-          .isEqualTo(resolveValue(expected));
+          .as("Delete Preset message").isEqualTo(resolveValue(expected));
     });
   }
 
@@ -1953,8 +1820,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @When("Operator verifies Preset Name field in Save Preset dialog on Create Route Groups page has green checkmark on it")
   public void verifyPresetNameIsValidated() {
     Assertions.assertThat(createRouteGroupsPage.savePresetDialog.confirmedIcon.isDisplayed())
-        .as("Preset Name checkmark")
-        .isTrue();
+        .as("Preset Name checkmark").isTrue();
   }
 
   @When("Operator verifies selected Filter Preset name is {string} on Create Route Groups page")
@@ -1964,14 +1830,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       String actual = StringUtils.trim(page.filterPreset.getValue());
       Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
       Matcher m = p.matcher(actual);
-      Assertions.assertThat(m.matches())
-          .as("Selected Filter Preset value matches to pattern")
+      Assertions.assertThat(m.matches()).as("Selected Filter Preset value matches to pattern")
           .isTrue();
       Long presetId = Long.valueOf(m.group(1));
       String presetName = m.group(2);
-      Assertions.assertThat(presetName)
-          .as("Preset Name")
-          .isEqualTo(exp);
+      Assertions.assertThat(presetName).as("Preset Name").isEqualTo(exp);
       put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID, presetId);
     });
   }
@@ -1983,13 +1846,10 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
     Matcher m = p.matcher(actual);
     Assertions.assertThat(m.matches())
-        .as("Selected Shippers Filter Preset value matches to pattern")
-        .isTrue();
+        .as("Selected Shippers Filter Preset value matches to pattern").isTrue();
     Long presetId = Long.valueOf(m.group(1));
     String presetName = m.group(2);
-    Assertions.assertThat(presetName)
-        .as("Preset Name")
-        .isEqualTo(expected);
+    Assertions.assertThat(presetName).as("Preset Name").isEqualTo(expected);
     put(KEY_SHIPMENTS_FILTERS_PRESET_ID, presetId);
   }
 

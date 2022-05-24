@@ -6,11 +6,10 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -24,7 +23,7 @@ import org.openqa.selenium.support.FindBy;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentInboundScanningPage extends SimpleReactPage {
+public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInboundScanningPage> {
 
   public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
   public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
