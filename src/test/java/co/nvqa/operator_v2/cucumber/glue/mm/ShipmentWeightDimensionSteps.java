@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue.mm;
 
 import co.nvqa.commons.model.core.hub.Shipment;
+import co.nvqa.commons.model.core.hub.ShipmentDimensionResponse;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -12,12 +13,15 @@ import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensi
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionPage.ShipmentWeightState;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage.Column;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightSumUpReportPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -46,11 +50,14 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   ShipmentWeightDimensionAddPage shipmentWeightDimensionAddPage;
   ShipmentWeightDimensionTablePage shipmentWeightDimensionTablePage;
 
+  ShipmentWeightSumUpReportPage shipmentWeightSumUpreport;
+
   @Override
   public void init() {
     shipmentWeightDimensionPage = new ShipmentWeightDimensionPage(getWebDriver());
     shipmentWeightDimensionTablePage = new ShipmentWeightDimensionTablePage(getWebDriver());
     shipmentWeightDimensionAddPage = new ShipmentWeightDimensionAddPage(getWebDriver());
+    shipmentWeightSumUpreport = new ShipmentWeightSumUpReportPage(getWebDriver());
   }
 
   @Then("Operator verify Shipment Weight Dimension page UI")
@@ -419,6 +426,13 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .as("Sum up button is enabled").isTrue();
   }
 
+  @And("Operator select {int} data on Shipment Weight Dimension Table")
+  public void operatorSelectAllDataOnShipmentWeightDimensionTable(int numberOfRows) {
+    shipmentWeightDimensionTablePage.selectAllCheckbox.check();
+    Assertions.assertThat(shipmentWeightDimensionTablePage.sumUpButton.isEnabled())
+        .as("Sum up button is enabled").isTrue();
+  }
+
   @Then("Operator verify Sum up button on Shipment Weight Dimension Table")
   public void operatorVerifySumUpButtonOnShipmentWeightDimensionTable() {
 
@@ -578,6 +592,161 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     Assertions.assertThat(shipmentWeightDimensionPage.presetFilterSelect.hasItem(filterName))
         .as(f("%s is not deleted", filterName))
         .isTrue();
+  }
+
+  @And("Operator select {int} rows from the shipment weight table")
+  public void operatorSelectRowsFromTheShipmentWeightTable(int numOfRows) {
+    shipmentWeightDimensionTablePage.selectSomeRows(numOfRows);
+  }
+
+  @When("Operator click sum up button on Shipment Weight Dimension page")
+  public void operatorClickSumUpButtonOnShipmentWeightDimensionPage() {
+    put(KEY_GENERATED_SHIPMENT_WEIGHT_SUM_UP_REPORT_TIMESTAMP, DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
+    shipmentWeightDimensionTablePage.sumUpButton.click();
+  }
+
+  @Then("Operator verify Shipment Weight Sum Up report page UI")
+  public void operatorVerifyShipmentWeightSumUpReportPageUI() {
+    shipmentWeightSumUpreport.waitUntilLoaded();
+    ZonedDateTime date = get(KEY_GENERATED_SHIPMENT_WEIGHT_SUM_UP_REPORT_TIMESTAMP);
+    List<Shipments> shipments = get(KEY_LIST_OF_CREATED_SHIPMENT);
+    List<ShipmentDimensionResponse> dimensions = get(KEY_UPDATED_SHIPMENTS_DIMENSIONS);
+    DecimalFormat df = new DecimalFormat("#.##");
+
+    List<Long> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
+        .rows
+        .stream()
+        .map( s -> Long.valueOf(!s.shipmentId.getText().isEmpty()? s.shipmentId.getText(): "0"))
+        .collect(Collectors.toList());
+    List<ShipmentDimensionResponse> selectedDimension = dimensions.stream()
+        .filter(s -> selectedShipmentIds.contains(s.getShipment().getId()))
+        .collect(
+        Collectors.toList());
+
+    Double totalWeight = selectedDimension.stream()
+        .map(ShipmentDimensionResponse::getWeight)
+        .reduce(0.0d, Double::sum);
+
+    Double totalKgv = selectedDimension.stream()
+        .map( sd -> sd.getHeight() * sd.getLength() * sd.getWidth())
+        .reduce(0.0d, Double::sum);
+
+    Long totalParcels = selectedDimension.stream()
+        .map(sd -> sd.getShipment().getOrdersCount())
+        .reduce(0L, Long::sum);
+
+
+    Shipment s = shipments.get(0).getShipment();
+    String reportDate = date.format(DateUtil.DATE_TIME_FORMATTER);
+
+
+    //verify ui elements
+
+    Assertions.assertThat(shipmentWeightSumUpreport.sumUpReportTitle.isDisplayed())
+        .as("Page title is displayed")
+        .isTrue();
+    try {
+      Assertions.assertThat(shipmentWeightSumUpreport.sumUpReportTitle.getText())
+          .as("Page title show correctly")
+          .isEqualTo(f("%s Sum-up Report", reportDate));
+    }catch (AssertionError err) {
+      //usually error because UI has offset 1 second
+      LOGGER.info("retrying with 1 second offset");
+      date = date.plusSeconds(1);
+      reportDate = date.format(DateUtil.DATE_TIME_FORMATTER);
+      Assertions.assertThat(shipmentWeightSumUpreport.sumUpReportTitle.getText())
+          .as("Page title show correctly")
+          .isEqualTo(f("%s Sum-up Report", reportDate));
+    }
+
+    //verify end hub
+    Assertions.assertThat(shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.endHubSection))
+        .as("End hub show correct value")
+        .isEqualTo(s.getDestHubName());
+
+    Assertions.assertThat(
+        Integer.parseInt(shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.totalShipmentSection)))
+        .as("Total shipments show correct value")
+        .isEqualTo(shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.size());
+
+    Assertions.assertThat(
+        shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.totalWeightSection)
+    ).as("Total weight should show correct value")
+        .isEqualTo(df.format(totalWeight));
+
+    // kgv formula
+    // kgv = width * length * height / country divisor . by default is 1 if unspecified.
+
+    Assertions.assertThat(
+            shipmentWeightSumUpreport.findValueFromSection(
+                shipmentWeightSumUpreport.totalKgvSection
+            )
+        ).as("Total weight should show correct value")
+        .isEqualTo(df.format(totalKgv));
+
+    Assertions.assertThat(
+            shipmentWeightSumUpreport.findValueFromSection(
+                shipmentWeightSumUpreport.totalParcelsSection)
+
+        ).as(f("Total shipment should show correct value:  %d", totalParcels))
+        .isEqualTo(String.valueOf(totalParcels));
+  }
+
+  @When("Operator select all rows from the shipment sum up report table")
+  public void operatorSelectAllRowsFromTheShipmentSumUpReportTable() {
+    shipmentWeightSumUpreport.selectAllCheckbox.check();
+  }
+
+  @And("Operator click on Download Full Report button on shipment sum up report table")
+  public void operatorClickOnDownloadFullReportButtonOnShipmentSumUpReportTable() {
+    shipmentWeightSumUpreport.downloadFullReportBtn.click();
+  }
+
+  @Then("Operator verify the downloaded CSV Sum Up report file is contains the correct values")
+  public void operatorVerifyTheDownloadedCSVSumUpReportFileIsContainsTheCorrectValues(Map<String, String> dataTable) {
+    String headers = dataTable.get("header");
+    String title = shipmentWeightSumUpreport.sumUpReportTitle.getText().trim();
+    String dateFromTitle = title.substring(0, title.length() - 13);
+    ZonedDateTime date = DateUtil.getDate(dateFromTitle, DateUtil.DATE_TIME_FORMATTER);
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss");
+    String fileNameFormat = date.format(dtf);
+
+    shipmentWeightSumUpreport.verifyFileDownloadedSuccessfully(
+          fileNameFormat, headers);
+
+  }
+
+  @When("Operator remove {int} shipments on Shipment Weight Sum Up report")
+  public void operatorRemoveShipmentsOnShipmentWeightSumUpReport(int numOfShipment) {
+    shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.subList(0, numOfShipment)
+        .forEach(row -> {
+          row.remove.click();
+          shipmentWeightSumUpreport.confirmDeleteModal.waitUntilVisible();
+          shipmentWeightSumUpreport.confirmDeleteModal.confirm();
+        });
+  }
+
+  @When("Operator remove shipment and cancel on Shipment Weight Sum Up report")
+  public void operatorRemoveShipmentAndCancelOnShipmentWeightSumUpReport() {
+    shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.get(0)
+            .remove.click();
+    shipmentWeightSumUpreport.confirmDeleteModal.waitUntilVisible();
+    shipmentWeightSumUpreport.confirmDeleteModal.cancel();
+  }
+
+  @Then("Operator verify Shipment Weight Sum Up report show empty record")
+  public void operatorVerifyShipmentWeightSumUpReportShowEmptyRecord() {
+    Assertions.assertThat(
+        shipmentWeightSumUpreport.downloadFullReportBtn.getAttribute("disabled")
+    ).as("Download full report button is disabled").isNotNull();
+
+    Assertions.assertThat(
+        shipmentWeightSumUpreport.updateMawbBtn.getAttribute("disabled")
+    ).as("Update MAWB button is disabled").isNotNull();
+
+    Assertions.assertThat(
+        shipmentWeightSumUpreport.shipmentSumUpReportNvTable.isDisplayed()
+    ).as("Shipment Weight Sum Up Report table is not displayed").isFalse();
   }
 }
 
