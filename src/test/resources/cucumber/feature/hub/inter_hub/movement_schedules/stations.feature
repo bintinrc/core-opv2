@@ -19,7 +19,6 @@ Feature: Stations
       | longitude    | GENERATED |
     Then Operator verifies that success react notification displayed:
       | top | Hub Created Successfully |
-    And Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}         |
       | facilityType | {KEY_CREATED_HUB.facilityType} |
@@ -43,13 +42,11 @@ Feature: Stations
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When Operator go to menu Hubs -> Facilities Management
-    And Operator refresh hubs cache on Facilities Management page
     And Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name} |
       | facilityType      | Station                |
     Then Operator verifies that success react notification displayed:
       | top | Hub Updated Successfully |
-    And Operator refresh hubs cache on Facilities Management page
     Then Operator verify hub parameters on Facilities Management page:
       | name         | {KEY_CREATED_HUB.name}        |
       | facilityType | Station                       |
