@@ -386,48 +386,6 @@ Feature: Stations
     Then Operator verify all station schedules are correct
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
-  Scenario: Update Station Schedule - Succeed Update Schedule (uid:f808c484-4bcb-4f78-83f9-bbcbaa23da3d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | STATION   |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
-    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    When Operator go to menu Inter-Hub -> Movement Schedules
-    And Movement Management page is loaded
-    When Operator select "Stations" tab on Movement Management page
-    And Operator load schedules on Movement Management page using data below:
-      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    Then Operator verify all station schedules are correct
-    When Operator updates created station schedule
-    When Operator refresh page
-    And Movement Management page is loaded
-    When Operator select "Stations" tab on Movement Management page
-    And Operator load schedules on Movement Management page using data below:
-      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    Then Operator verify all station schedules are correct
-
-  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Create Station Schedule - Merged into Same Wave
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
