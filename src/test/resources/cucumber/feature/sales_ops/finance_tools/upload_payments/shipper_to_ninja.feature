@@ -189,7 +189,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | netsuite_id  | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |
       | <account_id> | {gradle-current-date-yyyy-MM-dd} | <amount> | <transaction_no>   | <type>           | <payment_method> | <payee_name> | <payee_account_number> | <payee_bank> |
     Then Operator verifies csv file is successfully uploaded on the Upload Payments page
-    Then Operator waits for 5 seconds
+    Then Operator waits for 7 seconds
     Then DB Operator gets payment details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
       | column            | expected_value                                                                             |

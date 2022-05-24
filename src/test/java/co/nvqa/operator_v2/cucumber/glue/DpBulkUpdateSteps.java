@@ -195,6 +195,20 @@ public class DpBulkUpdateSteps extends AbstractSteps {
     dpBulkUpdatePage.bulkUpdateDialog.isDisplayed();
   }
 
+  @When("Operator clicks on Set Public on Apply Action Drop Down")
+  public void operatorClicksOnSetPublicOnApplyActionDropDown() {
+    dpBulkUpdatePage.applyActionButton.click();
+    dpBulkUpdatePage.setPublic.click();
+    pause1s();
+  }
+
+  @When("Operator clicks on Set Not Public on Apply Action Drop Down")
+  public void operatorClicksOnSetNotPublicOnApplyActionDropDown() {
+    dpBulkUpdatePage.applyActionButton.click();
+    dpBulkUpdatePage.setNotPublic.click();
+    pause1s();
+  }
+
   @And("Operator edits the capacity of DP via DP Bulk Update Page")
   public void operatorEditsTheCapacityOfDPViaDPBulkUpdatePage() {
     dpBulkUpdatePage.maxCapacity.sendKeys(10000000);
@@ -289,5 +303,11 @@ public class DpBulkUpdateSteps extends AbstractSteps {
     } else {
       dpBulkUpdatePage.maxPickCapacityS.sendKeys(100L);
     }
+  }
+
+  @And("Operator clicks on first checkbox")
+  public void operatorClicksOnFirstCheckbox() {
+    pause1s();
+    dpBulkUpdatePage.firstCheckbox.click();
   }
 }

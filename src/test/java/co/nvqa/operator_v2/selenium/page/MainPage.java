@@ -24,7 +24,7 @@ public class MainPage extends OperatorV2SimplePage {
   public Button openSideNav;
 
   static {
-    MAP_OF_END_URL.put("1. Create Route Groups", "transactions/v2");
+    MAP_OF_END_URL.put("1. Create Route Groups", "create-route-groups");
     MAP_OF_END_URL.put("1.1. Create Route Groups V1.5", "create-route-groups-v1_5");
     MAP_OF_END_URL.put("2. Route Group Management", "route-group");
     MAP_OF_END_URL.put("3. Route Engine - Zonal Routing", "zonal-routing");
@@ -124,6 +124,10 @@ public class MainPage extends OperatorV2SimplePage {
     closeDialogIfVisible();
     openNavigationPanel();
     String mainDashboard = grabEndURL(navTitle);
+    if (mainDashboard.contains("(new)")){
+      mainDashboard = mainDashboard.replace("(","");
+      mainDashboard = mainDashboard.replace(")","");
+    }
     clickNavigation(parentTitle, navTitle, mainDashboard);
   }
 

@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -446,73 +447,89 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   public void verifyPricingScriptAndShipperDiscountDetails(Pricing pricingProfile,
       Pricing pricingProfileFromDb, Pricing pricingProfileFromOPV2) {
-    assertTrue("Script id is not same: ",
-        pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
-    assertEquals("Pricing profile id is not same: ", pricingProfileFromOPV2.getTemplateId(),
-        pricingProfileFromDb.getTemplateId());
-    assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId() != null);
-    assertEquals("Comments are not the same: ", pricingProfile.getComments(),
-        pricingProfileFromDb.getComments());
-    assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(pricingProfile.getScriptName()).as("Script id is correct")
+        .contains(pricingProfileFromDb.getScriptId().toString());
+    softAssertions.assertThat(pricingProfileFromOPV2.getTemplateId()).as("Pricing profile id is correct")
+        .isEqualTo(pricingProfileFromDb.getTemplateId());
+    softAssertions.assertThat(pricingProfileFromDb.getShipperDiscountId())
+        .as("Shipper discount Id is not null")
+        .isNotNull();
+    softAssertions.assertThat(pricingProfile.getComments()).as("Comments are the same")
+        .isEqualTo(pricingProfileFromDb.getComments());
+    softAssertions.assertThat(pricingProfileFromOPV2.getEffectiveDate())
+        .as("Start Date is not null")
+        .isNotNull();
     final Date endDate = pricingProfile.getContractEndDate();
     if (Objects.isNull(endDate)) {
-      assertNull("End Date is not the same: ", pricingProfileFromOPV2.getContractEndDate());
+      softAssertions.assertThat(pricingProfileFromOPV2.getContractEndDate()).as("End Date is null")
+          .isNull();
     } else {
-      assertNotNull("End Date is not the same: ", pricingProfileFromOPV2.getContractEndDate());
+      softAssertions.assertThat(pricingProfileFromOPV2.getContractEndDate())
+          .as("End Date is not null")
+          .isNotNull();
     }
 
     final String discount = pricingProfile.getDiscount();
     if (Objects.isNull(discount)) {
-      assertEquals("Discount amount is not blank:", "-", pricingProfileFromOPV2.getDiscount());
-      assertNull("Type is not not null", pricingProfileFromDb.getType());
+      softAssertions.assertThat(pricingProfileFromOPV2.getDiscount()).as("Discount amount is blank")
+          .isEqualTo("-");
+      softAssertions.assertThat(pricingProfileFromOPV2.getType()).as("Type is blank")
+          .isNull();
     } else if (Double.parseDouble(discount) * 100 % 1 > 0) {
       double expectedDiscount = Math.round(Double.parseDouble(discount) * 100.0) / 100.0;
-      assertEquals("Discount amount is not rounded:", Double.toString(expectedDiscount),
-          pricingProfileFromOPV2.getDiscount());
-      assertEquals("Type is not the same:", pricingProfile.getType(),
-          pricingProfileFromDb.getType());
+      softAssertions.assertThat(pricingProfileFromOPV2.getDiscount())
+          .as("Discount amount is rounded")
+          .isEqualTo(Double.toString(expectedDiscount));
+      softAssertions.assertThat(pricingProfileFromOPV2.getType()).as("Type is correct")
+          .isEqualTo(pricingProfileFromDb.getType());
     } else {
-      assertTrue("Discount amount is not same:",
-          pricingProfileFromDb.getDiscount().contains(pricingProfile.getDiscount()));
-      assertEquals("Type is not the same:", pricingProfile.getType(),
-          pricingProfileFromDb.getType());
+      softAssertions.assertThat(pricingProfileFromDb.getDiscount()).as("Discount amount same")
+          .contains(pricingProfile.getDiscount());
+      softAssertions.assertThat(pricingProfile.getType()).as("Type is correct")
+          .isEqualTo(pricingProfileFromDb.getType());
     }
     if (Objects.isNull(pricingProfile.getCodMin())) {
-      assertEquals("COD min fee is not - ", "-",
-          pricingProfileFromOPV2.getCodMin());
+      softAssertions.assertThat(pricingProfileFromOPV2.getCodMin()).as("COD min fee is -")
+          .isEqualTo("-");
     } else {
-      assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
-          pricingProfileFromOPV2.getCodMin());
+      softAssertions.assertThat(pricingProfileFromOPV2.getCodMin()).as("COD min fee is correct")
+          .isEqualTo(pricingProfile.getCodMin());
     }
     if (Objects.isNull(pricingProfile.getCodMin())) {
-      assertEquals("COD percentage is - ", "-",
-          pricingProfileFromOPV2.getCodPercentage());
+      softAssertions.assertThat(pricingProfileFromOPV2.getCodPercentage())
+          .as("COD percentage fee is -")
+          .isEqualTo("-");
     } else {
-      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage() + "%",
-          pricingProfileFromOPV2.getCodPercentage());
+      softAssertions.assertThat(pricingProfileFromOPV2.getCodPercentage())
+          .as("COD percentage fee is correct")
+          .isEqualTo(pricingProfile.getCodPercentage() + "%");
     }
     if (Objects.isNull(pricingProfile.getInsMin())) {
-      assertEquals("INS min fee is not - ", "-",
-          pricingProfileFromOPV2.getInsMin());
+      softAssertions.assertThat(pricingProfileFromOPV2.getInsMin()).as("INS min fee is -")
+          .isEqualTo("-");
     } else {
-      assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
-          pricingProfileFromOPV2.getInsMin());
+      softAssertions.assertThat(pricingProfileFromOPV2.getInsMin()).as("INS min fee is correct")
+          .isEqualTo(pricingProfile.getInsMin());
     }
     if (Objects.isNull(pricingProfile.getInsPercentage())) {
-      assertEquals("INS percentage is - ", "-",
-          pricingProfileFromOPV2.getInsPercentage());
+      softAssertions.assertThat(pricingProfileFromOPV2.getInsPercentage())
+          .as("INS percentage fee is -")
+          .isEqualTo("-");
     } else {
-      assertEquals("INS percentage is not the same: ", pricingProfile.getInsPercentage() + "%",
-          pricingProfileFromOPV2.getInsPercentage());
+      softAssertions.assertThat(pricingProfileFromOPV2.getInsPercentage())
+          .as("INS percentage fee is correct")
+          .isEqualTo(pricingProfile.getInsPercentage() + "%");
     }
     if (Objects.isNull(pricingProfile.getInsThreshold())) {
-      assertEquals("INS threshold is - ", "-",
-          pricingProfileFromOPV2.getInsThreshold());
+      softAssertions.assertThat(pricingProfileFromOPV2.getInsThreshold()).as("INS Threshold is -")
+          .isEqualTo("-");
     } else {
-      assertEquals("INS threshold is not the same: ",
-          NO_TRAILING_ZERO_DF.format(Double.valueOf(pricingProfile.getInsThreshold())),
-          pricingProfileFromOPV2.getInsThreshold());
+      softAssertions.assertThat(pricingProfileFromOPV2.getInsThreshold())
+          .as("INS Threshold is correct")
+          .isEqualTo(NO_TRAILING_ZERO_DF.format(Double.valueOf(pricingProfile.getInsThreshold())));
     }
+    softAssertions.assertAll();
   }
 
   public void verifyPricingProfileDetails(Pricing pricingProfile, Pricing pricingProfileFromOPV2) {

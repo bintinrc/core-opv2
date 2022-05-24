@@ -243,7 +243,6 @@ public class ShipmentScanningSteps extends AbstractSteps {
     for (String trackingId : trackingIds) {
       pause1s();
       shipmentScanningPage.removeShipmentWithId(trackingId);
-      shipmentScanningPage.checkOrderNotInShipment(trackingId);
     }
   }
 
@@ -267,7 +266,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorScanTheCreatedShipment(String shipmentIdAsString) {
     String shipmentId = resolveValue(shipmentIdAsString);
     shipmentScanningPage.scanBarcode(shipmentId);
-    //shipmentScanningPage.antNotificationMessage = shipmentScanningPage.getAntNotificationMessage();
+    shipmentScanningPage.waitUntilVisibilityOfElementLocated(shipmentScanningPage.XPATH_SMALL_SUCCESS_MESSAGE);
   }
 
   @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
@@ -441,8 +440,15 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @Then("Operator verify small message {string} appears in Shipment Inbound Box")
   public void operatorVerifySmallMessageAppearsInShipmentInboundBox(String smallMessageAsString) {
-    String smallMessage = resolveValue(smallMessageAsString);
-    shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        String smallMessage = resolveValue(smallMessageAsString);
+        shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 5);
   }
 
   @Then("Operator verify small message {string} appears in Remove Shipment Container")

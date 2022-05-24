@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -13,6 +14,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -60,6 +62,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//nv-filter-boolean-box[@main-title='Resolved Tickets']")
   public NvFilterBooleanBox resolverTicketsFilter;
+
+  @FindBy(xpath = "//md-datepicker[@name='filter.fieldKey']")
+  public MdDatepicker createdAtFilter;
 
   @FindBy(xpath = "//nv-autocomplete[@placeholder='filter.select-filter']")
   public NvAutocomplete addFilter;
@@ -271,6 +276,13 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     addFilter.selectValue("Resolved Tickets");
     pause1s();
     resolverTicketsFilter.selectFilter(StringUtils.equalsIgnoreCase("show", filter));
+    pause1s();
+  }
+
+  public void createdAtFilter(String createdAtTo) {
+    addFilter.selectValue("Created At");
+    pause1s();
+    createdAtFilter.simpleSetValue(createdAtTo);
     pause1s();
   }
 

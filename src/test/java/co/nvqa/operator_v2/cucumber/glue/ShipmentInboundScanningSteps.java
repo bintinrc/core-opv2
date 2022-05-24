@@ -37,16 +37,17 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage = new ShipmentInboundScanningPage(getWebDriver());
   }
 
+  @SuppressWarnings("unchecked")
   @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
   public void inboundScanning(String label, String hub) {
-    pause10s();
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        Long shipmentId = Long.valueOf(String.valueOf(get(KEY_CREATED_SHIPMENT_ID)));
+        Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
-        scanningPage.switchTo();
-        scanningPage.inboundScanning(shipmentId, label, finalHub);
+        scanningPage.inFrame(page -> {
+          scanningPage.inboundScanning(shipmentId, label, finalHub);
+        });
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
@@ -213,7 +214,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         String driver = finalData.get("driver");
         String movementTripSchedule = finalData.get("movementTripSchedule");
         scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver,
-                movementTripSchedule);
+            movementTripSchedule);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
@@ -282,7 +283,8 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the following messages display on the card after inbounding")
-  public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(Map<String, String> messages) {
+  public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(
+      Map<String, String> messages) {
     messages = resolveKeyValues(messages);
     Assertions.assertThat(scanningPage.scannedState.getText())
         .as(f("Assert that scanned state is %s", messages.get("scanState")))

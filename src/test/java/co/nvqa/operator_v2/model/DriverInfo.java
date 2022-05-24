@@ -22,6 +22,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   private Integer codLimit;
   private String employmentStartDate;
   private String employmentEndDate;
+  private String vehicleType;
   private String vehicleLicenseNumber;
   private Integer vehicleCapacity;
   private String contactType;
@@ -256,6 +257,14 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public boolean hasVehicleInfo() {
     return vehicleLicenseNumber != null || vehicleCapacity != null;
+  }
+
+  public String getVehicleType() {
+    return vehicleType;
+  }
+
+  public void setVehicleType(String vehicleType) {
+    this.vehicleType = vehicleType;
   }
 
   public boolean hasContactsInfo() {

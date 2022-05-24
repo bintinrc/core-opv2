@@ -7,17 +7,16 @@ import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -26,7 +25,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class GlobalInboundPage extends OperatorV2SimplePage {
+public class GlobalInboundPage extends SimpleReactPage {
 
   @FindBy(xpath = "//div/*[self::h2]")
   public PageElement destinationHub;
@@ -34,7 +33,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div/*[self::h1]")
   public PageElement rackInfo;
 
-  @FindBy(css = "div.toast-bottom")
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement weightDiffInfo;
 
   @FindBy(css = "div[ng-if='ctrl.data.setAsideGroup']")
@@ -43,18 +42,40 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   @FindBy(css = "div[ng-if='ctrl.data.setAsideRackSector']")
   public PageElement setAsideRackSector;
 
-  @FindBy(css = "md-autocomplete[placeholder='Select Hub']")
-  public MdAutocomplete selectHub;
-
-  public static final String XPATH_INBOUND_HUB = "//div[@class='ant-select-selector']//input[@id='rc_select_0']";
+  @FindBy(xpath = "//div[@data-testid='hub-selection-select']")
+  public AntSelect selectHub;
 
   @FindBy(xpath = "//input[@data-testid='device-id-input']")
   public TextBox deviceIdInput;
 
-  @FindBy(xpath = "//button[text()='Proceed']")
-  public Button proceedButton;
+  @FindBy(xpath = "//button[@data-testid='proceed-button']")
+  public Button continueButton;
 
-  @FindBy(xpath = "//nv-tag")
+  @FindBy(xpath = "//input[@data-testid='scan-input-field']")
+  public TextBox scan;
+
+  @FindBy(xpath = "//button[@data-testid='sizing-state-auto-toogle-button']")
+  public Button size;
+
+  @FindBy(xpath = "//div[@data-testid='hub-selection-select']")
+  public AntSelect sizeInput;
+
+  @FindBy(xpath = "//input[@data-testid='weight-input']")
+  public TextBox weightInput;
+
+  @FindBy(xpath = "//input[@data-testid='width-input']")
+  public TextBox dimWidthInput;
+
+  @FindBy(xpath = "//input[@data-testid='height-input']")
+  public TextBox dimHeightInput;
+
+  @FindBy(xpath = "//input[@data-testid='length-input']")
+  public TextBox dimLengthInput;
+
+  @FindBy(xpath = "//span[@data-testid='priority-level']")
+  public PageElement priorityLevel;
+
+  @FindBy(xpath = "//div[@class='order-tag']")
   public PageElement dpTag;
 
   @FindBy(xpath = "//span[contains(@class,'nv-tag md-nvBlue-theme')]")
@@ -63,17 +84,17 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@aria-label='Use order tagging']")
   public Button useOrderTagging;
 
-  @FindBy(xpath = ".//nv-autocomplete[@selected-options='ctrl.data.selectedTagOptions']")
-  public NvAutocomplete selectTag;
+  @FindBy(xpath = "//div[@data-testid='settings-tag-selection-select']")
+  public AntSelect2 selectTag;
 
-  @FindBy(xpath = "//nv-icon-button/button[@aria-label='Settings']")
+  @FindBy(xpath = "//button[@data-testid='settings-button']")
   public Button settings;
 
-  @FindBy(xpath = "    //nv-icon-text-button[@name='Save changes']")
+  @FindBy(xpath = "//span[@data-testid='save-text']")
   public Button saveChanges;
 
-  public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
-  public static String XPATH_CONTAINER = "//div[contains(@class, 'rack-container')]";
+  public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[@class='order-tag']";
+  public static String XPATH_CONTAINER = "//div[contains(@class, 'middle panel')]";
 
 
   public GlobalInboundPage(WebDriver webDriver) {
@@ -83,12 +104,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
   private void selectHubAndDeviceId(String hubName, String deviceId) {
     if (isElementExistFast("//h4[text()='Select the following to begin:']")) {
       pause1s();
-      TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
-      sendKeysAndEnter(XPATH_INBOUND_HUB, hubName);
+      retryIfRuntimeExceptionOccurred(() -> selectHub.selectValue(hubName));
       if (StringUtils.isNotBlank(deviceId)) {
         deviceIdInput.setValue(deviceId);
       }
-      proceedButton.click();
+      continueButton.waitUntilClickable();
+      continueButton.click();
     } else {
       clickNvIconButtonByNameAndWaitUntilEnabled("commons.settings");
       selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
@@ -103,45 +124,32 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
 
   private void overrideSize(String overrideSize) {
     if (overrideSize == null) {
-      if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']")) {
-        clickNvIconTextButtonByName("container.global-inbound.manual");
+      if (size.getText().equalsIgnoreCase("Manual")) {
+        size.click();
       }
     } else {
-      if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']")) {
-        clickNvIconTextButtonByName("container.global-inbound.retain");
-        clickf(".//md-select[starts-with(@id, 'size')]");
-        pause1s();
-        sendKeys("//input[@ng-model=\"searchTerm\"]", overrideSize);
-        clickf(
-            "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,\"%s\") or contains(./div/text(),\"%s\")]",
-            overrideSize, overrideSize);
+      if (size.isDisplayedFast()) {
+        size.click();
+        sizeInput.selectValue(overrideSize);
         pause50ms();
       }
     }
   }
 
   private void overrideWeight(Double overrideWeight) {
-    setOverrideValue("input-weight", overrideWeight);
+    weightInput.sendKeys(overrideWeight);
   }
 
   private void overrideDimHeight(Double overrideDimHeight) {
-    setOverrideValue("input-height", overrideDimHeight);
+    dimHeightInput.sendKeys(overrideDimHeight);
   }
 
   private void overrideDimWidth(Double overrideDimWidth) {
-    setOverrideValue("input-width", overrideDimWidth);
+    dimWidthInput.sendKeys(overrideDimWidth);
   }
 
   private void overrideDimLength(Double overrideDimLength) {
-    setOverrideValue("input-length", overrideDimLength);
-  }
-
-  private void setOverrideValue(String inputId, Double value) {
-    if (value == null) {
-      clearf("//input[@id='%s']", inputId);
-    } else {
-      sendKeysById(inputId, NO_TRAILING_ZERO_DF.format(value));
-    }
+    dimLengthInput.sendKeys(overrideDimLength);
   }
 
   public void successfulGlobalInbound(GlobalInboundParams globalInboundParams) {
@@ -150,7 +158,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
 
     retryIfAssertionErrorOccurred(() ->
     {
-      String lastScannedTrackingId = getTextTrimmed("//h5[contains(@class, 'last-scanned-tracking-id')]");
+      String lastScannedTrackingId = getText("//h5[@class= 'last-scanned-tracking-id']");
       assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
     }, "Checking Last Scanned Tracking ID");
   }
@@ -190,9 +198,8 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
       List<String> items = Arrays.asList(tags.split("\\s*,\\s*"));
       addTag(items);
     }
-    sendKeysAndEnter("//input[@data-testid='scan-input-field']", globalInboundParams.getTrackingId());
-//    sendKeysAndEnterBy("Scan a new parcel / Enter a tracking ID",
-//        globalInboundParams.getTrackingId());
+
+    scan.sendKeys(globalInboundParams.getTrackingId() + Keys.ENTER);
     pause500ms();
   }
 
@@ -244,12 +251,10 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
 
   public void verifiesPriorityLevelInfoIsCorrect(int expectedPriorityLevel,
       String expectedPriorityLevelColorAsHex) {
-    String actualPriorityLevel = getText("//div[contains(@class,'priority-container')]//h5");
-    actualPriorityLevel = actualPriorityLevel.split(" ")[1];
     Color actualPriorityLevelColor = getBackgroundColor(
         "//div[contains(@class,'priority-container')]");
 
-    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
+    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), priorityLevel.getText());
     assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex,
         actualPriorityLevelColor.asHex());
   }
@@ -300,7 +305,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage {
 
   public void verifiesDpTag() {
     String actualTag = dpTag.getText();
-    assertEquals("DP tag", "DP PARCEL", actualTag);
+    assertEquals("DP tag", "DP Parcel", actualTag);
   }
 
   public void verifiesPriorTag() {

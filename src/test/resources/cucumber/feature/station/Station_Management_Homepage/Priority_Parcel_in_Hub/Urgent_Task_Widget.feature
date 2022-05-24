@@ -18,7 +18,10 @@ Feature: Urgent Task Widget
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -51,6 +54,7 @@ Feature: Urgent Task Widget
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -58,13 +62,16 @@ Feature: Urgent Task Widget
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
-    And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<UrgentTasksText>"
     And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<UrgentTasksText>"
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID           |
@@ -74,13 +81,14 @@ Feature: Urgent Task Widget
 
     Examples:
       | HubName       | HubId       | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                | UrgentTasksText                |
-      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 20:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
+      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 20:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels that are late (missed delivery cut off time) |
 
   @ForceSuccessOrder
   Scenario Outline: Late Parcel Inbounded Before Cut Off Time (uid:a556c76e-9ccd-4d59-a4ff-eb255f7437a8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -88,13 +96,16 @@ Feature: Urgent Task Widget
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
-    And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<UrgentTasksText>"
     And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<UrgentTasksText>"
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID           |
@@ -104,13 +115,14 @@ Feature: Urgent Task Widget
 
     Examples:
       | HubName       | HubId       | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                | UrgentTasksText                |
-      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels are due today |
+      | {hub-name-12} | {hub-id-12} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 09:00:00 | Please Confirm ETA of FSR Parcels to Proceed | priority parcels that are late (missed delivery cut off time) |
 
   @ForceSuccessOrder
   Scenario Outline: Due Today Parcel (uid:c6964a2f-17fe-43ed-9d8c-5825943f900f)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -118,13 +130,16 @@ Feature: Urgent Task Widget
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
-    And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<UrgentTasksText>"
     And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<UrgentTasksText>"
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID           |

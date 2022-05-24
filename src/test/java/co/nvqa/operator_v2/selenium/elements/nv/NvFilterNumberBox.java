@@ -39,7 +39,7 @@ public abstract class NvFilterNumberBox extends AbstractFilterBox {
   public TextBox to;
 
   @Override
-  void setValue(String... values) {
+  public void setValue(String... values) {
     selectFilter(values[0]);
   }
 
