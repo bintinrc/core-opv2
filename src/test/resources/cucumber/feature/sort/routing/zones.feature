@@ -36,6 +36,16 @@ Feature: Zones
     When Operator changes the newly created Zone to be "Normal" zone
     Then Operator verifies that the newly created "Normal" zone's details are right
 
+  @DeleteCreatedZone
+  Scenario: Delete Zone (uid:fa98df0c-2681-4c86-961b-de5a9ee19bdd)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create zone using data below:
+      | hubName | {hub-name} |
+      | hubId   | {hub-id}   |
+    Given Operator go to menu Routing -> Zones
+    And Operator delete the new Zone
+    Then Operator verify the new Zone is deleted successfully
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
