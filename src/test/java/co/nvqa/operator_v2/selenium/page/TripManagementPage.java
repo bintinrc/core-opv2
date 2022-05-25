@@ -108,6 +108,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String DETAIL_PAGE_SHIPMENTS_TAB_XPATH = "//div[text()='Shipments' and @role='tab']";
   private static final String DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
   private static final String DETAIL_PAGE_ASSIGN_DRIVER_XPATH = "//span[@data-testid='assign-driver-icon']"; //Helpful for the future - Add driver from detail page, do not remove
+  private static final String SHIPMENTS_TAB_SHIPMENT_ID_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-id']";
+  private static final String SHIPMENTS_TAB_ORIGIN_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-orig-hub-name']";
+  private static final String SHIPMENTS_TAB_CURRENT_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-curr-hub-name']";
+  private static final String SHIPMENTS_TAB_DEST_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-dest-hub-name']";
+  private static final String SHIPMENTS_TAB_STATUS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-status' and text()='Status']";
+  private static final String SHIPMENTS_TAB_SLA_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-sla']";
+  private static final String SHIPMENTS_TAB_PARCELS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-orders-count']";
+  private static final String SHIPMENTS_TAB_SHIPMENT_TYPE_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-type']";
+  private static final String SHIPMENTS_TAB_TABLE_BODY_XPATH = "//div[contains(@id,'shipments')]//div[contains(@class,'ant-table-body')]";
 
   private static final String TRIP_DEPARTURE_PAGE_MESSAGE_XPATH="//div[@class='ant-modal-content']//span[@class='ant-typography']/strong";
   private static final String TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH="//div[@class='ant-modal-content']//span[text()='Origin Hub']/ancestor::div[contains(@class,'ant-col')]";
@@ -865,6 +874,26 @@ public class TripManagementPage extends OperatorV2SimplePage {
     findElementByXpath(TRIP_ASSIGN_DRIVER_PAGE_UNASSIGN_DRIVER_XPATH).click();
     assignTripModal.saveButton.click();
     assignTripModal.waitUntilInvisible();
+  }
+
+  public void clickShipmentTab(){
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_SHIPMENTS_TAB_XPATH);
+    findElementByXpath(DETAIL_PAGE_SHIPMENTS_TAB_XPATH).click();
+
+  }
+
+  public void verifyShipmentTabElements(){
+    waitUntilVisibilityOfElementLocated(SHIPMENTS_TAB_TABLE_BODY_XPATH);
+    WebElement TableBody = findElementByXpath(SHIPMENTS_TAB_TABLE_BODY_XPATH);
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_SHIPMENT_ID_XPATH,5)).as("Shipment ID appear in Shipment Table").isTrue();
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_ORIGIN_HUB_XPATH,5)).as("Origin Hub appear in Shipment Table").isTrue();
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_CURRENT_HUB_XPATH,5)).as("Last Inbound Hub appear in Shipment Table").isTrue();
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_DEST_HUB_XPATH,5)).as("Destination Hub appear in Shipment Table").isTrue();
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_SHIPMENT_TYPE_XPATH,5)).as("Shipment type appear in Shipment Table").isTrue();
+    executeScript("arguments[0].scrollLeft = arguments[0].offsetWidth;", TableBody);
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_SLA_XPATH,5)).as("SLA appear in Shipment Table").isTrue();
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_PARCELS_XPATH,5)).as("Parcels appear in Shipment Table").isTrue();
+    Assertions.assertThat(isElementVisible(SHIPMENTS_TAB_STATUS_XPATH,5)).as("Status appear in Shipment Table").isTrue();
   }
 
   public void verifyAddDriverUnclickable(){
