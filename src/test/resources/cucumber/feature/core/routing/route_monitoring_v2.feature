@@ -436,12 +436,12 @@ Feature: Route Monitoring V2
     And API Driver failed the delivery of the created parcel using data below:
       | orderNumber            | 1           |
       | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 5           |
+      | failureReasonCodeId    | 6           |
       | failureReasonIndexMode | FIRST       |
     And API Driver failed the delivery of the created parcel using data below:
       | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 5           |
+      | failureReasonCodeId    | 6           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded

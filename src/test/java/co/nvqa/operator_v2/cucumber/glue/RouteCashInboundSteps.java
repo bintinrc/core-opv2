@@ -102,7 +102,7 @@ public class RouteCashInboundSteps extends AbstractSteps {
           routeCashInboundPage.editCodDialog.waitUntilVisible();
           routeCashInboundPage.editCodDialog.routeId.setValue(
               routeCashInboundCodEdited.getRouteId());
-          routeCashInboundPage.editCodDialog.amountCollected.setValue(
+          routeCashInboundPage.editCodDialog.amountCollected.jsSetValue(
               routeCashInboundCodEdited.getAmountCollected());
           routeCashInboundPage.editCodDialog.receiptNumber.setValue(
               routeCashInboundCodEdited.getReceiptNumber());

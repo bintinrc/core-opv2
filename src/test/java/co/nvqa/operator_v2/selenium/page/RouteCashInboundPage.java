@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -164,16 +163,16 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
 
   public static class EditCodDialog extends AntModal {
 
-    @FindBy(xpath = ".//span[./input[@placeholder='Route ID']]")
-    public AntTextBox routeId;
+    @FindBy(css = "[label='Route ID']")
+    public ForceClearTextBox routeId;
 
-    @FindBy(xpath = "(.//span[./input[@type='number']])[2]")
-    public AntTextBox amountCollected;
+    @FindBy(css = "[label='Amount Collected']")
+    public ForceClearTextBox amountCollected;
 
-    @FindBy(xpath = ".//span[./input[@placeholder='Receipt Number']]")
-    public AntTextBox receiptNumber;
+    @FindBy(css = "[placeholder='Receipt Number']")
+    public ForceClearTextBox receiptNumber;
 
-    @FindBy(xpath = ".//button[.='Submit']")
+    @FindBy(css = "[data-testid='cod.edit.submit']")
     public AntButton submit;
 
     public EditCodDialog(WebDriver webDriver, WebElement webElement) {

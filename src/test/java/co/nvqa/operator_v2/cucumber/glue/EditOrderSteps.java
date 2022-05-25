@@ -1392,7 +1392,6 @@ public class EditOrderSteps extends AbstractSteps {
       editOrderPage.editRtsDetailsDialog.postcode.setValue(value);
     }
     editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
-//    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
   }
 
   @Then("Operator resume order on Edit Order page")
