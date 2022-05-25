@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import java.util.Date;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -48,10 +50,18 @@ public class AntDateRangePicker extends AntAbstractFilterBox {
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, to)))).click();
   }
 
+  public void setFromDate(Date from) {
+    setFromDate(DateUtil.fromDate(from).format(DateUtil.DATE_FORMATTER));
+  }
+
   public void setFromDate(String from) {
     fromInput.click();
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, from)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
+  }
+
+  public void setToDate(Date to) {
+    setToDate(DateUtil.fromDate(to).format(DateUtil.DATE_FORMATTER));
   }
 
   public void setToDate(String to) {
@@ -82,6 +92,10 @@ public class AntDateRangePicker extends AntAbstractFilterBox {
     ok.click();
   }
 
+  public void selectFromHours(long value) {
+    selectFromHours(String.format("%02d", value));
+  }
+
   public void selectFromMinutes(String value) {
     fromInput.click();
     Button button = new Button(webDriver,
@@ -97,6 +111,10 @@ public class AntDateRangePicker extends AntAbstractFilterBox {
     button.scrollIntoView();
     button.jsClick();
     ok.click();
+  }
+
+  public void selectToHours(long value) {
+    selectToHours(String.format("%02d", value));
   }
 
   public void selectToMinutes(String value) {

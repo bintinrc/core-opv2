@@ -33,6 +33,10 @@ public class FinancialBatchPage extends SimpleReactPage<FinancialBatchPage> {
   public PageElement toastErrorBottomText;
   @FindBy(xpath = "//iframe[contains(@src,'financial-batch')]")
   private PageElement pageFrame;
+  @FindBy(xpath = "//span[text()='Enter Email Addresses']//preceding-sibling::div/div/div/input")
+  public PageElement emailAddressTxtBox;
+  @FindBy(xpath = "//span[text()='Request Report']/parent::button")
+  public Button requestReportBtn;
 
   public FinancialBatchPage(WebDriver webDriver) {
     super(webDriver);
@@ -107,4 +111,15 @@ public class FinancialBatchPage extends SimpleReactPage<FinancialBatchPage> {
   public String getCreditNettBalance() {
     return getText(f(CREDIT_VALUES_XPATH, "nett"));
   }
+
+  public void setEmailAddress(String emailAddress) {
+    emailAddressTxtBox.sendKeys(emailAddress);
+  }
+
+  public void verifyNoErrorsAvailable() {
+    if (toastErrors.size() > 0) {
+      fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
+    }
+  }
+
 }

@@ -1,5 +1,5 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroupsV1.5
-Feature: Create Route Groupss V1.5 - Preset Filters
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups
+Feature: Create Route Groups - Preset Filters
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

@@ -45,9 +45,8 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       try {
         Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
-        scanningPage.inFrame(page -> {
-          scanningPage.inboundScanning(shipmentId, label, finalHub);
-        });
+        scanningPage.switchTo();
+        scanningPage.inboundScanning(shipmentId, label, finalHub);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
@@ -141,7 +140,10 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       try {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         final String resolvedHub = resolveValue(hub);
-        scanningPage.inboundScanningNegativeScenario(shipmentId, label, resolvedHub, condition);
+        scanningPage.inFrame(page -> {
+          scanningPage.inboundScanningNegativeScenario(shipmentId, label, resolvedHub, condition);
+        });
+
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         scanningPage.refreshPage();

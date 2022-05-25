@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
@@ -238,8 +239,9 @@ public class EditOrderSteps extends AbstractSteps {
   }
 
   @When("Operator completes COD order manually by updating reason for change as {string}")
-  public void operator_completes_COD_order_manually_by_updating_reason_for_change_as(String changeReason) {
-    if("GENERATED".equals(changeReason)){
+  public void operator_completes_COD_order_manually_by_updating_reason_for_change_as(
+      String changeReason) {
+    if ("GENERATED".equals(changeReason)) {
       changeReason = f("This reason is created by automation at %s.",
           CREATED_DATE_SDF.format(new Date()));
     }
@@ -643,6 +645,11 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("status")) {
       Assert.assertEquals("Delivery Details - Status", f("Status: %s", expectedData.get("status")),
           editOrderPage.deliveryDetailsBox.status.getText());
+    }
+    if (expectedData.containsKey("address")) {
+      Assertions.assertThat(editOrderPage.deliveryDetailsBox.toAddress.getNormalizedText())
+          .as("Delivery Details - address")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
     }
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
@@ -1385,7 +1392,7 @@ public class EditOrderSteps extends AbstractSteps {
       editOrderPage.editRtsDetailsDialog.postcode.setValue(value);
     }
     editOrderPage.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
+//    editOrderPage.waitUntilInvisibilityOfToast("1 order(s) RTS-ed", true);
   }
 
   @Then("Operator resume order on Edit Order page")
@@ -1676,15 +1683,23 @@ public class EditOrderSteps extends AbstractSteps {
     recoveryTicket.setLiability(liability);
     recoveryTicket.setDamageDescription(damageDescription);
     recoveryTicket.setOrderOutcome(orderOutcome);
-    recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
-    recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
+    if (StringUtils.isNotBlank(orderOutcomeDamaged)) {
+      recoveryTicket.setOrderOutcome(orderOutcomeDamaged);
+    }
+    if (StringUtils.isNotBlank(orderOutcomeMissing)) {
+      recoveryTicket.setOrderOutcome(orderOutcomeMissing);
+    }
+    if (StringUtils.isNotBlank(orderOutcomeDuplicateParcel)) {
+      recoveryTicket.setOrderOutcome(orderOutcomeDuplicateParcel);
+    }
+    if (StringUtils.isNotBlank(orderOutcomeInaccurateAddress)) {
+      recoveryTicket.setOrderOutcome(orderOutcomeInaccurateAddress);
+    }
     recoveryTicket.setCustZendeskId(custZendeskId);
     recoveryTicket.setShipperZendeskId(shipperZendeskId);
     recoveryTicket.setTicketNotes(ticketNotes);
     recoveryTicket.setParcelDescription(parcelDescription);
     recoveryTicket.setExceptionReason(exceptionReason);
-    recoveryTicket.setOrderOutcomeInaccurateAddress(orderOutcomeInaccurateAddress);
-    recoveryTicket.setOrderOutcomeDuplicateParcel(orderOutcomeDuplicateParcel);
     recoveryTicket.setIssueDescription(issueDescription);
     recoveryTicket.setRtsReason(rtsReason);
 

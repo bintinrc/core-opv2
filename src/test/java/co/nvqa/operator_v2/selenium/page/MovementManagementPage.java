@@ -110,7 +110,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//label[starts-with(.,'Pending')]")
   public PageElement pendingTab;
 
-  @FindBy(xpath = "//th[contains(.,'Station')]//input")
+  @FindBy(xpath = "//label[starts-with(.,'Pending')]")
+  public PageElement inputOfPendingTab;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-hub-name']")
   public TextBox stationFilter;
 
   //region Stations tab
@@ -535,10 +538,18 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       }
 
       if (stationMovementSchedule.getDuration() != null) {
-        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
-        TestUtils.findElementAndClick(
-            "//div[@title='" + stationMovementSchedule.getDuration() + "']", "xpath",
-            getWebDriver());
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+        {
+          TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+          pause2s();
+          TestUtils.findElementAndClick(
+              "//div[contains(@text," + stationMovementSchedule.getDuration() + ")]", "xpath",
+              getWebDriver());
+          pause2s();
+          assertTrue("duration days input is wrong", findElement(
+              By.xpath("//span[@title='" + stationMovementSchedule.getDuration() + "']")).isDisplayed());
+        }, 3);
+
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
@@ -802,7 +813,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     }
   }
 
-  public static class HubRelationSchedulesTable extends AntTable<HubRelationSchedule> {
+  public static class HubRelationSchedulesTable extends AntTableV3<HubRelationSchedule> {
 
     @FindBy(xpath = "//td[contains(@class,'start-time')]")
     public AntTimePicker departureTime;
@@ -843,11 +854,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     public HubRelationSchedulesTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("originHub", "origin-hub-name")
-          .put("destinationHub", "destination-hub-name")
+          .put("originHubName", "origin-hub-name")
+          .put("destinationHubName", "destination-hub-name")
           .put("movementType", "movement-type")
           .put("departureTime", "start-time")
-          .put("endTime", "duration")
+          .put("duration", "duration")
           .put("comment", "comments")
           .build()
       );
@@ -857,7 +868,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
             value = value.toLowerCase();
             return String.join("_", value.split(" "));
           },
-          "endTime", value ->
+          "duration", value ->
           {
             Matcher m = DURATION_PATTERN.matcher(value);
             return m.matches() ? m.group(1) + ":" + m.group(2) + ":" + m.group(3) : null;

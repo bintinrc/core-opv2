@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.FinancialBatchPage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
@@ -152,4 +153,11 @@ public class FinancialBatchSteps extends AbstractSteps {
     }
   }
 
+  @And("Operator generated financial batch report using data below:")
+  public void operatorGeneratedFinancialBatchReportUsingDataBelow(Map<String, String> mapOfData) {
+    if (mapOfData.containsKey("emailAddress")) {
+      financialBatchPage.setEmailAddress(mapOfData.get("emailAddress"));
+    }
+    financialBatchPage.requestReportBtn.click();
+  }
 }

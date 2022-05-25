@@ -222,13 +222,16 @@ Feature: Sort Task
     When Operator search for "SORT-SG-2-HUB" node on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
       | SORT-SG-2-HUB   |
+      | SORT-SG-2-HUB   |
       | {hub-name-4}    |
       | {mid-tier-name} |
     When Operator reset view on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
       | SORT-SG-2-HUB   |
+      | SORT-SG-2-HUB   | 
       | {hub-name-4}    |
       | {mid-tier-name} |
+      | SORT-1          |
       | SORT-1          |
 
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
@@ -250,7 +253,9 @@ Feature: Sort Task
     And Operator search for "{mid-tier-name}" node on Sort Tasks page
     Then Operator verify displayed nodes on Sort Tasks page:
       | {hub-name-4}    |
+      | SORT-SG-2-HUB   |
       | {mid-tier-name} |
+      | SORT-1          |
     And Operator verify following nodes are highlighted on Sort Tasks page:
       | {mid-tier-name} |
 
