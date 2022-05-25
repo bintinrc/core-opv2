@@ -63,7 +63,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']")
   public TextBox shipmentIdInput;
 
-  @FindBy(xpath = "//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span")
+  @FindBy(xpath = "//div[@class='message']")
   public PageElement scanAlertMessage;
 
   @FindBy(xpath = "//md-card[contains(@class,'scan-status-card')]")
@@ -80,10 +80,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = ".//button[.='Proceed']")
   public Button proceed;
 
-  @FindBy(css = "div.scan-state-text h2")
+  @FindBy(css = "h2.scan-state-text")
   public PageElement scannedState;
 
-  @FindBy(css = "md-card-content h1")
+  @FindBy(xpath = "//h1[@data-testid='scan-state-command']")
   public PageElement scannedMessage;
 
   @FindBy(css = "div.scanned-shipping-id")
