@@ -403,14 +403,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       try {
         shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         Assertions.assertThat(shipmentsTable.readEntity(1).getId()).as("Shipment Id:").isEqualTo(shipmentId);
-        /*ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
-
-        List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
-        shipmentList.stream()
-            .filter(shipment -> shipment.getId().equals(shipmentId))
-            .findFirst()
-            .orElseThrow(
-                () -> new AssertionError(f("Shipment with ID = '%s' not exist.", shipmentId)));*/
       } catch (AssertionError ex) {
         clickEditSearchFilterButton();
         clickButtonLoadSelection();
