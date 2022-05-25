@@ -178,7 +178,7 @@ Feature: Global Inbound
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":1.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":1.0 }, "is_pickup_required":true, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
     Given DB Operator gets the Order ID by Tracking ID
     Given DB Operator gets Reservation ID based on Order ID from order pickups table
@@ -193,12 +193,11 @@ Feature: Global Inbound
     And API Driver success Reservation by scanning created parcel
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-3}                               |
+      | hubName    | {KEY_CREATED_ORDER.destinationHub}         |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #55a1e8                            |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
     And DB Operator verify dp_qa_gl.dp_job_orders record using data below:
@@ -219,7 +218,7 @@ Feature: Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name-3}     |
+      | hubName | {KEY_CREATED_ORDER.destinationHub}         |
 
   @CloseNewWindows
   Scenario Outline: Inbound with Priority Level - <dataset_name> (<hiptest-uid>)
