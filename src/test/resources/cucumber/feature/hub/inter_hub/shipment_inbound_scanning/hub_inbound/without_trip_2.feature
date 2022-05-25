@@ -18,6 +18,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     When Operator filter Shipment Status = Transit on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
+#    Then Operator verify parameters of the created shipment on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
   @DeleteShipment
@@ -59,7 +60,9 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Completed alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} in Shipment Inbound Scanning page
+    Then Click on Yes, continue on dialog box
+    Then Operator verify scan text message "In Transit for" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Hub Inbound Cancelled Shipment In Destination Hub (uid:2af315a0-4d44-4004-a4fd-8228ef6ce55b)
@@ -72,7 +75,9 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page with Cancelled alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} in Shipment Inbound Scanning page
+    And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Hub Inbound Cancelled Shipment Not In Destination Hub (uid:5cd67385-6a4b-4d0b-9658-f81ebfac6dd5)
@@ -85,7 +90,10 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
+#    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} in Shipment Inbound Scanning page
+    And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" appears in Shipment Inbound Box
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

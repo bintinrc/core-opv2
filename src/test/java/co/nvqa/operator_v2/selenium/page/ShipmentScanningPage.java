@@ -535,7 +535,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     noGoBack.waitUntilClickable();
     noGoBack.click();
-    antNotificationMessage = getAntNotificationMessage();
+    //antNotificationMessage = getAntNotificationMessage();
   }
 
   public void clickYesContinueInInboundScanningDialog() {
