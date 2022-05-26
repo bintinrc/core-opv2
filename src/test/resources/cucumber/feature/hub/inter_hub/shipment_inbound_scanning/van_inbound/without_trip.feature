@@ -13,7 +13,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     And Operator refresh page
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page
-    Then Operator verify error message in shipment inbound scanning is "Transit" for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify small message "Shipment id {KEY_CREATED_SHIPMENT_ID} cannot change status from Transit to Transit" appears in Shipment Inbound Box
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -38,7 +38,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} in Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment @ForceSuccessOrder
@@ -61,7 +63,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} in Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -73,7 +77,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} in Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -90,7 +96,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} in Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -107,7 +115,9 @@ Feature: Shipment Van Inbound Without Trip Scanning
     When Operator change the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} in Shipment Inbound Scanning page
+    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Singapore"
 
   @DeleteShipment
