@@ -180,7 +180,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     if (!isMawb) {
       selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
     } else {
-      sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
+      sendKeysAndEnter("//input[@ng-model='search' and contains(@id,'input')]", value);
     }
     pause1s();
   }
