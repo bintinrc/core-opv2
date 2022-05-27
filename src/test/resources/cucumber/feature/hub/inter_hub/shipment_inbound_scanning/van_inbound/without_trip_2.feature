@@ -16,7 +16,9 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-id-2} on Shipment Inbound Scanning page with Completed alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
+    Then Click on Yes, continue on dialog box
+    Then Operator verify scan text message "Still In transit" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Van Inbound Completed Shipment Not In Origin Hub (uid:eab6d9b4-d433-41de-ae68-dfb2da3eb59e)
@@ -29,7 +31,9 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with Completed alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
+    Then Click on Yes, continue on dialog box
+    Then Operator verify scan text message "Still In transit" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Van Inbound Cancelled Shipment In Origin Hub
@@ -42,7 +46,9 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with Cancelled alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
+    And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Van Inbound Cancelled Shipment Not In Origin Hub (uid:a7c716a4-aa89-4af7-b9d0-8d9e37caf766)
@@ -55,7 +61,9 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
+    And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Van Inbound Pending Shipment In Origin Hub (uid:12043574-7019-492d-a0f6-0b6147ad518b)
@@ -75,7 +83,8 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with pending shipment alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
+    Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is [Pending], but scanned at [{hub-name-2}], please inbound into van in the origin hub [{hub-name}]" appears in Shipment Inbound Box
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
@@ -133,7 +142,8 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page with closed shipment alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
+    Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is [Closed], but scanned at [{hub-name-2}], please inbound into van in the origin hub [{hub-name}]" appears in Shipment Inbound Box
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Closed on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
@@ -145,7 +155,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning wrong Shipment -1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
-    Then Operator verify error message in shipment inbound scanning is "shipment not found" for shipment "-1"
+    Then Operator verify small message "Shipment -1 can not be found." appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Van Inbound Transit Shipment In Origin Hub (uid:43f4bacc-e862-4410-89b1-15be54463875)

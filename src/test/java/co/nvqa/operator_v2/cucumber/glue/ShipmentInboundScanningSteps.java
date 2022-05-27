@@ -286,6 +286,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId,
       String hubName) {
     String resolvedHubName = resolveValue(hubName);
+    scanningPage.switchTo();
     scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
   }
 
