@@ -30,6 +30,9 @@ public class ShipmentWeightDimensionTablePage extends
   public Button backButton;
   @FindBy(xpath = "//button[span[contains(text(),'Sum up')]]")
   public Button sumUpButton;
+
+  @FindBy(xpath = "//button[span[contains(text(),'Update MAWB')]]")
+  public Button updateMawbButton;
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentWeightRow> shipmentWeightNvTable;
   @FindBy(xpath = "//div[contains(text(), 'Showing')]")
