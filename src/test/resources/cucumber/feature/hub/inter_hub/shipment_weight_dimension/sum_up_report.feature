@@ -15,7 +15,7 @@ Feature: Sum Up Report
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -48,7 +48,7 @@ Feature: Sum Up Report
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -79,7 +79,7 @@ Feature: Sum Up Report
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -112,7 +112,7 @@ Feature: Sum Up Report
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -146,7 +146,7 @@ Feature: Sum Up Report
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -179,7 +179,7 @@ Feature: Sum Up Report
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -211,7 +211,7 @@ Feature: Sum Up Report
         | mawb                  | RANDOM                                  |
         | destinationAirportId  | {airport-id-1}                          |
         | originAirportId       | {airport-id-2}                          |
-        | vendorId              | {vendor_id}                             |
+        | vendorId              | {vendor-id}                             |
       Given Operator go to menu Shipper Support -> Blocked Dates
       Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
       Then Operator verify Shipment Weight Dimension page UI
