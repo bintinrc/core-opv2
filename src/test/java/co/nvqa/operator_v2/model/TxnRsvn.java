@@ -186,8 +186,8 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
     setSequence(getValueIfIndexExists(values, 0));
     setId(getValueIfIndexExists(values, 1));
     setOrderId(getValueIfIndexExists(values, 2));
-    setTrackingId(getValueIfIndexExists(values, 3));
-    setWaypointId(getValueIfIndexExists(values, 4));
+    setWaypointId(getValueIfIndexExists(values, 3));
+    setTrackingId(getValueIfIndexExists(values, 4));
     setType(getValueIfIndexExists(values, 5));
     setShipper(getValueIfIndexExists(values, 6));
     setAddress(getValueIfIndexExists(values, 7));

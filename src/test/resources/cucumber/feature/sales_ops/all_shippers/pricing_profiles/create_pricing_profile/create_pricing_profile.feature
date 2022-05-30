@@ -3,7 +3,6 @@ Feature: Create Pricing Profile
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
 
   @CloseNewWindows
   Scenario: Create a new Shipper - Create Pricing Profile (uid:78dadc9d-16ea-429f-88ff-eb472bad435f)
@@ -67,6 +66,8 @@ Feature: Create Pricing Profile
 
   @CloseNewWindows
   Scenario: Create Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
+    Given DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
+    And Operator waits for 2 seconds
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-basic-global-id}"
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id}} |
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
@@ -92,6 +93,8 @@ Feature: Create Pricing Profile
 
   @CloseNewWindows
   Scenario: Create Pricing Profile with COD Settings and Insurance Settings (uid:e3e08035-2d35-459a-8398-7cf8dafd328d)
+    Given DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
+    And Operator waits for 2 seconds
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate           | {gradle-next-1-day-yyyy-MM-dd}              |
@@ -110,6 +113,8 @@ Feature: Create Pricing Profile
 
   @CloseNewWindows
   Scenario: Create Pricing Profile with Use Country Level COD and Insurance (uid:0bee7a3c-9c6c-4260-bd68-21d110d4c40e)
+    Given DB Operator deletes "{shipper-v4-dummy-pricing-profile-basic-global-id}" shipper's pricing profiles
+    And Operator waits for 2 seconds
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-basic-legacy-id}"
     When Operator adds new Shipper's Pricing Profile
       | startDate         | {gradle-next-1-day-yyyy-MM-dd}              |

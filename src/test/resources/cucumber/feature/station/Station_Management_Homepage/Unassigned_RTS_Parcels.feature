@@ -24,6 +24,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -62,6 +65,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -99,6 +105,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -147,6 +156,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -197,7 +209,7 @@ Feature: Unassigned RTS Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -206,6 +218,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -247,6 +262,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -281,7 +299,7 @@ Feature: Unassigned RTS Parcels
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+      | globalInboundRequest | { "hubId":"<HubId>" } |
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -290,6 +308,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -330,6 +351,9 @@ Feature: Unassigned RTS Parcels
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     And Operator updates the destination HubId "<DestinationHubId>" in Parcels table
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed

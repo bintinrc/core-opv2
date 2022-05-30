@@ -118,6 +118,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(rackSector)) {
       rackSector = order.getRackSector();
     }
+    globalInboundPage.switchTo();
     globalInboundPage
         .globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor,
             weightWarning, rackSector, destinationHub);

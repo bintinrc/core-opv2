@@ -82,6 +82,21 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.assignShipperDialog.assignShipper.clickAndWaitUntilDone();
   }
 
+  @Then("^Operator unassign pending task on Reservation Preset Management page:$")
+  public void unassignPendingTask(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String shipper = data.get("shipper");
+    reservationPresetManagementPage.pendingTab.click();
+    pause2s();
+    PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
+        .filter(t -> t.shipper.getText().startsWith("Unassign: " + shipper))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Task for shipper " + shipper + " was not found"));
+    pendingTaskBlock.unassign.click();
+    reservationPresetManagementPage.unassignShipperDialog.waitUntilVisible();
+    reservationPresetManagementPage.unassignShipperDialog.unassignShipper.clickAndWaitUntilDone();
+  }
+
   @Then("^Operator route pending reservations on Reservation Preset Management page:$")
   public void routePendingReservations(Map<String, String> data) {
     data = resolveKeyValues(data);

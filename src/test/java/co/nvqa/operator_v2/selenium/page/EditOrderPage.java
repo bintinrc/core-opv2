@@ -54,7 +54,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.DATE_TIME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
@@ -2126,24 +2125,26 @@ public class EditOrderPage extends OperatorV2SimplePage {
     switch (ticketType) {
       case RecoveryTicketsPage.TICKET_TYPE_DAMAGED: {
         //Damaged Details
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDamaged());
-        createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
-        createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
-        createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        if (StringUtils.isNotBlank(recoveryTicket.getLiability())) {
+          createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
+        }
+        if (StringUtils.isNotBlank(recoveryTicket.getParcelLocation())) {
+          createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
+        }
+        if (StringUtils.isNotBlank(recoveryTicket.getDamageDescription())) {
+          createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
+        }
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_MISSING: {
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeMissing());
-        createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
         createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
@@ -2161,12 +2162,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
       case RecoveryTicketsPage.TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
+      }
+      case RecoveryTicketsPage.TICKET_TYPE_SELF_COLLECTION: {
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        break;
       }
     }
 

@@ -238,6 +238,10 @@ public class PageElement extends SimplePage {
     return executeScript(script, getWebElement());
   }
 
+  public boolean isSelected() {
+    return getWebElement().isSelected();
+  }
+
   private WebElement refreshWebElement(WebDriver webDriver, WebElement webEl) {
     String elementInfo = webEl.toString();
     if (elementInfo.contains("->")) {

@@ -27,10 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -183,7 +180,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     if (!isMawb) {
       selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
     } else {
-      sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
+      sendKeysAndEnter("//input[@ng-model='search' and contains(@id,'input')]", value);
     }
     pause1s();
   }
@@ -404,18 +401,14 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() ->
     {
       try {
-        List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
-        shipmentList.stream()
-            .filter(shipment -> shipment.getId().equals(shipmentId))
-            .findFirst()
-            .orElseThrow(
-                () -> new AssertionError(f("Shipment with ID = '%s' not exist.", shipmentId)));
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+        Assertions.assertThat(shipmentsTable.readEntity(1).getId()).as("Shipment Id:").isEqualTo(shipmentId);
       } catch (AssertionError ex) {
         clickEditSearchFilterButton();
         clickButtonLoadSelection();
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, "retry Inbounded Shipment Exist", 500, 10);
   }
 
   public void clearAllFilters() {
@@ -1090,6 +1083,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String RESULT = "result";
     public static final String HUB = "hub";
     public static final String CREATED_AT = "createdAt";
+    public static final String XPATH_TABLE_DATA = "//div[contains(@id,'shipment-events')]//tr[./td[.='%s']]//td";
 
     public ShipmentEventsTable(WebDriver webDriver) {
       super(webDriver);
@@ -1104,6 +1098,19 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       setEntityClass(ShipmentEvent.class);
       setNvTableParam("ctrl.tableParamScans");
     }
+
+    public Map<String, String> readShipmentEventsTable(String source) {
+      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
+      List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
+      Assertions.assertThat(list.size()).as(f("There is no [%s] shipment event on Shipment Details page",source)).isNotEqualTo(0);
+      Map<String, String> eventsTable = new HashMap<>();
+      eventsTable.put(SOURCE, list.get(0));
+      eventsTable.put(USER_ID, list.get(1));
+      eventsTable.put(RESULT, list.get(2));
+      eventsTable.put(HUB, list.get(3));
+      eventsTable.put(CREATED_AT, list.get(4));
+      return eventsTable;
+    }
   }
 
   public static class MovementEventsTable extends MdVirtualRepeatTable<MovementEvent> {
@@ -1113,6 +1120,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String STATUS = "status";
     public static final String CREATED_AT = "createdAt";
     public static final String COMMENTS = "comments";
+    public static final String XPATH_TABLE_DATA = "//div[contains(@id,'movement-events')]//tr[./td[.='%s']]//td";
 
     public MovementEventsTable(WebDriver webDriver) {
       super(webDriver);
@@ -1125,6 +1133,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
           .build());
       setEntityClass(MovementEvent.class);
       setNvTableParam("ctrl.tableParamEvents");
+    }
+
+    public Map<String, String> readMovementEventsTable(String source) {
+      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
+      List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
+      Assertions.assertThat(list.size()).as(f("There is no [%s] movement event on Shipment Details page",source)).isNotEqualTo(0);
+      Map<String, String> eventsTable = new HashMap<>();
+      eventsTable.put(SOURCE, list.get(0));
+      eventsTable.put(STATUS, list.get(1));
+      eventsTable.put(CREATED_AT, list.get(2));
+      eventsTable.put(COMMENTS, list.get(3));
+      return eventsTable;
     }
   }
 

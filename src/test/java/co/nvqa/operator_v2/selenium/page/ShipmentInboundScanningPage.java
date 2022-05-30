@@ -6,11 +6,10 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -24,7 +23,7 @@ import org.openqa.selenium.support.FindBy;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentInboundScanningPage extends SimpleReactPage {
+public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInboundScanningPage> {
 
   public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
   public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
@@ -73,6 +72,14 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
+  public String TRIP_COMPLETION_DIALOG="//div[@class='ant-modal-content']";
+
+  @FindBy(xpath = ".//button[.='Cancel']")
+  public Button cancel;
+
+  @FindBy(xpath = ".//button[.='Proceed']")
+  public Button proceed;
+
   @FindBy(css = "h2.scan-state-text")
   public PageElement scannedState;
 
@@ -99,6 +106,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void inboundScanning(long shipmentId, String label, String hub) {
+    inboundScanningShipment(shipmentId, label, hub);
+    checkSessionScan(String.valueOf(shipmentId));
+  }
+
+  public void inboundScanningShipment(long shipmentId, String label, String hub) {
     pause2s();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
@@ -110,7 +122,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
     }
     startInboundButton.click();
     fillShipmentId(shipmentId);
-    checkSessionScan(String.valueOf(shipmentId));
   }
 
   public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub) {
@@ -134,8 +145,12 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub,
       String condition) {
     pause2s();
-    inboundHub.searchAndSelectValue(hub);
-    click(grabXpathButton(label));
+    selectInboundHub(hub);
+    if (CONST_INTO_VAN.equals(label)) {
+      intoVan.click();
+    } else if (CONST_INTO_HUB.equals(label)) {
+      intoHub.click();
+    }
     startInboundButton.click();
     fillShipmentId(shipmentId);
     pause2s();
@@ -207,10 +222,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void completeTrip() {
-    tripCompletionDialog.waitUntilVisible();
-    tripCompletionDialog.proceed.waitUntilClickable();
-    tripCompletionDialog.proceed.click();
-    tripCompletionDialog.waitUntilInvisible();
+    waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
+    proceed.waitUntilClickable();
+    proceed.click();
+    waitUntilInvisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
   }
 
   public void inputEndDate(Date date) {

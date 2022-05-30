@@ -1,5 +1,5 @@
 # https://studio.cucumber.io/projects/210778/test-plan/folders/2075581
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @Load @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @Load
 Feature: Load Shipment Weight and Dimension
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -16,7 +16,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -55,7 +55,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -157,7 +157,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -258,7 +258,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -287,7 +287,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -316,7 +316,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -345,7 +345,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -374,7 +374,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -403,7 +403,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -432,7 +432,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -461,7 +461,7 @@ Feature: Load Shipment Weight and Dimension
       | mawb                  | RANDOM                                  |
       | destinationAirportId  | {airport-id-1}                          |
       | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor_id}                             |
+      | vendorId              | {vendor-id}                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI

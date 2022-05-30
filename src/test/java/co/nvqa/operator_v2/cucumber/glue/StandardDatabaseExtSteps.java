@@ -118,10 +118,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .as("Actual waypoint from DB should not be null.")
           .isNotNull();
       Assertions.assertThat(actualWaypoint.getLatitude())
-          .as(String.format("Latitude is CORRECT: %f", jaroScore.getLatitude()))
+          .as("Latitude is CORRECT: %f", jaroScore.getLatitude())
           .isEqualTo(jaroScore.getLatitude());
       Assertions.assertThat(actualWaypoint.getLongitude())
-          .as(String.format("Longitude is CORRECT: %f", jaroScore.getLongitude()))
+          .as("Longitude is CORRECT: %f", jaroScore.getLongitude())
           .isEqualTo(jaroScore.getLongitude());
     });
   }

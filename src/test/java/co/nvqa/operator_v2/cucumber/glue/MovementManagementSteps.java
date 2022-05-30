@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.hub.Driver;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
@@ -7,6 +8,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.MovementSchedule.Schedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
@@ -60,8 +62,8 @@ public class MovementManagementSteps extends AbstractSteps {
     {
       try {
         final String finalHubName = resolveValue(hubName);
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub
-            .selectValue(finalHubName);
+        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(
+            finalHubName);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info(
@@ -101,6 +103,7 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
+    pause10s();
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
@@ -167,6 +170,7 @@ public class MovementManagementSteps extends AbstractSteps {
         }
         operatorSelectTabOnMovementManagementPage("Relations");
         operatorSelectTabOnMovementManagementPage(tabName);
+        pause10s();
         movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
         if (!movementManagementPage.relationsTable.rows.get(0).editRelations.isDisplayed()) {
@@ -186,6 +190,7 @@ public class MovementManagementSteps extends AbstractSteps {
           movementManagementPage.successCreateRelation.waitUntilInvisible();
         }
         movementManagementPage.editStationRelationsModal.waitUntilInvisible();
+        pause5s();
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying...");
@@ -194,7 +199,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.relationsTab.waitUntilClickable(60);
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, 3);
   }
 
   @Then("Operator search for Pending relation on Movement Management page using data below:")
@@ -271,7 +276,45 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addSchedule.waitUntilClickable(60);
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 2);
+    }, 3);
+
+  }
+
+  @Then("Operator try adds new Station Movement Schedule on Movement Management page using data below:")
+  public void operatorTryAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
+      Map<String, String> data) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+        movementManagementPage.stationsTab.click();
+          movementManagementPage.addSchedule.click();
+          movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+          movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+        putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+        if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
+          movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
+          StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
+              finalData);
+          secondStationMovementSchedule.setDepartureTime("21:15");
+          movementManagementPage.addStationMovementScheduleModal.fillAnother(
+              secondStationMovementSchedule, "1");
+          putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+        }
+        movementManagementPage.addStationMovementScheduleModal.create.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+        pause6s();
+      } catch (Exception ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addSchedule.waitUntilClickable(60);
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 3);
 
   }
 
@@ -326,6 +369,37 @@ public class MovementManagementSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
+  }
+
+  @And("Operator load schedules and verifies on Movement Management page with retry using data below:")
+  public void operatorLoadSchedulesAndVerifiesOnMovementManagementPageWithRetryUsingDataBelow(
+      Map<String, String> inputData) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> data = resolveKeyValues(inputData);
+        String crossdockHub = data.get("crossdockHub");
+        String originHub = data.get("originHub");
+        String destinationHub = data.get("destinationHub");
+        movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
+
+        MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+        assertEquals("Number of displayed schedules", movementSchedule.getSchedules().size(),
+            movementManagementPage.schedulesTable.getRowsCount());
+        for (int i = 0; i < movementSchedule.getSchedules().size(); i++) {
+          MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(
+              i + 1);
+          movementSchedule.getSchedule(i).compareWithActual(actual);
+        }
+
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        movementManagementPage.refreshPage();
+        movementManagementPageIsLoaded();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 3);
   }
 
   @And("Operator load schedules on Movement Management page")
@@ -386,7 +460,13 @@ public class MovementManagementSteps extends AbstractSteps {
         if (existed == null) {
           put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
         } else {
-          existed.getSchedules().addAll(movementSchedule.getSchedules());
+          Optional<Schedule> scheduleExist = existed.getSchedules().stream()
+              .filter((schedule) -> schedule.getDepartureTime()
+                  .equals(movementSchedule.getSchedule(0).getDepartureTime())).findFirst();
+
+          if (!scheduleExist.isPresent()) {
+            existed.getSchedules().addAll(movementSchedule.getSchedules());
+          }
         }
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
@@ -411,7 +491,7 @@ public class MovementManagementSteps extends AbstractSteps {
     assertNull("Movement Type value",
         movementManagementPage.addMovementScheduleModal.getScheduleForm(
             1).movementType.getValue());
-    assertEquals("Comment value", "",
+    assertEquals("Comment value", null,
         movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue());
   }
 
@@ -492,7 +572,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
   public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage() {
-    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");
+    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted");
   }
 
   @Deprecated
@@ -791,8 +871,9 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator verify all station schedules are correct")
   public void operatorVerifyAllStationSchedulesAreCorrect() {
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount() - 1)
+    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(hubRelations.size());
+
     for (int i = 0; i < hubRelations.size(); i++) {
       HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
           .readEntity(i + 1);
@@ -803,7 +884,7 @@ public class MovementManagementSteps extends AbstractSteps {
           .setOriginHubName(hubRelations.get(i).getOriginHubName());
       hubRelations.get(i).getSchedules().get(i)
           .setDestinationHubName(hubRelations.get(i).getDestinationHubName());
-      hubRelations.get(i).getSchedules().get(i).compareWithActual(actual);
+      hubRelations.get(i).getSchedules().get(i).compareWithActual(actual, "drivers");
     }
   }
 

@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroupsV1.5
-Feature: Create Route Groups V1.5 - Transaction Filters
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups
+Feature: Create Route Groups - Transaction Filters
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Filter Order Type on Create Route Group V1.5 - Transaction Filters (uid:30fc5e7c-b85f-4401-8d92-dcc63c07a03a)
+  Scenario: Operator Filter Order Type on Create Route Groups - Transaction Filters (uid:30fc5e7c-b85f-4401-8d92-dcc63c07a03a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -14,23 +14,22 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderType | Normal,Return |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type                 | shipper                                 | address                                                    | status                 |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter RTS on Create Route Group V1.5 - Transaction Filters (uid:f712664e-dbb9-4fbe-b041-d4d6c305ff48)
+  Scenario: Operator Filter RTS on Create Route Groups - Transaction Filters (uid:f712664e-dbb9-4fbe-b041-d4d6c305ff48)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -43,17 +42,16 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | addParcelToRouteRequest | { "type":"DD" } |
     Given API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time"
-    Given Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today |
-    Given Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
-      | RTS | Show |
-    Given Operator choose "Hide Reservations" on Reservation Filters section on Create Route Group V1.5 page
-    Given Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+    Given Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
+      | rts | Show |
+    Given Operator choose "Hide Reservations" on Reservation Filters section on Create Route Groups page
+    Given Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | orderId       | {KEY_LIST_OF_CREATED_ORDER[1].id}                          |
       | trackingId    | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type          | DELIVERY Transaction                                       |
@@ -63,22 +61,21 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00                    |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
 
-  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Group V1.5 - Transaction Filters - PP/DD Leg = <ppDdLeg> (<hiptest-uid>)
+  Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Groups - Transaction Filters - PP/DD Leg = <ppDdLeg> (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | ppDdLeg | <ppDdLeg> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} |
       | type       | <type> Transaction                        |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}   |
@@ -89,7 +86,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | PP      | PICKUP   | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
       | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | uid:a11f812d-673d-4215-991b-db42b3e7daa1 |
 
-  Scenario Outline: Operator Filter Granular Order Status on Create Route Group V1.5 - Transaction Filters - Granular Order Status = <granularStatus> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Granular Order Status on Create Route Groups - Transaction Filters - Granular Order Status = <granularStatus> (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
@@ -97,23 +94,22 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | granularStatus | <granularStatus>                  |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | granularOrderStatus | <granularStatus> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status     | <granularStatus>                                           |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
@@ -136,85 +132,82 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | Transferred to 3PL                   | Parcel      | uid:e3b28ae3-5cc2-4a69-b5da-0c8a5f3c3a56 |
       | Van en-route to pickup               | Parcel      | uid:e5c5048d-2823-4521-a054-4b81033c1d72 |
 
-  Scenario: Operator Filter Order Zone on Create Route Group V1.5 - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order Zone on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | generateTo     | ZONE{zone-name-3}                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | zone | {zone-full-name-3} |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Transaction Status on Create Route Group V1.5 - Transaction Status = Pending - Transaction Filters (uid:4a5cc769-9638-471a-be6c-6a1b6eb5fdca)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters (uid:4a5cc769-9638-471a-be6c-6a1b6eb5fdca)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | transactionStatus | Pending |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status     | Pending Pickup                                             |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Transaction Status on Create Route Group V1.5 - Transaction Status = Cancelled - Transaction Filters (uid:b39eed67-342c-4738-a779-42437223eb82)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Cancelled - Transaction Filters (uid:b39eed67-342c-4738-a779-42437223eb82)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator cancel created order
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | transactionStatus | Cancelled |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
 
-  Scenario: Operator Filter Transaction Status on Create Route Group V1.5 - Transaction Status = Fail - Transaction Filters (uid:30d2add1-35fd-4152-91cd-89696fa31a75)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Fail - Transaction Filters (uid:30d2add1-35fd-4152-91cd-89696fa31a75)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -228,87 +221,84 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
       | granularStatus | Pickup fail                       |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | transactionStatus | Fail |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Reschedule                                       |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[2].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[2].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} |
       | status     | Pickup fail                                                |
 
-  Scenario: Operator Filter Transaction Status on Create Route Group V1.5 - Transaction Status = Success - Transaction Filters (uid:a9b5e800-f2fc-4f6d-9d05-45bc7931ca76)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Success - Transaction Filters (uid:a9b5e800-f2fc-4f6d-9d05-45bc7931ca76)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | transactionStatus | Success |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status     | Completed                                                  |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Completed                                                |
 
-  Scenario: Operator Filter Transaction Status on Create Route Group V1.5 - Transaction Status = Staging - Transaction Filters (uid:9a76e1ec-aec6-4c2f-a2a7-b76a6ba0f474)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Staging - Transaction Filters (uid:9a76e1ec-aec6-4c2f-a2a7-b76a6ba0f474)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","is_staged":true,"parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | transactionStatus | Staging |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status     | Staging                                                    |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Staging                                                  |
 
-  Scenario: Operator Filter Order Priority Level on Create Route Group V1.5 - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order Priority Level on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -316,95 +306,91 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     And API Operator update priority level of an order:
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | priorityLevel | 58                                |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | priorityLevel | == 58 |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order Weight on Create Route Group V1.5 - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order Weight on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | weight | == 4.0 |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status     | Pending Pickup                                             |
-    And Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order DNR Group on Create Route Group V1.5 - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order DNR Group on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
-      | dnrGroup | Normal |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
+      | dnrGroup | NORMAL |
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
       | status     | Pending Pickup                                             |
-    And Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Group V1.5 - Transaction Filters - Timeslot = <timeslots> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Transaction Timeslot on Create Route Groups - Transaction Filters - Timeslot = <timeslots> (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"<startTime>","end_time":"<endTime>"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | timeslots | <timeslots> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
@@ -419,27 +405,26 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | Day       | 09:00     | 18:00   | uid:a408168d-f299-4366-a703-3e179b996d63 |
       | Night     | 18:00     | 22:00   | uid:90816330-9865-4f8c-9e22-5530c56e9668 |
 
-  Scenario Outline: Operator Filter Parcel Size on Create Route Group V1.5 - Transaction Filters - Parcel Size = <parcelSize> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Parcel Size on Create Route Groups - Transaction Filters - Parcel Size = <parcelSize> (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"dimensions":{"size":"<size>","volume":1.0,"weight":4.0},"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    Given Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | parcelSize | <parcelSize> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
       | type       | PICKUP Transaction                                         |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-    Then Operator verifies Transaction record on Create Route Group V1.5 page using data below:
+    Then Operator verifies Transaction record on Create Route Groups page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
@@ -453,7 +438,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | Small       | S    | uid:20988608-803f-4479-b50d-d928c4feefc8 |
       | Extra Small | XS   | uid:10a6796a-66e3-4801-a1d2-78684e848054 |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Corporate (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
@@ -461,17 +446,16 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                              |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                                      |
-      | Shipper       | {filter-shipper-name-corporate-subshipper} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
+      | shipper          | {filter-shipper-name-corporate-subshipper} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <serviceType> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type                 | shipper                                 | address                                                    | status         |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
@@ -481,7 +465,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | serviceType | hiptest-uid                              |
       | Corporate   | uid:e9550294-1f8b-4e43-a7ec-234239ab9d67 |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Corporate Return (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Return (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
@@ -489,17 +473,16 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                              |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                                      |
-      | Shipper       | {filter-shipper-name-corporate-subshipper} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
+      | Shipper          | {filter-shipper-name-corporate-subshipper} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <serviceType> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type                 | shipper                                 | address                                                    | status         |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
@@ -509,7 +492,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | serviceType      | hiptest-uid                              |
       | Corporate Return | uid:26f1fb1c-23d5-4126-8285-c325f0e7b838 |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Corporate Document (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Document (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
@@ -517,17 +500,16 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                              |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                                      |
-      | Shipper       | {filter-shipper-name-corporate-subshipper} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
+      | Shipper          | {filter-shipper-name-corporate-subshipper} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <serviceType> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type                 | shipper                                 | address                                                    | status         |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
@@ -537,7 +519,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | serviceType        | hiptest-uid                              |
       | Corporate Document | uid:8670e666-5a26-4450-aa4f-e00acd7472d5 |
 
-  Scenario: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Corporate AWB (uid:599a191b-43b6-45ca-896e-c91e159d8f4f)
+  Scenario: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate AWB (uid:599a191b-43b6-45ca-896e-c91e159d8f4f)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator generate 2 Corporate AWB Tracking Id
     And API Shipper set Shipper V4 using data below:
@@ -548,24 +530,23 @@ Feature: Create Route Groups V1.5 - Transaction Filters
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | {"service_type":"Corporate AWB","requested_tracking_number":"{KEY_CORPORATE_AWB_TRACKING_LIST[2].trackingId}","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                                      |
-      | Shipper       | {filter-shipper-name-corporate-subshipper} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
+      | Shipper          | {filter-shipper-name-corporate-subshipper} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | Corporate Manual AWB |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type                 | shipper                                 | address                                                    | status         |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
 
-  Scenario: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Marketplace Sort (uid:e49e7cbc-d702-43cf-bc49-05201f83b8e1)
+  Scenario: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace Sort (uid:e49e7cbc-d702-43cf-bc49-05201f83b8e1)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
@@ -574,24 +555,23 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time  | Today                                  |
-      | Master Shipper | {filter-shipper-name-marketplace-sort} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}         |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}         |
+      | Shipper          | {filter-shipper-name-marketplace-sort} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | Marketplace Sort |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type                 | shipper                                 | address                                                    | status         |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Marketplace International (uid:f8929f70-3e18-4be8-b490-20dd32b97e68)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace International (uid:f8929f70-3e18-4be8-b490-20dd32b97e68)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -601,16 +581,15 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | v4OrderRequest | <v4OrderRequest> |
       | addressType    | global           |
       | generateTo     | RANDOM           |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <service_type> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type   | shipper                                 | address                                                  | status   |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
@@ -618,7 +597,7 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | service_type              | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | Marketplace International | Pending Pickup | DELIVERY Transaction | {"service_type": "Marketplace International","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": false,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}, "international":{"portation":"import"}} |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Marketplace (uid:d7067f43-f02c-4dde-ba64-1aea558fed8c)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace (uid:d7067f43-f02c-4dde-ba64-1aea558fed8c)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -627,16 +606,15 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | numberOfOrder     | 2                |
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <service_type> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type   | shipper                                 | address                                                  | status   |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
@@ -644,23 +622,22 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | service_type | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | hiptest-uid                              |
       | Marketplace  | Pending Pickup | DELIVERY Transaction | {"service_type": "Marketplace","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": true,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}} | uid:3f17fe40-7fb8-44f5-ae5e-86639de78feb |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Document (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Document (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                |
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | Shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <service_type> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type   | shipper                                 | address                                                  | status   |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
@@ -668,30 +645,29 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | service_type | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                     | hiptest-uid                              |
       | Document     | Pending Pickup | DELIVERY Transaction | { "service_type":"Document", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} | uid:7cc4e8fa-9506-4f91-b2f2-07fbe1820b97 |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - Ninja Pack (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Ninja Pack (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator generate 2 Ninja Pack Tracking Id
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 1                |
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <service_type> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type   | shipper                                 | address                                                  | status   |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
     Examples:
       | service_type | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                                                                                                 | hiptest-uid                              |
       | Ninja Pack   | Pending Pickup | DELIVERY Transaction | { "requested_tracking_number":"{KEY_NINJA_PACK_TRACKING_LIST[1].trackingId}","service_type":"Ninja Pack","service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} | uid:b2314731-a6d8-42e1-9f22-4b93dfbd88e9 |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - International (uid:30d34cc1-76db-4833-b434-0f06294cb5a3)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - International (uid:30d34cc1-76db-4833-b434-0f06294cb5a3)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -701,16 +677,15 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | v4OrderRequest | <v4OrderRequest> |
       | addressType    | global           |
       | generateTo     | RANDOM           |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <service_type> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type   | shipper                                 | address                                                  | status   |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
@@ -718,23 +693,22 @@ Feature: Create Route Groups V1.5 - Transaction Filters
       | service_type  | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                        |
       | International | Pending Pickup | DELIVERY Transaction | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
 
-  Scenario Outline: Operator Filter Order by Service Type on Create Route Group V1.5 Page - Transaction Filters - <Note> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - <Note> (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                |
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Group V1.5' page is loaded
-    And Operator removes all General Filters except following on Create Route Group V1.5 page: "Creation Time, Shipper"
-    And Operator add following filters on General Filters section on Create Route Group V1.5 page:
-      | Creation Time | Today                 |
-      | Shipper       | {filter-shipper-name} |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group V1.5 page
-    And Operator add following filters on Transactions Filters section on Create Route Group V1.5 page:
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | Shipper          | {filter-shipper-name}          |
+    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
+    And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <service_type> |
-    And Operator click Load Selection on Create Route Group V1.5 page
-    Then Operator verifies Transaction records on Create Route Group V1.5 page using data below:
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                | type   | shipper                                 | address                                                  | status   |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
