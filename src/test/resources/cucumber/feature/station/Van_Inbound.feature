@@ -193,11 +193,11 @@ Feature: Van Inbound
     And Operator clicks the Hub Inbound Shipment button
     And Operator inbound scanning Shipment Into Hub in hub <DestHubName> on Shipment Inbound Scanning page
     And Operator check alert message on Shipment Inbound Scanning page using data below:
-      | alert | Last scanned:{KEY_CREATED_SHIPMENT_ID} |
+      | alert | Last Scanned {KEY_CREATED_SHIPMENT_ID} |
     And Operator verifies that the following messages display on the card after inbounding
-      | scanState         | Destination Reached                       |
-      | scanMessage       | Open Shipment                             |
-      | scannedShipmentId | Shipment ID(s)\n{KEY_CREATED_SHIPMENT_ID} |
+      | scanState         | Destination Reached                         |
+      | scanMessage       | Open Shipment                               |
+      | scannedShipmentId | 1 Shipment ID(s)\n{KEY_CREATED_SHIPMENT_ID} |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click Parcels Yet to scan area on Van Inbound Page

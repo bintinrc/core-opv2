@@ -180,7 +180,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     if (!isMawb) {
       selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
     } else {
-      sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
+      sendKeysAndEnter("//input[@ng-model='search' and contains(@id,'input')]", value);
     }
     pause1s();
   }
@@ -401,18 +401,14 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() ->
     {
       try {
-        List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
-        shipmentList.stream()
-            .filter(shipment -> shipment.getId().equals(shipmentId))
-            .findFirst()
-            .orElseThrow(
-                () -> new AssertionError(f("Shipment with ID = '%s' not exist.", shipmentId)));
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+        Assertions.assertThat(shipmentsTable.readEntity(1).getId()).as("Shipment Id:").isEqualTo(shipmentId);
       } catch (AssertionError ex) {
         clickEditSearchFilterButton();
         clickButtonLoadSelection();
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, "retry Inbounded Shipment Exist", 500, 10);
   }
 
   public void clearAllFilters() {
