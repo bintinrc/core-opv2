@@ -65,6 +65,7 @@ Feature: Urgent Task Widget
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -98,6 +99,7 @@ Feature: Urgent Task Widget
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -131,6 +133,7 @@ Feature: Urgent Task Widget
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page

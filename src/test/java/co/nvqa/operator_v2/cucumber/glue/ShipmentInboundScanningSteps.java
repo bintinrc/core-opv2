@@ -95,7 +95,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   public void checkAlertOnShipmentInboundScanningPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String alert = data.get("alert");
-
+    getWebDriver().switchTo().frame(scanningPage.frame.getWebElement());
     scanningPage.scanAlertMessage.waitUntilVisible();
     assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
   }
@@ -288,7 +288,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     Assertions.assertThat(scanningPage.scannedState.getText())
         .as(f("Assert that scanned state is %s", messages.get("scanState")))
         .isEqualTo(messages.get("scanState"));
-    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+    Assertions.assertThat(scanningPage.scannedMessage.getText())
         .as(f("Assert that scanned message is %s", messages.get("scanMessage")))
         .isEqualTo(messages.get("scanMessage"));
     Assertions.assertThat(scanningPage.scannedShipmentId.getText())

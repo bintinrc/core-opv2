@@ -64,7 +64,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']")
   public TextBox shipmentIdInput;
 
-  @FindBy(xpath = "//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span")
+  @FindBy(css = "[data-testid='scan-box-container'] div.message")
   public PageElement scanAlertMessage;
 
   @FindBy(xpath = "//md-card[contains(@class,'scan-status-card')]")
@@ -73,10 +73,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
-  @FindBy(css = "div.scan-state-text h2")
+  @FindBy(css = "h2.scan-state-text")
   public PageElement scannedState;
 
-  @FindBy(css = "md-card-content h1")
+  @FindBy(xpath = "//h1[@*='scan-state-command']")
   public PageElement scannedMessage;
 
   @FindBy(css = "div.scanned-shipping-id")
@@ -90,6 +90,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
 
   @FindBy(xpath = "//input[@value='SHIPMENT_HUB_INBOUND']")
   public PageElement intoHub;
+
+  @FindBy(xpath = "//iframe")
+  public PageElement frame;
 
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);

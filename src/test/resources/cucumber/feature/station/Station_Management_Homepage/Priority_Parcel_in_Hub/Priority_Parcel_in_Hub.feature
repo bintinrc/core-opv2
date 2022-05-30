@@ -2208,10 +2208,11 @@ Feature: Priority Parcel in Hub
       | ticketNotes             | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+      | status                  | <Status>                  |
+      | outcome                 | <OrderOutcome>            |
+      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
+      | assignTo                | NikoSusanto               |
+      | newInstructions         | GENERATED                 |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2236,8 +2237,8 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status   | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | KeepCurrentOrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | No                      | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel On Hold
@@ -3293,7 +3294,7 @@ Feature: Priority Parcel in Hub
       | HubName1     | HubId1     | HubName2     | HubId2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | {hub-name-9} | {hub-id-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Error
   Scenario Outline: Unable to Filter Parcels by Post-tagged If Van Inbound in Different Hub (uid:276160f5-17c5-4fa2-980c-b59804c3803c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
