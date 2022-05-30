@@ -18,10 +18,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
@@ -33,8 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.model.core.Order.STATUS_CANCELLED;
 import static co.nvqa.commons.model.core.Order.STATUS_COMPLETED;
-import static co.nvqa.commons.model.core.hub.trip_management.MovementTripType.ARCHIVE_ARRIVAL_DATE;
-import static co.nvqa.commons.model.core.hub.trip_management.MovementTripType.ARCHIVE_DEPARTURE_DATE;
 
 /**
  * @author Tristania Siagian
@@ -131,6 +126,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String TRIP_ASSIGN_DRIVER_PAGE_ADD_DRIVER_DISABLE_XPATH="//button[@data-testid='add-driver-button' and @disabled]";
   private static final String TRIP_ASSIGN_DRIVER_PAGE_DRIVER_LABLE_XPATH="//label[@class='ant-form-item-required']";
 
+  private static final String TRIP_CANCEL_PAGE_REASON_XPATH = "//label[text()='Cancellation reason']/following::input";
+  private static final String TRIP_CANCEL_PAGE_MESSAGE_XPATH = "(//div[@class='ant-select-item-option-content'])[%d]";
+  private static final String TRIP_CANCEL_PAGE_MESSAGE_LIST_XPATH = "//div[@class='ant-select-item-option-content']";
+  private static final String TRIP_CANCEL_PAGE_NO_BUTTON = "//div[@class='ant-modal-content']//button[@data-testid ='cancel-modal-cancel-button']";
+  private static final String TRIP_CANCEL_PAGE_CANCEL_BUTTON = "//div[@class='ant-modal-content']//button[@data-testid ='cancel-modal-confirm-button']";
+  private static final String TRIP_CANCEL_PAGE_CANCELLATION_REASON = "//label[@title='Cancellation reason']";
+
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
 
@@ -183,7 +185,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public Button completeTripButton;
 
   @FindBy(xpath = "//button[.='Cancel Trip']")
-  public Button CancelTripButton;
+  public Button CancelTrip;
 
   @FindBy(xpath = "//button[.='Submit']")
   public Button SubmitButton;
@@ -717,7 +719,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_SHIPMENTS_TAB_XPATH,5)).as("Shipments tab in Trip Details page").isTrue();
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH,5)).as("Trip Events appear in Trip Details page").isTrue();
     // Assertions.assertThat(departTripButton.isDisplayed()).as("Depart button appear in Trip Details page").isTrue();
-
   }
 
   public void clickButtonOnCancelDialog(String buttonValue) {
@@ -876,6 +877,64 @@ public class TripManagementPage extends OperatorV2SimplePage {
     assignTripModal.waitUntilInvisible();
   }
 
+  public void CancelTrip() {
+    pause3s();
+    CancelTrip.waitUntilClickable();
+    CancelTrip.click();
+    tripDepartureArrivalModal.waitUntilVisible();
+    String script = "return window.getComputedStyle(document.querySelector('label.ant-form-item-required'),':before').getPropertyValue('content')";
+//    JavascriptExecutor js = (JavascriptExecutor) getWebDriver();
+//    String content = (String) js.executeScript(script);
+    String content = (String) executeScript(script);
+//    System.out.println(content);
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH,5)).as("Trip Departure message appear in Trip Cancel page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH,5)).as("Start Hub appear in Trip Cancel page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DESTINATION_HUB_XPATH,5)).as("End Hub appear in Trip Cancel page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MOVEMENT_TYPE_XPATH,5)).as("Movement Type appear in Trip Cancel page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_DRIVER_XPATH,5)).as("Driver appear in Trip Cancel page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_CANCEL_PAGE_NO_BUTTON,5)).as("No button appear in Trip Cancel page").isTrue();
+    Assertions.assertThat(isElementVisible(TRIP_CANCEL_PAGE_CANCELLATION_REASON,5)).as("Cancellation reason appear in Trip Cancel page ").isTrue();
+    Assertions.assertThat(content.contains("*")).as("Cancellation reason is mandatory field").isTrue();
+  }
+
+  public void selectCancellationReason(){
+    //Create random interger from 1 to 6
+    int i = new Random().nextInt(5)+1;
+    TestUtils.findElementAndClick(TRIP_CANCEL_PAGE_REASON_XPATH, "xpath", getWebDriver());
+    waitUntilElementIsClickable(f(TRIP_CANCEL_PAGE_MESSAGE_XPATH,i));
+    TestUtils.findElementAndClick(f(TRIP_CANCEL_PAGE_MESSAGE_XPATH,i), "xpath", getWebDriver());
+  }
+
+  public void vefiryCancellationMessage(){
+    List<WebElement> messageListElements = findElementsByXpath(TRIP_CANCEL_PAGE_MESSAGE_LIST_XPATH);
+    List<String> messageList = new ArrayList<String>();
+    for (int i = 1;i<= messageListElements.size();i++){
+      messageList.add(getText(f(TRIP_CANCEL_PAGE_MESSAGE_XPATH,i)));
+    }
+    Assertions.assertThat(messageList.contains("Natural disasters / Force majeure")).as("Natural disasters / Force majeure is shown").isTrue();
+    Assertions.assertThat(messageList.contains("Cancellation of flight")).as("Cancellation of flight is shown").isTrue();
+    Assertions.assertThat(messageList.contains("Change of schedule")).as("Change of schedule is shown").isTrue();
+    Assertions.assertThat(messageList.contains("Low parcel volume")).as("Low parcel volume is shown").isTrue();
+    Assertions.assertThat(messageList.contains("Not onboard on MMDA yet")).as("Not onboard on MMDA yet is shown").isTrue();
+    Assertions.assertThat(messageList.contains("System Issues")).as("System Issues is shown").isTrue();
+
+  }
+
+  public void CancelTripButtonStatus(String status){
+    switch (status){
+      case "disable":
+        Assertions.assertThat(isClickable(TRIP_CANCEL_PAGE_CANCEL_BUTTON,1)).as(" Cancel Trip button is disable").isFalse();
+        break;
+      case "enable":
+        Assertions.assertThat(isClickable(TRIP_CANCEL_PAGE_CANCEL_BUTTON,1)).as("Cancel Trip button is enable").isTrue();
+        break;
+
+    }
+  }
+
+  public void clickCancelTripButton(){
+    TestUtils.findElementAndClick(TRIP_CANCEL_PAGE_CANCEL_BUTTON, "xpath", getWebDriver());
+  }
   public void clickShipmentTab(){
     waitUntilVisibilityOfElementLocated(DETAIL_PAGE_SHIPMENTS_TAB_XPATH);
     findElementByXpath(DETAIL_PAGE_SHIPMENTS_TAB_XPATH).click();

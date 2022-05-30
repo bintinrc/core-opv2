@@ -410,4 +410,29 @@ public class TripManagementSteps extends AbstractSteps {
         mainPage.refreshPage();
         tripManagementPage.switchTo();
     }
+
+    @When("Operator select Cancellation Reason on Cancel Trip Page")
+    public void OperatorSelectCancellationReason(){
+        tripManagementPage.selectCancellationReason();
+    }
+
+    @Then("Operator verifies the Cancellation Reason are correct")
+    public void OperatorVerifiesCacellationReason(){
+        tripManagementPage.vefiryCancellationMessage();
+    }
+
+    @Then("Operator verifies the Cancel Trip button is {string}")
+    public void OperatorVerifiesCancelTripButtonStatus (String status){
+        tripManagementPage.CancelTripButtonStatus(status);
+    }
+
+    @When("Operator clicks Cancel Trip button on Department page" )
+    public void OperatorClicksCancelTripButton(){
+        tripManagementPage.CancelTrip();
+    }
+
+    @When("Operator clicks Cancel Trip button on Cancel page")
+    public void OperatorClicksCancelOnCancelPage(){
+        tripManagementPage.clickCancelTripButton();
+    }
 }
