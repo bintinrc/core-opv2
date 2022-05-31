@@ -58,16 +58,16 @@ Feature: Shipment Management - Edit Shipment
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
-      | startHub       | {hub-name-2} |
+      | startHub       | {hub-name-3} |
       | removeShipment | second       |
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     Then Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[1]}" on Shipment Management page:
-      | startHub | {hub-name-2} |
-    And Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}" on Shipment Management page:
       | startHub | {hub-name} |
+    And Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}" on Shipment Management page:
+      | startHub | {hub-name-3} |
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Abort Update (uid:83793581-a5af-45c1-aef5-bfc0e5edb0c5)
