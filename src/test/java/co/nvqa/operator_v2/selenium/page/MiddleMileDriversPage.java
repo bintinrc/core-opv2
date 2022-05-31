@@ -582,20 +582,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifiesDataInViewModalIsTheSame(Driver middleMileDriver) {
-        assertEquals("Name is not the same : ", middleMileDriver.getFirstName(),
-                viewDriverDialog.name.getValue());
-        assertEquals("Hub is not the same : ", middleMileDriver.getHub(),
-                viewDriverDialog.hub.getValue());
-        assertEquals("Contact number is not the same : ", middleMileDriver.getMobilePhone(),
-                viewDriverDialog.contactNumber.getValue());
-        assertEquals("License Number is not the same : ", middleMileDriver.getLicenseNumber(),
-                viewDriverDialog.licenseNumber.getValue());
-        assertEquals("Expiry Date is not the same : ", middleMileDriver.getLicenseExpiryDate(),
-                viewDriverDialog.licenseExpiryDate.getValue());
-        assertEquals("Username is not the same : ", middleMileDriver.getUsername(),
-                viewDriverDialog.username.getValue());
-        assertEquals("Comments is not the same : ", middleMileDriver.getComments(),
-                viewDriverDialog.comments.getValue());
+        Assertions.assertThat(middleMileDriver.getFirstName()).
+            as("Name is as expected").isEqualTo(viewDriverDialog.name.getValue());
+        Assertions.assertThat(middleMileDriver.getHub()).
+            as("Hub is as expected").isEqualTo(viewDriverDialog.hub.getValue());
+        Assertions.assertThat(viewDriverDialog.contactNumber.getValue()).
+            as("Contact number is as expected").endsWith(middleMileDriver.getMobilePhone());
+        Assertions.assertThat(middleMileDriver.getLicenseNumber()).
+            as("License number is as expected").isEqualTo(viewDriverDialog.licenseNumber.getValue());
+        Assertions.assertThat(middleMileDriver.getLicenseExpiryDate()).
+            as("Expiry Date is as expected").isEqualTo(viewDriverDialog.licenseExpiryDate.getValue());
+        Assertions.assertThat(middleMileDriver.getUsername()).
+            as("Username is as expected").isEqualTo(viewDriverDialog.username.getValue());
+        Assertions.assertThat(middleMileDriver.getComments()).
+            as("Comments is as expected").isEqualTo(viewDriverDialog.comments.getValue());
     }
 
     public void clickAvailabilityMode(String mode) {
@@ -868,7 +868,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         public TextBox contactNumber;
         @FindBy(id = "licenseNumber")
         public TextBox licenseNumber;
-        @FindBy(xpath = "//div[contains(@class,'ant-picker')][not(contains(@class,'ant-picker-input'))][.//input[@id='licenseExpiryDate']]")
+        @FindBy(id = "licenseExpiryDate")
         public PageElement licenseExpiryDate;
         @FindBy(id = "username")
         public TextBox username;

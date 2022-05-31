@@ -6,6 +6,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
+import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
@@ -30,6 +31,7 @@ public class TripManagementSteps extends AbstractSteps {
     private static final Logger LOGGER = LoggerFactory.getLogger(TripManagementSteps.class);
 
     private TripManagementPage tripManagementPage;
+    private MainPage mainPage;
 
     public TripManagementSteps() {
     }
@@ -37,8 +39,8 @@ public class TripManagementSteps extends AbstractSteps {
     @Override
     public void init() {
         tripManagementPage = new TripManagementPage(getWebDriver());
+        mainPage = new MainPage(getWebDriver());
     }
-
     @And("Operator verifies that the Trip Management Page is opened")
     public void operatorVerifiesThatTheTripManagementPageIsOpened() {
         pause2s();
@@ -394,4 +396,43 @@ public class TripManagementSteps extends AbstractSteps {
 
     @Then("Operator verify Items display on Assign Driver Page")
     public void OperatorVerifyItemsOnAssginDriverPage(){tripManagementPage.verifyItemsDisplayOnAssignDriverPage(); }
+
+    @When("Operator click on Shipment tab")
+    public void OperatorClickOnShipmentTab(){tripManagementPage.clickShipmentTab();}
+
+    @Then("Operator verifies the elements on Shipment tab are correct")
+    public void OperatorVerifiesElementOnShipmentTab(){tripManagementPage.verifyShipmentTabElements();}
+
+    @When("Operator goes to current page plus parameters {string}")
+    public void GotoCurrentPagePlusParameters(String parameters){
+        String currentURL = mainPage.getCurrentUrl();
+        mainPage.goToUrl(currentURL+parameters);
+        mainPage.refreshPage();
+        tripManagementPage.switchTo();
+    }
+
+    @When("Operator select Cancellation Reason on Cancel Trip Page")
+    public void OperatorSelectCancellationReason(){
+        tripManagementPage.selectCancellationReason();
+    }
+
+    @Then("Operator verifies the Cancellation Reason are correct")
+    public void OperatorVerifiesCacellationReason(){
+        tripManagementPage.vefiryCancellationMessage();
+    }
+
+    @Then("Operator verifies the Cancel Trip button is {string}")
+    public void OperatorVerifiesCancelTripButtonStatus (String status){
+        tripManagementPage.CancelTripButtonStatus(status);
+    }
+
+    @When("Operator clicks Cancel Trip button on Department page" )
+    public void OperatorClicksCancelTripButton(){
+        tripManagementPage.CancelTrip();
+    }
+
+    @When("Operator clicks Cancel Trip button on Cancel page")
+    public void OperatorClicksCancelOnCancelPage(){
+        tripManagementPage.clickCancelTripButton();
+    }
 }
