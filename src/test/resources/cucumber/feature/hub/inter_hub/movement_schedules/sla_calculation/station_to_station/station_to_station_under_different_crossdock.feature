@@ -81,6 +81,13 @@ Feature: Station to Station Under Different Crossdock
       | duration       | 0                                  |
       | endTime        | 00:30                              |
       | daysOfWeek     | all                                |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator put created parcel to shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
@@ -94,7 +101,7 @@ Feature: Station to Station Under Different Crossdock
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | status      | Transit                             |
-      | sla         | {{next-3-days-yyyy-MM-dd}} 20:45:00 |
+#      | sla         | {{next-3-days-yyyy-MM-dd}} 20:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND(OpV2)         |
@@ -153,6 +160,13 @@ Feature: Station to Station Under Different Crossdock
     And Operator adds new relation on Movement Management page using data below:
       | station      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator put created parcel to shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
@@ -170,12 +184,12 @@ Feature: Station to Station Under Different Crossdock
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(OpV2)               |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                      |
-      | status   | FAILED                                                                                                               |
+      | source   | SLA_CALCULATION                                                                                                                                           |
+      | status   | FAILED                                                                                                                                                    |
       | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
@@ -236,6 +250,13 @@ Feature: Station to Station Under Different Crossdock
     And Operator adds new relation on Movement Management page using data below:
       | station      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator put created parcel to shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created

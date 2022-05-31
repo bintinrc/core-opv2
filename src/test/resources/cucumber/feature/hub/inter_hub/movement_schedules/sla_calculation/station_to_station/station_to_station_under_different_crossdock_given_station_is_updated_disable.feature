@@ -1,7 +1,7 @@
 @MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToStation @StationToStationUnderDifferentCrossdock
 Feature: Station to Station Under Different Crossdock Given Station is Updated/Disable
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @runthis
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -66,6 +66,13 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
     When API Operator updates Hub using data below:
       | id           | {KEY_LIST_OF_CREATED_HUBS[1].id} |
       | facilityType | CROSSDOCK                        |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator put created parcel to shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
