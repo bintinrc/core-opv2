@@ -5,7 +5,7 @@ Feature: Station User Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Create User with Invalid Email (uid:3916e502-9a05-421f-b556-7d2a255e1325)
+  Scenario Outline: Add User to Station with Invalid Email
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
     Then Operator searches by "Station Name": "<HubName>"
@@ -22,7 +22,7 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
-  Scenario Outline: Create User that Already Added to the Station (uid:c08600bb-d97f-4f6c-be12-5e9ccea4b2c6)
+  Scenario Outline: Add User that Already Added to the Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
     Then Operator searches by "Station Name": "<HubName>"
@@ -38,7 +38,7 @@ Feature: Station User Management
       | {hub-name-6} | {hub-id-6} |
 
   @Happypath
-  Scenario Outline: Delete User (uid:7a2eef21-7c36-4618-8a97-5952fea5fec2)
+  Scenario Outline: Remove User from Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
     Then Operator searches by "Station Name": "<HubName1>"
@@ -73,7 +73,7 @@ Feature: Station User Management
       | {hub-name-6} | {hub-id-6} | {hub-name-8} | {hub-name-9} |
 
   @Happypath
-  Scenario Outline: Create User (uid:71a042fc-8cab-40bc-8ff9-1375ae640d67)
+  Scenario Outline: Add User to Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
     Then Operator searches by "Station Name": "<HubName>"
@@ -91,7 +91,7 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
-  Scenario Outline: Create User to Multiple Hub (uid:e4d12c21-6f12-44e0-b285-fc8de9c5ef0a)
+  Scenario Outline: Add User to Multiple Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> User Management
     Then Operator searches by "Station Name": "<HubName1>"
