@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
@@ -16,6 +17,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,6 +27,8 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +55,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String DEPARTURE_CALENDAR_XPATH = "//input[@id='departureDate']";
   private static final String ARRIVAL_CALENDAR_XPATH = "//input[@id='arrivalDate']";
   private static final String CALENDAR_SELECTED_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//td[@title='%s']";
+  private static final String DATE_PICKER_MODAL_XPATH = "//div[not(contains(@class, 'ant-picker-dropdown-hidden'))]/div[@class= 'ant-picker-panel-container']";
   private static final String NEXT_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-next-icon')]";
   private static final String PREV_MONTH_BUTTON_XPATH = "//div[contains(@class, 'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//span[contains(@class,'ant-picker-prev-icon')]";
   private static final String TAB_XPATH = "//span[contains(.,'%s')]/preceding-sibling::span";
@@ -133,6 +138,22 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String TRIP_CANCEL_PAGE_CANCEL_BUTTON = "//div[@class='ant-modal-content']//button[@data-testid ='cancel-modal-confirm-button']";
   private static final String TRIP_CANCEL_PAGE_CANCELLATION_REASON = "//label[@title='Cancellation reason']";
 
+  private static final String MOVEMENT_TRIPS_PAGE_ORIGIN_HUB_XPATH = "";
+  private static final String MOVEMENT_TRIPS_PAGE_CREATE_ONE_TIME_TRIP_XAPTH = "//span[text()=' Create One Time Trip']";
+
+  private static final String CREATE_TRIP_PAGE_SUBMIT_BUTTON_XPATH = "//span[text()='Submit']";
+  private static final String CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH = "//input[@id='createAdhocTripForm_originHub']";
+  private static final String CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH ="//input[@id='createAdhocTripForm_destinationHub']";
+  private static final String CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH ="//input[@id='createAdhocTripForm_movementType']";
+  private static final String CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id ='createAdhocTripForm_drivers']";
+  private static final String CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH = "//input[@id = 'createAdhocTripForm_departureTime']";
+  private static final String CREATE_TRIP_PAGE_DURATION_DAYS_XPATH = "//input[@id = 'createAdhocTripForm_durationDays']";
+
+  private static final String CREATE_TRIP_PAGE_DURATION_HOURS_XPATH = "//input[@id = 'createAdhocTripForm_durationHours']";
+  private static final String CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH = "//input[@id = 'createAdhocTripForm_durationMinutes']";
+  private static final String CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH = "//input[@id = 'createAdhocTripForm_departureDate']";
+  private static final String ASSIGN_DRIVER_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),%s)]";
+
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
 
@@ -194,7 +215,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public Button AddDriverButton;
 
   @FindBy(xpath = "//input[@id='originHub']")
-  public PageElement originHubFilter;
+  public AntSelect originHubFilter;
 
   @FindBy(xpath = "//input[@id='destinationHub']")
   public AntSelect destinationHubFilter;
@@ -263,6 +284,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
     } else if (filterName.equalsIgnoreCase("destinationhub")) {
       TestUtils.findElementAndClick(destinationHub, "xpath", getWebDriver());
       sendKeysAndEnter(destinationHub, filterValue);
+    } else if (filterName.equalsIgnoreCase("OneTimeOriginHub")) {
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, filterValue);
+    } else if (filterName.equalsIgnoreCase("OneTimeDestinationHub")) {
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, filterValue);
+    } else if (filterName.equalsIgnoreCase("OneTimeMovementType")) {
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, filterValue);
     }
   }
 
@@ -966,6 +996,70 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void verifyAssignDriverInvisible(){
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_ASSIGN_DRIVER_XPATH)).as("Assign Driver button is not visible.").isFalse();
+  }
+
+  public void clickCreateOneTimeTripButton(){
+    findElementByXpath(MOVEMENT_TRIPS_PAGE_CREATE_ONE_TIME_TRIP_XAPTH).click();
+    verifyCreateOneTimeTripPage();
+    //pause5s();
+  }
+
+  public void verifyCreateOneTimeTripPage(){
+    switchToNewWindow();
+    this.switchTo();
+    waitUntilVisibilityOfElementLocated(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH,5);
+    waitUntilVisibilityOfElementLocated("//input[@id ='createAdhocTripForm_originHub']/parent::span/following-sibling::span[text()='Search or Select']",10);
+
+
+  }
+
+  public void createOneTimeTrip(Map<String, String> resolvedMapOfData, List<Driver> middleMileDrivers){
+    resolvedMapOfData.forEach((k, v) -> System.out.println((k + ":" + v)));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, resolvedMapOfData.get("originHub"));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, resolvedMapOfData.get("destinationHub"));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, resolvedMapOfData.get("movementType"));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH, resolvedMapOfData.get("departureTime"));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_DAYS_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_DAYS_XPATH, resolvedMapOfData.get("durationDays"));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_HOURS_XPATH, "xpath", getWebDriver());
+      sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_HOURS_XPATH, resolvedMapOfData.get("durationHours"));
+
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH, "xpath", getWebDriver());
+
+      sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH, resolvedMapOfData.get("durationMinutes"));
+
+    click(CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH);
+    waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
+    click(f(CALENDAR_SELECTED_XPATH, resolvedMapOfData.get("departureDate")));
+    int numberOfDrivers = Integer.parseInt(resolvedMapOfData.get("assignDrivers"));
+    for (int i=0;i<numberOfDrivers;i++){
+      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
+      //sendKeysAndEnter(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
+      sendKeys(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
+      click(f(ASSIGN_DRIVER_LIST_XPATH, middleMileDrivers.get(i).getUsername()));
+    }
+    if (numberOfDrivers ==4) verifyCanNotAssignMoreThan4Drivers(middleMileDrivers);
+    //pause5s();
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_SUBMIT_BUTTON_XPATH, "xpath", getWebDriver());
+  }
+
+  public void verifyCanNotAssignMoreThan4Drivers(List<Driver> middleMileDrivers){
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
+    sendKeys(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH,middleMileDrivers.get(middleMileDrivers.size()-1).getUsername());
+    click(f(ASSIGN_DRIVER_LIST_XPATH, middleMileDrivers.get(middleMileDrivers.size()-1).getUsername()));
+    Boolean isDriverSelected = findElementByXpath(f(ASSIGN_DRIVER_LIST_XPATH, middleMileDrivers.get(middleMileDrivers.size()-1).getUsername())).isSelected();
+
+    Assertions.assertThat(isDriverSelected).as(" Can not select more than 4 drivers").isFalse();
   }
 
   public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {

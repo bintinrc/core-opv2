@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
@@ -16,8 +17,11 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,6 +150,15 @@ public class TripManagementSteps extends AbstractSteps {
                     case "movement type":
                         filterMap.put("filterName", "movementType");
                         put(KEY_MOVEMENT_TYPE_INCLUDED, true);
+                        break;
+                    case "one time trip origin hub":
+                        filterMap.put("filterName", "OneTimeOriginHub");
+                        break;
+                    case "one time trip destination hub":
+                        filterMap.put("filterName", "OneTimeDestinationHub");
+                        break;
+                    case "one time trip movement type":
+                        filterMap.put("filterName", "OneTimeMovementType");
                         break;
                     default:
                         LOGGER.warn("Filter Type: {} is not found!", filterName);
@@ -434,5 +447,31 @@ public class TripManagementSteps extends AbstractSteps {
     @When("Operator clicks Cancel Trip button on Cancel page")
     public void OperatorClicksCancelOnCancelPage(){
         tripManagementPage.clickCancelTripButton();
+    }
+
+    @When("Openrator clicks on Create One Time Trip Button")
+    public void OperatorclicksCreateOneTimeTripButton(){
+        tripManagementPage.clickCreateOneTimeTripButton();
+    }
+
+    @When("Operator create One Time Trip on Movement Trips page using data below:")
+    public void OperatorCreateOneTimeTrip(Map<String, String> mapOfData){
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+        if(resolvedMapOfData.get("departureTime").equalsIgnoreCase("GENERATED")){
+            LocalTime time = LocalTime.now().plusHours(1L);
+            String departTime = time.format(DateTimeFormatter.ofPattern("HH:mm"));
+            resolvedMapOfData.put("departureTime",departTime);
+        }
+        if(resolvedMapOfData.get("departureDate").equalsIgnoreCase("GENERATED")){
+            String departureDay = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            resolvedMapOfData.put("departureDate",departureDay);
+        }
+        if(resolvedMapOfData.get("duration").equalsIgnoreCase("GENERATED")) {
+            resolvedMapOfData.putIfAbsent("durationDays", "0");
+            resolvedMapOfData.putIfAbsent("durationHours", "0");
+            resolvedMapOfData.putIfAbsent("durationMinutes", "15");
+        }
+        tripManagementPage.createOneTimeTrip(resolvedMapOfData,middleMileDriver);
     }
 }
