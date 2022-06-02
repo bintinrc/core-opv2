@@ -118,8 +118,8 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | status          | Pending                                  |
-      | granular status | Pending Pickup                           |
+      | status          | Pending        |
+      | granular status | Pending Pickup |
     And Operator searches and selects orders created first row on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1 |
@@ -140,8 +140,307 @@ Feature: Add To Shipment 4
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator close the shipment which has been created
 
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Close Shipment without Print Shipment Label - Single 70x50 mm
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan order to shipment on Add to Shipment page:
+      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | originHub      | {hub-name}                      |
+      | destinationHub | {hub-name-2}                    |
+      | shipmentType   | Air Haul                        |
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
+    When Operator set shipment label sticker settings on Add to Shipment page:
+      | version | Single     |
+      | size    | 70 x 50 mm |
+    Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
+    And Operator close shipment on Add to Shipment page
+    Then Operator verifies that notification displayed:
+      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator filter Shipment Status = Closed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Closed |
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Close Shipment without Print Shipment Label - Folded 70x50 mm
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan order to shipment on Add to Shipment page:
+      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | originHub      | {hub-name}                      |
+      | destinationHub | {hub-name-2}                    |
+      | shipmentType   | Air Haul                        |
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
+    When Operator set shipment label sticker settings on Add to Shipment page:
+      | version | Folded     |
+      | size    | 70 x 50 mm |
+    Then Operator verifies shipment label settings are "Folded, 70 x 50 mm, No print when closing" on Add to Shipment page
+    And Operator close shipment on Add to Shipment page
+    Then Operator verifies that notification displayed:
+      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator filter Shipment Status = Closed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Closed |
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Close Shipment without Print Shipment Label - Single 100x150 mm
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan order to shipment on Add to Shipment page:
+      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | originHub      | {hub-name}                      |
+      | destinationHub | {hub-name-2}                    |
+      | shipmentType   | Air Haul                        |
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
+    When Operator set shipment label sticker settings on Add to Shipment page:
+      | version | Single       |
+      | size    | 100 x 150 mm |
+    Then Operator verifies shipment label settings are "Single, 100 x 150 mm, No print when closing" on Add to Shipment page
+    And Operator close shipment on Add to Shipment page
+    Then Operator verifies that notification displayed:
+      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator filter Shipment Status = Closed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Closed |
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Close Shipment without Print Shipment Label - Folded 100x150 mm
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan order to shipment on Add to Shipment page:
+      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | originHub      | {hub-name}                      |
+      | destinationHub | {hub-name-2}                    |
+      | shipmentType   | Air Haul                        |
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
+    When Operator set shipment label sticker settings on Add to Shipment page:
+      | version | Folded       |
+      | size    | 100 x 150 mm |
+    Then Operator verifies shipment label settings are "Folded, 100 x 150 mm, No print when closing" on Add to Shipment page
+    And Operator close shipment on Add to Shipment page
+    Then Operator verifies that notification displayed:
+      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator filter Shipment Status = Closed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Closed |
+
+  @DeleteShipment
+  Scenario: Create New Shipment - with selected origin hub
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator select values on Add to Shipment page:
+      | originHub | {hub-name} |
+    And Operator clicks Create Shipment on Add to Shipment page
+    Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
+      | originHub | {hub-name} |
+    When Operator set values in Create Shipment modal on Add to Shipment page:
+      | originHub      | {hub-name}                                          |
+      | destinationHub | {hub-name-2}                                        |
+      | shipmentType   | Air Haul                                            |
+      | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
+    Then Operator verifies that Created new shipment notification displayed
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | shipmentType    | AIR_HAUL                                            |
+      | id              | {KEY_CREATED_SHIPMENT_ID}                           |
+      | userId          | {operator-portal-uid}                               |
+      | entrySource     | MANUAL                                              |
+      | createdAt       | ^{gradle-current-date-yyyy-MM-dd}.*                 |
+      | transitAt       | null                                                |
+      | status          | Pending                                             |
+      | origHubName     | {hub-name}                                          |
+      | currHubName     | {hub-name}                                          |
+      | destHubName     | {hub-name-2}                                        |
+      | arrivalDatetime | null                                                |
+      | sla             | null                                                |
+      | ordersCount     | 0                                                   |
+      | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+      | mawb            | null                                                |
+
+  @DeleteShipment
+  Scenario: Create New Shipment - with selected destination hub
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator select values on Add to Shipment page:
+      | destinationHub | {hub-name-2} |
+    And Operator clicks Create Shipment on Add to Shipment page
+    Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
+      | destinationHub | {hub-name-2} |
+    When Operator set values in Create Shipment modal on Add to Shipment page:
+      | originHub      | {hub-name}                                          |
+      | destinationHub | {hub-name-2}                                        |
+      | shipmentType   | Air Haul                                            |
+      | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
+    Then Operator verifies that Created new shipment notification displayed
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | shipmentType    | AIR_HAUL                                            |
+      | id              | {KEY_CREATED_SHIPMENT_ID}                           |
+      | userId          | {operator-portal-uid}                               |
+      | entrySource     | MANUAL                                              |
+      | createdAt       | ^{gradle-current-date-yyyy-MM-dd}.*                 |
+      | transitAt       | null                                                |
+      | status          | Pending                                             |
+      | origHubName     | {hub-name}                                          |
+      | currHubName     | {hub-name}                                          |
+      | destHubName     | {hub-name-2}                                        |
+      | arrivalDatetime | null                                                |
+      | sla             | null                                                |
+      | ordersCount     | 0                                                   |
+      | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+      | mawb            | null                                                |
+
+  @DeleteShipment
+  Scenario Outline: Create New Shipment - with selected shipment type - <shipmentType>
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator select values on Add to Shipment page:
+      | shipmentType | <shipmentType> |
+    And Operator clicks Create Shipment on Add to Shipment page
+    Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
+      | shipmentType | <shipmentType> |
+    When Operator set values in Create Shipment modal on Add to Shipment page:
+      | originHub      | {hub-name}                                          |
+      | destinationHub | {hub-name-2}                                        |
+      | shipmentType   | <shipmentType>                                      |
+      | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
+    Then Operator verifies that Created new shipment notification displayed
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | shipmentType    | <shipmentTypeTable>                                 |
+      | id              | {KEY_CREATED_SHIPMENT_ID}                           |
+      | userId          | {operator-portal-uid}                               |
+      | entrySource     | MANUAL                                              |
+      | createdAt       | ^{gradle-current-date-yyyy-MM-dd}.*                 |
+      | transitAt       | null                                                |
+      | status          | Pending                                             |
+      | origHubName     | {hub-name}                                          |
+      | currHubName     | {hub-name}                                          |
+      | destHubName     | {hub-name-2}                                        |
+      | arrivalDatetime | null                                                |
+      | sla             | null                                                |
+      | ordersCount     | 0                                                   |
+      | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+      | mawb            | null                                                |
+    Examples:
+      | shipmentType | shipmentTypeTable |
+      | Air Haul     | AIR_HAUL          |
+      | Land Haul    | LAND_HAUL         |
+      | Sea Haul     | SEA_HAUL          |
+      | Others       | OTHERS            |
+
+  @DeleteShipment
+  Scenario: Create New Shipment - with selected all mandatory fields
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator select values on Add to Shipment page:
+      | originHub      | {hub-name}   |
+      | destinationHub | {hub-name-2} |
+      | shipmentType   | Air Haul     |
+    And Operator clicks Create Shipment on Add to Shipment page
+    Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
+      | originHub      | {hub-name}   |
+      | destinationHub | {hub-name-2} |
+      | shipmentType   | Air Haul     |
+    When Operator set values in Create Shipment modal on Add to Shipment page:
+      | comments | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
+    Then Operator verifies that Created new shipment notification displayed
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | shipmentType    | AIR_HAUL                                            |
+      | id              | {KEY_CREATED_SHIPMENT_ID}                           |
+      | userId          | {operator-portal-uid}                               |
+      | entrySource     | MANUAL                                              |
+      | createdAt       | ^{gradle-current-date-yyyy-MM-dd}.*                 |
+      | transitAt       | null                                                |
+      | status          | Pending                                             |
+      | origHubName     | {hub-name}                                          |
+      | currHubName     | {hub-name}                                          |
+      | destHubName     | {hub-name-2}                                        |
+      | arrivalDatetime | null                                                |
+      | sla             | null                                                |
+      | ordersCount     | 0                                                   |
+      | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+      | mawb            | null                                                |
+
+  @DeleteShipment
+  Scenario: Create New Shipment - without selected any fields
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator clicks Create Shipment on Add to Shipment page
+    Then Operator verifies mandatory fields in Create Shipment modal on Add to Shipment page
+    And Operator verifies Create Shipment button is disabled in Create Shipment modal on Add to Shipment page
+
+  @DeleteShipment
+  Scenario: Create New Shipment - with selected same origin and destination hub
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator clicks Create Shipment on Add to Shipment page
+    And Operator set values in Create Shipment modal on Add to Shipment page:
+      | originHub      | {hub-name} |
+      | destinationHub | {hub-name} |
+    Then Operator verifies same hubs alert in Create Shipment modal on Add to Shipment page
+    And Operator verifies Create Shipment button is disabled in Create Shipment modal on Add to Shipment page
+
+  @DeleteShipment @DeleteHubsViaAPI @DeleteHubsViaDb
+  Scenario: Can not create new shipment using virtual hubs
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED  |
+      | displayName  | GENERATED  |
+      | facilityType | CROSSDOCK  |
+      | city         | GENERATED  |
+      | country      | GENERATED  |
+      | latitude     | GENERATED  |
+      | longitude    | GENERATED  |
+      | parentHub    | {hub-name} |
+      | parentHubId  | {hub-id}   |
+      | virtual      | true       |
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator clicks Create Shipment on Add to Shipment page
+    Then Operator verifies "{KEY_CREATED_HUB.name}" Origin Hub is not shown in Create Shipment modal on Add to Shipment page
+    Then Operator verifies "{KEY_CREATED_HUB.name}" Destination Hub is not shown in Create Shipment modal on Add to Shipment page
+
   @KillBrowser
   Scenario: Kill Browser
     Given no-op
-
-

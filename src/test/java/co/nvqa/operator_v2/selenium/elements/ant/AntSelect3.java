@@ -52,6 +52,7 @@ public class AntSelect3 extends PageElement {
     if (!StringUtils.equals(value, getValue())) {
       enterSearchTerm(value);
       clickMenuItem(value);
+      waitUntilInvisibilityOfElementLocated(getListBoxLocator());
     }
   }
 
@@ -62,11 +63,15 @@ public class AntSelect3 extends PageElement {
   public void selectByIndex(int index) {
     openMenu();
     clickMenuItemByIndex(index);
+    waitUntilInvisibilityOfElementLocated(getListBoxLocator());
   }
 
   public void selectValueWithoutSearch(String value) {
-    openMenu();
-    clickMenuItem(value);
+    if (!StringUtils.equals(getValue(), value)) {
+      openMenu();
+      clickMenuItem(value);
+      waitUntilInvisibilityOfElementLocated(getListBoxLocator());
+    }
   }
 
   public void clickMenuItem(String value) {
@@ -91,6 +96,7 @@ public class AntSelect3 extends PageElement {
     } else {
       searchInput.forceClear();
     }
+    waitUntilInvisibilityOfElementLocated(getListBoxLocator());
   }
 
   public void removeSelected(List<String> items) {
@@ -123,7 +129,11 @@ public class AntSelect3 extends PageElement {
   }
 
   private void openMenu() {
-    if (!isElementVisible(getListBoxLocator(), 0)) {
+    String listBoxLocator = getListBoxLocator();
+    if (!isElementVisible(listBoxLocator, 0)) {
+      searchInput.moveAndClick();
+    }
+    if (!isElementVisible(listBoxLocator, 0)) {
       searchInput.click();
     }
   }
@@ -181,5 +191,9 @@ public class AntSelect3 extends PageElement {
     public void remove() {
       remove.click();
     }
+  }
+
+  public void waitUntilEnabled() {
+    searchInput.waitUntilClickable();
   }
 }

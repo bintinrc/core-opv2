@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.translate.CsvTranslators;
 
@@ -35,6 +36,10 @@ public class ReservationInfo extends DataEntity<ReservationInfo> {
   private String comments;
 
   public ReservationInfo() {
+  }
+
+  public ReservationInfo(Map<String, ?> data) {
+    super(data);
   }
 
   public ReservationInfo(ReservationInfo reservationInfo) {

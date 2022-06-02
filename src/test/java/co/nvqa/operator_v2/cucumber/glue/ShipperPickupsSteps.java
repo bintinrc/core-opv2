@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
+import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_ROUTE_EDIT;
@@ -58,6 +60,26 @@ public class ShipperPickupsSteps extends AbstractSteps {
     Date nextDayDate = TestUtils.getNextDate(1);
     shipperPickupsPage.filtersForm.filterReservationDate(currentDate, nextDayDate);
     shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
+  }
+
+  @When("^Operator enter reservation ids on Shipper Pickups page:$")
+  public void enterReservationIds(List<String> ids) {
+    ids = resolveValues(ids);
+    ids.forEach(id ->
+        shipperPickupsPage.reservationIds.sendKeys(id + Keys.ENTER)
+    );
+  }
+
+  @When("Operator verifies that there is '{int} reservation IDs entered' shown under the search field on Shipper Pickups page")
+  public void verifiesTotalReservationsId(int count) {
+    Assertions.assertThat(shipperPickupsPage.reservationIdsCount.getNormalizedText())
+        .as("Reservation IDs field counter text")
+        .isEqualTo(f("%d reservation IDs entered", count));
+  }
+
+  @When("^Operator clicks Search by Reservation IDs on Shipper Pickups page$")
+  public void clickSearchByReservationIds() {
+    shipperPickupsPage.searchByReservationIds.clickAndWaitUntilDone();
   }
 
   @When("^Operator set filter parameters and click Load Selection on Shipper Pickups page:$")
@@ -148,6 +170,23 @@ public class ShipperPickupsSteps extends AbstractSteps {
     retryIfAssertionErrorOccurred(() ->
             verifyReservationData(addressResult, resolveKeyValues(mapOfData)),
         " Verify reservation parameters", 500, 3);
+  }
+
+  @Then("^Operator verify reservations details on Shipper Pickups page:$")
+  public void verifyReservationDetails(List<Map<String, String>> data) {
+    data = resolveListOfMaps(data);
+    List<ReservationInfo> actualRows = shipperPickupsPage.reservationsTable.readAllEntities();
+    data.forEach(row -> {
+      ReservationInfo expected = new ReservationInfo(row);
+      actualRows.stream()
+          .filter(expected::matchedTo)
+          .findFirst()
+          .orElseThrow(() -> new AssertionError("Reservation was not found: " + expected
+              + "\nTable rows:\n" + actualRows.stream()
+              .map(DataEntity::toString)
+              .reduce((r, n) -> r + "\n" + n)
+              .orElse("")));
+    });
   }
 
   @Then("^Operator verify the new reservations are listed on table in Shipper Pickups page using data below:$")

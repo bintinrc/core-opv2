@@ -91,8 +91,8 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(xpath = "//div[./label[@for='routeDate']]/div")
   public AntRangePicker routeDateFilter;
 
-  @FindBy(xpath = "//div[./div/label[@for='hub']]/div[2]")
-  public AntSelect3 hubFilter;
+  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Hub')]]")
+  public AntFilterSelect3 hubFilter;
 
   @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Driver')]]")
   public AntFilterSelect3 driverFilter;
@@ -198,8 +198,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     waitUntilLoaded();
     routeDateFilter.setInterval(routeDateFrom, routeDateTo);
     if (StringUtils.isNotBlank(hubName)) {
-      hubFilter.clearValue();
-      hubFilter.selectValue(hubName);
+      hubFilter.selectFilter(hubName);
     }
     loadSelection.clickAndWaitUntilDone();
   }

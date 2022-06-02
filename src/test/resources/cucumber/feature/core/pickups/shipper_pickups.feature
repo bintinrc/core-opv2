@@ -1383,6 +1383,45 @@ Feature: Shipper Pickups
       | waypointStatus      | FAIL, SUCCESS                  |
       | zones               | {zone-id}-{zone-name}          |
 
+  Scenario: Operator Search Single Reservation by Reservation Id on Shipper Pickup Page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator enter reservation ids on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verifies that there is '1 reservation IDs entered' shown under the search field on Shipper Pickups page
+    When Operator clicks Search by Reservation IDs on Shipper Pickups page
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | shipperId              | shipperName                                                                              | pickupAddress                                                 | routeId | driverName | priorityLevel                                       | readyBy                                                        | latestBy                                                        | reservationType | reservationStatus | reservationCreatedTime | serviceTime | approxVolume                                       | failureReason | comments                                       |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {shipper-v4-legacy-id} | {shipper-v4-name} - {shipper-v4-contact} ({KEY_LIST_OF_CREATED_RESERVATIONS[1].contact}) | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].priorityLevel} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].toDisplayedReadyDatetime} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].toDisplayedLatestDatetime} | REGULAR         | PENDING           | not null               | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | -             | {KEY_LIST_OF_CREATED_RESERVATIONS[1].comments} |
+
+  Scenario: Operator Search Multiple Less Than 30 Reservations by Reservation Ids on Shipper Pickup Page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator enter reservation ids on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
+    Then Operator verifies that there is '2 reservation IDs entered' shown under the search field on Shipper Pickups page
+    When Operator clicks Search by Reservation IDs on Shipper Pickups page
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | shipperId              | shipperName                                                                              | pickupAddress                                                 | routeId | driverName | priorityLevel                                       | readyBy                                                        | latestBy                                                        | reservationType | reservationStatus | reservationCreatedTime | serviceTime | approxVolume                                       | failureReason | comments                                       |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {shipper-v4-legacy-id} | {shipper-v4-name} - {shipper-v4-contact} ({KEY_LIST_OF_CREATED_RESERVATIONS[1].contact}) | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].priorityLevel} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].toDisplayedReadyDatetime} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].toDisplayedLatestDatetime} | REGULAR         | PENDING           | not null               | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | -             | {KEY_LIST_OF_CREATED_RESERVATIONS[1].comments} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | {shipper-v4-legacy-id} | {shipper-v4-name} - {shipper-v4-contact} ({KEY_LIST_OF_CREATED_RESERVATIONS[2].contact}) | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[2].priorityLevel} | {KEY_LIST_OF_CREATED_RESERVATIONS[2].toDisplayedReadyDatetime} | {KEY_LIST_OF_CREATED_RESERVATIONS[2].toDisplayedLatestDatetime} | REGULAR         | PENDING           | not null               | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[2].approxVolume} | -             | {KEY_LIST_OF_CREATED_RESERVATIONS[2].comments} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

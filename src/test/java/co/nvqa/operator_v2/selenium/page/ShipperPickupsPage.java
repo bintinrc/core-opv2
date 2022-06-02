@@ -65,6 +65,15 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   @FindBy(css = "[id^='commons.preset.load-filter-preset']")
   public MdSelect filterPreset;
 
+  @FindBy(id = "rsvn-ids")
+  public TextBox reservationIds;
+
+  @FindBy(css = "small.search-input-count")
+  public PageElement reservationIdsCount;
+
+  @FindBy(name = "container.shipper-pickups.search-by-reservation-ids")
+  public NvApiTextButton searchByReservationIds;
+
   @FindBy(css = "md-dialog")
   public AllOrdersPage.SavePresetDialog savePresetDialog;
 

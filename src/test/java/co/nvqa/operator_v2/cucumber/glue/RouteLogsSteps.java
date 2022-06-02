@@ -487,8 +487,8 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.routeDateFilter.setTo(finalData.get("routeDateTo"));
       }
       if (finalData.containsKey("hub")) {
-        routeLogsPage.hubFilter.clearValue();
-        routeLogsPage.hubFilter.selectValues(splitAndNormalize(finalData.get("hub")));
+        routeLogsPage.hubFilter.clearAll();
+        routeLogsPage.hubFilter.selectFilter(splitAndNormalize(finalData.get("hub")));
       }
       if (finalData.containsKey("driver")) {
         if (!routeLogsPage.driverFilter.isDisplayedFast()) {
@@ -759,7 +759,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Hub filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.hubFilter.getValues())
+          assertions.assertThat(routeLogsPage.hubFilter.getSelectedValues())
               .as("Hub items")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hub")));
         }
@@ -1184,4 +1184,5 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.selectionErrorDialog.continueBtn.click();
     });
   }
+
 }
