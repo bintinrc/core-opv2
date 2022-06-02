@@ -872,7 +872,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     confirmBulkUpdateDialog.proceed.click();
     confirmBulkUpdateDialog.waitUntilInvisible();
 
-    pause1s();
+    pause3s();
     String fieldInfo = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(": ")[0];
     assertThat("Field info is correct", fieldInfo, equalTo("Field successfully updated"));
     for (PageElement checkListExistence : shipmentToBeUpdatedTable.checkLists) {
@@ -1243,7 +1243,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//i[.='check']")
     public List<PageElement> checkLists;
 
-    @FindBy(css = "[aria-label='Back to Shipment Management']")
+    @FindBy(css = "[aria-label='Done']")
     public Button backButton;
 
     public ShipmentToBeUpdatedTable(WebDriver webDriver, WebElement webElement) {

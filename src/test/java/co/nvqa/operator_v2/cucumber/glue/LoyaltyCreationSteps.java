@@ -5,6 +5,8 @@ import co.nvqa.operator_v2.selenium.page.LoyaltyCreationPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
 
@@ -72,6 +74,21 @@ public class LoyaltyCreationSteps extends AbstractSteps{
     loyaltyCreationPage.addDataToLoyaltyCsv(shipper, false, null);
   }
 
+  @When("Operator add shipper to csv file for loyalty creation with data below:")
+  public void addShipperCustom(Map<String, String> mapOfData) {
+    Map<String, String> finalDataMap = resolveKeyValues(mapOfData);
+    Shipper shipper = new Shipper();
+    shipper.setLegacyId(Long.valueOf(finalDataMap.get("legacyId")));
+    shipper.setName(finalDataMap.get("shipperName"));
+    shipper.setEmail(finalDataMap.get("shipperEmail"));
+    if (finalDataMap.containsKey("shipperPhoneNumber")) {
+      shipper.setContact(finalDataMap.get("shipperPhoneNumber"));
+      loyaltyCreationPage.addDataToLoyaltyCsv(shipper, false, null);
+      return;
+    }
+    loyaltyCreationPage.addDataToLoyaltyCsv(shipper, true, null);
+  }
+
   @When("Operator add shipper with empty email and phone number to csv file for loyalty creation")
   public void addShipperWithEmptyEmailAndPhone() {
     Shipper shipper = new Shipper();
@@ -95,8 +112,15 @@ public class LoyaltyCreationSteps extends AbstractSteps{
     loyaltyCreationPage.clickUploadConfirmation();
   }
 
+  @When("Operator click download error CSV button")
+  public void clickDownloadErrorCsvButton() {
+    loyaltyCreationPage.clickDownloadErrorCsvButton();
+  }
+
   @Then("Operator check result message {string} displayed")
   public void openSmsPanel(String msg) {
-    assertTrue("Check result message", loyaltyCreationPage.isResultMessageDisplayed(msg));
+    boolean isMessageDisplayed = loyaltyCreationPage.isResultMessageDisplayed(msg);
+    Assertions.assertThat(isMessageDisplayed).as(f("Result message: '%s' is displayed", msg))
+        .isTrue();
   }
 }
