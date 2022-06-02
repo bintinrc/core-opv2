@@ -545,7 +545,7 @@ Feature: Number of Missing Parcels
       | {hub-name-Global2} | {hub-id-Global2} | MISSING    | Missing parcels | Missing Parcels | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
-  Scenario Outline: View Parcel Routing Scanned Missing Pacels (uid:fc15ede0-0393-42d3-a323-ec048e786524)
+  Scenario Outline: View Parcel Routing Scanned Missing Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed

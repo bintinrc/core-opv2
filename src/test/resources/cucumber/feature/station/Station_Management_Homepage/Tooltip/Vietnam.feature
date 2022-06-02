@@ -5,7 +5,7 @@ Feature: Vietnam
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Vietnam Tooltip for COD Collected from Countries (uid:c4b532b0-9a7a-48af-b752-5ddfe613e04c)
+  Scenario Outline: Vietnam Tooltip for COD Collected from Courier
     Given Operator loads Operator portal home page
     And Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"
