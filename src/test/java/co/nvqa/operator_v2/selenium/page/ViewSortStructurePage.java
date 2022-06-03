@@ -105,7 +105,7 @@ public class ViewSortStructurePage extends OperatorV2SimplePage {
   public static class TreeNode extends PageElement {
 
     public enum NodeType {
-      HUB, MIDDLE_TIER, ZONE
+      HUB, MIDDLE_TIER, ZONE, RTS_ZONE
     }
 
     public TreeNode(WebDriver webDriver, WebElement webElement) {
@@ -140,6 +140,8 @@ public class ViewSortStructurePage extends OperatorV2SimplePage {
         return NodeType.MIDDLE_TIER;
       } else if (classes.contains("zone")) {
         return NodeType.ZONE;
+      } else if (classes.contains("rts_zone")) {
+        return NodeType.RTS_ZONE;
       } else {
         throw new NvTestRuntimeException("Unknown type of a node");
       }

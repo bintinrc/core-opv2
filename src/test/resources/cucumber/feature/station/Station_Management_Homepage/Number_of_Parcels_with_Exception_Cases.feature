@@ -1045,7 +1045,7 @@ Feature: Number of Parcels with Exception Cases
       | {hub-name-Global2} | {hub-id-Global2} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
-  Scenario Outline: View Parcel Routing Scanned Pacels with Exception Cases (uid:b407f68a-f384-476f-b3f9-7ff9e049d8fa)
+  Scenario Outline: View Parcel Routing Scanned Parcels with Exception Cases
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed

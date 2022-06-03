@@ -237,6 +237,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
   @And("^Operator verifies that \"(.+)\" error notification is displayed$")
   public void operatorVerifiesToast(String message) {
     message = resolveValue(message);
+    pause2s();
     sortBeltManagerPage.waitUntilInvisibilityOfNotification(message, true);
   }
 
