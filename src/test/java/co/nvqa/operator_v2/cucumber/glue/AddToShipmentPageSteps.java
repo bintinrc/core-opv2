@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.page.AddToShipmentPage;
 import com.google.common.collect.ImmutableMap;
@@ -7,7 +8,9 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -41,6 +44,16 @@ public class AddToShipmentPageSteps extends AbstractSteps {
     });
   }
 
+  @When("^Operator verifies tags are displayed on Add to Shipment page:$")
+  public void verifyTags(List<String> data) {
+    addToShipmentPage.inFrame(page -> {
+      Assertions.assertThat(page.tags.stream().map(PageElement::getNormalizedText).collect(
+              Collectors.toList()))
+          .as("List of displayed tags")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(data));
+    });
+  }
+
   @When("^Operator select values on Add to Shipment page:$")
   public void operatorSelectValuesShipment(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
@@ -60,7 +73,7 @@ public class AddToShipmentPageSteps extends AbstractSteps {
       }
       value = finalData.get("shipmentId");
       if (StringUtils.isNotBlank(value)) {
-        pause5s();
+        page.shipmentId.waitUntilEnabled();
         page.shipmentId.selectValue(finalData.get("shipmentId"));
       }
     });

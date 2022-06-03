@@ -94,9 +94,7 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
   public void addTag(List<String> orderTags) {
     actionsMenu.selectOption("Add Tags");
     addTagsDialog.waitUntilVisible();
-    for (String tag : orderTags) {
-      addTagsDialog.selectTag.selectValue(tag);
-    }
+    addTagsDialog.selectTag.selectValues(orderTags);
     addTagsDialog.save.click();
     addTagsDialog.waitUntilInvisible();
   }

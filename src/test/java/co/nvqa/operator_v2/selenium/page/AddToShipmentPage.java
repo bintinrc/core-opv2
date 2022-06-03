@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -44,6 +45,9 @@ public class AddToShipmentPage extends SimpleReactPage<AddToShipmentPage> {
 
   @FindBy(id = "toAddTrackingId")
   public TextBox addTrackingIdInput;
+
+  @FindBy(css = "[data-testid='scan-status-tags-section'] span")
+  public List<PageElement> tags;
 
   @FindBy(id = "toRemoveTrackingId")
   public TextBox removeTrackingIdInput;

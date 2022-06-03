@@ -1392,8 +1392,8 @@ public class OperatorV2SimplePage extends SimplePage {
       List<String> closeLocators = ImmutableList.of(
           dialogXpath + "//nv-icon-button[@name='Cancel']",
           dialogXpath + "//nv-icon-text-button[@name='Cancel']",
-          dialogXpath + "//button[@aria-label='Leave']"
-
+          dialogXpath + "//button[@aria-label='Leave']",
+          dialogXpath + "//button[@aria-label='Leave Anyway']"
       );
       for (String closeLocator : closeLocators) {
         if (isElementVisible(closeLocator, 0)) {
