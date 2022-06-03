@@ -207,7 +207,7 @@ Feature: Movement Trip - Create One Time Trip
     Then Operator verifies toast message display on create one time trip page
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
-  Scenario: Create One Time Trip with disabled Origin Hub (uid:c5de607c-0e75-483f-a261-e2453b439d66)
+  Scenario: Create One Time Trip with disabled Destination Hub (uid:c5de607c-0e75-483f-a261-e2453b439d66)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
