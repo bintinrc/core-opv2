@@ -453,7 +453,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @Then("Operator verify Sum up button on Shipment Weight Dimension Table have {string} as counter")
   public void operatorVerifySumUpButtonOnShipmentWeightDimensionTableHaveAsCounter(String counter) {
     Assertions.assertThat(shipmentWeightDimensionTablePage.sumUpButton.getText())
-        .as("sum up button counter is increased").isEqualTo("Sum up & Update MAWB (%s)", counter);
+        .as("sum up button counter is increased").isEqualTo("Sum up (%s)", counter);
   }
 
   @And("Operator click edit button on Shipment Weight Dimension table")
