@@ -2,7 +2,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @SumUpReport
 Feature: Sum Up Report
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -200,7 +200,7 @@ Feature: Sum Up Report
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
       | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
 
-  @DeleteShipments @runthis
+  @DeleteShipments
   Scenario: Select Some SID from Shipment Weight Dimension table and Remove All SID of Sum Up Report
     Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
