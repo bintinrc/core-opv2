@@ -21,6 +21,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +48,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   private static final String STATE_KEY = "state";
   private static final String MESSAGE_KEY = "message";
   private static final String STATUS_KEY = "shipment status";
+  private static final String FILE_NAME = " Sum Up Report - Shipment Weight Dimension.csv";
 
   // page object
   ShipmentWeightDimensionPage shipmentWeightDimensionPage;
@@ -451,7 +453,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @Then("Operator verify Sum up button on Shipment Weight Dimension Table have {string} as counter")
   public void operatorVerifySumUpButtonOnShipmentWeightDimensionTableHaveAsCounter(String counter) {
     Assertions.assertThat(shipmentWeightDimensionTablePage.sumUpButton.getText())
-        .as("sum up button counter is increased").isEqualTo("Sum up & Update MAWB (%s)", counter);
+        .as("sum up button counter is increased").isEqualTo("Sum up (%s)", counter);
   }
 
   @And("Operator click edit button on Shipment Weight Dimension table")
@@ -712,10 +714,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorVerifyTheDownloadedCSVSumUpReportFileIsContainsTheCorrectValues(Map<String, String> dataTable) {
     String headers = dataTable.get("header");
     String title = shipmentWeightSumUpreport.sumUpReportTitle.getText().trim();
-    String dateFromTitle = title.substring(0, title.length() - 13);
-    ZonedDateTime date = DateUtil.getDate(dateFromTitle, DateUtil.DATE_TIME_FORMATTER);
+    String dateFromTitle = title.substring(0, title.length() - 14);
+
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss");
-    String fileNameFormat = date.format(dtf);
+    LocalDateTime date = LocalDateTime.parse(dateFromTitle, DateUtil.DATE_TIME_FORMATTER);
+
+    String fileNameFormat = date.format(dtf) + FILE_NAME;
 
     shipmentWeightSumUpreport.verifyFileDownloadedSuccessfully(
           fileNameFormat, headers);
