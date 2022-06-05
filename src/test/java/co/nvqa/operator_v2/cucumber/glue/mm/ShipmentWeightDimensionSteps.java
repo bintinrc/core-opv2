@@ -548,6 +548,20 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .as("Shipment status select is shown").isTrue();
   }
 
+  @Then("Operator verify disabled Selected Filter card on Shipment Weight Dimension Filter UI")
+  public void operatorVerifyDisabledSelectedFilterCardOnShipmentWeightDimensionFilterUI() {
+    Assertions.assertThat(shipmentWeightDimensionPage.deletePresetButton.isDisplayed())
+        .as("Delete button is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledShipmentTypeSelect.isDisplayed())
+        .as("Shipment Type select is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledStartHubSelect.isDisplayed())
+        .as("Start Hub select is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledEndHubSelect.isDisplayed())
+        .as("End Hub select is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledShipmentStatusSelect.isDisplayed())
+        .as("Shipment status select is shown").isTrue();
+  }
+
   @Then("Operator fill Shipment Weight Dimension Filter UI with data")
   public void operatorFillShipmentWeightDimensionFilterUIWithData(Map<String,String> dataTable) {
     Map<String,String> map = resolveKeyValues(dataTable);

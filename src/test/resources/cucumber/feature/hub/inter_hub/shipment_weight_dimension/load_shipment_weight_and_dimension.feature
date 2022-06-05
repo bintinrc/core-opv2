@@ -12,19 +12,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | presetName  | {shipment-weight-filter-name} |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -39,8 +39,8 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -51,18 +51,18 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName | {shipment-weight-filter-name} |
+      | mawb       | {KEY_SHIPMENT_AWB}            |
     Then Operator verify search button is disabled on Shipment Weight Dimension page
     When Operator search "{KEY_CREATED_SHIPMENT_ID}" on Shipment Weight Dimension search by SID text
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -83,15 +83,15 @@ Feature: Load Shipment Weight and Dimension
     When Operator click Enter New Filter button on Shipment Weight Dimension Filter UI
     Then Operator verify Enter New Filter card on Shipment Weight Dimension Filter UI
     Then Operator fill Shipment Weight Dimension Filter UI with data
-      | shipmentType    | Air Haul        |
-      | startHub        | {hub-name}      |
-      | endHub          | {hub-name-2}    |
-      | shipmentStatus  | Pending,Closed  |
-      | saveAsPreset    | true            |
-      | presetName      | RANDOM          |
+      | shipmentType   | Air Haul       |
+      | startHub       | {hub-name}     |
+      | endHub         | {hub-name-2}   |
+      | shipmentStatus | Pending,Closed |
+      | saveAsPreset   | true           |
+      | presetName     | RANDOM         |
     When Operator fill in Load Shipment Weight filter
-      | mawb            | INVALID                       |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | INVALID                      |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE} |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension search error popup shown
     And Operator close Shipment Weight Dimension search error popup
@@ -114,15 +114,15 @@ Feature: Load Shipment Weight and Dimension
     When Operator click Enter New Filter button on Shipment Weight Dimension Filter UI
     Then Operator verify Enter New Filter card on Shipment Weight Dimension Filter UI
     Then Operator fill Shipment Weight Dimension Filter UI with data
-      | shipmentType    | Air Haul        |
-      | startHub        | {hub-name}      |
-      | endHub          | {hub-name-2}    |
-      | shipmentStatus  | Pending,Closed  |
-      | saveAsPreset    | true            |
-      | presetName      | RANDOM          |
+      | shipmentType   | Air Haul       |
+      | startHub       | {hub-name}     |
+      | endHub         | {hub-name-2}   |
+      | shipmentStatus | Pending,Closed |
+      | saveAsPreset   | true           |
+      | presetName     | RANDOM         |
     When Operator fill in Load Shipment Weight filter
-      | mawb            | INVALID                       |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | INVALID                      |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE} |
     Then Operator click Clear and Close button on Shipment Weight Dimension
     When Operator search "{KEY_CREATED_SHIPMENT_ID}" on Shipment Weight Dimension search by SID text
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -141,8 +141,8 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -153,19 +153,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | presetName  | {shipment-weight-filter-name} |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -187,8 +187,8 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name}  |
-      | createdTime     | FUTURE                         |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | FUTURE                        |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension search error popup shown
     And Operator close Shipment Weight Dimension search error popup
@@ -198,15 +198,15 @@ Feature: Load Shipment Weight and Dimension
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Given API Operator create shipment weight dimension preset
-      | name            | RANDOM          |
-      | destinationHubs | {hub-id-2}      |
-      | originHubs      | {hub-id}        |
-      | shipmentStatus  | PENDING,CLOSED  |
-      | shipmentType    | AIR_HAUL        |
+      | name            | RANDOM         |
+      | destinationHubs | {hub-id-2}     |
+      | originHubs      | {hub-id}       |
+      | shipmentStatus  | PENDING,CLOSED |
+      | shipmentType    | AIR_HAUL       |
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {KEY_CREATED_SHIPMENT_WEIGHT_FILTER}  |
+      | presetName | {KEY_CREATED_SHIPMENT_WEIGHT_FILTER} |
     Then Operator delete the shipment weight filter preset
     And Operator verify Shipment Weight Dimension confirm delete popup shown
     Then Operator confirm Shipment Weight Dimension confirm delete popup
@@ -222,8 +222,8 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -233,20 +233,20 @@ Feature: Load Shipment Weight and Dimension
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Given API Operator create shipment weight dimension preset
-      | name            | RANDOM          |
-      | destinationHubs | {hub-id-2}      |
-      | originHubs      | {hub-id}        |
-      | shipmentStatus  | PENDING,CLOSED  |
-      | shipmentType    | AIR_HAUL        |
+      | name            | RANDOM         |
+      | destinationHubs | {hub-id-2}     |
+      | originHubs      | {hub-id}       |
+      | shipmentStatus  | PENDING,CLOSED |
+      | shipmentType    | AIR_HAUL       |
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {KEY_CREATED_SHIPMENT_WEIGHT_FILTER}  |
+      | presetName | {KEY_CREATED_SHIPMENT_WEIGHT_FILTER} |
     Then Operator delete the shipment weight filter preset
     And Operator verify Shipment Weight Dimension confirm delete popup shown
     Then Operator cancel Shipment Weight Dimension confirm delete popup
     And Operator verify shipment weight preset "{KEY_CREATED_SHIPMENT_WEIGHT_FILTER}" is not deleted
-    And Operator verify Selected Filter card on Shipment Weight Dimension Filter UI
+    And Operator verify disabled Selected Filter card on Shipment Weight Dimension Filter UI
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018972
   @DeleteShipment
@@ -254,19 +254,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -283,19 +283,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -312,19 +312,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -341,19 +341,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -370,19 +370,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -399,19 +399,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -428,19 +428,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -457,19 +457,19 @@ Feature: Load Shipment Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
+      | shipmentId           | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb                 | RANDOM                                |
+      | destinationAirportId | {airport-id-1}                        |
+      | originAirportId      | {airport-id-2}                        |
+      | vendorId             | {vendor-id}                           |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     And Operator verify Shipment Weight Dimension Filter UI
     When Operator fill in Load Shipment Weight filter
-      | presetName      | {shipment-weight-filter-name} |
-      | createdTime     | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb            | {KEY_SHIPMENT_AWB}            |
+      | presetName  | {shipment-weight-filter-name} |
+      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -479,7 +479,6 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
     When Operator clear filter on Shipment Weight Dimension Table
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
-
 
   @KillBrowser
   Scenario: Kill Browser
