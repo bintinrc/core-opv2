@@ -1250,12 +1250,12 @@ public class OperatorV2SimplePage extends SimplePage {
       return result;
     }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
-    waitUntilPageLoaded();
+    waitUntilPageLoaded(60);
     if (halfCircleSpinner.isDisplayedFast()) {
       halfCircleSpinner.waitUntilInvisible();
     }
     // temporary close /aaa error alert if exist
-    if (isElementExist("//button[.='close']")) {
+    if (isElementExist("//button[.='close']", 2)) {
       pause7s();
     }
   }

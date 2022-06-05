@@ -11,7 +11,6 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDe
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -29,9 +27,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,9 +79,9 @@ public class RouteLogsSteps extends AbstractSteps {
 
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
-      routeLogsPage.createRouteReact.click();
+      routeLogsPage.createRoute.click();
       routeLogsPage.createRouteDialog.waitUntilVisible();
-      routeLogsPage.waitUntilLoaded();
+      pause1s();
 
       CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
           .get(0);
@@ -132,6 +128,57 @@ public class RouteLogsSteps extends AbstractSteps {
     writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
   }
 
+  @When("Operator verifies {value} Driver is not shown in Create Route modal on Route Logs page")
+  public void verifyInvalidDriver(String value) {
+    routeLogsPage.inFrame(page -> {
+      page.createRouteDialog.waitUntilVisible();
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(0);
+      routeDetailsForm.assignedDriver.waitUntilEnabled();
+      Assertions.assertThatExceptionOfType(NoSuchElementException.class)
+          .as("Error expected for %s Driver value", value)
+          .isThrownBy(() -> routeDetailsForm.assignedDriver.selectValue(value));
+    });
+  }
+
+  @When("Operator verifies {value} Driver is not shown in Edit Route Details modal on Route Logs page")
+  public void verifyInvalidDriverEditRote(String value) {
+    routeLogsPage.inFrame(page -> {
+      page.editRoutesDialog.waitUntilVisible();
+      Assertions.assertThatExceptionOfType(NoSuchElementException.class)
+          .as("Error expected for %s Driver value", value)
+          .isThrownBy(() -> page.editDetailsDialog.assignedDriver.selectValue(value));
+    });
+  }
+
+  @When("Operator verifies {value} Driver is shown in Create Route modal on Route Logs page")
+  public void verifyValidDriver(String value) {
+    routeLogsPage.inFrame(page -> {
+      page.createRouteDialog.waitUntilVisible();
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(0);
+      routeDetailsForm.assignedDriver.waitUntilEnabled();
+      routeDetailsForm.assignedDriver.selectValue(value);
+    });
+  }
+
+  @When("Operator verifies {value} Driver is shown in Edit Route Details modal on Route Logs page")
+  public void verifyValidDriverEditRoute(String value) {
+    routeLogsPage.inFrame(page -> {
+      page.editDetailsDialog.waitUntilVisible();
+      routeLogsPage.editDetailsDialog.assignedDriver.waitUntilEnabled();
+      routeLogsPage.editDetailsDialog.assignedDriver.selectValue(value);
+    });
+  }
+
+  @When("Operator clicks Create Route on Route Logs page")
+  public void clickCreateRoute() {
+    routeLogsPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.createRoute.click();
+    });
+  }
+
   @When("^Operator create multiple routes using data below:$")
   public void operatorCreateMultipleRoutesUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -153,7 +200,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
-      routeLogsPage.createRouteReact.click();
+      routeLogsPage.createRoute.click();
       routeLogsPage.createRouteDialog.waitUntilVisible();
 
       RouteLogsParams newParams = routeParamsList.get(0);
@@ -441,6 +488,7 @@ public class RouteLogsSteps extends AbstractSteps {
   public void operatorSaveRouteData() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+      routeLogsPage.routesTable.waitIsNotEmpty(10);
       List<RouteLogsParams> params = routeIds.stream().map(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         return routeLogsPage.routesTable.readEntity(1);
@@ -462,13 +510,23 @@ public class RouteLogsSteps extends AbstractSteps {
   }
 
   @When("Operator set filter using data below and click 'Load Selection'")
-  public void loadSelection(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
-    Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
-    String hubName = mapOfData.get("hubName");
-    routeLogsPage.inFrame(() -> {
-      routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
+  public void loadSelection(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    routeLogsPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      if (finalData.containsKey("routeDateFrom")) {
+        page.routeDateFilter.setInterval(finalData.get("routeDateFrom"),
+            finalData.get("routeDateTo"));
+      }
+      page.hubFilter.clearAll();
+      if (finalData.containsKey("hubName")) {
+        page.hubFilter.selectFilter(finalData.get("hubName"));
+      }
+      if (finalData.containsKey("archiveRoutes")) {
+        page.archivedRoutesFilter.selectFilter(
+            StringUtils.equalsAnyIgnoreCase(finalData.get("archiveRoutes"), "show", "true"));
+      }
+      page.loadSelection.clickAndWaitUntilDone();
     });
   }
 
@@ -855,54 +913,19 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator is redirected to this page {string}")
+  @Then("Operator is redirected to this page {value}")
   public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl) {
-    redirectUrl = resolveValue(TestConstants.OPERATOR_PORTAL_BASE_URL + redirectUrl);
-
-    String primaryWindowHandle = getWebDriver().getWindowHandle();
-    Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-    String actualCurrentUrl = null;
-
-    for (String windowName : windowHandles) {
-      if (!primaryWindowHandle.equals(windowName)) {
-        getWebDriver().switchTo().window(windowName);
-        pause3s();
-
-        try {
-          WebDriverWait webDriverWait = new WebDriverWait(getWebDriver(),
-              ALERT_WAIT_TIMEOUT_IN_SECONDS);
-          Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
-          pause200ms();
-          alert.accept();
-        } catch (Exception ex) {
-          getScenarioManager().writeToCurrentScenarioLog(
-              f("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
-          getScenarioManager()
-              .writeToCurrentScenarioLog(TestUtils.convertExceptionStackTraceToString(ex));
-        }
-
-        pause100ms();
-        actualCurrentUrl = getCurrentUrl();
-        getWebDriver().close();
-        pause100ms();
-        getWebDriver().switchTo().window(primaryWindowHandle);
-        pause500ms();
-        break;
-      }
-    }
-
-    assertEquals(f("Operator does not redirect to page %s.", redirectUrl), redirectUrl,
-        actualCurrentUrl);
-    takesScreenshot();
+    redirectUrl = TestConstants.OPERATOR_PORTAL_BASE_URL + redirectUrl;
+    routeLogsPage.switchToOtherWindowAndWaitWhileLoading(redirectUrl);
   }
 
-  @When("Operator opens Edit Details dialog for route {string}")
+  @When("Operator opens Edit Details dialog for route {value} on Route Logs page")
   public void operatorOpensEditDetails(String routeId) {
-    routeId = resolveValue(routeId);
-    routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-    routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
-    routeLogsPage.editDetailsDialog.waitUntilVisible();
+    routeLogsPage.inFrame(page -> {
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
+      routeLogsPage.editDetailsDialog.waitUntilVisible();
+    });
   }
 
   @When("Operator adds tag {string} to created route")

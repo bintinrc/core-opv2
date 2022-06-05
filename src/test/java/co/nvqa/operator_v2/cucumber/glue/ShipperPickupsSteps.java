@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -70,16 +72,25 @@ public class ShipperPickupsSteps extends AbstractSteps {
     );
   }
 
-  @When("Operator verifies that there is '{int} reservation IDs entered' shown under the search field on Shipper Pickups page")
-  public void verifiesTotalReservationsId(int count) {
+  @When("Operator enters {int} reservation ids on Shipper Pickups page")
+  public void enterReservationIds(int idsCount) {
+    List<String> ids = new ArrayList<>();
+    for (int i = 0; i < idsCount; i++) {
+      ids.add(RandomStringUtils.randomNumeric(7));
+    }
+    enterReservationIds(ids);
+  }
+
+  @When("Operator verifies that there is {value} shown under the search field on Shipper Pickups page")
+  public void verifiesTotalReservationsId(String text) {
     Assertions.assertThat(shipperPickupsPage.reservationIdsCount.getNormalizedText())
         .as("Reservation IDs field counter text")
-        .isEqualTo(f("%d reservation IDs entered", count));
+        .isEqualTo(text);
   }
 
   @When("^Operator clicks Search by Reservation IDs on Shipper Pickups page$")
   public void clickSearchByReservationIds() {
-    shipperPickupsPage.searchByReservationIds.clickAndWaitUntilDone();
+    shipperPickupsPage.searchByReservationIds.click();
   }
 
   @When("^Operator set filter parameters and click Load Selection on Shipper Pickups page:$")
@@ -95,41 +106,42 @@ public class ShipperPickupsSteps extends AbstractSteps {
     shipperPickupsPage.filtersForm.filterReservationDate(fromDate, toDate);
 
     value = mapOfData.get("hub");
+    shipperPickupsPage.filtersForm.hubsFilter.clearAll();
     if (StringUtils.isNotBlank(value)) {
-      shipperPickupsPage.filtersForm.filterByHub(value);
+      shipperPickupsPage.filtersForm.hubsFilter.selectFilter(value);
     }
-    value = mapOfData.get("zone");
-    if (StringUtils.isNotBlank(value)) {
-      shipperPickupsPage.filtersForm.filterByZone(value);
-    }
-    value = mapOfData.get("type");
-    if (StringUtils.isNotBlank(value)) {
-      shipperPickupsPage.filtersForm.filterByType(value);
-    }
-    value = mapOfData.get("status");
-    if (StringUtils.isNotBlank(value)) {
-      shipperPickupsPage.filtersForm.filterByStatus(value);
-    }
-    value = mapOfData.get("shipperName");
-    if (StringUtils.isNotBlank(value)) {
-      shipperPickupsPage.filtersForm.filterByShipper(value);
-    }
-    value = mapOfData.get("masterShipperName");
-    if (StringUtils.isNotBlank(value)) {
-      shipperPickupsPage.filtersForm.filterByMasterShipper(value);
-    }
-    shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
-  }
 
-  private Date resolveFilterDate(String value) {
-    switch (value.toUpperCase()) {
-      case "TODAY":
-        return new Date();
-      case "TOMORROW":
-        return TestUtils.getNextDate(1);
-      default:
-        return Date.from(DateUtil.getDate(value).toInstant());
+    value = mapOfData.get("zone");
+    shipperPickupsPage.filtersForm.zonesFilter.clearAll();
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.filtersForm.zonesFilter.selectFilter(value);
     }
+
+    value = mapOfData.get("type");
+    shipperPickupsPage.filtersForm.reservationTypesFilter.clearAll();
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.filtersForm.reservationTypesFilter.selectFilter(value);
+    }
+
+    value = mapOfData.get("status");
+    shipperPickupsPage.filtersForm.statusFilter.clearAll();
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.filtersForm.statusFilter.selectFilter(value);
+    }
+
+    value = mapOfData.get("shipperName");
+    shipperPickupsPage.filtersForm.shipperFilter.clearAll();
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.filtersForm.shipperFilter.selectFilter(value);
+    }
+
+    value = mapOfData.get("masterShipperName");
+    shipperPickupsPage.filtersForm.masterShipperFilter.clearAll();
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.filtersForm.masterShipperFilter.selectFilter(value);
+    }
+
+    shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
   }
 
   @When("^Operator refresh routes on Shipper Pickups page$")
@@ -174,8 +186,22 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
   @Then("^Operator verify reservations details on Shipper Pickups page:$")
   public void verifyReservationDetails(List<Map<String, String>> data) {
+    verifyReservationDetails(data, false);
+  }
+
+  @Then("^Operator verify exactly reservations details on Shipper Pickups page:$")
+  public void verifyExactlyReservationDetails(List<Map<String, String>> data) {
+    verifyReservationDetails(data, true);
+  }
+
+  public void verifyReservationDetails(List<Map<String, String>> data, boolean checkCount) {
     data = resolveListOfMaps(data);
     List<ReservationInfo> actualRows = shipperPickupsPage.reservationsTable.readAllEntities();
+    if (checkCount) {
+      Assertions.assertThat(actualRows)
+          .as("List of reservations in table")
+          .hasSameSizeAs(data);
+    }
     data.forEach(row -> {
       ReservationInfo expected = new ReservationInfo(row);
       actualRows.stream()
@@ -383,6 +409,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
     List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
     addresses.forEach(address ->
     {
+      pause500ms();
       shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
       shipperPickupsPage.reservationsTable.selectRow(1);
     });
@@ -391,9 +418,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator verifies no route suggested for selected reservations$")
   public void operatorVerifiesNoRouteSuggestedForSelectedReservations() {
     shipperPickupsPage.bulkRouteAssignmentDialog.suggestedRoutes.forEach(routeSelector ->
-    {
-      assertEquals("Suggested route value", "", routeSelector.getValue());
-    });
+        assertEquals("Suggested route value", "", routeSelector.getValue())
+    );
   }
 
   @And("^Operator use the Route Suggestion to add created reservations to the route using data below:$")
@@ -565,6 +591,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @When("^Operator switch (on|off) Bulk Assign Route toggle on Shipper Pickups page$")
   public void operatorSwitchBulkAssignRoute(String mode) {
     shipperPickupsPage.bulkAssignRoute.setValue(StringUtils.equalsIgnoreCase(mode, "on"));
+    pause1s();
   }
 
   @Then("^Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page$")
@@ -573,10 +600,12 @@ public class ShipperPickupsSteps extends AbstractSteps {
         shipperPickupsPage.bulkAssignRoute.waitUntilVisible(5));
   }
 
-  @Then("^Operator verify that title of Bulk Route Assignment Side Panel is \"(.+)\"$")
+  @Then("Operator verify that title of Bulk Route Assignment Side Panel is {value}")
   public void operatorVerifyBulkRouteAssignmentSidePanelTitle(String expected) {
-    assertEquals("Bulk Route Assignment Side Panel title", expected,
-        shipperPickupsPage.bulkRouteAssignmentSidePanel.description.getText());
+    pause500ms();
+    Assertions.assertThat(shipperPickupsPage.bulkRouteAssignmentSidePanel.description.getText())
+        .as("Bulk Route Assignment Side Panel title")
+        .isEqualTo(expected);
   }
 
   @Then("^Operator verify reservations data in Bulk Route Assignment Side Panel using data below:$")
@@ -603,9 +632,9 @@ public class ShipperPickupsSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator select \"(.+)\" route in Bulk Route Assignment Side Panel$")
+  @When("Operator select {value} route in Bulk Route Assignment Side Panel")
   public void operatorSelectRouteInBulkRouteAssignmentSidePanel(String route) {
-    shipperPickupsPage.bulkRouteAssignmentSidePanel.route.selectValue(resolveValue(route));
+    shipperPickupsPage.bulkRouteAssignmentSidePanel.route.selectValue(route);
   }
 
   @When("^Operator click Bulk Assign button in Bulk Route Assignment Side Panel$")
@@ -785,6 +814,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
       if (!shipperPickupsPage.hubsFilter.isDisplayedFast()) {
         shipperPickupsPage.addFilter("Hubs");
       }
+      shipperPickupsPage.hubsFilter.waitUntilLoaded();
       shipperPickupsPage.hubsFilter.selectFilter(data.get("hubsFilter"));
     }
 
@@ -805,6 +835,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
       if (!shipperPickupsPage.masterShipperFilter.isDisplayedFast()) {
         shipperPickupsPage.addFilter("Master Shipper");
       }
+      shipperPickupsPage.masterShipperFilter.waitUntilLoaded();
       shipperPickupsPage.masterShipperFilter.selectFilter(data.get("masterShipper"));
     }
 
@@ -1053,6 +1084,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Hubs filter is not displayed");
       } else {
+        shipperPickupsPage.hubsFilter.waitUntilLoaded();
         assertions.assertThat(shipperPickupsPage.hubsFilter.getSelectedValues())
             .as("Hubs items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hubs")));
@@ -1071,10 +1103,12 @@ public class ShipperPickupsSteps extends AbstractSteps {
     }
 
     if (data.containsKey("masterShipper")) {
+      shipperPickupsPage.waitUntilPageLoaded();
       boolean isDisplayed = shipperPickupsPage.masterShipperFilter.isDisplayedFast();
       if (!isDisplayed) {
         assertions.fail("Master Shipper filter is not displayed");
       } else {
+        shipperPickupsPage.masterShipperFilter.waitUntilLoaded();
         assertions.assertThat(shipperPickupsPage.masterShipperFilter.getSelectedValues())
             .as("Master Shipper items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("masterShipper")));

@@ -76,9 +76,7 @@ public class RouteCashInboundSteps extends AbstractSteps {
     RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
     RouteCashInboundCod clone = new RouteCashInboundCod(routeCashInboundCod);
     clone.setAmountCollected(String.valueOf(clone.getDoubleAmountCollected()));
-    routeCashInboundPage.inFrame(() ->
-        routeCashInboundPage.verifyFilterWorkFine(clone)
-    );
+    routeCashInboundPage.inFrame(() -> routeCashInboundPage.verifyFilterWorkFine(clone));
   }
 
   @When("^Operator update the new COD on Route Cash Inbound page$")
@@ -94,22 +92,19 @@ public class RouteCashInboundSteps extends AbstractSteps {
     routeCashInboundCodEdited.setAmountCollected(newTotalCollected);
     routeCashInboundCodEdited.setReceiptNumber(routeCashInboundCod.getReceiptNumber() + "-EDITED");
 
-    routeCashInboundPage.inFrame(() ->
-        retryIfRuntimeExceptionOccurred(() ->
-        {
-          routeCashInboundPage.searchAndVerifyTableIsNotEmpty(routeCashInboundCod);
-          routeCashInboundPage.routeCashInboundTable.clickActionButton(1, ACTION_EDIT);
-          routeCashInboundPage.editCodDialog.waitUntilVisible();
-          routeCashInboundPage.editCodDialog.routeId.setValue(
-              routeCashInboundCodEdited.getRouteId());
-          routeCashInboundPage.editCodDialog.amountCollected.jsSetValue(
-              routeCashInboundCodEdited.getAmountCollected());
-          routeCashInboundPage.editCodDialog.receiptNumber.setValue(
-              routeCashInboundCodEdited.getReceiptNumber());
-          routeCashInboundPage.editCodDialog.submit.click();
-          routeCashInboundPage.editCodDialog.waitUntilInvisible();
-        })
-    );
+    routeCashInboundPage.inFrame(() -> {
+      routeCashInboundPage.waitUntilLoaded(5);
+      routeCashInboundPage.searchAndVerifyTableIsNotEmpty(routeCashInboundCod);
+      routeCashInboundPage.routeCashInboundTable.clickActionButton(1, ACTION_EDIT);
+      routeCashInboundPage.editCodDialog.waitUntilVisible();
+      routeCashInboundPage.editCodDialog.routeId.setValue(routeCashInboundCodEdited.getRouteId());
+      routeCashInboundPage.editCodDialog.amountCollected.setValue(
+          routeCashInboundCodEdited.getAmountCollected().replace("S$", ""));
+      routeCashInboundPage.editCodDialog.receiptNumber.setValue(
+          routeCashInboundCodEdited.getReceiptNumber());
+      routeCashInboundPage.editCodDialog.submit.click();
+      routeCashInboundPage.editCodDialog.waitUntilInvisible();
+    });
     put(KEY_ROUTE_CASH_INBOUND_COD_EDITED, routeCashInboundCodEdited);
   }
 
@@ -118,8 +113,7 @@ public class RouteCashInboundSteps extends AbstractSteps {
     RouteCashInboundCod routeCashInboundCodEdited = get(KEY_ROUTE_CASH_INBOUND_COD_EDITED);
     RouteCashInboundCod clone = new RouteCashInboundCod(routeCashInboundCodEdited);
     clone.setAmountCollected(String.valueOf(clone.getDoubleAmountCollected()));
-    routeCashInboundPage.inFrame(() ->
-        routeCashInboundPage.verifyCodIsUpdatedSuccessfully(clone));
+    routeCashInboundPage.inFrame(() -> routeCashInboundPage.verifyCodIsUpdatedSuccessfully(clone));
   }
 
   @When("^Operator delete the new COD on Route Cash Inbound page$")
@@ -138,8 +132,8 @@ public class RouteCashInboundSteps extends AbstractSteps {
     RouteCashInboundCod routeCashInboundCod =
         containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED)
             : get(KEY_ROUTE_CASH_INBOUND_COD);
-    routeCashInboundPage.inFrame(() ->
-        routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod));
+    routeCashInboundPage.inFrame(
+        () -> routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod));
   }
 
   @When("^Operator download COD CSV file on Route Cash Inbound page$")

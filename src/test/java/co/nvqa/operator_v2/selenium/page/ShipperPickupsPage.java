@@ -693,14 +693,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
           f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
       return actualPriorityLevelColor.asHex();
     }
-
-    public String getBackgroundColorOfRow(int rowNumber) {
-      waitUntilVisibilityOfElementLocated(
-          f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
-      Color actualPriorityLevelColor = getBackgroundColor(
-          f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
-      return actualPriorityLevelColor.asHex();
-    }
   }
 
   /**
@@ -744,37 +736,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       fromDateField.setDate(fromDate);
     }
 
-    public void filterByHub(String hub) {
-      hubsFilter.clearAll();
-      hubsFilter.selectFilter(hub);
-    }
-
-    public void filterByZone(String zone) {
-      zonesFilter.clearAll();
-      zonesFilter.selectFilter(zone);
-    }
-
-    public void filterByShipper(String shipperName) {
-      shipperFilter.clearAll();
-      shipperFilter.selectFilter(shipperName);
-    }
-
-    public void filterByMasterShipper(String masterShipperName) {
-      masterShipperFilter.clearAll();
-      masterShipperFilter.selectFilter(masterShipperName);
-    }
-
-    public void filterByType(String reservationType) {
-      reservationTypesFilter.clearAll();
-      reservationTypesFilter.selectFilter(reservationType);
-    }
-
-    public void filterByStatus(String waypointStatus) {
-      if (waypointStatus != null) {
-        statusFilter.clearAll();
-        statusFilter.selectFilter(waypointStatus);
-      }
-    }
   }
 
   /**
@@ -892,7 +853,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     @FindBy(css = "div[md-virtual-repeat='item in cards']")
     public List<ReservationCard> reservationCards;
 
-    @FindBy(css = "nv-autocomplete[selected-item='selectedRoute']")
+    @FindBy(css = "nv-autocomplete[selected-item='selectedRoute.route']")
     public NvAutocomplete route;
 
     @FindBy(name = "Bulk Assign")
