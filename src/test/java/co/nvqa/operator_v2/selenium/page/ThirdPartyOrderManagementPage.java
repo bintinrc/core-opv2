@@ -215,7 +215,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
   public void loadOrders() {
     loadOrders.clickAndWaitUntilDone();
     if (loadingBar.waitUntilVisible(1)) {
-      loadingBar.waitUntilInvisible();
+      loadingBar.waitUntilInvisible(60);
     }
   }
 

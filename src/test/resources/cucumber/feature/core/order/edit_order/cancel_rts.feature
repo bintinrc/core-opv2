@@ -88,9 +88,12 @@ Feature: Cancel RTS
       | top                | The RTS has been cancelled |
       | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
-    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name | REVERT RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
@@ -125,9 +128,12 @@ Feature: Cancel RTS
       | top                | The RTS has been cancelled |
       | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
-    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name | REVERT RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 

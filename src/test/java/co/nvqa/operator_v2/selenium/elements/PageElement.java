@@ -185,9 +185,9 @@ public class PageElement extends SimplePage {
     waitUntilInvisibilityOfElementLocated(webElement);
   }
 
-  public boolean waitUntilInvisible(int timeout) {
+  public boolean waitUntilInvisible(int timeoutInSeconds) {
     try {
-      waitUntilInvisibilityOfElementLocated(getWebElement(), timeout);
+      waitUntilInvisibilityOfElementLocated(getWebElement(), timeoutInSeconds);
       return true;
     } catch (Throwable ex) {
       return false;

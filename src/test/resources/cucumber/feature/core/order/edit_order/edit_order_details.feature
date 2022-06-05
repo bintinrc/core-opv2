@@ -91,7 +91,7 @@ Feature: Edit Order Details
       | description | ^To Name changed.*to test sender name.*To Email changed.*to test@mail\.com.*To Contact changed.*\+9727894434.*.*Is Rts changed.* |
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE SLA                                                                                                                        |
-      | description | Delivery End Time changed from {gradle-next-3-working-day-yyyy-MM-dd} 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
+      | description | ^Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE AV |
     And Operator verifies Delivery Details are updated on Edit Order Page
