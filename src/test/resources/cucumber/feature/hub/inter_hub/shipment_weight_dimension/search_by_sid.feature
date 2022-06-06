@@ -20,6 +20,7 @@ Feature: Search by SID
     When Operator search "{KEY_CREATED_SHIPMENT_ID}" on Shipment Weight Dimension search by SID text
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | search_valid |
+    When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
 
@@ -225,7 +226,7 @@ Feature: Search by SID
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "creation_date" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "created-at" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
@@ -255,7 +256,7 @@ Feature: Search by SID
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "creation_date" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
       | expectedNumOfRows | 1                       |
       | filterValue       | {KEY_SHIPMENT_AWB}      |
     And Operator select all data on Shipment Weight Dimension Table

@@ -251,6 +251,13 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  @When("API Operator create {int} new Driver using data below:")
+  public void apiOperatorCreateMultiNewDriverUsingDataBelow(Integer numberOdDrivers,Map<String, String> mapOfData){
+    for(int i =0;i<numberOdDrivers;i++){
+      apiOperatorCreateNewDriverUsingDataBelow(mapOfData);
+    }
+  }
+
   @When("API Operator create new Driver using data below:")
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);

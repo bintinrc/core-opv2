@@ -339,6 +339,32 @@ Feature: Sort Task
       | {mid-tier-name} |
       | SORT-1          |
 
+  @CloseNewWindows
+  Scenario: Search sort nodes on Sort Structure Page - RTS zone (uid:4776cda5-157a-4345-b7d6-b9c3cc776691)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-7} |
+    And Operator click View Sort Structure on Sort Tasks page
+    Then Operator verifies graph contains following Hub nodes:
+      | {hub-name-7}  |
+      | SORT-SG-2-HUB |
+    And Operator verifies graph contains following Middle Tier nodes:
+      | {mid-tier-name} |
+    And Operator verifies graph contains following Zone nodes:
+      | SORT-1             |
+      | RTS-SORT-SG-1-ZONE |
+    And Operator verifies graph contains following duplicated nodes:
+      | label  | count |
+      | SORT-1 | 2     |
+    When Operator search for "{mid-tier-name}" node on View Sort Structure page
+    Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-7}    |
+      | {mid-tier-name} |
+      | SORT-SG-2-HUB   |
+      | SORT-1          |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -140,4 +140,4 @@ Feature: Open SMH from Side Navigation
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
-    Given no-op
+    When Operator click logout button
