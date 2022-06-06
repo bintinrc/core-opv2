@@ -175,7 +175,6 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       if (partner.getName() != null){
         dpAdminReactPage.formPartnerName.setValue(partner.getName());
-        put(KEY_DP_PARTNER_NAME,partner.getName());
       }
       if (partner.getPocName() != null){
         if(!dpAdminReactPage.formPocName.getValue().equals("")){
@@ -207,6 +206,8 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (partner.getSendNotificationsToCustomer() != null && partner.getSendNotificationsToCustomer()){
         dpAdminReactPage.buttonSendNotifications.click();
       }
+
+      put(KEY_DP_MANAGEMENT_PARTNER,partner);
     });
   }
 
@@ -233,9 +234,9 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @And("Operator check the submitted data in the table")
   public void checkSubmittedDataInTable() {
-    String partnerName = get(KEY_DP_PARTNER_NAME);
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
     dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.fillFilter("name",partnerName);
+      dpAdminReactPage.fillFilter("name",partner.getName());
     });
   }
 
