@@ -1,12 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.Hours;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
-import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -17,10 +17,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javax.mail.Part;
 
 /**
  * @author Sergey Mishanin
@@ -33,7 +34,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   private DpAdministrationPage dpAdminPage;
   private DpAdministrationReactPage dpAdminReactPage;
 
-  private static final String KEY_DP_PARTNER_NAME = "KEY_DP_PARTNER_NAME";
+  private static final String DP_PARTNER_LABEL = "label_page_details";
+  private static final String DP_LABEL = "label_distribution_points";
 
   public DpAdministrationSteps() {
   }
@@ -146,12 +148,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
     String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
         createDefaultTokens());
-    String [] extractDetails = searchDetailsData.split(",");
+    String[] extractDetails = searchDetailsData.split(",");
 
     dpAdminReactPage.inFrame(() -> {
-      for(String extractDetail : extractDetails){
-        String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail,expected);
-        dpAdminReactPage.fillFilter(extractDetail,valueDetails);
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
+        dpAdminReactPage.fillFilter(extractDetail, valueDetails);
         pause2s();
         dpAdminReactPage.readEntity(expected);
         dpAdminReactPage.clearFilter(extractDetail);
@@ -160,7 +162,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @And("Operator click on Add Partner button on DP Administration React page")
-  public void operatorPressAddDpButton(){
+  public void operatorPressAddDpButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonAddPartner.click();
       pause3s();
@@ -168,28 +170,28 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @Then("Operator Fill Dp Partner Details below :")
-  public void operatorFillDpPartnerDetails(DataTable dt){
+  public void operatorFillDpPartnerDetails(DataTable dt) {
     List<Partner> partners = convertDataTableToList(dt, Partner.class);
     Partner partner = partners.get(0);
 
     dpAdminReactPage.inFrame(() -> {
-      if (partner.getName() != null){
+      if (partner.getName() != null) {
         dpAdminReactPage.formPartnerName.setValue(partner.getName());
       }
-      if (partner.getPocName() != null){
-        if(!dpAdminReactPage.formPocName.getValue().equals("")){
+      if (partner.getPocName() != null) {
+        if (!dpAdminReactPage.formPocName.getValue().equals("")) {
           dpAdminReactPage.formPocName.forceClear();
         }
         dpAdminReactPage.formPocName.setValue(partner.getPocName());
       }
 
-      if (partner.getPocTel() != null){
+      if (partner.getPocTel() != null) {
 
-        if(!dpAdminReactPage.formPocNo.getValue().equals("")){
+        if (!dpAdminReactPage.formPocNo.getValue().equals("")) {
           dpAdminReactPage.formPocNo.forceClear();
         }
 
-        if (partner.getPocTel().equals("VALID")){
+        if (partner.getPocTel().equals("VALID")) {
           partner.setPocTel(TestUtils.generatePhoneNumber());
           dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
         } else {
@@ -197,36 +199,37 @@ public class DpAdministrationSteps extends AbstractSteps {
         }
       }
 
-      if (partner.getPocEmail() != null){
+      if (partner.getPocEmail() != null) {
         dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
       }
-      if (partner.getRestrictions() != null){
+      if (partner.getRestrictions() != null) {
         dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
       }
-      if (partner.getSendNotificationsToCustomer() != null && partner.getSendNotificationsToCustomer()){
+      if (partner.getSendNotificationsToCustomer() != null
+          && partner.getSendNotificationsToCustomer()) {
         dpAdminReactPage.buttonSendNotifications.click();
       }
 
-      put(KEY_DP_MANAGEMENT_PARTNER,partner);
+      put(KEY_DP_MANAGEMENT_PARTNER, partner);
     });
   }
 
   @Then("Operator press submit button")
-  public void submitDpPartnerButton(){
+  public void submitDpPartnerButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonSubmitPartner.click();
     });
   }
 
   @Then("Operator press edit partner button")
-  public void editDpPartnerButton(){
+  public void editDpPartnerButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonEditPartner.click();
     });
   }
 
   @Then("Operator press submit partner changes button")
-  public void submitDpPartnerChangesButton(){
+  public void submitDpPartnerChangesButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonSubmitPartnerChanges.click();
     });
@@ -236,20 +239,47 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void checkSubmittedDataInTable() {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
     dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.fillFilter("name",partner.getName());
+      dpAdminReactPage.fillFilter("name", partner.getName());
+    });
+  }
+
+  @And("Operator Search Dp Partners by Id")
+  public void operatorSearchDpPartnersById() {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.waitUntilVisibilityOfElementLocated(
+          f("//h2[@data-testid='%s']", DP_PARTNER_LABEL));
+      dpAdminReactPage.filterPartnerId.setValue(partner.getId());
+    });
+  }
+
+
+  @And("Operator press view DP")
+  public void operatorPressViewDp() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonViewDps.click();
+    });
+  }
+
+  @When("Operator press Add DP")
+  public void operatorPressAddDp() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.waitUntilVisibilityOfElementLocated(
+          f("//h2[@data-testid='%s']", DP_LABEL));
+      dpAdminReactPage.buttonAddDp.click();
     });
   }
 
   @Then("Operator get partner id")
-  public void operatorGetPartnerId(){
+  public void operatorGetPartnerId() {
     dpAdminReactPage.inFrame(() -> {
       String partnerId = dpAdminReactPage.labelPartnerId.getText();
-      put(KEY_DP_PARTNER_ID,partnerId);
+      put(KEY_DP_PARTNER_ID, partnerId);
     });
   }
 
   @Then("Operator need to make sure that the id and dpms partner id from newly created dp partner is same")
-  public void dpPartnerIdDpmsIdChecking(){
+  public void dpPartnerIdDpmsIdChecking() {
     Partner partner = get(KEY_DP_PARTNER);
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.checkingIdAndDpmsId(partner);
@@ -264,12 +294,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
     String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
         createDefaultTokens());
-    String [] extractDetails = searchDetailsData.split(",");
+    String[] extractDetails = searchDetailsData.split(",");
 
     dpAdminReactPage.inFrame(() -> {
-      String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0],expected);
-      dpAdminReactPage.fillFilter(extractDetails[0],valueDetails);
-      for(String extractDetail : extractDetails){
+      String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0], expected);
+      dpAdminReactPage.fillFilter(extractDetails[0], valueDetails);
+      for (String extractDetail : extractDetails) {
         dpAdminReactPage.sortFilter(extractDetail);
         pause2s();
         dpAdminReactPage.readEntity(expected);

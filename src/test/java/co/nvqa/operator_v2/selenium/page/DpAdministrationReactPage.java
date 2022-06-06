@@ -4,14 +4,15 @@ import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.page.DpAdministrationPage.DpPartnersTable;
 import com.google.common.collect.ImmutableMap;
-import io.cucumber.java8.Te;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
 
+/**
+ * @author Diaz Ilyasa
+ */
 public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage>{
 
   @FindBy(xpath = "//button[@data-testid='button_download_csv']")
@@ -31,6 +32,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//button[@data-testId='button_submit_dp_changes']")
   public Button buttonSubmitPartnerChanges;
+
+  @FindBy(xpath = "//button[@data-testId='button_view_dps']")
+  public Button buttonViewDps;
+
+  @FindBy(xpath = "//button[@data-testId='button_add_dp']")
+  public Button buttonAddDp;
 
   @FindBy(xpath = "//input[@data-testId='field_partner_id']")
   public TextBox filterPartnerId;
