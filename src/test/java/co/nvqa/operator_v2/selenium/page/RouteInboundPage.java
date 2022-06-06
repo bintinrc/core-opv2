@@ -211,7 +211,7 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   }
 
   private void dismissDriverAttendanceDialog() {
-    if (driverAttendanceDialog.waitUntilVisible(3)) {
+    if (driverAttendanceDialog.waitUntilVisible(5)) {
       pause500ms();
       driverAttendanceDialog.yes.click();
       driverAttendanceDialog.waitUntilInvisible();

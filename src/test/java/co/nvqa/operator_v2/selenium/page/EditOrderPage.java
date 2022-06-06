@@ -797,7 +797,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void waitUntilInvisibilityOfLoadingOrder() {
     waitUntilInvisibilityOfElementLocated(
-        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]");
+        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]", 60);
     pause100ms();
   }
 

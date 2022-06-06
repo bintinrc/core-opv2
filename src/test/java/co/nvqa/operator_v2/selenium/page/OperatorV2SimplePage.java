@@ -74,6 +74,11 @@ public class OperatorV2SimplePage extends SimplePage {
     waitUntilPageLoaded();
   }
 
+  public void waitWhilePageIsLoading(int timeoutInSeconds) {
+    waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", timeoutInSeconds);
+    waitUntilPageLoaded();
+  }
+
   public void clickAndWaitUntilDone(String xpathExpression) {
     click(xpathExpression);
     waitUntilInvisibilityOfElementLocated(xpathExpression + "//md-progress-circular");
@@ -1256,7 +1261,7 @@ public class OperatorV2SimplePage extends SimplePage {
 
     waitUntilPageLoaded(60);
     if (halfCircleSpinner.isDisplayedFast()) {
-      halfCircleSpinner.waitUntilInvisible();
+      halfCircleSpinner.waitUntilInvisible(60);
     }
     // temporary close /aaa error alert if exist
     if (isElementExist("//button[.='close']", 2)) {
