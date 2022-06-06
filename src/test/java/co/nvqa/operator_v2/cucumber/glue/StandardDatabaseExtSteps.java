@@ -1917,7 +1917,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyTheNewCodSoftDeleted() {
     CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
-        Matchers.startsWith(DateUtil.generateUTCTodayDate()));
+        Matchers.startsWith(DateUtil.getUTCTodayDate()));
   }
 
   @Then("DB Operator verify loyalty point for completed order is {string}")

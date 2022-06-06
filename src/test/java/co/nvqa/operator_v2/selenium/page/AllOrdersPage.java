@@ -68,19 +68,19 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
-  @FindBy(css = "nv-filter-box[main-title='commons.status']")
+  @FindBy(css = "nv-filter-box[main-title='Status']")
   public NvFilterBox statusFilter;
 
-  @FindBy(css = "nv-filter-box[main-title='commons.model.granular-status']")
+  @FindBy(css = "nv-filter-box[main-title='Granular Status']")
   public NvFilterBox granularStatusFilter;
 
   @FindBy(css = "nv-filter-time-box")
   public NvFilterTimeBox creationTimeFilter;
 
-  @FindBy(css = "nv-filter-box[main-title='commons.master-shipper']")
+  @FindBy(css = "nv-filter-box[main-title='Master Shipper']")
   public NvFilterBox masterShipperFilter;
 
-  @FindBy(css = "nv-filter-autocomplete[main-title='commons.shipper']")
+  @FindBy(css = "nv-filter-autocomplete[main-title='Shipper']")
   public NvFilterAutocomplete shipperFilter;
 
   @FindBy(css = "md-autocomplete[md-input-name='searchTerm']")
@@ -203,6 +203,11 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     public String getValue() {
       return value;
     }
+  }
+
+  public void selectFilterPreset(String preset) {
+    filterPreset.searchAndSelectValue(preset);
+    filterPreset.waitUntilEnabled(60);
   }
 
   private final EditOrderPage editOrderPage;

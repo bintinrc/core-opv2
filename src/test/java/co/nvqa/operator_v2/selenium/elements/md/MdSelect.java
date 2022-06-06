@@ -151,4 +151,13 @@ public class MdSelect extends PageElement {
   public String getSelectedValueAttribute() {
     return selectedOption.getAttribute("value");
   }
+
+  @Override
+  public boolean isEnabled() {
+    return StringUtils.equals(getAttribute("aria-disabled"), "false");
+  }
+
+  public void waitUntilEnabled(int timeoutInSeconds) {
+    waitUntil(this::isEnabled, timeoutInSeconds * 1000);
+  }
 }

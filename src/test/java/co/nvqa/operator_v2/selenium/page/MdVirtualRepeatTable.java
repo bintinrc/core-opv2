@@ -21,6 +21,9 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
   @FindBy(css = "th.column-checkbox md-menu")
   public MdMenu selectionMenu;
 
+  @FindBy(css = "div.no-result")
+  public PageElement noResults;
+
   private String nvTableParam;
   private String mdVirtualRepeat = "data in getTableData()";
 
@@ -133,5 +136,10 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     String xpath =
         getRowLocator(index) + f("/td[contains(@class, '%s')]", getColumnLocators().get(columnId));
     return new PageElement(getWebDriver(), xpath);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return noResults.isDisplayedFast();
   }
 }

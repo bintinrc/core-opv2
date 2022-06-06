@@ -527,6 +527,7 @@ public class RouteLogsSteps extends AbstractSteps {
             StringUtils.equalsAnyIgnoreCase(finalData.get("archiveRoutes"), "show", "true"));
       }
       page.loadSelection.clickAndWaitUntilDone();
+      page.waitUntilLoaded();
     });
   }
 
