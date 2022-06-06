@@ -70,6 +70,40 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     put(KEY_CREATE_DP_REQUEST, dpDetail);
   }
 
+  @When("Operator fill Detail for update DP:")
+  public void ninjaPointVUserFillDetailForUpdateDp(DataTable dt) {
+    List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
+    DpDetailsResponse dpDetail = dpDetails.get(0);
+    DpDetailsResponse dpNewlyCreated = get(KEY_CREATE_DP_RESPONSE);
+
+    dpDetail.setDpmsId(dpNewlyCreated.getDpmsId());
+    dpDetail.setId(dpNewlyCreated.getId());
+    dpDetail.setPartnerId(dpNewlyCreated.getPartnerId());
+
+    Hours hours = new Hours();
+    hours.setStartTime("08:00:00");
+    hours.setEndTime("21:00:00");
+
+    List<Hours> hourList = new ArrayList<>();
+    hourList.add(hours);
+
+    Map<String, List<Hours>> workingHours = new HashMap<>();
+    workingHours.put("monday", hourList);
+    workingHours.put("tuesday", hourList);
+    workingHours.put("wednesday", hourList);
+    workingHours.put("thursday", hourList);
+    workingHours.put("friday", hourList);
+    workingHours.put("saturday", hourList);
+    workingHours.put("sunday", hourList);
+
+    dpDetail.setOpeningHours(workingHours);
+    dpDetail.setOperatingHours(workingHours);
+
+    put(KEY_CREATE_DP_REQUEST, null);
+    put(KEY_CREATE_DP_REQUEST, dpDetail);
+  }
+
+
   @When("Operator fill Detail for create DP Management:")
   public void ninjaPointVUserFillDetailForCreateDpManagement(DataTable dt) {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
@@ -94,6 +128,39 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     dpDetail.setOpeningHours(workingHours);
     dpDetail.setOperatingHours(workingHours);
 
+    put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
+  }
+
+  @When("Operator fill Detail for update DP Management:")
+  public void ninjaPointVUserFillDetailForUpdateDpManagement(DataTable dt) {
+    List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
+    DpDetailsResponse dpDetail = dpDetails.get(0);
+    DpDetailsResponse dpNewlyCreated = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+
+    dpDetail.setDpmsId(dpNewlyCreated.getDpmsId());
+    dpDetail.setId(dpNewlyCreated.getId());
+    dpDetail.setPartnerId(dpNewlyCreated.getPartnerId());
+
+    Hours hours = new Hours();
+    hours.setStartTime("08:00:00");
+    hours.setEndTime("21:00:00");
+
+    List<Hours> hourList = new ArrayList<>();
+    hourList.add(hours);
+
+    Map<String, List<Hours>> workingHours = new HashMap<>();
+    workingHours.put("monday", hourList);
+    workingHours.put("tuesday", hourList);
+    workingHours.put("wednesday", hourList);
+    workingHours.put("thursday", hourList);
+    workingHours.put("friday", hourList);
+    workingHours.put("saturday", hourList);
+    workingHours.put("sunday", hourList);
+
+    dpDetail.setOpeningHours(workingHours);
+    dpDetail.setOperatingHours(workingHours);
+
+    put(KEY_CREATE_DP_MANAGEMENT_REQUEST, null);
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
   }
 
