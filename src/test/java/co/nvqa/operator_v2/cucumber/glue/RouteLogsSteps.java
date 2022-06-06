@@ -780,9 +780,9 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("Operator selects {string} Filter Preset on Route Logs page")
   public void selectPresetName(String value) {
     routeLogsPage.inFrame(() -> {
-      routeLogsPage.waitUntilLoaded(2);
+      routeLogsPage.waitUntilLoaded(2, 60);
       routeLogsPage.filterPreset.selectValue(resolveValue(value));
-      routeLogsPage.waitUntilLoaded(2);
+      routeLogsPage.waitUntilLoaded(2, 60);
     });
   }
 

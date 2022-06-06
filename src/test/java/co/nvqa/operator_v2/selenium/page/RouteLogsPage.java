@@ -206,7 +206,6 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     } else {
       super.waitUntilLoaded(10);
     }
-    createRoute.waitUntilClickable();
   }
 
   public static class EditRoutesDialog extends AntModal {
