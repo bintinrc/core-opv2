@@ -11,7 +11,6 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-  # @nadeera
   @HappyPath
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     Given Operator go to menu Finance Tools -> Order Billing
@@ -57,7 +56,7 @@ Feature: Order Billing
     Then Operator gets the success billing report entries
     Then Operator verifies the header using data {default-ssb-headers}
     Then Operator verifies the priced order details in the body
-#@nadeera
+
   @HappyPath
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
     Given Operator go to menu Finance Tools -> Order Billing
