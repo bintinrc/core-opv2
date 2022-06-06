@@ -2,7 +2,7 @@
 Feature: DP Administration - Distribution Point Partners
 
   @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
-  Scenario: dp administrations - authorized scope - delete dp - active dp without pending reservations - Success Delete - SG
+  Scenario: dp administrations - authorized scope - delete dp - active dp without pending reservations - Success Delete
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
