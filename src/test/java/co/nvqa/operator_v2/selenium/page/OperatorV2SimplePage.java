@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -655,6 +656,9 @@ public class OperatorV2SimplePage extends SimplePage {
       LOGGER.warn("Failed to getTextOnTableWithNgRepeat. XPath: {}", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+    } catch (StaleElementReferenceException ex) {
+      WebElement we = findElementByXpath(xpath);
+      text = we.getText().trim();
     }
 
     return text;
