@@ -360,6 +360,75 @@ Feature: Parcel Sweeper Live
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When API Operator refresh created order data
+    When API Operator update priority level of an order to = "50"
+    When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator refresh page
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | routeId | -       |
+      | color   | #55a1e8 |
+    Then Operator verifies priority level dialog box shows correct priority level info using data below:
+      | priorityLevel           | 50      |
+      | priorityLevelColorAsHex | #e29d4a |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #55a1e8            |
+    When DB Operator Get Next Sorting Task
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
+    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
+      | nextSortingHub | FROM CREATED ORDER |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | {KEY_CREATED_ORDER.destinationHub} |
+      | color   | #e8e8e8                            |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    And API Operator get order details
+    And Operator refresh page
+    Then API Operator verify order info after delivery "DELIVERY_SUCCESS"
+    And Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper Live - Order With Tag - e2e (uid:f31d9150-b346-4511-8b87-0164079294d8)
+    When API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    And API Operator start the route
+    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    And API Driver success reservation by scanning created parcel using submit pod v5
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When API Operator refresh created order data
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
       | shipperName     | {shipper-v4-name}             |
