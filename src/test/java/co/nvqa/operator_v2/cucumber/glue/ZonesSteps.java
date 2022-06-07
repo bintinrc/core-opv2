@@ -298,4 +298,22 @@ public class ZonesSteps extends AbstractSteps {
     });
     put(KEY_CREATED_ZONE, zone);
   }
+
+  /* ======================= Bulk Edit Zone Polygon ======================= */
+
+  @And("Zones page is loaded")
+  public void zonesPageIsLoaded() {
+    zonesPage.switchTo();
+    zonesPage.bulkEditPolygons.waitUntilVisible(60);
+  }
+
+  @When("Operator clicks Bulk Edit Polygons button")
+  public void operatorClicksBulkEditPolygonsButton() {
+    zonesPage.bulkEditPolygons.waitUntilClickable();
+    zonesPage.bulkEditPolygons.click();
+    zonesPage.bulkEditPolygonsDialog.waitUntilVisible();
+    Assertions.assertThat(zonesPage.bulkEditPolygonsDialog.isDisplayed())
+        .as("Bulk Edit Polygons dialog shows up")
+        .isTrue();
+  }
 }

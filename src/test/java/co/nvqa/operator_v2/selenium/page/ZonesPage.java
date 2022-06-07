@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
@@ -21,6 +22,9 @@ import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME
 public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
   private static final String CSV_FILENAME = "zones.csv";
+
+  @FindBy(tagName = "iframe")
+  private PageElement pageFrame;
 
   @FindBy(css = "[data-testid='add-zone-button']")
   public Button addZone;
@@ -43,7 +47,17 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
   @FindBy(className = "ant-modal-wrap")
   public ConfirmDeleteModal confirmDeleteDialog;
 
+  @FindBy(xpath = "//button[@data-testid='bulk-edit-polygons-button']")
+  public Button bulkEditPolygons;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title' and text()='Bulk Edit Polygons']")
+  public PageElement bulkEditPolygonsDialog;
+
   public ZonesTable zonesTable;
+
+  public void switchTo() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+  }
 
   public ZonesPage(WebDriver webDriver) {
     super(webDriver);
