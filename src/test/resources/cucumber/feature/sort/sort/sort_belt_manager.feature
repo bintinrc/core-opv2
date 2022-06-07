@@ -1,4 +1,4 @@
-@Sort @SortBeltManagerV2 @cwf @run
+@Sort @SortBeltManagerV2
 Feature: Sort Belt Manager V2
 
   @LaunchBrowser @ShouldAlwaysRun
