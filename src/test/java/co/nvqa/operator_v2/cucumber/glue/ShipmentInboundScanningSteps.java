@@ -56,6 +56,25 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }, 5);
   }
 
+  @SuppressWarnings("unchecked")
+  @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) in Shipment Inbound Scanning page$")
+  public void inboundScanningShipment(String label, String hub) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
+        final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
+        scanningPage.inboundScanningShipment(shipmentId, label, finalHub);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 5);
+  }
+
   @When("Operator inbound scanning Shipment {string} with type {string} in hub {string} on Shipment Inbound Scanning page")
   public void operatorInboundScanningShipmentWithType(String shipmentId, String label, String hub) {
     retryIfRuntimeExceptionOccurred(() ->
@@ -91,13 +110,15 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }
   }
 
+  @SuppressWarnings("unchecked")
   @When("^Operator check alert message on Shipment Inbound Scanning page using data below:$")
   public void checkAlertOnShipmentInboundScanningPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String alert = data.get("alert");
-
-    scanningPage.scanAlertMessage.waitUntilVisible();
-    assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
+    scanningPage.inFrame(page -> {
+      scanningPage.scanAlertMessage.waitUntilVisible();
+      assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
+    });
   }
 
   @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB$")
@@ -267,6 +288,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId,
       String hubName) {
     String resolvedHubName = resolveValue(hubName);
+    scanningPage.switchTo();
     scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
   }
 
@@ -284,20 +306,25 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage.checkSessionScanResult(Long.valueOf(resolvedShipmentId), condition);
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the following messages display on the card after inbounding")
   public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(
       Map<String, String> messages) {
     messages = resolveKeyValues(messages);
-    Assertions.assertThat(scanningPage.scannedState.getText())
-        .as(f("Assert that scanned state is %s", messages.get("scanState")))
-        .isEqualTo(messages.get("scanState"));
-    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
-        .as(f("Assert that scanned message is %s", messages.get("scanMessage")))
-        .isEqualTo(messages.get("scanMessage"));
-    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
-        .as(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")))
-        .isEqualTo(messages.get("scannedShipmentId"));
-    takesScreenshot();
+    Map<String, String> finalMessages = messages;
+    scanningPage.inFrame(page -> {
+      Assertions.assertThat(scanningPage.scannedState.getText())
+          .as(f("Assert that scanned state is %s", finalMessages.get("scanState")))
+          .isEqualTo(finalMessages.get("scanState"));
+      Assertions.assertThat(scanningPage.scannedMessage.getText())
+          .as(f("Assert that scanned message is %s", finalMessages.get("scanMessage")))
+          .isEqualTo(finalMessages.get("scanMessage"));
+      Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+          .as(f("Assert that scanned shipment message is %s",
+              finalMessages.get("scannedShipmentId")))
+          .isEqualTo(finalMessages.get("scannedShipmentId"));
+      takesScreenshot();
+    });
 
 
   }

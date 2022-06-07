@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @GetReportInLedger
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @FinancialBatch @GetReportInLedger
 
 Feature: Get Report in Ledger
 
@@ -58,10 +58,10 @@ Feature: Get Report in Ledger
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.49                                          |
-      | totalWithTax     | 7.54                                          |
+      | totalTax         | 0.59                                          |
+      | totalWithTax     | 9.14                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper
@@ -126,7 +126,7 @@ Feature: Get Report in Ledger
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.5                                           |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.52                                          |
       | totalWithTax     | 8.02                                          |
@@ -197,10 +197,10 @@ Feature: Get Report in Ledger
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.5                                           |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.52                                          |
-      | totalWithTax     | 8.02                                          |
+      | totalTax         | 0.63                                          |
+      | totalWithTax     | 9.63                                          |
       | type             | Completed                                     |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |
@@ -261,9 +261,9 @@ Feature: Get Report in Ledger
       | insuredAmount    | 0.00                                       |
       | codFee           | 0.0                                        |
       | insuredFee       | 0.0                                        |
-      | deliveryFee      | 7.0                                        |
+      | deliveryFee      | 8.5                                        |
       | rtsFee           | 0.0                                        |
-      | totalTax         | 0.49                                       |
+      | totalTax         | 0.59                                       |
       | totalWithTax     | 7.49                                       |
       | type             | Returned to Sender                         |
 
@@ -329,10 +329,10 @@ Feature: Get Report in Ledger
       | insuredAmount    | 0.00                                          |
       | codFee           | 100.0                                         |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 16.0                                          |
+      | deliveryFee      | 19.0                                          |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 8.11                                          |
-      | totalWithTax     | 124.12                                        |
+      | totalTax         | 8.33                                          |
+      | totalWithTax     | 127.33                                        |
       | type             | Completed                                     |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |

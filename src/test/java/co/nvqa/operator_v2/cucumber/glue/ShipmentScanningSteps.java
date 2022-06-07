@@ -286,6 +286,10 @@ public class ShipmentScanningSteps extends AbstractSteps {
     shipmentScanningPage.clickGoBackInCancelledTripDepartureDialog(shipmentId);
   }
 
+  @Then("Click on Yes, continue on dialog box")
+  public void operatorClickOnYesContinueOnDialog() {
+    shipmentScanningPage.clickYesContinueInInboundScanningDialog();
+  }
   @Then("Operator verifies toast bottom with message {string} is shown on Shipment Inbound Scanning page")
   public void operatorVerifiesToastBottomWithMessageIsShownOnShipmentInboundScanningPage(
       String toastMessage) {
@@ -444,6 +448,19 @@ public class ShipmentScanningSteps extends AbstractSteps {
       try {
         String smallMessage = resolveValue(smallMessageAsString);
         shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName(), 500, 5);
+  }
+
+  @Then("Operator verify scan text message {string} appears in Shipment Inbound Box")
+  public void operatorVerifyScanTextInShipmentInboundBox(String smallMessageAsString) {
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        String smallMessage = resolveValue(smallMessageAsString);
+        shipmentScanningPage.verifyScanTextAppearsInScanShipmentBox(smallMessage);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         throw ex;

@@ -259,6 +259,112 @@ Feature: Sort Task
     And Operator verify following nodes are highlighted on Sort Tasks page:
       | {mid-tier-name} |
 
+  @CloseNewWindows @DeleteNodes
+  Scenario: Removing and adding a sort task (uid:f4b78675-b8b7-4e28-bbcd-45b38477f732)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create Middle Tier sort node:
+      | hub_id | {hub-id}                                             |
+      | name   | MIDTIERDONOTUSE{gradle-current-date-yyyyMMddHHmmsss} |
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+      | hubId   | {hub-id}   |
+    And Operator open the sidebar menu on Sort Tasks page
+    And Operator select a sort task
+    Then Operator verifies that "{hub-name} modified" success notification is displayed
+    When Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    Then Operator verify added outputs appears on tree list
+    When Operator open the sidebar menu on Sort Tasks page
+    And Operator remove selection of a sort task
+    Then Operator verifies that "{hub-name} modified" success notification is displayed
+    When Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator refresh table on Sort Tasks page
+    Then Operator verify removed outputs removed on tree list
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator open the sidebar menu on Sort Tasks page
+    And Operator select a sort task
+    Then Operator verifies that "{hub-name} modified" success notification is displayed
+    When Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator refresh table on Sort Tasks page
+    Then Operator verify added outputs appears on tree list
+
+  @CloseNewWindows
+  Scenario: Add a sort task - RTS Zone (uid:094b5d46-1a8c-4658-868c-20ebb695a14d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-6} |
+      | hubId   | {hub-id-6}   |
+    And Operator open the sidebar menu on Sort Tasks page
+    And Operator select a RTS zone
+      | rtsZone | RTS-Z-20210616172544662 |
+    Then Operator verifies that "{hub-name-6} modified" success notification is displayed
+    Then Operator verify RTS zone appears on tree list
+      | rtsZone | RTS-Z-20210616172544662 |
+    When Operator open the sidebar menu on Sort Tasks page
+    And Operator remove selection of RTS zone
+      | rtsZone | RTS-Z-20210616172544662 |
+    Then Operator verifies that "{hub-name-6} modified" success notification is displayed
+
+  @CloseNewWindows
+  Scenario: Load Sort Entity List - No Children (uid:814f21d2-73bf-4705-896d-f9fd7e795d67)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-6} |
+      | hubId   | {hub-id-6}   |
+    Then Operator verify output on tree list
+      | noOutput |
+
+  @CloseNewWindows
+  Scenario: Load Sort Entity List - Has Children (uid:928312c2-6375-48dc-8108-cd91dc70735b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-4} |
+      | hubId   | {hub-id-4}   |
+    Then Operator verify displayed nodes on Sort Tasks page:
+      | {hub-name-4}    |
+      | SORT-SG-2-HUB   |
+      | {mid-tier-name} |
+      | SORT-1          |
+
+  @CloseNewWindows
+  Scenario: Search sort nodes on Sort Structure Page - RTS zone (uid:4776cda5-157a-4345-b7d6-b9c3cc776691)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-7} |
+    And Operator click View Sort Structure on Sort Tasks page
+    Then Operator verifies graph contains following Hub nodes:
+      | {hub-name-7}  |
+      | SORT-SG-2-HUB |
+    And Operator verifies graph contains following Middle Tier nodes:
+      | {mid-tier-name} |
+    And Operator verifies graph contains following Zone nodes:
+      | SORT-1             |
+      | RTS-SORT-SG-1-ZONE |
+    And Operator verifies graph contains following duplicated nodes:
+      | label  | count |
+      | SORT-1 | 2     |
+    When Operator search for "{mid-tier-name}" node on View Sort Structure page
+    Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-7}    |
+      | {mid-tier-name} |
+      | SORT-SG-2-HUB   |
+      | SORT-1          |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
