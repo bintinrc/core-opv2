@@ -27,7 +27,23 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   }
 
   private static final String DELETE_DP = "Delete DP";
+  private static final String UPDATE_SUCCESS = "Success";
+  private static final String UPDATE_FAILED = "Failed";
   private static final String INVALID_DELETE_DP = "Invalid Delete DP";
+
+  @Then("Operator need to check that the update is {string}")
+  public void OperatorCheckUpdateDp(String occasion) {
+    switch (occasion) {
+      case UPDATE_SUCCESS:
+        successUpdate();
+        break;
+
+      case UPDATE_FAILED:
+        failedUpdate();
+        break;
+
+    }
+  }
 
   @Then("Operator need to compare both of delete result after {string} and make sure both of the data is valid")
   public void APIDPgetDpDeleteAndValidate(String occasion) {
@@ -162,6 +178,32 @@ public class DpAdministrationAPISteps extends AbstractSteps {
 
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, null);
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
+  }
+
+  public void failedUpdate() {
+    DpDetailsResponse dp = get(KEY_CREATE_DP_RESPONSE);
+    DpDetailsResponse dpManagement = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+
+    Assertions.assertThat(dp)
+        .as("DP is not Updated")
+        .isNull();
+
+    Assertions.assertThat(dpManagement)
+        .as("DP Management is not Updated")
+        .isNull();
+  }
+
+  public void successUpdate() {
+    DpDetailsResponse dp = get(KEY_CREATE_DP_RESPONSE);
+    DpDetailsResponse dpManagement = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+
+    Assertions.assertThat(dp)
+        .as("DP is Updated")
+        .isNotNull();
+
+    Assertions.assertThat(dpManagement)
+        .as("DP Management is Updated")
+        .isNotNull();
   }
 
   public void apiDeleteCheckForDeleteDp() {
