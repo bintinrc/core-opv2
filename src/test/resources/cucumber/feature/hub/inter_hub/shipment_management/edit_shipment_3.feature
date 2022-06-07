@@ -42,7 +42,8 @@ Feature: Shipment Management - Edit Shipment 3
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter the shipment based on its status of Transit
+    When Operator filter Shipment Status = At Transit Hub on Shipment Management page
+    When Operator filter Shipment Status = Transit on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
     When Operator clicks on reopen shipment button under the Apply Action for invalid status shipment
@@ -59,6 +60,7 @@ Feature: Shipment Management - Edit Shipment 3
     When API Operator change the status of the shipment into "Completed"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
