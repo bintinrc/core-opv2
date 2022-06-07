@@ -34,51 +34,51 @@ import org.openqa.selenium.support.FindBy;
 public class SortBeltManagerPage extends OperatorV2SimplePage {
 
   public static final String ARM_LIST_XPATH = "//div[contains(@class,'arm-combination-unit-content')][.//div[contains(@class,'arm-output')][.//.='%d']]";
-  public static final String SUMMARY_XPATH = "//div[@class=\"section summary-section\"]";
-  public static final String CREATE_COPY_DIALOG_XPATH = "//div[@class=\"ant-modal-header\"]/div[text()=\"Create a copy\"]";
-  public static final String SEARCH_LOGIC_RESULT_XPATH = "//div[@class=\"title\" and text()=\"%s\"]";
-  public static final String CAN_NOT_SAVE_POPUP_XPATH = "//div[contains(@class,\"ant-notification-notice-message\") and text()=\"Incomplete Form Submission\"]";
-  public static final String ACTIVATED_LOGIC_POPUP_XPATH = "//div[contains(@class,\"ant-notification-notice-message\") and text()=\"Logic Activated\"]";
-  public static final String SUB_PAGE_HEADER_XPATH = "//div[@class=\"section-header\"]//div[text()=\"%s\"]";
-  public static final String DROPDOWN_SELECTIONS_XPATH = "//div[@class=\"ant-select-item-option-content\" and text()=\"%s\"]";
-  public static final String LOGIC_MAPPING_COLUMN_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//span[text()=\"%s\"]";
-  public static final String COLUMN_MAPPING_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//td[@class=\"ant-table-cell\"][%d]";
-  public static final String ARM_FILTERS_DISABLED_XPATH = "//div[contains(@class,\"ant-select-item-option-disabled\")]";
-  public static final String ADD_RULE_XPATH = "//button[@data-testid=\"add-rule-button\"]";
-  public static final String DELETE_RULE_XPATH = "//span[contains(@data-testid,\"delete-icon\")]";
-  public static final String DELETE_RULE_SPECIFIC_XPATH = "//span[@data-testid=\"delete-icon-%d\"]";
-  public static final String FORM_LOGIC_NAME_VALUE_XPATH = "//input[@data-testid=\"logic-name-input\"]";
-  public static final String FORM_LOGIC_DESCRIPTION_VALUE_XPATH = "//input[@data-testid=\"logic-description-input\"]";
-  public static final String FORM_LOGIC_ARM_FILTERS_VALUE_XPATH = "//div[@data-testid=\"arm-filters-selection\"]//span[@class=\"ant-select-selection-item-content\"]";
-  public static final String FORM_LOGIC_UNASSIGNED_ARM_VALUE_XPATH = "//input[@id=\"unassignedParcelArm\"]/parent::span/following-sibling::span";
-  public static final String FORM_RULE_ALL_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//span[@class=\"rule-number\"]";
-  public static final String FORM_RULE_NUMBER_VALUE_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//span[@class=\"rule-number\"]";
-  public static final String FORM_RULE_ARM_VALUE_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//td[@class=\"ant-table-cell\"][1]/div";
-  public static final String FORM_RULE_DESCRIPTION_VALUE_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//td[@class=\"ant-table-cell\"][2]/div";
-  public static final String FORM_RULE_FILTERS_VALUE_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//td[@class=\"ant-table-cell\"][2+%d]/div";
-  public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//td[@class=\"ant-table-cell\"][2+%d+1]/div";
-  public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "//div[contains(@class, \"logic-mapping-table\")]//tr[@data-row-key=\"%d\"]//td[@class=\"ant-table-cell\"][2+%d+2]/div";
+  public static final String SUMMARY_XPATH = "//div[@class='section summary-section']";
+  public static final String CREATE_COPY_DIALOG_XPATH = "//div[@class='ant-modal-header']/div[text()='Create a copy']";
+  public static final String SEARCH_LOGIC_RESULT_XPATH = "//div[@class='title' and text()='%s']";
+  public static final String CAN_NOT_SAVE_POPUP_XPATH = "//div[contains(@class,'ant-notification-notice-message') and text()='Incomplete Form Submission']";
+  public static final String ACTIVATED_LOGIC_POPUP_XPATH = "//div[contains(@class,'ant-notification-notice-message') and text()='Logic Activated']";
+  public static final String SUB_PAGE_HEADER_XPATH = "//div[@class='section-header']//div[text()='%s']";
+  public static final String DROPDOWN_SELECTIONS_XPATH = "//div[@class='ant-select-item-option-content' and text()='%s']";
+  public static final String LOGIC_MAPPING_COLUMN_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[text()='%s']";
+  public static final String COLUMN_MAPPING_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][%d]";
+  public static final String ARM_FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
+  public static final String ADD_RULE_XPATH = "//button[@data-testid='add-rule-button']";
+  public static final String DELETE_RULE_XPATH = "//span[contains(@data-testid,'delete-icon')]";
+  public static final String DELETE_RULE_SPECIFIC_XPATH = "//span[@data-testid='delete-icon-%d']";
+  public static final String FORM_LOGIC_NAME_VALUE_XPATH = "//input[@data-testid='logic-name-input']";
+  public static final String FORM_LOGIC_DESCRIPTION_VALUE_XPATH = "//input[@data-testid='logic-description-input']";
+  public static final String FORM_LOGIC_ARM_FILTERS_VALUE_XPATH = "//div[@data-testid='arm-filters-selection']//span[@class='ant-select-selection-item-content']";
+  public static final String FORM_LOGIC_UNASSIGNED_ARM_VALUE_XPATH = "//input[@id='unassignedParcelArm']/parent::span/following-sibling::span";
+  public static final String FORM_RULE_ALL_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[@class='rule-number']";
+  public static final String FORM_RULE_NUMBER_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//span[@class='rule-number']";
+  public static final String FORM_RULE_ARM_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][1]/div";
+  public static final String FORM_RULE_DESCRIPTION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2]/div";
+  public static final String FORM_RULE_FILTERS_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2+%d]/div";
+  public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2+%d+1]/div";
+  public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2+%d+2]/div";
 
-  public static final String CHECK_LOGIC_NAME_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"summary\"]//div[@class=\"text-block category-title\"]";
-  public static final String CHECK_LOGIC_DESCRIPTION_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"summary\"]//div[@class=\"text-block info\"][1]";
-  public static final String CHECK_LOGIC_ARM_FILTERS_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"summary\"]//div[@class=\"text-block info\"][2]";
-  public static final String CHECK_LOGIC_UNASSIGNED_ARM_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"summary\"]//div[@class=\"text-block info\"][3]";
-  public static final String CHECK_LOGIC_ARMS_IN_USE_COUNT_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"summary\"]//div[@class=\"text-block info\"][4]";
-  public static final String CHECK_LOGIC_ARMS_NOT_IN_USE_COUNT_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"details-holder\"][1]/div[@class=\"category-title\"]";
-  public static final String CHECK_LOGIC_ARM_LIST_NOT_IN_USE_VALUE_XPATH = "//div[@class=\"section-content\"]//div[@class=\"details-holder\"][1]/div[@class=\"details\"]";
+  public static final String CHECK_LOGIC_NAME_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block category-title']";
+  public static final String CHECK_LOGIC_DESCRIPTION_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][1]";
+  public static final String CHECK_LOGIC_ARM_FILTERS_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][2]";
+  public static final String CHECK_LOGIC_UNASSIGNED_ARM_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][3]";
+  public static final String CHECK_LOGIC_ARMS_IN_USE_COUNT_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][4]";
+  public static final String CHECK_LOGIC_ARMS_NOT_IN_USE_COUNT_VALUE_XPATH = "//div[@class='section-content']//div[@class='details-holder'][1]/div[@class='category-title']";
+  public static final String CHECK_LOGIC_ARM_LIST_NOT_IN_USE_VALUE_XPATH = "//div[@class='section-content']//div[@class='details-holder'][1]/div[@class='details']";
 
-  public static final String CHECK_LOGIC_MULTIPLE_ARMS_SUMMARY_XPATH = "//div[contains(text(),\"Multiple arms with the same rules\")]";
-  public static final String CHECK_LOGIC_MULTIPLE_ARMS_TABLE_XPATH = "//div[contains(text(),\"Multiple arms with the same rules\")]/following-sibling::div//table";
-  public static final String CHECK_LOGIC_UNIQUE_RULES_SUMMARY_XPATH = "//div[contains(text(),\"Unique rules and arms\")]";
-  public static final String CHECK_LOGIC_UNIQUE_RULES_TABLE_XPATH = "//div[contains(text(),\"Unique rules and arms\")]/following-sibling::div//table";
-  public static final String CHECK_LOGIC_DUPLICATE_RULES_SUMMARY_XPATH = "//div[contains(text(),\"Multiple rules with the same filters\")]";
-  public static final String CHECK_LOGIC_DUPLICATE_RULES_TABLE_XPATH = "//div[contains(text(),\"Multiple rules with the same filters\")]/following-sibling::div//table";
-  public static final String CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH = "//div[contains(text(),\"Conflicting shipment destination & type\")]";
+  public static final String CHECK_LOGIC_MULTIPLE_ARMS_SUMMARY_XPATH = "//div[contains(text(),'Multiple arms with the same rules')]";
+  public static final String CHECK_LOGIC_MULTIPLE_ARMS_TABLE_XPATH = "//div[contains(text(),'Multiple arms with the same rules')]/following-sibling::div//table";
+  public static final String CHECK_LOGIC_UNIQUE_RULES_SUMMARY_XPATH = "//div[contains(text(),'Unique rules and arms')]";
+  public static final String CHECK_LOGIC_UNIQUE_RULES_TABLE_XPATH = "//div[contains(text(),'Unique rules and arms')]/following-sibling::div//table";
+  public static final String CHECK_LOGIC_DUPLICATE_RULES_SUMMARY_XPATH = "//div[contains(text(),'Multiple rules with the same filters')]";
+  public static final String CHECK_LOGIC_DUPLICATE_RULES_TABLE_XPATH = "//div[contains(text(),'Multiple rules with the same filters')]/following-sibling::div//table";
+  public static final String CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH = "//div[contains(text(),'Conflicting shipment destination & type')]";
 
-  public static final String CANCEL_CREATE_DIALOG_XPATH = "//div[text()=\"Leave this page?\"]";
-  public static final String LOGIC_DETAIL_NAME_VALUE_XPATH = "//div[@class=\"section-header\"]//div[contains(@class,\"title\")]";
-  public static final String LOGIC_DETAIL_DESC_VALUE_XPATH = "//div[@class=\"section-header\"]//div[contains(@class,\"title\")]";
-  public static final String LOGIC_DETAIL_ARM_FILTERS_VALUE_XPATH = "//div[@class=\"ant-row\"][2]//div[contains(@class,\"logic-details\")][2]";
+  public static final String CANCEL_CREATE_DIALOG_XPATH = "//div[text()='Leave this page?']";
+  public static final String LOGIC_DETAIL_NAME_VALUE_XPATH = "//div[@class='section-header']//div[contains(@class,'title')]";
+  public static final String LOGIC_DETAIL_DESC_VALUE_XPATH = "//div[@class='section-header']//div[contains(@class,'title')]";
+  public static final String LOGIC_DETAIL_ARM_FILTERS_VALUE_XPATH = "//div[@class='ant-row'][2]//div[contains(@class,'logic-details')][2]";
 
   @FindBy(xpath = "(//div[contains(@class,'ant-select-selector')])[1]")
   public VirtualSelect selectHub;
@@ -116,13 +116,13 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//li[@data-testid='create-a-copy-menu-item']")
   public PageElement createCopy;
 
-  @FindBy(xpath = "//input[@placeholder=\"Search Name or Description\"]")
+  @FindBy(xpath = "//input[@placeholder='Search Name or Description']")
   public TextBox searchLogicInput;
 
-  @FindBy(xpath = "//div[@class=\"ant-modal-header\"]/div[text()=\"Create a copy\"]/parent::div/following-sibling::div//input")
+  @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Create a copy']/parent::div/following-sibling::div//input")
   public TextBox copyLogicInput;
 
-  @FindBy(xpath = "//div[@class=\"ant-modal-footer\"]/button[@data-testid=\"confirm-button\"]")
+  @FindBy(xpath = "//div[@class='ant-modal-footer']/button[@data-testid='confirm-button']")
   public Button copyLogicConfirm;
 
   @FindBy(xpath = "//button[.//span[contains(., 'Edit Configuration')]]")
@@ -170,46 +170,46 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-wrap")
   public ChangeActiveConfigurationModal changeActiveConfigurationModal;
 
-  @FindBy(xpath = "//button[@data-testid=\"add-rule-button\"]")
+  @FindBy(xpath = "//button[@data-testid='add-rule-button']")
   public Button addRule;
 
-  @FindBy(xpath = "//button[@data-testid=\"next-button\"]")
+  @FindBy(xpath = "//button[@data-testid='next-button']")
   public Button nextCreateLogic;
 
-  @FindBy(xpath = "//button[@data-testid=\"save-button\"]")
+  @FindBy(xpath = "//button[@data-testid='save-button']")
   public Button saveLogic;
 
-  @FindBy(xpath = "//button[@data-testid=\"close-button\"]")
+  @FindBy(xpath = "//button[@data-testid='close-button']")
   public Button closeLogicDetail;
 
-  @FindBy(xpath = "//button[@data-testid=\"edit-button\"]")
+  @FindBy(xpath = "//button[@data-testid='edit-button']")
   public Button editLogicDetail;
 
-  @FindBy(xpath = "//button[@data-testid=\"cancel-button\"]")
+  @FindBy(xpath = "//button[@data-testid='cancel-button']")
   public Button cancelCreateLogic;
 
-  @FindBy(xpath = "//button[@data-testid=\"activate-button\"]")
+  @FindBy(xpath = "//button[@data-testid='activate-button']")
   public Button activateLogic;
 
-  @FindBy(xpath = "//span[@data-testid=\"leave-text\"]/parent::button")
+  @FindBy(xpath = "//span[@data-testid='leave-text']/parent::button")
   public Button cancelConfirmCreateLogic;
 
-  @FindBy(xpath = "//div[@class=\"active-logic-name\"]")
+  @FindBy(xpath = "//div[@class='active-logic-name']")
   public PageElement activeLogicNameSummary;
 
-  @FindBy(xpath = "//div[@class=\"active-logic-desc\"]")
+  @FindBy(xpath = "//div[@class='active-logic-desc']")
   public PageElement activeLogicDescSummary;
 
-  @FindBy(xpath = "//span[@class=\"sub-headers\"]/span[not(@class)]")
+  @FindBy(xpath = "//span[@class='sub-headers']/span[not(@class)]")
   public PageElement activeLogicArmFiltersSummary;
 
-  @FindBy(xpath = "//div[@class=\"section-header\"]//div[contains(@class,\"title\")]")
+  @FindBy(xpath = "//div[@class='section-header']//div[contains(@class,'title')]")
   public PageElement logicDetailName;
 
-  @FindBy(xpath = "//div[contains(@class,\"logic-description\")]")
+  @FindBy(xpath = "//div[contains(@class,'logic-description')]")
   public PageElement logicDetailDesc;
 
-  @FindBy(xpath = "//div[@class=\"ant-row\"][2]//div[contains(@class,\"logic-details\")][2]")
+  @FindBy(xpath = "//div[@class='ant-row'][2]//div[contains(@class,'logic-details')][2]")
   public PageElement logicDetailArmFilters;
 
   public DuplicatedCombinationsTable duplicatedCombinationsTable;
@@ -681,7 +681,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public boolean checkListOfMultipleArmsWithTheSameRules(List<RuleForm> rules) {
     for (RuleForm rule : rules) {
       String row = String.format(
-          CHECK_LOGIC_MULTIPLE_ARMS_TABLE_XPATH + "//tr[@data-row-key=\"%d\"]/td",
+          CHECK_LOGIC_MULTIPLE_ARMS_TABLE_XPATH + "//tr[@data-row-key='%d']/td",
           rule.getRuleNumber() - 1);
 
       Assertions.assertThat(findElementsByXpath(row).get(1).getText())
@@ -696,7 +696,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public boolean checkListOfUniqueRulesAndArms(List<RuleForm> rules) {
     for (RuleForm rule : rules) {
       String row = String.format(
-          CHECK_LOGIC_UNIQUE_RULES_TABLE_XPATH + "//tr[@data-row-key=\"%d\"]/td",
+          CHECK_LOGIC_UNIQUE_RULES_TABLE_XPATH + "//tr[@data-row-key='%d']/td",
           rule.getRuleNumber() - 1);
 
       Assertions.assertThat(Integer.parseInt(findElementsByXpath(row).get(1).getText()))
@@ -710,7 +710,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public boolean checkListOfDuplicateRules(List<List<RuleForm>> duplicateRules) {
     for (List<RuleForm> rules : duplicateRules) {
       String row = String.format(
-          CHECK_LOGIC_DUPLICATE_RULES_TABLE_XPATH + "//tr[@data-row-key=\"%d\"]/td",
+          CHECK_LOGIC_DUPLICATE_RULES_TABLE_XPATH + "//tr[@data-row-key='%d']/td",
           rules.get(0).getRuleNumber() - 1);
 
       String storedRuleNumbersJoined = rules.stream().map(r -> String.valueOf(r.getRuleNumber()))
