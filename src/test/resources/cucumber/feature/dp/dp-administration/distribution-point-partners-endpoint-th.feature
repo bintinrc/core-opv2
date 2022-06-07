@@ -1,7 +1,7 @@
 @OperatorV2Th @DpAdministrationEndpoint
 Feature: DP Administration - Distribution Point Partners
 
-  @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
+  @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is RETAIL_POINT_NETWORK and allow_post_order_enhancements is false - Success Update - TH
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
@@ -24,7 +24,7 @@ Feature: DP Administration - Distribution Point Partners
     Then API Operator request to update DP
     Then API Operator request to update DP Management
 
-  @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
+  @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is FRANCHISEE and allow_post_order_enhancements is true - Success Update - TH
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
@@ -47,7 +47,7 @@ Feature: DP Administration - Distribution Point Partners
     Then API Operator request to update DP
     Then API Operator request to update DP Management
 
-  @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
+  @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is FRANCHISEE and allow_post_order_enhancements is false - Success Update - TH
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
