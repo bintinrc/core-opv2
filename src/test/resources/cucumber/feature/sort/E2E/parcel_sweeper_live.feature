@@ -138,9 +138,8 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute (uid:ea9d47e4-ea9f-4ada-90f7-7a133b211f85)
-
-  Scenario: Parcel Sweeper On Hold Order - Resolve PENDING MISSING Ticket Type - e2e
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper On Hold Order - Resolve PENDING MISSING Ticket Type - e2e (uid:ea9d47e4-ea9f-4ada-90f7-7a133b211f85)
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
