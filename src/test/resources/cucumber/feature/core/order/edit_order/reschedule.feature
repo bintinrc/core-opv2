@@ -491,17 +491,17 @@ Feature: Reschedule & RTS
     And Operator verify Delivery details on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify order events on Edit order page using data below:
-      | tags           | name                |
-      | PICKUP, SCAN   | DRIVER PICKUP SCAN  |
-      | PICKUP         | PICKUP SUCCESS      |
-      | SORT, SCAN     | HUB INBOUND SCAN    |
-      | MANUAL ACTION  | ADD TO ROUTE        |
-      | SCAN, DELIVERY | DRIVER INBOUND SCAN |
-      | MANUAL ACTION  | DRIVER START ROUTE  |
-      | DELIVERY       | DELIVERY FAILURE    |
-      | MANUAL ACTION  | RESCHEDULE          |
-      | SYSTEM ACTION  | PRICING CHANGE      |
-      | DELIVERY       | DELIVERY SUCCESS    |
+      | tags            | name                |
+      | #l#PICKUP, SCAN | DRIVER PICKUP SCAN  |
+      | PICKUP          | PICKUP SUCCESS      |
+      | SORT, SCAN      | HUB INBOUND SCAN    |
+      | MANUAL ACTION   | ADD TO ROUTE        |
+      | SCAN, DELIVERY  | DRIVER INBOUND SCAN |
+      | MANUAL ACTION   | DRIVER START ROUTE  |
+      | DELIVERY        | DELIVERY FAILURE    |
+      | MANUAL ACTION   | RESCHEDULE          |
+      | SYSTEM ACTION   | PRICING CHANGE      |
+      | DELIVERY        | DELIVERY SUCCESS    |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Failure Reason Code Id 13

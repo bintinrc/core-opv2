@@ -815,7 +815,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           page.generalFiltersForm.addFilter.selectValue("Route Grouping");
         }
         page.generalFiltersForm.routeGroupingFilter.clearAll();
-        page.generalFiltersForm.routeGroupingFilter.selectFilter(value);
+        String finalValue = value;
+        retryIfRuntimeExceptionOccurred(() ->
+            page.generalFiltersForm.routeGroupingFilter.selectFilter(finalValue), 5);
       } else if (page.generalFiltersForm.routeGroupingFilter.isDisplayedFast()) {
         page.generalFiltersForm.routeGroupingFilter.removeFilter();
       }

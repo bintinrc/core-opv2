@@ -83,8 +83,8 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.createRouteDialog.waitUntilVisible();
       pause1s();
 
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
-          .get(0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
+          0);
 
       if (StringUtils.isNotBlank(newParams.getDate())) {
         routeDetailsForm.routeDate.setValue(newParams.getDate());
@@ -132,8 +132,8 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifyInvalidDriver(String value) {
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
-          .get(0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
+          0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
       Assertions.assertThatExceptionOfType(NoSuchElementException.class)
           .as("Error expected for %s Driver value", value)
@@ -155,10 +155,10 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifyValidDriver(String value) {
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
-          .get(0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
+          0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
-      routeDetailsForm.assignedDriver.selectValue(value);
+      retryIfRuntimeExceptionOccurred(() -> routeDetailsForm.assignedDriver.selectValue(value), 5);
     });
   }
 
@@ -204,8 +204,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.createRouteDialog.waitUntilVisible();
 
       RouteLogsParams newParams = routeParamsList.get(0);
-      RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
-          .get(0);
+      RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(0);
 
       if (StringUtils.isNotBlank(newParams.getDate())) {
         routeDetailsForm.routeDate.setValue(newParams.getDate());
@@ -382,10 +381,8 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded(3);
       List<String> actual = routeLogsPage.optimizeSelectedRouteDialog.message.stream()
-          .map(PageElement::getText)
-          .collect(Collectors.toList());
-      Assertions.assertThat(actual)
-          .as("Optimize Selected Route dialog message")
+          .map(PageElement::getText).collect(Collectors.toList());
+      Assertions.assertThat(actual).as("Optimize Selected Route dialog message")
           .containsExactlyElementsOf(lines);
     });
   }
@@ -605,10 +602,8 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       List<String> actual = routeLogsPage.savePresetDialog.selectedFilters.stream()
-          .map(PageElement::getNormalizedText)
-          .collect(Collectors.toList());
-      Assertions.assertThat(actual)
-          .as("List of selected filters")
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
+      Assertions.assertThat(actual).as("List of selected filters")
           .containsExactlyInAnyOrderElementsOf(expected);
     });
     takesScreenshot();
@@ -619,8 +614,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.helpText.getText())
-          .as("Preset Name error text")
-          .isEqualTo("This field is required");
+          .as("Preset Name error text").isEqualTo("This field is required");
     });
     takesScreenshot();
   }
@@ -630,8 +624,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.cancel.isEnabled())
-          .as("Cancel button is enabled")
-          .isTrue();
+          .as("Cancel button is enabled").isTrue();
     });
     takesScreenshot();
   }
@@ -641,8 +634,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.save.isEnabled())
-          .as("Save button is enabled")
-          .isTrue();
+          .as("Save button is enabled").isTrue();
     });
     takesScreenshot();
   }
@@ -657,8 +649,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.deletePresetDialog.cancel.isEnabled())
-          .as("Cancel button is enabled")
-          .isTrue();
+          .as("Cancel button is enabled").isTrue();
     });
     takesScreenshot();
   }
@@ -668,8 +659,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.deletePresetDialog.delete.isEnabled())
-          .as("Delete button is enabled")
-          .isTrue();
+          .as("Delete button is enabled").isTrue();
     });
     takesScreenshot();
   }
@@ -687,8 +677,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.deletePresetDialog.preset.getValue())
-          .as("Selected preset")
-          .isEqualTo(resolveValue(value));
+          .as("Selected preset").isEqualTo(resolveValue(value));
     });
     takesScreenshot();
   }
@@ -703,8 +692,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.deletePresetDialog.delete.isEnabled())
-          .as("Delete button is enabled")
-          .isFalse();
+          .as("Delete button is enabled").isFalse();
     });
   }
 
@@ -713,42 +701,38 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.deletePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.deletePresetDialog.message.getNormalizedText())
-          .as("Delete Preset message")
-          .isEqualTo(resolveValue(expected));
+          .as("Delete Preset message").isEqualTo(resolveValue(expected));
     });
   }
 
   @And("Operator verifies that success toast displayed:")
   public void operatorVerifySuccessToast(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
-    boolean waitUntilInvisible = Boolean
-        .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
+    boolean waitUntilInvisible = Boolean.parseBoolean(
+        finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
     ToastInfo toastInfo;
     do {
-      toastInfo = routeLogsPage.toastSuccess.stream()
-          .filter(toast -> {
-            String value = finalData.get("top");
-            if (StringUtils.isNotBlank(value)) {
-              String actual = toast.toastTop.getNormalizedText();
-              if (value.startsWith("^")) {
-                if (!actual.matches(value)) {
-                  return false;
-                }
-              } else {
-                if (!StringUtils.equalsIgnoreCase(value, actual)) {
-                  return false;
-                }
-              }
+      toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
+        String value = finalData.get("top");
+        if (StringUtils.isNotBlank(value)) {
+          String actual = toast.toastTop.getNormalizedText();
+          if (value.startsWith("^")) {
+            if (!actual.matches(value)) {
+              return false;
             }
-            value = finalData.get("bottom");
-            if (StringUtils.isNotBlank(value)) {
-              return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+          } else {
+            if (!StringUtils.equalsIgnoreCase(value, actual)) {
+              return false;
             }
-            return true;
-          })
-          .findFirst()
-          .orElse(null);
+          }
+        }
+        value = finalData.get("bottom");
+        if (StringUtils.isNotBlank(value)) {
+          return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+        }
+        return true;
+      }).findFirst().orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
     Assertions.assertThat(toastInfo != null).as("Toast " + finalData.toString() + " is displayed")
         .isTrue();
@@ -764,14 +748,11 @@ public class RouteLogsSteps extends AbstractSteps {
       String actual = StringUtils.trim(routeLogsPage.filterPreset.getValue());
       Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
       Matcher m = p.matcher(actual);
-      Assertions.assertThat(m.matches())
-          .as("Selected Filter Preset value matches to pattern")
+      Assertions.assertThat(m.matches()).as("Selected Filter Preset value matches to pattern")
           .isTrue();
       Long presetId = Long.valueOf(m.group(1));
       String presetName = m.group(2);
-      Assertions.assertThat(presetName)
-          .as("Preset Name")
-          .isEqualTo(finalExpected);
+      Assertions.assertThat(presetName).as("Preset Name").isEqualTo(finalExpected);
       put(KEY_ROUTES_FILTERS_PRESET_ID, presetId);
     });
     takesScreenshot();
@@ -798,8 +779,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Route Date filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.routeDateFilter.getValueFrom())
-              .as("Route Date from")
+          assertions.assertThat(routeLogsPage.routeDateFilter.getValueFrom()).as("Route Date from")
               .isEqualTo(data.get("routeDateFrom"));
         }
       }
@@ -808,8 +788,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Route Date filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.routeDateFilter.getValueTo())
-              .as("Route Date to")
+          assertions.assertThat(routeLogsPage.routeDateFilter.getValueTo()).as("Route Date to")
               .isEqualTo(data.get("routeDateTo"));
         }
       }
@@ -818,8 +797,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Hub filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.hubFilter.getSelectedValues())
-              .as("Hub items")
+          assertions.assertThat(routeLogsPage.hubFilter.getSelectedValues()).as("Hub items")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("hub")));
         }
       }
@@ -828,8 +806,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Driver filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.driverFilter.getSelectedValues())
-              .as("Driver items")
+          assertions.assertThat(routeLogsPage.driverFilter.getSelectedValues()).as("Driver items")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("driver")));
         }
       }
@@ -838,8 +815,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Zone filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.zoneFilter.getSelectedValues())
-              .as("Zone items")
+          assertions.assertThat(routeLogsPage.zoneFilter.getSelectedValues()).as("Zone items")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("zone")));
         }
       }
@@ -863,8 +839,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.save.isEnabled())
-          .as("Save button is enabled")
-          .isFalse();
+          .as("Save button is enabled").isFalse();
     });
     takesScreenshot();
   }
@@ -881,11 +856,9 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("Operator verifies Preset Name field in Save Preset dialog on Route Logs page has green checkmark on it")
   public void verifyPresetNameIsValidated() {
-    routeLogsPage.inFrame(() ->
-        Assertions.assertThat(routeLogsPage.savePresetDialog.confirmedIcon.isDisplayed())
-            .as("Preset Name checkmark")
-            .isTrue()
-    );
+    routeLogsPage.inFrame(
+        () -> Assertions.assertThat(routeLogsPage.savePresetDialog.confirmedIcon.isDisplayed())
+            .as("Preset Name checkmark").isTrue());
   }
 
   @When("Operator verifies help text {string} is displayed in Save Preset dialog on Route Logs page")
@@ -893,8 +866,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.helpText.getNormalizedText())
-          .as("Help Text")
-          .isEqualTo(resolveValue(expected));
+          .as("Help Text").isEqualTo(resolveValue(expected));
     });
   }
 
@@ -1012,27 +984,24 @@ public class RouteLogsSteps extends AbstractSteps {
   @And("Operator verifies that info toast displayed:")
   public void operatorVerifyInfoToast(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
-    boolean waitUntilInvisible = Boolean
-        .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
+    boolean waitUntilInvisible = Boolean.parseBoolean(
+        finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
     ToastInfo toastInfo;
     do {
-      toastInfo = routeLogsPage.toastInfo.stream()
-          .filter(toast -> {
-            String value = finalData.get("top");
-            if (StringUtils.isNotBlank(value)) {
-              if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-                return false;
-              }
-            }
-            value = finalData.get("bottom");
-            if (StringUtils.isNotBlank(value)) {
-              return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
-            }
-            return true;
-          })
-          .findFirst()
-          .orElse(null);
+      toastInfo = routeLogsPage.toastInfo.stream().filter(toast -> {
+        String value = finalData.get("top");
+        if (StringUtils.isNotBlank(value)) {
+          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+            return false;
+          }
+        }
+        value = finalData.get("bottom");
+        if (StringUtils.isNotBlank(value)) {
+          return StringUtils.equalsIgnoreCase(value, toast.toastBottom.getNormalizedText());
+        }
+        return true;
+      }).findFirst().orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
     Assertions.assertThat(toastInfo).as("Toast " + finalData + " is displayed").isNotNull();
     if (waitUntilInvisible) {
@@ -1045,43 +1014,39 @@ public class RouteLogsSteps extends AbstractSteps {
   public void operatorVerifySuccessReactToast(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
       Map<String, String> finalData = resolveKeyValues(data);
-      boolean waitUntilInvisible = Boolean
-          .parseBoolean(finalData.getOrDefault("waitUntilInvisible", "false"));
+      boolean waitUntilInvisible = Boolean.parseBoolean(
+          finalData.getOrDefault("waitUntilInvisible", "false"));
       long start = new Date().getTime();
       AntNotification toastInfo;
       do {
-        toastInfo = routeLogsPage.noticeNotifications.stream()
-            .filter(toast -> {
-              String actualTop = toast.message.getNormalizedText();
-              LOGGER.info("Found notification: " + actualTop);
-              String value = finalData.get("top");
-              if (StringUtils.isNotBlank(value)) {
-                if (value.startsWith("^")) {
-                  if (!actualTop.matches(value)) {
-                    return false;
-                  }
-                } else {
-                  if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
-                    return false;
-                  }
-                }
+        toastInfo = routeLogsPage.noticeNotifications.stream().filter(toast -> {
+          String actualTop = toast.message.getNormalizedText();
+          LOGGER.info("Found notification: " + actualTop);
+          String value = finalData.get("top");
+          if (StringUtils.isNotBlank(value)) {
+            if (value.startsWith("^")) {
+              if (!actualTop.matches(value)) {
+                return false;
               }
-              value = finalData.get("bottom");
-              if (StringUtils.isNotBlank(value)) {
-                String actual = toast.description.getNormalizedText();
-                if (value.startsWith("^")) {
-                  return actual.matches(value);
-                } else {
-                  return StringUtils.equalsIgnoreCase(value, actual);
-                }
+            } else {
+              if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
+                return false;
               }
-              return true;
-            })
-            .findFirst()
-            .orElse(null);
+            }
+          }
+          value = finalData.get("bottom");
+          if (StringUtils.isNotBlank(value)) {
+            String actual = toast.description.getNormalizedText();
+            if (value.startsWith("^")) {
+              return actual.matches(value);
+            } else {
+              return StringUtils.equalsIgnoreCase(value, actual);
+            }
+          }
+          return true;
+        }).findFirst().orElse(null);
       } while (toastInfo == null && new Date().getTime() - start < 20000);
-      Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed")
-          .isTrue();
+      Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed").isTrue();
       if (toastInfo != null && waitUntilInvisible) {
         toastInfo.waitUntilInvisible();
       }
@@ -1154,8 +1119,8 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
-      String actualRouteStatus = routeLogsPage.routesTable
-          .getColumnText(1, RoutesTable.COLUMN_STATUS);
+      String actualRouteStatus = routeLogsPage.routesTable.getColumnText(1,
+          RoutesTable.COLUMN_STATUS);
       assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
     });
   }
@@ -1164,13 +1129,11 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifySelectionErrors(String process, List<Map<String, String>> data) {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.selectionErrorDialog.waitUntilVisible();
-      Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText())
-          .as("Process")
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText()).as("Process")
           .isEqualTo(resolveValue(process));
 
       Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds.size())
-          .as("Number Of routes")
-          .isEqualTo(data.size());
+          .as("Number Of routes").isEqualTo(data.size());
 
       for (int i = 0; i < data.size(); i++) {
         Map<String, String> expected = resolveKeyValues(data.get(i));
@@ -1178,8 +1141,8 @@ public class RouteLogsSteps extends AbstractSteps {
         String reason = expected.get("reason");
         int routeIndex = -1;
         for (int j = 0; j < data.size(); j++) {
-          if (StringUtils
-              .equals(routeId, routeLogsPage.selectionErrorDialog.routeIds.get(i).getText())) {
+          if (StringUtils.equals(routeId,
+              routeLogsPage.selectionErrorDialog.routeIds.get(i).getText())) {
             routeIndex = i;
             break;
           }
