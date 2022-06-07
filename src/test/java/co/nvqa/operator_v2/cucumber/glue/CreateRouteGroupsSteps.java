@@ -448,9 +448,12 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (!createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.isDisplayedFast()) {
           createRouteGroupsPage.reservationFiltersForm.addFilter.selectValue("Pick Up Size");
         }
-        createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.clearAll();
-        createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.selectFilter(
-            splitAndNormalize(value));
+        String finalValue = value;
+        retryIfRuntimeExceptionOccurred(() -> {
+          createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.clearAll();
+          createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.selectFilter(
+              splitAndNormalize(finalValue));
+        }, 5);
       }
 
       value = finalData.get("reservationType");
@@ -918,7 +921,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         if (!page.generalFiltersForm.masterShipperFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Master Shipper");
-          page.waitUntilLoaded(2);
+          page.waitUntilLoaded(2, 60);
         }
         page.generalFiltersForm.masterShipperFilter.clearAll();
         page.generalFiltersForm.masterShipperFilter.selectFilter(value);

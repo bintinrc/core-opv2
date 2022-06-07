@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.model.CollectionSummary;
 import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
@@ -21,14 +22,12 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.Keys;
@@ -463,62 +462,28 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   }
 
   public void validateReservationsTable(List<WaypointReservationInfo> expectedReservationsInfo) {
-    List<WaypointReservationInfo> actualReservationsInfo = reservationsTable.readAllEntities();
-    assertEquals("Reservations count", expectedReservationsInfo.size(),
-        actualReservationsInfo.size());
-
-    expectedReservationsInfo
-        .forEach(expectedReservationInfo ->
-        {
-          String message = f("Reservation [%d]", expectedReservationInfo.getReservationId());
-          WaypointReservationInfo actualReservationInfo = actualReservationsInfo.stream()
-              .filter(res -> Objects
-                  .equals(res.getReservationId(), expectedReservationInfo.getReservationId()))
-              .findFirst()
-              .orElseThrow(
-                  () -> new AssertionError(message + " was not found in Reservations table"));
-          expectedReservationInfo.compareWithActual(message, actualReservationInfo);
-        });
+    expectedReservationsInfo.forEach(expected -> {
+          reservationsTable.filterByColumn(ReservationsTable.RESERVATION_ID,
+              expected.getReservationId());
+          Assertions.assertThat(reservationsTable.isEmpty())
+              .as("Reservation " + expected.getReservationId() + " was not found")
+              .isFalse();
+          List<WaypointReservationInfo> actual = reservationsTable.readAllEntities();
+          DataEntity.assertListContains(actual, expected, "Reservation record");
+        }
+    );
   }
 
   public void validateOrdersTable(List<WaypointOrderInfo> expectedOrdersInfo) {
-    List<WaypointOrderInfo> actualOrdersInfo = ordersTable.readAllEntities();
-    Map<String, List<WaypointOrderInfo>> actualOrdersInfoMap = actualOrdersInfo.stream()
-        .collect(Collectors.toMap(
-            WaypointOrderInfo::getTrackingId,
-            orderInfo ->
-            {
-              List<WaypointOrderInfo> list = new ArrayList<>();
-              list.add(orderInfo);
-              return list;
-            },
-            (oldVal, newVal) ->
-            {
-              oldVal.addAll(newVal);
-              return oldVal;
-            }
-        ));
-    assertEquals("Orders count", expectedOrdersInfo.size(), actualOrdersInfo.size());
-
-    expectedOrdersInfo.forEach(expectedOrderInfo ->
-    {
-      List<WaypointOrderInfo> actualOrderInfoList = actualOrdersInfoMap
-          .get(expectedOrderInfo.getTrackingId());
-      String msg = f("Order [%s]", expectedOrderInfo.getTrackingId());
-      assertThat(msg + " was not found", actualOrderInfoList, notNullValue());
-      AssertionError error = null;
-      for (WaypointOrderInfo actualOrderInfo : actualOrderInfoList) {
-        try {
-          expectedOrderInfo.compareWithActual(msg, actualOrderInfo);
-          return;
-        } catch (AssertionError err) {
-          error = err;
+    expectedOrdersInfo.forEach(expected -> {
+          ordersTable.filterByColumn(OrdersTable.TRACKING_ID, expected.getTrackingId());
+          Assertions.assertThat(ordersTable.isEmpty())
+              .as("Order " + expected.getTrackingId() + " was not found")
+              .isFalse();
+          List<WaypointOrderInfo> actual = ordersTable.readAllEntities();
+          DataEntity.assertListContains(actual, expected, "Order record");
         }
-      }
-      if (error != null) {
-        throw error;
-      }
-    });
+    );
   }
 
   public void verifyErrorMessage(String status, String url, String errorCode, String errorMessage) {
