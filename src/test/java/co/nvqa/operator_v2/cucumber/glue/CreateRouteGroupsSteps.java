@@ -307,7 +307,6 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
     createRouteGroupsPage.inFrame(page -> {
       createRouteGroupsPage.transactionsFiltersForm.includeTransactions.check();
-
       String value = finalData.get("granularOrderStatus");
       if (StringUtils.isNotBlank(value)) {
         if (!createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.isDisplayedFast()) {
@@ -1481,7 +1480,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void operatorClickLoadSelectionOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> {
       page.loadSelection.click();
-      page.waitUntilLoaded();
+      page.waitUntilLoaded(5, 60);
     });
   }
 

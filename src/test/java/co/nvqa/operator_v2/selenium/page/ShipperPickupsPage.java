@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
@@ -133,6 +134,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-switch[aria-label='Bulk Assign Route']")
   public MdSwitch bulkAssignRoute;
+
+  @FindBy(name = "Refresh")
+  public NvApiIconButton refresh;
 
   @FindBy(css = "nv-bulk-route-assignment-side-panel")
   public BulkRouteAssignmentSidePanel bulkRouteAssignmentSidePanel;

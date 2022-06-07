@@ -77,6 +77,9 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ClearAllTagsDialog clearAllTagsDialog;
 
+  @FindBy(css = "md-progress-linear")
+  public PageElement loadingBar;
+
   public OrdersTable ordersTable;
   public TaggedOrdersTable taggedOrdersTable;
 

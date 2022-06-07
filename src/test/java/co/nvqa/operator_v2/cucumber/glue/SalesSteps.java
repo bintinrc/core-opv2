@@ -109,6 +109,7 @@ public class SalesSteps extends AbstractSteps {
   public void operatorVerifiesAllFiltersOnSalesPageWorksFine() {
     List<SalesPerson> salesPersons = get(KEY_LIST_OF_SALES_PERSON);
     salesPersons.forEach(expected -> {
+      salesPage.waitWhilePageIsLoading();
       salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, expected.getCode());
       SalesPerson actual = salesPage.salesPersonsTable.readEntity(1);
       expected.compareWithActual(actual, "id");

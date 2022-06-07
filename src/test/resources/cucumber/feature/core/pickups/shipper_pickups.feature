@@ -16,10 +16,12 @@ Feature: Shipper Pickups
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}                  |
-      | approxVolume | Less than 10 Parcels               |
-      | comments     | {KEY_CREATED_RESERVATION.comments} |
+      | type        | Normal                           |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | approxVolume | Less than 10 Parcels                     |
+      | shipperName  | ^{shipper-v4-name}.*                     |
+      | comments     | {KEY_CREATED_RESERVATION.comments}       |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Verify Route Details of A Routed Reservation on Shipper Pickup Page (uid:15a1bd52-d4c5-4c31-a88e-3c4ca4619807)
@@ -33,16 +35,15 @@ Feature: Shipper Pickups
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
-      | routeId      | GET_FROM_CREATED_ROUTE       |
-      | driverName   | {ninja-driver-name}          |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | approxVolume | Less than 10 Parcels                     |
+      | shipperName  | ^{shipper-v4-name}.*                     |
+      | comments     | {KEY_CREATED_RESERVATION.comments}       |
+      | routeId      | {KEY_CREATED_ROUTE_ID}                   |
+      | driverName   | {ninja-driver-name}                      |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
@@ -55,22 +56,20 @@ Feature: Shipper Pickups
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And Operator refresh routes on Shipper Pickups page
     And Operator assign Reservation to Route on Shipper Pickups page
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
-      | routeId      | GET_FROM_CREATED_ROUTE       |
-      | driverName   | {ninja-driver-name}          |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | approxVolume | Less than 10 Parcels                     |
+      | shipperName  | ^{shipper-v4-name}.*                     |
+      | comments     | {KEY_CREATED_RESERVATION.comments}       |
+      | routeId      | {KEY_CREATED_ROUTE_ID}                   |
+      | driverName   | {ninja-driver-name}                      |
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -84,17 +83,16 @@ Feature: Shipper Pickups
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-    And Operator refresh routes on Shipper Pickups page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And Operator set the Priority Level of the created reservation to "3" from Apply Action
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | priorityLevel | 3 |
+    When Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id            | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | priorityLevel | 3                                        |
 
   Scenario: Operator Find Created Reservation by Shipper Name (uid:4d2d2a71-33e0-4f6c-846e-9cca10ef4c2b)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -108,10 +106,10 @@ Feature: Shipper Pickups
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {filter-shipper-name}            |
-    Then Operator verify the reservations details is correct on Shipper Pickups page using data below:
-      | shipperName   | {shipper-v4-name}            |
-      | shipperId     | {shipper-v4-legacy-id}       |
-      | reservationId | GET_FROM_CREATED_RESERVATION |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | shipperName | ^{shipper-v4-name}.*                     |
+      | shipperId   | {shipper-v4-legacy-id}                   |
 
   Scenario: Operator Creates New Reservation by Duplicating Existing Reservation Details - Single Reservation (uid:2138a61e-e56b-4efb-9ced-7dfd92ea07f3)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -121,12 +119,30 @@ Feature: Shipper Pickups
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And Operator duplicates created reservation
-    Then Operator verify the duplicated reservation is created successfully
+    When Operator refresh page
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-next-1-day-yyyy-MM-dd} |
+      | toDate      | {gradle-next-2-day-yyyy-MM-dd} |
+      | shipperName | {filter-shipper-name}          |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | shipperId              | {KEY_CREATED_RESERVATION.legacyShipperId}        |
+      | shipperName            | ^{shipper-v4-name}.*                             |
+      | pickupAddress          | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} |
+      | routeId                | null                                             |
+      | driverName             | null                                             |
+      | priorityLevel          | {KEY_CREATED_RESERVATION.priorityLevel}          |
+      | readyBy                | not null                                         |
+      | latestBy               | not null                                         |
+      | reservationType        | REGULAR                                          |
+      | reservationStatus      | PENDING                                          |
+      | reservationCreatedTime | ^{gradle-current-date-yyyy-MM-dd}.*              |
+      | serviceTime            | null                                             |
+      | approxVolume           | {KEY_CREATED_RESERVATION.approxVolume}           |
+      | failureReason          | null                                             |
+      | comments               | {KEY_CREATED_RESERVATION.comments}               |
 
   Scenario: Operator Creates New Reservation by Duplicating Existing Reservation Details - Multiple Reservations (uid:aea00c1d-f550-4286-ba1a-5ed0f7369d2b)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -137,12 +153,19 @@ Feature: Shipper Pickups
     And API Operator create multiple V2 reservations based on number of created addresses using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
     And Operator duplicates created reservations
-    Then Operator verify the duplicated reservations are created successfully
+    When Operator refresh page
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-next-1-day-yyyy-MM-dd} |
+      | toDate      | {gradle-next-2-day-yyyy-MM-dd} |
+      | shipperName | {filter-shipper-name}          |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | shipperId              | shipperName          | pickupAddress                                                 | routeId | driverName | priorityLevel                                       | readyBy  | latestBy | reservationType | reservationStatus | reservationCreatedTime              | serviceTime | approxVolume                                       | failureReason | comments                                       |
+      | {shipper-v4-legacy-id} | ^{shipper-v4-name}.* | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].priorityLevel} | not null | not null | REGULAR         | PENDING           | ^{gradle-current-date-yyyy-MM-dd}.* | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | null          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].comments} |
+      | {shipper-v4-legacy-id} | ^{shipper-v4-name}.* | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[2].priorityLevel} | not null | not null | REGULAR         | PENDING           | ^{gradle-current-date-yyyy-MM-dd}.* | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[2].approxVolume} | null          | {KEY_LIST_OF_CREATED_RESERVATIONS[2].comments} |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
@@ -167,32 +190,23 @@ Feature: Shipper Pickups
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-    And Operator use the Route Suggestion to add created reservation to the route using data below:
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    And Operator use the Route Suggestion to add created reservations to the route using data below:
       | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v4-name}        |
-      | routeId     | GET_FROM_SUGGESTED_ROUTE |
-      | driverName  | GET_FROM_SUGGESTED_ROUTE |
+    And Operator refresh routes on Shipper Pickups page
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | routeId                | driverName          |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Multiple Reservations (uid:e1d9c28e-57d9-48c5-b43d-752165695637)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create multiple shipper addresses V2 using data below:
-      | numberOfAddresses | 2               |
-      | shipperId         | {shipper-v4-id} |
-      | generateAddress   | RANDOM          |
-    And API Operator create multiple V2 reservations based on number of created addresses using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateTo     | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route tag:
@@ -201,17 +215,23 @@ Feature: Shipper Pickups
     And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2                  |
+      | shipperId         | {shipper-v4-id}    |
+      | generateAddress   | ZONE {zone-name-3} |
+    And API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
     And Operator use the Route Suggestion to add created reservations to the route using data below:
       | routeTagName | {KEY_CREATED_ROUTE_TAG.name} |
-    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v4-name}        |
-      | routeId     | GET_FROM_SUGGESTED_ROUTE |
-      | driverName  | GET_FROM_SUGGESTED_ROUTE |
+    And Operator refresh routes on Shipper Pickups page
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | routeId                | driverName          |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Single Reservation (uid:cce1d21c-a238-4a46-b622-dcc8820f8ce1)
@@ -225,12 +245,15 @@ Feature: Shipper Pickups
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-    And Operator removes the route from the created reservation
-    Then Operator verify the route was removed from the created reservation
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    And Operator removes the route from the created reservations
+    And Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | routeId | driverName |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | null    | null       |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Multiple Reservations (uid:b4d16fb8-edb0-4dca-b31d-416e58232e45)
@@ -245,15 +268,21 @@ Feature: Shipper Pickups
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-ups to the route
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
     And Operator removes the route from the created reservations
-    Then Operator verify the route was removed from the created reservations
+    And Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | routeId | driverName |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | null    | null       |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | null    | null       |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Filters Reservation by Hub Name (<hiptest-uid>)
+  Scenario: Operator Filters Reservation by Hub Name (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id}    |
@@ -267,14 +296,10 @@ Feature: Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate | {gradle-current-date-yyyy-MM-dd} |
       | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
-      | hub      | <hubName>                        |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v4-name}      |
-      | routeId     | {KEY_CREATED_ROUTE_ID} |
-      | driverName  | {ninja-driver-name}    |
-    Examples:
-      | Note     | hiptest-uid                              | hubName      |
-      | Hub Name | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-name-3} |
+      | hub      | {hub-name-3}                     |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | routeId                | driverName          |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Reservation by Zone Name
@@ -284,18 +309,16 @@ Feature: Shipper Pickups
       | generateAddress | ZONE {zone-name-3} |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-3}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate | {gradle-current-date-yyyy-MM-dd} |
       | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
       | zone     | {zone-full-name-3}               |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v4-name}      |
-      | routeId     | {KEY_CREATED_ROUTE_ID} |
-      | driverName  | {ninja-driver-name}    |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | shipperName | {shipper-v4-name}                        |
+      | routeId     | {KEY_CREATED_ROUTE_ID}                   |
+      | driverName  | {ninja-driver-name}                      |
 
   Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -320,13 +343,15 @@ Feature: Shipper Pickups
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And Operator set the Priority Level of the created reservation to "2" from Apply Action
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | priorityLevel | 2 |
+    When Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id            | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | priorityLevel | 2                                        |
     And DB Operator verify reservation priority level
       | priorityLevel | 2 |
 
@@ -339,13 +364,18 @@ Feature: Shipper Pickups
     And API Operator create multiple V2 reservations based on number of created addresses using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
     And Operator set the Priority Level of the created reservations to "2" from Apply Action
-    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
-      | priorityLevel | 2 |
+    When Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | priorityLevel |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | 2             |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | 2             |
 
   Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations, Set to All Priority Level (uid:e994a33e-d5e8-4176-91b2-c7636f4ae1f6)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -528,12 +558,15 @@ Feature: Shipper Pickups
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And Operator removes reservation from route from Edit Route Details dialog
-    Then Operator verify the route was removed from the created reservation
+    And Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | routeId | driverName |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | null    | null       |
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
@@ -1023,20 +1056,18 @@ Feature: Shipper Pickups
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator refresh routes on Shipper Pickups page
     And Operator assign Reservation to Route on Shipper Pickups page
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
-      | routeId      | GET_FROM_CREATED_ROUTE       |
-      | driverName   | {ninja-driver-name}          |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | approxVolume | Less than 10 Parcels                     |
+      | routeId      | {KEY_CREATED_ROUTE_ID}                   |
+      | driverName   | {ninja-driver-name}                      |
+      | comments     | {KEY_CREATED_RESERVATION.comments}       |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Views POD Details of a Success Reservation (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
@@ -1228,11 +1259,8 @@ Feature: Shipper Pickups
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-      | status      | SUCCESS                          |
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
 
   @DeleteFilterTemplate
@@ -1429,7 +1457,7 @@ Feature: Shipper Pickups
     Then Operator verifies that error toast displayed:
       | top | We cannot process more than 30 reservations |
 
-  Scenario: Operator Search Single Reservation by Reservation Id on Shipper Pickup Page
+  Scenario: Operator Search Duplicate Reservation by Reservation Id on Shipper Pickup Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |

@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,6 +129,7 @@ public class ReservationInfo extends DataEntity<ReservationInfo> {
     return Date.from(getReadyByDateTime().toInstant());
   }
 
+  @JsonIgnore
   public ZonedDateTime getReadyByDateTime() {
     if (readyBy == null) {
       return null;
@@ -150,6 +152,7 @@ public class ReservationInfo extends DataEntity<ReservationInfo> {
     return Date.from(getLatestByDateTime().toInstant());
   }
 
+  @JsonIgnore
   public ZonedDateTime getLatestByDateTime() {
     if (latestBy == null) {
       return null;

@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
@@ -12,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.BulkRouteAssignmentSidePanel.ReservationCard;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableList;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -38,6 +38,7 @@ import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_ROUTE_EDIT;
+import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.COLUMN_PICKUP_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.COLUMN_RESERVATION_ID;
 
 /**
@@ -72,6 +73,12 @@ public class ShipperPickupsSteps extends AbstractSteps {
     );
   }
 
+  @When("^Operator search reservations on Shipper Pickups page:$")
+  public void searchReservationIds(List<String> ids) {
+    enterReservationIds(ids);
+    shipperPickupsPage.searchByReservationIds.clickAndWaitUntilDone(60);
+  }
+
   @When("Operator enters {int} reservation ids on Shipper Pickups page")
   public void enterReservationIds(int idsCount) {
     List<String> ids = new ArrayList<>();
@@ -98,7 +105,9 @@ public class ShipperPickupsSteps extends AbstractSteps {
       Map<String, String> mapOfData) throws ParseException {
     mapOfData = resolveKeyValues(mapOfData);
 
+    shipperPickupsPage.waitUntilPageLoaded();
     String value = mapOfData.get("fromDate");
+
     Date fromDate = StringUtils.isNotBlank(value) ? YYYY_MM_DD_SDF.parse(value) : new Date();
     value = mapOfData.get("toDate");
     Date toDate =
@@ -141,12 +150,13 @@ public class ShipperPickupsSteps extends AbstractSteps {
       shipperPickupsPage.filtersForm.masterShipperFilter.selectFilter(value);
     }
 
-    shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
+    shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone(120);
   }
 
   @When("^Operator refresh routes on Shipper Pickups page$")
   public void operatorRefreshRoutesOnShipperPickupPage() {
-    shipperPickupsPage.clickButtonRefresh();
+    shipperPickupsPage.refresh.click();
+    shipperPickupsPage.waitUntilPageLoaded();
   }
 
   @When("^Operator assign Reservation to Route on Shipper Pickups page$")
@@ -189,6 +199,11 @@ public class ShipperPickupsSteps extends AbstractSteps {
     verifyReservationDetails(data, false);
   }
 
+  @Then("^Operator verify reservation details on Shipper Pickups page:$")
+  public void verifyReservationDetails(Map<String, String> data) {
+    verifyReservationDetails(ImmutableList.of(data), false);
+  }
+
   @Then("^Operator verify exactly reservations details on Shipper Pickups page:$")
   public void verifyExactlyReservationDetails(List<Map<String, String>> data) {
     verifyReservationDetails(data, true);
@@ -196,22 +211,32 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
   public void verifyReservationDetails(List<Map<String, String>> data, boolean checkCount) {
     data = resolveListOfMaps(data);
-    List<ReservationInfo> actualRows = shipperPickupsPage.reservationsTable.readAllEntities();
+    shipperPickupsPage.reservationsTable.clearColumnFilter(COLUMN_RESERVATION_ID);
+    shipperPickupsPage.reservationsTable.clearColumnFilter(COLUMN_PICKUP_ADDRESS);
+    int count = shipperPickupsPage.reservationsTable.getRowsCount();
     if (checkCount) {
-      Assertions.assertThat(actualRows)
-          .as("List of reservations in table")
-          .hasSameSizeAs(data);
+      Assertions.assertThat(count)
+          .as("Number of reservation")
+          .isEqualTo(data.size());
     }
     data.forEach(row -> {
       ReservationInfo expected = new ReservationInfo(row);
-      actualRows.stream()
-          .filter(expected::matchedTo)
-          .findFirst()
-          .orElseThrow(() -> new AssertionError("Reservation was not found: " + expected
-              + "\nTable rows:\n" + actualRows.stream()
-              .map(DataEntity::toString)
-              .reduce((r, n) -> r + "\n" + n)
-              .orElse("")));
+      if (StringUtils.isNotBlank(expected.getId())) {
+        shipperPickupsPage.reservationsTable.filterByColumn(COLUMN_RESERVATION_ID,
+            expected.getId());
+        if (shipperPickupsPage.reservationsTable.isEmpty()) {
+          Assertions.fail("Reservation ID " + expected.getId() + " was not found");
+        }
+      } else if (StringUtils.isNotBlank(expected.getPickupAddress())) {
+        shipperPickupsPage.reservationsTable.filterByColumn(COLUMN_PICKUP_ADDRESS,
+            expected.getPickupAddress());
+        if (shipperPickupsPage.reservationsTable.isEmpty()) {
+          Assertions.fail(
+              "Reservation with Pickup Address " + expected.getPickupAddress() + " was not found");
+        }
+      }
+      ReservationInfo actual = shipperPickupsPage.reservationsTable.readEntity(1);
+      expected.compareWithActual(actual);
     });
   }
 
@@ -438,7 +463,6 @@ public class ShipperPickupsSteps extends AbstractSteps {
         .validateSuggestedRoutes(zzzRoutes);
     put(KEY_SUGGESTED_ROUTE, suggestedRoute);
     shipperPickupsPage.bulkRouteAssignmentDialog().submitForm();
-    shipperPickupsPage.clickButtonRefresh();
   }
 
   @And("^Operator removes the route from the created reservation$")
@@ -1032,6 +1056,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @When("^Operator verifies selected filters on Shipper Pickups page:$")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
+    shipperPickupsPage.waitUntilPageLoaded();
 
     SoftAssertions assertions = new SoftAssertions();
 
