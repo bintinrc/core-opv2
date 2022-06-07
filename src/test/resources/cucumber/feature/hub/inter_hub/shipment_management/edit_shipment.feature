@@ -63,9 +63,10 @@ Feature: Shipment Management - Edit Shipment
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
-      | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     Then Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[1]}" on Shipment Management page:
       | startHub | {hub-name} |
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     And Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}" on Shipment Management page:
       | startHub | {hub-name-3} |
 
