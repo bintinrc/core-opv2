@@ -1,9 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common_selenium.page.SimplePage;
-import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -27,13 +24,15 @@ import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -46,7 +45,8 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
 
 /**
  * @author Lanang Jati
@@ -1018,6 +1018,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String MD_VIRTUAL_REPEAT = "shipment in getTableData()";
     public static final String COLUMN_SHIPMENT_TYPE = "shipmentType";
     public static final String COLUMN_SHIPMENT_ID = "id";
+    public static final String COLUMN_USER_ID = "userId";
+    public static final String COLUMN_ENTRY_SOURCE = "entrySource";
     public static final String COLUMN_CREATION_DATE_TIME = "createdAt";
     public static final String COLUMN_TRANSIT_DATE_TIME = "transitAt";
     public static final String COLUMN_STATUS = "status";
@@ -1041,6 +1043,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_SHIPMENT_TYPE, "shipment_type")
           .put(COLUMN_SHIPMENT_ID, "id")
+          .put(COLUMN_USER_ID, "user_id")
+          .put(COLUMN_ENTRY_SOURCE, "shipment_entry_source")
           .put(COLUMN_CREATION_DATE_TIME, "created_at")
           .put(COLUMN_TRANSIT_DATE_TIME, "transit_at")
           .put(COLUMN_STATUS, "status")

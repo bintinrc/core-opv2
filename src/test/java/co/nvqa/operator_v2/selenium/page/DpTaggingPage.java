@@ -116,7 +116,7 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
   public void checkAndAssignAll(boolean isMultipleOrders) {
     dpTaggingTable.selectAllShown();
-    assignAll.click();
+    assignAll.clickAndWaitUntilDone();
 
     if (isMultipleOrders) {
       waitUntilInvisibilityOfToast("DP tagging performed successfully");

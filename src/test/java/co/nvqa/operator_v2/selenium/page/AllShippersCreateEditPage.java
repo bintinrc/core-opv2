@@ -184,7 +184,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(60);
+    shipperInformation.waitUntilClickable(120);
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {

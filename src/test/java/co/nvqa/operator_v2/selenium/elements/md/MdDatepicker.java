@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.SearchContext;
@@ -57,12 +58,17 @@ public class MdDatepicker extends PageElement {
   }
 
   public void setValue(String value) {
+    if (StringUtils.isBlank(value)) {
+      throw new IllegalArgumentException("Incorrect input value [" + value + "]");
+    }
     calendarButton.click();
     String dayXpath = f("//td[@aria-label='%s']", value);
-    while (!isElementExistFast(dayXpath)) {
+    int count = 0;
+    while (!isElementExistFast(dayXpath) && count < 10) {
       List<WebElement> webElements = findElementsBy(
           By.xpath("//tbody[@class='md-calendar-month']"));
       scrollIntoView(webElements.get(webElements.size() - 1), true);
+      count++;
     }
     scrollIntoView(dayXpath, true);
     pause200ms();

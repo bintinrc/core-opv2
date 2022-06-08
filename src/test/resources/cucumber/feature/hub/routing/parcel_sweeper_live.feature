@@ -14,7 +14,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
@@ -45,7 +45,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
@@ -75,7 +75,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
@@ -110,7 +110,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
@@ -145,7 +145,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
@@ -192,7 +192,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
@@ -238,7 +238,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page
@@ -268,7 +268,7 @@ Feature: Parcel Sweeper Live
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page

@@ -16,7 +16,6 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.util.Date;
@@ -34,11 +33,8 @@ import org.openqa.selenium.support.FindBy;
 @SuppressWarnings("WeakerAccess")
 public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
-  @FindBy(name = "Create Route")
-  public NvIconTextButton createRoute;
-
   @FindBy(css = "[data-testid='create-route-button']")
-  public Button createRouteReact;
+  public Button createRoute;
 
   @FindBy(xpath = "//button[.='Clear All Filters']")
   public Button clearAllFilters;
@@ -91,8 +87,8 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(xpath = "//div[./label[@for='routeDate']]/div")
   public AntRangePicker routeDateFilter;
 
-  @FindBy(xpath = "//div[./div/label[@for='hub']]/div[2]")
-  public AntSelect3 hubFilter;
+  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Hub')]]")
+  public AntFilterSelect3 hubFilter;
 
   @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Driver')]]")
   public AntFilterSelect3 driverFilter;
@@ -198,16 +194,18 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     waitUntilLoaded();
     routeDateFilter.setInterval(routeDateFrom, routeDateTo);
     if (StringUtils.isNotBlank(hubName)) {
-      hubFilter.clearValue();
-      hubFilter.selectValue(hubName);
+      hubFilter.selectFilter(hubName);
     }
     loadSelection.clickAndWaitUntilDone();
   }
 
   @Override
   public void waitUntilLoaded() {
-    super.waitUntilLoaded(10);
-    clearAllFilters.waitUntilClickable();
+    if (createRoute.isDisplayedFast()) {
+      super.waitUntilLoaded(1);
+    } else {
+      super.waitUntilLoaded(10);
+    }
   }
 
   public static class EditRoutesDialog extends AntModal {
@@ -244,7 +242,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
           .put("hub", "hub_name")
           .put("zone", "zone_name")
           .put("driverTypeName", "driver_type")
-          .put("comments", "comments")
+          .put("comments", "route_comments")
           .put(COLUMN_TAGS, "tagNames")
           .build()
       );

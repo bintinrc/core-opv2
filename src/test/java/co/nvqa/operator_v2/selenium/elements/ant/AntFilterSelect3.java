@@ -32,12 +32,10 @@ public class AntFilterSelect3 extends AntAbstractFilterBox {
 
   public void selectFilter(String value) {
     selector.selectValue(value);
-    closeMenu();
   }
 
   public void selectFilter(Iterable<String> values) {
     selector.selectValues(values);
-    closeMenu();
   }
 
   public void closeMenu() {

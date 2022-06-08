@@ -12,6 +12,9 @@ Feature: Tag Management
     And Operator create new route tag on Tag Management page:
       | name        | AAA                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
+    Then Operator verifies that success react notification displayed:
+      | top | Tag created |
+    When Operator refresh page
     Then Operator verifies tag on Tag Management page:
       | name        | {KEY_CREATED_ROUTE_TAG.name}        |
       | description | {KEY_CREATED_ROUTE_TAG.description} |
