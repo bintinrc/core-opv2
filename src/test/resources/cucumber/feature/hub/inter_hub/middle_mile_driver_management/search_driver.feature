@@ -290,6 +290,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -308,6 +309,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -326,6 +328,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -344,6 +347,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -362,6 +366,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -380,6 +385,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -398,6 +404,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
@@ -416,6 +423,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
