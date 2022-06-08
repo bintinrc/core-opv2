@@ -23,6 +23,7 @@ Feature: Distribution Point - Update Dp TH
       | Dp Only Testing | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpOnTestManagement | onTesting21Management | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | RETAIL_POINT_NETWORK | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   | false                      |
     Then API Operator request to update DP
     Then API Operator request to update DP Management
+    Then Operator need to check that the update is "Success"
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is FRANCHISEE and allow_post_order_enhancements is true - Success Update - TH
@@ -46,6 +47,7 @@ Feature: Distribution Point - Update Dp TH
       | Dp Only Testing | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpOnTestManagement | onTesting21Management | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   | true                       |
     Then API Operator request to update DP
     Then API Operator request to update DP Management
+    Then Operator need to check that the update is "Success"
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is FRANCHISEE and allow_post_order_enhancements is false - Success Update - TH
@@ -69,6 +71,7 @@ Feature: Distribution Point - Update Dp TH
       | Dp Only Testing | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpOnTestManagement | onTesting21Management | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   | false                      |
     Then API Operator request to update DP
     Then API Operator request to update DP Management
+    Then Operator need to check that the update is "Success"
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is RETAIL_POINT_NETWORK and allow_post_order_enhancements is true - failed Update - TH
@@ -92,3 +95,4 @@ Feature: Distribution Point - Update Dp TH
       | Dp Only Testing | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpOnTestManagement | onTesting21Management | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | RETAIL_POINT_NETWORK | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   | true                       |
     Then API Operator request to update DP
     Then API Operator request to update DP Management
+    Then Operator need to check that the update is "Failed"
