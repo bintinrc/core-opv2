@@ -64,7 +64,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 23.72                            |
       | balance         | 4.15                             |
 
@@ -127,7 +127,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 0.00                             |
       | balance         | 4.15                             |
 
@@ -223,7 +223,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 0.00                             |
       | balance         | 4.15                             |
 
@@ -320,7 +320,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 23.72                            |
       | balance         | 4.15                             |
     Then Operator verifies extended financial batch report data in CSV is as below
@@ -338,10 +338,10 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.49                                          |
-      | totalWithTax     | 9.15                                          |
+      | totalTax         | 0.59                                          |
+      | totalWithTax     | 9.14                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
@@ -376,7 +376,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 0.00                             |
       | balance         | 4.15                             |
     Then Operator verifies extended financial batch report data in CSV is as below
@@ -394,10 +394,10 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.49                                          |
-      | totalWithTax     | 9.15                                          |
+      | totalTax         | 0.59                                          |
+      | totalWithTax     | 9.14                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
@@ -432,7 +432,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 0.00                             |
       | balance         | 4.15                             |
     Then Operator verifies extended financial batch report data in CSV is as below
@@ -450,10 +450,10 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.49                                          |
-      | totalWithTax     | 9.15                                          |
+      | totalTax         | 0.59                                          |
+      | totalWithTax     | 9.14                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
@@ -488,7 +488,7 @@ Feature: Financial Batch Report
       | shipperName     | {KEY_CREATED_SHIPPER.name}       |
       | date            | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD        | 5.00                             |
-      | totalFees       | 9.15                             |
+      | totalFees       | 9.14                             |
       | totalAdjustment | 0.00                             |
       | balance         | 4.15                             |
     Then Operator verifies extended financial batch report data in CSV is as below
@@ -506,8 +506,8 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.0                                           |
-      | deliveryFee      | 7.0                                           |
+      | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.49                                          |
-      | totalWithTax     | 9.15                                          |
+      | totalTax         | 0.59                                          |
+      | totalWithTax     | 9.14                                          |
       | type             | Completed                                     |
