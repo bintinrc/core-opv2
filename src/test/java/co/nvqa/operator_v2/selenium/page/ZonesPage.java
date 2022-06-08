@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
@@ -20,7 +21,10 @@ import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME
  */
 public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
-  private static final String CSV_FILENAME = "zones.csv";
+  public static final String CSV_FILENAME = "zones.csv";
+
+  @FindBy(css = ".loading-container")
+  public PageElement loading;
 
   @FindBy(css = "[data-testid='add-zone-button']")
   public Button addZone;
@@ -48,25 +52,6 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
   public ZonesPage(WebDriver webDriver) {
     super(webDriver);
     zonesTable = new ZonesTable(webDriver);
-  }
-
-  public void waitUntilPageLoaded() {
-    super.waitUntilPageLoaded();
-    halfCircleSpinner.waitUntilInvisible();
-  }
-
-  public void verifyCsvFileDownloadedSuccessfully(Zone zone) {
-    String name = zone.getName();
-    String shortName = zone.getShortName();
-    String hubName = zone.getHubName();
-    String expectedText = String.format("%s,%s,%s", shortName, name, hubName);
-    verifyFileDownloadedSuccessfully(CSV_FILENAME, expectedText);
-  }
-
-  public void clickRefreshCache() {
-    refresh.click();
-    waitUntilVisibilityOfNotification("Zone Cache Refreshed");
-    pause2s();
   }
 
   private static class ZoneParamsDialog extends AntModal {
@@ -97,14 +82,27 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
     public AntSwitch rts;
   }
 
-  public void findZone(Zone zone) {
-    zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
-    if (zonesTable.isEmpty()) {
-      pause2s();
-      clickRefreshCache();
-      refreshPage();
-      switchTo();
-      zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
+  @Override
+  public void waitUntilLoaded() {
+    int timeout = addZone.isDisplayedFast() ? 2 : 10;
+    if (loading.waitUntilVisible(timeout)) {
+      loading.waitUntilInvisible();
+    }
+  }
+
+  public void refreshCash() {
+    refresh.click();
+    waitUntilLoaded();
+  }
+
+  public void findZone(String zoneName) {
+    zonesTable.filterByColumn(COLUMN_NAME, zoneName);
+    int count = 0;
+    while (zonesTable.isEmpty() && count < 10) {
+      pause5s();
+      refreshCash();
+      zonesTable.filterByColumn(COLUMN_NAME, zoneName);
+      count++;
     }
   }
 

@@ -6,7 +6,6 @@ Feature: Edit Order Details
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -91,7 +90,7 @@ Feature: Edit Order Details
       | description | ^To Name changed.*to test sender name.*To Email changed.*to test@mail\.com.*To Contact changed.*\+9727894434.*.*Is Rts changed.* |
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE SLA                                                                                                                        |
-      | description | Delivery End Time changed from {gradle-next-3-working-day-yyyy-MM-dd} 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
+      | description | ^Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE AV |
     And Operator verifies Delivery Details are updated on Edit Order Page

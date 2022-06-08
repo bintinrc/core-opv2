@@ -140,7 +140,7 @@ public class RouteManifestSteps extends AbstractSteps {
     routeId = resolveValue(routeId);
     routeManifestPage.openPage(Long.parseLong(StringUtils.trim(routeId)));
     if (routeManifestPage.loadMoreData.waitUntilVisible(2)) {
-      routeManifestPage.loadMoreData.waitUntilInvisible();
+      routeManifestPage.loadMoreData.waitUntilInvisible(60);
     }
   }
 

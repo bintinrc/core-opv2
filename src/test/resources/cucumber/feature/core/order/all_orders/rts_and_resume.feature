@@ -49,7 +49,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd}         |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:
@@ -73,7 +73,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd}         |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:
@@ -175,7 +175,7 @@ Feature: All Orders - RTS & Resume
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Invalid status to change |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Invalid status to change |
     When Operator clicks Continue button in Selection Error dialog on All Orders page
-    Then Operator verifies that error react notification displayed:
+    Then Operator verifies that error toast displayed:
       | top    | Unable to apply actions |
       | bottom | No valid selection      |
     Then API Operator verifies order state:

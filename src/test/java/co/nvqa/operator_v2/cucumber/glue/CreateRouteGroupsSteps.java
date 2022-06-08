@@ -307,7 +307,6 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
     createRouteGroupsPage.inFrame(page -> {
       createRouteGroupsPage.transactionsFiltersForm.includeTransactions.check();
-
       String value = finalData.get("granularOrderStatus");
       if (StringUtils.isNotBlank(value)) {
         if (!createRouteGroupsPage.transactionsFiltersForm.granularOrderStatusFilter.isDisplayedFast()) {
@@ -449,9 +448,12 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (!createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.isDisplayedFast()) {
           createRouteGroupsPage.reservationFiltersForm.addFilter.selectValue("Pick Up Size");
         }
-        createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.clearAll();
-        createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.selectFilter(
-            splitAndNormalize(value));
+        String finalValue = value;
+        retryIfRuntimeExceptionOccurred(() -> {
+          createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.clearAll();
+          createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.selectFilter(
+              splitAndNormalize(finalValue));
+        }, 5);
       }
 
       value = finalData.get("reservationType");
@@ -816,7 +818,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           page.generalFiltersForm.addFilter.selectValue("Route Grouping");
         }
         page.generalFiltersForm.routeGroupingFilter.clearAll();
-        page.generalFiltersForm.routeGroupingFilter.selectFilter(value);
+        String finalValue = value;
+        retryIfRuntimeExceptionOccurred(() ->
+            page.generalFiltersForm.routeGroupingFilter.selectFilter(finalValue), 5);
       } else if (page.generalFiltersForm.routeGroupingFilter.isDisplayedFast()) {
         page.generalFiltersForm.routeGroupingFilter.removeFilter();
       }
@@ -917,7 +921,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         if (!page.generalFiltersForm.masterShipperFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Master Shipper");
-          page.waitUntilLoaded(2);
+          page.waitUntilLoaded(2, 60);
         }
         page.generalFiltersForm.masterShipperFilter.clearAll();
         page.generalFiltersForm.masterShipperFilter.selectFilter(value);
@@ -1481,7 +1485,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void operatorClickLoadSelectionOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> {
       page.loadSelection.click();
-      page.waitUntilLoaded();
+      page.waitUntilLoaded(5, 60);
     });
   }
 

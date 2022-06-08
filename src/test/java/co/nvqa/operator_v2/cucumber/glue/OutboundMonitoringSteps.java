@@ -43,6 +43,9 @@ public class OutboundMonitoringSteps extends AbstractSteps {
   @When("^Operator click on 'Load Selection' Button on Outbound Monitoring Page$")
   public void clickLoadSelection() {
     outboundMonitoringPage.loadSelection.clickAndWaitUntilDone();
+    if (outboundMonitoringPage.loadSelection.isDisplayedFast()) {
+      outboundMonitoringPage.loadSelection.clickAndWaitUntilDone();
+    }
   }
 
   @When("Operator verifies Date is {string} on Outbound Monitoring Page")
@@ -74,7 +77,8 @@ public class OutboundMonitoringSteps extends AbstractSteps {
         .as("Routes table is empty")
         .isFalse();
     outboundMonitoringPage.routesTable.clickActionButton(1, ACTION_EDIT);
-    outboundMonitoringPage.switchToOutboundBreakrouteWindow(Long.parseLong(routeId));
+    retryIfRuntimeExceptionOccurred(
+        () -> outboundMonitoringPage.switchToOutboundBreakrouteWindow(Long.parseLong(routeId)), 5);
   }
 
   @Then("Operator clicks Pull Out button for routes on Outbound Monitoring Page:")
@@ -253,7 +257,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     if (data.containsKey("hubName")) {
       outboundMonitoringPage.hubsSelect.selectFilter(splitAndNormalize(data.get("hubName")));
     }
-    outboundMonitoringPage.loadSelection.clickAndWaitUntilDone();
+    clickLoadSelection();
   }
 
   @When("Operator pull out order {value} from route on Outbound Breakroute page")

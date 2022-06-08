@@ -3,10 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.SalesPerson;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SalesPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +109,7 @@ public class SalesSteps extends AbstractSteps {
   public void operatorVerifiesAllFiltersOnSalesPageWorksFine() {
     List<SalesPerson> salesPersons = get(KEY_LIST_OF_SALES_PERSON);
     salesPersons.forEach(expected -> {
+      salesPage.waitWhilePageIsLoading();
       salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, expected.getCode());
       SalesPerson actual = salesPage.salesPersonsTable.readEntity(1);
       expected.compareWithActual(actual, "id");
@@ -133,6 +134,7 @@ public class SalesSteps extends AbstractSteps {
         .filter(person -> StringUtils.equalsIgnoreCase(oldCode, person.getCode()))
         .findFirst()
         .ifPresent(person -> person.merge(newSalesPerson));
+    salesPage.waitWhilePageIsLoading();
     salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, oldCode);
     salesPage.salesPersonsTable.clickActionButton(1, ACTION_EDIT);
     salesPage.editSalesPersonDialog.waitUntilVisible();

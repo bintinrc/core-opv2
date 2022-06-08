@@ -4,8 +4,9 @@ import co.nvqa.operator_v2.model.PendingPriorityOrder;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page;
-import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.When;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
@@ -51,15 +52,11 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
     RouteMonitoringFilters filters = new RouteMonitoringFilters(data);
     if (ArrayUtils.isNotEmpty(filters.getHubs())) {
       routeMonitoringV2Page.hubsFilter.clearAll();
-      for (String hub : filters.getHubs()) {
-        routeMonitoringV2Page.hubsFilter.selectFilter(hub);
-      }
+      routeMonitoringV2Page.hubsFilter.selectFilter(Arrays.asList(filters.getHubs()));
     }
     if (ArrayUtils.isNotEmpty(filters.getZones())) {
       routeMonitoringV2Page.zonesFilter.clearAll();
-      for (String zone : filters.getZones()) {
-        routeMonitoringV2Page.zonesFilter.selectFilter(zone);
-      }
+      routeMonitoringV2Page.zonesFilter.selectFilter(Arrays.asList(filters.getZones()));
     }
     routeMonitoringV2Page.loadSelection.click();
     pause1s();

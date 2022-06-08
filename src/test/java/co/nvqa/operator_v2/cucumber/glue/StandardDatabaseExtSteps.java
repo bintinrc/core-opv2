@@ -858,6 +858,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     put(KEY_DB_FOUND_DRIVERS, drivers);
   }
 
+  @Given("DB Operator find drivers with ended employment")
+  public void findDriversWithEndedEmployment() {
+    List<Driver> drivers = getDriverJdbc().findDriversWithEndedEmployment();
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
   @Given("DB Operator find drivers by {string} driver type name")
   public void findDriversByDriverTypeName(String driverTypeName) {
     List<Driver> drivers = getDriverJdbc()
@@ -1911,7 +1917,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyTheNewCodSoftDeleted() {
     CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
-        Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
+        Matchers.startsWith(DateUtil.getUTCTodayDate()));
   }
 
   @Then("DB Operator verify loyalty point for completed order is {string}")

@@ -40,7 +40,9 @@ Feature: Cash Collection
     And Operator change the COP value to "100"
     And Operator refresh page
     Then Operator verify COP value is updated to "100"
-    And Operator verify "UPDATE CASH" order event description on Edit order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE CASH                            |
+      | description | Cash On Pickup changed from 23.57 to 1 |
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
@@ -53,7 +55,9 @@ Feature: Cash Collection
     And Operator change the COD value to "100"
     And Operator refresh page
     Then Operator verify COD value is updated to "100"
-    And Operator verify "UPDATE CASH" order event description on Edit order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE CASH                              |
+      | description | Cash On Delivery changed from 23.57 to 1 |
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
@@ -65,7 +69,9 @@ Feature: Cash Collection
     And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
     And Operator change Cash on Pickup toggle to no
     And Operator refresh page
-    Then Operator verify "UPDATE CASH" order event description on Edit order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE CASH                            |
+      | description | Cash On Pickup changed from 23.57 to 0 |
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
@@ -77,7 +83,9 @@ Feature: Cash Collection
     And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
     And Operator change Cash on Delivery toggle to no
     And Operator refresh page
-    Then Operator verify "UPDATE CASH" order event description on Edit order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE CASH                              |
+      | description | Cash On Delivery changed from 23.57 to 0 |
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
