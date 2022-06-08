@@ -49,7 +49,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd}         |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:
@@ -73,7 +73,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd}         |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:

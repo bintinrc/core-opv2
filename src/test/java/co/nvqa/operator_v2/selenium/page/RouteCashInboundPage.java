@@ -75,6 +75,7 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
 
   public void verifyCodIsDeletedSuccessfully(RouteCashInboundCod routeCashInboundCod) {
     fetchCod.click();
+    waitUntilLoaded(2);
 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
