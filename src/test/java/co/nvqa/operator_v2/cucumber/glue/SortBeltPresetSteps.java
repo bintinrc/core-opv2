@@ -21,9 +21,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 
 @ScenarioScoped
 public class SortBeltPresetSteps extends AbstractSteps {
+
   SortBeltPresetPage sortBeltPresetPage;
   CreatePresetSortBeltPresetPage createPresetSortBeltPresetPage;
 
@@ -39,11 +41,11 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @Then("Operator search sort belt preset by")
-  public void operatorSearchSortBeltPresetBy(Map<String,String> dataTable) {
+  public void operatorSearchSortBeltPresetBy(Map<String, String> dataTable) {
     String value = resolveValue(dataTable.get("value"));
     String column = dataTable.get("column");
     if (column.equalsIgnoreCase("description")) {
-      value = "Description for: "+value;
+      value = "Description for: " + value;
     }
     sortBeltPresetPage.searchInput.forceClear();
     sortBeltPresetPage.searchInput.sendKeys(value);
@@ -97,7 +99,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @When("Operator fill name and description into Create Preset UI")
-  public void operatorFillNameAndDescriptionIntoCreatePresetUI(Map<String,String> dataTable) {
+  public void operatorFillNameAndDescriptionIntoCreatePresetUI(Map<String, String> dataTable) {
     String name = dataTable.get("name");
     String desc = dataTable.get("description");
     if (name.equalsIgnoreCase("random") && desc.equalsIgnoreCase("random")) {
@@ -121,10 +123,10 @@ public class SortBeltPresetSteps extends AbstractSteps {
   public void operatorRemoveCriteriaToCreatePresetUI() {
     // removing the last criteria
     int currentSize = createPresetSortBeltPresetPage.cards.size();
-    createPresetSortBeltPresetPage.cards.get(currentSize-1).clearBtn.click();
+    createPresetSortBeltPresetPage.cards.get(currentSize - 1).clearBtn.click();
     Assertions.assertThat(createPresetSortBeltPresetPage.cards.size())
         .as("1 criteria is removed")
-        .isEqualTo(currentSize-1);
+        .isEqualTo(currentSize - 1);
   }
 
   @And("Operator click Proceed in the Create Preset UI")
@@ -139,11 +141,11 @@ public class SortBeltPresetSteps extends AbstractSteps {
     String message = dataTable.get("message");
 
     Assertions.assertThat(createPresetSortBeltPresetPage.notification.message.getText())
-        .as("show correct header message :" + header )
+        .as("show correct header message :" + header)
         .isEqualTo(header);
 
     Assertions.assertThat(createPresetSortBeltPresetPage.notification.description.getText())
-        .as("show correct message :"+ message)
+        .as("show correct message :" + message)
         .isEqualTo(message);
   }
 
@@ -154,7 +156,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator fill the criteria with following data")
-  public void operatorFillTheCriteriaWithFollowingData(Map<String,String> dataTable) {
+  public void operatorFillTheCriteriaWithFollowingData(Map<String, String> dataTable) {
     String description = resolveValue(dataTable.get("description"));
     String fieldsString = resolveValue(dataTable.get("fields"));
     String valuesString = resolveValue(dataTable.get("values"));
@@ -166,13 +168,21 @@ public class SortBeltPresetSteps extends AbstractSteps {
       throw new NvTestRuntimeException("Number of fields != number of values");
     }
 
-    CriteriaCard criteriaElement = createPresetSortBeltPresetPage.cards.get(createPresetSortBeltPresetPage.cards.size()-1);
+    CriteriaCard criteriaElement = createPresetSortBeltPresetPage.cards.get(
+        createPresetSortBeltPresetPage.cards.size() - 1);
     criteriaElement.description.sendKeys(description);
     for (int i = 0; i < fields.size(); i++) {
       criteriaElement.addFilterMenu.selectOption(fields.get(i));
-      AntSelect select = criteriaElement.selectInputs.get(criteriaElement.selectInputs.size()-1);
-      select.enterSearchTerm(values.get(i));
-      select.sendReturnButton();
+      AntSelect select = new AntSelect(getWebDriver(),
+          criteriaElement.findElement(By.xpath(f(CriteriaCard.SELECTOR_XPATH, fields.get(i)))));
+      List<String> vals = Arrays.asList(values.get(i).split("\\."));
+      vals.forEach(v -> {
+        select.enterSearchTerm(v);
+        select.sendReturnButton();
+      });
+
+      createPresetSortBeltPresetPage.title.click();
+      pause300ms();
     }
   }
 
@@ -182,7 +192,6 @@ public class SortBeltPresetSteps extends AbstractSteps {
 
     SortBeltPreset sb = get(KEY_CREATED_SORT_BELT_PRESET);
 
-
     Assertions.assertThat(sortBeltPresetDetailPage.cancelBtn.isDisplayed())
         .as("Cancel button is displayed")
         .isTrue();
@@ -191,12 +200,12 @@ public class SortBeltPresetSteps extends AbstractSteps {
         .as("Edit button is displayed")
         .isTrue();
 
-
     Assertions.assertThat(sortBeltPresetDetailPage.presetTitle.getText().contains(sb.getName()))
-        .as("Preset title contains the correct string: "+ sb.getName())
+        .as("Preset title contains the correct string: " + sb.getName())
         .isTrue();
 
-    Assertions.assertThat(sortBeltPresetDetailPage.description.getText().contains(sb.getDescription()))
+    Assertions.assertThat(
+            sortBeltPresetDetailPage.description.getText().contains(sb.getDescription()))
         .as("Preset description contain the correct string: " + sb.getDescription());
     // outer loop, read all the rule
     Rule rule = null;
@@ -215,17 +224,17 @@ public class SortBeltPresetSteps extends AbstractSteps {
       //check the field
       String ruleFieldName = row.getFilterType();
       switch (ruleFieldName) {
-        case "Order Tag" :
+        case "Order Tag":
           String tagsString = String.join(",", f.getTags());
           Assertions.assertThat(row.getFilterValue())
               .as("Order tags show correct values :")
               .isEqualTo(tagsString);
           break;
-        case "DP IDs" :
-        case "Zones" :
+        case "DP IDs":
+        case "Zones":
         case "Destination Hub":
-        case "Master Shipper" :
-        case "Shipper" :
+        case "Master Shipper":
+        case "Shipper":
           //unsupported due to shipper id fetching and dp fetching
           break;
         case "Granular Status":
@@ -234,8 +243,8 @@ public class SortBeltPresetSteps extends AbstractSteps {
               .as("granular status show correct values :")
               .isEqualTo(statuses);
           break;
-        case "RTS" :
-          String yesNoRTS = f.getRts()? "Yes" : "No";
+        case "RTS":
+          String yesNoRTS = f.getRts() ? "Yes" : "No";
           Assertions.assertThat(row.getFilterValue())
               .as("RTS show correct value")
               .isEqualTo(yesNoRTS);
@@ -246,7 +255,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
               .as("Service levels show correct values")
               .isEqualTo(serviceLevels);
           break;
-        case "Transaction End Day" :
+        case "Transaction End Day":
           Assertions.assertThat(row.getFilterValue().contains(String.valueOf(f.getTxnEndInDays())))
               .as("Transaction end days show correct value")
               .isTrue();
@@ -269,7 +278,8 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator verify preset has error on Check Sort Belt Preset detail page")
-  public void operatorVerifyPresetHasErrorOnCheckSortBeltPresetDetailPage(Map<String, String> dataTable) {
+  public void operatorVerifyPresetHasErrorOnCheckSortBeltPresetDetailPage(
+      Map<String, String> dataTable) {
 
     String duplicateFilter = dataTable.get("fields");
     checkSortBeltPresetPage.waitUntilLoaded();

@@ -1,4 +1,4 @@
-@Sort @SortBeltPreset @CWF
+@Sort @SortBeltPreset
 Feature: Sort Belt Preset
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -114,13 +114,13 @@ Feature: Sort Belt Preset
       | description   | RANDOM  |
     And Operator fill the criteria with following data
       | description   | criteria 1       |
-      | fields        | Order Tag,RTS   |
-      | values        | ABC,Yes         |
+      | fields        | Order Tag        |
+      | values        | ABS.ABC          |
     And Operator add new criteria to Create Preset UI
     And Operator fill the criteria with following data
-      | description   | criteria 2                |
-      | fields        | Service Level,Order Tag   |
-      | values        | STANDARD,ABC              |
+      | description   | criteria 2        |
+      | fields        | Order Tag         |
+      | values        | ABC.ABS           |
     And Operator click Proceed in the Create Preset UI
     And Operator verify preset has error on Check Sort Belt Preset detail page
       | fields        | Tags        |

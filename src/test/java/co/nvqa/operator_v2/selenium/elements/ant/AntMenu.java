@@ -17,7 +17,7 @@ public class AntMenu extends PageElement {
     super(webDriver, searchContext, webElement);
   }
 
-  private static final String MD_MENU_ITEM_LOCATOR = "//div[contains(@class, 'ant-dropdown') and not(contains(@class, 'ant-dropdown-hidden'))]//li[@role='menuitem'][text()='Order Tag']";
+  private static final String MD_MENU_ITEM_LOCATOR = "//div[contains(@class, 'ant-dropdown') and not(contains(@class, 'ant-dropdown-hidden'))]//li[@role='menuitem'][text()='%s']";
 
 
   public void selectOption(String option) {
