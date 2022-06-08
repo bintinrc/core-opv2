@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @FinancialBatch @GetReportInLedger
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @GetReportInLedger
 
 Feature: Get Report in Ledger
 
