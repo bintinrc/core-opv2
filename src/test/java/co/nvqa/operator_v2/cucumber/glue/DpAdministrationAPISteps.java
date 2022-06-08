@@ -119,6 +119,35 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     put(KEY_CREATE_DP_REQUEST, dpDetail);
   }
 
+  @Then("Operator Update Dp To Redirect for DP")
+  public void operatorUpdateDpsToRedirectForDp(Map<String, String> dpToRedirectValues) {
+    dpToRedirectValues = resolveKeyValues(dpToRedirectValues);
+    String dpToRedirect = dpToRedirectValues.get("dpsToRedirect");
+    DpDetailsResponse dpDetail = get(KEY_CREATE_DP_REQUEST);
+
+    String[] dpRedirectList = dpToRedirect.split(",");
+    List<Long> dpsToRedirect = new ArrayList<>();
+    for (int i = 0; i < dpRedirectList.length; i++) {
+      dpsToRedirect.add(Long.parseLong(dpRedirectList[i]));
+    }
+    dpDetail.setDpsToRedirect(dpsToRedirect);
+    put(KEY_CREATE_DP_REQUEST, dpDetail);
+  }
+
+  @Then("Operator Update Dp To Redirect for DP Management")
+  public void operatorUpdateDpsToRedirectForDpManagement(Map<String, String> dpToRedirectValues) {
+    dpToRedirectValues = resolveKeyValues(dpToRedirectValues);
+    String dpToRedirect = dpToRedirectValues.get("dpsToRedirect");
+    DpDetailsResponse dpDetail = get(KEY_CREATE_DP_MANAGEMENT_REQUEST);
+
+    String[] dpRedirectList = dpToRedirect.split(",");
+    List<Long> dpsToRedirect = new ArrayList<>();
+    for (int i = 0; i < dpRedirectList.length; i++) {
+      dpsToRedirect.add(Long.parseLong(dpRedirectList[i]));
+    }
+    dpDetail.setDpsToRedirect(dpsToRedirect);
+    put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
+  }
 
   @When("Operator fill Detail for create DP Management:")
   public void ninjaPointVUserFillDetailForCreateDpManagement(DataTable dt) {

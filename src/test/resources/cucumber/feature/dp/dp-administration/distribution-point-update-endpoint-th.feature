@@ -1,5 +1,5 @@
-@OperatorV2Th @DpAdministrationEndpoint
-Feature: DP Administration - Distribution Point Partners
+@OperatorV2Th @DistributionPointUpdateEndpoint
+Feature: Distribution Point - Update Dp TH
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update Existing DP - authorized scope - dp_service_type is RETAIL_POINT_NETWORK and allow_post_order_enhancements is false - Success Update - TH
