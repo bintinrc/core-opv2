@@ -13,16 +13,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 public class LoyaltyCreationPage extends OperatorV2SimplePage {
 
-  private static final String RESULT_TEXT_XPATH = "//span[contains(@class, 'BulkCreate__MessageText')]/descendant::*[contains(text(),\"%s\")]";
   private static final String CSV_LOYALTY_NAME = "loyalty.csv";
   private static final String CSV_LOYALTY_HEADER = "shipper_id,email,shipper_name,onboarded_date,phone_number,parent_shipper_id";
   public static final String FILE_PATH = String.format("%s/%s", StandardTestConstants.TEMP_DIR, CSV_LOYALTY_NAME);
-  public static final String CSV_FILENAME_PATTERN = "template.csv";
+  public static final String CSV_FILENAME_PATTERN = "template";
 
   @FindBy(xpath = "//button[descendant::text()='Download Template']")
   public Button downloadTemplateButton;
@@ -38,6 +38,12 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//iframe[contains(@src,'loyalty-creation')]")
   public Button iframe;
+
+  @FindBy(xpath = "//*[contains(@class, 'BulkCreate__MessageBox')]")
+  public Button resultMessage;
+
+  @FindBy(xpath = "//button[descendant::text()='Download Error Log']")
+  public Button downloadErrorCsvButton;
 
   public LoyaltyCreationPage(WebDriver webDriver) {
     super(webDriver);
@@ -119,14 +125,17 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
     return phoneNUmber;
   }
 
-  public boolean isResultMessageDisplayed(String msg) {
+  public boolean isResultMessageDisplayed(String expectedMsg) {
     try {
       inFrame(page -> {
-        String xpath = f(RESULT_TEXT_XPATH, msg);
-        assertTrue(isElementExist(xpath));
+        waitUntilVisibilityOfElementLocated(page.resultMessage.getWebElement());
+        Assertions.assertThat(page.resultMessage.isDisplayed()).isTrue();
+        wait2sUntil(()-> page.resultMessage.getText().contains(expectedMsg));
+        Assertions.assertThat(page.resultMessage.getText()).contains(expectedMsg);
       });
       return true;
     } catch (AssertionError error) {
+      error.printStackTrace();
       return false;
     }
   }
@@ -135,6 +144,13 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
     inFrame(page -> {
       waitUntilVisibilityOfElementLocated(page.uploadConfirmationButton.getWebElement());
       page.uploadConfirmationButton.click();
+    });
+  }
+
+  public void clickDownloadErrorCsvButton() {
+    inFrame(page -> {
+      waitUntilVisibilityOfElementLocated(page.downloadErrorCsvButton.getWebElement());
+      page.downloadErrorCsvButton.click();
     });
   }
 

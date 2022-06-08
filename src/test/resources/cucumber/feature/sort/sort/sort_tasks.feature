@@ -217,22 +217,18 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
+      | hubName | {hub-name-8} |
     And Operator click View Sort Structure on Sort Tasks page
     When Operator search for "SORT-SG-2-HUB" node on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-8}    |
       | SORT-SG-2-HUB   |
-      | SORT-SG-2-HUB   |
-      | {hub-name-4}    |
-      | {mid-tier-name} |
     When Operator reset view on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-8}    |
       | SORT-SG-2-HUB   |
-      | SORT-SG-2-HUB   | 
-      | {hub-name-4}    |
-      | {mid-tier-name} |
-      | SORT-1          |
-      | SORT-1          |
+      | SORTSGMIDDLETIER|
+
 
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
     When Operator go to menu Sort -> Sort Tasks
@@ -249,15 +245,15 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
-    And Operator search for "{mid-tier-name}" node on Sort Tasks page
+      | hubName | {hub-name-9} |
+    And Operator search for "SORT-1" node on Sort Tasks page
     Then Operator verify displayed nodes on Sort Tasks page:
-      | {hub-name-4}    |
-      | SORT-SG-2-HUB   |
+      | {hub-name-9}    |
       | {mid-tier-name} |
+      | SORT-SG-2-HUB   |
       | SORT-1          |
     And Operator verify following nodes are highlighted on Sort Tasks page:
-      | {mid-tier-name} |
+      | SORT-1          |
 
   @CloseNewWindows @DeleteNodes
   Scenario: Removing and adding a sort task (uid:f4b78675-b8b7-4e28-bbcd-45b38477f732)
@@ -337,6 +333,32 @@ Feature: Sort Task
       | {hub-name-4}    |
       | SORT-SG-2-HUB   |
       | {mid-tier-name} |
+      | SORT-1          |
+
+  @CloseNewWindows
+  Scenario: Search sort nodes on Sort Structure Page - RTS zone (uid:4776cda5-157a-4345-b7d6-b9c3cc776691)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-7} |
+    And Operator click View Sort Structure on Sort Tasks page
+    Then Operator verifies graph contains following Hub nodes:
+      | {hub-name-7}  |
+      | SORT-SG-2-HUB |
+    And Operator verifies graph contains following Middle Tier nodes:
+      | {mid-tier-name} |
+    And Operator verifies graph contains following Zone nodes:
+      | SORT-1             |
+      | RTS-SORT-SG-1-ZONE |
+    And Operator verifies graph contains following duplicated nodes:
+      | label  | count |
+      | SORT-1 | 2     |
+    When Operator search for "{mid-tier-name}" node on View Sort Structure page
+    Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-7}    |
+      | {mid-tier-name} |
+      | SORT-SG-2-HUB   |
       | SORT-1          |
 
   @KillBrowser @ShouldAlwaysRun

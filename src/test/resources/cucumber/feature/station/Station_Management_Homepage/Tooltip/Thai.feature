@@ -5,7 +5,7 @@ Feature: Thai
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Thai Tooltip for COD Collected from Countries (uid:d532f9e3-fffa-4326-b438-c67cbce8e422)
+  Scenario Outline: Thai Tooltip for COD Collected from Courier
     Given Operator loads Operator portal home page
     And Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"

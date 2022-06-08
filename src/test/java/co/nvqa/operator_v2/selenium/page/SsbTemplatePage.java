@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,10 +14,10 @@ public class SsbTemplatePage extends SimpleReactPage {
   public PageElement createTemplateHeader;
 
   @FindBy(xpath = "//input[@data-testid='name-input']")
-  private PageElement templateNameInput;
+  private TextBox templateNameInput;
 
   @FindBy(xpath = "//input[@data-testid='description-input']")
-  private PageElement templateDescriptionInput;
+  private TextBox templateDescriptionInput;
 
   @FindBy(xpath = "//button[@data-testid='back-btn']")
   private Button goBackBtn;
@@ -42,9 +43,21 @@ public class SsbTemplatePage extends SimpleReactPage {
   @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']")
   public PageElement toastErrorBottomText;
 
-  private static String XPATH_HEADER_COLUMN = "//div[text()='%s']";
-  private static String XPATH_HEADER_COLUMN_DROP_AREA = "//div[@data-testid='selected-drop-area']";
+  @FindBy(xpath = "//li[@title='Next Page']//preceding-sibling::li[1]")
+  public PageElement lastPagePaginationBtn;
 
+  @FindBy(css = "li.ant-pagination-prev")
+  public Button prevPage;
+
+  @FindBy(css = "li.ant-pagination-next")
+  public Button nextPage;
+
+  private static String XPATH_HEADER_COLUMN_IN_AVAILABLE_HEADERS = "//div[text()='%s']";
+  private static String XPATH_HEADER_COLUMN_IN_SELECTED_HEADERS = "//div[contains(text(),'%s')]";
+  private static String XPATH_HEADER_COLUMN_SELECTED_DROP_AREA = "//div[@data-testid='selected-drop-area']";
+  private static String XPATH_HEADER_COLUMN_OPTIONS_DROP_AREA = "//div[@data-testid='options-drop-area']";
+
+  private static String XPATH_TEMPLATE_EDIT_BTN = "//td[text()='%s']/..//span[@aria-label='edit']";
 
   public SsbTemplatePage(WebDriver webDriver) {
     super(webDriver);
@@ -63,16 +76,27 @@ public class SsbTemplatePage extends SimpleReactPage {
   }
 
   public void setTemplateName(String name) {
+    templateNameInput.forceClear();
     templateNameInput.sendKeys(name);
   }
 
   public void setTemplateDescription(String description) {
+    templateDescriptionInput.forceClear();
     templateDescriptionInput.sendKeys(description);
   }
 
-  public void dragAndDropColumn(String headerColumn) {
-    WebElement fromColumn = findElementBy(By.xpath(f(XPATH_HEADER_COLUMN, headerColumn)));
-    WebElement to = findElementBy(By.xpath(XPATH_HEADER_COLUMN_DROP_AREA));
+  public void dragAndDropColumnToSelectedHeadersColumn(String headerColumn) {
+    WebElement fromColumn = findElementBy(
+        By.xpath(f(XPATH_HEADER_COLUMN_IN_AVAILABLE_HEADERS, headerColumn)));
+    WebElement to = findElementBy(By.xpath(XPATH_HEADER_COLUMN_SELECTED_DROP_AREA));
+    dragAndDrop(fromColumn, to);
+    pause100ms();
+  }
+
+  public void dragAndDropToAvailableHeadersColumn(String headerColumn) {
+    WebElement fromColumn = findElementBy(
+        By.xpath(f(XPATH_HEADER_COLUMN_IN_SELECTED_HEADERS, headerColumn)));
+    WebElement to = findElementBy(By.xpath(XPATH_HEADER_COLUMN_OPTIONS_DROP_AREA));
     dragAndDrop(fromColumn, to);
     pause100ms();
   }
@@ -85,5 +109,14 @@ public class SsbTemplatePage extends SimpleReactPage {
   public String getNotificationMessageDescText() {
     antNotificationMessage.waitUntilVisible();
     return antNotificationMessageDescription.getText();
+  }
+
+  public void selectAndEditSsbTemplate(String name) {
+    lastPagePaginationBtn.click();
+    final String templateEditBtn = f(XPATH_TEMPLATE_EDIT_BTN, name);
+    while (!isElementExist(templateEditBtn) && prevPage.isEnabled()) {
+      prevPage.click();
+    }
+    clickAndWaitUntilDone(templateEditBtn);
   }
 }

@@ -58,8 +58,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//div[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
-  private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[contains(@class,'NoResult')]";
-
+  private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[normalize-space(text())='No Results Found']";
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -811,6 +810,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    /*
     scrollIntoView(footerRow.getWebElement());
     pause5s();
     colElements = getWebDriver().findElements(
@@ -818,6 +818,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    */
     return colData;
   }
 
@@ -845,10 +846,17 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
           Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
       return;
     }
+    if ("ETA Calculated".contentEquals(columnName)) {
+      List<Double> columnValue = new ArrayList<Double>();
+      colData.forEach(value -> {
+        value = value.replaceAll("-", "");
+        columnValue.add(Double.parseDouble(value));
+      });
+      Assert.assertTrue(
+          f("Assert that the column values %s are sorted as expected", columnName),
+          Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
+    }
 
-    Assert.assertTrue(
-        f("Assert that the column values %s are sorted as expected", columnName),
-        Comparators.isInOrder(colData, Comparator.naturalOrder()));
   }
 
 
@@ -908,7 +916,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     WebElement quickFilter = getWebDriver().findElement(
         By.xpath(filterXpath));
     if(filterApplied.size() > 0){
-      return;
+      filterApplied.get(0).click();
+      pause2s();
     }
     quickFilter.click();
     pause2s();

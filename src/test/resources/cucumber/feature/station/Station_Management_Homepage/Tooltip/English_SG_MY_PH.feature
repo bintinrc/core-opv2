@@ -5,7 +5,7 @@ Feature: English (SG, MY, PH)
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: English Tooltip for COD Collected from Countries (uid:04c0d965-a469-4eea-8d4d-5adf0fe1a065)
+  Scenario Outline: English Tooltip for COD Collected from Courier
     Given Operator loads Operator portal home page
     And Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"
