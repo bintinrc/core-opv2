@@ -246,7 +246,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
             .setArrivalDatetime(resolvedMapOfData.get("EDA") + " " + resolvedMapOfData.get("ETA"));
         break;
       case "mawb":
-        shipmentInfo.setMawb(resolvedMapOfData.get("mawb"));
+        shipmentInfo.setMawb("12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1) );
         break;
       case "non-mawb":
         shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
@@ -254,14 +254,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
         shipmentInfo.setComments(resolvedMapOfData.get("comments"));
         break;
     }
-    shipmentManagementPage.editShipmentBy(editType, shipmentInfo);
+    shipmentManagementPage.editShipmentBy(editType, shipmentInfo, resolvedMapOfData);
     put(KEY_SHIPMENT_INFO, shipmentInfo);
   }
 
   @When("Operator force complete shipment from edit shipment")
   public void operatorForceCompleteShipmentFromEditShipment() {
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    shipmentManagementPage.editShipmentBy("completed", shipmentInfo);
+    shipmentManagementPage.editShipmentBy("completed", shipmentInfo, null);
   }
 
   @When("^Operator edit Shipment on Shipment Management page using data below:$")
@@ -414,7 +414,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
   @And("Operator edits and verifies that the completed shipment cannot be edited")
   public void operatorEditsAndVerifiesThatTheCompletedShipmentCannotBeEdited() {
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    shipmentManagementPage.editShipmentBy("cancelled", shipmentInfo);
+    shipmentManagementPage.editShipmentBy("cancelled", shipmentInfo, null);
     shipmentManagementPage.verifyUnableToEditCompletedShipmentToastExist();
   }
 
@@ -775,11 +775,15 @@ public class ShipmentManagementSteps extends AbstractSteps {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
 
-    shipmentManagementPage.bulkUpdateShipment(resolvedMapOfData);
+    shipmentManagementPage.bulkUpdateShipment(resolvedMapOfData, shipmentIds);
     shipmentManagementPage.verifyShipmentToBeUpdatedData(shipmentIds, resolvedMapOfData);
     shipmentManagementPage.confirmUpdateBulk(resolvedMapOfData);
   }
 
+  @When("Operator bulk MAWB update shipment with data below:")
+  public void operatorBulkMawbUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
+    shipmentManagementPage.bulkMawbUpdateShipment(resolveKeyValues(mapOfData), get(KEY_LIST_OF_CREATED_SHIPMENT_ID));
+  }
   @Then("Operator verify the following parameters of shipment with id {string} on Shipment Management page:")
   public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
       String shipmentIdAsString,
