@@ -210,7 +210,6 @@ public class SortBeltPresetSteps extends AbstractSteps {
     // outer loop, read all the rule
     Rule rule = null;
     int ruleIndex = 0;
-    System.out.println(sortBeltPresetDetailPage.rows);
     for (int i = 0; i < sortBeltPresetDetailPage.rows.size(); i++) {
       CriteriaTableRow row = sortBeltPresetDetailPage.rows.get(i);
       if (row.isCriteriaRow()) {
