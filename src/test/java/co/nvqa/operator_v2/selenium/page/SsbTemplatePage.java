@@ -52,6 +52,10 @@ public class SsbTemplatePage extends SimpleReactPage {
   @FindBy(css = "li.ant-pagination-next")
   public Button nextPage;
 
+  @FindBy(xpath = "//button//span[text()='OK']")
+  public Button okBtn;
+
+
   private static String XPATH_HEADER_COLUMN_IN_AVAILABLE_HEADERS = "//div[text()='%s']";
   private static String XPATH_HEADER_COLUMN_IN_SELECTED_HEADERS = "//div[contains(text(),'%s')]";
   private static String XPATH_HEADER_COLUMN_SELECTED_DROP_AREA = "//div[@data-testid='selected-drop-area']";
@@ -128,5 +132,6 @@ public class SsbTemplatePage extends SimpleReactPage {
       prevPage.click();
     }
     clickAndWaitUntilDone(templateDeleteBtn);
+    okBtn.click();
   }
 }
