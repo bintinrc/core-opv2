@@ -285,6 +285,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
+    pause5s();
     if (filterName.equalsIgnoreCase("originhub")) {
       TestUtils.findElementAndClick(originHub, "xpath", getWebDriver());
       sendKeysAndEnter(originHub, filterValue);
@@ -470,7 +471,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         ZonedDateTime expectedDepartTime = tripManagementDetailsData.getData().get(index)
             .getExpectedDepartureTime();
         String normalizedExpDepartDate = shipmentInfo.normalisedDate(
-            expectedDepartTime.toString().replaceAll("Z", ":00.000Z"));
+            expectedDepartTime.toString().replaceAll("Z", ":00Z"));
         normalizedExpDepartDate = normalizedExpDepartDate.replace(" ", "T") + ".000Z";
         expectedDepartTime = ZonedDateTime.parse(normalizedExpDepartDate, BE_FORMATTER);
         expectedDepartTimeFilter.openButton.click();
@@ -496,7 +497,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index)
             .getExpectedArrivalTime();
         String normalizedArrivalDate = shipmentInfo.normalisedDate(
-            expectedArrivalTime.toString().replaceAll("Z", ":00.000Z"));
+            expectedArrivalTime.toString().replaceAll("Z", ":00Z"));
         normalizedArrivalDate = normalizedArrivalDate.replace(" ", "T") + ".000Z";
         expectedArrivalTime = ZonedDateTime.parse(normalizedArrivalDate, BE_FORMATTER);
         expectedArrivalTimeFilter.scrollIntoView();
@@ -1232,6 +1233,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyTripMovementPageItems() {
+    waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
     Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
         .as("Load button appear in Movement Trips page").isTrue();
     Assertions.assertThat(isElementVisible(originHub, 5))
@@ -1472,28 +1474,28 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     public final String hiddenDropdown = "//div[contains(@class, 'ant-dropdown') and not(contains(@class , 'ant-dropdown-hidden'))]";
 
-    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[1]")
+    @FindBy(xpath = hiddenDropdown + "//div[div[.='Date']]//ul//li[1]")
     public TextBox firstDateText;
 
-    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[1]//input)")
+    @FindBy(xpath = "(//div[div[.='Date']]//ul//li[1]//input)")
     public CheckBox firstDate;
 
-    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")
+    @FindBy(xpath = hiddenDropdown + "//div[div[.='Date']]//ul//li[2]")
     public TextBox secondDateText;
 
-    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[2]//input)")
+    @FindBy(xpath = "(//div[div[.='Date']]//ul//li[2]//input)")
     public CheckBox secondDate;
 
-    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")
+    @FindBy(xpath = hiddenDropdown + "//div[div[.='Date']]//ul//li[3]")
     public TextBox thirdDateText;
 
-    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[3]//input)")
+    @FindBy(xpath = "(//div[div[.='Date']]//ul//li[3]//input)")
     public CheckBox thirdDate;
 
-    @FindBy(xpath = hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")
+    @FindBy(xpath = hiddenDropdown + "//div[div[.='Date']]//ul//li[4]")
     public TextBox fourthDateText;
 
-    @FindBy(xpath = "(//div[p[.='Date']]//ul//li[4]//input)")
+    @FindBy(xpath = "(//div[div[.='Date']]//ul//li[4]//input)")
     public CheckBox fourthDate;
 
     @FindBy(xpath = hiddenDropdown + "//li[.='-']//input")
@@ -1519,19 +1521,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
         firstDate.check();
         return;
       }
-      if (isElementExistWait1Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[2]")) {
+      if (isElementExistWait1Second(hiddenDropdown + "//div[div[.='Date']]//ul//li[2]")) {
         if (secondDateText.getText().contains(stringDate)) {
           secondDate.check();
           return;
         }
       }
-      if (isElementExistWait0Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[3]")) {
+      if (isElementExistWait0Second(hiddenDropdown + "//div[div[.='Date']]//ul//li[3]")) {
         if (thirdDateText.getText().contains(stringDate)) {
           thirdDate.check();
           return;
         }
       }
-      if (isElementExistWait0Second(hiddenDropdown + "//div[p[.='Date']]//ul//li[4]")) {
+      if (isElementExistWait0Second(hiddenDropdown + "//div[div[.='Date']]//ul//li[4]")) {
         if (fourthDateText.getText().contains(stringDate)) {
           fourthDate.check();
         }

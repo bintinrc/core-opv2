@@ -55,7 +55,6 @@ public class TripManagementSteps extends AbstractSteps {
     @And("Operator verifies movement Trip page is loaded")
     public void operatorMovementTripPageIsLoaded() {
         tripManagementPage.switchTo();
-        tripManagementPage.loadButton.waitUntilClickable(30);
         tripManagementPage.verifyTripMovementPageItems();
     }
 
