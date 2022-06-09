@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -70,6 +71,11 @@ public class OperatorV2SimplePage extends SimplePage {
 
   public void waitWhilePageIsLoading() {
     waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", 60);
+    waitUntilPageLoaded();
+  }
+
+  public void waitWhilePageIsLoading(int timeoutInSeconds) {
+    waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", timeoutInSeconds);
     waitUntilPageLoaded();
   }
 
@@ -655,6 +661,9 @@ public class OperatorV2SimplePage extends SimplePage {
       LOGGER.warn("Failed to getTextOnTableWithNgRepeat. XPath: {}", xpath);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+    } catch (StaleElementReferenceException ex) {
+      WebElement we = findElementByXpath(xpath);
+      text = we.getText().trim();
     }
 
     return text;
@@ -1250,12 +1259,12 @@ public class OperatorV2SimplePage extends SimplePage {
       return result;
     }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
-    waitUntilPageLoaded();
+    waitUntilPageLoaded(60);
     if (halfCircleSpinner.isDisplayedFast()) {
-      halfCircleSpinner.waitUntilInvisible();
+      halfCircleSpinner.waitUntilInvisible(60);
     }
     // temporary close /aaa error alert if exist
-    if (isElementExist("//button[.='close']")) {
+    if (isElementExist("//button[.='close']", 2)) {
       pause7s();
     }
   }
@@ -1392,8 +1401,8 @@ public class OperatorV2SimplePage extends SimplePage {
       List<String> closeLocators = ImmutableList.of(
           dialogXpath + "//nv-icon-button[@name='Cancel']",
           dialogXpath + "//nv-icon-text-button[@name='Cancel']",
-          dialogXpath + "//button[@aria-label='Leave']"
-
+          dialogXpath + "//button[@aria-label='Leave']",
+          dialogXpath + "//button[@aria-label='Leave Anyway']"
       );
       for (String closeLocator : closeLocators) {
         if (isElementVisible(closeLocator, 0)) {

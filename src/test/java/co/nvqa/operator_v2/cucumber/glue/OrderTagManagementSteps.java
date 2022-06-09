@@ -4,9 +4,9 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.OrderTagManagementPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +125,9 @@ public class OrderTagManagementSteps extends AbstractSteps {
     trackingIds.forEach(trackingId ->
     {
       orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
+      if (orderTagManagementPage.ordersTable.getRowsCount() == 0) {
+        orderTagManagementPage.loadingBar.waitUntilInvisible(60);
+      }
       orderTagManagementPage.ordersTable.selectRow(1);
     });
   }
@@ -188,6 +191,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
     trackingIds.forEach(trackingId ->
     {
       orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
+      orderTagManagementPage.loadingBar.waitUntilInvisible(60);
       assertTrue(f("Order %s must not be displayed", trackingId),
           orderTagManagementPage.ordersTable.isEmpty());
     });

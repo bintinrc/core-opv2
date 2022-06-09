@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
@@ -20,6 +21,9 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
   @FindBy(css = "th.column-checkbox md-menu")
   public MdMenu selectionMenu;
+
+  @FindBy(css = "div.no-result")
+  public PageElement noResults;
 
   private String nvTableParam;
   private String mdVirtualRepeat = "data in getTableData()";
@@ -77,9 +81,10 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
   @Override
   public void selectRow(int rowNumber) {
-    clickf(
+    String xpath = f(
         ".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]//md-checkbox",
         mdVirtualRepeat, rowNumber);
+    new CheckBox(getWebDriver(), xpath).check();
   }
 
   public MdCheckbox getCheckbox(int rowNumber) {
@@ -133,5 +138,10 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     String xpath =
         getRowLocator(index) + f("/td[contains(@class, '%s')]", getColumnLocators().get(columnId));
     return new PageElement(getWebDriver(), xpath);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return noResults.isDisplayedFast();
   }
 }

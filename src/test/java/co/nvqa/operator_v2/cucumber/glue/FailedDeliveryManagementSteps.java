@@ -67,7 +67,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("^Operator reschedule failed delivery order on next day$")
   public void operatorRescheduleFailedDeliveryOrderOnNextDay() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    failedDeliveryManagementPage.waitWhilePageIsLoading();
+    failedDeliveryManagementPage.waitWhilePageIsLoading(120);
     failedDeliveryManagementPage.rescheduleNextDay(trackingId);
   }
 

@@ -2,8 +2,10 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
+import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,6 +25,9 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
 
   @FindBy(css = ".ant-notification-notice")
   public List<AntNotification> noticeNotifications;
+
+  @FindBy(css = ".ant-message-notice")
+  public List<AntNotice> notices;
 
   public SimpleReactPage(WebDriver webDriver) {
     super(webDriver);
@@ -66,6 +71,18 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
     try {
       consumer.accept((T) this);
+    } finally {
+      getWebDriver().switchTo().defaultContent();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public <R> R returnFromFrame(Function<T, R> consumer) {
+    getWebDriver().switchTo().defaultContent();
+    pageFrame.waitUntilVisible();
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    try {
+      return consumer.apply((T) this);
     } finally {
       getWebDriver().switchTo().defaultContent();
     }
