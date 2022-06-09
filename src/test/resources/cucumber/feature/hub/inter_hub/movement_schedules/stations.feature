@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @Stations
+@MiddleMile @Hub @InterHub @MovementSchedules @Stations @CWF
 Feature: Stations
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -343,7 +343,7 @@ Feature: Stations
     Then Operator verify all station schedules are correct
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is deleted in hub_relation_schedules
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
   Scenario: Update Station Schedule - Succeed Update Schedule (uid:f808c484-4bcb-4f78-83f9-bbcbaa23da3d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -452,6 +452,49 @@ Feature: Stations
       | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:15         | 0        | 00:15   | monday,tuesday      |
       | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:15         | 0        | 00:15   | wednesday, thursday |
     And Operator deletes 1 schedule fro Edit Schedule dialog
+
+  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  Scenario: Fail Update Station Schedule to Duplicate and Existing Schedule (uid:002362fd-43ed-4704-a330-fb19d42c9d22)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    When Operator select "Stations" tab on Movement Management page
+    And Operator load schedules on Movement Management page using data below:
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    Then Operator verify all station schedules are correct
+    When Operator updates all created station schedules using same values
+#    When Operator refresh page
+#    And Movement Management page is loaded
+#    When Operator select "Stations" tab on Movement Management page
+#    And Operator load schedules on Movement Management page using data below:
+#      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#    Then Operator verify all station schedules are correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -813,10 +814,17 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.modify.click();
     String displayTime = DateUtil
         .displayTime(DateUtil.getDate(ZoneId.of("UTC")).plusHours(7), true);
-    movementManagementPage.departureTimeInputs.get(0).setValue(displayTime);
-    movementManagementPage.departureTimeInputs.get(1).setValue(displayTime);
-    movementManagementPage.durationInputs.get(0).setValue("00:45");
-    movementManagementPage.durationInputs.get(1).setValue("00:45");
+    movementManagementPage.departureTimeInputs.get(0).sendKeys(displayTime);
+    movementManagementPage.departureTimeInputs.get(0).sendKeys(Keys.RETURN);
+    movementManagementPage.departureTimeInputs.get(1).sendKeys(displayTime);
+    movementManagementPage.departureTimeInputs.get(1).sendKeys(Keys.RETURN);
+    //movementManagementPage.departureTimeInputs.get(1).setValue(displayTime);
+//    movementManagementPage.durationInputs.get(0).setValue("00:45");
+//    movementManagementPage.durationInputs.get(1).setValue("00:45");
+    movementManagementPage.durationInputs.get(0).sendKeys("00:45");
+    movementManagementPage.durationInputs.get(0).sendKeys(Keys.RETURN);
+    movementManagementPage.durationInputs.get(1).sendKeys("00:45");
+    movementManagementPage.durationInputs.get(1).sendKeys(Keys.RETURN);
     movementManagementPage.commentInputs.get(0)
         .clearAndSendKeys("This schedule has been updated by Automation Test");
     movementManagementPage.commentInputs.get(1)
@@ -873,7 +881,13 @@ public class MovementManagementSteps extends AbstractSteps {
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
     Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(hubRelations.size());
-
+//    for (int i = 0; i < hubRelations.size(); i++) {
+//      System.out.println(hubRelations.get(i).getSchedules().get(i).getStartTime());
+//      System.out.println(hubRelations.get(i).getSchedules().get(i).getDay());
+//      System.out.println(hubRelations.get(i).getSchedules().get(i).getDuration());
+//      System.out.println(hubRelations.get(i).getSchedules().get(i).getDepartureTime());
+//      System.out.println(hubRelations.get(i).getSchedules().toString());
+//    }
     for (int i = 0; i < hubRelations.size(); i++) {
       HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
           .readEntity(i + 1);
@@ -891,18 +905,17 @@ public class MovementManagementSteps extends AbstractSteps {
   @When("Operator updates created station schedule")
   public void operatorUpdatesCreatedStationSchedule() {
     movementManagementPage.modify.click();
-    movementManagementPage.departureTimeInputs.get(0).setValue("21:15");
-    movementManagementPage.durationInputs.get(0).setValue("00:45");
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
     movementManagementPage.commentInputs.get(0)
         .clearAndSendKeys("This schedule has been updated by Automation Test");
     movementManagementPage.save.click();
     movementManagementPage.modalUpdateButton.click();
     movementManagementPage
-        .verifyNotificationWithMessage("1 schedule(s) have been updated.");
-    movementManagementPage.closeButton.click();
+        .verifyNotificationWithMessage("1 schedule(s) have been updated");
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    hubRelations.get(0).getSchedules().get(0).setDuration("00:00:45");
-    hubRelations.get(0).getSchedules().get(0).setStartTime("21:15");
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:01:00");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:00");
     hubRelations.get(0).getSchedules().get(0)
         .setComment("This schedule has been updated by Automation Test");
   }
@@ -914,7 +927,19 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.save.click();
     movementManagementPage.modalUpdateButton.click();
     movementManagementPage
-        .verifyNotificationWithMessage("1 schedule(s) have been updated.");
+        .verifyNotificationWithMessage("1 schedule(s) have been updated");
     movementManagementPage.closeButton.click();
+  }
+
+  @When("Operator updates all created station schedules using same values")
+  public void operatorUpdatesAllCreatedStationSchedules() {
+    movementManagementPage.modify.click();
+    movementManagementPage.UpdatesdepartureTime("21:00");
+    movementManagementPage.UpdatesdurationTime("01:00");
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    pause9s();
   }
 }

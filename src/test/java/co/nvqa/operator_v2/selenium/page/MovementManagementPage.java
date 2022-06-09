@@ -17,11 +17,8 @@ import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,6 +41,17 @@ import org.slf4j.LoggerFactory;
 public class MovementManagementPage extends SimpleReactPage<MovementManagementPage> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MovementManagementPage.class);
+  /*
+   MS: Movement Schedules
+   */
+  private static final String MS_PAGE_DEPARTURE_TIME_LIST_XPATH = "//tbody[@class='ant-table-tbody']/tr//td[contains(@class,'start-time')]//input";
+  private static final String MS_PAGE_DURATION_TIME_LIST_XPATH = "//tbody[@class='ant-table-tbody']/tr//td[contains(@class,'duration')]//input[@placeholder='Select time']";
+  private static final String MS_PAGE_DURATION_DATE_LIST_XPATH = "//tbody[@class='ant-table-tbody']/tr//td[contains(@class,'duration')]//input[@type='search']";
+  private static final String MS_PAGE_ERROR_NOTIFICATION_XPATH = "//div[contains(@class,'ant-notification-notice-error')]//div[@class='ant-notification-notice-message']";
+  private static final String MS_PAGE_PICKER_HOUR_DROPDOWN_XPATH = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[1]//div[text()='%s']";
+  private static final String MS_PAGE_PICKER_MIN_DROPDOWN_XPATH = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[2]//div[text()='%s']";
+
+
 
   @FindBy(xpath = "//button[.='Close']")
   public Button closeButton;
@@ -159,7 +167,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//div[contains(@class,'ant-modal-confirm')]//button[contains(@class,'ant-btn-primary')]")
   public Button modalDeleteButton;
 
-  @FindBy(xpath = "//button[.='Update' and contains(@class, 'ant-btn-primary')]")
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-btns']//button[contains(@class, 'ant-btn-primary')]")
   public Button modalUpdateButton;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//div//span")
@@ -171,13 +179,13 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//span[.='No Results Found']")
   public TextBox noResultsFoundText;
 
-  @FindBy(xpath = "//td[@class='startTime']//span[@class='ant-time-picker']")
-  public List<AntTimePicker> departureTimeInputs;
+  @FindBy(xpath = "//td[contains(@class,'start-time')]//div[@class='ant-picker-input']//input")
+  public List<WebElement> departureTimeInputs;
 
-  @FindBy(xpath = "//td[@class='duration']//span[@class='ant-time-picker']")
-  public List<AntTimePicker> durationInputs;
+  @FindBy(xpath = "//td[contains(@class,'duration')]//div[@class='ant-picker-input']//input")
+  public List<WebElement> durationInputs;
 
-  @FindBy(xpath = "//td[@class='comment']//textarea")
+  @FindBy(xpath = "//td[contains(@class,'comments')]//textarea")
   public List<TextBox> commentInputs;
 
   @FindBy(xpath = "//td[@class='startTime']")
@@ -263,6 +271,14 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     assertThat("Toast message is the same", notificationElement.getText(),
         equalTo(containsMessage));
     waitUntilInvisibilityOfNotification(notificationXpath, false);
+  }
+
+  public void verifyNotificationWithMessage(List<String> containsMessages) {
+    String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
+    waitUntilVisibilityOfElementLocated(notificationXpath);
+    List<WebElement> notificationElements = findElementsByXpath(notificationXpath);
+    for(int i =0;i<notificationElements.size();i++)
+    Assertions.assertThat(notificationElements.get(i).getText()).as("Toast message is the same").isEqualToIgnoringCase(containsMessages.get(i));
   }
 
   public static class EditStationRelationsModal extends AntModal {
@@ -679,7 +695,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   public static class SchedulesTable extends AntTableV3<MovementSchedule.Schedule> {
 
-    @FindBy(xpath = "//td[contains@class='start-time']//span[@class='ant-time-picker']")
+    @FindBy(xpath = "//td[@class='start-time']//span[@class='ant-time-picker']")
     public AntTimePicker departureTime;
 
     @FindBy(xpath = "//td[@class='day']//input[@class='ant-input-number-input']")
@@ -1048,4 +1064,46 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     @FindBy(xpath = "//button[.='Update']")
     public Button update;
   }
+
+  public void UpdatesdepartureTime(String value){
+    departureTimeInputs = findElementsByXpath(MS_PAGE_DEPARTURE_TIME_LIST_XPATH);
+    departureTimeInputs.forEach((element) -> dateTimeInput(element,value)    );
+  }
+
+  public void UpdatesdepartureTime(String value, Integer index){
+    departureTimeInputs = findElementsByXpath(MS_PAGE_DEPARTURE_TIME_LIST_XPATH);
+    dateTimeInput(departureTimeInputs.get(index),value);
+  }
+
+  public void UpdatesdurationTime(String value){
+    durationInputs = findElementsByXpath(MS_PAGE_DURATION_TIME_LIST_XPATH);
+    durationInputs.forEach((element) -> dateTimeInput(element,value));
+  }
+
+  public void UpdatesdurationTime(String value, int index){
+    durationInputs = findElementsByXpath(MS_PAGE_DURATION_TIME_LIST_XPATH);
+    dateTimeInput(durationInputs.get(index), value);
+  }
+
+  public void dateTimeInput(WebElement element, String value){
+    executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", element);
+    element.click();
+    pause500ms();
+//    element.sendKeys(Keys.CONTROL+"A");
+//    element.sendKeys(Keys.BACK_SPACE);
+//    element.sendKeys(value);
+//    element.sendKeys(Keys.RETURN);
+    String[] times = value.split(":");
+    WebElement timeElement = findElementByXpath(f(MS_PAGE_PICKER_HOUR_DROPDOWN_XPATH,times[0]));
+    executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", timeElement);
+    timeElement.click();
+    pause300ms();
+    timeElement = findElementByXpath(f(MS_PAGE_PICKER_MIN_DROPDOWN_XPATH,times[1]));
+    executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", timeElement);
+    timeElement.click();
+    element.sendKeys(Keys.RETURN);
+
+  }
+
+
 }
