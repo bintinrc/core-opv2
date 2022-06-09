@@ -20,6 +20,7 @@ Feature: Movement Trip - Search Trip - Search Field - Departure Tab - All Tab
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     When Operator searches and selects the "origin hub" with value "{hub-relation-origin-hub-name}"
+    When Operator selects the date to tomorrow in "departure" Tab
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator clicks on "All" tab
@@ -54,7 +55,7 @@ Feature: Movement Trip - Search Trip - Search Field - Departure Tab - All Tab
     And Operator verifies movement Trip page is loaded
     When Operator searches and selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator clicks on "All" tab
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
