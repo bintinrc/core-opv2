@@ -127,13 +127,13 @@ Feature: Financial Batch
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies financial batch data as below
-      | overallBalance        | S$ 4,798.28 (Debit)              |
+      | overallBalance        | S$ 5,599.18 (Debit)              |
       | date                  | {gradle-current-date-dd/MM/yyyy} |
       | shipperName           | {KEY_CREATED_SHIPPER.name}       |
       | debitTotalCOD         | 0.00                             |
-      | debitTotalFee         | 4,803.28                         |
+      | debitTotalFee         | 5,604.18                         |
       | debitTotalAdjustment  | 0.00                             |
-      | debitNettBalance      | 4,798.28                         |
+      | debitNettBalance      | 5,599.18                         |
       | creditTotalCOD        | 5.00                             |
       | creditTotalFee        | 0.00                             |
       | creditTotalAdjustment | 0.00                             |

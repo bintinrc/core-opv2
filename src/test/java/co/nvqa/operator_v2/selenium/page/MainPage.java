@@ -64,7 +64,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Beranda Manajemen Stasiun", "station-homepage");
     MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
     MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
-    MAP_OF_END_URL.put("User Management", "admin/hubs");
+    MAP_OF_END_URL.put("Station User Management", "admin/hubs");
   }
 
   public MainPage(WebDriver webDriver) {
