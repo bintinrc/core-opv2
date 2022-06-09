@@ -17,7 +17,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -38,7 +37,6 @@ Feature: Route Monitoring V2
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -53,7 +51,6 @@ Feature: Route Monitoring V2
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -82,7 +79,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -108,7 +104,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -142,7 +137,6 @@ Feature: Route Monitoring V2
     And API Operator start the route
     And API Driver pickup the created parcel successfully
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -173,7 +167,6 @@ Feature: Route Monitoring V2
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver pickup the created parcel successfully
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -211,7 +204,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | <failureReasonCodeId> |
       | failureReasonIndexMode | FIRST                 |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -249,7 +241,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | <failureReasonCodeId> |
       | failureReasonIndexMode | FIRST                 |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -283,7 +274,6 @@ Feature: Route Monitoring V2
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -321,7 +311,6 @@ Feature: Route Monitoring V2
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -356,7 +345,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -387,7 +375,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -444,7 +431,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | 6           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -500,7 +486,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -558,7 +543,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -614,7 +598,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -657,7 +640,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -714,7 +696,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -761,7 +742,6 @@ Feature: Route Monitoring V2
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -789,7 +769,6 @@ Feature: Route Monitoring V2
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -832,7 +811,6 @@ Feature: Route Monitoring V2
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -869,7 +847,6 @@ Feature: Route Monitoring V2
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -892,19 +869,18 @@ Feature: Route Monitoring V2
     And API Driver collect all his routes
     And API Operator start the route
     And API Driver fail the reservation using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 8           |
-      | failureReasonIndexMode | FIRST       |
+      | failureReasonFindMode  | findAdvance           |
+      | failureReasonCodeId    | <failureReasonCodeId> |
+      | failureReasonIndexMode | FIRST                 |
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId        | {KEY_CREATED_ROUTE_ID} |
-      | numValidFailed | 1                      |
-
+      | routeId          | {KEY_CREATED_ROUTE_ID} |
+      | numValidFailed   | <numValidFailed>       |
+      | numInvalidFailed | <numInvalidFailed>     |
     Examples:
       | name         | failureReasonCodeId | numValidFailed | numInvalidFailed | hiptest-uid                              |
       | Valid Fail   | 8                   | 1              | 0                | uid:795339f1-f3db-4417-9c90-5b712a22adf9 |
@@ -922,7 +898,6 @@ Feature: Route Monitoring V2
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -953,7 +928,6 @@ Feature: Route Monitoring V2
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -987,7 +961,6 @@ Feature: Route Monitoring V2
     And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -1020,7 +993,6 @@ Feature: Route Monitoring V2
     And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
@@ -1071,7 +1043,6 @@ Feature: Route Monitoring V2
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
     And DB Operator verifies all orphaned route_waypoint records are hard-deleted
     When Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
