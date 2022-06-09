@@ -450,7 +450,7 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.clickCancelTripButton();
     }
 
-    @When("Openrator clicks on Create One Time Trip Button")
+    @When("Operator clicks on Create One Time Trip Button")
     public void OperatorclicksCreateOneTimeTripButton(){
         tripManagementPage.clickCreateOneTimeTripButton();
     }
@@ -480,6 +480,30 @@ public class TripManagementSteps extends AbstractSteps {
         }
         tripManagementPage.createOneTimeTrip(resolvedMapOfData,middleMileDriver);
     }
+
+    @When("Operator create One Time Trip without driver on Movement Trips page using data below:")
+    public void OperatorCreateOneTimeTripWithoutDriver(Map<String, String> mapOfData){
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        if(resolvedMapOfData.get("departureTime").equalsIgnoreCase("GENERATED")){
+            LocalTime time = LocalTime.now().plusHours(1L);
+            String departTime = time.format(DateTimeFormatter.ofPattern("HH:mm"));
+            resolvedMapOfData.put("departureTime",departTime);
+        }
+        if(resolvedMapOfData.get("departureDate").equalsIgnoreCase("GENERATED")){
+            Date date = new Date();
+            long hour = 1000 * 60 * 60 * 24;
+            date.setTime(date.getTime() + hour);
+            String departureDay = new SimpleDateFormat("yyyy-MM-dd").format(date);
+            resolvedMapOfData.put("departureDate",departureDay);
+        }
+        if(resolvedMapOfData.get("duration").equalsIgnoreCase("GENERATED")) {
+            resolvedMapOfData.putIfAbsent("durationDays", "0");
+            resolvedMapOfData.putIfAbsent("durationHours", "0");
+            resolvedMapOfData.putIfAbsent("durationMinutes", "15");
+        }
+        tripManagementPage.createOneTimeTripWithoutDriver(resolvedMapOfData);
+    }
+
     @And("Operator clicks Submit button on Create One Trip page")
     public void operatorClicksSubmitButton(){
         tripManagementPage.clickSubmitButtonOnCreateOneTripPage();

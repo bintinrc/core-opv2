@@ -1062,6 +1062,35 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   }
 
+  public void createOneTimeTripWithoutDriver(Map<String, String> resolvedMapOfData){
+    //resolvedMapOfData.forEach((k, v) -> System.out.println((k + ":" + v)));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, resolvedMapOfData.get("originHub"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, resolvedMapOfData.get("destinationHub"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, resolvedMapOfData.get("movementType"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH, resolvedMapOfData.get("departureTime"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_DAYS_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_DAYS_XPATH, resolvedMapOfData.get("durationDays"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_HOURS_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_HOURS_XPATH, resolvedMapOfData.get("durationHours"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH, resolvedMapOfData.get("durationMinutes"));
+
+    click(CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH);
+    waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
+    click(f(CALENDAR_SELECTED_XPATH, resolvedMapOfData.get("departureDate")));
+  }
+
   public void clickSubmitButtonOnCreateOneTripPage(){
     TestUtils.findElementAndClick(CREATE_TRIP_PAGE_SUBMIT_BUTTON_XPATH, "xpath", getWebDriver());
   }
