@@ -43,7 +43,8 @@ public class CreatePresetSortBeltPresetPage extends
 
   public static class CriteriaCard extends PageElement {
 
-    public static String SELECTOR_XPATH = ".//form[.//label[text()='%s']]//div[contains(concat(' ',normalize-space(@class),' '),' ant-select ')]";
+    public static String SELECTOR_XPATH = ".//form[.//label[text()='%s']]//div[contains(concat(' ',normalize-space(@class),' '),' ant-select logic-selection-field')]";
+    public static String INCLUDE_SELECTOR_XPATH = ".//form[.//label[text()='%s']]//div[contains(concat(' ',normalize-space(@class),' '),' ant-select ')][1]";
     @FindBy(css = "[data-testid='criteria-description']")
     public TextBox description;
     @FindBy(css = "[data-testid='add-filter-button']")
