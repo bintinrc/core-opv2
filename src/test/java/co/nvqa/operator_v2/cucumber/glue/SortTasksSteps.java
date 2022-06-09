@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SortTasksPage;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage.TreeNode.NodeType;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
@@ -353,4 +354,16 @@ public class SortTasksSteps extends AbstractSteps {
           Matchers.contains(expectedNodes.toArray(new String[0])));
     }
   }
+
+  @And("Operator select region on Sort Task page")
+  public void operatorSelectRegionOnSortTaskPage(Map<String,String>data) {
+    data = resolveKeyValues(data);
+    String regionName = data.get("regionName");
+
+    sortTasksPage.selectRegion.selectValue(regionName);
+
+
+    pause5s();
+  }
+
 }
