@@ -124,6 +124,24 @@ public class EditOrderSteps extends AbstractSteps {
           .as("Parcel weight")
           .isEqualTo(Double.parseDouble(expected));
     }
+    expected = data.get("length");
+    if (StringUtils.isNotBlank(expected)) {
+      softAssertions.assertThat(editOrderPage.getLength())
+          .as("Parcel length")
+          .isEqualTo(Double.parseDouble(expected));
+    }
+    expected = data.get("width");
+    if (StringUtils.isNotBlank(expected)) {
+      softAssertions.assertThat(editOrderPage.getWidth())
+          .as("Parcel width")
+          .isEqualTo(Double.parseDouble(expected));
+    }
+    expected = data.get("height");
+    if (StringUtils.isNotBlank(expected)) {
+      softAssertions.assertThat(editOrderPage.getHeighth())
+          .as("Parcel height")
+          .isEqualTo(Double.parseDouble(expected));
+    }
     takesScreenshot();
     softAssertions.assertAll();
   }
