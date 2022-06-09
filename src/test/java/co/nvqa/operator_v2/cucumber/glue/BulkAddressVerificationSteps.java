@@ -189,6 +189,7 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
   @And("^Operator verifies waypoints are assigned to \"([^\"]*)\" rack sector upon bulk address verification$")
   public void operatorVerifiesWaypointsAreAssignedToRackSectorUponBulkAddressVerification(
       String sector) {
+    bulkAddressVerificationPage.switchTo();
     boolean isRts = sector.equals("RTS");
     List<JaroScore> listOfJaroScore = get(KEY_LIST_OF_CREATED_JARO_SCORES);
     List<JaroScore> listOfValidJaroScore = listOfJaroScore.stream()
