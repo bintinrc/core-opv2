@@ -7,7 +7,6 @@ Feature: RTS
 
   @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -22,7 +21,7 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -56,7 +55,6 @@ Feature: RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -75,7 +73,7 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -112,7 +110,6 @@ Feature: RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -144,7 +141,7 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -182,7 +179,6 @@ Feature: RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan (uid:5bae8c76-b67d-4cfd-9d7e-2af0d0fe0db9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -217,7 +213,7 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -254,7 +250,6 @@ Feature: RTS
     And Operator verifies waypoints.routing_zone_id is correct
 
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted - Edit Delivery Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -275,7 +270,7 @@ Feature: RTS
       | address1     | 116 Keng Lee Rd                |
       | address2     | 15                             |
       | postalCode   | 308402                         |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -325,7 +320,6 @@ Feature: RTS
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -350,7 +344,7 @@ Feature: RTS
       | address1     | 116 Keng Lee Rd                |
       | address2     | 15                             |
       | postalCode   | 308402                         |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -408,7 +402,6 @@ Feature: RTS
     And Operator verifies waypoints.routing_zone_id is correct
 
   Scenario Outline: Operator RTS Order with Allowed Granular Status - <granular_status> (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -424,7 +417,7 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -463,7 +456,6 @@ Feature: RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS Order with Allowed Granular Status - On Vehicle for Delivery (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -491,7 +483,7 @@ Feature: RTS
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     Then Operator verify order events on Edit order page using data below:
@@ -554,7 +546,7 @@ Feature: RTS
     And Operator verify order granular status is "On Hold" on Edit Order page
     And Operator RTS order on Edit Order page using data below:
       | timeslot | All Day (9AM - 10PM) |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
@@ -618,7 +610,7 @@ Feature: RTS
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator RTS order on Edit Order page using data below:
       | timeslot | All Day (9AM - 10PM) |
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page

@@ -85,7 +85,7 @@ Feature: Reschedule & RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -154,7 +154,7 @@ Feature: Reschedule & RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan (uid:066c5598-129c-4fe0-bd9a-0af449703f33)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -378,7 +378,7 @@ Feature: Reschedule & RTS
 
   @DeleteOrArchiveRoute
   Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -491,21 +491,21 @@ Feature: Reschedule & RTS
     And Operator verify Delivery details on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify order events on Edit order page using data below:
-      | tags           | name                |
-      | PICKUP, SCAN   | DRIVER PICKUP SCAN  |
-      | PICKUP         | PICKUP SUCCESS      |
-      | SORT, SCAN     | HUB INBOUND SCAN    |
-      | MANUAL ACTION  | ADD TO ROUTE        |
-      | SCAN, DELIVERY | DRIVER INBOUND SCAN |
-      | MANUAL ACTION  | DRIVER START ROUTE  |
-      | DELIVERY       | DELIVERY FAILURE    |
-      | MANUAL ACTION  | RESCHEDULE          |
-      | SYSTEM ACTION  | PRICING CHANGE      |
-      | DELIVERY       | DELIVERY SUCCESS    |
+      | tags            | name                |
+      | #l#PICKUP, SCAN | DRIVER PICKUP SCAN  |
+      | PICKUP          | PICKUP SUCCESS      |
+      | SORT, SCAN      | HUB INBOUND SCAN    |
+      | MANUAL ACTION   | ADD TO ROUTE        |
+      | SCAN, DELIVERY  | DRIVER INBOUND SCAN |
+      | MANUAL ACTION   | DRIVER START ROUTE  |
+      | DELIVERY        | DELIVERY FAILURE    |
+      | MANUAL ACTION   | RESCHEDULE          |
+      | SYSTEM ACTION   | PRICING CHANGE      |
+      | DELIVERY        | DELIVERY SUCCESS    |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Failure Reason Code Id 13
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

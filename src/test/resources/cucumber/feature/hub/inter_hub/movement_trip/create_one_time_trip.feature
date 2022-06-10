@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @CreateOneTimeTrip
 Feature: Movement Trip - Create One Time Trip
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @runthis
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -266,7 +266,7 @@ Feature: Movement Trip - Create One Time Trip
     Given Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @CancelTrip @runthis
   Scenario: Create One Time Trip without Assign Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -292,6 +292,6 @@ Feature: Movement Trip - Create One Time Trip
     And Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @runthis
   Scenario: Kill Browser
     Given no-op

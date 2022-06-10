@@ -30,7 +30,7 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
       Map<String, String> data) {
     data = resolveKeyValues(data);
 
-    viewTaggedOrdersPage.loadSelection.waitUntilVisible();
+    viewTaggedOrdersPage.loadSelection.waitUntilVisible(120);
 
     if (data.containsKey("orderTags")) {
       List<String> tags = splitAndNormalize(data.get("orderTags"));
@@ -48,6 +48,7 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
     }
 
     viewTaggedOrdersPage.loadSelection.click();
+    viewTaggedOrdersPage.waitUntilPageLoaded();
   }
 
 

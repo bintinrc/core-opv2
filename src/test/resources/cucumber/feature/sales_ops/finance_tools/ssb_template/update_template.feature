@@ -167,7 +167,7 @@ Feature: Update Template
       | updated_at            | {gradle-current-date-yyyy-MM-dd} |
       | deleted_at            | null                             |
 
-
+  @DeleteSsbTemplate
   Scenario: Update Template - Remove Some Columns (uid:f54df623-63cc-4d4e-9a0a-a46fd92929a2)
     Given Operator go to menu Finance Tools -> SSB Template
     When SSB Template page is loaded

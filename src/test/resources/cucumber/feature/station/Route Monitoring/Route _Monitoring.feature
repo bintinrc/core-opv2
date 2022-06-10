@@ -152,7 +152,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute  @Debug
+  @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Reservation
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:

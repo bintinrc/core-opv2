@@ -116,9 +116,10 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.overviewTab.click();
     pause2s();
     reservationPresetManagementPage.reservationPresetTable.filterByColumn(COLUMN_NAME, group);
+    reservationPresetManagementPage.routeDate.simpleSetValue(routeDate);
+    reservationPresetManagementPage.waitWhilePageIsLoading(2);
     reservationPresetManagementPage.reservationPresetTable.selectRow(1);
-    reservationPresetManagementPage.routeDate.setValue(routeDate);
-    reservationPresetManagementPage.actionsMenu.selectOption("Create route");
+    reservationPresetManagementPage.actionsMenu.selectOption("Create Route");
     reservationPresetManagementPage.createRouteDialog.waitUntilVisible();
     reservationPresetManagementPage.createRouteDialog.confirm.clickAndWaitUntilDone();
   }

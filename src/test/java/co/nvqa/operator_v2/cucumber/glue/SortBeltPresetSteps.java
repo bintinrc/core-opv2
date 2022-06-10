@@ -73,10 +73,16 @@ public class SortBeltPresetSteps extends AbstractSteps {
         .isEqualTo(savedPreset.getDescription());
   }
 
-  @When("Operator click Create a new preset menu on Sort Belt Preset page")
-  public void operatorClickCreateANewPresetMenuOnSortBeltPresetPage() {
+  @When("Operator click {string} preset menu on Sort Belt Preset page")
+  public void operatorClickCreateANewPresetMenuOnSortBeltPresetPage(String newOrCopy) {
     sortBeltPresetPage.createPresetBtn.click();
-    sortBeltPresetPage.createNewMenu.click();
+    if (newOrCopy.equalsIgnoreCase("Create new")) {
+      sortBeltPresetPage.createNewMenu.click();
+    } else {
+      sortBeltPresetPage.createACopyMenu.click();
+    }
+
+
   }
 
   @And("Operator verify Create Preset UI")
@@ -87,15 +93,11 @@ public class SortBeltPresetSteps extends AbstractSteps {
         .as("Cancel button is displayed")
         .isTrue();
     Assertions.assertThat(createPresetSortBeltPresetPage.addCriteriaBtn.isDisplayed())
-        .as("Add criteri button is displayed")
+        .as("Add criteria button is displayed")
         .isTrue();
     Assertions.assertThat(createPresetSortBeltPresetPage.presetName.isDisplayed())
         .as("Preset name field is displayed")
         .isTrue();
-    Assertions.assertThat(createPresetSortBeltPresetPage.cards.size())
-        .as("Show 1 criteria by default")
-        .isEqualTo(1);
-
   }
 
   @When("Operator fill name and description into Create Preset UI")
@@ -106,6 +108,8 @@ public class SortBeltPresetSteps extends AbstractSteps {
       name = f("AUTOMATION PRESET %d", new Date().getTime());
       desc = f("Description for: %s", name);
     }
+    createPresetSortBeltPresetPage.presetName.forceClear();
+    createPresetSortBeltPresetPage.description.forceClear();
     createPresetSortBeltPresetPage.presetName.sendKeys(name);
     createPresetSortBeltPresetPage.description.sendKeys(desc);
     put(KEY_CREATED_SORT_BELT_PRESET_NAME, name);
@@ -173,9 +177,20 @@ public class SortBeltPresetSteps extends AbstractSteps {
     criteriaElement.description.sendKeys(description);
     for (int i = 0; i < fields.size(); i++) {
       criteriaElement.addFilterMenu.selectOption(fields.get(i));
+      List<String> vals;
+      if (fields.get(i).equalsIgnoreCase("Shipper")) {
+        List<String> include = Arrays.asList(values.get(i).split(":"));
+        vals = Arrays.asList(include.get(1).split("\\."));
+        AntSelect select = new AntSelect(getWebDriver(),
+            criteriaElement.findElement(By.xpath(f(CriteriaCard.INCLUDE_SELECTOR_XPATH, "Shipper"))));
+        select.selectValue(include.get(0));
+      } else {
+        vals = Arrays.asList(values.get(i).split("\\."));
+      }
+
       AntSelect select = new AntSelect(getWebDriver(),
           criteriaElement.findElement(By.xpath(f(CriteriaCard.SELECTOR_XPATH, fields.get(i)))));
-      List<String> vals = Arrays.asList(values.get(i).split("\\."));
+
       vals.forEach(v -> {
         select.enterSearchTerm(v);
         select.sendReturnButton();
@@ -187,7 +202,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator verify preset created correctly on Sort Belt Preset detail page")
-  public void operatorVerifyPresetCreatedCorrectlyOnSortBeltPresetDetailPage() {
+  public void operatorVerifyPresetCreatedCorrectlyOnSortBeltPresetDetailPage(Map<String,String> dataTable) {
     sortBeltPresetDetailPage.waitUntilLoaded();
 
     SortBeltPreset sb = get(KEY_CREATED_SORT_BELT_PRESET);
@@ -230,14 +245,56 @@ public class SortBeltPresetSteps extends AbstractSteps {
               .isEqualTo(tagsString);
           break;
         case "DP IDs":
+          String dpName = dataTable.get("dpName");
+          if (dpName!=null) {
+            String finalDpName = resolveValue(dpName);
+            Assertions.assertThat(row.getFilterValue())
+                .as(f("DP show correct value : %s", finalDpName))
+                .isEqualTo(finalDpName);
+          }
+          break;
         case "Zones":
+          String zones = dataTable.get("zones");
+          if (zones!= null) {
+            String finalZones = resolveValue(zones);
+            Assertions.assertThat(row.getFilterValue())
+                .as(f("Zones show correct value : %s", finalZones))
+                .isEqualTo(finalZones);
+          }
+          break;
         case "Destination Hub":
-        case "Master Shipper":
+          String destinationHub = dataTable.get("destinationHub");
+          if (destinationHub!=null) {
+            String finalDestinationHub = resolveValue(destinationHub);
+            Assertions.assertThat(row.getFilterValue())
+                .as(f("Destination Hub show correct value : %s", finalDestinationHub))
+                .isEqualTo(finalDestinationHub);
+          }
+
+          break;
+        case "Marketplace Shipper":
+          String masterShipper = dataTable.get("masterShipper");
+          if (masterShipper!=null) {
+            String finalMasterShipper = resolveValue(masterShipper);
+            Assertions.assertThat(row.getFilterValue())
+                .as(f("Master shipper show correct value : %s", finalMasterShipper))
+                .isEqualTo(finalMasterShipper);
+          }
+
+          break;
         case "Shipper":
-          //unsupported due to shipper id fetching and dp fetching
+        case "Exclude Shippers":
+          String shipper = dataTable.get("shipper");
+          if (shipper!=null) {
+            String finalShipper = resolveValue(shipper);
+            Assertions.assertThat(row.getFilterValue())
+                .as(f("shipper show correct value : %s", finalShipper))
+                .isEqualTo(finalShipper);
+          }
+
           break;
         case "Granular Status":
-          String statuses = String.join(",", f.getGranularStatuses());
+          String statuses = String.join(", ", f.getGranularStatuses());
           Assertions.assertThat(row.getFilterValue())
               .as("granular status show correct values :")
               .isEqualTo(statuses);
@@ -249,7 +306,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
               .isEqualTo(yesNoRTS);
           break;
         case "Service Level":
-          String serviceLevels = String.join(",", f.getServiceLevels());
+          String serviceLevels = String.join(", ", f.getServiceLevels());
           Assertions.assertThat(row.getFilterValue())
               .as("Service levels show correct values")
               .isEqualTo(serviceLevels);
@@ -293,5 +350,46 @@ public class SortBeltPresetSteps extends AbstractSteps {
     Assertions.assertThat(checkSortBeltPresetPage.criteriaElements.get(0).filterType.getText())
         .as(f("%s is duplicated ", duplicateFilter))
         .isEqualTo(duplicateFilter);
+  }
+
+  @And("Operator select {string} as the preset base on Sort Belt Preset page")
+  public void operatorSelectBasePresetNameAsThePresetBaseOnSortBeltPresetPage(String basePresetName) {
+      sortBeltPresetPage.presetBaseModal.waitUntilVisible();
+      sortBeltPresetPage.presetBaseModal.presetBaseSelect.selectValue(basePresetName);
+      sortBeltPresetPage.presetBaseModal.confirmBtn.click();
+  }
+
+  @Then("Operator select the preset from Sort Belt Preset page")
+  public void operatorSelectThePresetFromSortBeltPresetPage() {
+    sortBeltPresetPage.listItems.get(0).click();
+  }
+
+  @Then("Operator click edit on Sort Belt Preset Detail page")
+  public void operatorClickEditOnSortBeltPresetDetailPage() {
+    sortBeltPresetDetailPage.waitUntilLoaded();
+    sortBeltPresetDetailPage.editButton.click();
+
+  }
+
+  @And("Operator take note the old preset name")
+  public void operatorTakeNoteTheOldPresetName() {
+    String oldPresetName = get(KEY_CREATED_SORT_BELT_PRESET_NAME);
+    put(KEY_UPDATED_SORT_BELT_PRESET_NAME, oldPresetName);
+  }
+
+  @And("Operator verify sort belt preset is not updated")
+  public void operatorVerifySortBeltPresetIsNotUpdated() {
+    SortBeltPreset savedPreset = get(KEY_CREATED_SORT_BELT_PRESET);
+    String oldName = get(KEY_UPDATED_SORT_BELT_PRESET_NAME);
+
+    Assertions.assertThat(savedPreset.getName())
+        .as("Preset name is not updated")
+        .isEqualTo(oldName);
+  }
+
+  @When("Operator click on Edit button at the Check Sort Belt Preset detail page")
+  public void operatorClickOnEditButtonAtTheCheckSortBeltPresetDetailPage() {
+    checkSortBeltPresetPage.editButton.click();
+    createPresetSortBeltPresetPage.waitUntilLoaded();
   }
 }
