@@ -1164,7 +1164,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void createOneTimeTripWithoutDriver(Map<String, String> resolvedMapOfData){
-    //resolvedMapOfData.forEach((k, v) -> System.out.println((k + ":" + v)));
 
     TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
     sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, resolvedMapOfData.get("originHub"));
