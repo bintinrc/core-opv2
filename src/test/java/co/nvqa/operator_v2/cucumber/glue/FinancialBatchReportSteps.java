@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.pricing.BillingReportsRequest;
 import co.nvqa.commons.model.pricing.billing.FinancialBatchReportEntry;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.FinancialBatchReportsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -110,9 +111,13 @@ public class FinancialBatchReportSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     List<FinancialBatchReportEntry> listOfBatchEntries = get(
         KEY_FINANCIAL_BATCH_REPORT_CSV_BODY_ENTRIES);
-    FinancialBatchReportEntry financialBatchReportEntryCsv = listOfBatchEntries.get(0);
-    SoftAssertions softAssertions = new SoftAssertions();
+    if (Objects.isNull(listOfBatchEntries)) {
+      throw new NvTestRuntimeException("There were no financial batch report data in CSV");
+    }
 
+    FinancialBatchReportEntry financialBatchReportEntryCsv = listOfBatchEntries.get(0);
+
+    SoftAssertions softAssertions = new SoftAssertions();
     if (mapOfData.containsKey("globalShipperId")) {
       softAssertions.assertThat(financialBatchReportEntryCsv.getGlobalShipperId())
           .as("Global Shipper ID is correct")

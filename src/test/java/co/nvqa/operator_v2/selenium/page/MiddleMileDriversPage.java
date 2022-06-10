@@ -53,7 +53,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
     private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead";
     private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH = "//div[@class='ant-table-container']//tbody//td[%d]";
-    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title' and text()='%s']";
+    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()='%s']";
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
@@ -645,6 +645,36 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         waitWhilePageIsLoading();
         String sortColumnXpath = f(TABLE_FILTER_SORT_XPATH, columnName);
         //scrollIntoView(sortColumnXpath);
+        String body_class_name = "name";
+        switch (columnName){
+            case "ID":
+                body_class_name ="id";
+                break;
+            case "Username":
+                body_class_name ="username";
+                break;
+            case "Hub":
+                body_class_name ="hub-name";
+                break;
+            case "Employment Type":
+                body_class_name ="employment-type";
+                break;
+            case "Employment Status":
+                body_class_name ="employment-status";
+                break;
+            case "License Type":
+                body_class_name ="license-type";
+                break;
+            case "License Status":
+                body_class_name ="license-status";
+                break;
+            case "Comments":
+                body_class_name ="comments";
+                break;
+        }
+
+        WebElement TableBody = findElementByXpath(f("(//div[contains(@class,'ant-table-container')]//div[contains(@class,'ant-table-body')]//td[contains(@class,'%s')])[1]",body_class_name));
+        executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", TableBody);
         List<WebElement> sortFields = getWebDriver().findElements(By.xpath(sortColumnXpath));
         if (sortFields.size() == 0) {
             Assertions.assertThat(sortFields.size()).as(f("Assert that the column %s to be sorted is displayed on the screen", columnName)).isGreaterThan(0);

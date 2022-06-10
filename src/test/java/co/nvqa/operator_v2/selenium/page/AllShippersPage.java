@@ -91,7 +91,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
   }
 
   public void createNewShipper(Shipper shipper) {
-    waitUntilPageLoaded();
+    waitUntilPageLoaded(120);
     createShipper.click();
     allShippersCreateEditPage.createNewShipper(shipper);
   }

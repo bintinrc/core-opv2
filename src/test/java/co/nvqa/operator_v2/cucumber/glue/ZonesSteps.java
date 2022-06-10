@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -22,8 +23,10 @@ import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_DESCRIPTION;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_HUB_NAME;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_ID;
+import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_LATITUDE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_SHORT_NAME;
 
@@ -66,7 +69,7 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyTheNewZoneIsCreatedSuccessfully() {
     zonesPage.inFrame(page -> {
       Zone expected = get(KEY_CREATED_ZONE);
-      zonesPage.findZone(expected);
+      zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
       put(KEY_CREATED_ZONE_ID, actual.getId());
@@ -89,6 +92,20 @@ public class ZonesSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies zone details on Zones page:")
+  public void operatorVerifiesZoneDetails(Map<String, String> data) {
+    Zone expected = new Zone(resolveKeyValues(data));
+    zonesPage.inFrame(page -> {
+      zonesPage.findZone(expected.getName());
+      Zone actual = zonesPage.zonesTable.readEntity(1);
+      if (StringUtils.equals(expected.getName(), actual.getName())) {
+        put(KEY_CREATED_ZONE_ID, actual.getId());
+        putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+      }
+      expected.compareWithActual(actual);
+    });
+  }
+
   @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
     Zone zone = get(KEY_CREATED_ZONE);
@@ -101,11 +118,11 @@ public class ZonesSteps extends AbstractSteps {
     zoneEdited.setHubName(zone.getHubName());
     zoneEdited.setDescription(zone.getDescription() + " [EDITED]");
 
-    put("zoneEdited", zoneEdited);
+    put(KEY_EDITED_ZONE, zoneEdited);
 
     zonesPage.inFrame(page -> {
-      zonesPage.waitUntilPageLoaded();
-      zonesPage.findZone(zone);
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zone.getName());
       zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       zonesPage.editZoneDialog.waitUntilVisible();
       zonesPage.editZoneDialog.name.setValue(zoneEdited.getName());
@@ -131,7 +148,7 @@ public class ZonesSteps extends AbstractSteps {
 
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilPageLoaded();
-      zonesPage.findZone(zone);
+      zonesPage.findZone(zone.getName());
       zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       zonesPage.editZoneDialog.waitUntilVisible();
       zonesPage.editZoneDialog.rts.click();
@@ -153,7 +170,7 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyTheNewZoneIsUpdatedSuccessfully() {
     Zone expected = get("zoneEdited");
     zonesPage.inFrame(page -> {
-      zonesPage.findZone(expected);
+      zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
       takesScreenshot();
@@ -164,23 +181,29 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorDeleteTheNewZone() {
     Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
     zonesPage.inFrame(page -> {
-      zonesPage.waitUntilPageLoaded();
-      zonesPage.findZone(zone);
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zone.getName());
       zonesPage.zonesTable.clickActionButton(1, ACTION_DELETE);
       zonesPage.confirmDeleteDialog.waitUntilVisible();
       zonesPage.confirmDeleteDialog.confirm.click();
     });
   }
 
+  @When("Operator find {value} zone on Zones page")
+  public void findZone(String zoneName) {
+    zonesPage.inFrame(page -> {
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zoneName);
+    });
+  }
+
   @Then("^Operator verify the new Zone is deleted successfully$")
   public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
-    Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
+    Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_CREATED_ZONE);
     zonesPage.inFrame(page -> {
-      zonesPage.clickRefreshCache();
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
           .as("Zone " + zone.getName() + " were deleted").isTrue();
-      takesScreenshot();
     });
   }
 
@@ -189,28 +212,58 @@ public class ZonesSteps extends AbstractSteps {
     Zone zone = get(KEY_CREATED_ZONE);
 
     zonesPage.inFrame(page -> {
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zone.getName());
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
+
+      zonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
+      List<String> values = zonesPage.zonesTable.readColumn(COLUMN_ID);
+      assertThat("ID filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_ID);
+
       zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
-      List<String> values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
+      values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
       assertThat("Short Name filter results", values,
           Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
       assertThat("Name filter results", values,
           Matchers.everyItem(Matchers.containsString(zone.getName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
       values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
       assertThat("Hub Name filter results", values,
           Matchers.everyItem(Matchers.containsString(zone.getHubName())));
-      takesScreenshot();
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_HUB_NAME);
+
+      zonesPage.zonesTable.filterByColumn(COLUMN_LATITUDE, zone.getLatitude());
+      values = zonesPage.zonesTable.readColumn(COLUMN_LATITUDE);
+      assertThat("Latitude/Longitude filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_LATITUDE);
+
+      zonesPage.zonesTable.filterByColumn(COLUMN_DESCRIPTION, zone.getDescription());
+      values = zonesPage.zonesTable.readColumn(COLUMN_DESCRIPTION);
+      assertThat("Description filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_DESCRIPTION);
     });
   }
 
   @When("Operator download Zone CSV file")
   public void operatorDownloadZoneCsvFile() {
+    zonesPage.inFrame(page -> zonesPage.downloadCsvFile.click());
+  }
+
+  @When("Operator reload zone cash on Zones page")
+  public void reloadZoneCash() {
     zonesPage.inFrame(page -> {
-      zonesPage.downloadCsvFile.click();
+      zonesPage.waitUntilLoaded();
+      zonesPage.refreshCash();
     });
   }
 
@@ -218,8 +271,9 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
     Zone zone = get(KEY_CREATED_ZONE);
     zonesPage.inFrame(page -> {
-      zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
-      takesScreenshot();
+      String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
+          zone.getHubName());
+      page.verifyFileDownloadedSuccessfully(ZonesPage.CSV_FILENAME, expectedText);
     });
   }
 
@@ -284,7 +338,7 @@ public class ZonesSteps extends AbstractSteps {
             new Date()));
 
     zonesPage.inFrame(page -> {
-      page.waitUntilPageLoaded();
+      page.waitUntilLoaded();
       page.addZone.click();
       page.addZoneDialog.waitUntilVisible();
       page.addZoneDialog.name.setValue(zone.getName());

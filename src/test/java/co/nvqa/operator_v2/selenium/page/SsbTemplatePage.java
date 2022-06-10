@@ -52,12 +52,17 @@ public class SsbTemplatePage extends SimpleReactPage {
   @FindBy(css = "li.ant-pagination-next")
   public Button nextPage;
 
+  @FindBy(xpath = "//button//span[text()='OK']")
+  public Button okBtn;
+
+
   private static String XPATH_HEADER_COLUMN_IN_AVAILABLE_HEADERS = "//div[text()='%s']";
   private static String XPATH_HEADER_COLUMN_IN_SELECTED_HEADERS = "//div[contains(text(),'%s')]";
   private static String XPATH_HEADER_COLUMN_SELECTED_DROP_AREA = "//div[@data-testid='selected-drop-area']";
   private static String XPATH_HEADER_COLUMN_OPTIONS_DROP_AREA = "//div[@data-testid='options-drop-area']";
 
   private static String XPATH_TEMPLATE_EDIT_BTN = "//td[text()='%s']/..//span[@aria-label='edit']";
+  private static String XPATH_TEMPLATE_DELETE_BTN = "//td[text()='%s']/..//span[@aria-label='delete']";
 
   public SsbTemplatePage(WebDriver webDriver) {
     super(webDriver);
@@ -118,5 +123,15 @@ public class SsbTemplatePage extends SimpleReactPage {
       prevPage.click();
     }
     clickAndWaitUntilDone(templateEditBtn);
+  }
+
+  public void selectAndDeleteSsbTemplate(String name) {
+    lastPagePaginationBtn.click();
+    final String templateDeleteBtn = f(XPATH_TEMPLATE_DELETE_BTN, name);
+    while (!isElementExist(templateDeleteBtn) && prevPage.isEnabled()) {
+      prevPage.click();
+    }
+    clickAndWaitUntilDone(templateDeleteBtn);
+    okBtn.click();
   }
 }

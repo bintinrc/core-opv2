@@ -24,7 +24,7 @@ Feature: Order Tag Management
       | {order-tag-name-3} |
 
   Scenario: Remove Tags from Order (uid:1ea8fbc7-d934-4433-9cc2-3034f6d9ae2a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -44,7 +44,7 @@ Feature: Order Tag Management
       | {order-tag-name-3} |
 
   Scenario: Update Tags from Order (uid:7d001759-5de3-42aa-9622-dd72913aae5a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -64,7 +64,7 @@ Feature: Order Tag Management
       | {order-tag-name-3} |
 
   Scenario: Clear All Tags from Order (uid:abb24ee5-c2b1-4b8a-afa2-8b7fbee392b0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -81,7 +81,7 @@ Feature: Order Tag Management
     Then Operator verifies no tags shown on Edit Order page
 
   Scenario Outline: Search Orders on Order Tag Management Page by Order Type Filter - <Note> (<hiptest-uid>)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -96,7 +96,7 @@ Feature: Order Tag Management
       | Return | uid:c2cb8cdc-f354-4afc-a5c8-63cc99a7955e | Return    | true             |
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Hide RTS Orders (uid:375d4322-b8ba-4cd3-a211-ce59402fc803)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -115,7 +115,7 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders (uid:b2d0b3b7-e915-49ed-94a1-0ac287889db5)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -132,7 +132,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page
 
   Scenario: Search Orders on the Order Tag Management Page by Shipper Filter (uid:d4180b65-215f-48f0-9c42-7f7ac5a45b2c)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -143,7 +143,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page
 
   Scenario: Search Orders on the Order Tag Management Page by Master Shipper Filter (uid:ae438b3a-376d-46bf-811a-1ccfcd8ef6b0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
@@ -155,7 +155,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page
 
   Scenario: Search Orders on the Order Tag Management Page by Status & Granular Status Filter (uid:3ff15dde-21af-4e3c-89f1-6b57534e4e73)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -169,7 +169,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page
 
   Scenario: Search Orders on the Order Tag Management Page by CSV File (uid:45a9e1a9-2112-4a5d-b753-83dd279c2f43)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

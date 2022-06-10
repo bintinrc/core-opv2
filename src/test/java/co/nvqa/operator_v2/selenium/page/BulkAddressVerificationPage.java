@@ -34,15 +34,14 @@ public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVeri
   private static final Logger LOGGER = LoggerFactory.getLogger(
       BulkAddressVerificationPage.class);
 
-  private static final String IFRAME_XPATH = "//iframe[contains(@src,'bulk-address-verification')]";
   private static final String SUCCESS_TABLE_XPATH = "//button[@data-testid='download-success-csv-button']/parent::div/following-sibling::div[1]//table";
   private static final String SUCCESS_COLUMN_XPATH = "%s/tbody/tr[%d]/td[@class='%s']";
   private static final String POPUP_MESSAGE = "//div[contains(text(),'Updated %d waypoint(s)')]";
 
-  @FindBy(xpath = "//button[@data-testid='upload-csv-button']")
+  @FindBy(css = "[data-testid='upload-csv-button']")
   public Button uploadCsv;
 
-  @FindBy(xpath = "//button[@data-testid='update-successful-matches']")
+  @FindBy(css = "[data-testid='update-successful-matches']")
   public Button updateSuccessfulMatches;
 
   @FindBy(css = "[data-testid='download-csv-sample-button']")

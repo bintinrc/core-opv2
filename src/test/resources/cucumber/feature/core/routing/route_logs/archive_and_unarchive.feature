@@ -39,11 +39,13 @@ Feature: Route Logs - Archive & Unarchive
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+      | archiveRoutes | show       |
     When Operator unarchive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Unarchived |
-      | waitUntilInvisible | true                  |
+      | top                | 1 Route(s) Unarchived                   |
+      | bottom             | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | waitUntilInvisible | true                                    |
     And Operator verify routes details on Route Logs page using data below:
       | id                                | status      |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
@@ -63,12 +65,14 @@ Feature: Route Logs - Archive & Unarchive
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+      | archiveRoutes | show       |
     When Operator unarchive routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies that success react notification displayed:
-      | top                | 2 Route(s) Unarchived |
-      | waitUntilInvisible | true                  |
+      | top                | 2 Route(s) Unarchived                                                     |
+      | bottom             | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | waitUntilInvisible | true                                                                      |
     Then Operator verify routes details on Route Logs page using data below:
       | id                                | status      |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |

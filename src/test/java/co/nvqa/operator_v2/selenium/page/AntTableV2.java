@@ -29,6 +29,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @FindBy(css = "div.caret-down-icon > button")
   public PageElement openMenu;
+  @FindBy(css = ".ant-dropdown-trigger > button")
+  public PageElement openMenu2;
 
   @FindBy(xpath = ".//span[.='Select All Shown']")
   public PageElement selectAllShown;
@@ -153,7 +155,11 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   public void selectAllShown() {
     if (!selectAllShown.isDisplayedFast()) {
-      openMenu.click();
+      if (openMenu2.isDisplayedFast()) {
+        openMenu2.click();
+      } else {
+        openMenu.click();
+      }
       selectAllShown.click();
     }
   }
@@ -178,5 +184,9 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
         "Locator for columnId [" + columnId + "] was not defined.");
     new TextBox(getWebDriver(),
         f(".//div[@data-headerkey='%s']//input", columnLocator)).forceClear();
+  }
+
+  public void waitIsNotEmpty(int timeoutInSeconds) {
+    waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000, "Table is empty");
   }
 }

@@ -113,6 +113,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[text()='Weight']/following-sibling::p")
   public PageElement weight;
 
+  @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::p")
+  public PageElement dimensions;
+
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
 
@@ -746,6 +749,42 @@ public class EditOrderPage extends OperatorV2SimplePage {
     return weight;
   }
 
+  public Double getLength() {
+    Double length = null;
+    String actualText = this.dimensions.getText();
+
+    if (!actualText.contains("(L) x (B) x (H) cm")) {
+      String temp = actualText.replaceAll("[^-?0-9]+", " ");
+      length = Double.parseDouble(temp.split(" ")[2]);
+    }
+
+    return length;
+  }
+
+  public Double getWidth() {
+    Double width = null;
+    String actualText = this.dimensions.getText();
+
+    if (!actualText.contains("(L) x (B) x (H) cm")) {
+      String temp = actualText.replaceAll("[^-?0-9]+", " ");
+      width = Double.parseDouble(temp.split(" ")[0]);
+    }
+
+    return width;
+  }
+
+  public Double getHeighth() {
+    Double height = null;
+    String actualText = this.dimensions.getText();
+
+    if (!actualText.contains("(L) x (B) x (H) cm")) {
+      String temp = actualText.replaceAll("[^-?0-9]+", " ");
+      height = Double.parseDouble(temp.split(" ")[1]);
+    }
+
+    return height;
+  }
+
   @SuppressWarnings("unused")
   public Double getCashOnDelivery() {
     Double cod = null;
@@ -797,7 +836,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void waitUntilInvisibilityOfLoadingOrder() {
     waitUntilInvisibilityOfElementLocated(
-        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]");
+        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]", 60);
     pause100ms();
   }
 

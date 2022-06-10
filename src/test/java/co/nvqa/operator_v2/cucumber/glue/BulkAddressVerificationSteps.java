@@ -162,7 +162,10 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
 
     put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);
 
-    bulkAddressVerificationPage.inFrame(page -> page.uploadWaypointsData(jaroScores));
+    bulkAddressVerificationPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.uploadWaypointsData(jaroScores);
+    });
   }
 
   @When("^Operator download sample CSV file on Bulk Address Verification page$")
@@ -186,6 +189,7 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
   @And("^Operator verifies waypoints are assigned to \"([^\"]*)\" rack sector upon bulk address verification$")
   public void operatorVerifiesWaypointsAreAssignedToRackSectorUponBulkAddressVerification(
       String sector) {
+    bulkAddressVerificationPage.switchTo();
     boolean isRts = sector.equals("RTS");
     List<JaroScore> listOfJaroScore = get(KEY_LIST_OF_CREATED_JARO_SCORES);
     List<JaroScore> listOfValidJaroScore = listOfJaroScore.stream()
@@ -199,5 +203,11 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
   public void operatorUpdateSuccessfullyMatchedWaypointsUponBulkAddressVerification() {
     List<JaroScore> listOfJaroScore = get(KEY_LIST_OF_CREATED_JARO_SCORES);
     bulkAddressVerificationPage.updateSuccessfulMatches(listOfJaroScore.size());
+  }
+
+  @Then("Operator clicks Update successful matched on Bulk Address Verification page")
+  public void operatorUpdateSuccessfullyMatched() {
+    bulkAddressVerificationPage.inFrame(page ->
+        bulkAddressVerificationPage.updateSuccessfulMatches.click());
   }
 }

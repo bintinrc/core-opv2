@@ -120,4 +120,9 @@ public class SsbTemplateSteps extends AbstractSteps {
     ssbTemplatePage.selectAndEditSsbTemplate(name);
   }
 
+  @Then("Operator deletes the SSB template {value}")
+  public void operatorDeletesTheSSBTemplate(String name) {
+    ssbTemplatePage.selectAndDeleteSsbTemplate(name);
+  }
+
 }

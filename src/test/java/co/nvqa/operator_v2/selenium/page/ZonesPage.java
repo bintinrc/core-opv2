@@ -26,8 +26,11 @@ import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME
  */
 public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
-  private static final String CSV_FILENAME = "zones.csv";
+  public static final String CSV_FILENAME = "zones.csv";
   public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
+
+  @FindBy(css = ".loading-container")
+  public PageElement loading;
 
   @FindBy(tagName = "iframe")
   public PageElement pageFrame;
@@ -84,20 +87,6 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
     halfCircleSpinner.waitUntilInvisible();
   }
 
-  public void verifyCsvFileDownloadedSuccessfully(Zone zone) {
-    String name = zone.getName();
-    String shortName = zone.getShortName();
-    String hubName = zone.getHubName();
-    String expectedText = String.format("%s,%s,%s", shortName, name, hubName);
-    verifyFileDownloadedSuccessfully(CSV_FILENAME, expectedText);
-  }
-
-  public void clickRefreshCache() {
-    refresh.click();
-    waitUntilVisibilityOfNotification("Zone Cache Refreshed");
-    pause2s();
-  }
-
   private static class ZoneParamsDialog extends AntModal {
 
     public ZoneParamsDialog(WebDriver webDriver, WebElement webElement) {
@@ -126,14 +115,27 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
     public AntSwitch rts;
   }
 
-  public void findZone(Zone zone) {
-    zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
-    if (zonesTable.isEmpty()) {
-      pause2s();
-      clickRefreshCache();
-      refreshPage();
-      switchTo();
-      zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
+  @Override
+  public void waitUntilLoaded() {
+    int timeout = addZone.isDisplayedFast() ? 2 : 10;
+    if (loading.waitUntilVisible(timeout)) {
+      loading.waitUntilInvisible();
+    }
+  }
+
+  public void refreshCash() {
+    refresh.click();
+    waitUntilLoaded();
+  }
+
+  public void findZone(String zoneName) {
+    zonesTable.filterByColumn(COLUMN_NAME, zoneName);
+    int count = 0;
+    while (zonesTable.isEmpty() && count < 10) {
+      pause5s();
+      refreshCash();
+      zonesTable.filterByColumn(COLUMN_NAME, zoneName);
+      count++;
     }
   }
 
