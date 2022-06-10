@@ -237,7 +237,6 @@ Feature: Sort Task
       | SORT-SG-2-HUB   |
       | SORTSGMIDDLETIER|
 
-
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
@@ -348,7 +347,6 @@ Feature: Sort Task
       | {hub-name-8}    |
       | SORT-SG-2-HUB   |
       | SORTSGMIDDLETIER|
-
 
   @CloseNewWindows
   Scenario: Search sort nodes on Sort Structure Page - RTS zone (uid:4776cda5-157a-4345-b7d6-b9c3cc776691)

@@ -359,11 +359,7 @@ public class SortTasksSteps extends AbstractSteps {
   public void operatorSelectRegionOnSortTaskPage(Map<String,String>data) {
     data = resolveKeyValues(data);
     String regionName = data.get("regionName");
-
     sortTasksPage.selectRegion.selectValue(regionName);
-
-
     pause5s();
   }
-
 }
