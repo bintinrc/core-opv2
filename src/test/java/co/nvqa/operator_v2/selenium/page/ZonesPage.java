@@ -2,14 +2,19 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
+import com.epam.ta.reportportal.ws.model.Page;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -22,9 +27,10 @@ import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME
 public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
   private static final String CSV_FILENAME = "zones.csv";
+  public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
 
   @FindBy(tagName = "iframe")
-  private PageElement pageFrame;
+  public PageElement pageFrame;
 
   @FindBy(css = "[data-testid='add-zone-button']")
   public Button addZone;
@@ -52,6 +58,15 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
   @FindBy(xpath = "//div[@class='ant-modal-title' and text()='Bulk Edit Polygons']")
   public PageElement bulkEditPolygonsDialog;
+
+  @FindBy(xpath = "//input[@accept='.kml']")
+  public FileInput uploadKmlFileInput;
+
+  @FindBy(xpath = "//span[@class='ant-upload-span']//span[@class='ant-upload-list-item-name']")
+  public PageElement uploadKmlFileName;
+
+  @FindBy(xpath = "//button[@data-testid='select-button']")
+  public Button selectKmlFile;
 
   public ZonesTable zonesTable;
 
@@ -120,6 +135,28 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
       switchTo();
       zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
     }
+  }
+
+  public void uploadKmlFile(File file) {
+    uploadKmlFileInput.sendKeys(file.getAbsoluteFile());
+    uploadKmlFileName.waitUntilVisible();
+    Assertions.assertThat(uploadKmlFileName.isDisplayed())
+        .as("KML file is SELECTED")
+        .isTrue();
+    Assertions.assertThat(uploadKmlFileName.getText())
+        .as("Selected KML file is CORRECT")
+        .isEqualTo(file.getName());
+    selectKmlFile.waitUntilClickable();
+    Assertions.assertThat(selectKmlFile.isEnabled())
+        .as("There is no problem selecting KML file")
+        .isTrue();
+    selectKmlFile.click();
+  }
+
+  public boolean isNotificationShowUp(String message) {
+    waitUntilVisibilityOfToastReact(message);
+
+    return true;
   }
 
   public static class AddZoneDialog extends ZoneParamsDialog {
