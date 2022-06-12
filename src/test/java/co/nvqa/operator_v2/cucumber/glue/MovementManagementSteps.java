@@ -19,10 +19,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -339,6 +337,8 @@ public class MovementManagementSteps extends AbstractSteps {
       }
       putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
     }
+    movementManagementPage.addStationMovementScheduleModal.create.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
   }
 
   @And("Operator load schedules on Movement Management page using data below:")
@@ -616,6 +616,7 @@ public class MovementManagementSteps extends AbstractSteps {
         break;
       case "stations":
         movementManagementPage.stationsTab.click();
+        Assertions.assertThat(movementManagementPage.loadSchedules.isEnabled()).as("Load Schedules Button is disable").isFalse();
         break;
       case "relations":
         movementManagementPage.relationsTab.click();
@@ -862,9 +863,11 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verify all station schedules are correct from UI")
   public void operatorVerifyAllStationSchedulesAreCorrectFromUI() {
+    movementManagementPage.waitForLoadingIconDisappear();
     List<StationMovementSchedule> stationMovementSchedules = get(
         KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE);
-    Assertions.assertThat(movementManagementPage.stationMovementSchedulesTable.getRowsCount() - 1)
+System.out.println("Row count: "+movementManagementPage.stationMovementSchedulesTable.getRowsCount());
+    Assertions.assertThat(movementManagementPage.stationMovementSchedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(stationMovementSchedules.size());
     for (int i = 0; i < stationMovementSchedules.size(); i++) {
       StationMovementSchedule actual = movementManagementPage.stationMovementSchedulesTable
@@ -878,16 +881,10 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verify all station schedules are correct")
   public void operatorVerifyAllStationSchedulesAreCorrect() {
+    movementManagementPage.waitForLoadingIconDisappear();
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
     Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(hubRelations.size());
-//    for (int i = 0; i < hubRelations.size(); i++) {
-//      System.out.println(hubRelations.get(i).getSchedules().get(i).getStartTime());
-//      System.out.println(hubRelations.get(i).getSchedules().get(i).getDay());
-//      System.out.println(hubRelations.get(i).getSchedules().get(i).getDuration());
-//      System.out.println(hubRelations.get(i).getSchedules().get(i).getDepartureTime());
-//      System.out.println(hubRelations.get(i).getSchedules().toString());
-//    }
     for (int i = 0; i < hubRelations.size(); i++) {
       HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
           .readEntity(i + 1);
@@ -920,15 +917,12 @@ public class MovementManagementSteps extends AbstractSteps {
         .setComment("This schedule has been updated by Automation Test");
   }
 
-  @When("Operator deletes {int} schedule fro Edit Schedule dialog")
+  @When("Operator deletes schedule {int} from Edit Schedule dialog")
   public void operatorDeletesCreatedStationSchedule(int index) {
-    movementManagementPage.modify.click();
-    movementManagementPage.deleteSchedule.get(index).click();
-    movementManagementPage.save.click();
-    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage.closeNotificationMessage();
+    movementManagementPage.deleteMovementSchedule(index);
     movementManagementPage
-        .verifyNotificationWithMessage("1 schedule(s) have been updated");
-    movementManagementPage.closeButton.click();
+        .verifyNotificationWithMessage("1 schedule(s) have been deleted");
   }
 
   @When("Operator updates all created station schedules using same values")
@@ -940,6 +934,71 @@ public class MovementManagementSteps extends AbstractSteps {
             .clearAndSendKeys("This schedule has been updated by Automation Test");
     movementManagementPage.save.click();
     movementManagementPage.modalUpdateButton.click();
-    pause9s();
+  }
+
+  @When("Operator updates Station Schedule to Duplicate and Existing Schedule and verifies error messages")
+  public void operatorUpdatesCreatedStationSchedulesToDuplicateAndExistingShcedule(){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    movementManagementPage.modify.click();
+    String UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+    String UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+    movementManagementPage.UpdatesdepartureTime(UpdatedStartTime);
+    movementManagementPage.UpdatesdurationTime(UpdatedDurationTime);
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+
+    List<String> errorMessageList = new ArrayList<String>();
+    errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime);
+    errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime+" already exists");
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @When("Operator updates Station Schedule to Duplicate Schedule and verifies error messages")
+  public void operatorUpdatesCreatedStationSchedulesToDuplicateShcedule(){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    movementManagementPage.modify.click();
+    String UpdatedStartTime = "00:01";
+    String UpdatedDurationTime = "00:01";
+    movementManagementPage.UpdatesdepartureTime(UpdatedStartTime);
+    movementManagementPage.UpdatesdurationTime(UpdatedDurationTime);
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+
+    List<String> errorMessageList = new ArrayList<String>();
+    errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime);
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @When("Operator updates Station Schedule to Existing Schedule and verifies error messages")
+  public void operatorUpdatesCreatedStationSchedulesToExistingShcedule(){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    movementManagementPage.modify.click();
+    String UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+    String UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+    movementManagementPage.UpdatesdepartureTime(UpdatedStartTime);
+    movementManagementPage.UpdatesdurationTime(UpdatedDurationTime);
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+
+    List<String> errorMessageList = new ArrayList<String>();
+    errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime+" already exists");
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @When("Operator clicks Error Message close icon")
+  public void operatorCloseMessage(){
+    movementManagementPage.closeNotificationMessage();
+  }
+
+  @Then("Operator verifies page is back to view mode")
+  public void operatorVerifiesPageIsViewMode(){
+    movementManagementPage.verifyPageInViewMode();
   }
 }

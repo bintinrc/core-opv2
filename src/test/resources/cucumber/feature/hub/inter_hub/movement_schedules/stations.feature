@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @Stations @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @Stations
 Feature: Stations
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -154,9 +154,9 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Land Haul                          |
-      | departureTime  | 20:15                              |
+      | departureTime  | 20:00                              |
       | duration       | 0                                  |
-      | endTime        | 00:15                              |
+      | endTime        | 00:01                              |
       | daysOfWeek     | all                                |
     Then Operator verify all station schedules are correct from UI
 
@@ -191,9 +191,9 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Land Haul                          |
-      | departureTime  | 20:15                              |
+      | departureTime  | 20:00                              |
       | duration       | 0                                  |
-      | endTime        | 00:15                              |
+      | endTime        | 00:01                              |
       | daysOfWeek     | all                                |
     When Operator refresh page
     And Movement Management page is loaded
@@ -205,9 +205,9 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Land Haul                          |
-      | departureTime  | 21:15                              |
+      | departureTime  | 21:00                              |
       | duration       | 0                                  |
-      | endTime        | 00:15                              |
+      | endTime        | 00:01                              |
       | daysOfWeek     | all                                |
     Then Operator verify all station schedules are correct from UI
 
@@ -244,9 +244,9 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Land Haul                          |
-      | departureTime  | 20:15                              |
+      | departureTime  | 20:00                              |
       | duration       | 0                                  |
-      | endTime        | 00:15                              |
+      | endTime        | 01:01                            |
       | daysOfWeek     | all                                |
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
@@ -284,9 +284,9 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Land Haul                          |
-      | departureTime  | 20:15                              |
+      | departureTime  | 20:00                              |
       | duration       | 0                                  |
-      | endTime        | 00:15                              |
+      | endTime        | 00:20                              |
       | daysOfWeek     | all                                |
     Then Operator verify all station schedules are correct from UI
     When Operator refresh page
@@ -299,9 +299,9 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Land Haul                          |
-      | departureTime  | 21:15                              |
+      | departureTime  | 21:00                             |
       | duration       | 0                                  |
-      | endTime        | 01:15                              |
+      | endTime        | 01:20                             |
       | daysOfWeek     | all                                |
     Then Operator verify all station schedules are correct from UI
 
@@ -343,7 +343,7 @@ Feature: Stations
     Then Operator verify all station schedules are correct
     Then DB Operator verify "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" is deleted in hub_relation_schedules
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Succeed Update Schedule (uid:f808c484-4bcb-4f78-83f9-bbcbaa23da3d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -415,8 +415,8 @@ Feature: Stations
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator adds new Station Movement Schedules on Movement Management page:
       | crossdockHub                       | originHub                          | destinationHub                     | movementType | departureTime | duration | endTime | daysOfWeek          |
-      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:15         | 0        | 00:15   | monday,tuesday      |
-      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:15         | 0        | 00:15   | wednesday, thursday |
+      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:00         | 0        | 01:01   | monday,tuesday      |
+      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 21:00         | 0        | 01:01   | wednesday, thursday |
     Then Operator verify all station schedules are correct from UI
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
@@ -446,14 +446,16 @@ Feature: Stations
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
     And Operator load schedules on Movement Management page using data below:
-      | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator adds new Station Movement Schedules on Movement Management page:
       | crossdockHub                       | originHub                          | destinationHub                     | movementType | departureTime | duration | endTime | daysOfWeek          |
-      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:15         | 0        | 00:15   | monday,tuesday      |
-      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:15         | 0        | 00:15   | wednesday, thursday |
-    And Operator deletes 1 schedule fro Edit Schedule dialog
+      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 20:00         | 0        | 02:01   | monday,tuesday      |
+      | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[1].name} | {KEY_LIST_OF_CREATED_HUBS[2].name} | Land Haul    | 21:00         | 0        | 02:01   | wednesday, thursday |
+    And Operator deletes schedule 1 from Edit Schedule dialog
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Fail Update Station Schedule to Duplicate and Existing Schedule (uid:002362fd-43ed-4704-a330-fb19d42c9d22)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -476,8 +478,9 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 3
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -486,15 +489,86 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    When Operator updates all created station schedules using same values
-#    When Operator refresh page
-#    And Movement Management page is loaded
-#    When Operator select "Stations" tab on Movement Management page
-#    And Operator load schedules on Movement Management page using data below:
-#      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-#    Then Operator verify all station schedules are correct
+    Then Operator updates Station Schedule to Duplicate and Existing Schedule and verifies error messages
+    When Operator clicks Error Message close icon
+    Then Operator verifies page is back to view mode
+    Then Operator verify all station schedules are correct
+
+  @DeleteHubsViaAPI @DeleteHubsViaDb
+  Scenario: Fail Update Station Schedule to Duplicate Schedule (uid:46dbce64-4445-4cb5-bf7e-ccb57fd8115f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    When Operator select "Stations" tab on Movement Management page
+    And Operator load schedules on Movement Management page using data below:
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    Then Operator verify all station schedules are correct
+    Then Operator updates Station Schedule to Duplicate Schedule and verifies error messages
+    When Operator clicks Error Message close icon
+    Then Operator verifies page is back to view mode
+    Then Operator verify all station schedules are correct
+
+  @DeleteHubsViaAPI @DeleteHubsViaDb
+  Scenario: Fail Update Station Schedule to Existing Schedule (uid:2376bfa9-bfcf-4b22-b0d8-b3eb4788dfe0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    When Operator select "Stations" tab on Movement Management page
+    And Operator load schedules on Movement Management page using data below:
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    Then Operator verify all station schedules are correct
+    Then Operator updates Station Schedule to Existing Schedule and verifies error messages
+    When Operator clicks Error Message close icon
+    Then Operator verifies page is back to view mode
+    Then Operator verify all station schedules are correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
