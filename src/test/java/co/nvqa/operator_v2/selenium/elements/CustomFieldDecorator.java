@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -228,6 +229,14 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
         return method.invoke(element, objects);
       } catch (InvocationTargetException e) {
         if (e.getCause() instanceof StaleElementReferenceException) {
+          FieldUtils.writeDeclaredField(locator, "cachedElement", null, true);
+          try {
+            return method.invoke(locator.findElement(), objects);
+          } catch (InvocationTargetException ex) {
+            throw ex.getCause();
+          }
+        } else if (e.getCause() instanceof InvalidElementStateException) {
+          Thread.sleep(1000);
           FieldUtils.writeDeclaredField(locator, "cachedElement", null, true);
           try {
             return method.invoke(locator.findElement(), objects);

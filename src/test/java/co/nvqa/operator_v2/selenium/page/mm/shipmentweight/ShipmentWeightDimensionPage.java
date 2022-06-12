@@ -43,7 +43,7 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(xpath = "//button[span[.='Load Selection']]")
   public Button loadSelectionButton;
 
-  @FindBy(css = "[data-testid='newFilterExpandToggle']")
+  @FindBy(css = "[data-testid='enter-new-filter-button']")
   public Button newFilterToggleButton;
 
   @FindBy(id = "search-by-sid_searchIds")
@@ -62,23 +62,35 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   public AntConfirmModal searchErrorConfirmModal;
 
   // new filter
-  @FindBy(css = "[data-testid='clearAndClose']")
+  @FindBy(css = "[data-testid='preset-clear-and-close-button']")
   public Button clearAndCloseButton;
 
-  @FindBy(xpath = "//button[./span[.='Delete Preset']]")
+  @FindBy(css = "[data-testid='preset-filter-delete-button']")
   public Button deletePresetButton;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='shipment_type']]")
+  @FindBy(css = "[data-testid='preset-shipment-type-select']")
   public AntSelect shipmentTypeSelect;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='origin_hub']]")
+  @FindBy(css = "[data-testid='preset-start-hub-select']")
   public AntSelect startHubSelect;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='destination_hub']]")
+  @FindBy(css = "[data-testid='preset-end-hub-select']")
   public AntSelect endHubSelect;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='shipment_status']]")
+  @FindBy(css = "[data-testid='preset-shipment-status-select']")
   public AntSelect shipmentStatusSelect;
+
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='shipment_type']]")
+  public AntSelect disabledShipmentTypeSelect;
+
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='origin_hub']]")
+  public AntSelect disabledStartHubSelect;
+
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='destination_hub']]")
+  public AntSelect disabledEndHubSelect;
+
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='shipment_status']]")
+  public AntSelect disabledShipmentStatusSelect;
 
   @FindBy(id = "is_create_new_filter")
   public CheckBox saveAsPresetCb;

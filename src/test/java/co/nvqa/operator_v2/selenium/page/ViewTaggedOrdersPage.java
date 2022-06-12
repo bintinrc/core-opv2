@@ -31,6 +31,14 @@ public class ViewTaggedOrdersPage extends OperatorV2SimplePage {
     taggedOrdersTable = new TaggedOrdersTable(webDriver);
   }
 
+  @Override
+  public void waitUntilPageLoaded() {
+    super.waitUntilPageLoaded();
+    if (halfCircleSpinner.waitUntilVisible(3)) {
+      halfCircleSpinner.waitUntilInvisible();
+    }
+  }
+
   public static class TaggedOrdersTable extends MdVirtualRepeatTable<TaggedOrderParams> {
 
     public static final String COLUMN_DRIVER = "driver";

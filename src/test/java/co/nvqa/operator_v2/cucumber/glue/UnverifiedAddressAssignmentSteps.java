@@ -21,7 +21,13 @@ public class UnverifiedAddressAssignmentSteps extends AbstractSteps {
 
   @And("Operator clicks Load Selection on Unverified Address Assignment page")
   public void operatorClicksLoadSelection() {
-    page.inFrame(() -> page.loadSelection.clickAndWaitUntilDone(120));
+    page.inFrame(() -> {
+      page.waitUntilLoaded(2);
+      page.loadSelection.clickAndWaitUntilDone(240);
+      if (page.loadSelection.isDisplayedFast()) {
+        page.loadSelection.clickAndWaitUntilDone(240);
+      }
+    });
   }
 
   @Then("Operator verifies address on Unverified Address Assignment page:")
@@ -34,12 +40,12 @@ public class UnverifiedAddressAssignmentSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator assign address {string} to zone {string} on Unverified Address Assignment page")
+  @Then("Operator assign address {value} to zone {value} on Unverified Address Assignment page")
   public void operatorAssignAddress(String address, String zone) {
     page.inFrame(() -> {
-      page.txnAddressTable.filterByColumn(TxnAddressTable.COLUMN_ADDRESS, resolveValue(address));
+      page.txnAddressTable.filterByColumn(TxnAddressTable.COLUMN_ADDRESS, address);
       page.txnAddressTable.selectRow(1);
-      page.selectZone.selectValue(resolveValue(zone));
+      page.selectZone.selectValue(zone);
       page.assignButton.click();
     });
   }

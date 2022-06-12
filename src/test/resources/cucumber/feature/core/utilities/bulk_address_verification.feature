@@ -23,6 +23,9 @@ Feature: Bulk Address Verification
       | waypoint  | FROM_CREATED_ORDER_DETAILS |
       | latitude  | GENERATED                  |
       | longitude | GENERATED                  |
+    And Operator clicks Update successful matched on Bulk Address Verification page
+    Then Operator verifies that success react notification displayed:
+      | top | Updated 2 waypoint(s) |
     Then Operator verify Jaro Scores are created successfully
 
   Scenario: Operator Download Bulk Address Verify Sample CSV File (uid:88b8b4ab-f130-47b1-b317-54eb770ad5e8)
@@ -44,6 +47,9 @@ Feature: Bulk Address Verification
       | waypoint  | FROM_CREATED_ORDER_DETAILS |
       | latitude  | <toLatitude>               |
       | longitude | <toLongitude>              |
+    And Operator clicks Update successful matched on Bulk Address Verification page
+    Then Operator verifies that success react notification displayed:
+      | top | Updated 1 waypoint(s) |
     Then DB Operator verify pricing info of "KEY_CREATED_ORDER_ID" order:
       | fromBillingZone.billingZone | {KEY_LIST_OF_FOUND_ZONES_INFO[1].billingZone} |
       | fromBillingZone.latitude    | <fromLatitude>                                |
@@ -85,6 +91,7 @@ Feature: Bulk Address Verification
       | waypoint  | FROM_CREATED_RESERVATION_DETAILS |
       | latitude  | GENERATED                        |
       | longitude | GENERATED                        |
+    And Operator clicks Update successful matched on Bulk Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Updated 2 waypoint(s) |
     Then DB Operator verify Jaro Scores:

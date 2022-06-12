@@ -1249,8 +1249,7 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setContractEndDate(
           Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
       String country = COUNTRY_CODE;
-      if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
-          || country.equalsIgnoreCase("ID"))) {
+      if (!country.equalsIgnoreCase("SG")) {
         if (Objects.isNull(billingWeightLogic)) {
           pricing.setBillingWeight(BillingWeightEnum.STANDARD);
         } else {

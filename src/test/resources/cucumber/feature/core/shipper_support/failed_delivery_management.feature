@@ -7,7 +7,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS a Single Parcel with Various Reason - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -53,7 +53,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS a Single Parcel and Change to New Address - Add New Address (uid:6bb33ad4-07fe-4a7d-8575-688895ef809d)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -80,7 +80,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -97,6 +97,9 @@ Feature: Failed Delivery Management
     And API Driver failed the delivery of the created parcel
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator reschedule failed delivery order on next day
+    Then Operator verifies that success toast displayed:
+      | top    | Order Rescheduling Success     |
+      | bottom | Success to reschedule 1 orders |
     Then Operator verify failed delivery order rescheduled on next day successfully
     And API Operator verify order info after failed delivery order rescheduled on next day
     Examples:
@@ -106,7 +109,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Reschedule Failed Delivery Order on Specific Date - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -132,7 +135,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS Selected Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -158,7 +161,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -184,7 +187,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Download and Verify CSV File of Failed Delivery Order on Failed Delivery Management Page - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -209,7 +212,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Find Failed Delivery Order on Failed Delivery Management Page - <Note> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -233,7 +236,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS Multiple Failed Deliveries (uid:02bc7568-b4d6-48f7-8d69-14bbfc57130d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create multiple V4 orders using data below:
@@ -313,7 +316,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario: Operator Reschedule Multiple Failed Deliveries (uid:aec2fa4a-bd14-4541-9820-b3370cbd564a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create multiple V4 orders using data below:
@@ -376,7 +379,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS a Single Parcel and Change to New Address - Search Address by Coordinates (uid:71e309a5-4beb-4add-ac51-44901c36cb50)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -432,7 +435,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS a Single Parcel and Change to New Address - Search Address by Name (uid:f69825d7-4f2d-439e-94cb-49c78fc2328f)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -488,7 +491,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario: Operator Reschedule Multiple Failed Deliveries by Upload CSV (uid:7e2f169f-1e30-41a7-8d7c-f87a8a844c79)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create multiple V4 orders using data below:
@@ -552,7 +555,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Fails Reschedule a Single Rescheduled Failed Delivery
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -587,7 +590,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Fails Reschedule Multiple Rescheduled Failed Deliveries
-    When Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

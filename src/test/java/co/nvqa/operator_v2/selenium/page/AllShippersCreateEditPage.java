@@ -184,7 +184,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(60);
+    shipperInformation.waitUntilClickable(120);
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {
@@ -1450,12 +1450,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       }
     }
     String country = COUNTRY_CODE;
-    if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
-        || country.equalsIgnoreCase("ID"))) {
+    if (!(country.equalsIgnoreCase("SG") || country.equalsIgnoreCase("VN"))) {
       String billingWeight = pricing.getBillingWeight().getCode();
       if (Objects.isNull(billingWeight)) {
         newPricingProfileDialog.billingWeight.selectValue("Standard");
-      } else if(!billingWeight.equalsIgnoreCase("empty")){
+      } else if (!billingWeight.equalsIgnoreCase("empty")) {
         newPricingProfileDialog.billingWeight.selectValue(billingWeight);
       }
     }

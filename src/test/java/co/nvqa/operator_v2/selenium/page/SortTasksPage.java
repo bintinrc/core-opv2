@@ -35,6 +35,9 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//div[contains(@class,'ant-form-item-control-input-content')])[1]")
   public AntSelect selectHub;
 
+  @FindBy(xpath = "//div[contains(@class,'ant-select-selector')]")
+  public AntSelect selectRegion;
+
   @FindBy(xpath = "(//button[contains(@class,'ant-btn')])[1]")
   public AntButton load;
 

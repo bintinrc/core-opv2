@@ -810,6 +810,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    /*
     scrollIntoView(footerRow.getWebElement());
     pause5s();
     colElements = getWebDriver().findElements(
@@ -817,6 +818,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    */
     return colData;
   }
 
@@ -844,10 +846,17 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
           Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
       return;
     }
+    if ("ETA Calculated".contentEquals(columnName)) {
+      List<Double> columnValue = new ArrayList<Double>();
+      colData.forEach(value -> {
+        value = value.replaceAll("-", "");
+        columnValue.add(Double.parseDouble(value));
+      });
+      Assert.assertTrue(
+          f("Assert that the column values %s are sorted as expected", columnName),
+          Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
+    }
 
-    Assert.assertTrue(
-        f("Assert that the column values %s are sorted as expected", columnName),
-        Comparators.isInOrder(colData, Comparator.naturalOrder()));
   }
 
 
