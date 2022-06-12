@@ -819,9 +819,6 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.departureTimeInputs.get(0).sendKeys(Keys.RETURN);
     movementManagementPage.departureTimeInputs.get(1).sendKeys(displayTime);
     movementManagementPage.departureTimeInputs.get(1).sendKeys(Keys.RETURN);
-    //movementManagementPage.departureTimeInputs.get(1).setValue(displayTime);
-//    movementManagementPage.durationInputs.get(0).setValue("00:45");
-//    movementManagementPage.durationInputs.get(1).setValue("00:45");
     movementManagementPage.durationInputs.get(0).sendKeys("00:45");
     movementManagementPage.durationInputs.get(0).sendKeys(Keys.RETURN);
     movementManagementPage.durationInputs.get(1).sendKeys("00:45");

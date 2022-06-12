@@ -1112,10 +1112,6 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", element);
     element.click();
     pause500ms();
-//    element.sendKeys(Keys.CONTROL+"A");
-//    element.sendKeys(Keys.BACK_SPACE);
-//    element.sendKeys(value);
-//    element.sendKeys(Keys.RETURN);
     String[] times = value.split(":");
     WebElement timeElement = findElementByXpath(f(MS_PAGE_PICKER_HOUR_DROPDOWN_XPATH,times[0]));
     executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", timeElement);
