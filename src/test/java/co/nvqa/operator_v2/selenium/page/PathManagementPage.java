@@ -115,6 +115,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement antNotificationMessage;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement antNotificationDescription;
+
   @FindBy(className = "ant-notification-notice-close")
   public PageElement closeAntNotificationMessage;
 
@@ -330,12 +333,17 @@ public class PathManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyNotificationMessageIsShown(String expectedNotificationMessage) {
-    antNotificationMessage.waitUntilVisible();
-    String actualNotificationMessage = antNotificationMessage.getText();
+    String actualNotificationMessage = "";
+    if(!notificationMessage.equals("")){
+      actualNotificationMessage = notificationMessage;
+    }else{
+      antNotificationMessage.waitUntilVisible();
+      actualNotificationMessage = antNotificationMessage.getText();
+      closeAntNotificationMessage.click();
+      antNotificationMessage.waitUntilInvisible();
+    }
     assertThat("Notification message is the same", actualNotificationMessage,
         equalTo(expectedNotificationMessage));
-    closeAntNotificationMessage.click();
-    antNotificationMessage.waitUntilInvisible();
   }
 
   public void verifyCreatedPathDetail(String expectedPath, List<String> departureTimes) {
@@ -494,8 +502,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
     createDefaultPathModal.generateButton.click();
     pause3s();
     if(antNotificationMessage.isDisplayed()){
-      notificationMessage = getWebDriver().findElement(By.xpath
-              ("//div[@class='ant-notification-notice-description']//span[contains(.,'Error Message')]")).getText().split("Error Message: ")[1];
+      if(antNotificationDescription.isDisplayed()){
+        notificationMessage = antNotificationDescription.getText();
+        if(notificationMessage.trim().equals("")){
+          notificationMessage = antNotificationMessage.getText();
+        }
+      }
     }
   }
 
