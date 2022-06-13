@@ -2227,7 +2227,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
     });
 
-    createTicketDialog.createTicket.clickAndWaitUntilDone();
+    createTicketDialog.createTicket.clickAndWaitUntilDone(60);
     waitUntilInvisibilityOfToast("Ticket created");
   }
 
