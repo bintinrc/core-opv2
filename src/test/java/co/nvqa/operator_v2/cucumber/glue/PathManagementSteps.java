@@ -462,12 +462,12 @@ public class PathManagementSteps extends AbstractSteps {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
 
-    String actualCreateDefaultPathInfoText = pathManagementPage.notificationMessage;
+    String actualCreateDefaultPathInfoText = pathManagementPage.notificationMessage.split("Error Message: ")[1];
     String expectedCreateDefaultPathInfoText = f(
         "No path found between %s (sg) and %s (sg). Please ask your manager to check the schedule.",
         resolvedOriginHub, resolvedDestinationHub);
-    assertThat("Create default path message is equal", actualCreateDefaultPathInfoText,
-        equalTo(expectedCreateDefaultPathInfoText));
+    assertThat("Create default path message is equal", actualCreateDefaultPathInfoText.toLowerCase(),
+        equalTo(expectedCreateDefaultPathInfoText.toLowerCase()));
   }
 
   @Then("Operator verify {string} error info shown on create default path modal")
