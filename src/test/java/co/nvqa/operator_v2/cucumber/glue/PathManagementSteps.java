@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -269,7 +270,7 @@ public class PathManagementSteps extends AbstractSteps {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     String originHubName = resolvedMapOfData.get("originHubName");
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
-    String path = originHubName + " → " + destinationHubName;
+    String path = originHubName + " " + resolvedMapOfData.get("path") + " " +destinationHubName;
     pathManagementPage.verifyCreatedPathDetail(path, null);
   }
 
@@ -461,10 +462,9 @@ public class PathManagementSteps extends AbstractSteps {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
 
-    String actualCreateDefaultPathInfoText = pathManagementPage.createDefaultPathModal.createDefaultPathInfo
-        .getText();
+    String actualCreateDefaultPathInfoText = pathManagementPage.notificationMessage;
     String expectedCreateDefaultPathInfoText = f(
-        "No path found from %s to %s!\nPlease add movement schedule(s) in Movement Schedule page in order to create a path between facilities.",
+        "No path found between %s (sg) and %s (sg). Please ask your manager to check the schedule.",
         resolvedOriginHub, resolvedDestinationHub);
     assertThat("Create default path message is equal", actualCreateDefaultPathInfoText,
         equalTo(expectedCreateDefaultPathInfoText));

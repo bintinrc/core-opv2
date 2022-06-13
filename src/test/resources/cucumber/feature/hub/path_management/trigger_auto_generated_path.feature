@@ -27,6 +27,7 @@ Feature: Trigger Auto Generated Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify a notification with message "Auto Generated Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created default path data in path detail with following data:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then DB Operator verifies "default" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table

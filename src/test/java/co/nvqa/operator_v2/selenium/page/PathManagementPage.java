@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -63,7 +64,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//tr[2]//td[3]//span[@class='ant-tag']")
   public TextBox pathTagFirstRow;
 
-  @FindBy(xpath = "//tr[2]//td[3]//span[contains(text(),'→')]")
+  @FindBy(xpath = "//tr[2]//td[3]//span[2]")
   public TextBox pathFirstRow;
 
   @FindBy(xpath = "//tr[2]//td[4]")
@@ -119,6 +120,8 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//table")
   public NvTable<PathRow> pathRowNvTable;
+
+  public static String notificationMessage = "";
 
   public PathManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -489,6 +492,11 @@ public class PathManagementPage extends OperatorV2SimplePage {
       sendKeysAndEnter("//input[@id='destinationHub']", destinationHubName);
     }
     createDefaultPathModal.generateButton.click();
+    pause3s();
+    if(antNotificationMessage.isDisplayed()){
+      notificationMessage = getWebDriver().findElement(By.xpath
+              ("//div[@class='ant-notification-notice-description']//span[contains(.,'Error Message')]")).getText().split("Error Message: ")[1];
+    }
   }
 
   public void verifyCreatingDefaultPath(String originHubName, String destinationHubName) {

@@ -84,6 +84,8 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    Then Operator verifies dimensions information on Edit Order page:
+      | weight | 7 |
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 
@@ -93,6 +95,7 @@ Feature: Global Inbound
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator recalculate order price
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name-3}                               |
@@ -109,6 +112,8 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    Then Operator verifies dimensions information on Edit Order page:
+      | weight | 7 |
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 

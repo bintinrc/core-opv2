@@ -298,6 +298,7 @@ public class OperatorV2SimplePage extends SimplePage {
       waitUntilVisibilityOfElementLocated(xpathExpression);
     }
     if (isElementExistFast(xpathExpression)) {
+      waitUntilElementIsClickable("//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
       click(
           "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
     }
