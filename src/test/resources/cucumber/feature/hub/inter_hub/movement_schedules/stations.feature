@@ -836,6 +836,9 @@ Feature: Stations
     Then Operator verifies "driver" with value "{inactive-driver-username}" is not shown on Movement Schedules page
     Then Operator verify all station schedules are correct from UI
 
+    Scenario: Create Station Schedule - Same Wave (uid:4c1b1b7b-4e25-4d93-ae20-2abce8a849ee)
+      # This is dummy scenario
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
