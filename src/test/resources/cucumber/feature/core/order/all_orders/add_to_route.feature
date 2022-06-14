@@ -267,11 +267,18 @@ Feature: All Orders - Add To Route
     And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
+    And Operator save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order as "KEY_TRANSACTION_1"
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                      |
       | generateFrom   | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                                     |
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order as "KEY_TRANSACTION_2"
+    And Operator save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[3]}" order as "KEY_TRANSACTION_3"
+    And DB Operator set "{zone-id-3}" routing_zone_id for waypoints:
+      | {KEY_TRANSACTION_1.waypointId} |
+      | {KEY_TRANSACTION_2.waypointId} |
+      | {KEY_TRANSACTION_3.waypointId} |
     When Operator go to menu Order -> All Orders
     And Operator find orders by uploading CSV on All Orders page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
@@ -300,11 +307,13 @@ Feature: All Orders - Add To Route
     And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
+    And Operator save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order as "KEY_TRANSACTION_1"
     #Create Order with same address
     And API Shipper create V4 order using data below:
       | generateFrom   | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                                     |
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order as "KEY_TRANSACTION_2"
     #Create Order with different address
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                 |
@@ -313,6 +322,9 @@ Feature: All Orders - Add To Route
     And API Operator create new route tag:
       | name        | GENERATED                          |
       | description | tag for automated testing purposes |
+    And DB Operator set "{zone-id-3}" routing_zone_id for waypoints:
+      | {KEY_TRANSACTION_1.waypointId} |
+      | {KEY_TRANSACTION_2.waypointId} |
     When Operator go to menu Order -> All Orders
     And Operator find orders by uploading CSV on All Orders page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |

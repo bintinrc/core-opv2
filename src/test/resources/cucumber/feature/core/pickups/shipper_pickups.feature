@@ -309,6 +309,8 @@ Feature: Shipper Pickups
       | generateAddress | ZONE {zone-name-3} |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And DB Operator set "{zone-id-3}" routing_zone_id for waypoints:
+      | {KEY_WAYPOINT_ID} |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate | {gradle-current-date-yyyy-MM-dd} |
