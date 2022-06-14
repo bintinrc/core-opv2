@@ -333,15 +333,10 @@ public class PathManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyNotificationMessageIsShown(String expectedNotificationMessage) {
-    String actualNotificationMessage = "";
-    if(!notificationMessage.equals("")){
-      actualNotificationMessage = notificationMessage;
-    }else{
-      antNotificationMessage.waitUntilVisible();
-      actualNotificationMessage = antNotificationMessage.getText();
-      closeAntNotificationMessage.click();
-      antNotificationMessage.waitUntilInvisible();
-    }
+    antNotificationMessage.waitUntilVisible();
+    String actualNotificationMessage = antNotificationMessage.getText();
+    closeAntNotificationMessage.click();
+    antNotificationMessage.waitUntilInvisible();
     assertThat("Notification message is the same", actualNotificationMessage,
         equalTo(expectedNotificationMessage));
   }
@@ -500,6 +495,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
       sendKeysAndEnter("//input[@id='destinationHub']", destinationHubName);
     }
     createDefaultPathModal.generateButton.click();
+  }
+
+  public void captureErrorNotification() {
     pause3s();
     if(antNotificationMessage.isDisplayed()){
       if(antNotificationDescription.isDisplayed()){

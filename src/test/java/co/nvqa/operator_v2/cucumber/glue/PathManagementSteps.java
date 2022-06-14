@@ -240,6 +240,11 @@ public class PathManagementSteps extends AbstractSteps {
     pause2s();
   }
 
+  @And("Capture the error notification on Path Management Page")
+  public void captureErrorNotification() {
+    pathManagementPage.captureErrorNotification();
+  }
+
   @Then("Operator verify a notification with message {string} is shown on path management page")
   public void operatorVerifyANotificationWithMessageIsShownOnPathManagementPage(
       String notificationMessage) {
