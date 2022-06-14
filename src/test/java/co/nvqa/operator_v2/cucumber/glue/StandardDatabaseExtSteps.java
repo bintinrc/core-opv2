@@ -2075,4 +2075,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Waypoint waypoint = getCoreJdbc().getWaypoint(waypointId);
     put(KEY_WAYPOINT_DETAILS, waypoint);
   }
+
+
+  @Then("^DB Operator verifies that (.+?) row.* added for the change type: (.+?) in account_audit_logs table in driver db$")
+  public void dbOperatorVerifiesTheRowIsAddedForTheChangeTypeInAccountAuditLogsTableInDriverDb(int records, String changeType) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    int totalRecord = getDriverJdbc().getAccountAuditTotal(driverInfo.getId(), changeType);
+    Assertions.assertThat(totalRecord)
+        .as("Total number of records with change type = %s", changeType)
+        .isEqualTo(records);
+  }
+
 }

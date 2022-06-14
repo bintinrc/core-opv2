@@ -2,8 +2,10 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Map;
+import java.util.Random;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,6 +21,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   private String lastName;
   private String licenseNumber;
   private String type;
+  private String dpmsId;
   private Integer codLimit;
   private String employmentStartDate;
   private String employmentEndDate;
@@ -113,6 +116,17 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     this.type = type;
   }
 
+  public String getDpmsId(){
+    return dpmsId;
+  }
+
+  public void setDpmsId(String dpmsId){
+    if("GENERATED".equalsIgnoreCase(dpmsId)){
+      dpmsId = String.valueOf(new Random().nextInt(99999));
+    }
+    this.dpmsId = dpmsId;
+  }
+
   public Integer getCodLimit() {
     return codLimit;
   }
@@ -162,7 +176,29 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setContact(String contact) {
     if ("GENERATED".equalsIgnoreCase(contact)) {
-      contact = "driver." + TestUtils.generateDateUniqueString() + "@ninjavan.co";
+      final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
+      switch (country) {
+        case "SG":
+          contact = "31594329";
+          break;
+        case "ID":
+          contact = "+6282188881593";
+          break;
+        case "MY":
+          contact = "+6066567878";
+          break;
+        case "PH":
+          contact = "+639285554697";
+          break;
+        case "TH":
+          contact = "+66955573510";
+          break;
+        case "VN":
+          contact = "+0812345678";
+          break;
+        default:
+          break;
+      }
     }
     this.contact = contact;
   }

@@ -76,7 +76,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @When("Operator verifies hint {string} is displayed in Add Driver dialog")
+  @When("^Operator verifies hint (.+?) is displayed in .* Driver dialog$")
   public void operatorVerifiesAddDriverHint(String expected) {
     final String exp = resolveValue(expected);
     dsPage.inFrame(() -> {
@@ -95,6 +95,10 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
           assertTrue("Hint is displayed", dsPage.addDriverDialog.zoneHints.isDisplayed());
           assertEquals("Hint text", expected, dsPage.addDriverDialog.zoneHints.getNormalizedText());
           break;
+        case "Please input a valid mobile phone number (e.g. 8123 4567)":
+          assertTrue("Valid mobile phone number", dsPage.addDriverDialog.validContactNumber.isDisplayed());
+          assertEquals("Hint text", expected, dsPage.addDriverDialog.validContactNumber.getNormalizedText());
+          break;
         default:
           break;
       }
@@ -112,6 +116,18 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
       dsPage.editDriverDialog.fillForm(driverInfo);
       dsPage.editDriverDialog.submitForm();
+    });
+  }
+
+  @When("^Operator updates created Driver on Driver Strength page using data below:$")
+  public void operatorUpdateCreatedDriver(Map<String, String> mapOfData) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    String username = driverInfo.getUsername();
+    driverInfo.fromMap(mapOfData);
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.fillForm(driverInfo);
     });
   }
 
@@ -193,6 +209,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
         assertThat("Type", actualDriverInfo.getType(), equalTo(expectedDriverInfo.getType()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getDpmsId())) {
+        assertThat("DPMS ID", actualDriverInfo.getDpmsId(), equalTo(expectedDriverInfo.getDpmsId()));
       }
       if (expectedDriverInfo.getZoneMin() != null) {
         assertThat("Min", actualDriverInfo.getZoneMin(), equalTo(expectedDriverInfo.getZoneMin()));
@@ -368,7 +387,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     });
   }
 
-  @When("Operator click Submit button in Add Driver dialog")
+  @When("^Operator click Submit button in .* Driver dialog$")
   public void clickSubmitButton() {
     dsPage.inFrame(() -> {
       dsPage.addDriverDialog.submit.click();
@@ -378,6 +397,19 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @When("Operator wait until table loaded")
   public void waitForTableToLoad() {
     dsPage.inFrame(() -> dsPage.waitUntilTableLoaded());
+  }
+
+  @Then("Operator verifies that the column: {string} displays between the columns: {string} and {string}")
+  public void operatorVerifiesThatTheColumnDisplaysBetweenTheColumnsAnd(String column, String precedingColumn, String followingColumn) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    String userName = driverInfo.getUsername();
+    dsPage.inFrame(() -> {
+      List<String> columns = dsPage.getAllColumnsInResultGrid(userName);
+      int columnIndex = columns.indexOf(column);
+      takesScreenshot();
+      assertEquals("Verify preceding column name",precedingColumn, columns.get(columnIndex-1));
+      assertEquals("Verify following column name",followingColumn, columns.get(columnIndex+1));
+    });
   }
 
 }
