@@ -56,7 +56,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
   private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
-  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//div[text()='%s']";
+  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//span[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
   private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[normalize-space(text())='No Results Found']";
   public StationManagementHomePage(WebDriver webDriver) {
@@ -99,13 +99,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div.value svg")
   private PageElement tileValueLoadIcon;
 
-  @FindBy(css = "i[class$='modal-close-icon']")
+  @FindBy(css = "button[class$='ant-modal-close']")
   private List<PageElement> modalCloseIcon;
 
   @FindBy(css = "div[class$='badge-count']")
   private List<PageElement> sfldTicketCount;
 
-  @FindBy(css = "i[aria-label$='bell']")
+  @FindBy(css = "span[aria-label$='bell']")
   private PageElement alarmBell;
 
   @FindBy(xpath = "//button[@disabled]//*[text()='Save & Proceed']")
