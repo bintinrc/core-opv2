@@ -978,10 +978,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     CancelTrip.click();
     tripDepartureArrivalModal.waitUntilVisible();
     String script = "return window.getComputedStyle(document.querySelector('label.ant-form-item-required'),':before').getPropertyValue('content')";
-//    JavascriptExecutor js = (JavascriptExecutor) getWebDriver();
-//    String content = (String) js.executeScript(script);
     String content = (String) executeScript(script);
-//    System.out.println(content);
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH, 5))
         .as("Trip Departure message appear in Trip Cancel page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH, 5))
