@@ -1198,7 +1198,6 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     int maxAssignDrivers = numberOfDrivers > 4 ? 4 : numberOfDrivers;
     for (int i = 0; i < maxAssignDrivers; i++) {
       TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
-      //sendKeysAndEnter(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
       sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
       click(f(MS_PAGE_DROPDOWN_LIST_XPATH, middleMileDrivers.get(i).getUsername()));
     }
