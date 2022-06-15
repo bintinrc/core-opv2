@@ -118,6 +118,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public void addNewDriver(DriverInfo driverInfo) {
     waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
     clickAddNewDriver();
+    pause3s();
     addDriverDialog.fillForm(driverInfo);
     addDriverDialog.submitForm();
   }
@@ -472,8 +473,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public void fillForm(DriverInfo driverInfo) {
-      pause3s();
       waitUntilVisible();
+      pause3s();
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());

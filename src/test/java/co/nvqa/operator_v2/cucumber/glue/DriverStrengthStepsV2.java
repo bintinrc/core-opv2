@@ -76,7 +76,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @When("^Operator verifies hint (.+?) is displayed in .* Driver dialog$")
+  @When("Operator verifies hint {string} is displayed in Add/Edit Driver dialog")
   public void operatorVerifiesAddDriverHint(String expected) {
     final String exp = resolveValue(expected);
     dsPage.inFrame(() -> {
