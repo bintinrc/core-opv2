@@ -20,7 +20,7 @@ import org.openqa.selenium.support.PageFactory;
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class RouteMonitoringV2Page extends OperatorV2SimplePage {
+public class RouteMonitoringV2Page extends SimpleReactPage<RouteMonitoringV2Page> {
 
   @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;

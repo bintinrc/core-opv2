@@ -11,11 +11,13 @@ Feature: Sort Task
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
+      | hubId   | {hub-id}  |
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIERDONOTUSE{gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that "New Middle Tier Created" success notification is displayed
+    And Operator select region on Sort Task page
+        |regionName| {region-name}|
     And Operator verify new middle tier is created
       | hubName  | {hub-name}  |
       | sortType | MIDDLE TIER |
@@ -31,6 +33,8 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     When Operator delete the middle tier
     Then Operator verifies that "Middle Tier Deleted" success notification is displayed
     And Operator verify middle tier is deleted
@@ -46,6 +50,8 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     And Operator select a sort task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
@@ -65,6 +71,8 @@ Feature: Sort Task
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     And Operator select a sort task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
@@ -181,7 +189,7 @@ Feature: Sort Task
     When Operator switch to View Sort Structure window
     And Operator refresh diagram on View Sort Structure page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
-      | {mid-tier-name}                      |
+      | {mid-tier-name}                |
       | {KEY_CREATED_MIDDLE_TIER_NAME} |
 
   @CloseNewWindows @DeleteNodes
@@ -229,7 +237,6 @@ Feature: Sort Task
       | SORT-SG-2-HUB   |
       | SORTSGMIDDLETIER|
 
-
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
@@ -267,6 +274,8 @@ Feature: Sort Task
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     And Operator select a sort task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
@@ -283,7 +292,10 @@ Feature: Sort Task
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
+    And Operator refresh table on Sort Tasks page
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     And Operator select a sort task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
@@ -300,14 +312,16 @@ Feature: Sort Task
       | hubName | {hub-name-6} |
       | hubId   | {hub-id-6}   |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name-6}|
     And Operator select a RTS zone
-      | rtsZone | RTS-Z-20210616172544662 |
+      | rtsZone | RTS-SORT-SG-3-HUB|
     Then Operator verifies that "{hub-name-6} modified" success notification is displayed
     Then Operator verify RTS zone appears on tree list
-      | rtsZone | RTS-Z-20210616172544662 |
+      | rtsZone | RTS-SORT-SG-3-HUB |
     When Operator open the sidebar menu on Sort Tasks page
     And Operator remove selection of RTS zone
-      | rtsZone | RTS-Z-20210616172544662 |
+      | rtsZone | RTS-SORT-SG-3-HUB|
     Then Operator verifies that "{hub-name-6} modified" success notification is displayed
 
   @CloseNewWindows
@@ -327,13 +341,12 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
-      | hubId   | {hub-id-4}   |
+      | hubName | {hub-name-8} |
+      | hubId   | {hub-id-8}   |
     Then Operator verify displayed nodes on Sort Tasks page:
-      | {hub-name-4}    |
+      | {hub-name-8}    |
       | SORT-SG-2-HUB   |
-      | {mid-tier-name} |
-      | SORT-1          |
+      | SORTSGMIDDLETIER|
 
   @CloseNewWindows
   Scenario: Search sort nodes on Sort Structure Page - RTS zone (uid:4776cda5-157a-4345-b7d6-b9c3cc776691)

@@ -114,7 +114,7 @@ Feature: Reservation Preset Management
     And API Operator fetch id of the created shipper
     And API Operator get address of shipper with ID = "{KEY_CREATED_SHIPPER.id}"
     And API Operator create V2 reservation using data below:
-      | reservationRequest | { "pickup_address_id":{KEY_LIST_OF_SHIPPER_ADDRESSES[1].id}, "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "pickup_address_id":{KEY_LIST_OF_SHIPPER_ADDRESSES[1].id}, "legacy_shipper_id":{KEY_LEGACY_SHIPPER_ID}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                                              |
@@ -128,6 +128,8 @@ Feature: Reservation Preset Management
       | waitUntilInvisible | true                                                                                         |
     When Operator route pending reservations on Reservation Preset Management page:
       | group | {KEY_CREATED_RESERVATION_GROUP.name} |
+    Then Operator verifies that success toast displayed:
+      | top | 1 reservations added to route |
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Create Route for Pickup Reservation - Route Date = Today
@@ -156,8 +158,6 @@ Feature: Reservation Preset Management
       | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
     And API Operator fetch id of the created shipper
     And API Operator get address of shipper with ID = "{KEY_CREATED_SHIPPER.id}"
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "pickup_address_id":{KEY_LIST_OF_SHIPPER_ADDRESSES[1].id}, "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                                              |
@@ -172,6 +172,30 @@ Feature: Reservation Preset Management
     When Operator create route on Reservation Preset Management page:
       | group     | {KEY_CREATED_RESERVATION_GROUP.name} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}     |
+    Then Operator verifies that success toast displayed:
+      | top                | Routes have been created for all groups! |
+      | waitUntilInvisible | true                                     |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-current-date-yyyy-MM-dd} |
+      | shipperName | {KEY_LEGACY_SHIPPER_ID}          |
+      | status      | ROUTED                           |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | shipperId              | {KEY_LEGACY_SHIPPER_ID}                                                |
+      | shipperName            | ^{KEY_CREATED_SHIPPER.name}.*                                          |
+      | pickupAddress          | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode}                       |
+      | routeId                | not null                                                               |
+      | driverName             | {KEY_CREATED_DRIVER_INFO.firstName} {KEY_CREATED_DRIVER_INFO.lastName} |
+      | priorityLevel          | 0                                                                      |
+      | readyBy                | ^{gradle-current-date-yyyy-MM-dd} .*                                   |
+      | latestBy               | ^{gradle-current-date-yyyy-MM-dd} .*                                   |
+      | reservationType        | REGULAR                                                                |
+      | reservationStatus      | ROUTED                                                                 |
+      | reservationCreatedTime | ^{gradle-current-date-yyyy-MM-dd}.*                                    |
+      | serviceTime            | null                                                                   |
+      | failureReason          | null                                                                   |
+      | comments               | null                                                                   |
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Create Route for Pickup Reservation - Route Date = Tomorrow

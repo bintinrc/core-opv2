@@ -978,10 +978,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     CancelTrip.click();
     tripDepartureArrivalModal.waitUntilVisible();
     String script = "return window.getComputedStyle(document.querySelector('label.ant-form-item-required'),':before').getPropertyValue('content')";
-//    JavascriptExecutor js = (JavascriptExecutor) getWebDriver();
-//    String content = (String) js.executeScript(script);
     String content = (String) executeScript(script);
-//    System.out.println(content);
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_MESSAGE_XPATH, 5))
         .as("Trip Departure message appear in Trip Cancel page").isTrue();
     Assertions.assertThat(isElementVisible(TRIP_DEPARTURE_PAGE_ORIGIN_HUB_XPATH, 5))
@@ -1161,6 +1158,34 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
     //pause5s();
 
+  }
+
+  public void createOneTimeTripWithoutDriver(Map<String, String> resolvedMapOfData){
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, resolvedMapOfData.get("originHub"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DESTINATION_HUB_XPATH, resolvedMapOfData.get("destinationHub"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_MOVEMENT_TYPE_XPATH, resolvedMapOfData.get("movementType"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DEPARTURE_TIME_XPATH, resolvedMapOfData.get("departureTime"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_DAYS_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_DAYS_XPATH, resolvedMapOfData.get("durationDays"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_HOURS_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_HOURS_XPATH, resolvedMapOfData.get("durationHours"));
+
+    TestUtils.findElementAndClick(CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH, "xpath", getWebDriver());
+    sendKeysAndEnter(CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH, resolvedMapOfData.get("durationMinutes"));
+
+    click(CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH);
+    waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
+    click(f(CALENDAR_SELECTED_XPATH, resolvedMapOfData.get("departureDate")));
   }
 
   public void clickSubmitButtonOnCreateOneTripPage() {
