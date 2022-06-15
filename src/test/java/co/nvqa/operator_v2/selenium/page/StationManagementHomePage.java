@@ -123,7 +123,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div.polling-time-info")
   public PageElement pollingTimeInfo;
 
-  @FindBy(css = "[id*='DialogTitle']")
+  @FindBy(css = "[id*='rc_unique_0']")
   public PageElement dialogLanguage;
 
   @FindBy(css = "li:last-child .text")
@@ -159,7 +159,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindAll(@FindBy(css = "div[class*='base-row'] span[class*='checked']"))
   private List<PageElement> checkboxChecked;
 
-  @FindAll(@FindBy(css = "div[class*='-checked'][class$='filter']"))
+  @FindAll(@FindBy(css = "span[class*='-checked'][class$='filter']"))
   private List<PageElement> filterApplied;
 
   @FindBy(css = "div.sfld-alert")
