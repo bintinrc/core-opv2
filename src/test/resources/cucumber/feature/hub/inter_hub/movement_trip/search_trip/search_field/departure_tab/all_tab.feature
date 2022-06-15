@@ -1,7 +1,7 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @DepartureTab @AllTab @1a
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @DepartureTab @AllTab
 Feature: Movement Trip - Search Trip - Search Field - Departure Tab - All Tab
 
-  @1 @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -139,7 +139,6 @@ Feature: Movement Trip - Search Trip - Search Field - Departure Tab - All Tab
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
-  @1
   Scenario: Search Trip on Search Field - Departure Tab - All Tab - Search Driver (uid:ee873a8a-a4fe-46ba-bc56-18e673abee46)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -163,6 +162,7 @@ Feature: Movement Trip - Search Trip - Search Field - Departure Tab - All Tab
     When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
+    And DB Operator gets the driver name by driver id for Trip Management
     And Operator clicks on "All" tab
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
