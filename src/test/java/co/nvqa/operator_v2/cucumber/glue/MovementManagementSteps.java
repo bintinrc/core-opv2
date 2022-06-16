@@ -245,30 +245,45 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
+    movementManagementPage.waitForLoadingIconDisappear();
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        final Map<String, String> finalData = resolveKeyValues(data);
+        Map<String, String> finalData = resolveKeyValues(data);
+        if(finalData.get("departureTime").equalsIgnoreCase("EXISTED")){
+          movementManagementPage.modify.click();
+          String UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+          String UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+          finalData.put("departureTime",UpdatedStartTime);
+          finalData.put("endTime",UpdatedDurationTime);
+          movementManagementPage.close.click();
+          movementManagementPage.StartTime = UpdatedStartTime;
+        }
         StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
-        movementManagementPage.stationsTab.click();
         movementManagementPage.addSchedule.click();
         movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
         movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+        if (StringUtils.isNotBlank(finalData.get("assignDrivers"))){
+          List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+          int numberOfDrivers = Integer.parseInt(finalData.get("assignDrivers"));
+          movementManagementPage.assignDrivers(numberOfDrivers,middleMileDrivers,0);
+        }
         putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
         if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
           movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
           StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
               finalData);
-          secondStationMovementSchedule.setDepartureTime("21:15");
+          secondStationMovementSchedule.setDepartureTime("21:01");
           movementManagementPage.addStationMovementScheduleModal.fillAnother(
               secondStationMovementSchedule, "1");
+          if (StringUtils.isNotBlank(finalData.get("assignDrivers"))){
+            List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+            int numberOfDrivers = Integer.parseInt(finalData.get("assignDrivers"));
+            movementManagementPage.assignDrivers(numberOfDrivers,middleMileDrivers,1);
+          }
           putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
         }
-        if (StringUtils.isNotBlank(finalData.get("assignDrivers"))){
-          List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
-          int numberOfDrivers = Integer.parseInt(finalData.get("assignDrivers"));
-          movementManagementPage.assignDrivers(numberOfDrivers,middleMileDrivers);
-        }
+
         movementManagementPage.addStationMovementScheduleModal.create.click();
         movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
       } catch (Exception ex) {
@@ -868,7 +883,7 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.waitForLoadingIconDisappear();
     List<StationMovementSchedule> stationMovementSchedules = get(
         KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE);
-System.out.println("Row count: "+movementManagementPage.stationMovementSchedulesTable.getRowsCount());
+    List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
     Assertions.assertThat(movementManagementPage.stationMovementSchedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(stationMovementSchedules.size());
     for (int i = 0; i < stationMovementSchedules.size(); i++) {
@@ -879,6 +894,7 @@ System.out.println("Row count: "+movementManagementPage.stationMovementSchedules
       stationMovementSchedules.get(i).setDuration((Integer) null);
       stationMovementSchedules.get(i).compareWithActual(actual);
     }
+    movementManagementPage.verifyListDriver(middleMileDrivers);
   }
 
   @Then("Operator verify all station schedules are correct")
@@ -994,6 +1010,31 @@ System.out.println("Row count: "+movementManagementPage.stationMovementSchedules
     movementManagementPage.verifyNotificationWithMessage(errorMessageList);
   }
 
+  @Then("Operator verifies {string} error message")
+  public void OperatorVerifiesErrorMessage(String errorType){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    List<String> errorMessageList = new ArrayList<String>();
+    System.out.println("Debug Start time: "+movementManagementPage.StartTime);
+    switch (errorType){
+      case "Existing Schedule":
+        errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime+" already exists");
+        break;
+      case "Duplicate Schedule":
+        errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime);
+        break;
+      case "Duplicate and Existing Schedule":
+        errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime);
+        errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime+" already exists");
+        break;
+    }
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
   @When("Operator clicks Error Message close icon")
   public void operatorCloseMessage(){
     movementManagementPage.closeNotificationMessage();
@@ -1009,6 +1050,6 @@ System.out.println("Row count: "+movementManagementPage.stationMovementSchedules
     movementManagementPage.stationsTab.click();
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-    movementManagementPage.verifyInvalidItem(name, value);
+    movementManagementPage.verifyInvalidItem(name, value,0);
   }
 }
