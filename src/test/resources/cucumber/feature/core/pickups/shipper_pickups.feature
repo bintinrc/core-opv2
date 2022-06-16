@@ -1265,49 +1265,50 @@ Feature: Shipper Pickups
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
 
-  @DeleteFilterTemplate
-  Scenario: Operator Save A New Preset on Shipper Pickup Page (uid:98a6abc9-a9d8-4e6d-abe0-bfef4a13cf99)
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator selects filters on Shipper Pickups page:
-      | reservationDateFrom | {gradle-next-0-day-yyyy-MM-dd}     |
-      | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}     |
-      | reservationTypes    | Hyperlocal                         |
-      | waypointStatus      | ROUTED                             |
-      | shipper             | {filter-shipper-name}              |
-      | masterShipper       | {shipper-v4-marketplace-legacy-id} |
-    And Operator selects "Save Current as Preset" preset action on Shipper Pickups page
-    Then Operator verifies Save Preset dialog on Shipper Pickups page contains filters:
-      | Reservation Date: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd} |
-      | Reservation Types: Hyperlocal                                                      |
-      | Waypoint Status: ROUTED                                                            |
-      | Shipper: {shipper-v4-legacy-id}-{shipper-v4-name}                                  |
-      | Master Shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name}   |
-    And Operator verifies Preset Name field in Save Preset dialog on Shipper Pickups page is required
-    And Operator verifies Cancel button in Save Preset dialog on Shipper Pickups page is enabled
-    And Operator verifies Save button in Save Preset dialog on Shipper Pickups page is disabled
-    When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Shipper Pickups page
-    Then Operator verifies Preset Name field in Save Preset dialog on Shipper Pickups page has green checkmark on it
-    And Operator verifies Save button in Save Preset dialog on Shipper Pickups page is enabled
-    When Operator clicks Save button in Save Preset dialog on Shipper Pickups page
-    Then Operator verifies that success toast displayed:
-      | top                | 1 filter preset created                         |
-      | bottom             | Name: {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME} |
-      | waitUntilInvisible | true                                            |
-    And Operator verifies selected Filter Preset name is "{KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME}" on Shipper Pickups page
-    And DB Operator verifies filter preset record:
-      | id        | {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID}   |
-      | namespace | shipper-pickups                           |
-      | name      | {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME} |
-    When Operator refresh page
-    And Operator selects "{KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME}" Filter Preset on Shipper Pickups page
-    Then Operator verifies selected filters on Shipper Pickups page:
-      | reservationDateFrom | {gradle-next-0-day-yyyy-MM-dd}                                   |
-      | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}                                   |
-      | reservationTypes    | Hyperlocal                                                       |
-      | waypointStatus      | ROUTED                                                           |
-      | shipper             | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
-      | masterShipper       | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+#    TODO DISABLED
+#  @DeleteFilterTemplate
+#  Scenario: Operator Save A New Preset on Shipper Pickup Page (uid:98a6abc9-a9d8-4e6d-abe0-bfef4a13cf99)
+#    Given Operator go to menu Utilities -> QRCode Printing
+#    When Operator go to menu Pick Ups -> Shipper Pickups
+#    And Operator selects filters on Shipper Pickups page:
+#      | reservationDateFrom | {gradle-next-0-day-yyyy-MM-dd}     |
+#      | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}     |
+#      | reservationTypes    | Hyperlocal                         |
+#      | waypointStatus      | ROUTED                             |
+#      | shipper             | {filter-shipper-name}              |
+#      | masterShipper       | {shipper-v4-marketplace-legacy-id} |
+#    And Operator selects "Save Current as Preset" preset action on Shipper Pickups page
+#    Then Operator verifies Save Preset dialog on Shipper Pickups page contains filters:
+#      | Reservation Date: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd} |
+#      | Reservation Types: Hyperlocal                                                      |
+#      | Waypoint Status: ROUTED                                                            |
+#      | Shipper: {shipper-v4-legacy-id}-{shipper-v4-name}                                  |
+#      | Master Shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name}   |
+#    And Operator verifies Preset Name field in Save Preset dialog on Shipper Pickups page is required
+#    And Operator verifies Cancel button in Save Preset dialog on Shipper Pickups page is enabled
+#    And Operator verifies Save button in Save Preset dialog on Shipper Pickups page is disabled
+#    When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Shipper Pickups page
+#    Then Operator verifies Preset Name field in Save Preset dialog on Shipper Pickups page has green checkmark on it
+#    And Operator verifies Save button in Save Preset dialog on Shipper Pickups page is enabled
+#    When Operator clicks Save button in Save Preset dialog on Shipper Pickups page
+#    Then Operator verifies that success toast displayed:
+#      | top                | 1 filter preset created                         |
+#      | bottom             | Name: {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME} |
+#      | waitUntilInvisible | true                                            |
+#    And Operator verifies selected Filter Preset name is "{KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME}" on Shipper Pickups page
+#    And DB Operator verifies filter preset record:
+#      | id        | {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID}   |
+#      | namespace | shipper-pickups                           |
+#      | name      | {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME} |
+#    When Operator refresh page
+#    And Operator selects "{KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME}" Filter Preset on Shipper Pickups page
+#    Then Operator verifies selected filters on Shipper Pickups page:
+#      | reservationDateFrom | {gradle-next-0-day-yyyy-MM-dd}                                   |
+#      | reservationDateTo   | {gradle-next-1-day-yyyy-MM-dd}                                   |
+#      | reservationTypes    | Hyperlocal                                                       |
+#      | waypointStatus      | ROUTED                                                           |
+#      | shipper             | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
+#      | masterShipper       | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Shipper Pickup Page (uid:e27277c3-d95b-4bf8-a674-3705501cca51)
