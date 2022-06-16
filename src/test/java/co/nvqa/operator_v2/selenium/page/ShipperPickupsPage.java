@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -387,6 +388,19 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       finishReservationDialog.selectFailureReasonDetail(detailsCount - 1);
     } while (finishReservationDialog.failureReasonDetail.size() > detailsCount);
 
+    finishReservationDialog.clickOnUpdateButton();
+    finishReservationDialog.proceedWithFailureInConfirmationPopUp();
+  }
+
+  public void finishReservationWithFailureReason(Map<String, String> mapOfData) {
+    String failureReason = mapOfData.get("Failure Reason");
+    String failureReasonDetail1 = mapOfData.get("Failure Reason Detail 1");
+    reservationsTable.clickActionButton(1, ACTION_BUTTON_FINISH);
+    finishReservationDialog.selectFailureAsReason();
+    finishReservationDialog.selectFailureReason(failureReason);
+    if (StringUtils.isNotBlank(failureReasonDetail1)) {
+      finishReservationDialog.selectFailureReasonDetail(1, failureReasonDetail1);
+    }
     finishReservationDialog.clickOnUpdateButton();
     finishReservationDialog.proceedWithFailureInConfirmationPopUp();
   }

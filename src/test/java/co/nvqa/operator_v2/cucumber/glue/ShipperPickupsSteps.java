@@ -544,6 +544,11 @@ public class ShipperPickupsSteps extends AbstractSteps {
     shipperPickupsPage.finishReservationWithFailure();
   }
 
+  @And("Operator fails reservation with failure Reason")
+  public void operatorFailsReservationWithFailureReason(Map<String, String> dataTableAsMap) {
+    shipperPickupsPage.finishReservationWithFailureReason(dataTableAsMap);
+  }
+
   @And("^Operator finish reservation with success")
   public void operatorFinishReservationWithSuccess() {
     shipperPickupsPage.finishReservationWithSuccess();
