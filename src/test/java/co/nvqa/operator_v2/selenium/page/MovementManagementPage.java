@@ -54,10 +54,12 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_LOADING_ICON_XPATH = "//span[@class='ant-spin-dot ant-spin-dot-spin']";
   private static final String MS_PAGE_ITEM_CHECKBOX_XPATH = "//td//label[@class='ant-checkbox-wrapper']//input[@class='ant-checkbox-input'][%d]";
 
-  private static final String MS_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id ='schedules_0_drivers']";
+  private static final String MS_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id ='schedules_%d_drivers']";
   private static final String MS_PAGE_ORIGIN_HUB_XPATH = "//input[@id='schedules_0_originHub']";
   private static final String MS_PAGE_DESTINATION_HUB_XPATH = "//input[@id='schedules_0_destinationHub']";
   private static final String MS_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
+
+  private static final String MS_PAGE_DRIVERS_COLUMN_XPATH = "//td[contains(@class,'ant-table-cell drivers')]";
 
   @FindBy(xpath = "//button[.='Close']")
   public Button closeButton;
@@ -149,6 +151,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//button[.='Save']")
   public Button save;
 
+  @FindBy(xpath = "//button[.='Close']")
+  public Button close;
+
   @FindBy(css = "div.ant-modal")
   public AddStationMovementScheduleModal addStationMovementScheduleModal;
 
@@ -207,6 +212,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public SchedulesTable schedulesTable;
   public HubRelationSchedulesTable hubRelationScheduleTable;
   public StationMovementSchedulesTable stationMovementSchedulesTable;
+  public String StartTime ="";
 
   public MovementManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -1159,7 +1165,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     modalUpdateButton.click();
   }
 
-  public void verifyInvalidItem(String name, String value) {
+  public void verifyInvalidItem(String name, String value, int index) {
     switch (name) {
       case "origin hub":
         String originHubName = value;
@@ -1184,9 +1190,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
       case "driver":
         String driverUsername = value;
-        TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath",
+        TestUtils.findElementAndClick(f(MS_PAGE_ASSIGN_DRIVER_XPATH,index), "xpath",
                 getWebDriver());
-        sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH, driverUsername);
+        sendKeys(f(MS_PAGE_ASSIGN_DRIVER_XPATH,index), driverUsername);
         Assertions.assertThat(
                         isElementExist(f(MS_PAGE_DROPDOWN_LIST_XPATH, driverUsername), 1L))
                 .as("Invalid Driver has not been displayed").isFalse();
@@ -1194,21 +1200,21 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     }
   }
 
-  public void assignDrivers(int numberOfDrivers, List<Driver> middleMileDrivers){
+  public void assignDrivers(int numberOfDrivers, List<Driver> middleMileDrivers,int index){
     int maxAssignDrivers = numberOfDrivers > 4 ? 4 : numberOfDrivers;
     for (int i = 0; i < maxAssignDrivers; i++) {
-      TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
-      sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
+      TestUtils.findElementAndClick(f(MS_PAGE_ASSIGN_DRIVER_XPATH,index), "xpath", getWebDriver());
+      sendKeys(f(MS_PAGE_ASSIGN_DRIVER_XPATH,index), middleMileDrivers.get(i).getUsername());
       click(f(MS_PAGE_DROPDOWN_LIST_XPATH, middleMileDrivers.get(i).getUsername()));
     }
     if (numberOfDrivers > 4) {
-      verifyCanNotAssignMoreThan4Drivers(middleMileDrivers);
+      verifyCanNotAssignMoreThan4Drivers(middleMileDrivers,index);
     }
   }
 
-  public void verifyCanNotAssignMoreThan4Drivers(List<Driver> middleMileDrivers) {
-    TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
-    sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH,
+  public void verifyCanNotAssignMoreThan4Drivers(List<Driver> middleMileDrivers,int index) {
+    TestUtils.findElementAndClick(f(MS_PAGE_ASSIGN_DRIVER_XPATH,index), "xpath", getWebDriver());
+    sendKeys(f(MS_PAGE_ASSIGN_DRIVER_XPATH,index),
             middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername());
     click(f(MS_PAGE_DROPDOWN_LIST_XPATH,
             middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername()));
@@ -1216,5 +1222,30 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
             middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername())).isSelected();
 
     Assertions.assertThat(isDriverSelected).as(" Can not select more than 4 drivers").isFalse();
+  }
+
+  public void verifyListDriver(List<Driver> middleMileDrivers){
+    Boolean result = true;
+    List<WebElement> ActualDrivers = findElementsByXpath(MS_PAGE_DRIVERS_COLUMN_XPATH);
+    List<String[]> AcutalDriversUsername = new ArrayList<>();
+    ActualDrivers.forEach((element)->{
+      AcutalDriversUsername.add(element.getText().split(","));
+    });
+    List<String> ExpectedDriverUsename = getListDriverUsername(middleMileDrivers);
+    for(String[] element:AcutalDriversUsername){
+      for(String s: element){
+        s = s.replace("(main)","").trim();
+        if(!ExpectedDriverUsename.contains(s)) result = false;
+      }
+    }
+    Assertions.assertThat(result).as("Drivers are show on Movement Schedule page as expected").isTrue();
+  }
+
+  public List<String> getListDriverUsername(List<Driver> middleMileDrivers){
+    List<String> ExpectedList = new ArrayList<>();
+    middleMileDrivers.forEach((e)->{
+      ExpectedList.add(e.getFullName());
+    });
+    return ExpectedList;
   }
 }
