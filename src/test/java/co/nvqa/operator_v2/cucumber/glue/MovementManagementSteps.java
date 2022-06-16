@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.hub.Driver;
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
@@ -263,6 +263,11 @@ public class MovementManagementSteps extends AbstractSteps {
           movementManagementPage.addStationMovementScheduleModal.fillAnother(
               secondStationMovementSchedule, "1");
           putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+        }
+        if (StringUtils.isNotBlank(finalData.get("assignDrivers"))){
+          List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+          int numberOfDrivers = Integer.parseInt(finalData.get("assignDrivers"));
+          movementManagementPage.assignDrivers(numberOfDrivers,middleMileDrivers);
         }
         movementManagementPage.addStationMovementScheduleModal.create.click();
         movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
@@ -997,5 +1002,13 @@ System.out.println("Row count: "+movementManagementPage.stationMovementSchedules
   @Then("Operator verifies page is back to view mode")
   public void operatorVerifiesPageIsViewMode(){
     movementManagementPage.verifyPageInViewMode();
+  }
+
+  @Then("Operator verifies {string} with value {string} is not shown on Movement Schedules page")
+  public void operatorVerifiesInvalidDriver(String name, String value){
+    movementManagementPage.stationsTab.click();
+    movementManagementPage.addSchedule.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+    movementManagementPage.verifyInvalidItem(name, value);
   }
 }

@@ -340,7 +340,7 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
+      | totalTax         | 0.6                                           |
       | totalWithTax     | 9.15                                          |
       | type             | Completed                                     |
 
@@ -396,7 +396,7 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
+      | totalTax         | 0.6                                           |
       | totalWithTax     | 9.15                                          |
       | type             | Completed                                     |
 
@@ -452,7 +452,7 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
+      | totalTax         | 0.6                                           |
       | totalWithTax     | 9.15                                          |
       | type             | Completed                                     |
 
@@ -508,6 +508,6 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
+      | totalTax         | 0.6                                           |
       | totalWithTax     | 9.15                                          |
       | type             | Completed                                     |

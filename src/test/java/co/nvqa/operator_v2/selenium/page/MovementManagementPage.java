@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -53,6 +54,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_LOADING_ICON_XPATH = "//span[@class='ant-spin-dot ant-spin-dot-spin']";
   private static final String MS_PAGE_ITEM_CHECKBOX_XPATH = "//td//label[@class='ant-checkbox-wrapper']//input[@class='ant-checkbox-input'][%d]";
 
+  private static final String MS_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id ='schedules_0_drivers']";
+  private static final String MS_PAGE_ORIGIN_HUB_XPATH = "//input[@id='schedules_0_originHub']";
+  private static final String MS_PAGE_DESTINATION_HUB_XPATH = "//input[@id='schedules_0_destinationHub']";
+  private static final String MS_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
 
   @FindBy(xpath = "//button[.='Close']")
   public Button closeButton;
@@ -1152,5 +1157,64 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     findElementByXpath(f(MS_PAGE_ITEM_CHECKBOX_XPATH,index)).click();
     delete.click();
     modalUpdateButton.click();
+  }
+
+  public void verifyInvalidItem(String name, String value) {
+    switch (name) {
+      case "origin hub":
+        String originHubName = value;
+        TestUtils.findElementAndClick(MS_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
+        sendKeys(MS_PAGE_ORIGIN_HUB_XPATH, originHubName);
+        Assertions.assertThat(
+                        isElementExist(f(MS_PAGE_DROPDOWN_LIST_XPATH, originHubName), 1L))
+                .as("Disable Origin Hub is not displayed").isFalse();
+        findElementByXpath(MS_PAGE_ORIGIN_HUB_XPATH).clear();
+        break;
+
+      case "destination hub":
+        String destinationHubName = value;
+        TestUtils.findElementAndClick(MS_PAGE_DESTINATION_HUB_XPATH, "xpath",
+                getWebDriver());
+        sendKeys(MS_PAGE_DESTINATION_HUB_XPATH, destinationHubName);
+        Assertions.assertThat(
+                        isElementExist(f(MS_PAGE_DROPDOWN_LIST_XPATH, destinationHubName), 1L))
+                .as("Disable Destination Hub is not displayed").isFalse();
+        findElementByXpath(MS_PAGE_DESTINATION_HUB_XPATH).clear();
+        break;
+
+      case "driver":
+        String driverUsername = value;
+        TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath",
+                getWebDriver());
+        sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH, driverUsername);
+        Assertions.assertThat(
+                        isElementExist(f(MS_PAGE_DROPDOWN_LIST_XPATH, driverUsername), 1L))
+                .as("Invalid Driver has not been displayed").isFalse();
+        break;
+    }
+  }
+
+  public void assignDrivers(int numberOfDrivers, List<Driver> middleMileDrivers){
+    int maxAssignDrivers = numberOfDrivers > 4 ? 4 : numberOfDrivers;
+    for (int i = 0; i < maxAssignDrivers; i++) {
+      TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
+      sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
+      click(f(MS_PAGE_DROPDOWN_LIST_XPATH, middleMileDrivers.get(i).getUsername()));
+    }
+    if (numberOfDrivers > 4) {
+      verifyCanNotAssignMoreThan4Drivers(middleMileDrivers);
+    }
+  }
+
+  public void verifyCanNotAssignMoreThan4Drivers(List<Driver> middleMileDrivers) {
+    TestUtils.findElementAndClick(MS_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
+    sendKeys(MS_PAGE_ASSIGN_DRIVER_XPATH,
+            middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername());
+    click(f(MS_PAGE_DROPDOWN_LIST_XPATH,
+            middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername()));
+    Boolean isDriverSelected = findElementByXpath(f(MS_PAGE_DROPDOWN_LIST_XPATH,
+            middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername())).isSelected();
+
+    Assertions.assertThat(isDriverSelected).as(" Can not select more than 4 drivers").isFalse();
   }
 }
