@@ -93,7 +93,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   private static final String TABLE_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,' ant-card-bordered')]//div[@class='cell-wrapper']//span/span";
   private static final String NO_RESULTS_FOUND_XPATH = "//div[contains(text(),'')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[contains(text(),'No Results Found')]";
   private static final String TRACKINGID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='tracking_id-link']";
-  private static final String RESERVATIONID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='tracking_id-link' and text()='%s'] ";
+  private static final String RESERVATIONID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='reservation-link' and text()='%s']";
   private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//div[@class='cell-wrapper']//span[1]";
 
   @FindBy(css = "iframe")
@@ -270,9 +270,9 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     return gridContent;
   }
 
-  public void validateNavigationOfReservationLink(String tableName, String reservationIDID) {
+  public void validateNavigationOfReservationLink(String tableName, String reservationID) {
     String windowHandle = getWebDriver().getWindowHandle();
-    getWebDriver().findElement(By.xpath(f(RESERVATIONID_XPATH, tableName, reservationIDID)))
+    getWebDriver().findElement(By.xpath(f(RESERVATIONID_XPATH, tableName, reservationID)))
         .click();
     switchToNewWindow();
     waitWhilePageIsLoading();
