@@ -88,11 +88,17 @@ public class RouteManifestSteps extends AbstractSteps {
   public void operatorFailDeliveryWaypointFromRouteManifestPage(String waypointType) {
     String mode = FAILURE_REASON_PICKUP.equalsIgnoreCase(waypointType) ? FAILURE_REASON_PICKUP
         : FAILURE_REASON_DELIVERY;
-    FailureReason failureReason = FailureReasonFactory
-        .findAdvance(FAILURE_REASON_TYPE_NORMAL, mode, FAILURE_REASON_CODE_ID_ALL,
-            FAILURE_REASON_INDEX_MODE_FIRST);
+    FailureReason failureReason = FailureReasonFactory.findAdvance(FAILURE_REASON_TYPE_NORMAL, mode,
+        FAILURE_REASON_CODE_ID_ALL, FAILURE_REASON_INDEX_MODE_FIRST);
     routeManifestPage.failDeliveryWaypoint(failureReason);
     put(KEY_SELECTED_FAILURE_REASON, failureReason);
+  }
+
+  @When("Operator fail waypoint from Route Manifest page with following details")
+  public void operatorFailWaypointFromRouteManifestPageWithFollowingDetails(
+      Map<String, String> mapOfData) {
+    routeManifestPage.failWaypointWithFailureDetails(mapOfData);
+    takesScreenshot();
   }
 
   @When("^Operator success (delivery|pickup|reservation) waypoint from Route Manifest page$")
@@ -139,7 +145,7 @@ public class RouteManifestSteps extends AbstractSteps {
   public void operatorOpenRouteManifestPage(String routeId) {
     routeId = resolveValue(routeId);
     routeManifestPage.openPage(Long.parseLong(StringUtils.trim(routeId)));
-    if (routeManifestPage.loadMoreData.waitUntilVisible(2)) {
+    if (routeManifestPage.loadMoreData.waitUntilVisible(5)) {
       routeManifestPage.loadMoreData.waitUntilInvisible(60);
     }
   }
@@ -149,8 +155,7 @@ public class RouteManifestSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     SoftAssertions assertions = new SoftAssertions();
     if (data.containsKey("routeId")) {
-      assertions.assertThat(routeManifestPage.routeId.getText())
-          .as("Route ID")
+      assertions.assertThat(routeManifestPage.routeId.getText()).as("Route ID")
           .isEqualTo(data.get("routeId"));
     }
     assertions.assertAll();

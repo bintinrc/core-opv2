@@ -1,15 +1,21 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -351,5 +357,141 @@ public class ZonesSteps extends AbstractSteps {
       page.addZoneDialog.waitUntilInvisible();
     });
     put(KEY_CREATED_ZONE, zone);
+  }
+
+  /* ======================= Bulk Edit Zone Polygon ======================= */
+
+  @And("Zones page is loaded")
+  public void zonesPageIsLoaded() {
+    zonesPage.waitUntilPageLoaded();
+    zonesPage.pageFrame.waitUntilVisible();
+    zonesPage.switchTo();
+    zonesPage.bulkEditPolygons.waitUntilVisible();
+  }
+
+  @When("Operator clicks Bulk Edit Polygons button")
+  public void operatorClicksBulkEditPolygonsButton() {
+    zonesPage.bulkEditPolygons.waitUntilClickable();
+    zonesPage.bulkEditPolygons.click();
+  }
+
+  @Then("Operator make sure Bulk Edit Polygons dialog shows up")
+  public void operatorMakeSureBulkEditPolygonsDialogShowsUp() {
+    zonesPage.bulkEditPolygonsDialog.waitUntilVisible();
+    Assertions.assertThat(zonesPage.bulkEditPolygonsDialog.isDisplayed())
+        .as("Bulk Edit Polygons dialog shows up")
+        .isTrue();
+  }
+
+  @When("Operator successfully upload a KML file {string}")
+  public void operatorSuccessfullyUploadAKMLFile(String fileName) {
+    // Retry mechanism in case the KML file is not correctly read (a.k.a. vertex = 0)
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      if (zonesSelectedPolygonsPage.sideToolbar.isDisplayed()) {
+        NvAssertions.LOGGER.info("Some elements are missing is Zone Drawing page, going back...");
+        backToPreviousPage();
+      } else {
+        NvAssertions.LOGGER.info("Refreshing on main page...");
+        zonesPage.refreshPage_v1();
+      }
+      zonesPageIsLoaded();
+      operatorClicksBulkEditPolygonsButton();
+      operatorMakeSureBulkEditPolygonsDialogShowsUp();
+      operatorUploadAKMLFile(fileName);
+      operatorMakeSureIsRedirectedToZoneDrawingPage();
+      operatorMakeSureKMLFileIsReadCorrectly();
+    }, "Retrying until KML file is read correctly");
+  }
+
+  @When("Operator upload a KML file {string}")
+  public void operatorUploadAKMLFile(String fileName) {
+    final String kmlFileName = "kml/" + fileName;
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File kmlFile = new File(
+        Objects.requireNonNull(classLoader.getResource(kmlFileName)).getFile());
+
+    zonesPage.uploadKmlFile(kmlFile);
+  }
+
+  @Then("Operator make sure is redirected to Zone Drawing page")
+  public void operatorMakeSureIsRedirectedToZoneDrawingPage() {
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    zonesSelectedPolygonsPage.switchTo();
+    zonesSelectedPolygonsPage.sideToolbar.waitUntilVisible();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+    Assertions.assertThat(
+            zonesSelectedPolygonsPage.zoneDrawingHeader.isDisplayed() &&
+                zonesSelectedPolygonsPage.saveZoneDrawingButton.isDisplayed()
+        )
+        .as("Zone Drawing page is loaded")
+        .isTrue();
+  }
+
+  @And("Operator make sure KML file is read correctly")
+  public void operatorMakeSureKMLFileIsReadCorrectly() {
+    Assertions.assertThat(zonesSelectedPolygonsPage.isKmlFileReadCorrectly())
+        .as("KML file is read CORRECTLY")
+        .isTrue();
+  }
+
+  @Then("Operator make sure zones from KML file are listed correctly")
+  public void operatorMakeSureZonesFromKMLFileAreListedCorrectly(
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> inputMap = resolveKeyValues(dataTableAsMap);
+
+    String zonesAsJson = inputMap.get("zones");
+    List<Map<String, Object>> zoneList = fromJsonToList(zonesAsJson, Object.class).stream()
+        .map(o -> convertValueToMap(o, String.class, Object.class))
+        .collect(Collectors.toList());
+
+    List<Long> ids = zoneList.stream()
+        .map(z -> convertValue(z.get("id"), Long.class)).collect(Collectors.toList());
+    List<String> names = zoneList.stream()
+        .map(z -> convertValue(z.get("name"), String.class)).collect(Collectors.toList());
+
+    Assertions.assertThat(zonesSelectedPolygonsPage.hasZonesListed(ids, names))
+        .as("All zones are listed correctly")
+        .isTrue();
+
+    List<Object> zonesAsObject = zoneList.stream()
+        .map(zone -> convertValue(zone, Object.class))
+        .collect(Collectors.toList());
+    Map<String, Object> inputMapAsObject = new HashMap<>();
+    inputMapAsObject.put("zones", zonesAsObject);
+
+    put(KEY_ZONE_POLYGONS_AS_JSON, inputMapAsObject);
+    put(KEY_LIST_OF_SUCCESSFUL_KML_ZONES, convertValue(zonesAsObject, Object.class));
+    put(KEY_LIST_OF_ZONES_POLYGON_ZONE_NAMES, names);
+  }
+
+  @And("Operator clicks save button in zone drawing page")
+  public void operatorClicksSaveButtonInZoneDrawingPage() {
+    List<String> names = get(KEY_LIST_OF_ZONES_POLYGON_ZONE_NAMES, new ArrayList<>());
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialog.waitUntilVisible();
+    Assertions.assertThat(zonesSelectedPolygonsPage.saveConfirmationDialog.isDisplayed())
+        .as("Save confirmation dialog shows up")
+        .isTrue();
+    Assertions.assertThat(zonesSelectedPolygonsPage.hasZonesListedInSaveConfirmationDialog(names))
+        .as("All zones are listed in save confirmation dialog")
+        .isTrue();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.waitUntilClickable();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+  }
+
+  @Then("Operator make sure error popup on zones page shows up: {string}")
+  public void operatorMakeSureErrorPopupOnZonesPageShowsUp(String message) {
+    Assertions.assertThat(zonesPage.isNotificationShowUp(message))
+        .as(String.format("Error notification shows up: %s", message))
+        .isTrue();
+  }
+
+  @Then("Operator make sure dialog shows error: {string}")
+  public void operatorMakeSureDialogShowsError(String errorTitle) {
+    Assertions.assertThat(
+            zonesPage.isElementExist(String.format(ZonesPage.BULK_ZONE_UPDATE_ERROR_TITLE, errorTitle)))
+        .as(String.format("Update dialog shows correct error title: %s", errorTitle))
+        .isTrue();
   }
 }

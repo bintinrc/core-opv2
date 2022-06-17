@@ -4,6 +4,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.util.List;
 import org.openqa.selenium.SearchContext;
@@ -35,6 +37,9 @@ public class SortBeltPresetPage extends SimpleReactPage<SortBeltPresetPage> {
   @FindBy(xpath="//li[@class='ant-list-item']")
   public List<SBPresetListElement> listItems;
 
+  @FindBy(css = ".ant-modal")
+  public PresetBaseModal presetBaseModal;
+
 
   public SortBeltPresetPage(WebDriver webDriver) {
     super(webDriver);
@@ -65,6 +70,26 @@ public class SortBeltPresetPage extends SimpleReactPage<SortBeltPresetPage> {
     @FindBy(xpath = "//div[@class='description']")
     public PageElement description;
 
-
   }
+
+  public static class PresetBaseModal extends AntModal {
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')]")
+    public AntSelect presetBaseSelect;
+
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button confirmBtn;
+
+    public PresetBaseModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public PresetBaseModal(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+  }
+
 }

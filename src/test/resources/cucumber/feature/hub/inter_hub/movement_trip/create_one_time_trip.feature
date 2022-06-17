@@ -21,7 +21,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using data below:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -50,7 +50,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using data below:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -79,7 +79,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using data below:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -108,7 +108,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using same hub:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -132,7 +132,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using data below:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -162,7 +162,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using data below:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -192,7 +192,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator verifies "origin hub" with value "{hub-disable-name}" is not shown on Create One Trip page
     And Operator create One Time Trip on Movement Trips page using data below:
@@ -222,7 +222,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator verifies "destination hub" with value "{hub-disable-name}" is not shown on Create One Trip page
     And Operator create One Time Trip on Movement Trips page using data below:
@@ -252,7 +252,7 @@ Feature: Movement Trip - Create One Time Trip
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    And Openrator clicks on Create One Time Trip Button
+    And Operator clicks on Create One Time Trip Button
     And Operator verifies Create One Time Trip page is loaded
     And Operator create One Time Trip on Movement Trips page using data below:
       | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
@@ -264,6 +264,32 @@ Feature: Movement Trip - Create One Time Trip
       | assignDrivers     | 1                                           |
     Then Operator verifies "driver" with value "{inactive-driver-username}" is not shown on Create One Trip page
     Given Operator clicks Submit button on Create One Trip page
+    Then Operator verifies toast message display on create one time trip page
+
+  @DeleteHubsViaAPI @DeleteHubsViaDb @CancelTrip
+  Scenario: Create One Time Trip without Assign Driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates 2 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given Operator go to menu Inter-Hub -> Movement Trips
+    And Operator verifies movement Trip page is loaded
+    And Operator clicks on Create One Time Trip Button
+    And Operator verifies Create One Time Trip page is loaded
+    And Operator create One Time Trip without driver on Movement Trips page using data below:
+      | originHub         | {KEY_LIST_OF_CREATED_HUBS[1].name}          |
+      | destinationHub    | {KEY_LIST_OF_CREATED_HUBS[2].name}          |
+      | movementType      | Land Haul                                   |
+      | departureTime     | GENERATED                                   |
+      | duration          | GENERATED                                   |
+      | departureDate     | GENERATED                                   |
+    And Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
   @KillBrowser @ShouldAlwaysRun

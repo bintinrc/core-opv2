@@ -50,7 +50,7 @@ public class SortBeltPresetDetailPage extends SimpleReactPage<SortBeltPresetDeta
     }
 
     public String getTitle() {
-      if (!isCriteriaRow()) {
+      if (isCriteriaRow()) {
         PageElement pe = tableCells.get(0);
         return pe.getText();
       }
@@ -58,7 +58,7 @@ public class SortBeltPresetDetailPage extends SimpleReactPage<SortBeltPresetDeta
     }
 
     public String getDescription() {
-      if (!isCriteriaRow()) {
+      if (isCriteriaRow()) {
         PageElement pe = tableCells.get(1);
         return pe.getText();
       }
@@ -67,7 +67,7 @@ public class SortBeltPresetDetailPage extends SimpleReactPage<SortBeltPresetDeta
 
     public String getFilterType() {
       PageElement pe;
-      if (!isCriteriaRow()) {
+      if (isCriteriaRow()) {
         pe = tableCells.get(2);
         return pe.getText();
       }
@@ -77,7 +77,7 @@ public class SortBeltPresetDetailPage extends SimpleReactPage<SortBeltPresetDeta
 
     public String getFilterValue() {
       WebElement pe;
-      if (!isCriteriaRow()) {
+      if (isCriteriaRow()) {
         pe = this.findElement(By.xpath("./td[4]"));
         return pe.getText();
       }
