@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.function.Consumer;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -22,10 +23,7 @@ public class B2bManagementPage extends OperatorV2SimplePage {
 
   public final B2bShipperTable subShipperTable;
 
-  private static final String IFRAME_XPATH = "//iframe[contains(@src,'b2b-management')]";
-  private static final String ERROR_MSG_CREATE_SUB_SHIPPER_XPATH = "//div[contains(@class,'ant-form-item-control')]//div[contains(@class,'ant-form-explain')]";
   public static final String NAME_COLUMN_LOCATOR_KEY = "name";
-  public static final String XPATH_SUB_SHIPPER_BACK = "//*[@class='ant-page-header-back-icon']";
 
   @FindBy(css = "[aria-label='icon: arrow-left']")
   public Button goBack;
@@ -97,12 +95,6 @@ public class B2bManagementPage extends OperatorV2SimplePage {
     subShipperTable = new B2bShipperTable(webDriver);
   }
 
-  public void onDisplay() {
-    super.waitUntilPageLoaded();
-    waitUntilVisibilityOfElementLocated(IFRAME_XPATH);
-    assertTrue(isElementVisible(IFRAME_XPATH));
-  }
-
   public boolean isPrevPageButtonDisable() {
     return prevPage.getAttribute("class").contains("disabled");
   }
@@ -112,14 +104,11 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   }
 
   public void backToSubShipperTable() {
-    getWebDriver().switchTo().parentFrame();
-    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-    if (isElementExistFast(XPATH_SUB_SHIPPER_BACK)) {
-      scrollIntoView(XPATH_SUB_SHIPPER_BACK, false);
-      pause1s();
-      click(XPATH_SUB_SHIPPER_BACK);
-    }
-    getWebDriver().switchTo().parentFrame();
+    inFrame(page -> {
+      if (page.goBack.isDisplayedFast()) {
+        page.goBack.click();
+      }
+    });
   }
 
   public void goToFirstPage() {
@@ -152,6 +141,16 @@ public class B2bManagementPage extends OperatorV2SimplePage {
           ACTION_NINJA_DASH_LOGIN, "//tr[%d]/td[contains(@class,'action')]//button[1]",
           ACTION_EDIT, "//tr[%d]/td[contains(@class,'action')]//button[2]"));
       setEntityClass(Shipper.class);
+    }
+
+    @Override
+    public int getRowsCount() {
+      if (StringUtils.isNotBlank(tableLocator)) {
+        return executeInContext(tableLocator,
+            () -> getElementsCount(".//tr[@class]"));
+      } else {
+        return getElementsCount("//tr[@class]");
+      }
     }
   }
 
