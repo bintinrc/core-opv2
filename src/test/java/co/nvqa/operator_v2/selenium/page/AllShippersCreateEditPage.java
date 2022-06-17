@@ -46,6 +46,7 @@ import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -363,6 +364,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     basicSettingsForm.corporate.selectValue(orderCreate.getIsCorporate());
     basicSettingsForm.corporateReturn.selectValue(orderCreate.getIsCorporateReturn());
     basicSettingsForm.corporateManualAWB.selectValue(orderCreate.getIsCorporateManualAWB());
+    basicSettingsForm.corporateDocument.selectValue(orderCreate.getIsCorporateDocument());
 
     if (isCreateForm) {
       selectMultipleValuesFromMdSelectById("container.shippers.service-level",
@@ -720,10 +722,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public ShipperBasicSettings getBasicSettings() {
     ShipperBasicSettings settings = new ShipperBasicSettings();
     settings.setVersion(basicSettingsForm.ocVersion.getValue());
-    settings.setBulky(basicSettingsForm.bulky.isOn());
     settings.setCorporate(basicSettingsForm.corporate.isOn());
     settings.setCorporateReturn(basicSettingsForm.corporateReturn.isOn());
     settings.setCorporateManualAWB(basicSettingsForm.corporateManualAWB.isOn());
+    settings.setCorporateDocument(basicSettingsForm.corporateDocument.isOn());
     settings.setAvailableServiceLevels(basicSettingsForm.serviceLevel.getValue());
     return settings;
   }
@@ -1314,7 +1316,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void goToTabCorporateSubShipper() {
     tabs.selectTab("Corporate sub shippers");
-    b2bManagementPage.onDisplay();
+    waitUntilPageLoaded();
+    b2bManagementPage.iframe.isDisplayedFast();
     b2bManagementPage.backToSubShipperTable();
   }
 
