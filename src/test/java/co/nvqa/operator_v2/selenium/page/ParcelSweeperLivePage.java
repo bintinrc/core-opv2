@@ -130,10 +130,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(HUB_DROPDOWN_XPATH);
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
-    sendKeys(HUB_DROPDOWN_XPATH, hubName);
-    waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-    click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-
+    sendKeys(HUB_DROPDOWN_XPATH, hubName,Keys.ENTER);
     pause2s();
 
     //Select Sort Task
