@@ -96,6 +96,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String ACTIVE_STATUS = "Active";
     private static final String INACTIVE_STATUS = "Inactive";
 
+    public static final String XPATH_EMPLOYMENTTYPE = "//div[contains(@class, ' ant-select')][.//input[@id='employmentType']]";
+
     private static final String YES = "yes";
     private static final String NO = "no";
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
@@ -144,6 +146,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     @FindBy(tagName = "iframe")
     private PageElement pageFrame;
 
+    @FindBy(xpath = "//div[@class='ant-empty-description']")
+    public PageElement listEmptyData;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -181,6 +185,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void selectHubFilter(String hubName) {
         loadDrivers.waitUntilClickable();
+        listEmptyData.waitUntilInvisible();
+        hubSearchFilter.click();
         hubSearchFilter.selectValue(hubName);
     }
 
@@ -556,7 +562,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.selectLicenseType(value);
                 break;
             case "employmentType":
-                editDriverDialog.employmentType.selectValue(value);
+                editDriverDialog.employmentType.click();
+                click(f(SELECT_FILTER_VALUE_XPATH, value));
                 break;
             case "employmentStartDate":
                 editDriverDialog.employmentStartDate.sendDate(value);
