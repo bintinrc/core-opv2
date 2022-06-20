@@ -241,10 +241,15 @@ Feature: Routing
     And API Operator set tags of the new created route to [{KEY_CREATED_ROUTE_TAG.id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
+    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION_1"
     And API Shipper create V4 order using data below:
       | generateFrom   | ZONE {zone-name-3}                                                                                                                                                                                                                                                                                                                     |
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-current-date-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION_2"
+    And DB Operator set "{zone-id-3}" routing_zone_id for waypoints:
+      | {KEY_TRANSACTION_1.waypointId} |
+      | {KEY_TRANSACTION_2.waypointId} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     And Operator click Pickup -> Add To Route on Edit Order page
     And Operator suggest route of "{KEY_CREATED_ROUTE_TAG.name}" tag from the Route Finder on Edit Order Page
