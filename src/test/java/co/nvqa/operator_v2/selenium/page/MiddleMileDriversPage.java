@@ -562,7 +562,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.selectLicenseType(value);
                 break;
             case "employmentType":
-                editDriverDialog.employmentType.selectValue(value);
+                editDriverDialog.employmentType.click();
+                click(f(SELECT_FILTER_VALUE_XPATH, value));
                 break;
             case "employmentStartDate":
                 editDriverDialog.employmentStartDate.sendDate(value);
