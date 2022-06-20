@@ -142,21 +142,7 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
   @Then("Operator verify value in the {string} table for the {string} column value is equal to {string}")
   public void operatorVerifyValueValueInTheInvalidFailedWPIsEqual(String tableName,
       String columnName, String expectedValue) {
-    if (expectedValue.equalsIgnoreCase("{KEY_CREATED_RESERVATION_ID}")) {
-      expectedValue = get("KEY_CREATED_RESERVATION_ID").toString();
-    }
-    if (expectedValue.equalsIgnoreCase("{KEY_SHIPPER_NAME}")) {
-      expectedValue = get("KEY_SHIPPER_NAME").toString();
-    }
-    if (expectedValue.equalsIgnoreCase("{KEY_SHIPPER_NAME}")) {
-      expectedValue = get("KEY_SHIPPER_NAME").toString();
-    }
-    if (expectedValue.equalsIgnoreCase("{KEY_SHIPPER_CONTACT}")) {
-      expectedValue = get("KEY_SHIPPER_CONTACT").toString();
-    }
-    if (expectedValue.equalsIgnoreCase("{KEY_SHIPPER_ADDRESS}")) {
-      expectedValue = get("KEY_SHIPPER_ADDRESS").toString();
-    }
+    expectedValue = resolveValue(expectedValue);
     InvalidFailedWP columnValue = InvalidFailedWP.valueOf(columnName);
     String actualColumnValue = stationRouteMonitoringPage.getColumnValueFromTable(tableName,
         columnValue);
@@ -168,14 +154,16 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
   @Then("Operator verifies that Shipper Pickup page is opened on clicking Reservation ID {string} table {string}")
   public void operator_verifies_that_Shipper_Pickup_page_is_opened_on_clicking_Reservation_ID(
       String reservationID, String tableName) {
-    String reservationIdfD = get("KEY_CREATED_RESERVATION_ID");
+    reservationID = resolveValue(reservationID);
     stationRouteMonitoringPage.validateNavigationOfReservationLink(tableName, reservationID);
+    takesScreenshot();
   }
 
   @And("Operator verifies that Edit Order page is opened on clicking tracking id in table {string}")
   public void operatorVerifiesThatEditOrderPageIsOpenedOnClickingTrackingIdFromTheRouteMonitoringPage(
       String tableName) {
     stationRouteMonitoringPage.validateNavigationOfTrackingIDLink(tableName);
+    takesScreenshot();
   }
 }
 
